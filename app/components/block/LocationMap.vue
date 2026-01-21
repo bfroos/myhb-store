@@ -242,7 +242,6 @@
   </UiLayoutSectionBlock>
 </template>
 <script setup lang="ts">
-import { getLocationStatus as getLocationStatusRaw } from "../../../../cms/src/utils/locationStatus";
 import type { BlockLocationMapDto } from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockLocationMapDto>();
@@ -271,16 +270,16 @@ const clinicCountLabel = computed(() => clinicCount.toString());
 const doctorCountLabel = computed(() => doctorCount.toString());
 
 const customersLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.customers", 2),
+  pluralKey("blocks.locationMap.footer.customers", 2)
 );
 const loungesLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.lounges", loungeCount),
+  pluralKey("blocks.locationMap.footer.lounges", loungeCount)
 );
 const doctorsLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.doctors", doctorCount),
+  pluralKey("blocks.locationMap.footer.doctors", doctorCount)
 );
 const clinicLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.clinic", clinicCount),
+  pluralKey("blocks.locationMap.footer.clinic", clinicCount)
 );
 
 // --- SVG Map Points (Lat/Lon -> SVG viewBox) ---
@@ -324,7 +323,7 @@ function projectLatLonToSvg(lat: number, lon: number) {
 type LocationStatus = "open" | "openSoon" | "comingSoon";
 
 const toDisplayStatus = (
-  status: ReturnType<typeof getLocationStatusRaw>,
+  status: ReturnType<typeof getLocationStatusRaw>
 ): LocationStatus => (status === "openNewToday" ? "open" : status);
 
 function statusLabelKey(status: LocationStatus) {
@@ -354,7 +353,7 @@ const locationPoints = computed(() => {
 
     const { x, y } = projectLatLonToSvg(lat, lon);
     const status = toDisplayStatus(
-      getLocationStatusRaw(loc?.newOpeningDate ?? null),
+      getLocationStatusRaw(loc?.newOpeningDate ?? null)
     );
 
     return {
@@ -369,7 +368,7 @@ const locationPoints = computed(() => {
 
   return points.filter(
     (
-      p,
+      p
     ): p is {
       id: string | number;
       name: string;
@@ -377,7 +376,7 @@ const locationPoints = computed(() => {
       y: number;
       status: LocationStatus;
       statusLabelKey: string;
-    } => p !== null,
+    } => p !== null
   );
 });
 </script>

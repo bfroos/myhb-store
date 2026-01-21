@@ -1,7 +1,9 @@
 import type { ComputedRef } from "vue";
-import { getLocationStatus as getLocationStatusRaw } from "../../../cms/src/utils/locationStatus";
 import type { LocationItem } from "~/lib/ui/types";
-import { getLocationStatus } from "../../../cms/src/utils/locationStatus";
+import {
+  getLocationStatus,
+  getLocationStatusRaw,
+} from "~/utils/locationStatus";
 import { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 
 /**
