@@ -8,7 +8,7 @@ type StrapiFetchOptions<T> = {
 
 export function useStrapiFetch<T>(
   path: string,
-  opts: StrapiFetchOptions<T> = {}
+  opts: StrapiFetchOptions<T> = {},
 ) {
   const config = useRuntimeConfig();
 
@@ -21,8 +21,17 @@ export function useStrapiFetch<T>(
     (path.startsWith("/") ? path : `/${path}`) +
     (queryString ? `?${queryString}` : "");
 
+  const headers: Record<string, string> = {
+    ...(opts.fetchOptions?.headers as Record<string, string>),
+  };
+
+  if (import.meta.server && config.strapiApiToken) {
+    headers.Authorization = `Bearer ${config.strapiApiToken}`;
+  }
+
   return useFetch<T>(url, {
     method: opts.method ?? ("get" as any),
     ...opts.fetchOptions,
+    headers: Object.keys(headers).length > 0 ? headers : undefined,
   });
 }

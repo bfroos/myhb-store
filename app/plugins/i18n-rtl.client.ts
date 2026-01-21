@@ -8,8 +8,10 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Set dir attribute on html element based on current locale
   const updateDir = () => {
-    if (process.client) {
-      const currentLocale = locales.value.find((l: any) => l.code === locale.value);
+    if (import.meta.client) {
+      const currentLocale = locales.value.find(
+        (l: any) => l.code === locale.value,
+      );
       const dir = currentLocale?.dir || "ltr";
       document.documentElement.setAttribute("dir", dir);
       document.documentElement.setAttribute("lang", locale.value);
@@ -17,7 +19,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   };
 
   // Update on initial load
-  if (process.client) {
+  if (import.meta.client) {
     updateDir();
   }
 
@@ -26,4 +28,3 @@ export default defineNuxtPlugin((nuxtApp) => {
     updateDir();
   });
 });
-

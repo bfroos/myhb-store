@@ -100,7 +100,6 @@ import { IconMenu2 } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 
 const { locale } = useI18n();
-const config = useRuntimeConfig();
 
 // Type für Treatment Page Menu Item
 type TreatmentPageMenuItem = {
@@ -111,7 +110,6 @@ type TreatmentPageMenuItem = {
   children: TreatmentPageMenuItem[];
 };
 
-// Type für Menu Response
 type MenuResponse = {
   data: {
     "treatment-pages"?: TreatmentPageMenuItem[];
@@ -119,18 +117,13 @@ type MenuResponse = {
   };
 };
 
-// Fetch menu data from new endpoint
-const { data: menuData } = await useFetch<MenuResponse>(
-  `${config.public.strapiUrl}/api/menu`,
-  {
-    params: {
-      locale: locale.value,
-      types: "treatment-pages",
-    },
+const { data: menuData } = await useStrapiFetch<MenuResponse>("/api/menu", {
+  query: {
+    locale: locale.value,
+    types: "treatment-pages",
   },
-);
+});
 
-// Convert treatment pages to navigation items
 const navigationItems = computed(
   () => menuData.value?.data?.["treatment-pages"] || [],
 );
