@@ -1,0 +1,357 @@
+{
+  "common": {
+    "discount": "خصم",
+    "comparison": "مقارنة",
+    "reviews": "التقييمات",
+    "five-star": "5 نجوم",
+    "less": "أقل",
+    "more": "أكثر",
+    "date": {
+      "fromDate": "من {date}"
+    },
+    "week": {
+      "monday": "الاثنين",
+      "tuesday": "الثلاثاء",
+      "wednesday": "الأربعاء",
+      "thursday": "الخميس",
+      "friday": "الجمعة",
+      "saturday": "السبت",
+      "sunday": "الأحد"
+    },
+    "openingHours": {
+      "open": "مفتوح",
+      "closed": "مغلق"
+    },
+    "federalState": {
+      "baden-wuerttemberg": "بادن-فورتمبرغ",
+      "bavaria": "بايرن",
+      "berlin": "برلين",
+      "brandenburg": "براندنبورغ",
+      "bremen": "بريمن",
+      "hamburg": "هامبورغ",
+      "hesse": "هاسي",
+      "mecklenburg-western-pomerania": "ميكلنبورغ-وسترن-بومرانيا",
+      "lower-saxony": "نيدرساسن",
+      "north-rhine-westphalia": "نوردرن-رين-وفال",
+      "rhineland-palatinate": "رينلاند-بالاتينات",
+      "saarland": "سارلاند",
+      "saxony": "ساكسوني",
+      "saxony-anhalt": "ساكسوني-انهالت",
+      "schleswig-holstein": "شلسويغ-هولستاين",
+      "thuringia": "تورينجيا"
+    },
+    "price": {
+      "cheap": "غير مكلف",
+      "startingPrefix": "من",
+      "forPrefix": "ل"
+    }
+  },
+
+  "navigation": {
+    "secondary": {
+      "doctors": "الأطباء",
+      "locations": "المواقع",
+      "prices": "الأسعار",
+      "careers": "الوظائف",
+      "blog": "المدونة",
+      "aboutUs": "عن الشركة"
+    },
+    "footer": {
+      "treatments": "العلاجات",
+      "company": "الشركة",
+      "prices": "الأسعار"
+    },
+    "meta": {
+      "privacyPolicy": "سياسة الخصوصية",
+      "imprint": "الشروط والأحكام"
+    }
+  },
+
+  "cta": {
+    "bookAppointment": "احجز موعدًا",
+    "learnMore": "اعرف المزيد",
+    "details": "التفاصيل",
+    "subscribe": "اشترك"
+  },
+
+  "location": {
+    "comingSoon": "قريباً",
+    "sinceToday": "افتتاح جديد اليوم",
+    "error": {
+      "locationNotFound": "الموقع غير موجود",
+      "locationNotFoundDescription": "الموقع المطلوب غير موجود."
+    },
+    "treatmentTeasers": {
+      "headline": {
+        "lounge": "العلاجات في اللاونج في {city}",
+        "center": "العلاجات في اللاونج في {city}",
+        "clinic": "العلاجات في العيادة الخاصة في {city}"
+      }
+    }
+  },
+
+  "blog": {
+    "breadcrumbTitle": "المدونة",
+    "headline": "المدونة",
+    "intro": "المعرفة والأخبار وكل ما يتعلق بالصحة والجمال.",
+    "emptyState": {
+      "title": "لا توجد مقالات",
+      "description": "للأسف، لا توجد مقالات متاحة لهذه الفئة باللغة المحددة."
+    },
+    "article": {
+      "share": {
+        "copy": "نسخ الرابط",
+        "copied": "تم نسخ الرابط",
+        "whatsapp": "مشاركة على واتساب",
+        "facebook": "مشاركة على فيسبوك"
+      }
+    }
+  },
+
+  "career": {
+    "job": {
+      "apply": "تقديم الآن",
+      "description": {
+        "headline": "حول الوظيفة",
+        "details": "التفاصيل",
+        "employmentType": "نوع التوظيف",
+        "contractType": "نوع العقد",
+        "startDate": "تاريخ البدء",
+        "hourlyRate": "الأجر بالساعة",
+        "locations": "أماكن العمل المتاحة"
+      },
+      "employmentType": {
+        "full-time": "دوام كامل",
+        "part-time": "دوام جزئي",
+        "full-time-or-part-time": "دوام كامل أو جزئي"
+      },
+      "contractType": {
+        "permanent": "دائم",
+        "fixed-term": "محدد المدة",
+        "freelance": "عمل حر"
+      },
+      "seo": {
+        "title": "عرض عمل: {title} ({genderHint}) - {employmentType}",
+        "description": "المواقع: {locations}"
+      }
+    }
+  },
+
+  "locations": {
+    "headline": "المواقع",
+    "breadcrumbTitle": "المواقع",
+    "upcomingOpening": "الافتتاحات القريبة",
+    "plannedLocations": "المواقع المخطط لها",
+    "allLocations": "جميع المواقع",
+    "location": {
+      "seo": {
+        "title": "{locationName}",
+        "description": "اكتشف علاجاتنا في {city}، {locationName}."
+      },
+      "openingHoursOpenNewToday": "افتتاح جديد اليوم",
+      "openingHoursOpenSoon": "من {date}",
+      "openingHoursComingSoon": "قريباً"
+    },
+    "city": {
+      "allLocations": "جميع المواقع في {city}",
+      "upcomingOpening": "الافتتاحات القريبة في {city}",
+      "plannedLocations": "المواقع المخطط لها في {city}",
+      "error": {
+        "noLocations": "لا توجد مواقع",
+        "noLocationsDescription": "للأسف، لم نفتتح موقعًا في {city} بعد."
+      }
+    }
+  },
+
+  "doctors": {
+    "headline": "الأطباء",
+    "breadcrumbTitle": "الأطباء",
+    "doctor": {
+      "breadcrumbTitle": "الأطباء",
+      "aboutMe": {
+        "headline": "عني"
+      },
+      "specializations": {
+        "headline": "التخصصات"
+      },
+      "locations": {
+        "headline": {
+          "one": "أعالج في {city}",
+          "other": "أعالج في {count} مواقع"
+        }
+      },
+      "seo": {
+        "description": "{ role } في { brandName }"
+      }
+    }
+  },
+
+  "treatments": {
+    "breadcrumbTitle": "العلاجات",
+    "seo": {
+      "title": "جميع العلاجات",
+      "description": "اكتشف علاجاتنا من الفئات {categories} واختر العلاج المناسب لك."
+    },
+    "errors": {
+      "noTreatmentsGroups": {
+        "title": "لا توجد علاجات",
+        "description": "للأسف، لم ننشئ أي علاجات باللغة المحددة بعد."
+      }
+    },
+    "treatment": {
+      "allTreatments": "العلاجات",
+      "error": {
+        "treatmentNotFound": "العلاج غير موجود",
+        "treatmentNotFoundDescription": "العلاج المطلوب غير موجود."
+      }
+    }
+  },
+
+  "productPage": {
+    "error": {
+      "productNotFound": "المنتج غير موجود",
+      "productNotFoundDescription": "المنتج المطلوب غير موجود."
+    },
+    "metaDescription": "{name} من {manufacturer} في المتغيرات {variants} متاح من {price} بالقرب منك"
+  },
+
+  "blocks": {
+    "jobTeasers": {
+      "headline": "الوظائف الشاغرة الحالية",
+      "andMore": "المزيد",
+      "filter": {
+        "label": "تصفية حسب الموقع:",
+        "placeholder": "جميع المواقع",
+        "all": "جميع المواقع"
+      }
+    },
+    "qualifications": {
+      "headline": "المؤهلات",
+      "vita": "السيرة الذاتية"
+    },
+    "employeeList": {
+      "readMore": "الملف الشخصي"
+    },
+    "treatmentDetails": {
+      "price": "السعر",
+      "duration": "مدة العلاج",
+      "effect": "النتيجة",
+      "initialResults": "النتائج الأولية",
+      "finalResults": "النتائج النهائية",
+      "effectDuration": "مدة النتيجة",
+      "anesthesia": "التخدير",
+      "medication": "العلاج",
+      "aftercareSummary": "العناية اللاحقة",
+      "followUpTreatments": "العلاجات اللاحقة",
+      "noInformation": "لا توجد معلومات متاحة",
+      "headline": "تفاصيل العلاج"
+    },
+    "tableOfContents": {
+      "content": "المحتوى"
+    },
+    "treatmentPlan": {
+      "followUpPlanText": "تكرار العلاج",
+      "endOfPlanText": "اكتمال العلاج",
+      "age": "العمر",
+      "treatmentGoal": "الهدف",
+      "week": "الأسبوع"
+    },
+    "locationTeasers": {
+      "filter": {
+        "label": "تصفية حسب الولاية:",
+        "placeholder": "جميع الولايات",
+        "all": "جميع الولايات"
+      }
+    },
+    "directions": {
+      "walk": "المشي",
+      "publicTransport": "النقل العام",
+      "car": "السيارة"
+    },
+    "reviews": {
+      "headline": "ما يقوله عملائنا",
+      "cta": {
+        "bookAppointment": "احجز موعدًا"
+      }
+    },
+    "locationContact": {
+      "openingHours": "ساعات العمل",
+      "openingHoursDescription": "مفتوح الآن حتى {hours}",
+      "openingHoursToday": "مفتوح اليوم من {opens} إلى {closes}",
+      "openingHoursNext": "يفتح يوم {day} في {time}",
+      "openingHoursOpenSoon": "افتتاح قريب في {date}. ستكون هذه ساعات عملنا",
+      "openingHoursComingSoon": "سنفتتح قريباً. ستكون هذه ساعات عملنا",
+      "map": {
+        "title": "خريطة عنوان الموقع"
+      },
+      "directions": "الاتجاهات",
+      "phone": "الهاتف",
+      "whatsapp": "واتساب",
+      "address": "عنوان الموقع"
+    },
+    "locationMap": {
+      "footer": {
+        "customers_one": "عميل",
+        "customers_other": "العملاء",
+        "lounges_one": "لاونج",
+        "lounges_other": "اللاونجات",
+        "doctors_one": "طبيب",
+        "doctors_other": "الأطباء",
+        "clinic_one": "عيادة خاصة",
+        "clinic_other": "عيادات خاصة"
+      },
+      "map": {
+        "title": "خريطة المواقع",
+        "description": "خريطة ألمانيا مع علامات للمواقع. الحالة: مفتوح، افتتاح قريب، أو قريباً.",
+        "listLabel": "المواقع على الخريطة"
+      },
+      "status": {
+        "open": "مفتوح",
+        "openSoon": "افتتاح قريب",
+        "comingSoon": "قريباً"
+      },
+      "cta": "العثور على لاونج طبي"
+    },
+    "treatmentHero": {
+      "discountCta": "احصل على خصم {pct}%",
+      "ctaActionLabel": "احجز موعدًا"
+    },
+    "productCategoryPriceOverview": {
+      "treatments": "العلاجات",
+      "products": "المنتجات",
+      "treatmentDetails": "تفاصيل العلاج",
+      "productDetails": "تفاصيل المنتج"
+    },
+    "productHero": {
+      "previousImage": "الصورة السابقة",
+      "nextImage": "الصورة التالية",
+      "selectImage": "اختر الصورة {index}",
+      "includesVat": "شامل الضريبة",
+      "bookAppointment": "احجز موعدًا",
+      "footerDescription": "يرجى ملاحظة أن منتجاتنا لا تباع بشكل منفصل. يتم استخدامها فقط في سياق العلاج المقابل – بعد استشارة طبية شاملة. ببساطة احجز موعدًا بالقرب منك واكتشف أي علاجات ممكنة مع هذا المنتج.",
+      "treatmentsWith": "العلاجات مع {manufacturer} {product}"
+    }
+  },
+
+  "error": {
+    "500": {
+      "statusMessage": "حدث خطأ",
+      "message": "حدث خطأ",
+      "button": "الانتقال إلى الصفحة الرئيسية"
+    },
+    "404": {
+      "statusMessage": "الصفحة غير موجودة",
+      "message": "الصفحة المطلوبة غير موجودة في اللغة المحددة.",
+      "button": "الانتقال إلى الصفحة الرئيسية"
+    }
+  },
+
+  "dialogs": {
+    "calendly": {
+      "header": "احجز موعدك الآن عبر Calendly"
+    },
+    "newsletterSignUp": {
+      "header": "الاشتراك في النشرة الإخبارية"
+    }
+  }
+}

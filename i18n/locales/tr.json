@@ -1,0 +1,357 @@
+{
+  "common": {
+    "discount": "İndirim",
+    "comparison": "Karşılaştırma",
+    "reviews": "Yorumlar",
+    "five-star": "5 Yıldız",
+    "less": "Daha az",
+    "more": "Daha fazla",
+    "date": {
+      "fromDate": "{date} tarihinden itibaren"
+    },
+    "week": {
+      "monday": "Pazartesi",
+      "tuesday": "Salı",
+      "wednesday": "Çarşamba",
+      "thursday": "Perşembe",
+      "friday": "Cuma",
+      "saturday": "Cumartesi",
+      "sunday": "Pazar"
+    },
+    "openingHours": {
+      "open": "Açık",
+      "closed": "Kapalı"
+    },
+    "federalState": {
+      "baden-wuerttemberg": "Baden-Württemberg",
+      "bavaria": "Bavyera",
+      "berlin": "Berlin",
+      "brandenburg": "Brandenburg",
+      "bremen": "Bremen",
+      "hamburg": "Hamburg",
+      "hesse": "Hessen",
+      "mecklenburg-western-pomerania": "Mecklenburg-Vorpommern",
+      "lower-saxony": "Aşağı Saksonya",
+      "north-rhine-westphalia": "Kuzey Ren-Vestfalya",
+      "rhineland-palatinate": "Renanya-Palatina",
+      "saarland": "Saarland",
+      "saxony": "Saksonya",
+      "saxony-anhalt": "Saksonya-Anhalt",
+      "schleswig-holstein": "Schleswig-Holstein",
+      "thuringia": "Türingiya"
+    },
+    "price": {
+      "cheap": "ucuz",
+      "startingPrefix": "başlangıç",
+      "forPrefix": "için"
+    }
+  },
+
+  "navigation": {
+    "secondary": {
+      "doctors": "Doktorlar",
+      "locations": "Konumlar",
+      "prices": "Fiyatlar",
+      "careers": "İş ilanları",
+      "blog": "Blog",
+      "aboutUs": "Hakkımızda"
+    },
+    "footer": {
+      "treatments": "Tedaviler",
+      "company": "Şirket",
+      "prices": "Fiyatlar"
+    },
+    "meta": {
+      "privacyPolicy": "Gizlilik Politikası",
+      "imprint": "İmza"
+    }
+  },
+
+  "cta": {
+    "bookAppointment": "Randevu al",
+    "learnMore": "Daha fazla bilgi",
+    "details": "Detaylar",
+    "subscribe": "Abone ol"
+  },
+
+  "location": {
+    "comingSoon": "Yakında",
+    "sinceToday": "Bugün yeni açılış",
+    "error": {
+      "locationNotFound": "Konum bulunamadı",
+      "locationNotFoundDescription": "İstenen konum bulunamadı."
+    },
+    "treatmentTeasers": {
+      "headline": {
+        "lounge": "{city} şehrindeki lounge'umuzda tedaviler",
+        "center": "{city} şehrindeki lounge'umuzda tedaviler",
+        "clinic": "{city} şehrindeki özel kliniğimizde tedaviler"
+      }
+    }
+  },
+
+  "blog": {
+    "breadcrumbTitle": "Blog",
+    "headline": "Blog",
+    "intro": "Sağlık ve güzellik konusunda bilgi, haberler ve her şey.",
+    "emptyState": {
+      "title": "Makale bulunamadı",
+      "description": "Maalesef, seçilen dilde bu kategori için makale bulunmamaktadır."
+    },
+    "article": {
+      "share": {
+        "copy": "Bağlantıyı kopyala",
+        "copied": "Bağlantı kopyalandı",
+        "whatsapp": "WhatsApp'ta paylaş",
+        "facebook": "Facebook'ta paylaş"
+      }
+    }
+  },
+
+  "career": {
+    "job": {
+      "apply": "Şimdi başvur",
+      "description": {
+        "headline": "İş hakkında",
+        "details": "Detaylar",
+        "employmentType": "Çalışma türü",
+        "contractType": "Sözleşme türü",
+        "startDate": "Başlangıç tarihi",
+        "hourlyRate": "Saatlik ücret",
+        "locations": "Mevcut çalışma yerleri"
+      },
+      "employmentType": {
+        "full-time": "Tam zamanlı",
+        "part-time": "Yarı zamanlı",
+        "full-time-or-part-time": "Tam zamanlı veya yarı zamanlı"
+      },
+      "contractType": {
+        "permanent": "Süresiz",
+        "fixed-term": "Belirli süreli",
+        "freelance": "Serbest çalışan"
+      },
+      "seo": {
+        "title": "İş ilanı: {title} ({genderHint}) - {employmentType}",
+        "description": "Konumlar: {locations}"
+      }
+    }
+  },
+
+  "locations": {
+    "headline": "Konumlar",
+    "breadcrumbTitle": "Konumlar",
+    "upcomingOpening": "Yaklaşan açılışlar",
+    "plannedLocations": "Planlanmış konumlar",
+    "allLocations": "Tüm konumlar",
+    "location": {
+      "seo": {
+        "title": "{locationName}",
+        "description": "{city} şehrindeki {locationName} konumumuzdaki tedavilerimizi keşfedin."
+      },
+      "openingHoursOpenNewToday": "Bugün yeni açılış",
+      "openingHoursOpenSoon": "{date} tarihinden itibaren",
+      "openingHoursComingSoon": "Yakında"
+    },
+    "city": {
+      "allLocations": "{city} şehrindeki tüm konumlar",
+      "upcomingOpening": "{city} şehrinde yaklaşan açılışlar",
+      "plannedLocations": "{city} şehrinde planlanmış konumlar",
+      "error": {
+        "noLocations": "Konum bulunamadı",
+        "noLocationsDescription": "Maalesef, {city} şehrinde henüz bir konum açmadık."
+      }
+    }
+  },
+
+  "doctors": {
+    "headline": "Doktorlar",
+    "breadcrumbTitle": "Doktorlar",
+    "doctor": {
+      "breadcrumbTitle": "Doktorlar",
+      "aboutMe": {
+        "headline": "Hakkımda"
+      },
+      "specializations": {
+        "headline": "Uzmanlık alanları"
+      },
+      "locations": {
+        "headline": {
+          "one": "{city} şehrinde tedavi yapıyorum",
+          "other": "{count} konumda tedavi yapıyorum"
+        }
+      },
+      "seo": {
+        "description": "{ role } { brandName }'de"
+      }
+    }
+  },
+
+  "treatments": {
+    "breadcrumbTitle": "Tedaviler",
+    "seo": {
+      "title": "Tüm tedaviler",
+      "description": "{categories} kategorilerindeki tedavilerimizi keşfedin ve size uygun olanı bulun."
+    },
+    "errors": {
+      "noTreatmentsGroups": {
+        "title": "Tedavi bulunamadı",
+        "description": "Maalesef, seçilen dilde henüz tedavi oluşturmadık."
+      }
+    },
+    "treatment": {
+      "allTreatments": "Tedaviler",
+      "error": {
+        "treatmentNotFound": "Tedavi bulunamadı",
+        "treatmentNotFoundDescription": "İstenen tedavi bulunamadı."
+      }
+    }
+  },
+
+  "productPage": {
+    "error": {
+      "productNotFound": "Ürün bulunamadı",
+      "productNotFoundDescription": "İstenen ürün bulunamadı."
+    },
+    "metaDescription": "{manufacturer} markasından {name} ürünü {variants} varyantlarında {price} fiyatından itibaren yakınınızda mevcut"
+  },
+
+  "blocks": {
+    "jobTeasers": {
+      "headline": "Mevcut iş ilanları",
+      "andMore": "daha fazla",
+      "filter": {
+        "label": "Konuma göre filtrele:",
+        "placeholder": "Tüm konumlar",
+        "all": "Tüm konumlar"
+      }
+    },
+    "qualifications": {
+      "headline": "Nitelikler",
+      "vita": "Özgeçmiş"
+    },
+    "employeeList": {
+      "readMore": "Profile git"
+    },
+    "treatmentDetails": {
+      "price": "Fiyat",
+      "duration": "Tedavi süresi",
+      "effect": "Etki",
+      "initialResults": "İlk sonuçlar",
+      "finalResults": "Nihai sonuçlar",
+      "effectDuration": "Etki süresi",
+      "anesthesia": "Anestezi",
+      "medication": "İlaç",
+      "aftercareSummary": "Sonrası bakım",
+      "followUpTreatments": "Takip tedavileri",
+      "noInformation": "Bilgi mevcut değil",
+      "headline": "Tedavi detayları"
+    },
+    "tableOfContents": {
+      "content": "İçerik"
+    },
+    "treatmentPlan": {
+      "followUpPlanText": "Tedaviyi tekrarla",
+      "endOfPlanText": "Tedavi tamamlandı",
+      "age": "Yaş",
+      "treatmentGoal": "Hedef",
+      "week": "Hafta"
+    },
+    "locationTeasers": {
+      "filter": {
+        "label": "Eyalete göre filtrele:",
+        "placeholder": "Tüm eyaletler",
+        "all": "Tüm eyaletler"
+      }
+    },
+    "directions": {
+      "walk": "Yürüyerek",
+      "publicTransport": "Toplu taşıma",
+      "car": "Araba"
+    },
+    "reviews": {
+      "headline": "Müşterilerimizin söyledikleri",
+      "cta": {
+        "bookAppointment": "Randevu al"
+      }
+    },
+    "locationContact": {
+      "openingHours": "Çalışma saatleri",
+      "openingHoursDescription": "Şu anda açık, {hours} saatine kadar",
+      "openingHoursToday": "Bugün {opens} - {closes} saatleri arasında açık",
+      "openingHoursNext": "{day} günü {time} saatinde açılacak",
+      "openingHoursOpenSoon": "{date} tarihinde yakında açılış. Bunlar çalışma saatlerimiz olacak",
+      "openingHoursComingSoon": "Yakında açılıyoruz. Bunlar çalışma saatlerimiz olacak",
+      "map": {
+        "title": "Konum adresinin haritası"
+      },
+      "directions": "Yol tarifi",
+      "phone": "Telefon",
+      "whatsapp": "WhatsApp sohbeti",
+      "address": "Konum adresi"
+    },
+    "locationMap": {
+      "footer": {
+        "customers_one": "Müşteri",
+        "customers_other": "Müşteriler",
+        "lounges_one": "Lounge",
+        "lounges_other": "Loungelar",
+        "doctors_one": "Doktor",
+        "doctors_other": "Doktorlar",
+        "clinic_one": "Özel klinik",
+        "clinic_other": "Özel klinikler"
+      },
+      "map": {
+        "title": "Konum haritası",
+        "description": "Almanya haritası üzerinde konum işaretleri. Durum: Açık, Yakında açılıyor veya Çok yakında.",
+        "listLabel": "Haritadaki konumlar"
+      },
+      "status": {
+        "open": "Açık",
+        "openSoon": "Yakında açılıyor",
+        "comingSoon": "Çok yakında"
+      },
+      "cta": "Medical Lounge bul"
+    },
+    "treatmentHero": {
+      "discountCta": "%{pct} indirim kazan",
+      "ctaActionLabel": "Randevu al"
+    },
+    "productCategoryPriceOverview": {
+      "treatments": "Tedaviler",
+      "products": "Ürünler",
+      "treatmentDetails": "Tedavi detayları",
+      "productDetails": "Ürün detayları"
+    },
+    "productHero": {
+      "previousImage": "Önceki resim",
+      "nextImage": "Sonraki resim",
+      "selectImage": "{index}. resmi seç",
+      "includesVat": "KDV dahil",
+      "bookAppointment": "Randevu al",
+      "footerDescription": "Lütfen ürünlerimizin tek başına satılmadığını unutmayın. Bu ürünler yalnızca ilgili tedavi kapsamında kullanılır – kapsamlı bir tıbbi danışmanlık sonrasında. Sadece yakınınızda bir randevu alın ve bu ürünle hangi tedavilerin mümkün olduğunu öğrenin.",
+      "treatmentsWith": "{manufacturer} {product} ile tedaviler"
+    }
+  },
+
+  "error": {
+    "500": {
+      "statusMessage": "Hata oluştu",
+      "message": "Hata oluştu",
+      "button": "Ana sayfaya git"
+    },
+    "404": {
+      "statusMessage": "Sayfa bulunamadı",
+      "message": "İstenen sayfa seçilen dilde mevcut değil.",
+      "button": "Ana sayfaya git"
+    }
+  },
+
+  "dialogs": {
+    "calendly": {
+      "header": "Calendly üzerinden şimdi randevu al"
+    },
+    "newsletterSignUp": {
+      "header": "Bülten kaydı"
+    }
+  }
+}

@@ -1,0 +1,357 @@
+{
+  "common": {
+    "discount": "Rabatt",
+    "comparison": "Vergleich",
+    "reviews": "Bewertungen",
+    "five-star": "5-Sterne",
+    "less": "Weniger anzeigen",
+    "more": "Mehr anzeigen",
+    "date": {
+      "fromDate": "ab {date}"
+    },
+    "week": {
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    },
+    "openingHours": {
+      "open": "Geöffnet",
+      "closed": "Geschlossen"
+    },
+    "federalState": {
+      "baden-wuerttemberg": "Baden-Württemberg",
+      "bavaria": "Bayern",
+      "berlin": "Berlin",
+      "brandenburg": "Brandenburg",
+      "bremen": "Bremen",
+      "hamburg": "Hamburg",
+      "hesse": "Hessen",
+      "mecklenburg-western-pomerania": "Mecklenburg-Vorpommern",
+      "lower-saxony": "Niedersachsen",
+      "north-rhine-westphalia": "Nordrhein-Westfalen",
+      "rhineland-palatinate": "Rheinland-Pfalz",
+      "saarland": "Saarland",
+      "saxony": "Sachsen",
+      "saxony-anhalt": "Sachsen-Anhalt",
+      "schleswig-holstein": "Schleswig-Holstein",
+      "thuringia": "Thüringen"
+    },
+    "price": {
+      "cheap": "günstig",
+      "startingPrefix": "ab",
+      "forPrefix": "für"
+    }
+  },
+
+  "navigation": {
+    "secondary": {
+      "doctors": "Ärzte",
+      "locations": "Standorte",
+      "prices": "Preise",
+      "careers": "Karriere",
+      "blog": "Blog",
+      "aboutUs": "Über uns"
+    },
+    "footer": {
+      "treatments": "Behandlungen",
+      "company": "Unternehmen",
+      "prices": "Preise"
+    },
+    "meta": {
+      "privacyPolicy": "Datenschutz",
+      "imprint": "Impressum"
+    }
+  },
+
+  "cta": {
+    "bookAppointment": "Termin buchen",
+    "learnMore": "Mehr erfahren",
+    "details": "Details",
+    "subscribe": "Abonnieren"
+  },
+
+  "location": {
+    "comingSoon": "Coming soon",
+    "sinceToday": "Neueröffnung heute",
+    "error": {
+      "locationNotFound": "Standort nicht gefunden",
+      "locationNotFoundDescription": "Der angeforderte Standort existiert nicht."
+    },
+    "treatmentTeasers": {
+      "headline": {
+        "lounge": "Behandlungen in unserer Lounge in {city}",
+        "center": "Behandlungen in unserer Lounge in {city}",
+        "clinic": "Behandlungen in unserer Privatklinik in {city}"
+      }
+    }
+  },
+
+  "blog": {
+    "breadcrumbTitle": "Blog",
+    "headline": "Blog",
+    "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
+    "emptyState": {
+      "title": "Keine Artikel gefunden",
+      "description": "Leider sind keine Artikel für diese Kategorie in deiner ausgewählten Sprache verfügbar."
+    },
+    "article": {
+      "share": {
+        "copy": "Link kopieren",
+        "copied": "Link kopiert",
+        "whatsapp": "Auf WhatsApp teilen",
+        "facebook": "Auf Facebook teilen"
+      }
+    }
+  },
+
+  "career": {
+    "job": {
+      "apply": "Jetzt bewerben",
+      "description": {
+        "headline": "Über den Job",
+        "details": "Details",
+        "employmentType": "Anstellungsart",
+        "contractType": "Befristung",
+        "startDate": "Startdatum",
+        "hourlyRate": "Stundenlohn",
+        "locations": "Verfügbare Arbeitsorte"
+      },
+      "employmentType": {
+        "full-time": "Vollzeit",
+        "part-time": "Teilzeit",
+        "full-time-or-part-time": "Vollzeit oder Teilzeit"
+      },
+      "contractType": {
+        "permanent": "Unbefristet",
+        "fixed-term": "Befristet",
+        "freelance": "Freiberuflich"
+      },
+      "seo": {
+        "title": "Jobangebot: {title} ({genderHint}) - {employmentType}",
+        "description": "Standorte: {locations}"
+      }
+    }
+  },
+
+  "locations": {
+    "headline": "Standorte",
+    "breadcrumbTitle": "Standorte",
+    "upcomingOpening": "Anstehende Neueröffnungen",
+    "plannedLocations": "Standorte in Planung",
+    "allLocations": "Alle Standorte",
+    "location": {
+      "seo": {
+        "title": "{locationName}",
+        "description": "Entdecke unsere Behandlungen in {city}, {locationName}."
+      },
+      "openingHoursOpenNewToday": "Neueröffnung heute",
+      "openingHoursOpenSoon": "ab {date}",
+      "openingHoursComingSoon": "Coming Soon"
+    },
+    "city": {
+      "allLocations": "Alle Standorte in {city}",
+      "upcomingOpening": "Bald neu in {city}",
+      "plannedLocations": "Geplante Standorte in {city}",
+      "error": {
+        "noLocations": "Keine Standorte gefunden",
+        "noLocationsDescription": "Leider haben wir noch keinen Standort in {city} eröffnet."
+      }
+    }
+  },
+
+  "doctors": {
+    "headline": "Ärzte",
+    "breadcrumbTitle": "Ärzte",
+    "doctor": {
+      "breadcrumbTitle": "Ärzte",
+      "aboutMe": {
+        "headline": "Über mich"
+      },
+      "specializations": {
+        "headline": "Spezialgebiete"
+      },
+      "locations": {
+        "headline": {
+          "one": "Ich behandle in {city}",
+          "other": "Ich behandle an {count} Standorten"
+        }
+      },
+      "seo": {
+        "description": "{ role } bei { brandName }"
+      }
+    }
+  },
+
+  "treatments": {
+    "breadcrumbTitle": "Behandlungen",
+    "seo": {
+      "title": "Alle Behandlungen",
+      "description": "Entdecke unsere Behandlungen aus den Bereichen {categories} und finde die passende für dich."
+    },
+    "errors": {
+      "noTreatmentsGroups": {
+        "title": "Keine Behandlungen gefunden",
+        "description": "Leider haben wir noch keine Behandlungen in deiner ausgewählten Sprache erstellt."
+      }
+    },
+    "treatment": {
+      "allTreatments": "Behandlungen",
+      "error": {
+        "treatmentNotFound": "Behandlung nicht gefunden",
+        "treatmentNotFoundDescription": "Die angeforderte Behandlung existiert nicht."
+      }
+    }
+  },
+
+  "productPage": {
+    "error": {
+      "productNotFound": "Produkt nicht gefunden",
+      "productNotFoundDescription": "Das angeforderte Produkt existiert nicht."
+    },
+    "metaDescription": "{name} von {manufacturer} in den Varianten {variants} ab {price} in deiner Nähe erhältlich"
+  },
+
+  "blocks": {
+    "jobTeasers": {
+      "headline": "Aktuelle Stellenangebote",
+      "andMore": "weitere",
+      "filter": {
+        "label": "Nach Standort filtern:",
+        "placeholder": "Alle Standorte",
+        "all": "Alle Standorte"
+      }
+    },
+    "qualifications": {
+      "headline": "Qualifikationen",
+      "vita": "Werdegang"
+    },
+    "employeeList": {
+      "readMore": "Zum Profil"
+    },
+    "treatmentDetails": {
+      "price": "Preis",
+      "duration": "Behandlungsdauer",
+      "effect": "Effekt",
+      "initialResults": "Erste Ergebnisse",
+      "finalResults": "Endgültige Ergebnisse",
+      "effectDuration": "Wirkungsdauer",
+      "anesthesia": "Anästhesie",
+      "medication": "Medikation",
+      "aftercareSummary": "Nachbehandlung",
+      "followUpTreatments": "Folgebehandlungen",
+      "noInformation": "Keine Informationen verfügbar",
+      "headline": "Details zur Behandlung"
+    },
+    "tableOfContents": {
+      "content": "Inhalt"
+    },
+    "treatmentPlan": {
+      "followUpPlanText": "Behandlung wiederholen",
+      "endOfPlanText": "Behandlung abgeschlossen",
+      "age": "Alter",
+      "treatmentGoal": "Ziel",
+      "week": "Woche"
+    },
+    "locationTeasers": {
+      "filter": {
+        "label": "Nach Bundesland filtern:",
+        "placeholder": "Alle Bundesländer",
+        "all": "Alle Bundesländer"
+      }
+    },
+    "directions": {
+      "walk": "Zu Fuß",
+      "publicTransport": "Mit dem Nahverkehr",
+      "car": "Mit dem Auto"
+    },
+    "reviews": {
+      "headline": "Das sagen unsere Kunden",
+      "cta": {
+        "bookAppointment": "Termin buchen"
+      }
+    },
+    "locationContact": {
+      "openingHours": "Öffnungszeiten",
+      "openingHoursDescription": "Jetzt geöffnet bis {hours} Uhr",
+      "openingHoursToday": "Heute geöffnet von {opens} bis {closes} Uhr",
+      "openingHoursNext": "Öffnet am {day} um {time} Uhr",
+      "openingHoursOpenSoon": "Neueröffnung am {date}. Das werden unsere Öffnungszeiten sein",
+      "openingHoursComingSoon": "Wir eröffnen bald. Das werden unsere Öffnungszeiten sein",
+      "map": {
+        "title": "Karte der Standortadresse"
+      },
+      "directions": "Wegbeschreibung",
+      "phone": "Telefon",
+      "whatsapp": "WhatsApp Chat",
+      "address": "Standortadresse"
+    },
+    "locationMap": {
+      "footer": {
+        "customers_one": "Kunde",
+        "customers_other": "Kunden",
+        "lounges_one": "Lounge",
+        "lounges_other": "Lounges",
+        "doctors_one": "Arzt",
+        "doctors_other": "Ärzte",
+        "clinic_one": "Privatklinik",
+        "clinic_other": "Privatkliniken"
+      },
+      "map": {
+        "title": "Standortkarte",
+        "description": "Karte von Deutschland mit Markierungen für Standorte. Status: Geöffnet, Neueröffnung bald oder Coming Soon.",
+        "listLabel": "Standorte auf der Karte"
+      },
+      "status": {
+        "open": "Geöffnet",
+        "openSoon": "Neueröffnung bald",
+        "comingSoon": "Coming Soon"
+      },
+      "cta": "Medical Lounge finden"
+    },
+    "treatmentHero": {
+      "discountCta": "{pct}% Rabatt sichern",
+      "ctaActionLabel": "Termin buchen"
+    },
+    "productCategoryPriceOverview": {
+      "treatments": "Behandlungen",
+      "products": "Produkte",
+      "treatmentDetails": "Behandlungdetails",
+      "productDetails": "Produktdetails"
+    },
+    "productHero": {
+      "previousImage": "Vorheriges Bild",
+      "nextImage": "Nächstes Bild",
+      "selectImage": "Bild {index} auswählen",
+      "includesVat": "Inkl. MwSt.",
+      "bookAppointment": "Termin buchen",
+      "footerDescription": "Bitte beachte, dass unsere Produkte nicht einzeln verkauft werden. Sie kommen ausschließlich im Rahmen einer entsprechenden Behandlung zum Einsatz – nach einer ausführlichen ärztlichen Beratung. Buche einfach einen Termin in deiner Nähe und erfahre, welche Behandlungen mit diesem Produkt möglich sind.",
+      "treatmentsWith": "Behandlungen mit {manufacturer} {product}"
+    }
+  },
+
+  "error": {
+    "500": {
+      "statusMessage": "Hoppla! Etwas ist schiefgelaufen.",
+      "message": "Wir haben den Fehler gemeldet und arbeiten daran, ihn zu beheben.",
+      "button": "Zur Startseite"
+    },
+    "404": {
+      "statusMessage": "Nicht schön!",
+      "message": "Die angeforderte Seite existiert nicht oder ist in der ausgewähltenSprache nicht verfügbar.",
+      "button": "Zur Startseite"
+    }
+  },
+
+  "dialogs": {
+    "calendly": {
+      "header": "Buche deinen Termin jetzt über Calendly"
+    },
+    "newsletterSignUp": {
+      "header": "Newsletter Anmeldung"
+    }
+  }
+}

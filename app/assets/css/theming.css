@@ -1,0 +1,95 @@
+.theme-light {
+  --card-color-bg: var(--color-card-bg-light);
+  --card-color-text: var(--light-color-text);
+  --card-color-bg-item-hover: var(--color-gray-100);
+
+  --color-text: var(--light-color-text);
+  --color-text-light: var(--light-color-text-light);
+  --color-text-muted: var(--light-color-text-muted);
+  --color-border-light: var(--light-color-border-light);
+  --color-border-mute: var(--light-color-border-mute);
+
+  --button-secondary-color-bg: var(--color-gray-200);
+  --button-secondary-color-bg-hover: var(--color-gray-300);
+
+  --button-quaternary-color-bg-hover: var(--color-gray-200);
+
+  background: var(--color-card-bg-light);
+}
+
+.theme-soft {
+  --card-color-bg: var(--color-card-bg-soft);
+  --card-color-text: var(--soft-color-text);
+  --card-color-bg-item-hover: var(--color-gray-300);
+
+  --color-text: var(--soft-color-text);
+  --color-text-light: var(--soft-color-text-light);
+  --color-text-muted: var(--soft-color-text-muted);
+  --color-border-light: var(--soft-color-border-light);
+  --color-border-mute: var(--soft-color-border-mute);
+
+  --button-secondary-color-bg: var(--color-gray-300);
+  --button-secondary-color-bg-hover: var(--color-gray-400);
+
+  --button-quaternary-color-bg-hover: var(--color-gray-300);
+
+  background: var(--color-card-bg-soft);
+}
+
+.theme-neutral {
+  --card-color-bg: var(--color-card-bg-neutral);
+  --card-color-text: var(--neutral-color-text);
+  --card-color-bg-item-hover: var(--color-gray-700);
+
+  --color-text: var(--neutral-color-text);
+  --color-text-light: var(--neutral-color-text-light);
+  --color-text-muted: var(--neutral-color-text-muted);
+  --color-border-light: var(--neutral-color-border-light);
+  --color-border-mute: var(--neutral-color-border-mute);
+
+  --button-primary-color-bg: var(--color-white);
+  --button-primary-color-bg-hover: var(--color-gray-200);
+  --button-primary-color-text: var(--color-black);
+
+  --button-secondary-color-bg: var(--color-gray-700);
+  --button-secondary-color-bg-hover: var(--color-gray-900);
+  --button-secondary-color-text: var(--color-gray-100);
+
+  --button-tertiary-color-border: var(--color-gray-200);
+  --button-tertiary-color-border-hover: var(--color-white);
+  --button-tertiary-color-text: var(--color-gray-100);
+
+  --button-quaternary-color-text: var(--color-gray-100);
+  --button-quaternary-color-bg-hover: var(--color-gray-700);
+
+  background: var(--color-card-bg-neutral);
+}
+
+.theme-strong {
+  --card-color-bg: var(--color-card-bg-strong);
+  --card-color-text: var(--strong-color-text);
+  --card-color-bg-item-hover: var(--color-gray-800);
+
+  --color-text: var(--strong-color-text);
+  --color-text-light: var(--strong-color-text-light);
+  --color-text-muted: var(--strong-color-text-muted);
+  --color-border-light: var(--strong-color-border-light);
+  --color-border-mute: var(--strong-color-border-mute);
+
+  --button-primary-color-bg: var(--color-white);
+  --button-primary-color-bg-hover: var(--color-gray-200);
+  --button-primary-color-text: var(--color-black);
+
+  --button-secondary-color-bg: var(--color-gray-800);
+  --button-secondary-color-bg-hover: var(--color-gray-900);
+  --button-secondary-color-text: var(--color-gray-100);
+
+  --button-tertiary-color-border: var(--color-gray-200);
+  --button-tertiary-color-border-hover: var(--color-white);
+  --button-tertiary-color-text: var(--color-gray-100);
+
+  --button-quaternary-color-text: var(--color-gray-100);
+  --button-quaternary-color-bg-hover: var(--color-gray-800);
+
+  background: var(--color-card-bg-strong);
+}

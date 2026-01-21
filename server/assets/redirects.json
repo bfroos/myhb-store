@@ -1,0 +1,4 @@
+[
+  { "from": "/impressum", "to": "/p/impressum", "code": 301 },
+  { "from": "/datenschutz", "to": "/p/datenschutz", "code": 301 }
+]

@@ -1,0 +1,58 @@
+<template>
+  <BlockTableOfContents
+    v-if="fixedBlocks?.tableOfContents"
+    v-bind="fixedBlocks.tableOfContents"
+  />
+  <BlockMediaBento
+    v-if="fixedBlocks?.about"
+    v-bind="fixedBlocks.about"
+    id="how-it-works"
+  />
+  <BlockReviewsBlock
+    v-if="fixedBlocks?.reviews"
+    v-bind="fixedBlocks.reviews"
+    id="reviews"
+  />
+  <BlockTreatmentDetails
+    v-if="fixedBlocks?.treatmentDetails"
+    v-bind="fixedBlocks.treatmentDetails"
+    id="treatment-details"
+  />
+  <BlockTreatmentPlan
+    v-if="fixedBlocks?.treatmentPlan"
+    v-bind="fixedBlocks.treatmentPlan"
+    id="treatment-plan"
+  />
+  <BlockBenefitsList
+    v-if="fixedBlocks?.benefits"
+    v-bind="fixedBlocks.benefits"
+    id="benefits"
+  />
+  <BlockComparisonBlock
+    v-if="fixedBlocks?.suitability"
+    v-bind="fixedBlocks.suitability"
+    id="suitability"
+  />
+  <BlockEmployeeBlock
+    v-if="fixedBlocks?.medicalTeamHighlight"
+    v-bind="fixedBlocks.medicalTeamHighlight"
+    id="employee"
+  />
+  <BlockProcessSteps
+    v-if="fixedBlocks?.treatmentProcess"
+    v-bind="fixedBlocks.treatmentProcess"
+    id="treatment-process-steps"
+  />
+  <BlockTreatmentTeasers
+    v-if="fixedBlocks?.relatedTreatments"
+    v-bind="fixedBlocks.relatedTreatments"
+    id="related-treatments"
+  />
+  <BlockFaqBlock v-if="fixedBlocks?.faq" v-bind="fixedBlocks.faq" id="faq" />
+</template>
+
+<script setup lang="ts">
+defineProps<{
+  fixedBlocks?: Record<string, any>;
+}>();
+</script>

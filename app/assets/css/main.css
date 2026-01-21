@@ -1,0 +1,84 @@
+@import "./variables.css";
+@import "./normalize.css";
+@import "./components/select.css";
+@import "./theming.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font: var(--font-md) / var(--line-md) var(--font-family-base);
+  font-feature-settings: "liga" 1, "calt" 1; /* fix for Chrome */
+  margin: 0;
+  padding: 0;
+  background: var(--color-page-bg);
+}
+
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+picture {
+  display: block;
+  line-height: 0;
+}
+
+figure,
+dl,
+dd,
+dt,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
+  hyphens: auto;
+  overflow-wrap: break-word;
+  margin: 0;
+  font-weight: var(--font-bold);
+}
+
+h1 {
+  font-size: var(--font-5xl);
+  line-height: var(--line-5xl);
+}
+
+h2 {
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
+}
+
+h3 {
+  font-size: var(--font-3xl);
+  line-height: var(--line-3xl);
+}
+
+h4 {
+  font-size: var(--font-2xl);
+  line-height: var(--line-2xl);
+}
+
+h5 {
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
+}
