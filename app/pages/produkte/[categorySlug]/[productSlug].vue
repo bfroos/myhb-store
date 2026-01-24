@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <BlockProductHero
     v-if="fixedBlocks.productHero"
     v-bind="fixedBlocks.productHero"

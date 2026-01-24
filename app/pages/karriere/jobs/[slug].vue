@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <BlockPageHeader v-if="fixedBlocks.jobHero" v-bind="fixedBlocks.jobHero" />
   <PagesJobDescriptionBlock
     v-if="fixedBlocks.jobDescription"

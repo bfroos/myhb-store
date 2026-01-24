@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
   <PagesBlogPageHeader :headline="blogPage?.name" :categories="categories" />
   <PagesBlogPageArticles

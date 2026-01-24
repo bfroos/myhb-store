@@ -1,13 +1,7 @@
 <template>
-  <div class="app">
-    <div>
-      <NuxtPage />
-      <CookieControl locale="en" />
-    </div>
-    <BaseAppFooter />
-    <Toast />
-    <DynamicDialog />
-  </div>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
@@ -36,16 +30,3 @@ useHead({
   },
 });
 </script>
-<style scoped>
-.app {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-.app > * {
-  flex: 1;
-}
-.app > :last-child {
-  flex: none;
-}
-</style>

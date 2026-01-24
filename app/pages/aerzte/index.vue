@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <BlockRenderer v-if="blocks && blocks.length > 0" :blocks="blocks" />
 </template>
 

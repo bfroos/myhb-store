@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <BlockPageHeader
     v-if="fixedBlocks.pageHeader"
     v-bind="fixedBlocks.pageHeader"

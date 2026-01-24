@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <BlockRenderer v-if="topBlocks && topBlocks.length > 0" :blocks="topBlocks" />
   <BlockJobTeasers
     v-if="fixedBlocks.jobTeasers"

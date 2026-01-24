@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
   <BlockLocationTeasers
     v-if="locations.open.length > 0"

@@ -5,7 +5,6 @@
     :description="$t('treatments.errors.noTreatmentsGroups.description')"
   />
   <template v-else>
-    <BaseAppHeader />
     <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
     <BlockTreatmentTeasers
       v-for="(group, index) in treatmentPageGroups"

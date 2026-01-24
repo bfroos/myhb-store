@@ -1,5 +1,4 @@
 <template>
-  <BaseAppHeader />
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
   <BlockTreatmentHero v-if="fixedBlocks.hero" v-bind="fixedBlocks.hero" />
   <BlockTextContent
