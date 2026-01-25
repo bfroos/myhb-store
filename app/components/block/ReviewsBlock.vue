@@ -98,14 +98,14 @@ const { data: googleRes, pending: googlePending } = await useAsyncData(
         source: string;
         sourceUrl?: string;
       }>;
-    }>("/api/gbp-reviews", {
+    }>("/gbp-reviews", {
       query: {
         locationName: effectiveGbpLocationName.value,
         locale: activeLocale.value,
         limit: 6,
       },
       fetchOptions: {
-        dedupe: "defer",
+        dedupe: true,
       },
     });
 

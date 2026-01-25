@@ -74,10 +74,13 @@ export function useLocationTreatmentPage() {
 
   async function fetchPage(): Promise<boolean> {
     const { data, error } = await useStrapiFetch<any>(
-      `/api/treatment-pages/${citySlug}/${locationSlug}/${treatmentPathKey}`,
+      `/treatment-pages/${citySlug}/${locationSlug}/${treatmentPathKey}`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `location-treatment-page:${currentLocale}:${citySlug}:${locationSlug}:${treatmentPathKey}`,
         },
       },
     );

@@ -117,10 +117,13 @@ type MenuResponse = {
   };
 };
 
-const { data: menuData } = await useStrapiFetch<MenuResponse>("/api/menu", {
+const { data: menuData } = await useStrapiFetch<MenuResponse>("/menu", {
   query: {
     locale: locale.value,
     types: "treatment-pages",
+  },
+  fetchOptions: {
+    key: `menu:${locale.value}:treatment-pages`,
   },
 });
 

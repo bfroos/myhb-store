@@ -58,11 +58,14 @@ export function useBlogPage() {
   ): Promise<boolean> {
     const { data, error } = await useStrapiFetch<{
       data: BlogPageWithArticlesAndCategoriesDto;
-    }>(`/api/blog-page`, {
+    }>(`/blog-page`, {
       query: {
         locale: currentLocale,
         page,
         ...(categorySlug && { categorySlug }),
+      },
+      fetchOptions: {
+        key: `blog-page:${currentLocale}:${page}:${categorySlug || ""}`,
       },
     });
 

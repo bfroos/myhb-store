@@ -10,7 +10,7 @@ export default defineNuxtPlugin(async (nuxtApp) => {
   const activeLocale = (i18n.locale.value ||
     i18n.fallbackLocale.value) as string;
 
-  const { data } = await useStrapiFetch<any>("/api/global", {
+  const { data } = await useStrapiFetch<any>("/global", {
     query: {
       locale: activeLocale,
       populate: {
@@ -27,7 +27,6 @@ export default defineNuxtPlugin(async (nuxtApp) => {
     },
     fetchOptions: {
       key: `globals:${activeLocale}`,
-      dedupe: "defer",
     },
   });
 

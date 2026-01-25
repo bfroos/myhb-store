@@ -42,9 +42,12 @@ export function useBlogArticlePage() {
 
     const { data, error } = await useStrapiFetch<{
       data: BlogArticleDto;
-    }>(`/api/blog-articles/by-slug/${slug}`, {
+    }>(`/blog-articles/by-slug/${slug}`, {
       query: {
         locale: currentLocale,
+      },
+      fetchOptions: {
+        key: `blog-article:${currentLocale}:${slug}`,
       },
     });
 

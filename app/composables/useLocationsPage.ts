@@ -27,9 +27,12 @@ export function useLocationsPage() {
   async function fetchWithLocations(): Promise<boolean> {
     const { data, error } = await useStrapiFetch<{
       data: LocationsPageWithLocationsDto;
-    }>(`/api/locations-page/with-locations`, {
+    }>(`/locations-page/with-locations`, {
       query: {
         locale: currentLocale,
+      },
+      fetchOptions: {
+        key: `locations-page:${currentLocale}`,
       },
     });
 

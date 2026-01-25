@@ -37,9 +37,12 @@ export function useCityPage() {
   async function fetchWithLocations(): Promise<boolean> {
     const { data, error } = await useStrapiFetch<{
       data: CityPageWithLocationsDto;
-    }>(`/api/city-page/${citySlug}/with-locations`, {
+    }>(`/city-page/${citySlug}/with-locations`, {
       query: {
         locale: currentLocale,
+      },
+      fetchOptions: {
+        key: `city-page:${currentLocale}:${citySlug}`,
       },
     });
 

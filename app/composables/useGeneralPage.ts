@@ -11,14 +11,14 @@ export function useGeneralPage() {
   const blocks = ref<StrapiBlock[]>([]);
 
   async function fetchGeneralPage(): Promise<boolean> {
-    const { data, error } = await useStrapiFetch<any>(
-      `/api/pages/by-slug/${slug}`,
-      {
-        query: {
-          locale: currentLocale,
-        },
+    const { data, error } = await useStrapiFetch<any>(`/pages/by-slug/${slug}`, {
+      query: {
+        locale: currentLocale,
       },
-    );
+      fetchOptions: {
+        key: `page:${currentLocale}:${slug}`,
+      },
+    });
 
     if (error.value) {
       throw handleFetchError(error.value, t);

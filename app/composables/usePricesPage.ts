@@ -12,10 +12,13 @@ export function usePricesPage() {
 
   async function fetchPage(): Promise<boolean> {
     const { data, error } = await useStrapiFetch<any>(
-      `/api/prices-page/with-product-categories`,
+      `/prices-page/with-product-categories`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `prices-page:${currentLocale}`,
         },
       },
     );

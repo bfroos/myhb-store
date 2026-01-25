@@ -22,10 +22,13 @@ export function useDoctorPage(brandName: string) {
     const slug = route.params.slug as string;
 
     const { data, error } = await useStrapiFetch<any>(
-      `/api/employees/by-slug/${slug}`,
+      `/employees/by-slug/${slug}`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `doctor-page:${currentLocale}:${slug}`,
         },
       },
     );

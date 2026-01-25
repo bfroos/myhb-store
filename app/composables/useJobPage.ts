@@ -14,14 +14,14 @@ export function useJobPage() {
     const route = useRoute();
     const slug = route.params.slug as string;
 
-    const { data, error } = await useStrapiFetch<any>(
-      `/api/job-pages/${slug}`,
-      {
-        query: {
-          locale: currentLocale,
-        },
+    const { data, error } = await useStrapiFetch<any>(`/job-pages/${slug}`, {
+      query: {
+        locale: currentLocale,
       },
-    );
+      fetchOptions: {
+        key: `job-page:${currentLocale}:${slug}`,
+      },
+    });
 
     if (error.value) {
       throw handleFetchError(error.value, t);

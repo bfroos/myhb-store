@@ -9,7 +9,7 @@ export async function useLocationCounts() {
   // Wichtig (Nuxt): keine weiteren `use*`-Composables nach einem `await` aufrufen.
   // Daher beide Requests parallel initialisieren und gemeinsam awaiten.
   const [loungeRes, clinicRes] = await Promise.all([
-    useStrapiFetch<any>("/api/locations", {
+    useStrapiFetch<any>("/locations", {
       query: {
         locale: activeLocale,
         fields: ["type"],
@@ -25,10 +25,9 @@ export async function useLocationCounts() {
       },
       fetchOptions: {
         key: `locationCounts:lounge:${activeLocale}`,
-        dedupe: "defer",
       },
     }),
-    useStrapiFetch<any>("/api/locations", {
+    useStrapiFetch<any>("/locations", {
       query: {
         locale: activeLocale,
         fields: ["type"],
@@ -44,7 +43,6 @@ export async function useLocationCounts() {
       },
       fetchOptions: {
         key: `locationCounts:clinic:${activeLocale}`,
-        dedupe: "defer",
       },
     }),
   ]);

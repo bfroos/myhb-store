@@ -8,9 +8,12 @@ export function useHomepage() {
   const blocks = ref<StrapiBlock[]>([]);
 
   async function fetchHomepage(): Promise<boolean> {
-    const { data, error } = await useStrapiFetch<any>(`/api/homepage`, {
+    const { data, error } = await useStrapiFetch<any>(`/homepage`, {
       query: {
         locale: currentLocale,
+      },
+      fetchOptions: {
+        key: `homepage:${currentLocale}`,
       },
     });
 

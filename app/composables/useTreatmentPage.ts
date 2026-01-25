@@ -59,10 +59,13 @@ export function useTreatmentPage() {
       .join("/");
 
     const { data, error, status } = await useStrapiFetch<any>(
-      `/api/treatment-pages/by-path/${treatmentPathKey}`,
+      `/treatment-pages/by-path/${treatmentPathKey}`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `treatment-page:${currentLocale}:${treatmentPathKey}`,
         },
       },
     );

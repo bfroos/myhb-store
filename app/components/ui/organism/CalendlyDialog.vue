@@ -39,9 +39,12 @@ const fetchLocations = async () => {
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const { data, error } = await useStrapiFetch<{
     data: CalendlyLocation[];
-  }>("/api/locations/with-calendly-url", {
+  }>("/locations/with-calendly-url", {
     query: {
       locale: currentLocale,
+    },
+    fetchOptions: {
+      key: `locations-calendly:${currentLocale}`,
     },
   });
 

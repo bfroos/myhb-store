@@ -1,37 +1,25 @@
 import qs from "qs";
 
-type StrapiFetchOptions<T> = {
-  method?: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-  query?: Record<string, any>;
-  fetchOptions?: Parameters<typeof useFetch<T>>[1];
-};
-
-export function useStrapiFetch<T>(
-  path: string,
-  opts: StrapiFetchOptions<T> = {},
-) {
-  const config = useRuntimeConfig();
-
-  const queryString = opts.query
-    ? qs.stringify(opts.query, { encodeValuesOnly: true })
-    : "";
-
-  const url =
-    `${config.public.strapiUrl}` +
-    (path.startsWith("/") ? path : `/${path}`) +
-    (queryString ? `?${queryString}` : "");
-
-  const headers: Record<string, string> = {
-    ...(opts.fetchOptions?.headers as Record<string, string>),
-  };
-
-  if (import.meta.server && config.strapiApiToken) {
-    headers.Authorization = `Bearer ${config.strapiApiToken}`;
+export function useStrapiFetch<T>(path: string, opts: any = {}) {
+  if (!path.startsWith("/")) {
+    throw new Error("useStrapiFetch path must start with '/'");
   }
 
+  const { query, fetchOptions, ...restOpts } = opts;
+
+  const qsString =
+    query && Object.keys(query).length > 0
+      ? qs.stringify(query, { encodeValuesOnly: true })
+      : "";
+  const queryString = qsString ? `?${qsString}` : "";
+
+  const url = `/api/strapi${path}${queryString}`;
+
+  const key = fetchOptions?.key ?? opts.key ?? `strapi:${path}:${qsString}`;
+
   return useFetch<T>(url, {
-    method: opts.method ?? ("get" as any),
-    ...opts.fetchOptions,
-    headers: Object.keys(headers).length > 0 ? headers : undefined,
+    ...restOpts,
+    ...fetchOptions,
+    key,
   });
 }

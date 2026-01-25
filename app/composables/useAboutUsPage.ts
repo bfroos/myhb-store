@@ -10,10 +10,13 @@ export function useAboutUsPage() {
 
   async function fetchPage(): Promise<boolean> {
     const { data, error } = await useStrapiFetch<{ data: AboutUsPageDto }>(
-      `/api/about-us-page`,
+      `/about-us-page`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `about-us-page:${currentLocale}`,
         },
       },
     );

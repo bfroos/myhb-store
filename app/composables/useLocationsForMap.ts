@@ -9,7 +9,7 @@ export async function useLocationsForMap() {
   const { locale, fallbackLocale } = useI18n();
   const activeLocale = (locale.value || fallbackLocale.value) as string;
 
-  const { data, error } = await useStrapiFetch<any>("/api/locations", {
+  const { data, error } = await useStrapiFetch<any>("/locations", {
     query: {
       locale: activeLocale,
       fields: ["name", "slug", "newOpeningDate"],
@@ -25,7 +25,6 @@ export async function useLocationsForMap() {
     },
     fetchOptions: {
       key: `locationsForMap:${activeLocale}`,
-      dedupe: "defer",
     },
   });
 

@@ -19,10 +19,13 @@ export function useProductPage() {
     const productSlug = route.params.productSlug as string;
 
     const { data, error } = await useStrapiFetch<any>(
-      `/api/product-pages/${productSlug}`,
+      `/product-pages/${productSlug}`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `product-page:${currentLocale}:${productSlug}`,
         },
       },
     );

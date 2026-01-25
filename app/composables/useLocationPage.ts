@@ -35,10 +35,13 @@ export function useLocationPage(brandName: string) {
 
   async function fetchWithTreatments(): Promise<boolean> {
     const { data, error } = await useStrapiFetch<any>(
-      `/api/locations/${citySlug}/${locationSlug}/with-treatments`,
+      `/locations/${citySlug}/${locationSlug}/with-treatments`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `location-page:${currentLocale}:${citySlug}:${locationSlug}`,
         },
       },
     );

@@ -19,9 +19,12 @@ export function useCareerPage() {
   async function fetchPage(): Promise<boolean> {
     const { data, error } = await useStrapiFetch<{
       data: CareerPageWithJobsDto;
-    }>(`/api/career-page`, {
+    }>(`/career-page`, {
       query: {
         locale: currentLocale,
+      },
+      fetchOptions: {
+        key: `career-page:${currentLocale}`,
       },
     });
 

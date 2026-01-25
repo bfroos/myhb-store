@@ -12,10 +12,13 @@ export function useTreatmentsPage() {
 
   async function fetchTreatmentPageGroups() {
     const { data, error } = await useStrapiFetch<any>(
-      `/api/treatment-pages/listed-grouped`,
+      `/treatment-pages/listed-grouped`,
       {
         query: {
           locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `treatment-pages-grouped:${currentLocale}`,
         },
       },
     );

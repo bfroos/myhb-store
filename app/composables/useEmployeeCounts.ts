@@ -4,7 +4,7 @@ export async function useEmployeeCounts() {
   const { locale, fallbackLocale } = useI18n();
   const activeLocale = (locale.value || fallbackLocale.value) as string;
 
-  const { data } = await useStrapiFetch<any>("/api/employees", {
+  const { data } = await useStrapiFetch<any>("/employees", {
     query: {
       locale: activeLocale,
       fields: ["isActive", "employeeType"],
@@ -23,7 +23,6 @@ export async function useEmployeeCounts() {
     },
     fetchOptions: {
       key: `employeeCounts:${EmployeeType.DOCTOR}:${activeLocale}`,
-      dedupe: "defer",
     },
   });
 
@@ -32,7 +31,7 @@ export async function useEmployeeCounts() {
     (Array.isArray(data.value?.data)
       ? data.value.data.filter(
           (x: any) =>
-            x?.isActive === true && x?.employeeType === EmployeeType.DOCTOR
+            x?.isActive === true && x?.employeeType === EmployeeType.DOCTOR,
         ).length
       : 0);
 

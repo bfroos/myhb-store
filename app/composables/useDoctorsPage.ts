@@ -8,9 +8,12 @@ export function useDoctorsPage() {
   const blocks = ref<StrapiBlock[]>([]);
 
   async function fetchPage(): Promise<boolean> {
-    const { data, error } = await useStrapiFetch<any>(`/api/doctors-page`, {
+    const { data, error } = await useStrapiFetch<any>(`/doctors-page`, {
       query: {
         locale: currentLocale,
+      },
+      fetchOptions: {
+        key: `doctors-page:${currentLocale}`,
       },
     });
 

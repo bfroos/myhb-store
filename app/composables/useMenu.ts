@@ -28,7 +28,7 @@ export function useMenu(types: string | string[] = "treatment-pages") {
   const cacheKey = `menu-${currentLocale}-${typesString}`;
 
   const { data, error, pending, refresh } = useStrapiFetch<MenuResponse>(
-    "/api/menu",
+    "/menu",
     {
       query: {
         locale: currentLocale,
