@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const incoming = getRequestURL(event);
 
-  setHeader(event, "Cache-Control", "no-store");
+  setHeader(event, "Cache-Control", "max-age=0, s-maxage=300, stale-while-revalidate=60");
 
   if (!config.public.strapiUrl) {
     throw createError({ statusCode: 500, statusMessage: "Strapi URL missing" });

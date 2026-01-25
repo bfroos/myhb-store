@@ -207,4 +207,14 @@ export default defineNuxtConfig({
       publicUrl: process.env.NUXT_PUBLIC_URL,
     },
   },
+  routeRules: {
+    // Cache Strapi API routes (5 Minuten)
+    "/api/strapi/**": {
+      cache: { maxAge: 300 },
+    },
+    // Cache sitemap.xml (24 Stunden)
+    "/sitemap.xml": {
+      cache: { maxAge: 86400 },
+    },
+  },
 });
