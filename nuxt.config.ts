@@ -201,7 +201,6 @@ export default defineNuxtConfig({
     },
   },
   runtimeConfig: {
-    strapiApiToken: process.env.STRAPI_API_TOKEN,
     redirectsFile: process.env.REDIRECTS_FILE,
     public: {
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL,

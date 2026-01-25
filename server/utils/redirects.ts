@@ -157,11 +157,7 @@ const fetchRedirects = async (): Promise<Map<string, RedirectAttributes>> => {
     const url = `${strapiUrl.replace(/\/+$/, "")}/api/redirects?${query}`;
     let response: StrapiListResponse<RedirectAttributes>;
     try {
-      response = await $fetch<StrapiListResponse<RedirectAttributes>>(url, {
-        headers: config.strapiApiToken
-          ? { Authorization: `Bearer ${config.strapiApiToken}` }
-          : undefined,
-      });
+      response = await $fetch<StrapiListResponse<RedirectAttributes>>(url);
     } catch {
       // Fail-open: don't block site if redirects API is down.
       return map;

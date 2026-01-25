@@ -309,16 +309,8 @@ export default defineCachedEventHandler(
           { encodeValuesOnly: true },
         );
 
-        const headers: Record<string, string> = {};
-        if (config.strapiApiToken) {
-          headers.Authorization = `Bearer ${config.strapiApiToken}`;
-        }
-
         const response = await $fetch<StrapiListResponse<T>>(
           `${strapiUrl}/api/${collection}?${queryString}`,
-          {
-            headers: Object.keys(headers).length > 0 ? headers : undefined,
-          },
         );
 
         results.push(...(response.data || []));
