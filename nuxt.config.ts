@@ -209,13 +209,17 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // Cache Strapi API routes (5 Minuten)
+    // Cache Strapi API routes (5 minutes)
     "/api/strapi/**": {
       cache: { maxAge: 300 },
     },
-    // Cache sitemap.xml (24 Stunden)
+    // Cache sitemap.xml (24 hours)
     "/sitemap.xml": {
       cache: { maxAge: 86400 },
+    },
+    // ISR: all pages the same (revalidation after 5 minutes, later can be customized per route)
+    "/**": {
+      isr: 300,
     },
   },
 });
