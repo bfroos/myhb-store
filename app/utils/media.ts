@@ -78,12 +78,12 @@ export function buildCloudflareImageUrl(
  *
  * @param media - Media object (url must point to the media CDN, e.g. R2/media.myhb.app)
  * @param format - Desired preset (thumbnail/small/medium/large)
- * @param mediaBaseUrl - Optional; Base URL of the media CDN, if media.url is relative
+ * @param mediaBaseUrl - Base URL of the media CDN (e.g. from NUXT_PUBLIC_MEDIA_URL). Required for image transforms.
  */
 export function getMediaUrl(
   media: StrapiMedia,
   format: ImageFormat,
-  mediaBaseUrl?: string,
+  mediaBaseUrl: string = process.env.NUXT_PUBLIC_MEDIA_URL ?? "",
 ): string | undefined {
   if (!media?.url) return undefined;
 

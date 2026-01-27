@@ -1,14 +1,15 @@
 <template>
   <div class="productHero__images">
     <div v-if="images && images.length > 0" class="productHero__images__main">
-      <UiAtomMediaPicture
-        v-if="currentImage"
-        :key="currentImage.id"
-        class="productHero__images__image"
-        :media="currentImage"
-        :sources="{ [ImageBreakpoint.LARGE]: ImageFormat.LARGE }"
-        :default-format="ImageFormat.MEDIUM"
-      />
+      <div class="productHero__images__image">
+        <UiAtomMediaPicture
+          v-if="currentImage"
+          :key="currentImage.id"
+          :media="currentImage"
+          :sources="{ [ImageBreakpoint.LARGE]: ImageFormat.LARGE }"
+          :default-format="ImageFormat.MEDIUM"
+        />
+      </div>
       <div v-if="hasMultipleImages" class="productHero__images__navigation">
         <UiAtomBaseButton
           icon-only
@@ -118,7 +119,7 @@ function selectImage(index: number) {
   position: relative;
 }
 
-.productHero__images__image,
+.productHero__images__image picture,
 .productHero__images__noImage {
   display: flex;
   justify-content: center;
@@ -128,7 +129,7 @@ function selectImage(index: number) {
   color: var(--color-text-muted);
 }
 
-.productHero__images__image > img {
+.productHero__images__image :deep(img) {
   height: inherit;
 }
 
@@ -185,7 +186,7 @@ function selectImage(index: number) {
     width: 50%;
   }
 
-  .productHero__images__image,
+  .productHero__images__image picture,
   .productHero__images__noImage {
     height: 400px;
   }
