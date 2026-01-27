@@ -73,7 +73,7 @@ export function useBlogPage() {
       throw handleFetchError(error.value, t);
     }
 
-    if (!data.value?.data || !data.value.data.blogPage) {
+    if (!data.value?.data) {
       throw handleNotFound(t);
     }
 

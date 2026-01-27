@@ -1,6 +1,6 @@
 <template>
   <UiLayoutSectionBlock>
-    <div v-if="articles.length > 0" class="blogPageArticles">
+    <div v-if="articles && articles.length > 0" class="blogPageArticles">
       <UiMoleculeBlogArticleTeaser
         v-for="article in articles"
         :key="article.id"
@@ -19,7 +19,7 @@
       inline
     />
     <Paginator
-      v-if="pagination && articles.length > 0"
+      v-if="pagination && articles && articles.length > 0"
       v-model:first="first"
       :rows="pagination.pageSize"
       :total-records="pagination.total"

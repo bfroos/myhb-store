@@ -1,6 +1,9 @@
 <template>
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
-  <PagesBlogPageHeader :headline="blogPage?.name" :categories="categories" />
+  <PagesBlogPageHeader
+    :headline="$t('blog.headline')"
+    :categories="categories"
+  />
   <PagesBlogPageArticles
     @page-change="handlePageChange"
     :articles="articles"
@@ -11,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
