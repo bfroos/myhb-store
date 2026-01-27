@@ -99,37 +99,9 @@
 import { IconMenu2 } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 
-const { locale } = useI18n();
+const { treatmentPages } = useMenu("treatment-pages,product-categories");
 
-// Type für Treatment Page Menu Item
-type TreatmentPageMenuItem = {
-  id: number;
-  name: string;
-  slug: string;
-  pathKey: string;
-  children: TreatmentPageMenuItem[];
-};
-
-type MenuResponse = {
-  data: {
-    "treatment-pages"?: TreatmentPageMenuItem[];
-    "product-categories"?: any[];
-  };
-};
-
-const { data: menuData } = await useStrapiFetch<MenuResponse>("/menu", {
-  query: {
-    locale: locale.value,
-    types: "treatment-pages",
-  },
-  fetchOptions: {
-    key: `menu:${locale.value}:treatment-pages`,
-  },
-});
-
-const navigationItems = computed(
-  () => menuData.value?.data?.["treatment-pages"] || [],
-);
+const navigationItems = computed(() => treatmentPages.value);
 </script>
 <style scoped>
 header {
