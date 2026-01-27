@@ -31,7 +31,7 @@ export function mapTreatmentPageFixedBlocks(
       headline: treatmentPage?.hero?.headline ?? treatmentPage?.name,
       headlineSuffix: treatmentPage?.hero?.headlineSuffix,
       subline: treatmentPage?.hero?.subline,
-      intro: treatmentPage?.hero?.intro,
+      text: treatmentPage?.hero?.text,
       cover: treatmentPage?.hero?.cover,
       cta: link,
       priceInEuroCent: treatmentPage?.treatment?.priceInEuroCent,

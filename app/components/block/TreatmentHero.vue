@@ -55,7 +55,7 @@
               </span>
             </h1>
             <b v-if="subline">{{ subline }}</b>
-            <p v-if="intro">{{ intro }}</p>
+            <p v-if="text">{{ text }}</p>
             <div class="treatmentHero__cta">
               <div
                 class="treatmentHero__cta__priceWrap"

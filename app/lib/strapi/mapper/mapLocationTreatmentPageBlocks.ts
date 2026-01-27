@@ -58,7 +58,7 @@ export function mapLocationTreatmentPageFixedBlocks(
       headlineSuffix: treatmentPage.hero?.headlineSuffix,
       subline: treatmentPage.hero?.subline,
       cover: location.buildingImage,
-      intro: treatmentPage.hero?.intro,
+      text: treatmentPage.hero?.text,
       showPrice: treatmentPage.hero?.showPrice,
       showGlobalDiscount: treatmentPage.hero?.showDiscount,
       showCompanyLogos: true,

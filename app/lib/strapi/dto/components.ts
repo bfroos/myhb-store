@@ -237,7 +237,7 @@ export type BlockTreatmentHeroDto = {
   headline?: string;
   headlineSuffix?: string;
   subline?: string;
-  intro?: string;
+  text?: string;
   showPrice?: boolean;
   showGlobalDiscount?: boolean;
   showReviews?: boolean;
@@ -523,7 +523,7 @@ export type TreatmentPageHeroDto = {
   headline?: string;
   headlineSuffix?: string;
   subline?: string;
-  intro?: string;
+  text?: string;
   cover?: StrapiMedia;
   showDiscount?: boolean;
   showPrice?: boolean;
