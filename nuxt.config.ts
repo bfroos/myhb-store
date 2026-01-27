@@ -205,6 +205,7 @@ export default defineNuxtConfig({
     public: {
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL,
       publicUrl: process.env.NUXT_PUBLIC_URL,
+      mediaUrl: process.env.NUXT_PUBLIC_MEDIA_URL,
     },
   },
   routeRules: {

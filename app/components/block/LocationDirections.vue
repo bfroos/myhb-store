@@ -7,18 +7,12 @@
       :layout="OrganismMediaCardLayout.MEDIA_RIGHT"
     >
       <template #media>
-        <picture v-if="image && image.formats">
-          <source
-            v-if="getMediaUrl(image, ImageFormat.LARGE)"
-            media="(min-width: 900px)"
-            :srcset="getMediaUrl(image, ImageFormat.LARGE)"
-          />
-          <img
-            :src="getMediaUrl(image, ImageFormat.SMALL)"
-            loading="lazy"
-            alt=""
-          />
-        </picture>
+        <UiAtomMediaPicture
+          v-if="image && isMediaImage(image)"
+          :media="image"
+          :sources="{ [ImageBreakpoint.LARGE]: ImageFormat.LARGE }"
+          :default-format="ImageFormat.SMALL"
+        />
       </template>
       <template #headline>
         <h2>{{ headline }}</h2>
@@ -73,7 +67,7 @@
 <script setup lang="ts">
 import type { BlockDirectionsDto } from "~/lib/strapi/dto/components";
 import { IconWalk, IconBus, IconCar } from "@tabler/icons-vue";
-import { ImageFormat } from "~/lib/strapi/dto/enums";
+import { ImageBreakpoint, ImageFormat } from "~/lib/strapi/dto/enums";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import { useId } from "vue";
 

@@ -30,7 +30,7 @@
           'treatmentHero--hasReviews': showReviews,
         }"
       >
-        <div v-if="cover && cover.formats" class="treatmentHero__media">
+        <div v-if="cover && isMediaImage(cover)" class="treatmentHero__media">
           <UiAtomMediaPicture
             class="treatmentHero__media__image"
             :media="cover"

@@ -12,7 +12,7 @@
           v-if="item.buildingImage && isMediaImage(item.buildingImage)"
           :media="item.buildingImage"
           :sources="{
-            [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
+            [ImageBreakpoint.SMALL]: ImageFormat.SMALL,
           }"
         />
         <IconBuildingStore v-else size="50%" stroke="1" />
@@ -89,7 +89,7 @@ const handleDetailsClick = () => {
 };
 
 const isComingSoon = computed(
-  () => props.item.openingStatus === LocationOpenStatus.COMING_SOON
+  () => props.item.openingStatus === LocationOpenStatus.COMING_SOON,
 );
 
 const badgeText = computed(() => {
@@ -105,7 +105,7 @@ const badgeText = computed(() => {
 
   if (openingStatus === LocationOpenStatus.OPEN_SOON && newOpeningDate) {
     const currentLocaleObj = locales.value.find(
-      (l: any) => l.code === locale.value
+      (l: any) => l.code === locale.value,
     );
     const localeIso = String(currentLocaleObj?.iso || "de-DE");
 

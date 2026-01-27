@@ -1,15 +1,14 @@
 <template>
   <div class="productHero__images">
     <div v-if="images && images.length > 0" class="productHero__images__main">
-      <picture class="productHero__images__image">
-        <source media="(min-width: 900px)" :srcset="currentImageUrl" />
-        <img
-          :src="currentImageUrl"
-          :key="currentImageIndex"
-          loading="lazy"
-          alt=""
-        />
-      </picture>
+      <UiAtomMediaPicture
+        v-if="currentImage"
+        :key="currentImage.id"
+        class="productHero__images__image"
+        :media="currentImage"
+        :sources="{ [ImageBreakpoint.LARGE]: ImageFormat.LARGE }"
+        :default-format="ImageFormat.MEDIUM"
+      />
       <div v-if="hasMultipleImages" class="productHero__images__navigation">
         <UiAtomBaseButton
           icon-only
@@ -48,7 +47,7 @@
         @click="selectImage(index)"
       >
         <img
-          :src="image.formats?.thumbnail?.url ?? image.url"
+          :src="getMediaUrl(image, ImageFormat.THUMBNAIL) ?? image.url"
           alt=""
           loading="lazy"
         />
@@ -58,6 +57,8 @@
 </template>
 
 <script setup lang="ts">
+import { getMediaUrl } from "~/utils/media";
+import { ImageBreakpoint, ImageFormat } from "~/lib/strapi/dto/enums";
 import type { ProductVariantDto } from "~/lib/strapi/dto/components";
 import { IconPhotoX, IconArrowLeft, IconArrowRight } from "@tabler/icons-vue";
 
@@ -72,15 +73,6 @@ const images = computed(() => props.currentVariant?.images ?? []);
 const currentImage = computed(() => {
   if (!images.value || images.value.length === 0) return null;
   return images.value[currentImageIndex.value] ?? null;
-});
-
-const currentImageUrl = computed<string | undefined>(() => {
-  if (!currentImage.value) return undefined;
-  return (
-    currentImage.value.formats?.medium?.url ??
-    currentImage.value.url ??
-    undefined
-  );
 });
 
 const hasMultipleImages = computed(() => {

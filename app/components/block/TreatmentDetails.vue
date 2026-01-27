@@ -4,8 +4,8 @@
       <article
         class="treatmentDetails"
         :class="{
-          'treatmentDetails--withImage': image && image.formats,
-          'treatmentDetails--withoutImage': !image || !image.formats,
+          'treatmentDetails--withImage': image && isMediaImage(image),
+          'treatmentDetails--withoutImage': !image || !isMediaImage(image),
         }"
       >
         <header class="treatmentDetails__header">
@@ -13,7 +13,7 @@
         </header>
         <div class="treatmentDetails__body">
           <UiAtomMediaPicture
-            v-if="image && image.formats"
+            v-if="image && isMediaImage(image)"
             class="treatmentDetails__body__image"
             :media="image"
             :sources="{
