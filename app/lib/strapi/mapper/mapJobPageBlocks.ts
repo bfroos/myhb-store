@@ -50,14 +50,22 @@ export function mapJobPageBlocks(jobDetails: JobDto) {
         })
       : undefined;
 
+    const employmentTypes =
+      jobDetails.employmentTypes ??
+      (jobDetails.employmentTypes ? jobDetails.employmentTypes : undefined);
+
+    const contractTypes =
+      jobDetails.contractTypes ??
+      (jobDetails.contractTypes ? jobDetails.contractTypes : undefined);
+
     return {
       startDate,
       applyTarget: jobDetails.applyTarget,
       hourlyRate,
       locations,
       recruiter: jobDetails.recruiter,
-      employmentType: jobDetails.employmentType,
-      contractType: jobDetails.contractType,
+      employmentTypes,
+      contractTypes,
       content: jobDetails.content as StrapiRichText | undefined,
       url: jobDetails.url,
       email: jobDetails.email,

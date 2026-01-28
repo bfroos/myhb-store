@@ -26,12 +26,14 @@
                 <div>
                   <b> {{ job.title }} ({{ job.genderHint }}) </b>
                   <dl>
-                    <div v-if="job.employmentType">
+                    <div
+                      v-if="
+                        job.employmentTypes && job.employmentTypes.length > 0
+                      "
+                    >
                       <dt><IconClockHour3 size="1.5em" stroke="1.5" /></dt>
                       <dd>
-                        {{
-                          $t(`career.job.employmentType.${job.employmentType}`)
-                        }}
+                        {{ formatEmploymentTypes(job.employmentTypes ?? []) }}
                       </dd>
                     </div>
                     <div
@@ -78,6 +80,7 @@ import { computed, ref } from "vue";
 import Select from "primevue/select";
 import type { BlockJobTeasersDto } from "~/lib/strapi/dto/components";
 import type { LocationDto, JobDto } from "~/lib/strapi/dto/collections";
+import type { JobEmploymentType } from "~/lib/strapi/dto/enums";
 
 const props = defineProps<BlockJobTeasersDto>();
 const { t } = useI18n();
@@ -133,6 +136,10 @@ const filteredJobs = computed(() => {
     );
   });
 });
+
+function formatEmploymentTypes(types: JobEmploymentType[]): string {
+  return types.map((type) => t(`career.job.employmentType.${type}`)).join(", ");
+}
 
 function formatLocations(locations: LocationDto[]): string {
   const cityNames = locations.map((location) => location.city.name);

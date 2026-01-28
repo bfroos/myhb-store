@@ -13,19 +13,19 @@
             <div class="jobDescription__aside__inner">
               <h2>{{ $t("career.job.description.details") }}</h2>
               <dl>
-                <template v-if="employmentType">
+                <template v-if="employmentTypesLabel">
                   <dt>{{ $t("career.job.description.employmentType") }}</dt>
                   <dd>
                     <span>
-                      {{ $t(`career.job.employmentType.${employmentType}`) }}
+                      {{ employmentTypesLabel }}
                     </span>
                   </dd>
                 </template>
-                <template v-if="contractType">
+                <template v-if="contractTypesLabel">
                   <dt>{{ $t("career.job.description.contractType") }}</dt>
                   <dd>
                     <span>
-                      {{ $t(`career.job.contractType.${contractType}`) }}
+                      {{ contractTypesLabel }}
                     </span>
                   </dd>
                 </template>
@@ -95,6 +95,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import {
   JobContractType,
   JobEmploymentType,
@@ -109,13 +110,27 @@ const props = defineProps<{
   applyTarget: JobApplyTarget;
   hourlyRate?: string;
   locations?: string[];
-  employmentType?: JobEmploymentType;
-  contractType?: JobContractType;
+  employmentTypes?: JobEmploymentType[];
+  contractTypes?: JobContractType[];
   content?: StrapiRichText;
   url?: string;
   email?: string;
   recruiter?: EmployeeDto;
 }>();
+
+const { t } = useI18n();
+
+const employmentTypesLabel = computed(() => {
+  const types = props.employmentTypes ?? [];
+  if (types.length === 0) return null;
+  return types.map((type) => t(`career.job.employmentType.${type}`)).join(", ");
+});
+
+const contractTypesLabel = computed(() => {
+  const types = props.contractTypes ?? [];
+  if (types.length === 0) return null;
+  return types.map((type) => t(`career.job.contractType.${type}`)).join(", ");
+});
 </script>
 <style scoped>
 .jobDescription {

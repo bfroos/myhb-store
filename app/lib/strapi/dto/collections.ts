@@ -121,8 +121,8 @@ export type JobDto = {
   email?: string;
   locations?: LocationDto[];
   content?: StrapiBlock[];
-  employmentType?: JobEmploymentType;
-  contractType?: JobContractType;
+  employmentTypes?: JobEmploymentType[];
+  contractTypes?: JobContractType[];
   hourlyRateMinInEuroCent?: number;
   hourlyRateMaxInEuroCent?: number;
   cover: StrapiMedia;

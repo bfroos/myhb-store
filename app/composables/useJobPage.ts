@@ -10,6 +10,12 @@ export function useJobPage() {
   const blocks = ref<StrapiBlock[]>([]);
   const localizations = ref<LocalizationDto[]>([]);
 
+  function normalizeEnumArray(value: unknown): string[] {
+    if (!value) return [];
+    if (Array.isArray(value)) return value.filter(Boolean).map(String);
+    return [String(value)];
+  }
+
   async function fetchJobPage(): Promise<boolean> {
     const route = useRoute();
     const slug = route.params.slug as string;
@@ -44,9 +50,11 @@ export function useJobPage() {
     t("career.job.seo.title", {
       title: jobDetails.value?.title,
       genderHint: jobDetails.value?.genderHint,
-      employmentType: t(
-        `career.job.employmentType.${jobDetails.value?.employmentType}`,
-      ),
+      employmentType: normalizeEnumArray(
+        jobDetails.value?.employmentTypes ?? jobDetails.value?.employmentType,
+      )
+        .map((type) => t(`career.job.employmentType.${type}`))
+        .join(", "),
     }),
   );
 
@@ -56,9 +64,11 @@ export function useJobPage() {
       locations: jobDetails.value?.locations
         ?.map((location: LocationDto) => location.city.name)
         .join(", "),
-      contractType: t(
-        `career.job.contractType.${jobDetails.value?.contractType}`,
-      ),
+      contractType: normalizeEnumArray(
+        jobDetails.value?.contractTypes ?? jobDetails.value?.contractType,
+      )
+        .map((type) => t(`career.job.contractType.${type}`))
+        .join(", "),
     }),
   );
 

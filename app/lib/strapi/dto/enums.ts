@@ -169,7 +169,6 @@ export enum TrustGridItemsPosition {
 export enum JobEmploymentType {
   FULL_TIME = "full-time",
   PART_TIME = "part-time",
-  FULL_TIME_OR_PART_TIME = "full-time-or-part-time",
 }
 
 export enum JobContractType {
