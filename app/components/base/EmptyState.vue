@@ -31,12 +31,10 @@ withDefaults(
 
 <style scoped>
 .empty-state {
-  display: flex;
-  flex-direction: column;
+  padding: var(--space-1200) var(--container-pad);
 }
 
 .empty-state__content {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -44,7 +42,6 @@ withDefaults(
   gap: var(--space-400);
   max-width: 90ch;
   margin: 0 auto;
-  padding: var(--space-1200) var(--container-pad);
   text-align: center;
 }
 
