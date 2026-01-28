@@ -123,7 +123,7 @@ import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import { IconAsterisk } from "@tabler/icons-vue";
 
 const props = defineProps<BlockTreatmentHeroDto>();
-const globals = await useGlobals();
+const globals = useGlobals();
 
 const marqueeItems = computed(() => {
   const raw = (props.announcementText ?? "").trim();
@@ -181,7 +181,7 @@ const priceLabel = computed(() => {
 });
 
 const discountLabel = computed(() => {
-  const pct = globals.value?.marketing?.newsletterDiscountPercentage ?? 20;
+  const pct = globals.value?.marketing?.newsletterDiscountPercentage;
   return $t("blocks.treatmentHero.discountCta", { pct });
 });
 </script>

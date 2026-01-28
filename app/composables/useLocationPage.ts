@@ -7,7 +7,7 @@ import { mapLocationFixedBlocks } from "~/lib/strapi/mapper/mapLocationPageBlock
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
 import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 
-export function useLocationPage(brandName: string) {
+export function useLocationPage(brandName: string = "") {
   const { locale, fallbackLocale, t } = useI18n();
   const route = useRoute();
   const currentLocale = (locale.value || fallbackLocale.value) as string;

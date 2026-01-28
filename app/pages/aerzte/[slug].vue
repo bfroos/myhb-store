@@ -19,10 +19,10 @@
   />
 </template>
 <script setup lang="ts">
-const { brandName } = await useGlobals();
+const globals = useGlobals();
 
 const { fetchPage, fixedBlocks, seo, breadcrumbItems, localizations } =
-  useDoctorPage(brandName);
+  useDoctorPage(globals.value.brand.name);
 
 const pageLoaded = await fetchPage();
 

@@ -17,7 +17,7 @@
   />
 </template>
 <script setup lang="ts">
-const { brandName } = await useGlobals();
+const globals = useGlobals();
 
 const {
   fetchWithTreatments,
@@ -26,7 +26,7 @@ const {
   locationLocalizations,
   cityLocalizations,
   seo,
-} = useLocationPage(brandName);
+} = useLocationPage(globals.value.brand.name);
 
 const locationLoaded = await fetchWithTreatments();
 

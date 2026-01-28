@@ -1,7 +1,7 @@
 import { mapDoctorPageBlocks } from "~/lib/strapi/mapper/mapDoctorPageBlocks";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
 
-export function useDoctorPage(brandName: string) {
+export function useDoctorPage(brandName: string = "") {
   const { locale, fallbackLocale, t } = useI18n();
   const page = ref<any | null>(null);
   const currentLocale = (locale.value || fallbackLocale.value) as string;
