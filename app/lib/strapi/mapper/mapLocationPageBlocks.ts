@@ -69,7 +69,7 @@ export function mapLocationFixedBlocks(
       headline: location?.name,
       headlinePrefix: brandName,
       cover: location?.buildingImage,
-      intro: location?.description,
+      text: location?.description,
       cta,
       showGlobalDiscount: location?.showDiscount,
       showCompanyLogos: true,
