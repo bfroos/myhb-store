@@ -7,7 +7,8 @@
     "less": "Less",
     "more": "More",
     "date": {
-      "fromDate": "from {date}"
+      "fromDate": "from {date}",
+      "today": "today"
     },
     "week": {
       "monday": "Monday",

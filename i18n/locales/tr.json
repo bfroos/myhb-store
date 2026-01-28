@@ -7,7 +7,8 @@
     "less": "Daha az",
     "more": "Daha fazla",
     "date": {
-      "fromDate": "{date} tarihinden itibaren"
+      "fromDate": "{date} tarihinden itibaren",
+      "today": "bugün"
     },
     "week": {
       "monday": "Pazartesi",

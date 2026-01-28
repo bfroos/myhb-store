@@ -42,7 +42,10 @@
                     :key="item.text"
                     class="qualificationsBlock__contentItemText"
                   >
-                    <dt>{{ item.fromYear }} - {{ item.toYear }}</dt>
+                    <dt>
+                      {{ item.fromYear }} –
+                      {{ item.toYear || $t("common.date.today") }}
+                    </dt>
                     <dd>
                       {{ item.text }}
                     </dd>
@@ -80,7 +83,7 @@ const props = defineProps<BlockQualificationsBlockDto>();
   display: grid;
   grid-template-columns: 140px 1fr;
 }
-.qualificationsBlock__contentItem dt,
+.qualificationsBlock__contentItem > dt,
 .qualificationsBlock__contentItemText dt {
   font-weight: var(--font-bold);
   font-size: var(--font-sm);
