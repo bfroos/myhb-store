@@ -1,6 +1,9 @@
 <template>
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
-  <PagesBlogPageHeader :headline="blogPage?.name" :categories="categories" />
+  <PagesBlogPageHeader
+    :headline="$t('blog.headline')"
+    :categories="categories"
+  />
   <PagesBlogPageArticles
     :articles="articles"
     :pagination="pagination"
@@ -24,7 +27,6 @@ const {
   fetchPage,
   seo,
   blocks,
-  blogPage,
   articles,
   categories,
   pagination,

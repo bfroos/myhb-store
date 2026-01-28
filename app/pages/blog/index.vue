@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -27,7 +26,6 @@ const {
   fetchPage,
   seo,
   blocks,
-  blogPage,
   articles,
   categories,
   pagination,
