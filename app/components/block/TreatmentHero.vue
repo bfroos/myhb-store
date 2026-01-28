@@ -67,8 +67,8 @@
                 <SharedButton
                   v-if="cta"
                   :button="cta"
-                  :size="priceLabel ? 'lg' : null"
                   :data="{ calendlyUrl: calendlyUrl }"
+                  :button-props="{ size: 'lg', variant: 'primary' }"
                 />
               </div>
               <div v-if="showGlobalDiscount">

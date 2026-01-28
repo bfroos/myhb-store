@@ -31,13 +31,13 @@
   --light-color-text: var(--color-text);
   --light-color-text-light: var(--color-gray-800);
   --light-color-text-muted: var(--color-gray-500);
-  --light-color-border-light: var(--color-gray-500);
-  --light-color-border-mute: var(--color-gray-300);
+  --light-color-border-light: var(--color-gray-200);
+  --light-color-border-mute: var(--color-gray-100);
 
   --soft-color-text: var(--color-text);
   --soft-color-text-light: var(--color-gray-700);
   --soft-color-text-muted: var(--color-gray-500);
-  --soft-color-border-light: var(--color-gray-500);
+  --soft-color-border-light: var(--color-gray-400);
   --soft-color-border-mute: var(--color-gray-300);
 
   --neutral-color-text: var(--color-gray-50);

@@ -39,9 +39,11 @@
         />
       </template>
       <template #links>
-        <UiMoleculeButtonGroup v-if="links && links.length > 0">
-          <SharedButton v-for="link in links" :key="link.id" :button="link" />
-        </UiMoleculeButtonGroup>
+        <div class="mediaCard__links">
+          <UiMoleculeButtonGroup v-if="links && links.length > 0">
+            <SharedButton v-for="link in links" :key="link.id" :button="link" />
+          </UiMoleculeButtonGroup>
+        </div>
       </template>
     </UiOrganismMediaCard>
   </UiLayoutSectionBlock>
@@ -66,5 +68,9 @@ const props = defineProps<BlockMediaCardDto>();
 
 .mediaCard__content {
   color: var(--color-text-light);
+}
+
+.mediaCard__links {
+  margin-top: var(--space-600);
 }
 </style>
