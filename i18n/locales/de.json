@@ -213,6 +213,7 @@
       "productNotFound": "Produkt nicht gefunden",
       "productNotFoundDescription": "Das angeforderte Produkt existiert nicht."
     },
+    "productDescription": "Produktbeschreibung",
     "metaDescription": "{name} von {manufacturer} in den Varianten {variants} ab {price} in deiner Nähe erhältlich"
   },
 

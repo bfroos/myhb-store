@@ -87,7 +87,7 @@ const copyTooltipSuccess = ref(false);
 const copyTooltipLabel = computed(() =>
   copyTooltipSuccess.value
     ? $t("blog.article.share.copied")
-    : $t("blog.article.share.copy")
+    : $t("blog.article.share.copy"),
 );
 const copyTooltip = computed(() => ({
   value: copyTooltipLabel.value,
@@ -146,14 +146,15 @@ function shareOnFacebook() {
 
 .blogArticle__header__text > h1 {
   margin: 0 0 var(--space-600);
-  font-size: var(--font-4xl);
-  line-height: var(--line-4xl);
+  font-size: var(--font-5xl);
+  line-height: var(--line-5xl);
 }
 
 .blogArticle__header__text > p {
   margin: 0 0 var(--space-600);
   font-size: var(--font-lg);
   line-height: var(--line-lg);
+  color: var(--color-text-light);
 }
 
 .blogArticle__header__image {
@@ -260,7 +261,7 @@ function shareOnFacebook() {
     align-items: center;
     justify-content: center;
     padding: calc(var(--space-card-pad) * 1.5) calc(var(--space-card-pad) * 2)
-      var(--space-card-pad) var(--space-card-pad);
+      calc(var(--space-card-pad) * 1.5) var(--space-card-pad);
   }
 
   .blogArticle__header__image picture {

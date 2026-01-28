@@ -134,7 +134,7 @@ const getCodeContent = (block: StrapiRichTextBlock): string => {
 };
 
 const isListItemBlock = (
-  item: StrapiRichTextNode | StrapiRichTextListItemBlock
+  item: StrapiRichTextNode | StrapiRichTextListItemBlock,
 ): item is StrapiRichTextListItemBlock => {
   // Check if it's a list-item block
   return (
@@ -146,25 +146,59 @@ const isListItemBlock = (
 };
 
 const getNodeChildren = (
-  children: (StrapiRichTextNode | StrapiRichTextListItemBlock)[] | undefined
+  children: (StrapiRichTextNode | StrapiRichTextListItemBlock)[] | undefined,
 ): StrapiRichTextNode[] => {
   if (!children) return [];
   // Filter out list-item blocks and return only nodes
   return children.filter(
-    (child): child is StrapiRichTextNode => !isListItemBlock(child)
+    (child): child is StrapiRichTextNode => !isListItemBlock(child),
   );
 };
 </script>
 
 <style scoped>
-.richText {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-400);
+.richText__heading {
+  font-weight: var(--font-bold);
+}
+
+.richText__heading--1 {
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
+  margin: 0 0 1rem;
+}
+
+.richText__heading--2 {
+  font-size: var(--font-3xl);
+  line-height: var(--line-3xl);
+  margin: 4rem 0 1rem;
+}
+
+.richText__heading--3 {
+  font-size: var(--font-2xl);
+  line-height: var(--line-2xl);
+  margin: 2.5rem 0 0.75rem;
+}
+
+.richText__heading--4 {
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
+  margin: 1rem 0 0.5rem;
+}
+
+.richText__heading--5 {
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
+  margin: 0.5rem 0 0.25rem;
+}
+
+.richText__heading--6 {
+  font-size: var(--font-md);
+  line-height: var(--line-md);
+  margin: 0.5rem 0 0.25rem;
 }
 
 .richText p {
-  margin: 0;
+  margin: 0.5rem 0;
 }
 
 .richText blockquote {
@@ -189,14 +223,15 @@ const getNodeChildren = (
 .richText ul {
   list-style-type: none;
   position: relative;
+  margin: 1rem 0;
 }
 
 .richText ul li::before {
-  content: "▶";
+  content: "→";
   position: absolute;
   left: calc(-1 * var(--space-600) + var(--space-200));
-  top: 0.25em;
-  font-size: 0.7em;
+  top: -0.125em;
+  font-size: 1.2em;
   color: var(--color-text);
 }
 
@@ -219,51 +254,6 @@ const getNodeChildren = (
   display: block;
   font-family: inherit;
   white-space: pre;
-}
-
-.richText h1,
-.richText h2,
-.richText h3,
-.richText h4,
-.richText h5,
-.richText h6 {
-  margin: 0;
-  font-weight: var(--font-bold);
-}
-
-.richText__heading {
-  margin-top: var(--space-600);
-  margin-bottom: var(--space-400);
-}
-
-.richText__heading--1 {
-  font-size: var(--font-2xl);
-  line-height: var(--line-2xl);
-}
-
-.richText__heading--2 {
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
-}
-
-.richText__heading--3 {
-  font-size: var(--font-lg);
-  line-height: var(--line-lg);
-}
-
-.richText__heading--4 {
-  font-size: var(--font-md);
-  line-height: var(--line-md);
-}
-
-.richText__heading--5 {
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-}
-
-.richText__heading--6 {
-  font-size: var(--font-xs);
-  line-height: var(--line-xs);
 }
 
 .richText__image {
@@ -301,5 +291,16 @@ const getNodeChildren = (
   color: var(--color-black);
   text-decoration: underline;
   text-underline-offset: 2px;
+  transition: opacity 0.2s;
+}
+
+.richText__link:hover {
+  opacity: 0.8;
+}
+
+.richText__image {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 </style>

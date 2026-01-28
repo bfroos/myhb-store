@@ -111,22 +111,3 @@ const getImageAlt = (node: StrapiNode): string => {
   return image.alternativeText || "";
 };
 </script>
-
-<style scoped>
-.richText__link {
-  color: var(--color-black);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  transition: opacity 0.2s;
-}
-
-.richText__link:hover {
-  opacity: 0.8;
-}
-
-.richText__image {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-</style>

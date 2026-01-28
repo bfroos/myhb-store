@@ -213,6 +213,7 @@
       "productNotFound": "Ürün bulunamadı",
       "productNotFoundDescription": "İstenen ürün bulunamadı."
     },
+    "productDescription": "Ürün açıklaması",
     "metaDescription": "{manufacturer} markasından {name} ürünü {variants} varyantlarında {price} fiyatından itibaren yakınınızda mevcut"
   },
 

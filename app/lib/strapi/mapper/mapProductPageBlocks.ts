@@ -3,7 +3,7 @@ import { CardElevation, ColorTheme } from "../dto/enums";
 
 export function mapProductPageBlocks(
   product: ProductDto,
-  relatedTreatmentTeasers: TreatmentPageDto[] = []
+  relatedTreatmentTeasers: TreatmentPageDto[] = [],
 ) {
   const { t } = useI18n();
 
@@ -26,7 +26,7 @@ export function mapProductPageBlocks(
 
   function buildTextContentModel() {
     return {
-      headline: product.name,
+      headline: t("productPage.productDescription"),
       content: product.description,
       cardSettings: {
         colorTheme: ColorTheme.SOFT,
