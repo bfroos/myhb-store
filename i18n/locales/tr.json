@@ -4,8 +4,10 @@
     "comparison": "Karşılaştırma",
     "reviews": "Yorumlar",
     "five-star": "5 Yıldız",
-    "less": "Daha az",
-    "more": "Daha fazla",
+    "showLess": "Daha az",
+    "showMore": "Daha fazla",
+    "more": "Diğer",
+    "general": "genel",
     "date": {
       "fromDate": "{date} tarihinden itibaren",
       "today": "bugün"

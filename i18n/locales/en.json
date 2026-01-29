@@ -4,8 +4,10 @@
     "comparison": "Comparison",
     "reviews": "Reviews",
     "five-star": "5-Stars",
-    "less": "Less",
+    "showLess": "Show less",
+    "showMore": "Show more",
     "more": "More",
+    "general": "general",
     "date": {
       "fromDate": "from {date}",
       "today": "today"

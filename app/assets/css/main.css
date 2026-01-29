@@ -25,6 +25,18 @@ ol {
   list-style-type: none;
 }
 
+button {
+  font-size: inherit;
+  line-height: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
 picture {
   display: block;
   line-height: 0;

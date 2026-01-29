@@ -4,8 +4,10 @@
     "comparison": "مقارنة",
     "reviews": "التقييمات",
     "five-star": "5 نجوم",
-    "less": "أقل",
-    "more": "أكثر",
+    "showLess": "أقل",
+    "showMore": "أكثر",
+    "more": "المزيد",
+    "general": "عام",
     "date": {
       "fromDate": "من {date}",
       "today": "اليوم"

@@ -3,9 +3,9 @@
     <div class="appHeader__inner">
       <nav class="appHeader__secondaryNav appHeader__desktop">
         <ul>
-          <li v-for="item in secondaryNavItems" :key="item.href">
-            <NuxtLinkLocale :to="item.href" class="text-link">
-              {{ item.label }}
+          <li v-for="item in secondaryNavItems" :key="item.slug">
+            <NuxtLinkLocale :to="`/${item.slug}`" class="text-link">
+              {{ item.name }}
             </NuxtLinkLocale>
           </li>
           <li>
@@ -15,7 +15,11 @@
       </nav>
       <nav class="appHeader__mainNav">
         <div class="appHeader__mobile">
-          <UiAtomBaseButton variant="quaternary" aria-label="Menü öffnen">
+          <UiAtomBaseButton
+            variant="quaternary"
+            aria-label="Menü öffnen"
+            @click="openMobileMenu"
+          >
             <IconMenu2 :size="24" aria-hidden="true" />
           </UiAtomBaseButton>
         </div>
@@ -57,6 +61,13 @@
         </div>
       </nav>
     </div>
+    <Teleport to="body">
+      <BaseAppHeaderMobileNav
+        v-if="isMobileMenuOpen"
+        :items="mobileMenuItems"
+        @close-mobile-menu="closeMobileMenu"
+      />
+    </Teleport>
   </header>
 </template>
 <script setup lang="ts">
@@ -65,18 +76,20 @@ import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
 const { treatmentPages } = useMenu("treatment-pages,product-categories");
 
+const isMobileMenuOpen = ref(false);
+
 const secondaryNavItems = [
   {
-    label: t("navigation.secondary.doctors"),
-    href: "/aerzte",
+    name: t("navigation.secondary.doctors"),
+    slug: "aerzte",
   },
   {
-    label: t("navigation.secondary.locations"),
-    href: "/standorte",
+    name: t("navigation.secondary.locations"),
+    slug: "standorte",
   },
   {
-    label: t("navigation.secondary.prices"),
-    href: "/preise",
+    name: t("navigation.secondary.prices"),
+    slug: "preise",
   },
 ];
 
@@ -94,6 +107,13 @@ const priorityNavItems = computed(() =>
     href: `/behandlungen/${page.slug}`,
   })),
 );
+
+const mobileMenuItems = computed(() => {
+  return {
+    secondaryNavItems: secondaryNavItems,
+    mainNavItems: treatmentPages.value,
+  };
+});
 
 const subnavItems = computed(() =>
   currentMainNav.value?.children.map((child) => ({
@@ -122,15 +142,25 @@ function requestHideSubnav() {
     mainNavId.value = null;
   }, 180);
 }
+
+function openMobileMenu() {
+  isMobileMenuOpen.value = true;
+  document.body.style.overflow = "hidden";
+}
+
+function closeMobileMenu() {
+  isMobileMenuOpen.value = false;
+  document.body.style.overflow = "";
+}
 </script>
 <style scoped>
 .appHeader {
-  padding: 0 var(--container-pad);
+  padding: var(--space-400) var(--container-pad) 0;
 }
 .appHeader__inner {
   position: relative;
   background: var(--color-card-bg-light);
-  border-radius: 0 0 var(--border-radius-card) var(--border-radius-card);
+  border-radius: var(--border-radius-card);
   box-shadow: var(--shadow-1);
 }
 .appHeader__secondaryNav {
@@ -169,6 +199,12 @@ function requestHideSubnav() {
 }
 
 @media screen and (min-width: 900px) {
+  .appHeader {
+    padding: 0 var(--container-pad);
+  }
+  .appHeader__inner {
+    border-radius: 0 0 var(--border-radius-card) var(--border-radius-card);
+  }
   .appHeader__mainNav__brand {
     position: static;
     transform: none;

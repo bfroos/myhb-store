@@ -235,14 +235,13 @@ onBeforeUnmount(() => {
   display: inline-flex;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  border-radius: 0.5rem;
+  border-radius: var(--border-radius-200);
   text-decoration: none;
   font-size: 1rem;
 }
 .appHeaderMainNav__link--active,
 .appHeaderMainNav__link:hover {
   background: var(--color-gray-100);
-  border-radius: var(--border-radius-200);
 }
 
 .appHeaderMainNav__gradient {

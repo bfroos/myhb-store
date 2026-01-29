@@ -4,8 +4,10 @@
     "comparison": "Vergleich",
     "reviews": "Bewertungen",
     "five-star": "5-Sterne",
-    "less": "Weniger anzeigen",
-    "more": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
+    "showMore": "Mehr anzeigen",
+    "more": "Mehr",
+    "general": "allgemein",
     "date": {
       "fromDate": "ab {date}",
       "today": "heute"
