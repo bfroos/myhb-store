@@ -31,7 +31,7 @@
           size="sm"
           @click="toggleExpanded"
         >
-          {{ isExpanded ? $t("common.less") : $t("common.more") }}
+          {{ isExpanded ? $t("common.showLess") : $t("common.showMore") }}
         </UiAtomBaseButton>
       </div>
     </div>
@@ -67,7 +67,7 @@ const props = defineProps<{
 const isExpanded = ref(false);
 
 const needsTruncation = computed(
-  () => props.text?.length && props.text.length > 400
+  () => props.text?.length && props.text.length > 400,
 );
 
 const truncatedText = computed(() => {

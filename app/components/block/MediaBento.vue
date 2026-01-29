@@ -32,9 +32,11 @@
         </div>
       </template>
       <template #links>
-        <UiMoleculeButtonGroup v-if="links && links.length > 0">
-          <SharedButton v-for="link in links" :key="link.id" :button="link" />
-        </UiMoleculeButtonGroup>
+        <div v-if="links && links.length > 0" class="mediaBento__links">
+          <UiMoleculeButtonGroup>
+            <SharedButton v-for="link in links" :key="link.id" :button="link" />
+          </UiMoleculeButtonGroup>
+        </div>
       </template>
       <template
         v-if="
@@ -114,6 +116,10 @@ const showBlock = computed(() => {
 
 .mediaBento__content {
   color: var(--color-text-light);
+}
+
+.mediaBento__links {
+  margin-top: var(--space-600);
 }
 
 @media screen and (min-width: 900px) {
