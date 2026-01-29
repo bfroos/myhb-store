@@ -82,3 +82,11 @@ h5 {
   font-size: var(--font-xl);
   line-height: var(--line-xl);
 }
+
+a.text-link {
+  text-decoration: none;
+}
+
+a.text-link:hover {
+  text-decoration: underline;
+}

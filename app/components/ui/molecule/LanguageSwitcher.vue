@@ -5,12 +5,19 @@
     option-label="name"
     option-value="code"
     size="small"
+    append-to="self"
+    overlay-class="languageSwitcher__overlay--alignRight"
+    :pt="{
+      root: 'languageSwitcher',
+      label: 'languageSwitcher__label',
+      dropdown: 'languageSwitcher__dropdown',
+    }"
   >
     <template #dropdownicon>
       <IconWorld :size="18" />
     </template>
     <template #value="slotProps">
-      <span>{{ getLocaleName(slotProps.value) }}</span>
+      <span>{{ getLocaleCode(slotProps.value) }}</span>
     </template>
     <template #option="slotProps">
       {{ slotProps.option.name }}
@@ -40,7 +47,7 @@ const availableLocales = computed(() => {
 const checkTreatmentPageExists = (targetLocale: string): boolean => {
   const currentTreatmentPage = useState<any>(
     "currentTreatmentPage",
-    () => null
+    () => null,
   );
   const treatmentPage = currentTreatmentPage.value;
 
@@ -48,9 +55,10 @@ const checkTreatmentPageExists = (targetLocale: string): boolean => {
     return false;
   }
 
+  // TODO: FIX THIS
   // Prüfe, ob die Ziel-Locale in den Lokalisierungen enthalten ist
   const hasTargetLocale = treatmentPage.localizations.some(
-    (l: any) => l.locale === targetLocale
+    (l: any) => l.locale === targetLocale,
   );
 
   return hasTargetLocale;
@@ -61,7 +69,7 @@ const selectedLocaleCode = computed({
   set: async (newCode: string) => {
     if (newCode && newCode !== locale.value) {
       const isValidLocale = availableLocales.value.some(
-        (l: any) => l.code === newCode
+        (l: any) => l.code === newCode,
       );
 
       if (!isValidLocale) {
@@ -71,7 +79,7 @@ const selectedLocaleCode = computed({
       // Prüfe, ob die Zielseite existiert (nur für Service Pages)
       const currentTreatmentPage = useState<any>(
         "currentTreatmentPage",
-        () => null
+        () => null,
       );
       const isTreatmentPage = !!currentTreatmentPage.value;
 
@@ -97,9 +105,41 @@ const selectedLocaleCode = computed({
   },
 });
 
-const getLocaleName = (code: string | null) => {
-  if (!code) return currentLocale.value.name;
-  const localeObj = locales.value.find((l: any) => l.code === code);
-  return localeObj?.name || currentLocale.value.name;
+const getLocaleCode = (code: string | null) => {
+  if (!code) return currentLocale.value.code?.toUpperCase() ?? "";
+  return code.toUpperCase();
 };
 </script>
+<style scoped>
+.languageSwitcher {
+  position: relative;
+  display: inline-flex;
+  flex-direction: row-reverse;
+  gap: var(--space-200);
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  height: 40px;
+}
+
+.languageSwitcher :deep(.languageSwitcher__label),
+.languageSwitcher :deep(.languageSwitcher__dropdown) {
+  padding: 0;
+  width: auto;
+  display: inline-flex;
+  align-items: center;
+}
+
+.languageSwitcher :deep(.languageSwitcher__dropdown) svg {
+  width: 20px;
+  height: 20px;
+  color: var(--color-text);
+  stroke-width: 1.5;
+}
+
+.languageSwitcher :deep(.languageSwitcher__overlay--alignRight) {
+  left: auto !important;
+  right: 0 !important;
+}
+</style>

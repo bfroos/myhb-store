@@ -1,267 +1,196 @@
 <template>
-  <header>
-    <nav
-      class="secondaryNav"
-      role="navigation"
-      aria-label="Sekundäre Navigation"
-    >
-      <ul role="list">
-        <li>
-          <UiAtomBaseButton as="nuxt-link-locale" variant="link" to="/aerzte">
-            {{ $t("navigation.secondary.doctors") }}
-          </UiAtomBaseButton>
-        </li>
-        <li>
-          <UiAtomBaseButton
-            as="nuxt-link-locale"
-            variant="link"
-            to="/standorte"
-          >
-            {{ $t("navigation.secondary.locations") }}
-          </UiAtomBaseButton>
-        </li>
-        <li>
-          <UiAtomBaseButton as="nuxt-link-locale" variant="link" to="/preise">
-            {{ $t("navigation.secondary.prices") }}
-          </UiAtomBaseButton>
-        </li>
-        <li>
-          <UiMoleculeLanguageSwitcher />
-        </li>
-      </ul>
-    </nav>
-    <UiLayoutCardSurface style="--card-pad: 0">
-      <nav class="mainNav" role="navigation" aria-label="Hauptnavigation">
-        <div class="mainNav__mobileTrigger">
-          <UiAtomBaseButton
-            variant="quaternary"
-            aria-label="Menü öffnen"
-            aria-expanded="false"
-          >
+  <header class="appHeader">
+    <div class="appHeader__inner">
+      <nav class="appHeader__secondaryNav appHeader__desktop">
+        <ul>
+          <li v-for="item in secondaryNavItems" :key="item.href">
+            <NuxtLinkLocale :to="item.href" class="text-link">
+              {{ item.label }}
+            </NuxtLinkLocale>
+          </li>
+          <li>
+            <UiMoleculeLanguageSwitcher />
+          </li>
+        </ul>
+      </nav>
+      <nav class="appHeader__mainNav">
+        <div class="appHeader__mobile">
+          <UiAtomBaseButton variant="quaternary" aria-label="Menü öffnen">
             <IconMenu2 :size="24" aria-hidden="true" />
           </UiAtomBaseButton>
         </div>
         <NuxtLinkLocale
           to="/"
-          class="mainNav__brand"
+          class="appHeader__mainNav__brand"
           aria-label="Zur Startseite"
         >
           <ImageAppLogo />
         </NuxtLinkLocale>
-        <ul
-          v-if="navigationItems.length > 0"
-          class="mainNav__menu"
-          role="menubar"
-        >
-          <li
-            v-for="parent in navigationItems"
-            :key="parent.id"
-            class="mainNav__menuItem"
-            role="none"
-          >
-            <NuxtLinkLocale
-              :to="`/behandlungen/${parent.slug}`"
-              role="menuitem"
-            >
-              {{ parent.name }}
-            </NuxtLinkLocale>
-            <ul
-              v-if="parent.children.length > 0"
-              class="mainNav__submenu"
-              role="menu"
-            >
-              <li v-for="child in parent.children" :key="child.id" role="none">
-                <NuxtLinkLocale
-                  :to="`/behandlungen/${parent.slug}/${child.slug}`"
-                  role="menuitem"
-                >
-                  {{ child.name }}
-                </NuxtLinkLocale>
-              </li>
-            </ul>
-          </li>
-        </ul>
-        <SharedButton
-          :button="{
-            label: 'Termin buchen',
-            method: SharedButtonMethod.ACTION,
-            action: SharedButtonAction.APPOINTMENT_BOOKING,
-          }"
-        />
-        <div class="mainNav__lang">
+        <div class="appHeader__desktop appHeader__mainNav__menu">
+          <div class="appHeader__priorityWrap">
+            <BaseAppHeaderMainNav
+              :links="priorityNavItems"
+              :currentMainNavId="mainNavId"
+              @showSubnav="showSubnav"
+              @requestHideSubnav="requestHideSubnav"
+              @cancelHideSubnav="cancelHideSubnav"
+            />
+          </div>
+          <BaseAppHeaderSubNav
+            v-if="subnavItems && subnavItems.length > 0"
+            :items="subnavItems"
+            @requestHideSubnav="requestHideSubnav"
+            @cancelHideSubnav="cancelHideSubnav"
+          />
+        </div>
+        <div class="appHeader__mobile">
           <UiMoleculeLanguageSwitcher />
         </div>
+        <div class="appHeader__desktop">
+          <SharedButton
+            :button="{
+              label: 'Termin buchen',
+              method: SharedButtonMethod.ACTION,
+              action: SharedButtonAction.APPOINTMENT_BOOKING,
+            }"
+          />
+        </div>
       </nav>
-    </UiLayoutCardSurface>
+    </div>
   </header>
 </template>
 <script setup lang="ts">
 import { IconMenu2 } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
-
+const { t } = useI18n();
 const { treatmentPages } = useMenu("treatment-pages,product-categories");
 
-const navigationItems = computed(() => treatmentPages.value);
+const secondaryNavItems = [
+  {
+    label: t("navigation.secondary.doctors"),
+    href: "/aerzte",
+  },
+  {
+    label: t("navigation.secondary.locations"),
+    href: "/standorte",
+  },
+  {
+    label: t("navigation.secondary.prices"),
+    href: "/preise",
+  },
+];
+
+const mainNavId = ref<number | null>(null);
+let hideSubnavTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const currentMainNav = computed(() =>
+  treatmentPages.value.find((page) => page.id === mainNavId.value),
+);
+
+const priorityNavItems = computed(() =>
+  treatmentPages.value.map((page) => ({
+    id: page.id,
+    label: page.name,
+    href: `/behandlungen/${page.slug}`,
+  })),
+);
+
+const subnavItems = computed(() =>
+  currentMainNav.value?.children.map((child) => ({
+    id: child.id,
+    label: child.name,
+    href: `/behandlungen/${currentMainNav.value?.slug}/${child.slug}`,
+  })),
+);
+
+function showSubnav(id: number) {
+  cancelHideSubnav();
+  mainNavId.value = id;
+}
+
+function cancelHideSubnav() {
+  if (hideSubnavTimeout != null) {
+    clearTimeout(hideSubnavTimeout);
+    hideSubnavTimeout = null;
+  }
+}
+
+function requestHideSubnav() {
+  cancelHideSubnav();
+  hideSubnavTimeout = setTimeout(() => {
+    hideSubnavTimeout = null;
+    mainNavId.value = null;
+  }, 180);
+}
 </script>
 <style scoped>
-header {
-  padding: var(--space-400) var(--container-pad) 0;
+.appHeader {
+  padding: 0 var(--container-pad);
 }
-
-.secondaryNav {
-  display: none;
+.appHeader__inner {
+  position: relative;
+  background: var(--color-card-bg-light);
+  border-radius: 0 0 var(--border-radius-card) var(--border-radius-card);
+  box-shadow: var(--shadow-1);
 }
-
-.secondaryNav a {
-  text-decoration: none;
+.appHeader__secondaryNav {
+  padding: var(--space-100) var(--space-card-pad);
+  border-bottom: 1px solid var(--color-border-mute);
 }
-
-.secondaryNav > ul {
+.appHeader__secondaryNav > ul {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-400);
-  margin: 0 0 var(--space-400);
   font-size: var(--font-sm);
   line-height: var(--line-sm);
 }
-
-.mainNav {
-  position: relative;
+.appHeader__mainNav {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  align-self: stretch;
-  padding: var(--space-400) var(--space-card-pad-xs);
+  justify-content: space-between;
+  gap: var(--space-400);
+  padding: var(--space-400) var(--space-card-pad-sm);
 }
-
-.mainNav__brand {
+.appHeader__mainNav__brand {
   position: absolute;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
 }
-
-.mainNav__brand > svg {
+.appHeader__mainNav__brand > svg {
   height: 32px;
   max-height: 32px;
   width: auto;
   display: block;
 }
-
-.mainNav__menu {
-  display: none;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.mainNav__menuItem {
-  position: relative;
-}
-
-.mainNav__menuItem > a {
-  display: block;
-  padding: var(--space-400) var(--space-500);
-  text-decoration: none;
-  color: var(--color-text);
-  transition: color 0.2s ease;
-}
-
-.mainNav__menuItem > a:hover {
-  color: var(--color-text-light);
-}
-
-.mainNav__submenu {
-  display: none;
-  flex-direction: column;
-  position: absolute;
-  top: calc(100% + var(--space-200));
-  left: 0;
-  list-style: none;
-  margin: 0;
-  padding: var(--space-400);
-  background: var(--color-card-bg-light);
-  border-radius: var(--border-radius-card-sm);
-  box-shadow: var(--shadow-4);
-  min-width: 200px;
-  z-index: 100;
-  gap: var(--space-200);
-}
-
-.mainNav__submenu li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.mainNav__submenu a {
-  display: block;
-  padding: var(--space-300) var(--space-400);
-  border-radius: var(--border-radius-300);
-  text-decoration: none;
-  color: var(--color-text);
-  transition: background-color 0.2s ease;
-  white-space: nowrap;
-}
-
-.mainNav__submenu a:hover {
-  background-color: var(--color-gray-100);
-}
-
-/* Zeige Submenu bei Hover auf MenuItem oder Submenu selbst */
-.mainNav__menuItem:hover .mainNav__submenu,
-.mainNav__submenu:hover {
-  display: flex;
-}
-
-.mainNav__lang {
-  text-align: right;
-}
-
-.mainNav__cta {
+.appHeader__desktop {
   display: none;
 }
 
 @media screen and (min-width: 900px) {
-  .mainNav {
-    padding: var(--space-card-pad-xs) var(--space-card-pad);
-  }
-}
-
-@media screen and (min-width: 1400px) {
-  .mainNav__menu {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    align-self: stretch;
-  }
-
-  .mainNav__menuItem {
-    position: relative;
-  }
-
-  .mainNav__submenu {
-    margin-top: -10px;
-  }
-
-  .mainNav__mobileTrigger,
-  .mainNav__lang {
-    display: none;
-  }
-
-  .mainNav__brand {
+  .appHeader__mainNav__brand {
     position: static;
     transform: none;
   }
-
-  .mainNav__brand > svg {
-    height: 40px;
-    max-height: 40px;
+  .appHeader__mobile {
+    display: none;
   }
-
-  .secondaryNav,
-  .mainNav__cta {
+  .appHeader__desktop {
     display: block;
+  }
+  .appHeader__priorityWrap {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-width: 0;
+  }
+  .appHeader__mainNav__menu {
+    position: relative;
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    min-width: 0;
   }
 }
 </style>
