@@ -1,30 +1,32 @@
 <template>
   <div class="newsletterSubscriptionForm theme-strong">
-    <div class="newsletterSubscriptionForm__benefits">
-      <ul class="newsletterSubscriptionForm__benefits__list">
-        <li>
-          <IconRosetteDiscount size="32" stroke="1.25" />
-          {{ $t("newsletter.marketingText.exlusiveOffers") }}
-        </li>
-        <li>
-          <IconMoodSmileBeam size="32" stroke="1.25" />
-          {{ $t("newsletter.marketingText.treatmentNews") }}
-        </li>
-        <li>
-          <IconRosetteDiscountCheck size="32" stroke="1.25" />
-          {{ $t("newsletter.marketingText.eventInvitations") }}
-        </li>
-      </ul>
-    </div>
+    <ul class="newsletterSubscriptionForm__benefits">
+      <li>
+        <IconRosetteDiscount size="32" stroke="1.25" />
+        {{ $t("newsletter.marketingText.exlusiveOffers") }}
+      </li>
+      <li>
+        <IconMoodSmileBeam size="32" stroke="1.25" />
+        {{ $t("newsletter.marketingText.treatmentNews") }}
+      </li>
+      <li>
+        <IconRosetteDiscountCheck size="32" stroke="1.25" />
+        {{ $t("newsletter.marketingText.eventInvitations") }}
+      </li>
+    </ul>
     <Message v-if="success" severity="success">
       {{ $t("newsletter.success") }}
     </Message>
-    <form v-else @submit="submit" class="newsletterSubscriptionForm__form">
+    <form v-else class="newsletterSubscriptionForm__form" @submit="submit">
       <Message v-if="error" severity="error">
         {{ error }}
       </Message>
+      <label for="newsletter-footer-email" class="sr-only">
+        {{ $t("newsletter.emailLabel") }}
+      </label>
       <div class="newsletterSubscriptionForm__form__controls">
         <InputText
+          id="newsletter-footer-email"
           v-model="email"
           type="email"
           autocomplete="email"
@@ -44,10 +46,14 @@ import {
   IconMoodSmileBeam,
   IconRosetteDiscountCheck,
 } from "@tabler/icons-vue";
-const email = ref("chrs.heinrich+600@gmail.com");
-const loading = ref(false);
-const success = ref<string | null>(null);
-const error = ref<string | null>(null);
+
+const {
+  email,
+  loading,
+  success,
+  error,
+  submit: submitNewsletter,
+} = useNewsletterSignup();
 
 async function submit(event: SubmitEvent) {
   event.preventDefault();
@@ -57,24 +63,7 @@ async function submit(event: SubmitEvent) {
     return;
   }
 
-  error.value = null;
-  success.value = null;
-  loading.value = true;
-
-  try {
-    await $fetch("/api/mailchimp/subscribe", {
-      method: "POST",
-      body: { email: email.value },
-    });
-    email.value = "";
-    success.value = "ok";
-  } catch (e: any) {
-    const code = e?.data?.errorCode ?? e?.statusMessage ?? "generic";
-    const key = `newsletter.errors.${code}`;
-    error.value = $te(key) ? $t(key) : $t("newsletter.errors.generic");
-  } finally {
-    loading.value = false;
-  }
+  await submitNewsletter();
 }
 </script>
 <style scoped>
@@ -84,27 +73,14 @@ async function submit(event: SubmitEvent) {
   gap: var(--space-300);
 }
 
-.newsletterSubscriptionForm > ul,
-.newsletterSubscriptionForm > span {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-200);
-  color: var(--color-text-light);
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-}
-
 .newsletterSubscriptionForm__benefits {
-  margin: 0 0 var(--space-400);
-}
-
-.newsletterSubscriptionForm__benefits__list {
   display: flex;
   flex-direction: column;
   gap: var(--space-300);
+  margin: 0 0 var(--space-400);
 }
 
-.newsletterSubscriptionForm__benefits__list > li {
+.newsletterSubscriptionForm__benefits > li {
   display: flex;
   align-items: center;
   gap: var(--space-200);
@@ -123,9 +99,7 @@ async function submit(event: SubmitEvent) {
 }
 
 @media screen and (min-width: 900px) {
-  .newsletterSubscriptionForm__benefits,
-  .newsletterSubscriptionForm__benefits > ul {
-    display: flex;
+  .newsletterSubscriptionForm__benefits {
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;

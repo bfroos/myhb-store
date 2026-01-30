@@ -74,7 +74,9 @@
     "bookAppointment": "Book appointment",
     "learnMore": "Learn more",
     "details": "Details",
-    "subscribe": "Subscribe"
+    "subscribe": "Subscribe",
+    "cancel": "Cancel",
+    "close": "Close"
   },
 
   "location": {
@@ -355,19 +357,21 @@
       "header": "Book your appointment via Calendly"
     },
     "newsletterSignUp": {
-      "header": "Newsletter sign-up"
+      "header": "Subscribe to our newsletter"
     }
   },
 
   "newsletter": {
     "marketingText": {
       "headline": "Deals and news. Now in the newsletter!",
+      "headlineDiscount": "Get {newsletterDiscountPercentage}% exclusive discount!",
       "exlusiveOffers": "Exclusive Offers",
       "treatmentNews": "News about treatments",
       "eventInvitations": "Event invitations"
     },
     "success": "Welcome to MY! If the address is not yet registered, you will receive a confirmation email shortly. If you are already registered, nothing will happen.",
     "emailPlaceholder": "your-email{'@'}example.com",
+    "emailLabel": "Email address",
     "errors": {
       "invalid_email": "Please provide a valid email address.",
       "generic": "Subscription failed. Please try again later."

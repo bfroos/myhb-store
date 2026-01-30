@@ -74,7 +74,9 @@
     "bookAppointment": "Randevu al",
     "learnMore": "Daha fazla bilgi",
     "details": "Detaylar",
-    "subscribe": "Abone ol"
+    "subscribe": "Abone ol",
+    "cancel": "İptal",
+    "close": "Kapat"
   },
 
   "location": {
@@ -355,19 +357,21 @@
       "header": "Calendly üzerinden şimdi randevu al"
     },
     "newsletterSignUp": {
-      "header": "Bülten kaydı"
+      "header": "Bültenimize abone ol"
     }
   },
 
   "newsletter": {
     "marketingText": {
       "headline": "Deals and news. Now in the newsletter!",
+      "headlineDiscount": "Şimdi {newsletterDiscountPercentage}% indirim kazan!",
       "exlusiveOffers": "Özel Teklifler",
       "treatmentNews": "Tedavi Haberleri",
       "eventInvitations": "Etkinlik Davetleri"
     },
     "success": "MY'ye hoş geldiniz! Eğer adresiniz henüz kayıtlı değilse, doğrulama e-postasını size yakında göndereceğiz. Eğer zaten kayıtlıysanız, hiçbir şey olmayacak.",
     "emailPlaceholder": "e-postanız{'@'}example.com",
+    "emailLabel": "E-posta adresi",
     "errors": {
       "invalid_email": "Lütfen geçerli bir e-posta adresi girin.",
       "generic": "Kayıt başarısız. Lütfen daha sonra tekrar deneyin."

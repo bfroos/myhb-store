@@ -74,7 +74,9 @@
     "bookAppointment": "Termin buchen",
     "learnMore": "Mehr erfahren",
     "details": "Details",
-    "subscribe": "Abonnieren"
+    "subscribe": "Abonnieren",
+    "cancel": "Abbrechen",
+    "close": "Schließen"
   },
 
   "location": {
@@ -355,19 +357,21 @@
       "header": "Buche deinen Termin jetzt über Calendly"
     },
     "newsletterSignUp": {
-      "header": "Newsletter Anmeldung"
+      "header": "Newsletter abonnieren"
     }
   },
 
   "newsletter": {
     "marketingText": {
       "headline": "Deals und News. Jetzt im Newsletter!",
+      "headlineDiscount": "Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
       "exlusiveOffers": "Exklusive Angebote",
       "treatmentNews": "News zu Behandlungen",
       "eventInvitations": "Einladungen zu Events"
     },
     "success": "Willkommen bei MY! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
     "emailPlaceholder": "deine-email{'@'}example.com",
+    "emailLabel": "E-Mail-Adresse",
     "errors": {
       "invalid_email": "Bitte gib eine gültige E-Mail-Adresse an.",
       "generic": "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."

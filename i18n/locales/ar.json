@@ -74,7 +74,9 @@
     "bookAppointment": "احجز موعدًا",
     "learnMore": "اعرف المزيد",
     "details": "التفاصيل",
-    "subscribe": "اشترك"
+    "subscribe": "اشترك",
+    "cancel": "إلغاء",
+    "close": "إغلاق"
   },
 
   "location": {
@@ -354,19 +356,21 @@
       "header": "احجز موعدك الآن عبر Calendly"
     },
     "newsletterSignUp": {
-      "header": "الاشتراك في النشرة الإخبارية"
+      "header": "اشترك في النشرة الإخبارية"
     }
   },
 
   "newsletter": {
     "marketingText": {
       "headline": "عروض وأخبار. الآن في النشرة الإخبارية!",
+      "headlineDiscount": "احصل على خصم {newsletterDiscountPercentage}% حصري!",
       "exlusiveOffers": "عروض حصرية",
       "treatmentNews": "أخبار عن العلاجات",
       "eventInvitations": "دعوات للحدثات"
     },
     "success": "مرحبًا بك في MY! إذا لم تكن عنوانك مسجل بالفعل، ستتلقى بريدًا إلكتروني للتحقق قريبًا. إذا كنت مسجلًا بالفعل، لن يحدث شيء آخر.",
     "emailPlaceholder": "bariduka-al-iliktruni{'@'}example.com",
+    "emailLabel": "عنوان البريد الإلكتروني",
     "errors": {
       "invalid_email": "يرجى إدخال عنوان بريد إلكتروني صالح.",
       "generic": "فشل الاشتراك. يرجى المحاولة مرة أخرى لاحقًا."
