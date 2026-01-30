@@ -1,14 +1,11 @@
 <template>
-  <BlockPageHeader
-    v-if="fixedBlocks.pageHeader"
-    v-bind="fixedBlocks.pageHeader"
-  />
+  <BlockRenderer v-if="topBlocks" :blocks="topBlocks" />
   <BlockProductCategoryPriceOverview :productCategories="productCategories" />
-  <BlockRenderer v-if="blocks" :blocks="blocks" />
+  <BlockRenderer v-if="bottomBlocks" :blocks="bottomBlocks" />
 </template>
 
 <script setup lang="ts">
-const { fetchPage, productCategories, fixedBlocks, seo, blocks } =
+const { fetchPage, productCategories, seo, topBlocks, bottomBlocks } =
   usePricesPage();
 
 const pageLoaded = await fetchPage();

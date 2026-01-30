@@ -1,12 +1,12 @@
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
-import { BlockPageHeaderLayout, ColorTheme } from "~/lib/strapi/dto/enums";
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
 
 export function usePricesPage() {
   const { locale, fallbackLocale, t } = useI18n();
   const page = ref<any | null>(null);
   const seo = ref<SharedSeoDto | null>(null);
-  const blocks = ref<StrapiBlock[]>([]);
+  const topBlocks = ref<StrapiBlock[]>([]);
+  const bottomBlocks = ref<StrapiBlock[]>([]);
   const productCategories = ref<any | null>(null);
   const currentLocale = (locale.value || fallbackLocale.value) as string;
 
@@ -33,34 +33,14 @@ export function usePricesPage() {
 
     page.value = data.value.data.pricesPage || null;
     productCategories.value = data.value.data.productCategories || null;
+    topBlocks.value = data.value.data.topBlocks || [];
+    bottomBlocks.value = data.value.data.bottomBlocks || [];
 
     return true;
   }
 
-  // Backwards-compatible alias: prices data comes from one endpoint now.
   async function fetchProductCategories(): Promise<boolean> {
     return await fetchPage();
-  }
-
-  const fixedBlocks = computed(() => {
-    return {
-      pageHeader: getPageHeader(),
-    };
-  });
-
-  function getPageHeader() {
-    if (!page.value?.headline) {
-      return null;
-    }
-
-    return {
-      headline: page.value?.headline,
-      intro: page.value?.intro,
-      layout: BlockPageHeaderLayout.COMPACT,
-      cardSettings: {
-        colorTheme: ColorTheme.STRONG,
-      },
-    };
   }
 
   return {
@@ -68,7 +48,7 @@ export function usePricesPage() {
     fetchPage,
     productCategories,
     seo,
-    blocks,
-    fixedBlocks,
+    topBlocks,
+    bottomBlocks,
   };
 }
