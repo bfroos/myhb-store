@@ -61,9 +61,9 @@ export type BlockDirectionsDto = {
   headline?: string;
   content?: StrapiRichText;
   image?: StrapiMedia;
-  walkDirections?: string;
-  publicTransportDirections?: string;
-  carDirections?: string;
+  walkDirections?: StrapiRichText;
+  publicTransportDirections?: StrapiRichText;
+  carDirections?: StrapiRichText;
   fixedImageAspectRatio: boolean;
   cardSettings?: CardSettingsDto;
 };

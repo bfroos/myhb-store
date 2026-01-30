@@ -31,7 +31,7 @@
             {{ $t("blocks.directions.walk") }}
           </template>
           <template #content>
-            <div>{{ walkDirections }}</div>
+            <UiLayoutRichText :blocks="walkDirections" />
           </template>
         </UiMoleculeCollabsibleItem>
         <UiMoleculeCollabsibleItem
@@ -44,7 +44,7 @@
             {{ $t("blocks.directions.publicTransport") }}
           </template>
           <template #content>
-            <div>{{ publicTransportDirections }}</div>
+            <UiLayoutRichText :blocks="publicTransportDirections" />
           </template>
         </UiMoleculeCollabsibleItem>
         <UiMoleculeCollabsibleItem
@@ -57,7 +57,7 @@
             {{ $t("blocks.directions.car") }}
           </template>
           <template #content>
-            <div>{{ carDirections }}</div>
+            <UiLayoutRichText :blocks="carDirections" />
           </template>
         </UiMoleculeCollabsibleItem>
       </template>
