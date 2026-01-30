@@ -19,19 +19,19 @@ export const IMAGE_SIZE_PRESETS: Record<
     fit: "scale-down",
   },
   [ImageFormatEnum.SMALL]: {
-    width: 420,
+    width: 460,
     format: "webp",
     quality: 85,
     fit: "scale-down",
   },
   [ImageFormatEnum.MEDIUM]: {
-    width: 768,
+    width: 760,
     format: "webp",
     quality: 85,
     fit: "scale-down",
   },
   [ImageFormatEnum.LARGE]: {
-    width: 1920,
+    width: 1100,
     format: "webp",
     quality: 85,
     fit: "scale-down",

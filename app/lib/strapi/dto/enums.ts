@@ -48,16 +48,16 @@ export enum TreatmentType {
 }
 
 export enum ImageFormat {
-  THUMBNAIL = "thumbnail",
-  SMALL = "small",
-  MEDIUM = "medium",
-  LARGE = "large",
+  THUMBNAIL = "thumbnail", // 150px
+  SMALL = "small", // 460px
+  MEDIUM = "medium", // 760px
+  LARGE = "large", // 1100px
 }
 
 export enum ImageBreakpoint {
-  LARGE = "900px",
+  SMALL = "300px",
   MEDIUM = "600px",
-  SMALL = "420px",
+  LARGE = "900px",
 }
 
 export enum EmployeeType {

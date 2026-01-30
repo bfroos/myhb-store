@@ -11,6 +11,10 @@
         <UiAtomMediaPicture
           v-if="media && isMediaImage(media)"
           :media="media"
+          :sources="{
+            [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
+            [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
+          }"
         />
         <UiAtomMediaVideo
           v-else-if="media && isMediaVideo(media)"
@@ -35,7 +39,11 @@
 </template>
 <script setup lang="ts">
 import type { BlockPageHeaderDto } from "~/lib/strapi/dto/components";
-import { BlockPageHeaderLayout } from "~/lib/strapi/dto/enums";
+import {
+  BlockPageHeaderLayout,
+  ImageFormat,
+  ImageBreakpoint,
+} from "~/lib/strapi/dto/enums";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 
 const props = defineProps<BlockPageHeaderDto>();
