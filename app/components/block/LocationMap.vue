@@ -152,6 +152,8 @@ import locationMapPaths from "~/assets/images/location-map-paths.svg?raw";
 
 const props = defineProps<BlockLocationMapDto>();
 
+const { formatInteger, localeIso } = useFormatInteger();
+
 const a11yIdBase = useId();
 const svgTitleId = `${a11yIdBase}-title`;
 const svgDescId = `${a11yIdBase}-desc`;
@@ -170,10 +172,22 @@ const loungeCount = Number(locationCounts.loungeCount ?? 0) || 0;
 const clinicCount = Number(locationCounts.clinicCount ?? 0) || 0;
 const doctorCount = Number(employeeCounts.doctorCount ?? 0) || 0;
 
-const customersCountLabel = computed(() => customersCount.toString());
-const loungeCountLabel = computed(() => loungeCount.toString());
-const clinicCountLabel = computed(() => clinicCount.toString());
-const doctorCountLabel = computed(() => doctorCount.toString());
+const customersCountLabel = computed(() => {
+  void localeIso.value;
+  return formatInteger(customersCount);
+});
+const loungeCountLabel = computed(() => {
+  void localeIso.value;
+  return formatInteger(loungeCount);
+});
+const clinicCountLabel = computed(() => {
+  void localeIso.value;
+  return formatInteger(clinicCount);
+});
+const doctorCountLabel = computed(() => {
+  void localeIso.value;
+  return formatInteger(doctorCount);
+});
 
 const customersLabelKey = computed(() =>
   pluralKey("blocks.locationMap.footer.customers", 2),
@@ -197,9 +211,9 @@ const VIEWBOX = {
 // Initial values for Germany
 const GEO_BOUNDS = {
   minLon: 5.5,
-  maxLon: 15.5,
+  maxLon: 15.3,
   minLat: 47.0,
-  maxLat: 55.5,
+  maxLat: 55.2,
 } as const;
 
 function toNumber(v: unknown): number | null {
@@ -237,9 +251,9 @@ function statusLabelKey(status: LocationStatus) {
 }
 
 // --- Marker Shapes ---
-const MARKER_CIRCLE_R = 3;
-const MARKER_SQUARE_SIZE = 6 * 0.9; // -10%
-const MARKER_TRIANGLE_SIZE = 4 * 0.8; // -20% (optisch etwas größer als der Kreis)
+const MARKER_CIRCLE_R = 3 * 1.2;
+const MARKER_SQUARE_SIZE = 6 * 0.9 * 1.1;
+const MARKER_TRIANGLE_SIZE = 4 * 0.8;
 
 function trianglePoints(cx: number, cy: number, size: number) {
   // Upward-pointing triangle (tip at the top)
