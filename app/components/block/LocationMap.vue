@@ -270,16 +270,16 @@ const clinicCountLabel = computed(() => clinicCount.toString());
 const doctorCountLabel = computed(() => doctorCount.toString());
 
 const customersLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.customers", 2)
+  pluralKey("blocks.locationMap.footer.customers", 2),
 );
 const loungesLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.lounges", loungeCount)
+  pluralKey("blocks.locationMap.footer.lounges", loungeCount),
 );
 const doctorsLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.doctors", doctorCount)
+  pluralKey("blocks.locationMap.footer.doctors", doctorCount),
 );
 const clinicLabelKey = computed(() =>
-  pluralKey("blocks.locationMap.footer.clinic", clinicCount)
+  pluralKey("blocks.locationMap.footer.clinic", clinicCount),
 );
 
 // --- SVG Map Points (Lat/Lon -> SVG viewBox) ---
@@ -323,7 +323,7 @@ function projectLatLonToSvg(lat: number, lon: number) {
 type LocationStatus = "open" | "openSoon" | "comingSoon";
 
 const toDisplayStatus = (
-  status: ReturnType<typeof getLocationStatusRaw>
+  status: ReturnType<typeof getLocationStatusRaw>,
 ): LocationStatus => (status === "openNewToday" ? "open" : status);
 
 function statusLabelKey(status: LocationStatus) {
@@ -353,7 +353,7 @@ const locationPoints = computed(() => {
 
     const { x, y } = projectLatLonToSvg(lat, lon);
     const status = toDisplayStatus(
-      getLocationStatusRaw(loc?.newOpeningDate ?? null)
+      getLocationStatusRaw(loc?.newOpeningDate ?? null),
     );
 
     return {
@@ -368,7 +368,7 @@ const locationPoints = computed(() => {
 
   return points.filter(
     (
-      p
+      p,
     ): p is {
       id: string | number;
       name: string;
@@ -376,13 +376,15 @@ const locationPoints = computed(() => {
       y: number;
       status: LocationStatus;
       statusLabelKey: string;
-    } => p !== null
+    } => p !== null,
   );
 });
 </script>
 <style scoped>
 .locationMap {
   --locationMap-legend-fill: var(--color-gray-900);
+  --locationMap-land-fill: var(--color-gray-300);
+  --locationMap-land-stroke: var(--color-card-bg-light);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -391,8 +393,6 @@ const locationPoints = computed(() => {
 }
 
 .locationMap__map {
-  --locationMap-land-fill: var(--color-gray-300);
-  --locationMap-land-stroke: var(--color-card-bg-light);
   max-height: 470px;
 }
 
@@ -400,13 +400,17 @@ const locationPoints = computed(() => {
   fill: var(--locationMap-land-fill);
 }
 
-.card--soft .locationMap__map {
-  --locationMap-land-fill: var(--color-gray-100);
+.theme-soft .locationMap {
+  --locationMap-land-fill: var(--color-gray-400);
+  --locationMap-land-stroke: var(--color-card-bg-soft);
+  --locationMap-legend-fill: var(--color-gray-900);
 }
 
-.card--neutral .locationMap__map,
-.card--strong .locationMap__map {
-  --locationMap-land-fill: var(--color-gray-900);
+.theme-neutral .locationMap,
+.theme-strong .locationMap {
+  --locationMap-land-fill: var(--color-gray-200);
+  --locationMap-land-stroke: var(--color-card-bg-strong);
+  --locationMap-legend-fill: var(--color-gray-500);
 }
 
 .locationMap__srOnly {
@@ -507,7 +511,6 @@ const locationPoints = computed(() => {
 .locationMap__footer {
   display: flex;
   flex-wrap: wrap;
-
   overflow: hidden;
 }
 

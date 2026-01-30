@@ -46,9 +46,11 @@
         </ul>
       </template>
       <template #links>
-        <UiMoleculeButtonGroup v-if="links && links.length > 0">
-          <SharedButton v-for="link in links" :key="link.id" :button="link" />
-        </UiMoleculeButtonGroup>
+        <div v-if="links && links.length > 0" class="benefitsList__links">
+          <UiMoleculeButtonGroup>
+            <SharedButton v-for="link in links" :key="link.id" :button="link" />
+          </UiMoleculeButtonGroup>
+        </div>
       </template>
     </UiOrganismMediaCard>
   </UiLayoutSectionBlock>
@@ -83,5 +85,9 @@ const props = defineProps<BlockBenefitsListDto>();
   font-size: var(--font-lg);
   line-height: var(--line-lg);
   margin: 6px 0 var(--space-200);
+}
+
+.benefitsList__links {
+  margin-top: var(--space-600);
 }
 </style>

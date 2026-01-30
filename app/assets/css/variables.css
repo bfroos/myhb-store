@@ -49,8 +49,8 @@
   --strong-color-text: var(--color-gray-50);
   --strong-color-text-light: var(--color-gray-300);
   --strong-color-text-muted: var(--color-gray-500);
-  --strong-color-border-light: var(--color-gray-700);
-  --strong-color-border-mute: var(--color-gray-800);
+  --strong-color-border-light: var(--color-gray-800);
+  --strong-color-border-mute: var(--color-gray-900);
 
   /*
     *  Typography
