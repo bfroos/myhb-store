@@ -2,7 +2,8 @@
   <UiLayoutSectionBlock>
     <UiOrganismMediaCard
       :layout="OrganismMediaCardLayout.MEDIA_RIGHT"
-      :fixed-image-aspect-ratio="false"
+      :full-height="layout === BlockPageHeaderLayout.SPLIT"
+      :fixed-image-aspect-ratio="fixedImageAspectRatio"
       :is-media-video="media && isMediaVideo(media)"
       :card-settings="cardSettings"
     >
@@ -26,7 +27,7 @@
           }"
         >
           <h1 v-if="headline">{{ headline }}</h1>
-          <p v-if="intro">({{ intro }})</p>
+          <p v-if="intro">{{ intro }}</p>
         </div>
       </template>
     </UiOrganismMediaCard>
@@ -43,14 +44,14 @@ const props = defineProps<BlockPageHeaderDto>();
 .pageHeader {
   display: flex;
   flex-direction: column;
-  gap: var(--space-400);
   justify-content: center;
+  gap: var(--space-600);
+  height: 100%;
   text-align: center;
-  min-height: 8em;
 }
 .pageHeader h1 {
-  font-size: var(--font-4xl);
-  line-height: var(--line-4xl);
+  font-size: var(--font-5xl);
+  line-height: var(--line-5xl);
 }
 .pageHeader p {
   color: var(--color-text-light);

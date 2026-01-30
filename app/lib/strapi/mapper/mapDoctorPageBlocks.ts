@@ -1,5 +1,5 @@
 import type { EmployeeDto } from "../dto/collections";
-import { ColorTheme } from "../dto/enums";
+import { BlockPageHeaderLayout, ColorTheme } from "../dto/enums";
 
 export function mapDoctorPageBlocks(employee: EmployeeDto) {
   const { t } = useI18n();
@@ -27,8 +27,10 @@ export function mapDoctorPageBlocks(employee: EmployeeDto) {
 
     return {
       headline: fullName,
-      subline: position,
-      cover: employee?.photo,
+      intro: position,
+      layout: BlockPageHeaderLayout.COMPACT,
+      media: employee?.photo,
+      fixedImageAspectRatio: true,
     };
   }
 

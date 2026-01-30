@@ -50,7 +50,10 @@
         </div>
       </div>
       <div class="mediaCard__body">
-        <div class="mediaCard__bodyInner">
+        <div
+          class="mediaCard__bodyInner"
+          :class="{ 'mediaCard__bodyInner--fullHeight': fullHeight }"
+        >
           <slot name="body" />
           <slot name="headline" />
           <slot name="intro" />
@@ -76,6 +79,7 @@ const props = withDefaults(defineProps<OrganismMediaCard>(), {
   contentAlignment: OrganismMediaCardContentAlignment.CENTER,
   mediaAlignment: OrganismMediaCardMediaAlignment.TOP,
   isMediaVideo: false,
+  fullHeight: false,
 });
 
 const slots = useSlots();
@@ -97,6 +101,7 @@ const hasMedia = computed(() => {
   aspect-ratio: 1/ 1;
   max-height: 40vh;
   flex: 1;
+  width: 100%;
   padding: var(--space-card-figure-pad) var(--space-card-figure-pad) 0;
 }
 
@@ -139,9 +144,11 @@ const hasMedia = computed(() => {
 .mediaCard__body {
   display: flex;
   flex-direction: column;
+  padding: var(--space-card-pad);
+}
 
-  padding: var(--space-card-pad) calc(var(--space-card-pad) * 2)
-    var(--space-card-pad) var(--space-card-pad);
+.mediaCard__bodyInner--fullHeight {
+  height: 100%;
 }
 
 .mediaCard--fixedImageAspectRatio .mediaCard__media {
@@ -214,8 +221,7 @@ const hasMedia = computed(() => {
   }
 
   .mediaCard--mediaRight .mediaCard__body {
-    padding: var(--space-card-pad) calc(var(--space-card-pad) * 2)
-      var(--space-card-pad) var(--space-card-pad);
+    padding: var(--space-card-pad);
   }
 
   .mediaCard--mediaRight .mediaCard__media {

@@ -1,6 +1,6 @@
 <template>
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
-  <BlockTreatmentHero v-if="fixedBlocks.hero" v-bind="fixedBlocks.hero" />
+  <BlockPageHeader v-if="fixedBlocks.hero" v-bind="fixedBlocks.hero" />
   <BlockTextContent
     v-if="fixedBlocks.textContent"
     v-bind="fixedBlocks.textContent"

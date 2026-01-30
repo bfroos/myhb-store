@@ -67,6 +67,7 @@ export type OrganismMediaCard = {
   cardSettings?: CardSettingsDto;
   isMediaVideo?: boolean;
   videoSettings?: SharedVideoSettingsDto;
+  fullHeight?: boolean;
 };
 
 /*
