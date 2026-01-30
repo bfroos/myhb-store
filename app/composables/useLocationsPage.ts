@@ -51,7 +51,7 @@ export function useLocationsPage() {
     };
 
     seo.value = data.value.data.locationsPage?.seo as SharedSeoDto;
-    blocks.value = data.value.data.blocks as StrapiBlock[];
+    blocks.value = data.value.data.locationsPage?.blocks as StrapiBlock[];
 
     return true;
   }
