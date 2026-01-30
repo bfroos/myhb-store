@@ -357,5 +357,20 @@
     "newsletterSignUp": {
       "header": "Newsletter Anmeldung"
     }
+  },
+
+  "newsletter": {
+    "marketingText": {
+      "headline": "Deals und News. Jetzt im Newsletter!",
+      "exlusiveOffers": "Exklusive Angebote",
+      "treatmentNews": "News zu Behandlungen",
+      "eventInvitations": "Einladungen zu Events"
+    },
+    "success": "Willkommen bei MY! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
+    "emailPlaceholder": "deine-email{'@'}example.com",
+    "errors": {
+      "invalid_email": "Bitte gib eine gültige E-Mail-Adresse an.",
+      "generic": "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+    }
   }
 }

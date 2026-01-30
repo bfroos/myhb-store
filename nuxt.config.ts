@@ -202,6 +202,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     redirectsFile: process.env.REDIRECTS_FILE,
+    mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
+    mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,
+    mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
     public: {
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL,
       publicUrl: process.env.NUXT_PUBLIC_URL,

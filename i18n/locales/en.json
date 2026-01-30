@@ -357,5 +357,20 @@
     "newsletterSignUp": {
       "header": "Newsletter sign-up"
     }
+  },
+
+  "newsletter": {
+    "marketingText": {
+      "headline": "Deals and news. Now in the newsletter!",
+      "exlusiveOffers": "Exclusive Offers",
+      "treatmentNews": "News about treatments",
+      "eventInvitations": "Event invitations"
+    },
+    "success": "Welcome to MY! If the address is not yet registered, you will receive a confirmation email shortly. If you are already registered, nothing will happen.",
+    "emailPlaceholder": "your-email{'@'}example.com",
+    "errors": {
+      "invalid_email": "Please provide a valid email address.",
+      "generic": "Subscription failed. Please try again later."
+    }
   }
 }

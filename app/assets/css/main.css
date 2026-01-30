@@ -1,6 +1,7 @@
 @import "./variables.css";
 @import "./normalize.css";
 @import "./components/select.css";
+@import "./components/inputtext.css";
 @import "./theming.css";
 
 *,

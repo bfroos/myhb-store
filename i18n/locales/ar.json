@@ -356,5 +356,20 @@
     "newsletterSignUp": {
       "header": "الاشتراك في النشرة الإخبارية"
     }
+  },
+
+  "newsletter": {
+    "marketingText": {
+      "headline": "عروض وأخبار. الآن في النشرة الإخبارية!",
+      "exlusiveOffers": "عروض حصرية",
+      "treatmentNews": "أخبار عن العلاجات",
+      "eventInvitations": "دعوات للحدثات"
+    },
+    "success": "مرحبًا بك في MY! إذا لم تكن عنوانك مسجل بالفعل، ستتلقى بريدًا إلكتروني للتحقق قريبًا. إذا كنت مسجلًا بالفعل، لن يحدث شيء آخر.",
+    "emailPlaceholder": "bariduka-al-iliktruni{'@'}example.com",
+    "errors": {
+      "invalid_email": "يرجى إدخال عنوان بريد إلكتروني صالح.",
+      "generic": "فشل الاشتراك. يرجى المحاولة مرة أخرى لاحقًا."
+    }
   }
 }

@@ -4,7 +4,7 @@
       <UiLayoutCardSurface>
         <div class="appFooter__inner">
           <aside class="appFooter__newsletter">
-            <h2>Deals und News. Jetzt im Newsletter!</h2>
+            <h2>{{ $t("newsletter.marketingText.headline") }}</h2>
             <UiMoleculeNewsletterSubscriptionForm />
           </aside>
           <div class="appFooter__content theme-soft">
@@ -199,7 +199,6 @@ const { treatmentPages, productCategories } = useMenu(
   "treatment-pages,product-categories",
 );
 
-// Map: Nur die Top-Level Kategorien (Parent-Elemente) extrahieren
 const treatmentPageCategories = computed<TreatmentPageMenuItem[]>(() => {
   return treatmentPages.value.filter((item) => {
     return item.children && item.children.length > 0;
@@ -225,8 +224,8 @@ const treatmentPageCategories = computed<TreatmentPageMenuItem[]>(() => {
 }
 
 .appFooter__newsletter > h2 {
-  font-size: var(--font-lg);
-  line-height: var(--line-lg);
+  font-size: var(--font-2xl);
+  line-height: var(--line-2xl);
   font-weight: var(--font-bold);
   margin-bottom: var(--space-400);
 }

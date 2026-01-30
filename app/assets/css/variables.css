@@ -99,9 +99,9 @@
   --space-1200: 96px;
 
   --space-card-figure-pad: var(--space-200);
-  --space-card-pad-xs: var(--space-200);
-  --space-card-pad-sm: var(--space-400);
-  --space-card-pad: var(--space-600);
+  --space-card-pad-xs: var(--space-500);
+  --space-card-pad-sm: var(--space-600);
+  --space-card-pad: var(--space-700);
 
   --space-page-gap: var(--space-800);
   --space-bento-gap: var(--space-400);
