@@ -177,6 +177,7 @@ export type BlockProductHeroDto = {
   manufacturerName: string;
   productName: string;
   variants: ProductVariantDto[];
+  images?: StrapiMedia[];
   cardSettings?: CardSettingsDto;
 };
 
@@ -356,8 +357,7 @@ export type ProductVariantDto = {
   priceInEuroCent: number;
   isActive: boolean;
   volume: ProductVolumeDto;
-  images: StrapiMedia[];
-  description: StrapiRichText;
+  description?: StrapiRichText;
 };
 
 export type ProductVolumeDto = {

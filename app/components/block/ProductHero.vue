@@ -9,7 +9,7 @@
           :current-variant="currentVariant"
           @set-current-variant="setCurrentVariant"
         />
-        <BlockProductHeroGallery :current-variant="currentVariant" />
+        <BlockProductHeroGallery :images="images" />
       </div>
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>

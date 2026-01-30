@@ -18,6 +18,7 @@ export function mapProductPageBlocks(
       manufacturerName: product.manufacturer?.name ?? "",
       productName: product.name,
       variants: product.variants ?? [],
+      images: product.images ?? [],
       cardSettings: {
         elevation: CardElevation.LARGE,
       },

@@ -1,6 +1,6 @@
 <template>
   <div class="productHero__images">
-    <div v-if="images && images.length > 0" class="productHero__images__main">
+    <div v-if="imageList && imageList.length > 0" class="productHero__images__main">
       <div class="productHero__images__image">
         <UiAtomMediaPicture
           v-if="currentImage"
@@ -38,7 +38,7 @@
     </div>
     <div v-if="hasMultipleImages" class="productHero__images__thumbnails">
       <button
-        v-for="(image, index) in images"
+        v-for="(image, index) in imageList"
         :key="image.id"
         class="productHero__images__thumbnail"
         :class="{
@@ -60,24 +60,24 @@
 <script setup lang="ts">
 import { getMediaUrl } from "~/utils/media";
 import { ImageBreakpoint, ImageFormat } from "~/lib/strapi/dto/enums";
-import type { ProductVariantDto } from "~/lib/strapi/dto/components";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { IconPhotoX, IconArrowLeft, IconArrowRight } from "@tabler/icons-vue";
 
 const props = defineProps<{
-  currentVariant: ProductVariantDto | null;
+  images?: StrapiMedia[];
 }>();
 
 const currentImageIndex = ref(0);
 
-const images = computed(() => props.currentVariant?.images ?? []);
+const imageList = computed(() => props.images ?? []);
 
 const currentImage = computed(() => {
-  if (!images.value || images.value.length === 0) return null;
-  return images.value[currentImageIndex.value] ?? null;
+  if (!imageList.value || imageList.value.length === 0) return null;
+  return imageList.value[currentImageIndex.value] ?? null;
 });
 
 const hasMultipleImages = computed(() => {
-  return images.value && images.value.length > 1;
+  return imageList.value && imageList.value.length > 1;
 });
 
 const canGoToPrevious = computed(() => {
@@ -85,7 +85,7 @@ const canGoToPrevious = computed(() => {
 });
 
 const canGoToNext = computed(() => {
-  return currentImageIndex.value < images.value.length - 1;
+  return currentImageIndex.value < imageList.value.length - 1;
 });
 
 function goToPreviousImage() {
@@ -101,7 +101,7 @@ function goToNextImage() {
 }
 
 function selectImage(index: number) {
-  const imgArray = images.value;
+  const imgArray = imageList.value;
   if (!imgArray) return;
 
   if (index >= 0 && index < imgArray.length) {
