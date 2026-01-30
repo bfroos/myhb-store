@@ -1,6 +1,9 @@
 <template>
   <div class="productHero__images">
-    <div v-if="imageList && imageList.length > 0" class="productHero__images__main">
+    <div
+      v-if="imageList && imageList.length > 0"
+      class="productHero__images__main"
+    >
       <div class="productHero__images__image">
         <UiAtomMediaPicture
           v-if="currentImage"
@@ -131,6 +134,7 @@ function selectImage(index: number) {
 
 .productHero__images__image :deep(img) {
   height: inherit;
+  max-width: 100%;
 }
 
 .productHero__images__navigation {

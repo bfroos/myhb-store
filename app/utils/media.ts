@@ -43,15 +43,15 @@ type CloudflareImageOptions = (typeof IMAGE_SIZE_PRESETS)[ImageFormat];
 /**
  * Builds a Cloudflare Image-Transform-URL (cdn-cgi/image) for on-the-fly resize/format.
  * Expects an absolute media URL (e.g. https://media.myhb.app/…) or a relative path.
+ * Uses runtimeConfig.public.mediaUrl as the base for relative URLs.
  */
 export function buildCloudflareImageUrl(
   mediaUrl: string,
   options: CloudflareImageOptions,
-  mediaBaseUrl?: string,
 ): string {
-  if (!mediaBaseUrl) {
-    throw new Error("mediaBaseUrl is required");
-  }
+  const config = useRuntimeConfig();
+  const mediaBaseUrl = config.public.mediaUrl ?? "";
+  if (!mediaBaseUrl) return mediaUrl;
 
   const parts: string[] = [];
   if (options.width) parts.push(`width=${options.width}`);
@@ -78,12 +78,10 @@ export function buildCloudflareImageUrl(
  *
  * @param media - Media object (url must point to the media CDN, e.g. R2/media.myhb.app)
  * @param format - Desired preset (thumbnail/small/medium/large)
- * @param mediaBaseUrl - Base URL of the media CDN (e.g. from NUXT_PUBLIC_MEDIA_URL). Required for image transforms.
  */
 export function getMediaUrl(
   media: StrapiMedia,
   format: ImageFormat,
-  mediaBaseUrl: string = process.env.NUXT_PUBLIC_MEDIA_URL ?? "",
 ): string | undefined {
   if (!media?.url) return undefined;
 
@@ -94,7 +92,7 @@ export function getMediaUrl(
   const preset = IMAGE_SIZE_PRESETS[format as ImageFormat];
   if (!preset) return media.url;
 
-  return buildCloudflareImageUrl(media.url, preset, mediaBaseUrl);
+  return buildCloudflareImageUrl(media.url, preset);
 }
 
 export function isMediaImage(media: StrapiMedia): boolean {

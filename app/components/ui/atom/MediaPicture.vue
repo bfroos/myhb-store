@@ -24,12 +24,11 @@ import type { AtomMediaPicture } from "~/lib/ui/types";
 
 const props = defineProps<AtomMediaPicture>();
 
-const config = useRuntimeConfig();
 function resolveMediaUrl(
   media: AtomMediaPicture["media"],
   format: ImageFormat | undefined,
 ): string | undefined {
   if (format == null) return undefined;
-  return getMediaUrl(media, format, config.public.mediaUrl);
+  return getMediaUrl(media, format);
 }
 </script>
