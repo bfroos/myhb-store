@@ -46,7 +46,7 @@ export async function useLocationMapData() {
   );
 
   const locations = computed<LocationForMapInput[]>(
-    () => locationsForMap.locations ?? [],
+    () => locationsForMap.locations.value ?? [],
   );
 
   return {

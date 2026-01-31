@@ -28,12 +28,9 @@ export async function useLocationsForMap() {
     },
   });
 
-  if (error.value) {
-    return {
-      locations: [] as LocationForMapDto[],
-    };
-  }
+  const locations = computed<LocationForMapDto[]>(() =>
+    error.value ? [] : ((data.value?.data ?? []) as LocationForMapDto[]),
+  );
 
-  const locations = (data.value?.data ?? []) as LocationForMapDto[];
   return { locations };
 }
