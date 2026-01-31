@@ -158,19 +158,17 @@ const a11yIdBase = useId();
 const svgTitleId = `${a11yIdBase}-title`;
 const svgDescId = `${a11yIdBase}-desc`;
 
-const [globals, locationCounts, employeeCounts, locationsForMap] =
-  await Promise.all([
-    useGlobals(),
-    useLocationCounts(),
-    useEmployeeCounts(),
-    useLocationsForMap(),
-  ]);
+const [globals, counts, locationsForMap] = await Promise.all([
+  useGlobals(),
+  useCounts(),
+  useLocationsForMap(),
+]);
 
 const customersCount =
   Number(globals.value?.marketing?.customersCount ?? 0) || 0;
-const loungeCount = Number(locationCounts.loungeCount ?? 0) || 0;
-const clinicCount = Number(locationCounts.clinicCount ?? 0) || 0;
-const doctorCount = Number(employeeCounts.doctorCount ?? 0) || 0;
+const loungeCount = Number(counts.loungeCount ?? 0) || 0;
+const clinicCount = Number(counts.clinicCount ?? 0) || 0;
+const doctorCount = Number(counts.doctorCount ?? 0) || 0;
 
 const customersCountLabel = computed(() => {
   void localeIso.value;
