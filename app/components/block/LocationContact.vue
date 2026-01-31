@@ -4,17 +4,10 @@
       <div class="locationContact">
         <div class="locationContact__map">
           <div class="locationContact__mapInner">
-            <iframe
-              v-if="mapUrl"
-              :src="mapUrl"
-              width="100%"
-              height="100%"
-              style="border: 0"
-              :allowfullscreen="true"
-              loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade"
-              :title="$t('blocks.locationContact.map.title')"
-            ></iframe>
+            <UiMoleculeGoogleMapEmbed
+              :coordinates="coordinates"
+              :address="address"
+            />
           </div>
         </div>
         <div class="locationContact__contact">
@@ -280,34 +273,6 @@ const openingHoursStatusText = computed(() => {
           time: day.intervals[0].opens,
         });
       }
-    }
-  }
-
-  return null;
-});
-
-const mapUrl = computed(() => {
-  if (props.coordinates?.lat && props.coordinates?.long) {
-    const lat = Number(props.coordinates.lat);
-    const long = Number(props.coordinates.long);
-    if (!isNaN(lat) && !isNaN(long)) {
-      return `https://www.google.com/maps?q=${lat},${long}&output=embed`;
-    }
-  }
-
-  if (props.address) {
-    const addressParts = [
-      props.address.street,
-      props.address.houseNumber,
-      props.address.postalCode,
-      props.address.city,
-    ]
-      .filter(Boolean)
-      .join(" ");
-    if (addressParts) {
-      return `https://www.google.com/maps?q=${encodeURIComponent(
-        addressParts,
-      )}&output=embed`;
     }
   }
 
