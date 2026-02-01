@@ -12,18 +12,12 @@
               <ImageAppLogo width="100" />
             </div>
             <div class="appFooter__navs">
-              <nav
-                v-if="treatmentPageCategories.length > 0"
-                aria-label="Behandlungen"
-              >
+              <nav v-if="treatmentPages.length > 0" aria-label="Behandlungen">
                 <h2 class="appFooter__navTitle">
                   {{ $t("navigation.footer.treatments") }}
                 </h2>
                 <ul>
-                  <li
-                    v-for="category in treatmentPageCategories"
-                    :key="category.id"
-                  >
+                  <li v-for="category in treatmentPages" :key="category.id">
                     <NuxtLinkLocale :to="`/behandlungen/${category.slug}`">
                       {{ category.name }}
                     </NuxtLinkLocale>
@@ -188,22 +182,16 @@
   </footer>
 </template>
 <script setup lang="ts">
-import type { TreatmentPageMenuItem } from "~/composables/useMenu";
 import {
   IconBrandFacebook,
   IconBrandInstagram,
   IconBrandLinkedin,
   IconBrandTiktok,
 } from "@tabler/icons-vue";
+
 const { treatmentPages, productCategories } = useMenu(
   "treatment-pages,product-categories",
 );
-
-const treatmentPageCategories = computed<TreatmentPageMenuItem[]>(() => {
-  return treatmentPages.value.filter((item) => {
-    return item.children && item.children.length > 0;
-  });
-});
 </script>
 <style scoped>
 .appFooter a:not(.button) {

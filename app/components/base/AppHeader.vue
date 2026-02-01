@@ -189,8 +189,8 @@ function closeMobileMenu() {
   transform: translate(-50%, -50%);
 }
 .appHeader__mainNav__brand > svg {
-  height: 32px;
-  max-height: 32px;
+  height: 36px;
+  max-height: 36px;
   width: auto;
   display: block;
 }
