@@ -17,6 +17,7 @@ export type Location = {
 
 const props = defineProps<{
   locations: Location[];
+  fitBoundsLocations?: Location[] | null;
   onMarkerClick?: (loc: Location) => void;
 }>();
 
@@ -136,7 +137,31 @@ function renderMarkers() {
   });
 
   if (markers.length > 0) {
-    map.fitBounds(bounds);
+    const boundsToFit =
+      props.fitBoundsLocations?.length &&
+      props.fitBoundsLocations.some(
+        (l) =>
+          toNum(l.coordinates?.lat) != null &&
+          toNum(l.coordinates?.long) != null,
+      )
+        ? props.fitBoundsLocations
+        : null;
+
+    if (boundsToFit && boundsToFit.length > 0) {
+      const fitBounds = new google.maps.LatLngBounds();
+      for (const loc of boundsToFit) {
+        const lat = toNum(loc.coordinates?.lat);
+        const lng = toNum(loc.coordinates?.long);
+        if (lat != null && lng != null) fitBounds.extend({ lat, lng });
+      }
+      if (!fitBounds.isEmpty()) {
+        map.fitBounds(fitBounds, { top: 48, right: 48, bottom: 48, left: 48 });
+      } else {
+        map.fitBounds(bounds);
+      }
+    } else {
+      map.fitBounds(bounds);
+    }
   }
 }
 
@@ -169,7 +194,7 @@ onMounted(async () => {
 });
 
 watch(
-  () => props.locations,
+  () => [props.locations, props.fitBoundsLocations],
   () => renderMarkers(),
   { deep: true },
 );

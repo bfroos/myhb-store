@@ -103,6 +103,7 @@ const sortedLocations = computed(() => {
 
 const emit = defineEmits<{
   (e: "citySelect", city: CitySuggestion | null): void;
+  (e: "fitMapToLocations", locations: LocationDto[] | null): void;
 }>();
 
 const {
@@ -120,8 +121,19 @@ function onCitySearch(event: { query: string }) {
   citySearch(event.query);
 }
 
+function getFirstThreeWithCoordinates() {
+  return sortedLocations.value
+    .filter(
+      (l) =>
+        l.coordinates?.lat != null &&
+        l.coordinates?.long != null,
+    )
+    .slice(0, 3);
+}
+
 function onCitySelect(event: AutoCompleteOptionSelectEvent) {
   selectedCity.value = event.value as CitySuggestion;
+  emit("fitMapToLocations", getFirstThreeWithCoordinates());
 }
 
 function onCityFocus() {
@@ -134,6 +146,10 @@ function closeFullscreenSearch() {
 
 watch(showFullscreenSearch, (isOpen) => {
   document.body.style.overflow = isOpen ? "hidden" : "";
+});
+
+watch(selectedCity, (city) => {
+  if (!city) emit("fitMapToLocations", null);
 });
 
 onBeforeUnmount(() => {

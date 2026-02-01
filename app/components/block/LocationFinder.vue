@@ -7,12 +7,18 @@
     >
       <div class="locationSearch">
         <div class="locationSearch__search">
-          <BlockLocationFinderSearch :locations="locations" />
+          <BlockLocationFinderSearch
+            :locations="locations"
+            @fit-map-to-locations="onFitMapToLocations"
+          />
         </div>
         <div class="locationSearch__map">
           <div class="locationSearch__mapInner">
             <ClientOnly>
-              <UiMoleculeLocationMapMarkers :locations="locations" />
+              <UiMoleculeLocationMapMarkers
+                :locations="locations"
+                :fit-bounds-locations="fitBoundsLocations"
+              />
               <template #fallback>
                 <div class="locationSearch__mapPlaceholder">
                   {{ $t("blocks.locationFinder.mapLoading") }}
@@ -32,6 +38,12 @@ import type { LocationDto } from "~/lib/strapi/dto/collections";
 const props = defineProps<{
   locations: LocationDto[];
 }>();
+
+const fitBoundsLocations = ref<LocationDto[] | null>(null);
+
+function onFitMapToLocations(locations: LocationDto[] | null) {
+  fitBoundsLocations.value = locations;
+}
 </script>
 <style scoped>
 .locationSearch {
