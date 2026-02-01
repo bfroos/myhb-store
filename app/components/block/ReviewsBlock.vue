@@ -43,9 +43,9 @@
               :author="review.author"
               :text="review.text"
               :rating="review.rating"
-              :city="review.relatedLocation?.address?.city"
-              :location="review.relatedLocation?.name"
-              :address="review.relatedLocation?.address"
+              :city="review.location?.address?.city"
+              :location="review.location?.name"
+              :address="review.location?.address"
               :source="review.source"
               :source-url="review.sourceUrl"
             />
@@ -131,7 +131,7 @@ const googleReviews = computed<ReviewDto[]>(() => {
       rating: r.rating,
       source: (r.source as ReviewSource) ?? ReviewSource.GOOGLE,
       sourceUrl: r.sourceUrl,
-      relatedLocation: undefined,
+      location: r.location,
     }));
 });
 
@@ -145,7 +145,7 @@ const displayReviews = computed<ReviewDto[]>(() => {
 
 const getThemeStyles = (index: number) => {
   if (index % 2 === 0) {
-    const theme = props.oddItemsTheme ?? ColorTheme.SOFT;
+    const theme = props.evenItemsTheme ?? ColorTheme.NEUTRAL;
     return {
       "theme-light": theme === ColorTheme.LIGHT,
       "theme-soft": theme === ColorTheme.SOFT,
@@ -153,7 +153,7 @@ const getThemeStyles = (index: number) => {
       "theme-strong": theme === ColorTheme.STRONG,
     };
   } else {
-    const theme = props.evenItemsTheme ?? ColorTheme.NEUTRAL;
+    const theme = props.oddItemsTheme ?? ColorTheme.SOFT;
     return {
       "theme-light": theme === ColorTheme.LIGHT,
       "theme-soft": theme === ColorTheme.SOFT,

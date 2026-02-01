@@ -53,9 +53,8 @@
       class="reviewsBadge__text"
       :aria-label="fiveStarAriaLabel"
     >
-      {{ globals.marketing?.fiveStarReviewsCount }} <br />{{
-        $t("common.five-star")
-      }}
+      {{ fiveStarReviewsCount }}
+      <br />{{ $t("common.five-star") }}
     </span>
   </div>
 </template>
@@ -80,14 +79,23 @@ const normalizedRating = computed(() => {
 });
 
 const ratingAriaLabel = computed(
-  () => `${t("common.reviews")}: ${normalizedRating.value}/5`
+  () => `${t("common.reviews")}: ${normalizedRating.value}/5`,
 );
 const fiveStarAriaLabel = computed(
   () =>
     `${globals.value?.marketing?.fiveStarReviewsCount} ${t(
-      "common.five-star"
-    )} ${t("common.reviews")}`
+      "common.five-star",
+    )} ${t("common.reviews")}`,
 );
+
+const fiveStarReviewsCount = computed(() => {
+  return (
+    formatInteger(
+      Number(globals.value?.marketing?.fiveStarReviewsCount ?? 0),
+      t("locale"),
+    ) + "+"
+  );
+});
 </script>
 <style scoped>
 .reviewsBadge {

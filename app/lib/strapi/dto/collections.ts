@@ -189,7 +189,7 @@ export type ReviewDto = {
   source: ReviewSource;
   sourceUrl?: string;
   relatedTreatments?: TreatmentDto[];
-  relatedLocation?: LocationDto;
+  location?: LocationDto;
 };
 
 export type StoryDto = {
