@@ -50,11 +50,23 @@ export default defineNuxtConfig({
     },
   },
   i18n: {
-    defaultLocale: "de",
     baseUrl:
       process.env.BASE_URL ||
       process.env.NUXT_PUBLIC_BASE_URL ||
       "http://localhost:3000",
+    defaultLocale: "de",
+    strategy: "prefix_except_default",
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: "i18n_redirected",
+      redirectOn: "root",
+      alwaysRedirect: false,
+    },
+    compilation: {
+      strictMessage: false,
+    },
+    customRoutes: "config",
+    langDir: "locales",
     locales: [
       {
         code: "de",
@@ -85,7 +97,6 @@ export default defineNuxtConfig({
         file: "ar.json",
       },
     ],
-    customRoutes: "config",
     pages: {
       behandlungen: {
         en: "/treatments",
@@ -178,16 +189,6 @@ export default defineNuxtConfig({
         ar: "/atibba/[slug]",
       },
     },
-    strategy: "prefix_except_default",
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: "i18n_redirected",
-      redirectOn: "root",
-    },
-    compilation: {
-      strictMessage: false,
-    },
-    langDir: "locales",
   },
   primevue: {
     options: {

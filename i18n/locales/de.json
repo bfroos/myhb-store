@@ -354,7 +354,7 @@
     },
     "404": {
       "statusMessage": "Nicht schön!",
-      "message": "Die angeforderte Seite existiert nicht oder ist in der ausgewähltenSprache nicht verfügbar.",
+      "message": "Die angeforderte Seite existiert nicht oder ist in der ausgewählten Sprache nicht verfügbar.",
       "button": "Zur Startseite"
     }
   },

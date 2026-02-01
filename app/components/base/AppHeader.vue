@@ -116,7 +116,7 @@ const mobileMenuItems = computed(() => {
 });
 
 const subnavItems = computed(() =>
-  currentMainNav.value?.children.map((child) => ({
+  (currentMainNav.value?.children ?? []).map((child) => ({
     id: child.id,
     label: child.name,
     href: `/behandlungen/${currentMainNav.value?.slug}/${child.slug}`,

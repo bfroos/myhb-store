@@ -93,12 +93,10 @@ const selectedLocaleCode = computed({
         }
       }
 
-      // Navigiere zur entsprechenden Route in der neuen Locale
       const targetPath = switchLocalePath(newCode as any);
       if (targetPath) {
-        await navigateTo(targetPath);
+        await navigateTo(targetPath, { replace: true });
       } else {
-        // Fallback: Setze nur die Locale, wenn keine Route gefunden wurde
         setLocale(newCode as any);
       }
     }
