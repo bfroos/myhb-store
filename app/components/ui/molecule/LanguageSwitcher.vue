@@ -31,7 +31,6 @@ import { computed } from "vue";
 import Select from "primevue/select";
 
 const { locale, locales, setLocale } = useI18n();
-const switchLocalePath = useSwitchLocalePath();
 
 const currentLocale = computed(() => {
   return (
@@ -43,26 +42,6 @@ const currentLocale = computed(() => {
 const availableLocales = computed(() => {
   return locales.value.filter((l: any) => l.code !== locale.value);
 });
-
-const checkTreatmentPageExists = (targetLocale: string): boolean => {
-  const currentTreatmentPage = useState<any>(
-    "currentTreatmentPage",
-    () => null,
-  );
-  const treatmentPage = currentTreatmentPage.value;
-
-  if (!treatmentPage || !treatmentPage.localizations) {
-    return false;
-  }
-
-  // TODO: FIX THIS
-  // Prüfe, ob die Ziel-Locale in den Lokalisierungen enthalten ist
-  const hasTargetLocale = treatmentPage.localizations.some(
-    (l: any) => l.locale === targetLocale,
-  );
-
-  return hasTargetLocale;
-};
 
 const selectedLocaleCode = computed({
   get: () => locale.value,
@@ -76,29 +55,7 @@ const selectedLocaleCode = computed({
         return;
       }
 
-      // Prüfe, ob die Zielseite existiert (nur für Service Pages)
-      const currentTreatmentPage = useState<any>(
-        "currentTreatmentPage",
-        () => null,
-      );
-      const isTreatmentPage = !!currentTreatmentPage.value;
-
-      if (isTreatmentPage) {
-        const pageExists = checkTreatmentPageExists(newCode);
-        if (!pageExists) {
-          // Wenn die Seite nicht existiert, navigiere zur Startseite der neuen Locale
-          const homePath = newCode === "de" ? "/" : `/${newCode}`;
-          await navigateTo(homePath);
-          return;
-        }
-      }
-
-      const targetPath = switchLocalePath(newCode as any);
-      if (targetPath) {
-        await navigateTo(targetPath, { replace: true });
-      } else {
-        setLocale(newCode as any);
-      }
+      await setLocale(newCode as any);
     }
   },
 });
