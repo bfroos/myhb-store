@@ -214,10 +214,14 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // Do NOT cache Strapi proxy routes (responses vary by locale/query)
     "/api/strapi/**": {
+      isr: false,
+      cache: false,
       headers: {
-        "cache-control": "no-store, no-cache, must-revalidate, max-age=0",
+        "cache-control":
+          "private, no-store, no-cache, must-revalidate, max-age=0",
+        "cdn-cache-control": "no-store",
+        "vercel-cdn-cache-control": "no-store",
         pragma: "no-cache",
         expires: "0",
       },
@@ -226,7 +230,7 @@ export default defineNuxtConfig({
     "/sitemap.xml": {
       cache: { maxAge: 86400 },
     },
-    // ISR: all pages the same (revalidation after 5 minutes, later can be customized per route)
+    // ISR: Seiten (NICHT API-Routen) werden nach 5 Minuten revalidiert
     "/**": {
       isr: 300,
     },
