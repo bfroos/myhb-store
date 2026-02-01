@@ -1,16 +1,12 @@
-/* Global Dropdown Styles for PrimeVue Select (unstyled mode) */
-
-/* Dropdown Root Container */
-.select {
+body .select {
   display: inline-flex;
   align-items: center;
   position: relative;
   cursor: pointer;
 }
 
-/* Dropdown Trigger Button / Label */
-.select__trigger,
-.select__label {
+body .select__trigger,
+body .select__label {
   display: flex;
   align-items: center;
   gap: var(--space-200);
@@ -23,14 +19,12 @@
   transition: opacity 0.2s;
 }
 
-.select__trigger:hover,
-.select__label:hover {
+body .select__trigger:hover,
+body .select__label:hover {
   opacity: 0.7;
 }
 
-
-/* Dropdown Panel (Dropdown Menu Container) */
-.select__panel {
+body .select__panel {
   z-index: var(--z-index-dropdown);
   position: absolute;
   top: 100%;
@@ -45,20 +39,18 @@
   overflow: hidden;
 }
 
-[dir="rtl"] .select__panel {
+body [dir="rtl"] .select__panel {
   right: auto;
   left: 0;
 }
 
-/* Dropdown List */
-.select__list {
+body .select__list {
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-/* Dropdown Option */
-.select__option {
+body .select__option {
   display: block;
   width: 100%;
   padding: var(--space-300) var(--space-400);
@@ -72,25 +64,23 @@
   transition: background-color 0.2s;
 }
 
-[dir="rtl"] .select__option {
+body [dir="rtl"] .select__option {
   text-align: right;
 }
 
-.select__dropdown {
+body .select__dropdown {
   display: flex;
 }
 
-.select__option:hover {
+body .select__option:hover {
   background-color: var(--color-gray-100);
 }
 
-.select__option--active {
+body .select__option--active {
   background-color: var(--color-gray-100);
   font-weight: var(--font-medium);
 }
 
-/* Dropdown Option Content */
-.select__option-content {
+body .select__option-content {
   display: block;
 }
-

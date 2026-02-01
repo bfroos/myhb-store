@@ -93,6 +93,9 @@ const props = defineProps<BlockTrustGridDto>();
 .trustGrid__items__description {
   grid-row: 2 / 3;
 }
+.trustGrid__items__description > *:last-child {
+  margin-bottom: 0;
+}
 
 @media screen and (min-width: 600px) {
   .trustGrid--itemsPosition-aside .trustGrid__items {
