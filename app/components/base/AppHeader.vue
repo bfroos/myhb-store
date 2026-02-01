@@ -78,7 +78,7 @@ const { treatmentPages } = useMenu("treatment-pages,product-categories");
 
 const isMobileMenuOpen = ref(false);
 
-const secondaryNavItems = [
+const secondaryNavItems = computed(() => [
   {
     name: t("navigation.secondary.doctors"),
     slug: "aerzte",
@@ -91,7 +91,7 @@ const secondaryNavItems = [
     name: t("navigation.secondary.prices"),
     slug: "preise",
   },
-];
+]);
 
 const mainNavId = ref<number | null>(null);
 let hideSubnavTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -110,7 +110,7 @@ const priorityNavItems = computed(() =>
 
 const mobileMenuItems = computed(() => {
   return {
-    secondaryNavItems: secondaryNavItems,
+    secondaryNavItems: secondaryNavItems.value,
     mainNavItems: treatmentPages.value,
   };
 });
