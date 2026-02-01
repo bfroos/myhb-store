@@ -22,7 +22,7 @@ import type { RouteLocationRaw } from "vue-router";
  */
 
 export type BaseButtonProps = {
-  size?: "lg" | "md" | "sm";
+  size?: "lg" | "md" | "sm" | "xs";
   variant?:
     | "primary"
     | "secondary"

@@ -293,6 +293,10 @@ const handleClick = (event: MouseEvent) => {
 }
 
 /* Sizes */
+.button--xs {
+  --button-control-height: var(--control-height-xs);
+}
+
 .button--sm {
   --button-control-height: var(--control-height-sm);
 }
@@ -370,6 +374,11 @@ const handleClick = (event: MouseEvent) => {
 .button--sm :is(.button__label, .button__icon) {
   font-size: var(--font-sm);
   line-height: var(--line-sm);
+}
+
+.button--xs :is(.button__label, .button__icon) {
+  font-size: var(--font-xs);
+  line-height: var(--line-xs);
 }
 
 .button--link {
