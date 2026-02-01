@@ -157,30 +157,49 @@ function renderMarkers() {
   });
 
   if (markers.length > 0) {
-    const boundsToFit =
-      props.fitBoundsLocations?.length &&
-      props.fitBoundsLocations.some(
+    if (markers.length === 1) {
+      const first = props.locations.find(
         (l) =>
           toNum(l.coordinates?.lat) != null &&
           toNum(l.coordinates?.long) != null,
-      )
-        ? props.fitBoundsLocations
-        : null;
-
-    if (boundsToFit && boundsToFit.length > 0) {
-      const fitBounds = new google.maps.LatLngBounds();
-      for (const loc of boundsToFit) {
-        const lat = toNum(loc.coordinates?.lat);
-        const lng = toNum(loc.coordinates?.long);
-        if (lat != null && lng != null) fitBounds.extend({ lat, lng });
+      );
+      if (first) {
+        const lat = toNum(first.coordinates!.lat)!;
+        const lng = toNum(first.coordinates!.long)!;
+        map.setCenter({ lat, lng });
+        map.setZoom(17);
       }
-      if (!fitBounds.isEmpty()) {
-        map.fitBounds(fitBounds, { top: 48, right: 48, bottom: 48, left: 48 });
+    } else {
+      const boundsToFit =
+        props.fitBoundsLocations?.length &&
+        props.fitBoundsLocations.some(
+          (l) =>
+            toNum(l.coordinates?.lat) != null &&
+            toNum(l.coordinates?.long) != null,
+        )
+          ? props.fitBoundsLocations
+          : null;
+
+      if (boundsToFit && boundsToFit.length > 0) {
+        const fitBounds = new google.maps.LatLngBounds();
+        for (const loc of boundsToFit) {
+          const lat = toNum(loc.coordinates?.lat);
+          const lng = toNum(loc.coordinates?.long);
+          if (lat != null && lng != null) fitBounds.extend({ lat, lng });
+        }
+        if (!fitBounds.isEmpty()) {
+          map.fitBounds(fitBounds, {
+            top: 48,
+            right: 48,
+            bottom: 48,
+            left: 48,
+          });
+        } else {
+          map.fitBounds(bounds);
+        }
       } else {
         map.fitBounds(bounds);
       }
-    } else {
-      map.fitBounds(bounds);
     }
   }
 }

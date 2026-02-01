@@ -4,10 +4,14 @@
       <div class="locationContact">
         <div class="locationContact__map">
           <div class="locationContact__mapInner">
-            <UiMoleculeGoogleMapEmbed
-              :coordinates="coordinates"
-              :address="address"
-            />
+            <ClientOnly v-if="mapLocation">
+              <UiMoleculeLocationMapMarkers :locations="[mapLocation]" />
+              <template #fallback>
+                <div class="locationContact__mapPlaceholder">
+                  {{ $t("blocks.locationFinder.mapLoading") }}
+                </div>
+              </template>
+            </ClientOnly>
           </div>
         </div>
         <div class="locationContact__contact">
@@ -46,7 +50,8 @@
                 <UiAtomBaseButton
                   variant="secondary"
                   size="sm"
-                  :href="`tel:${contact?.phoneNumber}`"
+                  as="a"
+                  :href="`tel:${phoneNumber}`"
                   fullWidth
                 >
                   {{ contact?.phoneNumber }}
@@ -59,6 +64,7 @@
                 <UiAtomBaseButton
                   variant="secondary"
                   size="sm"
+                  as="a"
                   :href="`https://wa.me/${contact?.whatsAppNumber}`"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -133,6 +139,27 @@ const props = defineProps<{
   newOpeningDate?: Date | string;
   timezone: string;
 }>();
+
+const mapLocation = computed(() => {
+  const coords = props.coordinates;
+  if (coords == null || coords.lat == null || coords.long == null) {
+    return null;
+  }
+  const lat = typeof coords.lat === "number" ? coords.lat : Number(coords.lat);
+  const long =
+    typeof coords.long === "number" ? coords.long : Number(coords.long);
+  if (!Number.isFinite(lat) || !Number.isFinite(long)) return null;
+  return {
+    id: "current",
+    name: props.address?.city ?? "Standort",
+    slug: "",
+    coordinates: { lat, long },
+  };
+});
+
+const phoneNumber = computed(() => {
+  return props.contact?.phoneNumber?.replace(/\D/g, "") ?? "";
+});
 
 const openingHoursDays = computed(() => {
   const allDays = [
@@ -294,12 +321,14 @@ const openingHoursStatusText = computed(() => {
   border-radius: var(--border-radius-card-figure);
 }
 
-.locationContact__map iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
+.locationContact__mapPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
+  min-height: 200px;
+  color: var(--color-text-light);
 }
 
 .locationContact__contact,
@@ -313,6 +342,10 @@ const openingHoursStatusText = computed(() => {
   flex-direction: column;
   justify-content: space-between;
   gap: var(--space-500);
+}
+
+.locationContact__openingHours {
+  padding-top: 0;
 }
 
 .locationContact__actions {
@@ -347,11 +380,48 @@ const openingHoursStatusText = computed(() => {
 @media screen and (min-width: 900px) {
   .locationContact {
     display: grid;
-    grid-template-columns: 5fr 3fr 3fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content max-content;
   }
+
+  .locationContact__map {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+
+  .locationContact__contact {
+    grid-column: 2;
+  }
+
+  .locationContact__openingHours {
+    grid-column: 2;
+  }
+
   .locationContact__mapInner {
     aspect-ratio: unset;
     height: 100%;
+  }
+}
+
+@media screen and (min-width: 1340px) {
+  .locationContact {
+    display: grid;
+    grid-template-columns: 6fr 3fr 3fr;
+    grid-template-rows: max-content;
+  }
+
+  .locationContact__map {
+    grid-column: 1 / 2;
+  }
+
+  .locationContact__contact {
+    grid-column: 2 / 3;
+  }
+
+  .locationContact__openingHours {
+    grid-column: 3 / 4;
+    padding: var(--space-card-pad) var(--space-card-pad-sm)
+      var(--space-card-pad) 0;
   }
 }
 </style>
