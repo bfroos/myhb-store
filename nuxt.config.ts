@@ -8,7 +8,6 @@ export default defineNuxtConfig({
     "@nuxt/fonts",
     "@nuxtjs/i18n",
     "@primevue/nuxt-module",
-    "@dargmuesli/nuxt-cookie-control",
     "nuxt-calendly",
   ],
   fonts: {
