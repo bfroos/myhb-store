@@ -1,12 +1,20 @@
 <template>
   <div class="videoTile" :class="{ 'videoTile--playing': isPlaying }">
     <video
+      v-if="isVideoLoaded"
       class="videoTile__video"
       ref="videoRef"
       :src="videoUrl"
+      :poster="posterUrl"
       :aria-label="`${title} - ${subtitle}`"
-      :title="`${title} - ${subtitle}`"
       :controls="isPlaying"
+    />
+    <img
+      v-else
+      class="videoTile__poster"
+      :src="posterUrl"
+      :alt="`${title} - ${subtitle}`"
+      loading="lazy"
     />
     <button
       v-if="!isPlaying"
@@ -29,11 +37,13 @@
 </template>
 <script setup lang="ts">
 import { IconPlayerPlayFilled } from "@tabler/icons-vue";
+import { buildVideoPosterUrl } from "~/utils/media";
 
 const props = defineProps<{
   title?: string;
   subtitle?: string;
   video: string;
+  poster?: string;
   isActive?: boolean;
 }>();
 
@@ -43,8 +53,15 @@ const emit = defineEmits<{
 }>();
 
 const isPlaying = ref(false);
+const isVideoLoaded = ref(false);
 
-const videoUrl = computed(() => `${props.video ?? ""}`);
+const videoUrl = computed(() => props.video ?? "");
+
+const posterUrl = computed(() => {
+  if (props.poster) return props.poster;
+  if (!props.video) return "";
+  return buildVideoPosterUrl(props.video);
+});
 
 const videoRef = ref<HTMLVideoElement | null>(null);
 
@@ -58,11 +75,14 @@ const handlePause = () => {
   emit("pause");
 };
 
-onMounted(() => {
-  const video = videoRef.value;
-  if (video) {
-    video.addEventListener("play", handlePlay);
-    video.addEventListener("pause", handlePause);
+watch(videoRef, (newVideo, oldVideo) => {
+  if (oldVideo) {
+    oldVideo.removeEventListener("play", handlePlay);
+    oldVideo.removeEventListener("pause", handlePause);
+  }
+  if (newVideo) {
+    newVideo.addEventListener("play", handlePlay);
+    newVideo.addEventListener("pause", handlePause);
   }
 });
 
@@ -88,10 +108,15 @@ watch(
     if (!newValue && isPlaying.value && videoRef.value) {
       videoRef.value.pause();
     }
-  }
+  },
 );
 
 const playVideo = async () => {
+  if (!isVideoLoaded.value) {
+    isVideoLoaded.value = true;
+    await nextTick();
+  }
+
   if (videoRef.value) {
     try {
       await videoRef.value.play();
@@ -111,7 +136,8 @@ const playVideo = async () => {
   overflow: hidden;
 }
 
-.videoTile__video {
+.videoTile__video,
+.videoTile__poster {
   position: absolute;
   top: 0;
   left: 0;
@@ -154,6 +180,11 @@ const playVideo = async () => {
   left: 0;
   padding: var(--space-500);
   color: var(--color-white);
+}
+
+.videoTile__overlayContent h3 {
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
 }
 
 .videoTile__overlayContent p {

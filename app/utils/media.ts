@@ -102,3 +102,123 @@ export function isMediaImage(media: StrapiMedia): boolean {
 export function isMediaVideo(media: StrapiMedia): boolean {
   return media?.mime?.startsWith("video/");
 }
+
+// ============================================================================
+// Cloudflare Media Transformations (für Video-Poster & Video-Delivery)
+// ============================================================================
+
+/**
+ * SSR-safe helper to determine the zone origin for Cloudflare media transformations.
+ * Prefers the origin of the media URL itself, then falls back to request/window origin.
+ */
+export function getMediaZoneOrigin(sourceUrl?: string): string | null {
+  if (sourceUrl) {
+    try {
+      const mediaUrl = new URL(sourceUrl);
+      if (mediaUrl.origin) return mediaUrl.origin;
+    } catch {
+      // Falls URL nicht absolut/valide ist, Fallback zu Request-Origin
+    }
+  }
+
+  // SSR: useRequestURL nutzen
+  try {
+    const url = useRequestURL();
+    if (url?.origin) return url.origin;
+  } catch {
+    // useRequestURL ist in manchen Edge Cases nicht verfügbar
+  }
+
+  // Client-side Fallback
+  if (
+    import.meta.client &&
+    typeof window !== "undefined" &&
+    window.location?.origin
+  ) {
+    return window.location.origin;
+  }
+
+  return null;
+}
+
+/**
+ * Encodes a source URL for Cloudflare Media Transformations.
+ * Query params and hash are encoded so they don't interfere with the transformation URL.
+ */
+export function encodeSourceForMediaTransform(sourceUrl: string): string {
+  try {
+    const u = new URL(sourceUrl);
+    let out = `${u.origin}${u.pathname}`;
+    if (u.search) out += `%3F${u.search.slice(1)}`;
+    if (u.hash) out += `%23${u.hash.slice(1)}`;
+    return out;
+  } catch {
+    return sourceUrl;
+  }
+}
+
+export interface VideoPosterOptions {
+  time?: string;
+  format?: "jpg" | "png" | "webp";
+  width?: number;
+  fit?: "scale-down" | "contain" | "cover";
+}
+
+const DEFAULT_POSTER_OPTIONS: Required<VideoPosterOptions> = {
+  time: "0s",
+  format: "jpg",
+  width: 600,
+  fit: "scale-down",
+};
+
+/**
+ * Builds a Cloudflare Media Transformation URL for a video poster frame.
+ */
+export function buildVideoPosterUrl(
+  sourceUrl: string,
+  options: VideoPosterOptions = {},
+): string {
+  const origin = getMediaZoneOrigin(sourceUrl);
+  if (!origin || !sourceUrl) return "";
+
+  const opts = { ...DEFAULT_POSTER_OPTIONS, ...options };
+  const encodedSource = encodeSourceForMediaTransform(sourceUrl);
+
+  const params = [
+    "mode=frame",
+    `time=${opts.time}`,
+    `format=${opts.format}`,
+    `width=${opts.width}`,
+    `fit=${opts.fit}`,
+  ];
+
+  return `${origin}/cdn-cgi/media/${params.join(",")}/${encodedSource}`;
+}
+
+export interface TransformedVideoOptions {
+  audio?: boolean;
+  fit?: "scale-down" | "contain" | "cover";
+}
+
+const DEFAULT_VIDEO_OPTIONS: Required<TransformedVideoOptions> = {
+  audio: true,
+  fit: "scale-down",
+};
+
+/**
+ * Builds a Cloudflare Media Transformation URL for video delivery.
+ */
+export function buildTransformedVideoUrl(
+  sourceUrl: string,
+  options: TransformedVideoOptions = {},
+): string {
+  const origin = getMediaZoneOrigin(sourceUrl);
+  if (!origin || !sourceUrl) return sourceUrl;
+
+  const opts = { ...DEFAULT_VIDEO_OPTIONS, ...options };
+  const encodedSource = encodeSourceForMediaTransform(sourceUrl);
+
+  const params = ["mode=video", `fit=${opts.fit}`, `audio=${opts.audio}`];
+
+  return `${origin}/cdn-cgi/media/${params.join(",")}/${encodedSource}`;
+}
