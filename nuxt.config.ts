@@ -214,9 +214,13 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    // Cache Strapi API routes (5 minutes)
+    // Do NOT cache Strapi proxy routes (responses vary by locale/query)
     "/api/strapi/**": {
-      cache: { maxAge: 300 },
+      headers: {
+        "cache-control": "no-store, no-cache, must-revalidate, max-age=0",
+        pragma: "no-cache",
+        expires: "0",
+      },
     },
     // Cache sitemap.xml (24 hours)
     "/sitemap.xml": {
