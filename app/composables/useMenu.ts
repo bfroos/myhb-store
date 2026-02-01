@@ -22,31 +22,26 @@ type MenuResponse = {
 
 export function useMenu(types: string | string[] = "treatment-pages") {
   const { locale, fallbackLocale } = useI18n();
-  const currentLocale = (locale.value || fallbackLocale.value) as string;
 
   const typesString = Array.isArray(types) ? types.join(",") : types;
-  const cacheKey = `menu-${currentLocale}-${typesString}`;
+
+  const query = computed(() => ({
+    locale: (locale.value || fallbackLocale.value) as string,
+    types: typesString,
+  }));
 
   const { data, error, pending, refresh } = useStrapiFetch<MenuResponse>(
     "/menu",
     {
-      query: {
-        locale: currentLocale,
-        types: typesString,
-      },
-      fetchOptions: {
-        key: cacheKey,
-      },
+      query,
     },
   );
 
-  // Computed properties for easy access
   const treatmentPages = computed(
-    () => data.value?.data?.["treatment-pages"] || [],
+    () => data.value?.data?.["treatment-pages"] ?? [],
   );
-
   const productCategories = computed(
-    () => data.value?.data?.["product-categories"] || [],
+    () => data.value?.data?.["product-categories"] ?? [],
   );
 
   return {
