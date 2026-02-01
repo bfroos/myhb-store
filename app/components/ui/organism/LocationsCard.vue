@@ -58,7 +58,7 @@ const emit = defineEmits<{
   "update:federal-state": [value: string | null];
 }>();
 
-const federalStateLabels: Record<string, string> = {
+const federalStateLabels = computed<Record<string, string>>(() => ({
   "baden-wuerttemberg": $t("common.federalState.baden-wuerttemberg"),
   bavaria: $t("common.federalState.bavaria"),
   berlin: $t("common.federalState.berlin"),
@@ -77,9 +77,10 @@ const federalStateLabels: Record<string, string> = {
   "saxony-anhalt": $t("common.federalState.saxony-anhalt"),
   "schleswig-holstein": $t("common.federalState.schleswig-holstein"),
   thuringia: $t("common.federalState.thuringia"),
-};
+}));
 
 const federalStateOptions = computed(() => {
+  const labels = federalStateLabels.value;
   const options: Array<{ label: string; value: string | null }> = [
     { label: $t("blocks.locationTeasers.filter.all"), value: null },
   ];
@@ -87,7 +88,7 @@ const federalStateOptions = computed(() => {
   if (props.availableFederalStates) {
     props.availableFederalStates.forEach((state) => {
       options.push({
-        label: federalStateLabels[state] || state,
+        label: labels[state] || state,
         value: state as string,
       });
     });
@@ -104,7 +105,7 @@ const selectedState = computed({
 });
 
 const selectedStateLabel = computed(() => {
-  return federalStateLabels[selectedState.value ?? ""];
+  return federalStateLabels.value[selectedState.value ?? ""];
 });
 </script>
 <style scoped>

@@ -12,7 +12,10 @@
               <ImageAppLogo width="100" />
             </div>
             <div class="appFooter__navs">
-              <nav v-if="treatmentPages.length > 0" aria-label="Behandlungen">
+              <nav
+                v-if="treatmentPages.length > 0"
+                :aria-label="$t('navigation.footer.treatments')"
+              >
                 <h2 class="appFooter__navTitle">
                   {{ $t("navigation.footer.treatments") }}
                 </h2>
@@ -24,7 +27,7 @@
                   </li>
                 </ul>
               </nav>
-              <nav aria-label="Unternehmen">
+              <nav :aria-label="$t('navigation.footer.company')">
                 <h2 class="appFooter__navTitle">
                   {{ $t("navigation.footer.company") }}
                 </h2>
@@ -61,7 +64,10 @@
                   </li>
                 </ul>
               </nav>
-              <nav v-if="productCategories.length > 0" aria-label="Preise">
+              <nav
+                v-if="productCategories.length > 0"
+                :aria-label="$t('navigation.footer.prices')"
+              >
                 <h2 class="appFooter__navTitle">
                   {{ $t("navigation.footer.prices") }}
                 </h2>

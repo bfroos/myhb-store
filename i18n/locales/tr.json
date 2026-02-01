@@ -64,7 +64,10 @@
     "footer": {
       "treatments": "Tedaviler",
       "company": "Şirket",
-      "prices": "Fiyatlar"
+      "prices": "Fiyatlar",
+      "careers": "İş ilanları",
+      "blog": "Blog",
+      "aboutUs": "Hakkımızda"
     },
     "meta": {
       "privacyPolicy": "Gizlilik Politikası",
@@ -80,7 +83,9 @@
     "cancel": "İptal",
     "close": "Kapat",
     "joinMyClub": "MY Club'a katıl",
-    "shopGroupon": "Groupon'u satın al"
+    "shopGroupon": "Groupon'u satın al",
+    "openMenu": "Menü aç",
+    "goToHome": "Ana sayfaya git"
   },
 
   "location": {

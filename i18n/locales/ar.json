@@ -64,7 +64,10 @@
     "footer": {
       "treatments": "العلاجات",
       "company": "الشركة",
-      "prices": "الأسعار"
+      "prices": "الأسعار",
+      "careers": "الوظائف",
+      "blog": "المدونة",
+      "aboutUs": "عن الشركة"
     },
     "meta": {
       "privacyPolicy": "سياسة الخصوصية",
@@ -80,7 +83,9 @@
     "cancel": "إلغاء",
     "close": "إغلاق",
     "joinMyClub": "أصبح عضوًا",
-    "shopGroupon": "شراء القسيمة"
+    "shopGroupon": "شراء القسيمة",
+    "openMenu": "افتح القائمة",
+    "goToHome": "العودة إلى الصفحة الرئيسية"
   },
 
   "location": {

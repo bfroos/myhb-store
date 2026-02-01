@@ -64,7 +64,10 @@
     "footer": {
       "treatments": "Treatments",
       "company": "Company",
-      "prices": "Prices"
+      "prices": "Prices",
+      "careers": "Careers",
+      "blog": "Blog",
+      "aboutUs": "About us"
     },
     "meta": {
       "privacyPolicy": "Privacy Policy",
@@ -80,7 +83,9 @@
     "cancel": "Cancel",
     "close": "Close",
     "joinMyClub": "Join My Club",
-    "shopGroupon": "Shop Groupon"
+    "shopGroupon": "Shop Groupon",
+    "openMenu": "Open Menu",
+    "goToHome": "Go to Home"
   },
 
   "location": {

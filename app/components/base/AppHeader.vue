@@ -17,7 +17,7 @@
         <div class="appHeader__mobile">
           <UiAtomBaseButton
             variant="quaternary"
-            aria-label="Menü öffnen"
+            :aria-label="$t('cta.openMenu')"
             @click="openMobileMenu"
           >
             <IconMenu2 :size="24" aria-hidden="true" />
@@ -26,7 +26,7 @@
         <NuxtLinkLocale
           to="/"
           class="appHeader__mainNav__brand"
-          aria-label="Zur Startseite"
+          :aria-label="$t('cta.goToHome')"
         >
           <ImageAppLogo />
         </NuxtLinkLocale>
@@ -53,7 +53,7 @@
         <div class="appHeader__desktop">
           <SharedButton
             :button="{
-              label: 'Termin buchen',
+              label: t('cta.bookAppointment'),
               method: SharedButtonMethod.ACTION,
               action: SharedButtonAction.APPOINTMENT_BOOKING,
             }"
