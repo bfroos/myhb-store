@@ -8,6 +8,7 @@ import EmployeeList from "./EmployeeList.vue";
 import MediaCard from "./MediaCard.vue";
 import TrustGrid from "./TrustGrid.vue";
 import MediaBento from "./MediaBento.vue";
+import MyClub from "./MyClub.vue";
 import TreatmentTeasers from "./TreatmentTeasers.vue";
 import FaqBlock from "./FaqBlock.vue";
 import HighlightsStrip from "./HighlightsStrip.vue";
@@ -43,6 +44,7 @@ const registry: Record<string, any> = {
   "blocks.location-map": LocationMap,
   "blocks.media-bento": MediaBento,
   "blocks.media-card": MediaCard,
+  "blocks.my-club": MyClub,
   "blocks.page-header": PageHeader,
   "blocks.process-steps": ProcessSteps,
   "blocks.product-category-price-overview": ProductCategoryPriceOverview,

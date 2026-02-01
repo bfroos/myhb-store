@@ -181,7 +181,7 @@ const priceLabel = computed(() => {
 });
 
 const discountLabel = computed(() => {
-  const pct = globals.value?.marketing?.newsletterDiscountPercentage;
+  const pct = globals.value?.ecommerce?.newsletterDiscountPercentage;
   return $t("blocks.treatmentHero.discountCta", { pct });
 });
 </script>

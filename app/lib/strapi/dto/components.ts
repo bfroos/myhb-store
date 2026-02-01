@@ -149,6 +149,16 @@ export type BlockMediaCardDto = {
   links?: SharedButtonDto[];
 };
 
+export type BlockMyClubDto = {
+  headline?: string;
+  clubContent?: StrapiRichText;
+  clubBenefits?: SharedIconTextPairDto[];
+  grouponContent?: StrapiRichText;
+  clubCardSettings?: CardSettingsDto;
+  grouponCardSettings?: CardSettingsDto;
+  grouponImage?: StrapiMedia;
+};
+
 export type BlockPageHeaderDto = {
   headline?: string;
   intro?: string;

@@ -23,6 +23,9 @@ export default defineNuxtPlugin(async (nuxtApp) => {
         seo: {
           populate: "*",
         },
+        ecommerce: {
+          populate: "*",
+        },
       },
     },
     fetchOptions: {

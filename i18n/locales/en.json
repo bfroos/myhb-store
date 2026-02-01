@@ -78,7 +78,9 @@
     "details": "Details",
     "subscribe": "Subscribe",
     "cancel": "Cancel",
-    "close": "Close"
+    "close": "Close",
+    "joinMyClub": "Join My Club",
+    "shopGroupon": "Shop Groupon"
   },
 
   "location": {

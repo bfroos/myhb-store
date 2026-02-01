@@ -17,7 +17,7 @@ const globals = useGlobals();
 
 const formattedHeadline = computed(() => {
   const discountPercentage =
-    globals.value?.marketing?.newsletterDiscountPercentage ?? null;
+    globals.value?.ecommerce?.newsletterDiscountPercentage ?? null;
 
   return (
     replacePlaceholderString(props.headline, [

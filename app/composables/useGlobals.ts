@@ -12,11 +12,15 @@ export type GlobalsState = {
   marketing: {
     fiveStarReviewsCount?: string;
     customersCount?: string;
-    newsletterDiscountPercentage?: number | null;
   };
   brand: {
     name?: string;
     nameShort?: string;
+  };
+  ecommerce: {
+    clubUrl?: string;
+    grouponUrl?: string;
+    newsletterDiscountPercentage?: number | null;
   };
 };
 
@@ -25,6 +29,7 @@ export function useGlobals() {
     seo: {},
     marketing: {},
     brand: {},
+    ecommerce: {},
   }));
 
   return globals;

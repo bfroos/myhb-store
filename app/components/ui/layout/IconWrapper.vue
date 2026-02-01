@@ -4,7 +4,7 @@
     :viewBox="computedViewBox"
     fill="none"
     stroke="currentColor"
-    stroke-width="1"
+    :stroke-width="strokeWidth"
     stroke-linecap="round"
     stroke-linejoin="round"
     :width="size"
@@ -20,18 +20,24 @@ type IconHubLike = {
   height?: number | string | null;
 };
 
-const props = defineProps<{
-  size?: number;
-  /**
-   * Optional: pass Iconhub payload so the wrapper can derive a correct viewBox
-   * (Iconhub can emit icons with different intrinsic sizes, e.g. 24x24 or 640x640).
-   */
-  icon?: IconHubLike | null;
-  /**
-   * Optional override, e.g. "0 0 640 640". Takes precedence over `icon`.
-   */
-  viewBox?: string;
-}>();
+const props = withDefaults(
+  defineProps<{
+    size?: number;
+    strokeWidth?: number;
+    /**
+     * Optional: pass Iconhub payload so the wrapper can derive a correct viewBox
+     * (Iconhub can emit icons with different intrinsic sizes, e.g. 24x24 or 640x640).
+     */
+    icon?: IconHubLike | null;
+    /**
+     * Optional override, e.g. "0 0 640 640". Takes precedence over `icon`.
+     */
+    viewBox?: string;
+  }>(),
+  {
+    strokeWidth: 1.25,
+  },
+);
 
 const size = computed(() => props.size || 42);
 
@@ -53,6 +59,6 @@ const computedViewBox = computed(() => {
 </script>
 <style scoped>
 svg :deep(*) {
-  stroke-width: 1;
+  stroke-width: v-bind(strokeWidth);
 }
 </style>
