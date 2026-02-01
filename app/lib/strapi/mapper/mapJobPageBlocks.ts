@@ -24,7 +24,8 @@ export function mapJobPageBlocks(jobDetails: JobDto) {
 
   function buildJobDescriptionBlock() {
     const locations = jobDetails.locations?.map((location) => {
-      return `${location.city.name} (${location.name})`;
+      const cityName = location.city?.name ?? "";
+      return cityName ? `${cityName} (${location.name})` : String(location.name);
     });
 
     const isSaleryRange =

@@ -126,7 +126,7 @@ function renderMarkers() {
   const bounds = new google.maps.LatLngBounds();
   const markers: ClusterMarker[] = [];
 
-  for (const loc of props.locations) {
+  for (const loc of props.locations ?? []) {
     const lat = toNum(loc.coordinates?.lat);
     const lng = toNum(loc.coordinates?.long);
     if (lat == null || lng == null) continue;
@@ -158,7 +158,7 @@ function renderMarkers() {
 
   if (markers.length > 0) {
     if (markers.length === 1) {
-      const first = props.locations.find(
+      const first = (props.locations ?? []).find(
         (l) =>
           toNum(l.coordinates?.lat) != null &&
           toNum(l.coordinates?.long) != null,

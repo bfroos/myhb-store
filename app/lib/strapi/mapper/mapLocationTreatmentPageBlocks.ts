@@ -50,7 +50,7 @@ export function mapLocationTreatmentPageFixedBlocks(
       action: SharedButtonAction.APPOINTMENT_BOOKING,
     };
 
-    const fullLocationName = `${location.city.name} · ${location.name}`;
+    const fullLocationName = `${location.city?.name ?? ""} · ${location.name}`;
 
     return {
       eyebrow: fullLocationName,

@@ -142,7 +142,9 @@ function formatEmploymentTypes(types: JobEmploymentType[]): string {
 }
 
 function formatLocations(locations: LocationDto[]): string {
-  const cityNames = locations.map((location) => location.city.name);
+  const cityNames = locations
+    .map((location) => location.city?.name)
+    .filter((name): name is string => Boolean(name));
   const uniqueCities = [...new Set(cityNames)];
   const maxDisplay = 3;
 

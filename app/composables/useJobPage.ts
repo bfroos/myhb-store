@@ -62,7 +62,8 @@ export function useJobPage() {
     t("career.job.seo.description", {
       title: jobDetails.value?.title,
       locations: jobDetails.value?.locations
-        ?.map((location: LocationDto) => location.city.name)
+        ?.map((location: LocationDto) => location.city?.name)
+        .filter((name: any): name is string => Boolean(name))
         .join(", "),
       contractType: normalizeEnumArray(
         jobDetails.value?.contractTypes ?? jobDetails.value?.contractType,

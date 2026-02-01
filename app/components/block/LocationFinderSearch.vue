@@ -78,7 +78,7 @@ const classes = computed(() => {
 });
 
 const sortedLocations = computed(() => {
-  return props.locations
+  return (props.locations ?? [])
     .map((location) => {
       const getDistance = () => {
         if (!location.coordinates || !selectedCity.value) return undefined;
@@ -123,11 +123,7 @@ function onCitySearch(event: { query: string }) {
 
 function getFirstThreeWithCoordinates() {
   return sortedLocations.value
-    .filter(
-      (l) =>
-        l.coordinates?.lat != null &&
-        l.coordinates?.long != null,
-    )
+    .filter((l) => l.coordinates?.lat != null && l.coordinates?.long != null)
     .slice(0, 3);
 }
 
