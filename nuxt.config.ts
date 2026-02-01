@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   fonts: {
     defaults: {
       weights: [400, 500],
-      styles: ["normal", "italic"],
+      styles: ["normal"],
       subsets: ["latin-ext", "latin"],
     },
   },
@@ -216,21 +216,17 @@ export default defineNuxtConfig({
   routeRules: {
     "/api/strapi/**": {
       isr: false,
-      cache: false,
       headers: {
-        "cache-control":
-          "private, no-store, no-cache, must-revalidate, max-age=0",
+        "cache-control": "private, no-store",
         "cdn-cache-control": "no-store",
         "vercel-cdn-cache-control": "no-store",
-        pragma: "no-cache",
-        expires: "0",
       },
     },
     // Cache sitemap.xml (24 hours)
     "/sitemap.xml": {
       cache: { maxAge: 86400 },
     },
-    // ISR: Seiten (NICHT API-Routen) werden nach 5 Minuten revalidiert
+    // ISR: Seiten werden nach 5 Minuten revalidiert
     "/**": {
       isr: 300,
     },
