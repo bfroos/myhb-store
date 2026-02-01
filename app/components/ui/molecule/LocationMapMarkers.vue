@@ -2,12 +2,9 @@
   <div ref="mapEl" class="locationMapMarkers"></div>
 </template>
 <script setup lang="ts">
-import markerClustererPkg from "@googlemaps/markerclusterer";
 import type { Marker as ClusterMarker } from "@googlemaps/markerclusterer";
 import { loadGoogleMaps } from "~/composables/useGoogleMaps";
 import markerIcon from "~/assets/images/my-circle.svg";
-
-type MarkerClustererType = InstanceType<typeof MarkerClusterer>;
 
 export type Location = {
   id: string | number;
@@ -17,7 +14,9 @@ export type Location = {
   coordinates?: { lat?: number | string; long?: number | string };
 };
 
-const { MarkerClusterer } = markerClustererPkg;
+type MarkerClustererInstance = InstanceType<
+  typeof import("@googlemaps/markerclusterer").MarkerClusterer
+>;
 
 const props = defineProps<{
   locations: Location[];
@@ -32,7 +31,10 @@ const emit = defineEmits<{
 const mapEl = ref<HTMLDivElement | null>(null);
 const mapRef = shallowRef<google.maps.Map | null>(null);
 const markersRef = shallowRef<ClusterMarker[]>([]);
-const clustererRef = shallowRef<MarkerClustererType | null>(null);
+const clustererRef = shallowRef<MarkerClustererInstance | null>(null);
+const MarkerClustererClassRef = shallowRef<
+  typeof import("@googlemaps/markerclusterer").MarkerClusterer | null
+>(null);
 const AdvancedMarkerRef = shallowRef<
   typeof google.maps.marker.AdvancedMarkerElement | null
 >(null);
@@ -100,7 +102,8 @@ function cleanup() {
 function renderMarkers() {
   const map = mapRef.value;
   const AdvancedMarkerElement = AdvancedMarkerRef.value;
-  if (!map || !AdvancedMarkerElement) return;
+  const MarkerClustererClass = MarkerClustererClassRef.value;
+  if (!map || !AdvancedMarkerElement || !MarkerClustererClass) return;
 
   cleanup();
 
@@ -128,7 +131,7 @@ function renderMarkers() {
   }
 
   markersRef.value = markers;
-  clustererRef.value = new MarkerClusterer({
+  clustererRef.value = new MarkerClustererClass({
     map,
     markers,
     renderer: {
@@ -175,6 +178,9 @@ onMounted(async () => {
   if (!mapId) {
     console.warn("Google Maps: mapId fehlt");
   }
+
+  const { MarkerClusterer } = await import("@googlemaps/markerclusterer");
+  MarkerClustererClassRef.value = MarkerClusterer;
 
   await loadGoogleMaps();
   const markerLib = (await google.maps.importLibrary(
