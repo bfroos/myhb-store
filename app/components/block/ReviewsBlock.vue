@@ -6,7 +6,6 @@
         :class="getReviewsCountClass()"
         role="region"
         :aria-labelledby="headingId"
-        :aria-busy="shouldUseGoogle && googlePending"
       >
         <div
           class="reviewsCard__header reviewsCard__header--static"
@@ -58,7 +57,6 @@
 <script setup lang="ts">
 import {
   ColorTheme,
-  ReviewSource,
   SharedButtonMethod,
   SharedButtonAction,
 } from "~/lib/strapi/dto/enums";
@@ -68,80 +66,9 @@ import type { BlockReviewsDto } from "~/lib/strapi/dto/components";
 const { t } = useI18n();
 const props = defineProps<BlockReviewsDto>();
 
-const { locale, fallbackLocale } = useI18n();
-const activeLocale = computed(
-  () => (locale.value || fallbackLocale.value) as string,
-);
-
-const shouldUseGoogle = computed(() => Boolean(props.localReviews));
-const effectiveGbpLocationName = computed(() =>
-  shouldUseGoogle.value ? (props.googlePlaceId ?? "").trim() : "",
-);
-
-const googleKey = computed(
-  () => `gbpReviews:${activeLocale.value}:${effectiveGbpLocationName.value}`,
-);
-
 const headingId = useId();
 
-const { data: googleRes, pending: googlePending } = await useAsyncData(
-  googleKey.value,
-  async () => {
-    if (!effectiveGbpLocationName.value) return null;
-
-    const { data, error } = await useStrapiFetch<{
-      reviews: Array<{
-        id: string;
-        rating: number;
-        author: string;
-        text: string;
-        source: string;
-        sourceUrl?: string;
-      }>;
-    }>("/gbp-reviews", {
-      query: {
-        locationName: effectiveGbpLocationName.value,
-        locale: activeLocale.value,
-        limit: 6,
-      },
-      fetchOptions: {
-        dedupe: true,
-      },
-    });
-
-    if (error.value) return null;
-    return data.value ?? null;
-  },
-  {
-    watch: [activeLocale, effectiveGbpLocationName],
-  },
-);
-
-const manualReviews = computed(() => (props.reviews ?? []) as ReviewDto[]);
-
-const googleReviews = computed<ReviewDto[]>(() => {
-  const items = googleRes.value?.reviews ?? [];
-
-  return items
-    .filter((r) => (r.text ?? "").trim().length > 0)
-    .map((r) => ({
-      id: r.id,
-      author: r.author,
-      text: r.text,
-      rating: r.rating,
-      source: (r.source as ReviewSource) ?? ReviewSource.GOOGLE,
-      sourceUrl: r.sourceUrl,
-      location: r.location,
-    }));
-});
-
-const displayReviews = computed<ReviewDto[]>(() => {
-  const src = shouldUseGoogle.value ? googleReviews.value : manualReviews.value;
-  return src.map((review) => ({
-    ...review,
-    source: review.source,
-  }));
-});
+const reviews = computed(() => (props.reviews ?? []) as ReviewDto[]);
 
 const getThemeStyles = (index: number) => {
   if (index % 2 === 0) {
@@ -164,7 +91,7 @@ const getThemeStyles = (index: number) => {
 };
 
 const getReviewsCountClass = () => {
-  return `reviewsCard--count-${displayReviews.value.length}`;
+  return `reviewsCard--count-${reviews.value.length}`;
 };
 </script>
 

@@ -84,7 +84,6 @@ export function mapLocationFixedBlocks(
     }
 
     return {
-      localReviews: !!location?.googlePlaceId,
       googlePlaceId: location?.googlePlaceId ?? undefined,
       oddItemsTheme: ColorTheme.NEUTRAL,
       evenItemsTheme: ColorTheme.SOFT,

@@ -194,7 +194,6 @@ export type BlockProductHeroDto = {
 export type BlockReviewsDto = {
   headline?: string;
   reviews?: ReviewDto[];
-  localReviews: boolean;
   googlePlaceId?: string;
   oddItemsTheme?: ColorTheme;
   evenItemsTheme?: ColorTheme;

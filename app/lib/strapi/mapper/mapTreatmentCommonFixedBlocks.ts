@@ -76,7 +76,6 @@ export function mapTreatmentCommonFixedBlocks(
       headline: treatmentPage?.reviews?.headline,
       reviews:
         treatmentPage?.reviews?.reviews ?? treatmentPage?.treatment?.reviews,
-      localReviews: false,
     };
   }
 
