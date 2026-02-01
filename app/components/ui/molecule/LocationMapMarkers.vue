@@ -12,6 +12,7 @@ export type Location = {
   slug: string;
   newOpeningDate?: string;
   coordinates?: { lat?: number | string; long?: number | string };
+  city?: { slug: string };
 };
 
 type MarkerClustererInstance = InstanceType<
@@ -41,6 +42,21 @@ const AdvancedMarkerRef = shallowRef<
 
 const config = useRuntimeConfig();
 const mapId = config.public.googleMapsMapId as string | undefined;
+const localePath = useLocalePath();
+const router = useRouter();
+
+function openLocation(loc: Location) {
+  if (loc.city?.slug && loc.slug) {
+    void router.push(
+      localePath({
+        name: "standorte-citySlug-locationSlug",
+        params: { citySlug: loc.city.slug, locationSlug: loc.slug },
+      }),
+    );
+  }
+  props.onMarkerClick?.(loc);
+  emit("markerClick", loc);
+}
 
 function toNum(v: unknown): number | null {
   const n = typeof v === "number" ? v : Number(v);
@@ -122,10 +138,7 @@ function renderMarkers() {
       title: loc.name,
       content: createMarkerContent(),
     });
-    marker.addListener("gmp-click", () => {
-      props.onMarkerClick?.(loc);
-      emit("markerClick", loc);
-    });
+    marker.addListener("gmp-click", () => openLocation(loc));
     markers.push(marker);
     bounds.extend(position);
   }
