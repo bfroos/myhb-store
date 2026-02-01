@@ -8,6 +8,8 @@
     "showMore": "Daha fazla",
     "more": "Diğer",
     "general": "genel",
+    "in": "içinde",
+    "distanceKilometersSuffix": "km",
     "date": {
       "fromDate": "{date} tarihinden itibaren",
       "today": "bugün"
@@ -294,6 +296,11 @@
       "phone": "Telefon",
       "whatsapp": "WhatsApp sohbeti",
       "address": "Konum adresi"
+    },
+    "locationFinder": {
+      "mapLoading": "Harita yükleniyor…",
+      "headline": "Konum bul",
+      "searchPlaceholder": "Posta kodu veya şehir"
     },
     "locationMap": {
       "footer": {

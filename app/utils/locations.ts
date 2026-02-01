@@ -5,6 +5,27 @@ import {
   getLocationStatusRaw,
 } from "~/utils/locationStatus";
 import { LocationOpenStatus } from "~/lib/strapi/dto/enums";
+import type { SharedCoordinatesDto } from "~/lib/strapi/dto/components";
+
+/**
+ * Distance between two coordinates in km (Haversine formula).
+ */
+export function getDistanceKm(
+  lat1: number,
+  lng1: number,
+  lat2: number,
+  lng2: number,
+): number {
+  const R = 6371; // Erdradius in km
+  const toRad = (deg: number) => (deg * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
 
 /**
  * Filter LocationItems by opening status.
@@ -65,4 +86,28 @@ export function getLocationOpenStatus(
     default:
       return LocationOpenStatus.COMING_SOON;
   }
+}
+
+export type LocationItemWithCoordinates = LocationItem & {
+  coordinates: { lat: number; lng: number };
+};
+
+export function getLocationDistance(
+  coordinatesFrom: SharedCoordinatesDto,
+  coordinatesTo: SharedCoordinatesDto,
+): number {
+  if (
+    !coordinatesFrom.lat ||
+    !coordinatesFrom.long ||
+    !coordinatesTo.lat ||
+    !coordinatesTo.long
+  ) {
+    return Infinity;
+  }
+  return getDistanceKm(
+    coordinatesFrom.lat,
+    coordinatesFrom.long,
+    coordinatesTo.lat,
+    coordinatesTo.long,
+  );
 }

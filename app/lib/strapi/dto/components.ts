@@ -425,8 +425,8 @@ export type SharedCollapsibleItemDto = {
 };
 
 export type SharedCoordinatesDto = {
-  lat?: number | string;
-  long?: number | string;
+  lat?: number;
+  long?: number;
 };
 
 export type SharedHeadingContentItemDto = {

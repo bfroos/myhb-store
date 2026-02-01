@@ -209,6 +209,8 @@ export default defineNuxtConfig({
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL,
       publicUrl: process.env.NUXT_PUBLIC_URL,
       mediaUrl: process.env.NUXT_PUBLIC_MEDIA_URL,
+      googleMapsKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+      googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
     },
   },
   routeRules: {

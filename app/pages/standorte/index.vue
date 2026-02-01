@@ -1,8 +1,9 @@
 <template>
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
+  <BlockLocationFinder :locations="finderLocations" />
   <BlockLocationTeasers
     v-if="locations.open.length > 0"
-    :headline="`${$t('locations.allLocations')} (${locations.open.length})`"
+    :headline="$t('locations.allLocations')"
     :locations="locations.open"
     :show-filters="true"
   />
@@ -28,6 +29,11 @@ const { fetchWithLocations, locations, seo, blocks, breadcrumbItems } =
   useLocationsPage();
 
 const pageLoaded = await fetchWithLocations();
+
+const finderLocations = computed(() => [
+  ...locations.value.open,
+  ...locations.value.openSoon,
+]);
 
 if (pageLoaded) {
   await setPageSeo(seo.value);

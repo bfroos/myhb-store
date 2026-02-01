@@ -8,6 +8,8 @@
     "showMore": "Show more",
     "more": "More",
     "general": "general",
+    "in": "in",
+    "distanceKilometersSuffix": "km",
     "date": {
       "fromDate": "from {date}",
       "today": "today"
@@ -294,6 +296,11 @@
       "phone": "Phone",
       "whatsapp": "WhatsApp Chat",
       "address": "Location address"
+    },
+    "locationFinder": {
+      "mapLoading": "Loading map…",
+      "headline": "Find a location",
+      "searchPlaceholder": "ZIP or city"
     },
     "locationMap": {
       "footer": {

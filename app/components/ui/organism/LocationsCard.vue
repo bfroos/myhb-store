@@ -1,7 +1,12 @@
 <template>
   <UiLayoutCardSurface :card-settings="cardSettings">
     <div class="locationsCard__header">
-      <h2>{{ headline }}</h2>
+      <h2 v-if="headline">
+        {{ headline }}
+        <template v-if="selectedStateLabel">
+          {{ $t("common.in") }} {{ selectedStateLabel }}
+        </template>
+      </h2>
       <div
         v-if="
           showFilters &&
@@ -62,7 +67,7 @@ const federalStateLabels: Record<string, string> = {
   hamburg: $t("common.federalState.hamburg"),
   hesse: $t("common.federalState.hesse"),
   "mecklenburg-western-pomerania": $t(
-    "common.federalState.mecklenburg-western-pomerania"
+    "common.federalState.mecklenburg-western-pomerania",
   ),
   "lower-saxony": $t("common.federalState.lower-saxony"),
   "north-rhine-westphalia": $t("common.federalState.north-rhine-westphalia"),
@@ -96,6 +101,10 @@ const selectedState = computed({
   set: (value: string | null) => {
     emit("update:federal-state", value);
   },
+});
+
+const selectedStateLabel = computed(() => {
+  return federalStateLabels[selectedState.value ?? ""];
 });
 </script>
 <style scoped>

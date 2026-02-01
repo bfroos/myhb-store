@@ -13,6 +13,8 @@
         v-for="location in filteredLocationsItems"
         :key="location.slug"
         :item="location"
+        main-information="city"
+        show-building-image
         :on-book="() => handleBookClick(location)"
       />
     </UiOrganismLocationsCard>

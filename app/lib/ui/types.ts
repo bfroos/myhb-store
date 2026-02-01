@@ -79,6 +79,7 @@ export type BreadcrumbItem = {
 };
 
 export type MoleculeLocationItem = {
+  id: string | number;
   name: string;
   slug: string;
   city: CityDto;
@@ -86,6 +87,7 @@ export type MoleculeLocationItem = {
   openingStatus: LocationOpenStatus;
   address?: SharedAddressDto;
   buildingImage?: StrapiMedia;
+  distanceInKilometers?: number;
 };
 
 export type LocationItem = {

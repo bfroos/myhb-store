@@ -8,6 +8,8 @@
     "showMore": "أكثر",
     "more": "المزيد",
     "general": "عام",
+    "in": "في",
+    "distanceKilometersSuffix": "كم",
     "date": {
       "fromDate": "من {date}",
       "today": "اليوم"
@@ -293,6 +295,11 @@
       "phone": "الهاتف",
       "whatsapp": "واتساب",
       "address": "عنوان الموقع"
+    },
+    "locationFinder": {
+      "mapLoading": "جاري تحميل الخريطة…",
+      "headline": "العثور على موقع",
+      "searchPlaceholder": "الرمز البريدي أو المدينة"
     },
     "locationMap": {
       "footer": {
