@@ -10,7 +10,6 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@dargmuesli/nuxt-cookie-control": "^9.1.13",
     "@googlemaps/js-api-loader": "^2.0.2",
     "@googlemaps/markerclusterer": "^2.6.2",
     "@mailchimp/mailchimp_marketing": "^3.0.80",

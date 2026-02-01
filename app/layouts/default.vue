@@ -3,17 +3,12 @@
     <div>
       <BaseAppHeader />
       <slot />
-      <CookieControl :locale="currentLocale" />
     </div>
     <BaseAppFooter />
     <Toast />
     <DynamicDialog />
   </div>
 </template>
-<script setup lang="ts">
-const { locale, fallbackLocale } = useI18n();
-const currentLocale = locale.value || fallbackLocale.value || "de";
-</script>
 <style scoped>
 .app {
   display: flex;
