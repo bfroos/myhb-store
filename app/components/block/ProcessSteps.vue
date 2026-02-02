@@ -56,6 +56,8 @@ const props = defineProps<BlockProcessStepsDto>();
 }
 
 .processSteps__header h2 {
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
   margin-bottom: var(--space-600);
 }
 

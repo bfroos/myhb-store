@@ -20,10 +20,14 @@
               class="employeeList__item"
             >
               <NuxtLinkLocale
-                v-if="employee.photo"
                 :to="`/aerzte/${employee.slug}`"
+                class="employeeList__itemImage"
               >
-                <UiAtomMediaPicture :media="employee.photo" />
+                <UiAtomMediaPicture
+                  v-if="employee.photo"
+                  :media="employee.photo"
+                />
+                <IconUser v-else size="50%" stroke="1" />
               </NuxtLinkLocale>
               <div class="employeeList__itemContent">
                 <p>
@@ -57,6 +61,7 @@
   </UiLayoutSectionBlock>
 </template>
 <script setup lang="ts">
+import { IconUser } from "@tabler/icons-vue";
 import type { BlockEmployeeListDto } from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockEmployeeListDto>();
@@ -101,6 +106,16 @@ const props = defineProps<BlockEmployeeListDto>();
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+
+.employeeList__itemImage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 2 / 1;
+  color: var(--color-text-muted);
 }
 
 .employeeList__itemContent {
