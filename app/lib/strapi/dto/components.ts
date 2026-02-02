@@ -162,7 +162,7 @@ export type BlockMyClubDto = {
 export type BlockPageHeaderDto = {
   headline?: string;
   intro?: string;
-  layout: BlockPageHeaderLayout;
+  layout?: BlockPageHeaderLayout | null;
   media?: StrapiMedia;
   fixedImageAspectRatio?: boolean;
   cardSettings?: CardSettingsDto;

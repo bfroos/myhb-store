@@ -70,6 +70,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const { formatInteger } = useFormatInteger();
 const globals = useGlobals();
 
 const normalizedRating = computed(() => {
@@ -90,10 +91,8 @@ const fiveStarAriaLabel = computed(
 
 const fiveStarReviewsCount = computed(() => {
   return (
-    formatInteger(
-      Number(globals.value?.marketing?.fiveStarReviewsCount ?? 0),
-      t("locale"),
-    ) + "+"
+    formatInteger(Number(globals.value?.marketing?.fiveStarReviewsCount ?? 0)) +
+    "+"
   );
 });
 </script>

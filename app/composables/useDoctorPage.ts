@@ -52,7 +52,7 @@ export function useDoctorPage(brandName: string = "") {
   const seo = computed(() => ({
     metaTitle: fixedBlocks.value?.hero?.headline,
     metaDescription: t("doctors.doctor.seo.description", {
-      role: fixedBlocks.value?.hero?.subline,
+      role: fixedBlocks.value?.hero?.intro,
       brandName: brandName,
       cities: page.value?.locations
         .map((location: any) => location.city)

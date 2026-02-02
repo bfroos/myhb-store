@@ -16,10 +16,9 @@
       :alt="`${title} - ${subtitle}`"
       loading="lazy"
     />
-    <button
+    <div
       v-if="!isPlaying"
       class="videoTile__overlay"
-      type="button"
       :aria-label="`Video abspielen: ${title} - ${subtitle}`"
       @click="playVideo"
     >
@@ -35,7 +34,7 @@
           {{ $t("cta.watch") }}
         </UiAtomBaseButton>
       </div>
-    </button>
+    </div>
   </div>
 </template>
 <script setup lang="ts">

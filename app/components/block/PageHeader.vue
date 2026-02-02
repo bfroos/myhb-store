@@ -46,7 +46,9 @@ import {
 } from "~/lib/strapi/dto/enums";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 
-const props = defineProps<BlockPageHeaderDto>();
+const props = withDefaults(defineProps<BlockPageHeaderDto>(), {
+  layout: () => BlockPageHeaderLayout.COMPACT,
+});
 </script>
 <style scoped>
 .pageHeader {
