@@ -133,4 +133,6 @@ export type AtomMediaPicture = {
   defaultFormat?: ImageFormat;
   alt?: string;
   loading?: "lazy" | "eager";
+  width?: number;
+  height?: number;
 };
