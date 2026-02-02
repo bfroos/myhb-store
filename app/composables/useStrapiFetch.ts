@@ -1,4 +1,5 @@
 import qs from "qs";
+import { computed, isRef, isReactive } from "vue";
 import type { Ref, ComputedRef } from "vue";
 
 type QueryObject = Record<string, unknown>;
@@ -41,6 +42,9 @@ export function useStrapiFetch<T>(path: string, opts: any = {}) {
   // Keep key behavior simple. A constant key is OK because `url` changes will refetch.
   const key = fetchOptions?.key ?? opts.key ?? `strapi:${path}`;
 
+  const watchQuery =
+    isRef(query) || isReactive(query) ? (query as any) : undefined;
+
   return useFetch<T>(url, {
     ...restOpts,
     ...(fetchOptions ?? {}),
@@ -48,7 +52,7 @@ export function useStrapiFetch<T>(path: string, opts: any = {}) {
     // Ensure refetch on reactive query changes (and keep any existing watchers)
     watch: [
       ...(((fetchOptions as any)?.watch as any[]) ?? []),
-      query as any,
+      watchQuery,
     ].filter(Boolean),
   });
 }
