@@ -14,8 +14,43 @@
           <h2 v-if="headline" :id="headingId">
             {{ headline || t("blocks.reviews.headline") }}
           </h2>
+          <SharedButton
+            :button="{
+              label: $t('cta.bookAppointment'),
+              method: SharedButtonMethod.ACTION,
+              action: SharedButtonAction.APPOINTMENT_BOOKING,
+            }"
+          />
         </div>
-        <div class="reviewsCard__body" tabindex="0">
+        <div
+          v-if="!isDesktop"
+          class="reviewsCard__body reviewsCard__body--scroll"
+        >
+          <UiOrganismHorizontalScroll
+            :style="{
+              '--horizontalScroll-padding-x': 'var(--space-400)',
+              '--horizontalScroll-padding-y': 'var(--space-card-pad-xs)',
+            }"
+          >
+            <article
+              v-for="(review, index) in reviews"
+              :key="review.id ?? index"
+              :class="getThemeStyles(index)"
+            >
+              <UiMoleculeReviewItem
+                :author="review.author"
+                :text="review.text"
+                :rating="review.rating"
+                :city="review.location?.address?.city"
+                :location="review.location?.name"
+                :address="review.location?.address"
+                :source="review.source"
+                :source-url="review.sourceUrl"
+              />
+            </article>
+          </UiOrganismHorizontalScroll>
+        </div>
+        <div v-else class="reviewsCard__body reviewsCard__body--grid">
           <div
             class="reviewsCard__header reviewsCard__header--floating"
             :class="getThemeStyles(1)"
@@ -61,12 +96,24 @@ import {
   SharedButtonAction,
 } from "~/lib/strapi/dto/enums";
 import type { ReviewDto } from "~/lib/strapi/dto/collections";
-import { computed, useId } from "vue";
+import { computed, useId, ref, onMounted, onUnmounted } from "vue";
 import type { BlockReviewsDto } from "~/lib/strapi/dto/components";
 const { t } = useI18n();
 const props = defineProps<BlockReviewsDto>();
 
 const headingId = useId();
+
+const isDesktop = ref(false);
+
+onMounted(() => {
+  const mq = window.matchMedia("(min-width: 1200px)");
+  isDesktop.value = mq.matches;
+  const handler = (e: MediaQueryListEvent) => {
+    isDesktop.value = e.matches;
+  };
+  mq.addEventListener("change", handler);
+  onUnmounted(() => mq.removeEventListener("change", handler));
+});
 
 const reviews = computed(() => (props.reviews ?? []) as ReviewDto[]);
 
@@ -102,78 +149,80 @@ const getReviewsCountClass = () => {
   gap: var(--space-card-figure-pad);
   padding: var(--space-card-figure-pad);
 }
+
 .reviewsCard__header {
   border-radius: var(--border-radius-card-figure)
     var(--border-radius-card-figure) var(--border-radius-100)
     var(--border-radius-100);
-  padding: calc(var(--space-card-pad-sm) - var(--space-card-figure-pad));
+  padding: calc(var(--space-card-pad) - var(--space-card-figure-pad));
   background-color: var(--card-color-bg);
   color: var(--color-text);
 }
-.reviewsCard__body {
-  display: flex;
-  gap: var(--space-card-figure-pad);
-  border-radius: var(--border-radius-100) var(--border-radius-100)
-    var(--border-radius-card-figure) var(--border-radius-card-figure);
 
-  overflow-x: scroll;
-
-  scroll-snap-type: x mandatory;
+.reviewsCard__body :deep(.horizontalScroll__container) {
+  scroll-padding-left: var(--space-400);
+  scroll-padding-right: var(--space-400);
 }
+
+.reviewsCard__body :deep(.horizontalScroll__container > *) {
+  flex: 0 0 300px;
+}
+
+.reviewsCard__body--grid {
+  flex-wrap: wrap;
+  overflow-x: hidden;
+  border-radius: var(--border-radius-card-figure);
+}
+
+.reviewsCard__body--grid > *:nth-child(-n + 3) {
+  flex: 1 1 33%;
+}
+
+.reviewsCard__body--grid > *:first-child {
+  border-radius: var(--border-radius-card-figure) var(--border-radius-100)
+    var(--border-radius-100) var(--border-radius-100);
+}
+
+.reviewsCard__body--grid > *:nth-child(n + 4) {
+  flex: 1 0 260px;
+}
+
 .reviewsCard__body article {
   display: flex;
-  flex: 0 0 300px;
   padding: calc(var(--space-card-pad-sm) - var(--space-card-figure-pad));
   background-color: var(--card-color-bg);
+  border-radius: var(--border-radius-400);
   color: var(--color-text);
-  scroll-snap-align: start;
+}
+
+.reviewsCard__header--static h2 {
+  margin: 0 0 var(--space-600);
 }
 
 .reviewsCard__header--floating {
   display: none;
 }
 
-@media screen and (min-width: 900px) {
-  .reviewsCard {
-    display: grid;
-    grid-template-columns: 2fr 5fr;
-  }
-  .reviewsCard__header {
-    border-radius: var(--border-radius-card-figure) var(--border-radius-100)
-      var(--border-radius-100) var(--border-radius-card-figure);
-  }
-  .reviewsCard__body {
-    border-radius: var(--border-radius-100) var(--border-radius-card-figure)
-      var(--border-radius-card-figure) var(--border-radius-100);
-  }
-}
-
 @media screen and (min-width: 1200px) {
   .reviewsCard {
     display: block;
   }
+
   .reviewsCard__body {
-    flex-wrap: wrap;
-    border-radius: var(--border-radius-card-figure);
-    overflow-x: hidden;
+    display: flex;
+    gap: var(--space-card-figure-pad);
+    border-radius: var(--border-radius-100) var(--border-radius-100)
+      var(--border-radius-card-figure) var(--border-radius-card-figure);
   }
+
   .reviewsCard__header--floating {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
   }
+
   .reviewsCard__header--static {
     display: none;
-  }
-  .reviewsCard__body > *:nth-child(-n + 3) {
-    flex: 1 1 33%;
-  }
-  .reviewsCard__body > *:first-child {
-    border-radius: var(--border-radius-card-figure) var(--border-radius-100)
-      var(--border-radius-100) var(--border-radius-100);
-  }
-  .reviewsCard__body > *:nth-child(n + 4) {
-    flex: 1 0 260px;
   }
 }
 </style>
