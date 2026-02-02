@@ -18,6 +18,10 @@ const route = useRoute();
 const router = useRouter();
 
 const categorySlug = computed(() => route.params.slug as string);
+const pageParam = computed(() => {
+  const p = Number(route.params.page) || 1;
+  return Math.max(1, p);
+});
 
 const {
   fetchPage,
@@ -29,7 +33,7 @@ const {
   breadcrumbItems,
 } = useBlogPage();
 
-const pageLoaded = await fetchPage(1, categorySlug.value);
+const pageLoaded = await fetchPage(pageParam.value, categorySlug.value);
 
 if (pageLoaded) {
   await setPageSeo(seo.value);

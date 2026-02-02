@@ -5,9 +5,9 @@
     :categories="categories"
   />
   <PagesBlogPageArticles
+    @page-change="handlePageChange"
     :articles="articles"
     :pagination="pagination"
-    @page-change="handlePageChange"
     spacing="sibling"
   />
   <BlockRenderer v-if="blocks && blocks.length > 0" :blocks="blocks" />
@@ -17,7 +17,10 @@
 const route = useRoute();
 const router = useRouter();
 
-const categorySlug = computed(() => route.params.slug as string);
+const pageParam = computed(() => {
+  const p = Number(route.params.page) || 1;
+  return Math.max(1, p);
+});
 
 const {
   fetchPage,
@@ -29,7 +32,7 @@ const {
   breadcrumbItems,
 } = useBlogPage();
 
-const pageLoaded = await fetchPage(1, categorySlug.value);
+const pageLoaded = await fetchPage(pageParam.value);
 
 if (pageLoaded) {
   await setPageSeo(seo.value);
@@ -37,11 +40,9 @@ if (pageLoaded) {
 
 function handlePageChange(page: number) {
   if (page === 1) {
-    router.push({ path: `/blog/c/${categorySlug.value}` });
+    router.push({ path: "/blog" });
   } else {
-    router.push({
-      path: `/blog/c/${categorySlug.value}/p/${page}`,
-    });
+    router.push({ path: `/blog/p/${page}` });
   }
 }
 </script>

@@ -14,13 +14,7 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute();
 const router = useRouter();
-
-const currentPage = computed(() => {
-  const page = Number(route.query.page) || 1;
-  return Math.max(1, page);
-});
 
 const {
   fetchPage,
@@ -32,19 +26,17 @@ const {
   breadcrumbItems,
 } = useBlogPage();
 
-const pageLoaded = await fetchPage(currentPage.value);
+const pageLoaded = await fetchPage(1);
 
 if (pageLoaded) {
   await setPageSeo(seo.value);
 }
 
-async function handlePageChange(page: number) {
-  await router.push({
-    query: {
-      ...route.query,
-      page,
-    },
-  });
-  await fetchPage(page);
+function handlePageChange(page: number) {
+  if (page === 1) {
+    router.push({ path: "/blog" });
+  } else {
+    router.push({ path: `/blog/p/${page}` });
+  }
 }
 </script>

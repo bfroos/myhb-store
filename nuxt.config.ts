@@ -156,6 +156,11 @@ export default defineNuxtConfig({
         tr: "/blog",
         ar: "/mudawwana",
       },
+      "blog/p/[page]": {
+        en: "/blog/p/[page]",
+        tr: "/blog/p/[page]",
+        ar: "/mudawwana/p/[page]",
+      },
       "blog/[slug]": {
         en: "/blog/[slug]",
         tr: "/blog/[slug]",
@@ -165,6 +170,11 @@ export default defineNuxtConfig({
         en: "/blog/c/[slug]",
         tr: "/blog/c/[slug]",
         ar: "/mudawwana/c/[slug]",
+      },
+      "blog/c/[slug]/p/[page]": {
+        en: "/blog/c/[slug]/p/[page]",
+        tr: "/blog/c/[slug]/p/[page]",
+        ar: "/mudawwana/c/[slug]/p/[page]",
       },
       karriere: {
         en: "/careers",
