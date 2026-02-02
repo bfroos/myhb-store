@@ -188,17 +188,17 @@ const getNodeChildren = (
 .richText__heading--5 {
   font-size: var(--font-lg);
   line-height: var(--line-lg);
-  margin: 0.5rem 0 0.25rem;
+  margin: 0.75rem 0 0.5rem;
 }
 
 .richText__heading--6 {
   font-size: var(--font-md);
   line-height: var(--line-md);
-  margin: 0.5rem 0 0.25rem;
+  margin: 0.5rem 0 0.5rem;
 }
 
 .richText p {
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
 }
 
 .richText blockquote {
@@ -221,24 +221,12 @@ const getNodeChildren = (
 }
 
 .richText ul {
-  list-style-type: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
+  list-style-type: square;
   position: relative;
-  margin: 1rem 0;
-}
-
-.richText ul li::before {
-  content: "→";
-  position: absolute;
-  left: calc(-1 * var(--space-600) + var(--space-200));
-  top: -0.125em;
-  font-size: 1.2em;
-  color: var(--color-text);
-}
-
-.richText li {
-  margin: var(--space-200) 0;
-  position: relative;
-  padding-left: var(--space-100);
+  margin: 0.5rem 0;
 }
 
 .richText__code {
@@ -302,5 +290,9 @@ const getNodeChildren = (
   max-width: 100%;
   height: auto;
   display: block;
+}
+
+.richText > *:first-child {
+  margin-top: 0;
 }
 </style>
