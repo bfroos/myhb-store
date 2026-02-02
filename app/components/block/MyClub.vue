@@ -14,6 +14,7 @@
             size="lg"
             as="a"
             target="_blank"
+            wide
             v-if="globals.ecommerce.clubUrl"
           >
             {{ $t("cta.joinMyClub") }}

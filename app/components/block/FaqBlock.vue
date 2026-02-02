@@ -59,7 +59,7 @@ const props = defineProps<BlockFaqBlockDto>();
 }
 
 .faqBlock__questions {
-  padding: var(--space-card-pad);
+  padding: calc(var(--space-card-pad) - var(--space-500)) var(--space-card-pad);
 }
 
 .faqBlock__body:last-child {
@@ -75,6 +75,10 @@ const props = defineProps<BlockFaqBlockDto>();
     min-width: 20ch;
     border-width: 0 1px 0 0;
     border-radius: var(--border-radius-card) 0 0 var(--border-radius-card);
+  }
+
+  .faqBlock__questions {
+    padding: var(--space-card-pad);
   }
 }
 </style>

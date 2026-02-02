@@ -27,16 +27,19 @@
         <h3 v-if="title">{{ title }}</h3>
         <p v-if="subtitle">{{ subtitle }}</p>
       </div>
-      <div class="videoTile__overlayIcon">
-        <span aria-hidden="true">
-          <IconPlayerPlayFilled size="24" />
-        </span>
+      <div class="videoTile__cta theme-light">
+        <UiAtomBaseButton @click="playVideo" size="sm">
+          <template #prefix>
+            <IconPlayerPlay />
+          </template>
+          {{ $t("cta.watch") }}
+        </UiAtomBaseButton>
       </div>
     </button>
   </div>
 </template>
 <script setup lang="ts">
-import { IconPlayerPlayFilled } from "@tabler/icons-vue";
+import { IconPlayerPlay } from "@tabler/icons-vue";
 import { buildVideoPosterUrl } from "~/utils/media";
 
 const props = defineProps<{
@@ -183,8 +186,8 @@ const playVideo = async () => {
 }
 
 .videoTile__overlayContent h3 {
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
 }
 
 .videoTile__overlayContent p {
@@ -205,25 +208,16 @@ const playVideo = async () => {
   pointer-events: auto;
 }
 
-.videoTile__overlayIcon {
+.videoTile__cta {
   z-index: 1;
   position: absolute;
-  top: 50%;
   left: 50%;
+  bottom: var(--space-400);
   transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--color-black);
-  border-radius: 50%;
-  color: var(--color-white);
-}
-
-.videoTile__overlay:hover .videoTile__overlayIcon {
-  transform: translate(-50%, -50%) scale(1.1);
-  transition: transform 0.1s ease-in-out;
+  background: none !important;
 }
 
 .videoTile--playing .videoTile__overlay {

@@ -313,8 +313,13 @@ const handleClick = (event: MouseEvent) => {
   align-items: center;
   justify-content: center;
   line-height: 0;
-  width: 1.5em;
-  height: 1.5em;
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.button__icon :deep(svg) {
+  width: 100%;
+  height: 100%;
 }
 
 .button__label {

@@ -62,7 +62,7 @@ const props = withDefaults(
   {
     defaultOpen: false,
     tightSpacing: false,
-  }
+  },
 );
 
 const emit = defineEmits<{
@@ -104,7 +104,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 const animateOpen = (element: HTMLElement) => {
   const inner = element.querySelector(
-    ".collabsibleItem__contentInner"
+    ".collabsibleItem__contentInner",
   ) as HTMLElement;
   if (!inner) return;
 
@@ -139,7 +139,7 @@ const animateOpen = (element: HTMLElement) => {
 
 const animateClose = (element: HTMLElement) => {
   const inner = element.querySelector(
-    ".collabsibleItem__contentInner"
+    ".collabsibleItem__contentInner",
   ) as HTMLElement;
   if (!inner) return;
 
@@ -176,7 +176,7 @@ onMounted(async () => {
   if (props.defaultOpen && contentRef.value) {
     await nextTick();
     const inner = contentRef.value.querySelector(
-      ".collabsibleItem__contentInner"
+      ".collabsibleItem__contentInner",
     ) as HTMLElement;
     if (inner) {
       contentRef.value.style.height = "auto";
@@ -191,7 +191,7 @@ watch(
     if (newValue !== isOpen.value) {
       toggle();
     }
-  }
+  },
 );
 </script>
 
@@ -238,7 +238,6 @@ watch(
   display: flex;
   align-items: center;
   gap: var(--space-400);
-  padding: var(--space-400) 0;
   cursor: pointer;
 }
 
