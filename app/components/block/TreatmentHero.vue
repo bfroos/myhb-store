@@ -68,7 +68,11 @@
                   v-if="cta"
                   :button="cta"
                   :data="{ calendlyUrl: calendlyUrl }"
-                  :button-props="{ size: 'lg', variant: 'primary' }"
+                  :button-props="{
+                    size: 'lg',
+                    variant: 'primary',
+                    wide: !priceLabel,
+                  }"
                 />
               </div>
               <div v-if="showGlobalDiscount">
@@ -297,7 +301,6 @@ const discountLabel = computed(() => {
 
 .treatmentHero__main h1 {
   max-width: 18ch;
-  margin-top: var(--space-400);
 }
 
 .treatmentHero__headlinePrefix,
@@ -386,10 +389,6 @@ const discountLabel = computed(() => {
     var(--border-radius-card-figure) var(--border-radius-card-figure);
 }
 
-.treatmentHero--hasReviews .treatmentHero__main h1 {
-  margin-top: var(--space-800);
-}
-
 .treatmentHero--hasReviews .treatmentHero__eyebrow + h1 {
   margin-top: 0;
 }
@@ -397,6 +396,10 @@ const discountLabel = computed(() => {
 @media screen and (min-width: 900px) {
   .treatmentHero {
     flex-direction: row;
+  }
+
+  .treatmentHero__main {
+    margin-top: var(--space-800);
   }
 
   .treatmentHero__media {

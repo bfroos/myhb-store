@@ -33,6 +33,11 @@ const props = defineProps<{
   blocks: StrapiBlock[];
 }>();
 
+const getBlockProps = (block: StrapiBlock) => {
+  const { id, __component, ...props } = block;
+  return props;
+};
+
 const registry: Record<string, any> = {
   "blocks.benefits-list": BenefitsList,
   "blocks.comparison-block": ComparisonBlock,
@@ -70,6 +75,6 @@ const registry: Record<string, any> = {
     v-for="block in blocks"
     :key="block.id"
     :is="registry[block.__component]"
-    v-bind="block"
+    v-bind="getBlockProps(block)"
   />
 </template>

@@ -43,7 +43,7 @@ const props = defineProps<{
 const normalizedItems = computed(() => {
   return (props.items ?? [])
     .filter(
-      (i) => i && typeof i.title === "string" && i.title.trim().length > 0
+      (i) => i && typeof i.title === "string" && i.title.trim().length > 0,
     )
     .map((item, index) => ({
       id: `${index}-${item.to ?? item.title}`,
@@ -59,7 +59,7 @@ const normalizedItems = computed(() => {
   align-items: center;
   gap: var(--space-200);
   padding: 0 var(--container-pad);
-  margin: var(--space-400) 0;
+  margin: var(--space-400) 0 calc(var(--space-400) * -1);
   color: var(--color-text-light);
 }
 

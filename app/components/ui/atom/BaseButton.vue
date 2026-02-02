@@ -126,6 +126,7 @@ const props = withDefaults(defineProps<BaseButtonProps>(), {
   prefetch: undefined,
   external: false,
   fullWidth: false,
+  wide: false,
 });
 
 const slots = useSlots();
@@ -161,6 +162,7 @@ const iconOnlyComputed = computed(() => {
 const buttonClasses = computed(() => [
   `button--${props.variant}`,
   `button--${props.size}`,
+  { "button--wide": props.wide },
   { "button--isToggle": props.isToggle },
   { "button--iconOnly": iconOnlyComputed.value },
   { "button--fullWidth": props.fullWidth },
@@ -387,6 +389,11 @@ const handleClick = (event: MouseEvent) => {
 
 .button--fullWidth {
   width: 100%;
+}
+
+.button--wide {
+  padding-left: var(--button-control-height);
+  padding-right: var(--button-control-height);
 }
 
 /* Disabled state */

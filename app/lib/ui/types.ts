@@ -43,6 +43,7 @@ export type BaseButtonProps = {
   prefetch?: boolean;
   external?: boolean;
   fullWidth?: boolean;
+  wide?: boolean;
 };
 
 /*
