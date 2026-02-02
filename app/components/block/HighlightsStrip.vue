@@ -13,6 +13,7 @@
                 v-if="item.icon && item.icon.iconData"
                 :icon="item.icon"
                 :size="72"
+                :stroke-width="1"
               >
                 <g v-html="item.icon?.iconData ?? ''" />
               </UiLayoutIconWrapper>

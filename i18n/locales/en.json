@@ -123,6 +123,7 @@
   },
 
   "career": {
+    "breadcrumbTitle": "Careers",
     "job": {
       "apply": "Apply now",
       "description": {

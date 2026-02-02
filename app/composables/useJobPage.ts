@@ -1,6 +1,7 @@
 import type { LocationDto } from "~/lib/strapi/dto/collections";
 import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import { mapJobPageBlocks } from "~/lib/strapi/mapper/mapJobPageBlocks";
+import type { BreadcrumbItem } from "~/lib/ui/types";
 
 export function useJobPage() {
   const { locale, fallbackLocale, t } = useI18n();
@@ -9,6 +10,16 @@ export function useJobPage() {
   const jobDetails = ref<any | null>(null);
   const blocks = ref<StrapiBlock[]>([]);
   const localizations = ref<LocalizationDto[]>([]);
+
+  const breadcrumbItems = computed<BreadcrumbItem[]>(() => [
+    {
+      title: t("career.breadcrumbTitle"),
+      to: "/karriere",
+    },
+    {
+      title: jobDetails.value?.title,
+    },
+  ]);
 
   function normalizeEnumArray(value: unknown): string[] {
     if (!value) return [];
@@ -87,5 +98,6 @@ export function useJobPage() {
     blocks,
     localizations,
     seo,
+    breadcrumbItems,
   };
 }

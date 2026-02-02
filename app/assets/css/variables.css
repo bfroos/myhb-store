@@ -103,8 +103,8 @@
   --space-card-pad-sm: var(--space-600);
   --space-card-pad: var(--space-700);
 
-  --space-page-gap: var(--space-800);
-  --space-bento-gap: var(--space-400);
+  --space-bento-gap: var(--space-600);
+  --space-bento-gap-sm: var(--space-400);
 
   /*
     *  Body

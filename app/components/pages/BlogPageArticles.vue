@@ -114,12 +114,12 @@ const paginatorTokens = ref({
 <style scoped>
 .blogPageArticles {
   display: grid;
-  gap: var(--space-600);
+  gap: var(--space-bento-gap-sm);
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  margin-bottom: var(--space-600);
+  margin-bottom: var(--space-bento-gap-sm);
 }
 
 .blogPageArticles__paginator {
-  margin-top: var(--space-600);
+  margin-top: var(--space-bento-gap-sm);
 }
 </style>

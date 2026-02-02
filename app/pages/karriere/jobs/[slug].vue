@@ -1,4 +1,5 @@
 <template>
+  <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
   <BlockPageHeader v-if="fixedBlocks.jobHero" v-bind="fixedBlocks.jobHero" />
   <PagesJobDescriptionBlock
     v-if="fixedBlocks.jobDescription"
@@ -8,7 +9,14 @@
 </template>
 
 <script setup lang="ts">
-const { fetchJobPage, fixedBlocks, blocks, seo, localizations } = useJobPage();
+const {
+  fetchJobPage,
+  fixedBlocks,
+  blocks,
+  seo,
+  localizations,
+  breadcrumbItems,
+} = useJobPage();
 
 const jobPageLoaded = await fetchJobPage();
 

@@ -1,6 +1,6 @@
 <template>
   <article class="treatment">
-    <NuxtLinkLocale :to="path" class="treatment__card">
+    <NuxtLinkLocale :to="path" class="treatment__card theme-light">
       <UiAtomMediaPicture
         v-if="image && isMediaImage(image)"
         :media="image"
@@ -68,6 +68,11 @@ const priceLabel = computed(() => {
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: transform 0.3s ease;
+}
+
+.treatment__card:hover .treatment__picture > :deep(img) {
+  transform: scale(1.05);
 }
 
 .treatment__description {
