@@ -9,7 +9,15 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "@primevue/nuxt-module",
     "nuxt-calendly",
+    "@nuxt/scripts",
   ],
+  scripts: {
+    registry: {
+      googleTagManager: {
+        id: "GTM-N5VCFKPR",
+      },
+    },
+  },
   fonts: {
     defaults: {
       weights: [400, 500],
