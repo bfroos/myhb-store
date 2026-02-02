@@ -1,7 +1,7 @@
 <template>
   <div class="newsletterBlock">
     <h2>{{ formattedHeadline }}</h2>
-    TODO: Newsletter Signup Formular
+    <UiMoleculeNewsletterSubscriptionForm />
   </div>
 </template>
 <script setup lang="ts">
@@ -41,7 +41,7 @@ const formattedHeadline = computed(() => {
   background-color: var(--color-card-bg-strong);
   color: var(--color-white);
   padding: var(--space-card-pad-sm);
-  border-radius: var(--border-radius-200);
+  border-radius: var(--border-radius-400);
   margin: 2em 0;
 }
 .newsletterBlock h2 {

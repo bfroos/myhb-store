@@ -51,7 +51,7 @@ const props = defineProps<{
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: var(--border-radius-200);
+  border-radius: var(--border-radius-400);
 }
 
 .imageBlock--fixedImageAspectRatio > picture {

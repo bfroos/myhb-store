@@ -18,10 +18,10 @@ const props = defineProps<{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-400);
+  gap: var(--space-600);
   background-color: var(--color-gray-200);
   padding: var(--space-card-pad-sm);
-  border-radius: var(--border-radius-200);
+  border-radius: var(--border-radius-400);
   margin: 2em 0;
 }
 .ctaBlock h2 {
