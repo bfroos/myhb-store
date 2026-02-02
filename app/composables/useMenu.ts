@@ -37,12 +37,27 @@ export function useMenu(types: string | string[] = "treatment-pages") {
     },
   );
 
-  const treatmentPages = computed(
-    () => data.value?.data?.["treatment-pages"] ?? [],
-  );
-  const productCategories = computed(
-    () => data.value?.data?.["product-categories"] ?? [],
-  );
+  const sortMenuByName = <T extends { name: string; children?: T[] }>(
+    items: T[],
+    sortLocale: string,
+  ): T[] =>
+    [...items]
+      .sort((a, b) => a.name.localeCompare(b.name, sortLocale))
+      .map((item) => ({
+        ...item,
+        children: item.children?.length
+          ? sortMenuByName(item.children, sortLocale)
+          : item.children,
+      }));
+
+  const treatmentPages = computed(() => {
+    const items = data.value?.data?.["treatment-pages"] ?? [];
+    return sortMenuByName(items, locale.value || fallbackLocale.value || "de");
+  });
+  const productCategories = computed(() => {
+    const items = data.value?.data?.["product-categories"] ?? [];
+    return sortMenuByName(items, locale.value || fallbackLocale.value || "de");
+  });
 
   return {
     data,

@@ -294,27 +294,14 @@ const handleClick = (event: MouseEvent) => {
   cursor: default;
 }
 
-/* Sizes */
-.button--xs {
-  --button-control-height: var(--control-height-xs);
-}
-
-.button--sm {
-  --button-control-height: var(--control-height-sm);
-}
-
-.button--lg {
-  --button-control-height: var(--control-height-lg);
-}
-
 /* Icon layout */
 .button__icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   line-height: 0;
-  width: 1.25em;
-  height: 1.25em;
+  width: 1.5em;
+  height: 1.5em;
 }
 
 .button__icon :deep(svg) {
@@ -325,6 +312,29 @@ const handleClick = (event: MouseEvent) => {
 .button__label {
   display: inline-flex;
   align-items: center;
+}
+
+/* Sizes */
+.button--xs {
+  --button-control-height: var(--control-height-xs);
+}
+
+.button--sm {
+  --button-control-height: var(--control-height-sm);
+}
+
+.button--sm .button__icon {
+  width: 1.25em;
+  height: 1.25em;
+}
+
+.button--lg {
+  --button-control-height: var(--control-height-lg);
+}
+
+.button--lg .button__icon {
+  width: 1.75em;
+  height: 1.75em;
 }
 
 /* Icon-only */

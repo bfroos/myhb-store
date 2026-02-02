@@ -385,7 +385,7 @@
       "eventInvitations": "دعوات للحدثات"
     },
     "success": "مرحبًا بك في MY! إذا لم تكن عنوانك مسجل بالفعل، ستتلقى بريدًا إلكتروني للتحقق قريبًا. إذا كنت مسجلًا بالفعل، لن يحدث شيء آخر.",
-    "emailPlaceholder": "bariduka-al-iliktruni{'@'}example.com",
+    "emailPlaceholder": "عنوان البريد الإلكتروني",
     "emailLabel": "عنوان البريد الإلكتروني",
     "errors": {
       "invalid_email": "يرجى إدخال عنوان بريد إلكتروني صالح.",

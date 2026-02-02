@@ -33,7 +33,7 @@
           :placeholder="$t('newsletter.emailPlaceholder')"
           required
         />
-        <UiAtomBaseButton variant="secondary" :disabled="loading" type="submit">
+        <UiAtomBaseButton :disabled="loading" type="submit">
           {{ $t("cta.subscribe") }}
         </UiAtomBaseButton>
       </div>

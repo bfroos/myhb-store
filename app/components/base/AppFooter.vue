@@ -9,7 +9,7 @@
           </aside>
           <div class="appFooter__content theme-soft">
             <div class="appFooter__brand">
-              <ImageAppLogo width="100" />
+              <ImageAppLogo width="140" />
             </div>
             <div class="appFooter__navs">
               <nav
@@ -38,23 +38,18 @@
                     </NuxtLinkLocale>
                   </li>
                   <li>
-                    <NuxtLinkLocale to="/aerzte">
-                      {{ $t("navigation.secondary.doctors") }}
-                    </NuxtLinkLocale>
-                  </li>
-                  <li>
                     <NuxtLinkLocale to="/standorte">
                       {{ $t("navigation.secondary.locations") }}
                     </NuxtLinkLocale>
                   </li>
                   <li>
-                    <NuxtLinkLocale to="/preise">
-                      {{ $t("navigation.secondary.prices") }}
+                    <NuxtLinkLocale to="/karriere">
+                      {{ $t("navigation.secondary.careers") }}
                     </NuxtLinkLocale>
                   </li>
                   <li>
-                    <NuxtLinkLocale to="/karriere">
-                      {{ $t("navigation.secondary.careers") }}
+                    <NuxtLinkLocale to="/aerzte">
+                      {{ $t("navigation.secondary.doctors") }}
                     </NuxtLinkLocale>
                   </li>
                   <li>
@@ -134,8 +129,7 @@
             <UiAtomBaseButton
               as="a"
               icon-only
-              variant="tertiary"
-              size="sm"
+              variant="quaternary"
               href="https://www.facebook.com/myhealthbeautylounge"
               target="_blank"
               no-follow
@@ -147,8 +141,7 @@
             <UiAtomBaseButton
               as="a"
               icon-only
-              variant="tertiary"
-              size="sm"
+              variant="quaternary"
               href="https://de.linkedin.com/company/my-health-beauty"
               target="_blank"
               no-follow
@@ -160,8 +153,7 @@
             <UiAtomBaseButton
               as="a"
               icon-only
-              variant="tertiary"
-              size="sm"
+              variant="quaternary"
               href="https://www.instagram.com/myhealthandbeauty.app/"
               target="_blank"
               no-follow
@@ -173,8 +165,7 @@
             <UiAtomBaseButton
               as="a"
               icon-only
-              variant="tertiary"
-              size="sm"
+              variant="quaternary"
               href="https://www.tiktok.com/@myhealthandbeauty.com"
               target="_blank"
               no-follow
@@ -204,6 +195,10 @@ const { treatmentPages, productCategories } = useMenu(
   display: inline-block;
   padding: var(--space-200) 0;
   text-decoration: none;
+}
+
+.appFooter a:not(.button):hover {
+  text-decoration: underline;
 }
 
 .appFooter__inner {
@@ -241,7 +236,7 @@ const { treatmentPages, productCategories } = useMenu(
   padding: var(--space-card-pad);
   display: flex;
   flex-direction: column;
-  gap: var(--space-400);
+  gap: var(--space-600);
 }
 
 .appFooter__navTitle {
@@ -262,7 +257,7 @@ const { treatmentPages, productCategories } = useMenu(
 
 .appFooter__socialNetworks {
   display: inline-block;
-  padding: var(--space-400) var(--space-500);
+  padding: var(--space-200);
   border-radius: 999px;
 }
 

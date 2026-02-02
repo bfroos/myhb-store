@@ -386,7 +386,7 @@
       "eventInvitations": "Einladungen zu Events"
     },
     "success": "Willkommen bei MY! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
-    "emailPlaceholder": "deine-email{'@'}example.com",
+    "emailPlaceholder": "Deine E-Mail-Adresse",
     "emailLabel": "E-Mail-Adresse",
     "errors": {
       "invalid_email": "Bitte gib eine gültige E-Mail-Adresse an.",

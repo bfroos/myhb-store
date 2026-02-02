@@ -386,7 +386,7 @@
       "eventInvitations": "Etkinlik Davetleri"
     },
     "success": "MY'ye hoş geldiniz! Eğer adresiniz henüz kayıtlı değilse, doğrulama e-postasını size yakında göndereceğiz. Eğer zaten kayıtlıysanız, hiçbir şey olmayacak.",
-    "emailPlaceholder": "e-postanız{'@'}example.com",
+    "emailPlaceholder": "E-postanız",
     "emailLabel": "E-posta adresi",
     "errors": {
       "invalid_email": "Lütfen geçerli bir e-posta adresi girin.",

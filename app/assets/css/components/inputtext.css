@@ -34,5 +34,5 @@ body .p-inputtext:disabled {
 }
 
 body .theme-strong .p-inputtext {
-  background: var(--color-gray-900);
+  background: var(--color-gray-800);
 }
