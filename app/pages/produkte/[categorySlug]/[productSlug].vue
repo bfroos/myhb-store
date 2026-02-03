@@ -22,6 +22,7 @@ const {
   seo,
   categoryLocalizations,
   productLocalizations,
+  product,
 } = useProductPage();
 
 const productPageLoaded = await fetchProductPage();
@@ -41,4 +42,18 @@ if (productPageLoaded) {
   ]);
   await setPageSeo(seo.value);
 }
+
+// Schema.org Product
+const config = useRuntimeConfig();
+const route = useRoute();
+
+const productSchema = computed(() =>
+  buildProductSchema(product.value, {
+    publicUrl: (config.public.publicUrl as string) || "",
+    path: route.path,
+    currency: "EUR",
+  }),
+);
+
+useSchemaOrg(productSchema);
 </script>
