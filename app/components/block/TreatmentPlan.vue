@@ -121,7 +121,15 @@
                   class="treatmentPlan__example__step__treatments"
                 >
                   <li v-for="(treatment, treatmentIndex) in step.treatments">
-                    {{ treatment.name }}
+                    <NuxtLinkLocale
+                      v-if="treatment.treatmentPage"
+                      :to="`/behandlungen/${treatment.treatmentPage.pathKey}`"
+                    >
+                      {{ treatment.label }}
+                    </NuxtLinkLocale>
+                    <template v-else>
+                      {{ treatment.label }}
+                    </template>
                     <template v-if="!isLastTreatment(step, treatmentIndex)">
                       +&nbsp;
                     </template>
@@ -297,6 +305,14 @@ const getColorThemeClass = (colorTheme: ColorTheme) => {
   flex-wrap: wrap;
   font-weight: var(--font-bold);
   margin: 0 0 var(--space-300);
+}
+
+.treatmentPlan__example__step__treatments a {
+  text-decoration: underline;
+}
+
+.treatmentPlan__example__step__treatments a:hover {
+  text-decoration: none;
 }
 
 .treatmentPlan__example__step__content > p {

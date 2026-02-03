@@ -624,7 +624,10 @@ export type TreatmentPlanStepDto = {
   type: TreatmentPlanStepType;
   week?: number;
   description?: string;
-  treatments?: TreatmentDto[];
+  treatments?: {
+    label: string;
+    treatmentPage: TreatmentPageDto;
+  }[];
   followUpPlanText?: string;
   endOfPlanText?: string;
 };
