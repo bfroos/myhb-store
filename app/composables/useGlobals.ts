@@ -19,7 +19,7 @@ export type GlobalsState = {
   };
   ecommerce: {
     clubUrl?: string;
-    grouponUrl?: string;
+    couponUrl?: string;
     newsletterDiscountPercentage?: number | null;
   };
 };

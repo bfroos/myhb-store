@@ -54,8 +54,8 @@
                 full-width
                 as="a"
                 size="lg"
-                :href="globals.ecommerce.grouponUrl"
-                v-if="globals.ecommerce.grouponUrl"
+                :href="globals.ecommerce.couponUrl"
+                v-if="globals.ecommerce.couponUrl"
                 target="_blank"
               >
                 {{ $t("cta.shopGroupon") }}
