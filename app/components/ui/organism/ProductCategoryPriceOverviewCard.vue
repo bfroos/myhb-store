@@ -76,7 +76,7 @@
           >
             <div>
               <NuxtLinkLocale
-                :to="`/produkte/${productCategory.slug}/${product.slug}#${variant.slug}`"
+                :to="`/produkte/${productCategory.slug}/${product.slug}?v=${variant.slug}`"
               >
                 {{ variant.label }}
               </NuxtLinkLocale>
@@ -87,7 +87,7 @@
             <div>
               <UiAtomBaseButton
                 as="nuxt-link-locale"
-                :to="`/produkte/${productCategory.slug}/${product.slug}#${variant.slug}`"
+                :to="`/produkte/${productCategory.slug}/${product.slug}?v=${variant.slug}`"
                 icon-only
                 size="sm"
                 variant="tertiary"

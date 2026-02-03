@@ -28,22 +28,19 @@ const activeVariants = computed(() => {
 });
 
 const currentVariant = ref<ProductVariantDto | null>(
-  activeVariants.value[0] ?? null
+  activeVariants.value[0] ?? null,
 );
 
 onMounted(() => {
   syncVariantFromRoute();
 });
 
-watch(
-  () => route.hash,
-  () => {
-    syncVariantFromRoute();
-  }
-);
+watch([() => route.hash, () => route.query.v], () => {
+  syncVariantFromRoute();
+});
 
-function findVariantByAnchor(anchor: string): ProductVariantDto | null {
-  return activeVariants.value.find((v) => v.slug === anchor) ?? null;
+function findVariantBySlug(slug: string): ProductVariantDto | null {
+  return activeVariants.value.find((v) => v.slug === slug) ?? null;
 }
 
 function pickInitialVariant(): ProductVariantDto | null {
@@ -55,17 +52,28 @@ function pickInitialVariant(): ProductVariantDto | null {
   );
 }
 
-function applyHashToVariant(hash: string): boolean {
+function applyVariantFromQuery(): boolean {
+  const raw = route.query.v;
+  const variantSlug = Array.isArray(raw) ? raw[0] : raw;
+  if (!variantSlug || typeof variantSlug !== "string") return false;
+  const v = findVariantBySlug(variantSlug);
+  if (!v) return false;
+  currentVariant.value = v;
+  return true;
+}
+
+function applyVariantFromHash(hash: string): boolean {
   const anchor = hash.replace(/^#/, "");
   if (!anchor) return false;
-  const v = findVariantByAnchor(anchor);
+  const v = findVariantBySlug(anchor);
   if (!v) return false;
   currentVariant.value = v;
   return true;
 }
 
 function syncVariantFromRoute(): void {
-  if (applyHashToVariant(route.hash)) return;
+  if (applyVariantFromQuery()) return;
+  if (applyVariantFromHash(route.hash)) return;
   if (!currentVariant.value) {
     currentVariant.value = pickInitialVariant();
   }
@@ -73,7 +81,10 @@ function syncVariantFromRoute(): void {
 
 function setCurrentVariant(variant: ProductVariantDto): void {
   currentVariant.value = variant;
-  router.push(`#${variant.slug}`);
+  router.push({
+    query: { ...route.query, v: variant.slug },
+    hash: "",
+  });
 }
 </script>
 <style scoped>
