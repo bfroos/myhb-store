@@ -1,6 +1,7 @@
 import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import type { TreatmentPageDto } from "~/lib/strapi/dto/collections";
 import { mapProductPageBlocks } from "~/lib/strapi/mapper/mapProductPageBlocks";
+import type { BreadcrumbItem } from "~/lib/ui/types";
 
 export function useProductPage() {
   const { locale, fallbackLocale, t } = useI18n();
@@ -13,6 +14,16 @@ export function useProductPage() {
   const blocks = ref<StrapiBlock[]>([]);
   const relatedTreatmentTeasers = ref<TreatmentPageDto[]>([]);
   const cheapestVariantPrice = ref<number>(0);
+
+  const breadcrumbItems = computed<BreadcrumbItem[]>(() => [
+    {
+      title: t("navigation.secondary.prices"),
+      to: "/preise",
+    },
+    {
+      title: product.value?.name,
+    },
+  ]);
 
   async function fetchProductPage(): Promise<boolean> {
     const route = useRoute();
@@ -103,6 +114,7 @@ export function useProductPage() {
     categoryLocalizations,
     productLocalizations,
     relatedTreatmentTeasers,
+    breadcrumbItems,
     seo,
   };
 }

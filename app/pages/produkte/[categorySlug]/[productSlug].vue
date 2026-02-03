@@ -1,4 +1,5 @@
 <template>
+  <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
   <BlockProductHero
     v-if="fixedBlocks.productHero"
     v-bind="fixedBlocks.productHero"
@@ -23,6 +24,7 @@ const {
   categoryLocalizations,
   productLocalizations,
   product,
+  breadcrumbItems,
 } = useProductPage();
 
 const productPageLoaded = await fetchProductPage();
