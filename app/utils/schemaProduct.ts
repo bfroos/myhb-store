@@ -113,7 +113,7 @@ function buildOffer(
       ? "https://schema.org/OutOfStock"
       : "https://schema.org/InStock";
   const vSlug = typeof variant?.slug === "string" ? variant.slug : "";
-  const offerUrl = vSlug ? `${ctx.pageUrl}#${vSlug}` : ctx.pageUrl;
+  const offerUrl = vSlug ? `${ctx.pageUrl}?v=${vSlug}` : ctx.pageUrl;
 
   return {
     "@type": "Offer",
