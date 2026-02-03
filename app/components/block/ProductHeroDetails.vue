@@ -95,6 +95,7 @@ const isCurrentVariant = (variant: ProductVariantDto) => {
 }
 .productHero__variants {
   display: flex;
+  flex-wrap: wrap;
   flex-direction: row;
   gap: var(--space-300);
   margin: var(--space-600) 0;

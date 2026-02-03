@@ -151,6 +151,7 @@ function selectImage(index: number) {
 
 .productHero__images__thumbnails {
   display: flex;
+  flex-wrap: wrap;
   gap: var(--space-300);
   margin: var(--space-400) 0 0;
   padding: var(--space-400) var(--space-card-pad);
