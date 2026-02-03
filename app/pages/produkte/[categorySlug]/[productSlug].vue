@@ -27,6 +27,8 @@ const {
   breadcrumbItems,
 } = useProductPage();
 
+const config = useRuntimeConfig();
+const route = useRoute();
 const productPageLoaded = await fetchProductPage();
 
 if (productPageLoaded) {
@@ -45,10 +47,22 @@ if (productPageLoaded) {
   await setPageSeo(seo.value);
 }
 
-// Schema.org Product
-const config = useRuntimeConfig();
-const route = useRoute();
+// Canonical URL without variant query params.
+const canonicalUrl = computed(() => {
+  const base = ((config.public.publicUrl as string) || "").replace(/\/+$/, "");
+  return `${base}${route.path}`;
+});
 
+useHead(() => ({
+  link: [
+    {
+      rel: "canonical",
+      href: canonicalUrl.value,
+    },
+  ],
+}));
+
+// Schema.org Product
 const productSchema = computed(() =>
   buildProductSchema(product.value, {
     publicUrl: (config.public.publicUrl as string) || "",
