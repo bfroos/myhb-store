@@ -58,6 +58,11 @@ const props = defineProps<BlockMediaCardDto>();
 .mediaCard__headline {
   margin: 0 0 var(--space-600);
 }
+
+.mediaBentoBlock__image {
+  aspect-ratio: 5/4;
+}
+
 .mediaCard__intro {
   font-size: var(--font-lg);
   line-height: var(--line-lg);

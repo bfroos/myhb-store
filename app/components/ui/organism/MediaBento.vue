@@ -1,13 +1,5 @@
 <template>
-  <div
-    class="mediaBento"
-    :class="{
-      'mediaBento--mediaRight': layout === MediaBentoLayout.MEDIA_RIGHT,
-      'mediaBento--hasSecondMedia': slots.secondMedia,
-      'mediaBento--wihoutMedia': !slots.firstMedia && !slots.secondMedia,
-      'mediaBento--withoutContent': !hasContent,
-    }"
-  >
+  <div class="mediaBento" :class="classList">
     <UiLayoutCardSurface
       v-if="slots.firstMedia"
       :card-settings="mediaCardSettings"
@@ -40,7 +32,11 @@
 </template>
 
 <script setup lang="ts">
-import { MediaBentoLayout, ColorTheme } from "~/lib/strapi/dto/enums";
+import {
+  MediaBentoLayout,
+  ColorTheme,
+  MediaBentoMediaItemAlignment,
+} from "~/lib/strapi/dto/enums";
 import type { CardSettingsDto } from "~/lib/strapi/dto/components";
 
 const slots = useSlots();
@@ -48,7 +44,19 @@ const slots = useSlots();
 const props = defineProps<{
   layout: MediaBentoLayout;
   cardSettings?: CardSettingsDto;
+  mediaItemAlignment: MediaBentoMediaItemAlignment;
 }>();
+
+const classList = computed(() => {
+  return {
+    "mediaBento--mediaRight": props.layout === MediaBentoLayout.MEDIA_RIGHT,
+    "mediaBento--hasSecondMedia": slots.secondMedia,
+    "mediaBento--wihoutMedia": !slots.firstMedia && !slots.secondMedia,
+    "mediaBento--withoutContent": !hasContent,
+    "mediaBento--mediaItemAlignment-horizontal":
+      props.mediaItemAlignment === MediaBentoMediaItemAlignment.HORIZONTAL,
+  };
+});
 
 const mediaCardSettings = computed(() => {
   if (props.cardSettings?.colorTheme === ColorTheme.SOFT) {
@@ -117,6 +125,13 @@ const hasContent = computed(() => {
     grid-template-rows: 1fr 1fr;
   }
 
+  .mediaBento:not(
+      .mediaBento--wihoutMedia
+    ).mediaBento--mediaItemAlignment-horizontal {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: max-content min(600px, 80vh);
+  }
+
   .mediaBento__media__container {
     min-height: 300px;
   }
@@ -167,6 +182,23 @@ const hasContent = computed(() => {
     grid-column: 1 / 2;
     grid-row: 2 / 3;
   }
+
+  .mediaBento--hasSecondMedia.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(1) {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+  .mediaBento--hasSecondMedia.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(2) {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+  }
+  .mediaBento--hasSecondMedia.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(3) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+  }
+
   .mediaBento--hasSecondMedia.mediaBento--withoutContent > div:nth-of-type(1) {
     grid-column: 1 / 2;
     grid-row: 1 / 3;
@@ -188,6 +220,23 @@ const hasContent = computed(() => {
     grid-column: 2 / 3;
     grid-row: 2 / 3;
   }
+
+  .mediaBento--hasSecondMedia.mediaBento--mediaRight.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(1) {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+  .mediaBento--hasSecondMedia.mediaBento--mediaRight.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(2) {
+    grid-column: 1 / 3;
+    grid-row: 1 / 2;
+  }
+  .mediaBento--hasSecondMedi.mediaBento--mediaRight.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(3) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+  }
+
   .mediaBento--hasSecondMedia.mediaBento--withoutContent.mediaBento--mediaRight
     > div:nth-of-type(1) {
     grid-column: 2 / 3;
@@ -197,6 +246,54 @@ const hasContent = computed(() => {
     > div:nth-of-type(2) {
     grid-column: 1 / 2;
     grid-row: 1 / 3;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .mediaBento:not(
+      .mediaBento--wihoutMedia
+    ).mediaBento--hasSecondMedia.mediaBento--mediaItemAlignment-horizontal {
+    grid-template-columns: 1fr 1fr 2fr;
+    grid-template-rows: min(600px, 80vh);
+  }
+
+  .mediaBento--hasSecondMedia.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(1) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+  .mediaBento--hasSecondMedia.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(2) {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
+  }
+  .mediaBento--hasSecondMedia.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(3) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+  }
+
+  .mediaBento:not(
+      .mediaBento--wihoutMedia
+    ).mediaBento--hasSecondMedia.mediaBento--mediaRight.mediaBento--mediaItemAlignment-horizontal {
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: min(600px, 80vh);
+  }
+
+  .mediaBento--hasSecondMedia.mediaBento--mediaRight.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(1) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+  }
+  .mediaBento--hasSecondMedia.mediaBento--mediaRight.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(2) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+  .mediaBento--hasSecondMedia.mediaBento--mediaRight.mediaBento--mediaItemAlignment-horizontal
+    > div:nth-of-type(3) {
+    grid-column: 3 / 4;
+    grid-row: 1 / 2;
   }
 }
 </style>

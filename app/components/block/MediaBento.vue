@@ -3,6 +3,9 @@
     <UiOrganismMediaBento
       :card-settings="cardSettings"
       :layout="layout ?? MediaBentoLayout.MEDIA_LEFT"
+      :media-item-alignment="
+        mediaItemAlignment ?? MediaBentoMediaItemAlignment.HORIZONTAL
+      "
     >
       <template v-if="mediaItems && mediaItems.length > 0" #firstMedia>
         <UiAtomMediaPicture
@@ -65,28 +68,15 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import type { CardSettingsDto } from "~/lib/strapi/dto/components";
-import type { StrapiRichText, StrapiMedia } from "~/lib/strapi/dto/types";
 import {
   MediaBentoLayout,
   ImageFormat,
   ImageBreakpoint,
+  MediaBentoMediaItemAlignment,
 } from "~/lib/strapi/dto/enums";
-import type {
-  SharedButtonDto,
-  SharedVideoSettingsDto,
-} from "~/lib/strapi/dto/components";
+import type { BlockMediaBentoDto } from "~/lib/strapi/dto/components";
 
-const props = defineProps<{
-  headline?: string;
-  intro?: string;
-  content?: StrapiRichText;
-  mediaItems: Array<StrapiMedia>;
-  layout?: MediaBentoLayout;
-  cardSettings?: CardSettingsDto;
-  videoSettings?: SharedVideoSettingsDto;
-  links?: SharedButtonDto[];
-}>();
+const props = defineProps<BlockMediaBentoDto>();
 
 const showBlock = computed(() => {
   return (

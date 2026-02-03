@@ -22,6 +22,11 @@ export enum MediaBentoLayout {
   MEDIA_RIGHT = "media-right",
 }
 
+export enum MediaBentoMediaItemAlignment {
+  HORIZONTAL = "horizontal",
+  VERTICAL = "vertical",
+}
+
 export enum ColorTheme {
   LIGHT = "light",
   SOFT = "soft",

@@ -29,6 +29,8 @@ import {
   BlockPageHeaderLayout,
   BlockHighlightsStripType,
   ProductVolumeUnit,
+  MediaBentoLayout,
+  MediaBentoMediaItemAlignment,
 } from "./enums";
 import {
   OrganismMediaCardContentAlignment,
@@ -127,7 +129,9 @@ export type BlockMediaBentoDto = {
   intro?: string;
   content?: StrapiRichText;
   mediaItems?: StrapiMedia[];
-  layout: OrganismMediaCardLayout;
+  layout: MediaBentoLayout;
+  mediaItemAlignment: MediaBentoMediaItemAlignment;
+  links?: SharedButtonDto[];
   cardSettings?: CardSettingsDto;
   videoSettings?: SharedVideoSettingsDto;
 };
