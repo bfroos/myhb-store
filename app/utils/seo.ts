@@ -1,4 +1,5 @@
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
 
 /**
  * Map i18n locale codes to Open Graph locale format.
@@ -19,8 +20,13 @@ export function mapStrapiLocaleToOpenGraphLocale(locale: string): string {
  * Apply SEO metadata for the current route.
  * Uses page-level SEO when provided and falls back to global defaults.
  * Also sets canonical URL, favicon, html lang, and Open Graph tags.
+ * @param pageSeo - SEO data from the page
+ * @param fallbackOgImage - Fallback image (e.g. article.cover) when ogImage is not set
  */
-export async function setPageSeo(pageSeo?: SharedSeoDto | null): Promise<void> {
+export async function setPageSeo(
+  pageSeo?: SharedSeoDto | null,
+  fallbackOgImage?: StrapiMedia | null,
+): Promise<void> {
   const nuxtApp = useNuxtApp();
   const { locale, fallbackLocale } = useI18n();
   const route = useRoute();
@@ -63,7 +69,7 @@ export async function setPageSeo(pageSeo?: SharedSeoDto | null): Promise<void> {
         pageSeo?.openGraph?.ogDescription ||
         pageSeo?.metaDescription ||
         globalsSeo?.defaultDescription,
-      ogImage: pageSeo?.openGraph?.ogImage,
+      ogImage: pageSeo?.openGraph?.ogImage || fallbackOgImage,
     });
   });
 }

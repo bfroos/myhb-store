@@ -16,6 +16,6 @@ const { fetchPage, seo, article, breadcrumbItems } = useBlogArticlePage();
 const pageLoaded = await fetchPage();
 
 if (pageLoaded) {
-  await setPageSeo(seo.value);
+  await setPageSeo(seo.value, article.value?.cover);
 }
 </script>
