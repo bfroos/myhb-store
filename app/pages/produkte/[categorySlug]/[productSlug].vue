@@ -44,7 +44,7 @@ if (productPageLoaded) {
       paramName: "productSlug",
     },
   ]);
-  await setPageSeo(seo.value);
+  await setPageSeo(seo.value, product.value?.images?.[0] ?? null);
 }
 
 // Canonical URL without variant query params.

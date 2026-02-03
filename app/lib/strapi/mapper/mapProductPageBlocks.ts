@@ -1,10 +1,7 @@
 import type { ProductDto, TreatmentPageDto } from "../dto/collections";
 import { CardElevation, ColorTheme } from "../dto/enums";
 
-export function mapProductPageBlocks(
-  product: ProductDto,
-  relatedTreatmentTeasers: TreatmentPageDto[] = [],
-) {
+export function mapProductPageBlocks(product: ProductDto) {
   const { t } = useI18n();
 
   const blocks = {
@@ -36,7 +33,7 @@ export function mapProductPageBlocks(
   }
 
   function buildTreatmentTeasersModel() {
-    if (!relatedTreatmentTeasers || relatedTreatmentTeasers.length === 0) {
+    if (!product.treatments || product.treatments.length === 0) {
       return undefined;
     }
 
@@ -44,9 +41,13 @@ export function mapProductPageBlocks(
       product.manufacturer?.name
     } ${product.name}`;
 
+    const treatmentPages = product.treatments
+      .map((treatment) => treatment.treatmentPage)
+      .filter((page): page is TreatmentPageDto => Boolean(page?.id));
+
     return {
       headline: headline,
-      treatmentPages: relatedTreatmentTeasers,
+      treatmentPages,
       showShortDescriptions: true,
       showPrices: true,
       showDescriptions: true,

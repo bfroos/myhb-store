@@ -12,7 +12,6 @@ export function useProductPage() {
   const category = ref<any | null>(null);
   const productPage = ref<any | null>(null);
   const blocks = ref<StrapiBlock[]>([]);
-  const relatedTreatmentTeasers = ref<TreatmentPageDto[]>([]);
   const cheapestVariantPrice = ref<number>(0);
 
   const breadcrumbItems = computed<BreadcrumbItem[]>(() => [
@@ -52,8 +51,6 @@ export function useProductPage() {
     product.value = data.value.data.product;
     productPage.value = data.value.data.productPage;
     blocks.value = (data.value.data.productPage?.blocks ?? []) as StrapiBlock[];
-    relatedTreatmentTeasers.value =
-      data.value.data.relatedTreatmentTeasers ?? [];
     cheapestVariantPrice.value = data.value.data.cheapestVariantPrice ?? 0;
 
     // Extract category from product.category
@@ -100,9 +97,7 @@ export function useProductPage() {
     metaDescription: metaDescription.value,
   }));
 
-  const fixedBlocks = computed(() =>
-    mapProductPageBlocks(product.value, relatedTreatmentTeasers.value),
-  );
+  const fixedBlocks = computed(() => mapProductPageBlocks(product.value));
 
   return {
     fetchProductPage,
@@ -113,7 +108,6 @@ export function useProductPage() {
     category,
     categoryLocalizations,
     productLocalizations,
-    relatedTreatmentTeasers,
     breadcrumbItems,
     seo,
   };
