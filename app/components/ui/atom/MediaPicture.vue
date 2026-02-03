@@ -99,6 +99,7 @@ function getAspectRatioFromMedia(
 <style scoped>
 .media-picture__img {
   max-width: 100%;
+  width: auto;
   height: auto;
   display: block;
 }
