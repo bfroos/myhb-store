@@ -36,6 +36,8 @@ export interface StrapiMedia {
   formats?: StrapiImageFormats | null;
   mime: string;
   url: string;
+  width?: number | null;
+  height?: number | null;
 }
 
 export type StrapiMediaImage = StrapiMedia & { mime: `image/${string}` };
