@@ -73,21 +73,19 @@ export function useProductPage() {
   );
 
   const metaDescription = computed(() => {
-    // const variants =
-    //   product.value?.variants &&
-    //   product.value?.variants.some((variant: any) => variant.volume)
-    //     ? product.value?.variants
-    //         .map(
-    //           (variant: any) =>
-    //             `${variant.volume.quantity} ${variant.volume.unit}`
-    //         )
-    //         .join(", ")
-    //     : "";
+    const variants = (product.value?.variants ?? [])
+      .map((variant: any) =>
+        variant?.volume
+          ? `${variant.volume.quantity} ${variant.volume.unit}`
+          : variant?.label ?? "",
+      )
+      .filter(Boolean)
+      .join(", ");
 
-    return `${t("pages.product.seo.description", {
+    return `${t("productPage.metaDescription", {
       name: product.value?.name,
       manufacturer: product.value?.manufacturer?.name,
-      // variants,
+      variants,
       price: formatPriceInEuro(cheapestVariantPrice.value ?? 0),
     })}`;
   });

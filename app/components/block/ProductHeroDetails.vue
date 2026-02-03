@@ -2,7 +2,9 @@
   <div class="productHero__details">
     <div class="productHero__details__header">
       <h1>
-        {{ manufacturerName }}
+        <span>
+          {{ manufacturerName }}
+        </span>
         {{ productName }}
       </h1>
       <ul class="productHero__variants">
