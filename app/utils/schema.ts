@@ -6,6 +6,27 @@ export type SchemaOrgContext = {
   brandName?: string;
 };
 
+function normalizeSchemaDateTime(
+  value: string | null | undefined,
+): string | undefined {
+  if (!value) return undefined;
+
+  // If it's a plain date (YYYY-MM-DD), convert to a full ISO date-time in UTC.
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return `${value}T00:00:00.000Z`;
+  }
+
+  // If it already contains an explicit timezone (Z or +/-HH:MM or +/-HHMM), keep it.
+  if (/(Z|[+-]\d{2}:\d{2}|[+-]\d{4})$/.test(value)) {
+    return value;
+  }
+
+  // Otherwise, try to parse and normalize to ISO with timezone.
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return undefined;
+  return d.toISOString();
+}
+
 /**
  * Schema.org BlogPosting für Blog-Artikel.
  */
@@ -17,6 +38,7 @@ export function buildBlogPostingSchema(
 
   const pageUrl = `${ctx.publicUrl.replace(/\/+$/, "")}${ctx.path}`;
   const imageUrl = article.cover?.url;
+  const datePublished = normalizeSchemaDateTime(article.displayDate);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -27,7 +49,7 @@ export function buildBlogPostingSchema(
       "@type": "WebPage",
       "@id": pageUrl,
     },
-    datePublished: article.displayDate,
+    ...(datePublished && { datePublished }),
     ...(imageUrl && {
       image: {
         "@type": "ImageObject",
@@ -49,3 +71,10 @@ export function buildBlogPostingSchema(
 
   return schema;
 }
+
+export type WebSiteSchemaContext = SchemaOrgContext & {
+  name?: string;
+  description?: string;
+  logoUrl?: string;
+  inLanguage?: string;
+};
