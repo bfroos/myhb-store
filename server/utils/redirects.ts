@@ -2,8 +2,8 @@ import { readFile } from "node:fs/promises";
 import { isAbsolute, resolve as resolvePath } from "node:path";
 import qs from "qs";
 
-/** Nitro storage key for bundled server/assets/redirects.json */
-const BUNDLED_REDIRECTS_KEY = "redirects.json";
+/** Build-time import: wird ins Bundle eingebettet, funktioniert zuverlässig in Production */
+import bundledRedirects from "../assets/redirects.json";
 
 type StrapiPagination = {
   page: number;
@@ -95,50 +95,12 @@ const shouldSkipPath = (path: string) => {
 const resolveRedirectsFilePath = (filePath: string) =>
   isAbsolute(filePath) ? filePath : resolvePath(process.cwd(), filePath);
 
-const loadLocalRedirects = async (): Promise<
-  Map<string, RedirectAttributes>
-> => {
-  const config = useRuntimeConfig();
-  const filePath =
-    (config.redirectsFile as string | undefined) || DEFAULT_REDIRECTS_FILE;
-  if (!filePath) return new Map();
-
-  let raw = "";
-  const isBundledPath =
-    !isAbsolute(filePath) && filePath.endsWith("redirects.json");
-
-  if (isBundledPath) {
-    try {
-      const storage = useStorage("assets:server");
-      const data = await storage.getItem(BUNDLED_REDIRECTS_KEY);
-      if (typeof data === "string") raw = data;
-      else if (Buffer.isBuffer(data)) raw = data.toString("utf8");
-      else raw = "";
-    } catch {
-      return new Map();
-    }
-  } else {
-    try {
-      raw = await readFile(resolveRedirectsFilePath(filePath), "utf8");
-    } catch (error: unknown) {
-      if ((error as NodeJS.ErrnoException)?.code === "ENOENT") {
-        return new Map();
-      }
-      return new Map();
-    }
-  }
-
-  let parsed: unknown = null;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    return new Map();
-  }
-
-  if (!Array.isArray(parsed)) return new Map();
-
+const parseRedirectItems = (
+  items: unknown,
+): Map<string, RedirectAttributes> => {
   const map = new Map<string, RedirectAttributes>();
-  for (const item of parsed) {
+  if (!Array.isArray(items)) return map;
+  for (const item of items) {
     if (!item || typeof item !== "object") continue;
     const from =
       "from" in item && typeof item.from === "string" ? item.from : "";
@@ -152,8 +114,41 @@ const loadLocalRedirects = async (): Promise<
       code: "code" in item ? (item as { code?: number }).code : undefined,
     });
   }
-
   return map;
+};
+
+const loadLocalRedirects = async (): Promise<
+  Map<string, RedirectAttributes>
+> => {
+  const config = useRuntimeConfig();
+  const filePath =
+    (config.redirectsFile as string | undefined) || DEFAULT_REDIRECTS_FILE;
+  if (!filePath) return new Map();
+
+  const useBundled =
+    !isAbsolute(filePath) && filePath.endsWith("redirects.json");
+
+  if (useBundled) {
+    return parseRedirectItems(bundledRedirects);
+  }
+
+  let raw = "";
+  try {
+    raw = await readFile(resolveRedirectsFilePath(filePath), "utf8");
+  } catch (error: unknown) {
+    if ((error as NodeJS.ErrnoException)?.code === "ENOENT") {
+      return new Map();
+    }
+    return new Map();
+  }
+
+  let parsed: unknown = null;
+  try {
+    parsed = JSON.parse(raw);
+  } catch {
+    return new Map();
+  }
+  return parseRedirectItems(parsed);
 };
 
 const fetchRedirects = async (): Promise<Map<string, RedirectAttributes>> => {
