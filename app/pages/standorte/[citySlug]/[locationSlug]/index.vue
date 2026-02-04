@@ -25,6 +25,7 @@ const {
   fetchWithTreatments,
   fixedBlocks,
   breadcrumbItems,
+  location,
   locationLocalizations,
   cityLocalizations,
   seo,
@@ -47,4 +48,19 @@ if (locationLoaded) {
   ]);
   await setPageSeo(seo.value);
 }
+
+// Schema.org LocalBusiness
+const config = useRuntimeConfig();
+const route = useRoute();
+const { brandName } = useBrand();
+
+const localBusinessSchema = computed(() =>
+  buildLocalBusinessSchema(location.value, {
+    publicUrl: (config.public.publicUrl as string) || "",
+    path: route.path,
+    brandName: brandName.value,
+  }),
+);
+
+useSchemaOrg(localBusinessSchema);
 </script>
