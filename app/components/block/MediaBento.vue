@@ -40,6 +40,13 @@
             <SharedButton v-for="link in links" :key="link.id" :button="link" />
           </UiMoleculeButtonGroup>
         </div>
+        <div v-if="showReviewsBadge" class="mediaBento__globalReviewsBadge">
+          <UiMoleculeReviewsBadge
+            show-text
+            :source="ReviewSource.GOOGLE"
+            :rating="5"
+          />
+        </div>
       </template>
       <template
         v-if="
@@ -73,6 +80,7 @@ import {
   ImageFormat,
   ImageBreakpoint,
   MediaBentoMediaItemAlignment,
+  ReviewSource,
 } from "~/lib/strapi/dto/enums";
 import type { BlockMediaBentoDto } from "~/lib/strapi/dto/components";
 
@@ -108,7 +116,8 @@ const showBlock = computed(() => {
   color: var(--color-text-light);
 }
 
-.mediaBento__links {
+.mediaBento__links,
+.mediaBento__globalReviewsBadge {
   margin-top: var(--space-600);
 }
 

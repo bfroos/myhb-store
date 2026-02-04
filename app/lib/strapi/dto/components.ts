@@ -134,6 +134,7 @@ export type BlockMediaBentoDto = {
   links?: SharedButtonDto[];
   cardSettings?: CardSettingsDto;
   videoSettings?: SharedVideoSettingsDto;
+  showReviewsBadge?: boolean;
 };
 
 export type BlockMediaCardDto = {
