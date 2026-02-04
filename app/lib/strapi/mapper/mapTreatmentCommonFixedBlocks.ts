@@ -271,6 +271,9 @@ export function mapTreatmentCommonFixedBlocks(
       showShortDescriptions: true,
       showPrices: true,
       showDescriptions: true,
+      locationPathKey: location
+        ? `${location.city?.slug}/${location.slug}`
+        : undefined,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,
       },
