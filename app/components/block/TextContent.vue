@@ -50,20 +50,23 @@ const classList = computed(() => {
 }
 
 @media (min-width: 900px) {
-  .textContent--columnCount-2:not(.textContent--withIntro)
-    .textContent__content {
+  .textContent--columnCount-2 .textContent__content {
     column-count: 2;
     column-gap: var(--space-1000);
   }
 
-  .textContent--columnCount-2.textContent--withIntro .textContent__intro {
-    border: none;
-  }
-
-  .textContent--columnCount-2 .textContent__body {
+  .textContent--columnCount-2.textContent--withIntro .textContent__body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-1000);
+    column-gap: var(--space-1000);
+  }
+
+  .textContent--columnCount-2.textContent--withIntro .textContent__content {
+    column-count: 1;
+  }
+
+  .textContent--columnCount-2.textContent--withIntro .textContent__intro {
+    border: none;
   }
 }
 </style>

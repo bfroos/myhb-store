@@ -113,9 +113,14 @@ const props = defineProps<BlockEmployeeListDto>();
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: 5 / 4;
   color: var(--color-text-muted);
+}
+
+.employeeList__itemImage > :deep(picture) {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .employeeList__itemContent {
