@@ -1,4 +1,144 @@
 [
   { "from": "/impressum", "to": "/p/impressum", "code": 301 },
-  { "from": "/datenschutz", "to": "/p/datenschutz", "code": 301 }
+  { "from": "/datenschutz", "to": "/p/datenschutz", "code": 301 },
+  {
+    "from": "/blogs/news",
+    "to": "/blog",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/valentinstagsspecial-mit-verena-kerth-und-marc-terenzi",
+    "to": "/blog/valentinstagsspecial-mit-verena-kerth-und-marc-terenzi",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/geglucktes-opening-in-berlin",
+    "to": "/blog/geglucktes-opening-in-berlin",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/schone-haut-bekommen",
+    "to": "/blog/schone-haut-bekommen",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/einmal-infusion-bitte",
+    "to": "/blog/einmal-infusion-bitte",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/neuerstandort-in-hamburg",
+    "to": "/blog/neuerstandort-in-hamburg",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/alphabetische-uebersicht",
+    "to": "/blog/alphabetische-uebersicht",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen-in-leipzig",
+    "to": "/blog/infusionen-in-leipzig",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen-in-kaiserslautern",
+    "to": "/blog/infusionen-in-kaiserslautern",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen-in-monchengladbach",
+    "to": "/blog/infusionen-in-monchengladbach",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen-in-koln",
+    "to": "/blog/infusionen-in-koln",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen-in-dusseldorf",
+    "to": "/blog/infusionen-in-dusseldorf",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen-in-berlin",
+    "to": "/blog/infusionen-in-berlin",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/oster-special",
+    "to": "/blog/oster-special",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/spezialangebot-zu-ostern",
+    "to": "/blog/spezialangebot-zu-ostern",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen",
+    "to": "/blog/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/vitamin-c-infusion",
+    "to": "/blog/vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/immunsystem-starken",
+    "to": "/blog/immunsystem-starken",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/beauty-infusion",
+    "to": "/blog/beauty-infusion",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/glutathion",
+    "to": "/blog/glutathion",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/anti-aging-infusion",
+    "to": "/blog/anti-aging-infusion",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/anti-hangover-infusion",
+    "to": "/blog/anti-hangover-infusion",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/infusionen-fur-sportler",
+    "to": "/blog/infusionen-fur-sportler",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/b-vitaminen",
+    "to": "/blog/b-vitaminen",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/omega-3",
+    "to": "/blog/omega-3",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/magnesium",
+    "to": "/blog/magnesium",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/eisen",
+    "to": "/blog/eisen",
+    "code": 301
+  }
 ]
