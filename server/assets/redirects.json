@@ -1,11 +1,7 @@
 [
   { "from": "/impressum", "to": "/p/impressum", "code": 301 },
   { "from": "/datenschutz", "to": "/p/datenschutz", "code": 301 },
-  {
-    "from": "/blogs/news",
-    "to": "/blog",
-    "code": 301
-  },
+  { "from": "/blogs/news", "to": "/blog", "code": 301 },
   {
     "from": "/blogs/news/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
     "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
@@ -27,118 +23,123 @@
     "code": 301
   },
   {
-    "from": "/blogs/news/einmal-infusion-bitte",
-    "to": "/blog/einmal-infusion-bitte",
+    "from": "/blogs/news/straffere-haut-die-besten-tipps",
+    "to": "/blog/straffere-haut-die-besten-tipps",
     "code": 301
   },
   {
-    "from": "/blogs/news/neuerstandort-in-hamburg",
-    "to": "/blog/neuerstandort-in-hamburg",
+    "from": "/blogs/news/was-hilft-gegen-falten",
+    "to": "/blog/was-hilft-gegen-falten",
     "code": 301
   },
   {
-    "from": "/blogs/news/alphabetische-uebersicht",
-    "to": "/blog/alphabetische-uebersicht",
+    "from": "/blogs/news/meso-therapie-vitamine-fur-deine-haut",
+    "to": "/blog/meso-therapie-vitamine-fur-deine-haut",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen-in-leipzig",
-    "to": "/blog/infusionen-in-leipzig",
+    "from": "/blogs/news/heuschnupfen-nein-danke",
+    "to": "/blog/heuschnupfen-nein-danke",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen-in-kaiserslautern",
-    "to": "/blog/infusionen-in-kaiserslautern",
+    "from": "/blogs/news/carboxy-therapie-gas-in-die-haut",
+    "to": "/blog/carboxy-therapie-gas-in-die-haut",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen-in-monchengladbach",
-    "to": "/blog/infusionen-in-monchengladbach",
+    "from": "/blogs/news/prp-fur-ein-verjungtes-und-strahlendes-hautbild",
+    "to": "/blog/prp-fur-ein-verjungtes-und-strahlendes-hautbild",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen-in-koln",
-    "to": "/blog/infusionen-in-koln",
+    "from": "/blogs/news/kundenreferenz-vitamin-c-infusion",
+    "to": "/blog/kundenreferenz-vitamin-c-infusion",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen-in-dusseldorf",
-    "to": "/blog/infusionen-in-dusseldorf",
+    "from": "/blogs/news/vampir-lifting-vorher-nacher",
+    "to": "/blog/vampir-lifting-vorher-nacher",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen-in-berlin",
-    "to": "/blog/infusionen-in-berlin",
+    "from": "/blogs/news/glow-gesicht-zum-strahlen-bringen",
+    "to": "/blog/glow-gesicht-zum-strahlen-bringen",
     "code": 301
   },
   {
-    "from": "/blogs/news/oster-special",
-    "to": "/blog/oster-special",
+    "from": "/blogs/news/augenlider-straffen-ohne-op",
+    "to": "/blog/augenlider-straffen-ohne-op",
     "code": 301
   },
   {
-    "from": "/blogs/news/spezialangebot-zu-ostern",
-    "to": "/blog/spezialangebot-zu-ostern",
+    "from": "/blogs/news/haarausfall-stoppen",
+    "to": "/blog/haarausfall-stoppen",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen",
-    "to": "/blog/infusionen",
+    "from": "/blogs/news/was-hilft-gegen-haarausfall",
+    "to": "/blog/was-hilft-gegen-haarausfall",
     "code": 301
   },
   {
-    "from": "/blogs/news/vitamin-c-infusion",
-    "to": "/blog/vitamin-c-infusion",
+    "from": "/blogs/news/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "to": "/blog/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
     "code": 301
   },
   {
-    "from": "/blogs/news/immunsystem-starken",
-    "to": "/blog/immunsystem-starken",
+    "from": "/blogs/news/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "to": "/blog/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
     "code": 301
   },
   {
-    "from": "/blogs/news/beauty-infusion",
-    "to": "/blog/beauty-infusion",
+    "from": "/blogs/news/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "to": "/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
     "code": 301
   },
   {
-    "from": "/blogs/news/glutathion",
-    "to": "/blog/glutathion",
+    "from": "/blogs/news/die-turkei-als-mekka-der-haartransplantation-warum-reisen-so-viele-deutsche-dorthin",
+    "to": "/blog/die-turkei-als-mekka-der-haartransplantation-warum-reisen-so-viele-deutsche-dorthin",
     "code": 301
   },
   {
-    "from": "/blogs/news/anti-aging-infusion",
-    "to": "/blog/anti-aging-infusion",
+    "from": "/blogs/news/haartransplantation-im-ausland-worauf-mussen-patienten-achten",
+    "to": "/blog/haartransplantation-im-ausland-worauf-mussen-patienten-achten",
     "code": 301
   },
   {
-    "from": "/blogs/news/anti-hangover-infusion",
-    "to": "/blog/anti-hangover-infusion",
+    "from": "/blogs/news/deutsche-kliniken-im-vergleich-was-bieten-sie-im-bereich-haartransplantation",
+    "to": "/blog/deutsche-kliniken-im-vergleich-was-bieten-sie-im-bereich-haartransplantation",
     "code": 301
   },
   {
-    "from": "/blogs/news/infusionen-fur-sportler",
-    "to": "/blog/infusionen-fur-sportler",
+    "from": "/blogs/news/schonheitsoperationen-im-ausland-schnappchen-oder-risiko",
+    "to": "/blog/schonheitsoperationen-im-ausland-schnappchen-oder-risiko",
     "code": 301
   },
   {
-    "from": "/blogs/news/b-vitaminen",
-    "to": "/blog/b-vitaminen",
+    "from": "/blogs/news/urlaub-und-haartransplantation-warum-kombi-reisen-so-beliebt-sind",
+    "to": "/blog/urlaub-und-haartransplantation-warum-kombi-reisen-so-beliebt-sind",
     "code": 301
   },
   {
-    "from": "/blogs/news/omega-3",
-    "to": "/blog/omega-3",
+    "from": "/blogs/news/gesundheitliche-wundertute-botox-viel-mehr-als-nur-ein-schonmacher",
+    "to": "/blog/gesundheitliche-wundertute-botox-viel-mehr-als-nur-ein-schonmacher",
     "code": 301
   },
   {
-    "from": "/blogs/news/magnesium",
-    "to": "/blog/magnesium",
+    "from": "/blogs/news/vitamin-c-infusion-wirkung-fuer-wen-sie-wirklich-sinnvoll-ist",
+    "to": "/blog/vitamin-c-infusion-wirkung-fuer-wen-sie-wirklich-sinnvoll-ist",
     "code": 301
   },
   {
-    "from": "/blogs/news/eisen",
-    "to": "/blog/eisen",
+    "from": "/blogs/news/botox-vs-hyaluron-was-unterscheidet-und-eint-die-beiden-wundermittel",
+    "to": "/blog/botox-vs-hyaluron-was-unterscheidet-und-eint-die-beiden-wundermittel",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/sorge-vor-overdone-so-behalt-man-seine-naturlichkeit-mit-botox",
+    "to": "/blog/sorge-vor-overdone-so-behalt-man-seine-naturlichkeit-mit-botox",
     "code": 301
   }
 ]
