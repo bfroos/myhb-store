@@ -1,5 +1,5 @@
 <template>
-  <UiLayoutSectionBlock>
+  <UiLayoutSectionBlock v-if="hasItems">
     <UiLayoutCardSurface :card-settings="cardSettings">
       <article class="faqBlock">
         <header v-if="headline" class="faqBlock__header">
@@ -37,6 +37,13 @@
 import type { BlockFaqBlockDto } from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockFaqBlockDto>();
+
+const hasItems = computed(() => {
+  return (
+    (props.faqs && props.faqs.length > 0) ||
+    (props.faqSets && props.faqSets.length > 0)
+  );
+});
 </script>
 <style scoped>
 .faqBlock {
