@@ -26,7 +26,7 @@ const {
   locationLocalizations,
   cityLocalizations,
   seo,
-} = useLocationPage(globals.value.brand.name);
+} = useLocationPage(globals.value?.brand?.name ?? "");
 
 const locationLoaded = await fetchWithTreatments();
 

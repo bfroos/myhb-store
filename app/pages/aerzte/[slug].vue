@@ -22,7 +22,7 @@
 const globals = useGlobals();
 
 const { fetchPage, fixedBlocks, seo, breadcrumbItems, localizations } =
-  useDoctorPage(globals.value.brand.name);
+  useDoctorPage(globals.value?.brand?.name ?? "");
 
 const pageLoaded = await fetchPage();
 
