@@ -131,6 +131,7 @@
         "employmentType": "نوع التوظيف",
         "contractType": "نوع العقد",
         "startDate": "تاريخ البدء",
+        "asOfNow": "من الآن",
         "hourlyRate": "الأجر بالساعة",
         "locations": "أماكن العمل المتاحة"
       },

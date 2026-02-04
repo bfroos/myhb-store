@@ -29,11 +29,16 @@
                     </span>
                   </dd>
                 </template>
-                <template v-if="startDate">
-                  <dt>{{ $t("career.job.description.startDate") }}</dt>
+                <template>
+                  <dt>
+                    {{ $t("career.job.description.startDate") }}
+                  </dt>
                   <dd>
-                    <span>
+                    <span v-if="startDate">
                       {{ startDate }}
+                    </span>
+                    <span v-else>
+                      {{ $t("career.job.description.asOfNow") }}
                     </span>
                   </dd>
                 </template>

@@ -131,6 +131,7 @@
         "employmentType": "Employment type",
         "contractType": "Contract type",
         "startDate": "Start date",
+        "asOfNow": "as of now",
         "hourlyRate": "Hourly rate",
         "locations": "Available work locations"
       },

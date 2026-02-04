@@ -131,6 +131,7 @@
         "employmentType": "Anstellungsart",
         "contractType": "Befristung",
         "startDate": "Startdatum",
+        "asOfNow": "ab sofort",
         "hourlyRate": "Stundenlohn",
         "locations": "Verfügbare Arbeitsorte"
       },

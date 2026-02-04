@@ -131,6 +131,7 @@
         "employmentType": "Çalışma türü",
         "contractType": "Sözleşme türü",
         "startDate": "Başlangıç tarihi",
+        "asOfNow": "şimdi",
         "hourlyRate": "Saatlik ücret",
         "locations": "Mevcut çalışma yerleri"
       },
