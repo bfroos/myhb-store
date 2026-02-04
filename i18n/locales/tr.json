@@ -106,7 +106,10 @@
       "headline": {
         "lounge": "{city} şehrindeki lounge'umuzda tedaviler",
         "center": "{city} şehrindeki lounge'umuzda tedaviler",
-        "clinic": "{city} şehrindeki özel kliniğimizde tedaviler"
+        "clinic": "{city} şehrindeki özel kliniğimizde tedaviler",
+        "loungeFuture": "{city} şehrindeki lounge'umuzda gelecekteki tedaviler",
+        "centerFuture": "{city} şehrindeki lounge'umuzda gelecekteki tedaviler",
+        "clinicFuture": "{city} şehrindeki özel kliniğimizde gelecekteki tedaviler"
       }
     },
     "jobTeasers": {

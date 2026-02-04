@@ -195,16 +195,25 @@ export function mapLocationFixedBlocks(
   }
 
   function buildTreatmentTeasersBlockModel() {
+    const isNotYetOpen =
+      locationOpenStatus === LocationOpenStatus.OPEN_SOON ||
+      locationOpenStatus === LocationOpenStatus.COMING_SOON;
+
+    const headlineKeySuffix = isNotYetOpen ? "Future" : "";
+
     const headlines = {
-      [LocationType.LOUNGE]: t("location.treatmentTeasers.headline.lounge", {
-        city: location?.city?.name,
-      }),
-      [LocationType.CENTER]: t("location.treatmentTeasers.headline.center", {
-        city: location?.city?.name,
-      }),
-      [LocationType.CLINIC]: t("location.treatmentTeasers.headline.clinic", {
-        city: location?.city?.name,
-      }),
+      [LocationType.LOUNGE]: t(
+        `location.treatmentTeasers.headline.lounge${headlineKeySuffix}`,
+        { city: location?.city?.name },
+      ),
+      [LocationType.CENTER]: t(
+        `location.treatmentTeasers.headline.center${headlineKeySuffix}`,
+        { city: location?.city?.name },
+      ),
+      [LocationType.CLINIC]: t(
+        `location.treatmentTeasers.headline.clinic${headlineKeySuffix}`,
+        { city: location?.city?.name },
+      ),
     };
 
     const headline = headlines[location?.type as LocationType];

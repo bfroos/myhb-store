@@ -106,7 +106,10 @@
       "headline": {
         "lounge": "Behandlungen in unserer Lounge in {city}",
         "center": "Behandlungen in unserer Lounge in {city}",
-        "clinic": "Behandlungen in unserer Privatklinik in {city}"
+        "clinic": "Behandlungen in unserer Privatklinik in {city}",
+        "loungeFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
+        "centerFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
+        "clinicFuture": "Zukünftige Behandlungen in unserer Privatklinik in {city}"
       }
     },
     "jobTeasers": {
