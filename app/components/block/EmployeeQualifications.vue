@@ -70,6 +70,18 @@ const props = defineProps<BlockQualificationsBlockDto>();
   flex-direction: column;
   padding: var(--space-card-pad);
 }
+
+.qualificationsBlock ul {
+  list-style-type: disc;
+  margin: 0 0 0 1em;
+}
+
+.qualificationsBlock__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-600);
+}
+
 .qualificationsBlock h2 {
   margin-bottom: var(--space-600);
 }
@@ -79,9 +91,13 @@ const props = defineProps<BlockQualificationsBlockDto>();
   flex-direction: column;
   gap: var(--space-600);
 }
+.qualificationsBlock__contentItemList {
+  row-gap: var(--space-200);
+}
 .qualificationsBlock__contentItem {
-  display: grid;
-  grid-template-columns: 140px 1fr;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-200);
 }
 .qualificationsBlock__contentItem > dt,
 .qualificationsBlock__contentItemText dt {
@@ -102,6 +118,11 @@ const props = defineProps<BlockQualificationsBlockDto>();
     display: grid;
     grid-template-columns: max-content 1fr;
     gap: var(--space-400);
+  }
+
+  .qualificationsBlock__contentItem {
+    display: grid;
+    grid-template-columns: 140px 1fr;
   }
 }
 </style>

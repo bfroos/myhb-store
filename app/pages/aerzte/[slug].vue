@@ -27,7 +27,7 @@ const { fetchPage, fixedBlocks, seo, breadcrumbItems, localizations } =
 const pageLoaded = await fetchPage();
 
 if (pageLoaded) {
-  await setPageSeo(seo.value);
+  await setPageSeo(seo.value, fixedBlocks.value?.hero?.media ?? null);
   usePageI18nParams(localizations.value, "slug");
 }
 </script>

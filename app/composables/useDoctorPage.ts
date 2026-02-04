@@ -37,7 +37,7 @@ export function useDoctorPage(brandName: string = "") {
       throw handleFetchError(error.value, t);
     }
 
-    if (!data.value?.data) {
+    if (!data.value?.data || data.value.data.hideFromPublic) {
       throw handleNotFound(t);
     }
 
