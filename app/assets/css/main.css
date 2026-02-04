@@ -2,6 +2,7 @@
 @import "./normalize.css";
 @import "./components/select.css";
 @import "./components/inputtext.css";
+@import "./components/iconfield.css";
 @import "./theming.css";
 
 *,

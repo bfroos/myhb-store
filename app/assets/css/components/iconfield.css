@@ -1,0 +1,4 @@
+body .p-inputicon {
+  pointer-events: none;
+  --p-iconfield-icon-color: var(--color-text);
+}

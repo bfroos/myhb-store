@@ -58,7 +58,7 @@ function onFitMapToLocations(locations: LocationDto[] | null) {
 
 .locationSearch__mapInner {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 50vh;
   border-radius: var(--border-radius-card-figure);
   overflow: hidden;
 }
@@ -80,7 +80,6 @@ function onFitMapToLocations(locations: LocationDto[] | null) {
   }
 
   .locationSearch__mapInner {
-    aspect-ratio: unset;
     height: 100%;
   }
 }

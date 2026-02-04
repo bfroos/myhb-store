@@ -21,6 +21,7 @@
             v-if="item.distanceInKilometers"
             class="locationTitle__distance"
           >
+            <IconDirectionSign size="1.5em" stroke="2" />
             {{ item.distanceInKilometers?.toFixed(1) }}
             {{ $t("common.distanceKilometersSuffix") }}
           </span>
@@ -44,11 +45,11 @@
       </div>
       <div class="locationTile__actions">
         <UiMoleculeButtonGroup>
-          <UiAtomBaseButton size="xs" @click="handleBookClick">
+          <UiAtomBaseButton size="sm" @click="handleBookClick">
             {{ $t("cta.bookAppointment") }}
           </UiAtomBaseButton>
           <UiAtomBaseButton
-            size="xs"
+            size="sm"
             variant="secondary"
             as="nuxt-link-locale"
             :to="buildLocationPath(item)"
@@ -67,6 +68,7 @@ import {
   IconBuildingStore,
   IconCalendarQuestion,
   IconCalendarStar,
+  IconDirectionSign,
 } from "@tabler/icons-vue";
 import type { MoleculeLocationItem } from "~/lib/ui/types";
 import {
@@ -179,7 +181,7 @@ const buildLocationPath = (item: MoleculeLocationItem) => {
   flex-wrap: wrap;
   color: var(--color-text);
   background: var(--card-color-bg-sub);
-  border-radius: var(--border-radius-400);
+  border-radius: var(--border-radius-card-sm);
   overflow: hidden;
 }
 
@@ -189,7 +191,7 @@ const buildLocationPath = (item: MoleculeLocationItem) => {
   gap: var(--space-400);
   flex: 1 0 300px;
   max-width: 100%;
-  padding: var(--space-400);
+  padding: var(--space-500) var(--space-400) var(--space-400);
 }
 
 .locationTitle__header {
@@ -199,7 +201,11 @@ const buildLocationPath = (item: MoleculeLocationItem) => {
   justify-content: space-between;
   gap: var(--space-200);
 }
+
 .locationTitle__distance {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
   color: var(--color-text-light);
 }
 
