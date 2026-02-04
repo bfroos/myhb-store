@@ -4,6 +4,7 @@
   <PagesJobDescriptionBlock
     v-if="fixedBlocks.jobDescription"
     v-bind="fixedBlocks.jobDescription"
+    :seo="seo"
   />
   <BlockRenderer v-if="blocks" :blocks="blocks" />
 </template>

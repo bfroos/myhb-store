@@ -86,6 +86,12 @@
                   </p>
                 </div>
               </div>
+              <div class="jobDescription__aside__share">
+                <UiMoleculeShareButtons
+                  :share-text="seo?.metaTitle"
+                  share-i18n-key="cta.share"
+                />
+              </div>
             </div>
           </aside>
         </div>
@@ -102,6 +108,7 @@ import {
   ImageFormat,
 } from "~/lib/strapi/dto/enums";
 import { JobApplyTarget } from "~/lib/strapi/dto/enums";
+import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { StrapiRichText } from "~/lib/strapi/dto/types";
 import type { EmployeeDto } from "~/lib/strapi/dto/collections";
 
@@ -116,6 +123,7 @@ const props = defineProps<{
   url?: string;
   email?: string;
   recruiter?: EmployeeDto;
+  seo?: SharedSeoDto;
 }>();
 
 const { t } = useI18n();
@@ -195,6 +203,10 @@ const contractTypesLabel = computed(() => {
 .jobDescription__aside__recruiter p {
   font-size: var(--font-sm);
   line-height: var(--line-sm);
+}
+
+.jobDescription__aside__share {
+  margin-top: var(--space-800);
 }
 
 @media (min-width: 900px) {

@@ -86,7 +86,13 @@
     "shopGroupon": "Gutschein kaufen",
     "openMenu": "Menü öffnen",
     "goToHome": "Zur Startseite",
-    "watch": "Ansehen"
+    "watch": "Ansehen",
+    "share": {
+      "copy": "Link kopieren",
+      "copied": "Link kopiert",
+      "whatsapp": "Auf WhatsApp teilen",
+      "facebook": "Auf Facebook teilen"
+    }
   },
 
   "location": {
@@ -112,14 +118,6 @@
     "emptyState": {
       "title": "Keine Artikel gefunden",
       "description": "Leider sind keine Artikel für diese Kategorie in deiner ausgewählten Sprache verfügbar."
-    },
-    "article": {
-      "share": {
-        "copy": "Link kopieren",
-        "copied": "Link kopiert",
-        "whatsapp": "Auf WhatsApp teilen",
-        "facebook": "Auf Facebook teilen"
-      }
     }
   },
 

@@ -86,7 +86,13 @@
     "shopGroupon": "Shop Groupon",
     "openMenu": "Open Menu",
     "goToHome": "Go to Home",
-    "watch": "Watch"
+    "watch": "Watch",
+    "share": {
+      "copy": "Copy link",
+      "copied": "Link copied",
+      "whatsapp": "Share on WhatsApp",
+      "facebook": "Share on Facebook"
+    }
   },
 
   "location": {
@@ -112,14 +118,6 @@
     "emptyState": {
       "title": "No articles found",
       "description": "Unfortunately, no articles are available for this category in your selected language."
-    },
-    "article": {
-      "share": {
-        "copy": "Copy link",
-        "copied": "Link copied",
-        "whatsapp": "Share on WhatsApp",
-        "facebook": "Share on Facebook"
-      }
     }
   },
 

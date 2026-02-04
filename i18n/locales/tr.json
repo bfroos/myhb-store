@@ -86,7 +86,13 @@
     "shopGroupon": "Groupon'u satın al",
     "openMenu": "Menü aç",
     "goToHome": "Ana sayfaya git",
-    "watch": "İzle"
+    "watch": "İzle",
+    "share": {
+      "copy": "Bağlantıyı kopyala",
+      "copied": "Bağlantı kopyalandı",
+      "whatsapp": "WhatsApp'ta paylaş",
+      "facebook": "Facebook'ta paylaş"
+    }
   },
 
   "location": {
@@ -112,14 +118,6 @@
     "emptyState": {
       "title": "Makale bulunamadı",
       "description": "Maalesef, seçilen dilde bu kategori için makale bulunmamaktadır."
-    },
-    "article": {
-      "share": {
-        "copy": "Bağlantıyı kopyala",
-        "copied": "Bağlantı kopyalandı",
-        "whatsapp": "WhatsApp'ta paylaş",
-        "facebook": "Facebook'ta paylaş"
-      }
     }
   },
 

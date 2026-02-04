@@ -14,38 +14,10 @@
         <aside class="blogArticle__aside">
           <UiAtomDateTag v-if="displayDate" :date="displayDate" />
           <div class="blogArticle__share">
-            <UiAtomBaseButton
-              icon-only
-              variant="tertiary"
-              @click="copyLinkToClipboard"
-              v-tooltip.right="copyTooltip"
-              :aria-label="$t('blog.article.share.copy')"
-            >
-              <IconLink v-if="!copyTooltipSuccess" />
-              <IconCheck v-else />
-            </UiAtomBaseButton>
-            <UiAtomBaseButton
-              icon-only
-              variant="tertiary"
-              @click="shareOnWhatsApp"
-              v-tooltip.right="{
-                value: $t('blog.article.share.whatsapp'),
-              }"
-              :aria-label="$t('blog.article.share.whatsapp')"
-            >
-              <IconBrandWhatsapp />
-            </UiAtomBaseButton>
-            <UiAtomBaseButton
-              icon-only
-              variant="tertiary"
-              @click="shareOnFacebook"
-              v-tooltip.right="{
-                value: $t('blog.article.share.facebook'),
-              }"
-              :aria-label="$t('blog.article.share.facebook')"
-            >
-              <IconBrandFacebook />
-            </UiAtomBaseButton>
+            <UiMoleculeShareButtons
+              :share-text="headline"
+              share-i18n-key="blog.article.share"
+            />
           </div>
         </aside>
         <main
@@ -65,16 +37,10 @@
   </UiLayoutSectionBlock>
 </template>
 <script setup lang="ts">
-import {
-  IconBrandFacebook,
-  IconBrandWhatsapp,
-  IconLink,
-  IconCheck,
-} from "@tabler/icons-vue";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import type { StrapiBlock, StrapiRichText } from "~/lib/strapi/dto/types";
 
-const props = defineProps<{
+defineProps<{
   headline?: string;
   intro?: string;
   cover?: StrapiMedia;
@@ -82,42 +48,6 @@ const props = defineProps<{
   displayDate?: string;
   footnotes?: StrapiRichText;
 }>();
-
-const copyTooltipSuccess = ref(false);
-const copyTooltipLabel = computed(() =>
-  copyTooltipSuccess.value
-    ? $t("blog.article.share.copied")
-    : $t("blog.article.share.copy"),
-);
-const copyTooltip = computed(() => ({
-  value: copyTooltipLabel.value,
-}));
-
-async function copyLinkToClipboard() {
-  const currentUrl = window.location.href;
-  await navigator.clipboard.writeText(currentUrl);
-  copyTooltipSuccess.value = true;
-  setTimeout(() => {
-    copyTooltipSuccess.value = false;
-  }, 1500);
-}
-
-function shareOnWhatsApp() {
-  const currentUrl = window.location.href;
-  const shareText = props.headline
-    ? `${props.headline} ${currentUrl}`
-    : currentUrl;
-  const encodedText = encodeURIComponent(shareText);
-  const whatsappUrl = `https://wa.me/?text=${encodedText}`;
-  window.open(whatsappUrl, "_blank", "noopener,noreferrer");
-}
-
-function shareOnFacebook() {
-  const currentUrl = window.location.href;
-  const encodedUrl = encodeURIComponent(currentUrl);
-  const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
-  window.open(facebookUrl, "_blank", "noopener,noreferrer");
-}
 </script>
 <style scoped>
 .blogArticle__header {
@@ -242,6 +172,10 @@ function shareOnFacebook() {
   }
 
   .blogArticle__share {
+    flex-direction: column;
+  }
+
+  .blogArticle__share :deep(.shareButtons) {
     flex-direction: column;
   }
 
