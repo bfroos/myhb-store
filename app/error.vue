@@ -5,14 +5,14 @@
       <h1 class="error-page__title">
         {{ error?.statusCode }}
       </h1>
-      <p v-if="error?.statusMessage" class="error-page__message">
-        {{ error?.statusMessage }}
+      <p class="error-page__message">
+        {{ statusMessage }}
       </p>
-      <p v-if="error?.message" class="error-page__description">
-        {{ error?.message }}
+      <p class="error-page__description">
+        {{ description }}
       </p>
       <UiAtomBaseButton as="nuxt-link-locale" to="/" class="error-page__button">
-        {{ t("error.404.button") }}
+        {{ buttonLabel }}
       </UiAtomBaseButton>
     </main>
     <BaseAppFooter />
@@ -28,10 +28,25 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-useHead({
-  title: props.error?.statusMessage,
-  meta: [{ name: "robots", content: "noindex" }],
-});
+const statusCode = computed(() => props.error?.statusCode ?? 500);
+const is404 = computed(() => statusCode.value === 404);
+
+const statusMessage = computed(() =>
+  is404.value ? t("error.404.statusMessage") : t("error.500.statusMessage"),
+);
+const description = computed(() =>
+  is404.value ? t("error.404.message") : t("error.500.message"),
+);
+const buttonLabel = computed(() =>
+  is404.value ? t("error.404.button") : t("error.500.button"),
+);
+
+useHead(
+  computed(() => ({
+    title: statusMessage.value,
+    meta: [{ name: "robots", content: "noindex" }],
+  })),
+);
 </script>
 
 <style scoped>
