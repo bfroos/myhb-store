@@ -3,6 +3,40 @@ import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import { ColorTheme } from "~/lib/strapi/dto/enums";
 import type { CityPageWithLocationsDto } from "~/lib/strapi/dto/singleTypes";
+import { replacePlaceholderString } from "~/utils/placeholder";
+
+function applySeoPlaceholders(
+  seo: SharedSeoDto | undefined | null,
+  city: string,
+  count: number,
+): SharedSeoDto | null {
+  if (!seo) return null;
+  const replacements = [
+    { placeholder: "{{ city }}", replacement: city },
+    { placeholder: "{{ count }}", replacement: String(count) },
+  ];
+  return {
+    ...seo,
+    metaTitle: replacePlaceholderString(seo.metaTitle, replacements),
+    metaDescription: replacePlaceholderString(
+      seo.metaDescription,
+      replacements,
+    ),
+    openGraph: seo.openGraph
+      ? {
+          ...seo.openGraph,
+          ogTitle: replacePlaceholderString(
+            seo.openGraph.ogTitle,
+            replacements,
+          ),
+          ogDescription: replacePlaceholderString(
+            seo.openGraph.ogDescription,
+            replacements,
+          ),
+        }
+      : undefined,
+  };
+}
 
 export function useCityPage() {
   const { locale, fallbackLocale, t } = useI18n();
@@ -63,7 +97,11 @@ export function useCityPage() {
     cityName.value = data.value.data.city?.name ?? "";
     localizations.value = data.value.data.city
       ?.localizations as LocalizationDto[];
-    seo.value = data.value.data.cityPage?.seo as SharedSeoDto;
+    const rawSeo = data.value.data.cityPage?.seo as SharedSeoDto | undefined;
+    const locationCount =
+      (locations.value.open?.length ?? 0) +
+      (locations.value.openSoon?.length ?? 0);
+    seo.value = applySeoPlaceholders(rawSeo, cityName.value, locationCount);
     topBlocks.value = data.value.data.cityPage?.topBlocks as StrapiBlock[];
     bottomBlocks.value = data.value.data.cityPage
       ?.bottomBlocks as StrapiBlock[];

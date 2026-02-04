@@ -17,13 +17,17 @@ type Replacement = {
   replacement: string;
 };
 
+function getPlaceholderKey(placeholder: string): string {
+  const match = placeholder.match(/\{\{\s*(.+?)\s*\}\}/);
+  return (match?.[1] ?? placeholder).trim();
+}
+
 function replaceInString(text: string, replacements: Replacement[]): string {
   let result = text;
   for (const { placeholder, replacement } of replacements) {
-    result = result.replace(
-      new RegExp(escapeRegExp(placeholder), "g"),
-      replacement
-    );
+    const key = getPlaceholderKey(placeholder);
+    const regex = new RegExp(`\\{\\{\\s*${escapeRegExp(key)}\\s*\\}\\}`, "g");
+    result = result.replace(regex, replacement);
   }
   return result;
 }
@@ -34,7 +38,7 @@ function escapeRegExp(string: string): string {
 
 function replaceInTextNode(
   node: StrapiRichTextTextNode,
-  replacements: Replacement[]
+  replacements: Replacement[],
 ): StrapiRichTextTextNode {
   return {
     ...node,
@@ -44,7 +48,7 @@ function replaceInTextNode(
 
 function replaceInNode(
   node: StrapiRichTextNode,
-  replacements: Replacement[]
+  replacements: Replacement[],
 ): StrapiRichTextNode {
   if (node.type === "text" && "text" in node) {
     return replaceInTextNode(node as StrapiRichTextTextNode, replacements);
@@ -55,7 +59,7 @@ function replaceInNode(
       ...node,
       url: replaceInString(node.url, replacements),
       children: node.children?.map((child) =>
-        replaceInNode(child, replacements)
+        replaceInNode(child, replacements),
       ),
     };
   }
@@ -64,7 +68,7 @@ function replaceInNode(
     return {
       ...node,
       children: node.children.map((child) =>
-        replaceInNode(child, replacements)
+        replaceInNode(child, replacements),
       ),
     };
   }
@@ -74,13 +78,13 @@ function replaceInNode(
 
 function replaceInBlock(
   block: StrapiRichTextBlock,
-  replacements: Replacement[]
+  replacements: Replacement[],
 ): StrapiRichTextBlock {
   if (block.children && Array.isArray(block.children)) {
     return {
       ...block,
       children: block.children.map((child) =>
-        replaceInNode(child, replacements)
+        replaceInNode(child, replacements),
       ),
     };
   }
@@ -89,7 +93,7 @@ function replaceInBlock(
 
 export function replacePlaceholderString(
   value: string | StrapiRichText | null | undefined,
-  replacements: Replacement[]
+  replacements: Replacement[],
 ): string | undefined {
   if (!value) {
     return undefined;
@@ -104,7 +108,7 @@ export function replacePlaceholderString(
 
 export function replacePlaceholderRichtext(
   value: StrapiRichText | null | undefined,
-  replacements: Replacement[]
+  replacements: Replacement[],
 ): StrapiRichText | undefined {
   if (!value || !Array.isArray(value)) {
     return undefined;
