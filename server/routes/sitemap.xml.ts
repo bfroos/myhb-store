@@ -627,11 +627,13 @@ export default defineCachedEventHandler(
         id?: number;
         slug?: string;
         updatedAt?: string;
+        seo?: { excludeFromSitemap?: boolean };
         localizations?: Array<{ id?: number }>;
       }>("pages", {
         locale,
         fields: ["slug", "updatedAt"],
         populate: {
+          seo: { fields: ["excludeFromSitemap"] },
           localizations: {
             fields: ["id"],
           },
@@ -640,6 +642,7 @@ export default defineCachedEventHandler(
 
       for (const page of generalPages) {
         if (!page.slug) continue;
+        if (page.seo?.excludeFromSitemap) continue;
         const groupId = getGroupId(page, page.slug);
         if (!groupId) continue;
         const groupKey = buildGroupKey("general", groupId);
