@@ -2,6 +2,9 @@ import { readFile } from "node:fs/promises";
 import { isAbsolute, resolve as resolvePath } from "node:path";
 import qs from "qs";
 
+/** Nitro storage key for bundled server/assets/redirects.json */
+const BUNDLED_REDIRECTS_KEY = "redirects.json";
+
 type StrapiPagination = {
   page: number;
   pageSize: number;
@@ -101,13 +104,28 @@ const loadLocalRedirects = async (): Promise<
   if (!filePath) return new Map();
 
   let raw = "";
-  try {
-    raw = await readFile(resolveRedirectsFilePath(filePath), "utf8");
-  } catch (error: unknown) {
-    if ((error as NodeJS.ErrnoException)?.code === "ENOENT") {
+  const isBundledPath =
+    !isAbsolute(filePath) && filePath.endsWith("redirects.json");
+
+  if (isBundledPath) {
+    try {
+      const storage = useStorage("assets:server");
+      const data = await storage.getItem(BUNDLED_REDIRECTS_KEY);
+      if (typeof data === "string") raw = data;
+      else if (Buffer.isBuffer(data)) raw = data.toString("utf8");
+      else raw = "";
+    } catch {
       return new Map();
     }
-    return new Map();
+  } else {
+    try {
+      raw = await readFile(resolveRedirectsFilePath(filePath), "utf8");
+    } catch (error: unknown) {
+      if ((error as NodeJS.ErrnoException)?.code === "ENOENT") {
+        return new Map();
+      }
+      return new Map();
+    }
   }
 
   let parsed: unknown = null;
@@ -157,9 +175,19 @@ const fetchRedirects = async (): Promise<Map<string, RedirectAttributes>> => {
     const url = `${strapiUrl.replace(/\/+$/, "")}/api/redirects?${query}`;
     let response: StrapiListResponse<RedirectAttributes>;
     try {
-      response = await $fetch<StrapiListResponse<RedirectAttributes>>(url);
-    } catch {
+      response = await $fetch<StrapiListResponse<RedirectAttributes>>(url, {
+        headers: {
+          // Strapi v5: v4 format returns attributes wrapper; v5 is flat.
+          // Our parser handles both; v4 header ensures consistent format.
+          "Strapi-Response-Format": "v4",
+        },
+      });
+    } catch (err) {
       // Fail-open: don't block site if redirects API is down.
+      // Prüfe Strapi Permissions: Redirects → find/findMany für Public.
+      if (process.env.NODE_ENV === "development") {
+        console.warn("[redirects] Strapi API fehlgeschlagen:", err);
+      }
       return map;
     }
 

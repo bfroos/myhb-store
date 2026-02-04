@@ -65,6 +65,8 @@ The middleware is fail-open: if Strapi is unavailable, the site keeps working an
 
 Create an entry in the `redirect` collection.
 
+**Strapi Permissions:** Damit Redirects aus der Collection funktionieren, muss die Strapi-Rolle **Public** für den Content-Type **Redirect** die Berechtigung **find** (bzw. **findMany**) haben. Einstellungen → Users & Permissions → Roles → Public → Redirect → find aktivieren.
+
 Use path-only values with a leading slash:
 
 - `from`: `/behandlungen/botox/stirnfalte`
