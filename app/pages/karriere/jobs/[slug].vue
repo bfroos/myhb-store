@@ -37,7 +37,7 @@ const jobPostingSchema = computed(() =>
   buildJobPostingSchema(jobDetails.value, {
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
-    brandName: globals.value?.brand?.name,
+    brandName: globals.value?.brand?.name ?? "",
   }),
 );
 

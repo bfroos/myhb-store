@@ -4,7 +4,7 @@
       {{
         $t("newsletter.marketingText.headlineDiscount", {
           newsletterDiscountPercentage:
-            globals.ecommerce.newsletterDiscountPercentage,
+            globals?.ecommerce?.newsletterDiscountPercentage,
         })
       }}
     </h2>

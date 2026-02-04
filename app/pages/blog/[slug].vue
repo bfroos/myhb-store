@@ -28,7 +28,7 @@ const blogPostingSchema = computed(() =>
   buildBlogPostingSchema(article.value, {
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
-    brandName: globals.value?.brand?.name,
+    brandName: globals.value?.brand?.name ?? "",
   }),
 );
 

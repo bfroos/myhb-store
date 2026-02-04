@@ -10,12 +10,12 @@
           </h2>
           <UiLayoutRichText v-if="clubContent" :blocks="clubContent" />
           <UiAtomBaseButton
-            :href="globals.ecommerce.clubUrl"
+            :href="globals?.ecommerce?.clubUrl"
             size="lg"
             as="a"
             target="_blank"
             wide
-            v-if="globals.ecommerce.clubUrl"
+            v-if="globals?.ecommerce?.clubUrl"
           >
             {{ $t("cta.joinMyClub") }}
           </UiAtomBaseButton>
@@ -54,8 +54,8 @@
                 full-width
                 as="a"
                 size="lg"
-                :href="globals.ecommerce.couponUrl"
-                v-if="globals.ecommerce.couponUrl"
+                :href="globals?.ecommerce?.couponUrl"
+                v-if="globals?.ecommerce?.couponUrl"
                 target="_blank"
               >
                 {{ $t("cta.shopGroupon") }}
