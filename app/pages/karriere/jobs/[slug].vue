@@ -14,6 +14,7 @@ const {
   fixedBlocks,
   blocks,
   seo,
+  jobDetails,
   localizations,
   breadcrumbItems,
 } = useJobPage();
@@ -24,4 +25,19 @@ if (jobPageLoaded) {
   usePageI18nParams(localizations.value, "slug");
   await setPageSeo(seo.value);
 }
+
+// Schema.org JobPosting
+const config = useRuntimeConfig();
+const globals = useGlobals();
+const route = useRoute();
+
+const jobPostingSchema = computed(() =>
+  buildJobPostingSchema(jobDetails.value, {
+    publicUrl: (config.public.publicUrl as string) || "",
+    path: route.path,
+    brandName: globals.value?.brand?.name,
+  }),
+);
+
+useSchemaOrg(jobPostingSchema);
 </script>

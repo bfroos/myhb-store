@@ -1,86 +1,22 @@
-body .select {
-  display: inline-flex;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
+body .p-select {
+  --p-select-background: transparent;
+  --p-select-disabled-background: transparent;
+  --p-select-border-color: var(--color-gray-600);
+  --p-select-border-radius: 999px;
+  --p-select-color: var(--color-text);
+  --p-select-placeholder-color: var(--color-text-light);
+  --p-select-dropdown-color: var(--color-text);
+  --p-select-focus-border-color: var(--color-text);
+  --p-select-hover-border-color: var(--color-text);
 }
 
-body .select__trigger,
-body .select__label {
-  display: flex;
-  align-items: center;
-  gap: var(--space-200);
-  padding: var(--space-200) var(--space-300);
-  background: transparent;
-  border: none;
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-  color: var(--color-text);
-  transition: opacity 0.2s;
+body .p-select-option.p-select-option-selected {
+  --p-select-option-selected-background: var(--color-gray-700);
+  --p-select-option-selected-focus-background: var(--color-gray-900);
+  --p-select-option-selected-color: var(--color-white);
+  --p-select-option-selected-focus-color: var(--color-white);
 }
 
-body .select__trigger:hover,
-body .select__label:hover {
-  opacity: 0.7;
-}
-
-body .select__panel {
-  z-index: var(--z-index-dropdown);
-  position: absolute;
-  top: 100%;
-  right: 0;
-  margin-top: var(--space-200);
-  padding: var(--space-200);
-  background: var(--color-white);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--border-radius-400);
-  box-shadow: var(--shadow-5);
-  min-width: 150px;
-  overflow: hidden;
-}
-
-body [dir="rtl"] .select__panel {
-  right: auto;
-  left: 0;
-}
-
-body .select__list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-body .select__option {
-  display: block;
-  width: 100%;
-  padding: var(--space-300) var(--space-400);
-  text-align: left;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-  color: var(--color-text);
-  transition: background-color 0.2s;
-}
-
-body [dir="rtl"] .select__option {
-  text-align: right;
-}
-
-body .select__dropdown {
-  display: flex;
-}
-
-body .select__option:hover {
-  background-color: var(--color-gray-100);
-}
-
-body .select__option--active {
-  background-color: var(--color-gray-100);
-  font-weight: var(--font-medium);
-}
-
-body .select__option-content {
-  display: block;
+body .p-select-option:not(.p-select-option-selected):not(.p-disabled):hover {
+  --p-select-option-focus-background: var(--color-gray-200);
 }

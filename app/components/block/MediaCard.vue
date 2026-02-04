@@ -60,7 +60,7 @@ const props = defineProps<BlockMediaCardDto>();
 }
 
 .mediaBentoBlock__image {
-  aspect-ratio: 5/4;
+  aspect-ratio: 3/2;
 }
 
 .mediaCard__intro {

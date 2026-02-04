@@ -11,7 +11,6 @@
             option-label="label"
             option-value="value"
             :placeholder="t('blocks.jobTeasers.filter.placeholder')"
-            size="small"
             class="jobTeasers__filter-select"
             :aria-label="t('blocks.jobTeasers.filter.label')"
           />
@@ -197,8 +196,8 @@ function formatLocations(locations: LocationDto[]): string {
 
 .jobTeasers__link__inner b {
   display: block;
-  font-size: var(--font-lg);
-  line-height: var(--line-lg);
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
   margin: 0 0 var(--space-400);
 }
 
@@ -219,16 +218,15 @@ function formatLocations(locations: LocationDto[]): string {
 
 .jobTeasers__link__inner dl dt {
   display: flex;
-  align-items: center;
   gap: var(--space-200);
 }
 
 .jobTeasers__link__inner :deep(svg) {
-  color: var(--color-text-muted);
-  transition: background 0.2s ease;
+  color: var(--color-text-light);
+  transition: color 0.2s ease;
 }
 
-.jobTeasers__link:hover .jobTeasers__link__inner :deep(svg) {
+.jobTeasers__link:hover .jobTeasers__link__inner > :deep(svg) {
   color: var(--color-text);
 }
 

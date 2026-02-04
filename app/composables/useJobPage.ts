@@ -94,6 +94,7 @@ export function useJobPage() {
   return {
     fetchJobPage,
     jobPage,
+    jobDetails,
     fixedBlocks,
     blocks,
     localizations,

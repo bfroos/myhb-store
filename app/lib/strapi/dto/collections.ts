@@ -127,6 +127,7 @@ export type JobDto = {
   hourlyRateMaxInEuroCent?: number;
   cover: StrapiMedia;
   recruiter?: EmployeeDto;
+  updatedAt?: string;
 };
 
 export type LocationDto = {
