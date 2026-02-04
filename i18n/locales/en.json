@@ -108,6 +108,9 @@
         "center": "Treatments in our lounge in {city}",
         "clinic": "Treatments in our private clinic in {city}"
       }
+    },
+    "jobTeasers": {
+      "headline": "Job offers in {city}"
     }
   },
 

@@ -238,6 +238,7 @@ watch(
   display: flex;
   align-items: center;
   gap: var(--space-400);
+  padding: var(--space-400) 0;
   cursor: pointer;
 }
 

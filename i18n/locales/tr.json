@@ -108,6 +108,9 @@
         "center": "{city} şehrindeki lounge'umuzda tedaviler",
         "clinic": "{city} şehrindeki özel kliniğimizde tedaviler"
       }
+    },
+    "jobTeasers": {
+      "headline": "{city} şehrindeki iş ilanları"
     }
   },
 

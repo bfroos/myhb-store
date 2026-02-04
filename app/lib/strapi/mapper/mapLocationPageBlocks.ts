@@ -4,6 +4,8 @@ import {
   SharedButtonAction,
   SharedButtonMethod,
   LocationType,
+  MediaBentoMediaItemAlignment,
+  MediaBentoLayout,
 } from "../dto/enums";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import type { SharedButtonDto } from "../dto/components";
@@ -34,6 +36,7 @@ export function mapLocationFixedBlocks(
     locationDirections: buildLocationDirectionsBlockModel(),
     about: buildAboutBlockModel(),
     treatmentTeasers: buildTreatmentTeasersBlockModel(),
+    jobTeasers: buildJobTeasersBlockModel(),
   };
 
   function buildTreatmentHeroBlockModel() {
@@ -164,9 +167,30 @@ export function mapLocationFixedBlocks(
       headline,
       intro,
       content,
-      media: aboutItem?.media,
+      mediaItems: aboutItem?.media ? [aboutItem.media] : [],
+      mediaItemAlignment: MediaBentoMediaItemAlignment.HORIZONTAL,
       links: [link],
-      layout: OrganismMediaCardLayout.MEDIA_LEFT,
+      layout: MediaBentoLayout.MEDIA_LEFT,
+      showReviewsBadge: true,
+    };
+  }
+
+  function buildJobTeasersBlockModel() {
+    const jobs = location?.jobs;
+
+    if (!jobs || jobs.length === 0) {
+      return;
+    }
+
+    return {
+      headline: t("location.jobTeasers.headline", {
+        city: location?.city?.name ?? "",
+      }),
+      showFilters: false,
+      jobs,
+      cardSettings: {
+        colorTheme: ColorTheme.NEUTRAL,
+      },
     };
   }
 

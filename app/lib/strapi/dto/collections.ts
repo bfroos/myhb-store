@@ -153,6 +153,7 @@ export type LocationDto = {
   about?: LocationAboutDto;
   directions?: BlockDirectionsDto;
   calendlyUrl?: string;
+  jobs?: JobDto[];
 };
 
 export type ProductDto = {

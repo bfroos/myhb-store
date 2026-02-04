@@ -5,7 +5,7 @@
         <div class="jobTeasers__header">
           <h2>{{ headline }}</h2>
           <Select
-            v-if="availableCities.length > 0"
+            v-if="(props.jobs?.length ?? 0) > 1 && availableCities.length > 0"
             v-model="selectedCity"
             :options="cityOptions"
             option-label="label"

@@ -9,11 +9,15 @@
     v-if="fixedBlocks?.locationDirections"
     v-bind="fixedBlocks.locationDirections"
   />
-  <BlockMediaCard v-if="fixedBlocks?.about" v-bind="fixedBlocks.about" />
-  <BlockReviewsBlock v-if="fixedBlocks?.reviews" v-bind="fixedBlocks.reviews" />
+  <BlockMediaBento v-if="fixedBlocks?.about" v-bind="fixedBlocks.about" />
   <BlockTreatmentTeasers
     v-if="fixedBlocks?.treatmentTeasers"
     v-bind="fixedBlocks.treatmentTeasers"
+  />
+  <BlockReviewsBlock v-if="fixedBlocks?.reviews" v-bind="fixedBlocks.reviews" />
+  <BlockJobTeasers
+    v-if="fixedBlocks?.jobTeasers"
+    v-bind="fixedBlocks.jobTeasers"
   />
 </template>
 <script setup lang="ts">
