@@ -54,9 +54,13 @@ export function useDoctorPage(brandName: string = "") {
     metaDescription: t("doctors.doctor.seo.description", {
       role: fixedBlocks.value?.hero?.intro,
       brandName: brandName,
-      cities: page.value?.locations
-        .map((location: any) => location.city)
-        .join(", "),
+      cities: [
+        ...new Set(
+          page.value?.locations
+            ?.map((location: any) => location.city?.name)
+            ?.filter(Boolean) ?? [],
+        ),
+      ].join(", "),
     }),
   }));
 

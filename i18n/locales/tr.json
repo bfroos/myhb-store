@@ -213,7 +213,7 @@
         }
       },
       "seo": {
-        "description": "{ role } { brandName }'de"
+        "description": "{ role } { brandName }'de { cities } – Çalışma hakkında bilgiler"
       }
     }
   },

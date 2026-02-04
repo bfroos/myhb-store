@@ -213,7 +213,7 @@
         }
       },
       "seo": {
-        "description": "{ role } bei { brandName }"
+        "description": "{ role } bei { brandName } in { cities } – Informationen zu meiner Tätigkeit"
       }
     }
   },
