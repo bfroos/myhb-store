@@ -7,6 +7,7 @@
     :seo="seo"
   />
   <BlockRenderer v-if="blocks" :blocks="blocks" />
+  <BlockCompanyStats />
 </template>
 
 <script setup lang="ts">
