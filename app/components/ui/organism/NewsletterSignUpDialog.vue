@@ -24,7 +24,9 @@
     </ul>
     <template v-if="success">
       <Message severity="success">
-        {{ $t("newsletter.success") }}
+        {{
+          $t("newsletter.success", { brandNameShort })
+        }}
       </Message>
       <div class="newsletterSignUpDialog__actions">
         <UiAtomBaseButton :disabled="loading" @click="handleClose">
@@ -76,6 +78,7 @@ import { inject } from "vue";
 import InputText from "primevue/inputtext";
 
 const globals = useGlobals();
+const { brandNameShort } = useBrand();
 
 const dialogRef = inject("dialogRef") as any;
 

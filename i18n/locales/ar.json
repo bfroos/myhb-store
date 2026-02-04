@@ -82,7 +82,7 @@
     "subscribe": "اشترك",
     "cancel": "إلغاء",
     "close": "إغلاق",
-    "joinMyClub": "أصبح عضوًا",
+    "joinMyClub": "انضم إلى نادي {brandNameShort}",
     "shopGroupon": "شراء القسيمة",
     "openMenu": "افتح القائمة",
     "goToHome": "العودة إلى الصفحة الرئيسية",
@@ -165,9 +165,20 @@
     "plannedLocations": "المواقع المخطط لها",
     "allLocations": "جميع المواقع",
     "location": {
+      "locationType": {
+        "lounge": "لاونج",
+        "center": "سنتر",
+        "clinic": "عيادة خاصة"
+      },
       "seo": {
-        "title": "{locationName}",
-        "description": "اكتشف علاجاتنا في {city}، {locationName}."
+        "title": "{brandNameShort} {locationType} {city}, {locationName}, {street} {houseNumber}, {postalCode} {city}",
+        "description": "{brandName} في {city}، {locationName} – أوقات العمل والعلاجات والمزيد. جميع المعلومات هنا!"
+      },
+      "locationTreatment": {
+        "seo": {
+          "title": "{treatmentName} علاج في {brandNameShort} في {city}، {locationName}",
+          "description": "{brandName} في {city}، {locationName} – {treatmentName} – أوقات العمل وجميع تفاصيل العلاج."
+        }
       },
       "openingHoursOpenNewToday": "افتتاح جديد اليوم",
       "openingHoursOpenSoon": "من {date}",
@@ -389,7 +400,7 @@
       "treatmentNews": "أخبار عن العلاجات",
       "eventInvitations": "دعوات للحدثات"
     },
-    "success": "مرحبًا بك في MY! إذا لم تكن عنوانك مسجل بالفعل، ستتلقى بريدًا إلكتروني للتحقق قريبًا. إذا كنت مسجلًا بالفعل، لن يحدث شيء آخر.",
+    "success": "مرحبًا بك في {brandNameShort}! إذا لم تكن عنوانك مسجل بالفعل، ستتلقى بريدًا إلكتروني للتحقق قريبًا. إذا كنت مسجلًا بالفعل، لن يحدث شيء آخر.",
     "emailPlaceholder": "عنوان البريد الإلكتروني",
     "emailLabel": "عنوان البريد الإلكتروني",
     "errors": {

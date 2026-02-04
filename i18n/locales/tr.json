@@ -82,7 +82,7 @@
     "subscribe": "Abone ol",
     "cancel": "İptal",
     "close": "Kapat",
-    "joinMyClub": "MY Club'a katıl",
+    "joinMyClub": "{brandNameShort} Club'a katıl",
     "shopGroupon": "Groupon'u satın al",
     "openMenu": "Menü aç",
     "goToHome": "Ana sayfaya git",
@@ -165,9 +165,20 @@
     "plannedLocations": "Planlanmış konumlar",
     "allLocations": "Tüm konumlar",
     "location": {
+      "locationType": {
+        "lounge": "Lounge",
+        "center": "Center",
+        "clinic": "Özel Klinik"
+      },
       "seo": {
-        "title": "{locationName}",
-        "description": "{city} şehrindeki {locationName} konumumuzdaki tedavilerimizi keşfedin."
+        "title": "{brandNameShort} {locationType} {city}, {locationName}, {street} {houseNumber}, {postalCode} {city}",
+        "description": "{brandName} {city}, {locationName} – Çalışma saatleri, tedaviler ve daha fazlası. Tüm bilgiler burada!"
+      },
+      "locationTreatment": {
+        "seo": {
+          "title": "{treatmentName} tedavisi {brandNameShort}'de {city}, {locationName}",
+          "description": "{brandName} {city}, {locationName} – {treatmentName} – Çalışma saatleri ve tedaviye dair tüm detaylar."
+        }
       },
       "openingHoursOpenNewToday": "Bugün yeni açılış",
       "openingHoursOpenSoon": "{date} tarihinden itibaren",
@@ -390,7 +401,7 @@
       "treatmentNews": "Tedavi Haberleri",
       "eventInvitations": "Etkinlik Davetleri"
     },
-    "success": "MY'ye hoş geldiniz! Eğer adresiniz henüz kayıtlı değilse, doğrulama e-postasını size yakında göndereceğiz. Eğer zaten kayıtlıysanız, hiçbir şey olmayacak.",
+    "success": "{brandNameShort}'ye hoş geldiniz! Eğer adresiniz henüz kayıtlı değilse, doğrulama e-postasını size yakında göndereceğiz. Eğer zaten kayıtlıysanız, hiçbir şey olmayacak.",
     "emailPlaceholder": "E-postanız",
     "emailLabel": "E-posta adresi",
     "errors": {

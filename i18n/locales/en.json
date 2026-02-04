@@ -82,7 +82,7 @@
     "subscribe": "Subscribe",
     "cancel": "Cancel",
     "close": "Close",
-    "joinMyClub": "Join My Club",
+    "joinMyClub": "Join {brandNameShort} Club",
     "shopGroupon": "Shop Groupon",
     "openMenu": "Open Menu",
     "goToHome": "Go to Home",
@@ -165,9 +165,20 @@
     "plannedLocations": "Planned locations",
     "allLocations": "All locations",
     "location": {
+      "locationType": {
+        "lounge": "Lounge",
+        "center": "Center",
+        "clinic": "Private Clinic"
+      },
       "seo": {
-        "title": "{locationName}",
-        "description": "Discover our treatments in {city}, {locationName}."
+        "title": "{brandNameShort} {locationType} {city}, {locationName}, {street} {houseNumber}, {postalCode} {city}",
+        "description": "{brandName} in {city}, {locationName} – Opening hours, treatments & more. Find all the info here!"
+      },
+      "locationTreatment": {
+        "seo": {
+          "title": "{treatmentName} treatment at {brandNameShort} in {city}, {locationName}",
+          "description": "{brandName} in {city}, {locationName} – {treatmentName} – Opening hours and all details about the treatment."
+        }
       },
       "openingHoursOpenNewToday": "New opening today",
       "openingHoursOpenSoon": "from {date}",
@@ -390,7 +401,7 @@
       "treatmentNews": "News about treatments",
       "eventInvitations": "Event invitations"
     },
-    "success": "Welcome to MY! If the address is not yet registered, you will receive a confirmation email shortly. If you are already registered, nothing will happen.",
+    "success": "Welcome to {brandNameShort}! If the address is not yet registered, you will receive a confirmation email shortly. If you are already registered, nothing will happen.",
     "emailPlaceholder": "Your email address",
     "emailLabel": "Email address",
     "errors": {

@@ -1,6 +1,12 @@
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 
+function toOgImageValue(
+  media: StrapiMedia | null | undefined,
+): string | undefined {
+  return media?.url ?? undefined;
+}
+
 /**
  * Map i18n locale codes to Open Graph locale format.
  * Open Graph expects "ll_CC" (e.g. "de_DE"), while i18n uses "ll" codes.
@@ -69,7 +75,9 @@ export async function setPageSeo(
         pageSeo?.openGraph?.ogDescription ||
         pageSeo?.metaDescription ||
         globalsSeo?.defaultDescription,
-      ogImage: pageSeo?.openGraph?.ogImage || fallbackOgImage,
+      ogImage:
+        toOgImageValue(pageSeo?.openGraph?.ogImage) ??
+        toOgImageValue(fallbackOgImage),
     });
   });
 }

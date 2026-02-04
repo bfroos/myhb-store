@@ -70,7 +70,7 @@ export function mapLocationFixedBlocks(
     return {
       announcementText: announcementText[locationOpenStatus],
       headline: location?.name,
-      headlinePrefix: brandName,
+      headlinePrefix: `${brandName} · ${location?.city?.name}`,
       cover: location?.buildingImage,
       text: location?.description,
       cta,

@@ -15,7 +15,9 @@
       </li>
     </ul>
     <Message v-if="success" severity="success">
-      {{ $t("newsletter.success") }}
+      {{
+        $t("newsletter.success", { brandNameShort })
+      }}
     </Message>
     <form v-else class="newsletterSubscriptionForm__form" @submit="submit">
       <Message v-if="error" severity="error">
@@ -47,6 +49,7 @@ import {
   IconRosetteDiscountCheck,
 } from "@tabler/icons-vue";
 
+const { brandNameShort } = useBrand();
 const {
   email,
   loading,

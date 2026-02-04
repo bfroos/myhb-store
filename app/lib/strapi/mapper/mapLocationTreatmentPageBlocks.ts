@@ -53,7 +53,7 @@ export function mapLocationTreatmentPageFixedBlocks(
     const fullLocationName = `${location.city?.name ?? ""} · ${location.name}`;
 
     return {
-      eyebrow: fullLocationName,
+      headlinePrefix: fullLocationName,
       headline: treatmentPage.hero?.headline ?? treatmentPage.name,
       headlineSuffix: treatmentPage.hero?.headlineSuffix,
       subline: treatmentPage.hero?.subline,

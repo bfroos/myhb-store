@@ -5,7 +5,7 @@
         <div class="myClub__club">
           <h2 class="myClub__club__header">
             <ImageAppLogo />
-            <span class="sr-only">MY</span>
+            <span class="sr-only">{{ brandNameShort }}</span>
             <span>Club</span>
           </h2>
           <UiLayoutRichText v-if="clubContent" :blocks="clubContent" />
@@ -17,7 +17,7 @@
             wide
             v-if="globals?.ecommerce?.clubUrl"
           >
-            {{ $t("cta.joinMyClub") }}
+            {{ $t("cta.joinMyClub", { brandNameShort }) }}
           </UiAtomBaseButton>
           <ul class="myClub___benefits">
             <li v-for="benefit in clubBenefits" :key="benefit.id">
@@ -74,6 +74,7 @@ import type { BlockMyClubDto } from "~/lib/strapi/dto/components";
 defineProps<BlockMyClubDto>();
 
 const globals = useGlobals();
+const { brandNameShort } = useBrand();
 </script>
 <style scoped>
 .myClub {

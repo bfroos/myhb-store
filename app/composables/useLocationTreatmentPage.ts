@@ -113,9 +113,31 @@ export function useLocationTreatmentPage() {
     ),
   );
 
-  const seo = computed(() => ({
-    metaTitle: treatmentPage.value?.name,
-  }));
+  const { brandName, brandNameShort } = useBrand();
+  const seo = computed(() => {
+    const loc = location.value;
+    const treatmentName = treatmentPage.value?.name ?? "";
+    const locationType = loc?.type
+      ? t(`locations.location.locationType.${loc.type}`)
+      : "";
+    return {
+      metaTitle: t("locations.location.locationTreatment.seo.title", {
+        treatmentName,
+        brandNameShort: brandNameShort.value,
+        locationName: loc?.name ?? "",
+        city: loc?.city?.name ?? "",
+      }),
+      metaDescription: t(
+        "locations.location.locationTreatment.seo.description",
+        {
+          brandName: brandName.value,
+          city: loc?.city?.name ?? "",
+          locationName: loc?.name ?? "",
+          treatmentName,
+        },
+      ),
+    };
+  });
 
   return {
     fetchPage,

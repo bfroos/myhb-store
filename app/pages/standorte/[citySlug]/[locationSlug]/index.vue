@@ -21,8 +21,6 @@
   />
 </template>
 <script setup lang="ts">
-const globals = useGlobals();
-
 const {
   fetchWithTreatments,
   fixedBlocks,
@@ -30,7 +28,7 @@ const {
   locationLocalizations,
   cityLocalizations,
   seo,
-} = useLocationPage(globals.value?.brand?.name ?? "");
+} = useLocationPage();
 
 const locationLoaded = await fetchWithTreatments();
 

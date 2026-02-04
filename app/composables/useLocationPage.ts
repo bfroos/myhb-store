@@ -7,7 +7,7 @@ import { mapLocationFixedBlocks } from "~/lib/strapi/mapper/mapLocationPageBlock
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
 import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 
-export function useLocationPage(brandName: string = "") {
+export function useLocationPage() {
   const { locale, fallbackLocale, t } = useI18n();
   const route = useRoute();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
@@ -64,24 +64,39 @@ export function useLocationPage(brandName: string = "") {
     return true;
   }
 
+  const { brandName, brandNameShort } = useBrand();
   const fixedBlocks = computed(() =>
     mapLocationFixedBlocks(
       location.value as LocationDto,
       locationOpenStatus.value as LocationOpenStatus,
-      brandName,
+      brandName.value,
       treatmentPages.value,
     ),
   );
 
-  const seo = computed(() => ({
-    metaTitle: t("locations.location.seo.title", {
-      locationName: location.value?.name ?? "",
-    }),
-    metaDescription: t("locations.location.seo.description", {
-      locationName: location.value?.name ?? "",
-      city: location.value?.city?.name ?? "",
-    }),
-  }));
+  const seo = computed(() => {
+    const loc = location.value;
+    const locationType = loc?.type
+      ? t(`locations.location.locationType.${loc.type}`)
+      : "";
+    return {
+      metaTitle: t("locations.location.seo.title", {
+        brandNameShort: brandNameShort.value,
+        locationType,
+        street: loc?.address?.street ?? "",
+        houseNumber: loc?.address?.houseNumber ?? "",
+        postalCode: loc?.address?.postalCode ?? "",
+        city: loc?.city?.name ?? "",
+        locationName: loc?.name ?? "",
+      }),
+      metaDescription: t("locations.location.seo.description", {
+        brandName: brandName.value,
+        city: loc?.city?.name ?? "",
+        location: loc?.name ?? "",
+        locationName: loc?.name ?? "",
+      }),
+    };
+  });
 
   return {
     fetchWithTreatments,
