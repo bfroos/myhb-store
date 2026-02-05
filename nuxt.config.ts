@@ -19,11 +19,15 @@ export default defineNuxtConfig({
     },
   },
   fonts: {
-    defaults: {
-      weights: [400, 500],
-      styles: ["normal"],
-      subsets: ["latin-ext", "latin"],
-    },
+    provider: "bunny",
+    families: [
+      {
+        name: "Inter",
+        weights: [400, 500],
+        styles: ["normal"],
+        subsets: ["latin"],
+      },
+    ],
   },
   app: {
     head: {
