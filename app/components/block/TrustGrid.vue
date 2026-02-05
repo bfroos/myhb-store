@@ -1,130 +1,157 @@
 <template>
-  <UiLayoutSectionBlock v-if="items && items.length > 0">
+  <UiLayoutSectionBlock v-if="hasContent">
     <UiLayoutCardSurface :card-settings="cardSettings">
       <div
-        class="trustGrid"
+        class="trust"
         :class="{
-          'trustGrid--itemsPosition-aside':
+          'trust--headlineAside':
             itemsPosition === TrustGridItemsPosition.ASIDE,
-
-          'trustGrid--iconPosition-aside':
-            iconPosition === TrustGridIconPosition.ASIDE,
+          'trust--iconAside': iconPosition === TrustGridIconPosition.ASIDE,
         }"
       >
-        <div v-if="headline" class="trustGrid__body">
-          <h2>{{ headline }}</h2>
-        </div>
-        <ul class="trustGrid__items">
-          <li v-for="item in items" :key="item.heading">
+        <header v-if="headline" class="trust__header">
+          <h2 class="trust__heading">{{ headline }}</h2>
+        </header>
+        <ul class="trust__list" role="list">
+          <li
+            v-for="(item, index) in items"
+            :key="item.heading ?? index"
+            class="trust__item"
+          >
             <UiLayoutIconWrapper
-              v-if="item.icon && item.icon.iconData"
+              v-if="item.icon?.iconData"
               :size="48"
               :icon="item.icon"
-              class="trustGrid__items__icon"
+              class="trust__item-icon"
             >
               <g v-html="item.icon.iconData" />
             </UiLayoutIconWrapper>
-            <h3 v-if="item.heading">{{ item.heading }}</h3>
-            <UiLayoutRichText
-              v-if="item.content"
-              :blocks="item.content"
-              class="trustGrid__items__description"
-            />
+            <h3 v-if="item.heading" class="trust__item-heading">
+              {{ item.heading }}
+            </h3>
+            <div
+              v-if="(item.content?.length ?? 0) > 0"
+              class="trust__item-content"
+            >
+              <UiLayoutRichText :blocks="item.content ?? []" />
+            </div>
           </li>
         </ul>
       </div>
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
+
 <script setup lang="ts">
 import {
-  TrustGridItemsPosition,
   TrustGridIconPosition,
+  TrustGridItemsPosition,
 } from "~/lib/strapi/dto/enums";
 import type { BlockTrustGridDto } from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockTrustGridDto>();
+
+const hasContent = computed(() => (props.items?.length ?? 0) > 0);
 </script>
 
 <style scoped>
-.trustGrid {
+.trust {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
-.trustGrid__body {
+
+.trust__header {
   padding: var(--space-card-pad);
-  border: 1px solid var(--color-border-mute);
-  border-width: 0 0 1px 0;
+  border-bottom: 1px solid var(--color-border-mute);
 }
-.trustGrid__items {
+
+.trust__heading {
+  margin: 0;
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
+}
+
+.trust__list {
   display: flex;
   flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
   overflow: hidden;
   border-radius: var(--border-radius-card);
 }
-.trustGrid__items li {
+
+.trust__item {
   display: flex;
   flex-direction: column;
   gap: var(--space-200);
   padding: var(--space-card-pad);
   border-bottom: 1px solid var(--color-border-mute);
 }
-.trustGrid__items li > div {
-  color: var(--color-text-light);
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-}
-.trustGrid__items li > h3 {
+
+.trust__item-heading {
   font-size: var(--font-lg);
   line-height: var(--line-lg);
   font-weight: var(--font-bold);
+  margin: 0;
 }
 
-.trustGrid--iconPosition-aside .trustGrid__items > li {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  grid-template-rows: max-content max-content;
-  column-gap: var(--space-400);
+.trust__item-content {
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
 }
 
-.trustGrid__items__icon {
-  grid-row: 1 / 3;
-}
-.trustGrid__items__description {
-  grid-row: 2 / 3;
-}
-.trustGrid__items__description > *:last-child {
+.trust__item-content > *:last-child {
   margin-bottom: 0;
 }
 
-@media screen and (min-width: 600px) {
-  .trustGrid--itemsPosition-aside .trustGrid__items {
+.trust--iconAside .trust__item {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-template-rows: auto auto;
+  column-gap: var(--space-400);
+}
+
+.trust--iconAside .trust__item-icon {
+  grid-row: 1 / -1;
+}
+
+.trust--iconAside .trust__item-content {
+  grid-row: 2;
+}
+
+@media (min-width: 600px) {
+  .trust__item {
+    flex: 0 1 50%;
+    border-right: 1px solid var(--color-border-mute);
+  }
+
+  .trust--headlineAside .trust__list {
     flex: 2;
   }
-  .trustGrid__items li {
-    flex: 0 1 50%;
+}
+
+@media (min-width: 900px) {
+  .trust--headlineAside {
+    flex-direction: row;
+  }
+
+  .trust--headlineAside .trust__header {
+    flex: 1;
+    border-bottom: none;
     border-right: 1px solid var(--color-border-mute);
   }
 }
 
-@media screen and (min-width: 900px) {
-  .trustGrid--itemsPosition-aside .trustGrid__body {
-    flex: 1;
-    border-width: 0 1px 0 0;
-  }
-  .trustGrid--itemsPosition-aside {
-    flex-direction: row;
-  }
-}
-
-@media screen and (min-width: 1200px) {
-  .trustGrid__items li {
+@media (min-width: 1200px) {
+  .trust__item {
     flex: 0 1 25%;
   }
-  .trustGrid--itemsPosition-aside .trustGrid__items > li {
-    flex: 0 1 50%;
-  }
-  .trustGrid--iconPosition-aside .trustGrid__items > li {
+
+  .trust--headlineAside .trust__list .trust__item,
+  .trust--iconAside .trust__list .trust__item {
     flex: 0 1 50%;
   }
 }

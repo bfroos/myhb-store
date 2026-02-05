@@ -1,146 +1,195 @@
 <template>
-  <UiLayoutSectionBlock>
+  <UiLayoutSectionBlock v-if="hasContent">
     <UiLayoutCardSurface :card-settings="cardSettings">
-      <article class="processSteps">
-        <header class="processSteps__header">
-          <h2 v-if="headline">{{ headline }}</h2>
-          <UiLayoutRichText
-            v-if="content && content.length > 0"
-            :blocks="content"
-          />
-          <UiMoleculeButtonGroup v-if="links && links.length > 0">
-            <SharedButton v-for="link in links" :key="link.id" :button="link" />
-          </UiMoleculeButtonGroup>
+      <div class="steps">
+        <header class="steps__header">
+          <h2 v-if="headline" class="steps__heading">{{ headline }}</h2>
+          <div v-if="hasContentBlocks" class="steps__intro">
+            <UiLayoutRichText :blocks="content!" />
+          </div>
+          <div v-if="hasLinks" class="steps__links">
+            <UiMoleculeButtonGroup>
+              <SharedButton
+                v-for="link in links"
+                :key="link.id"
+                :button="link"
+              />
+            </UiMoleculeButtonGroup>
+          </div>
         </header>
-        <ol v-if="steps && steps.length > 0" class="processSteps__items">
+        <ol v-if="hasSteps" class="steps__list" role="list">
           <li
-            v-for="step in steps"
-            :key="step.heading"
-            class="processSteps__item"
+            v-for="(step, index) in steps"
+            :key="step.heading ?? index"
+            class="steps__item"
           >
-            <div class="processSteps__itemImage">
+            <figure class="steps__figure">
               <UiAtomMediaPicture
                 v-if="step.image && isMediaImage(step.image)"
                 :media="step.image"
-                :sources="{
-                  [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-                }"
+                :sources="imageSources"
+                class="steps__image"
               />
-            </div>
-            <div>
-              <h3>{{ step.heading }}</h3>
-              <p>{{ step.text }}</p>
+              <span class="steps__badge" aria-hidden="true">
+                {{ index + 1 }}
+              </span>
+            </figure>
+            <div class="steps__body">
+              <h3 v-if="step.heading" class="steps__title">
+                {{ step.heading }}
+              </h3>
+              <p v-if="step.text" class="steps__text">{{ step.text }}</p>
             </div>
           </li>
         </ol>
-      </article>
+      </div>
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
+
 <script setup lang="ts">
-import type { BlockProcessStepsDto } from "~/lib/strapi/dto/components";
 import { ImageFormat, ImageBreakpoint } from "~/lib/strapi/dto/enums";
+import type { BlockProcessStepsDto } from "~/lib/strapi/dto/components";
+import { isMediaImage } from "~/utils/media";
 
 const props = defineProps<BlockProcessStepsDto>();
+
+const imageSources = {
+  [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
+};
+
+const hasContent = computed(
+  () =>
+    !!props.headline ||
+    (props.content?.length ?? 0) > 0 ||
+    (props.links?.length ?? 0) > 0 ||
+    (props.steps?.length ?? 0) > 0,
+);
+
+const hasContentBlocks = computed(() => (props.content?.length ?? 0) > 0);
+
+const hasLinks = computed(() => (props.links?.length ?? 0) > 0);
+
+const hasSteps = computed(() => (props.steps?.length ?? 0) > 0);
 </script>
+
 <style scoped>
-.processSteps {
+.steps {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.processSteps__header {
+.steps__header {
   padding: var(--space-card-pad);
   background-color: var(--color-gray-200);
   border-radius: var(--border-radius-card) var(--border-radius-card) 0 0;
 }
 
-.processSteps__header h2 {
+.steps__heading {
   font-size: var(--font-xl);
   line-height: var(--line-xl);
+  margin: 0 0 var(--space-600);
+}
+
+.steps__intro {
   margin-bottom: var(--space-600);
 }
 
-.processSteps__itemImage {
-  position: relative;
+.steps__intro:last-child {
+  margin-bottom: 0;
 }
 
-.processSteps__items {
-  counter-reset: step;
+.steps__links {
+  margin-top: var(--space-600);
+}
+
+.steps__list {
+  counter-reset: none;
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.processSteps__item {
-  border-top: 1px solid var(--color-border-mute);
+.steps__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-500);
   padding: var(--space-card-pad);
-  counter-increment: step;
+  border-top: 1px solid var(--color-border-mute);
 }
 
-.processSteps__item :deep(picture) img {
-  aspect-ratio: 5 / 3;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: var(--border-radius-500);
-}
-
-.processSteps__itemImage {
+.steps__figure {
+  position: relative;
   margin: var(--space-400);
 }
 
-.processSteps__itemImage::before {
-  content: counter(step, decimal);
+.steps__image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  border-radius: var(--border-radius-500);
+}
+
+.steps__image :deep(img) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: inherit;
+}
+
+.steps__badge {
   position: absolute;
   top: 0;
   left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   transform: translate(-50%, -50%);
   background-color: var(--color-black);
   color: var(--color-white);
+  font-weight: 600;
+  font-size: var(--font-sm);
   border-radius: 50%;
 }
 
-.processSteps__item h3 {
+.steps__title {
   margin: 0 0 var(--space-200);
 }
 
-.processSteps__item p {
+.steps__text {
   font-size: var(--font-sm);
   line-height: var(--line-sm);
   color: var(--color-text-light);
 }
 
-@media screen and (min-width: 900px) {
-  .processSteps__header {
-    border-radius: var(--border-radius-card) 0 0 var(--border-radius-card);
-  }
-
-  .processSteps {
+@media (min-width: 900px) {
+  .steps {
     flex-direction: row;
   }
 
-  .processSteps__header {
-    flex: 1;
+  .steps__header {
+    flex: 1 1 33%;
+    border-radius: var(--border-radius-card) 0 0 var(--border-radius-card);
   }
 
-  .processSteps__items {
-    flex: 2;
+  .steps__list {
+    flex: 2 1 67%;
   }
 
-  .processSteps__item {
+  .steps__item {
+    flex-direction: row;
     display: grid;
     grid-template-columns: 220px 1fr;
     gap: var(--space-600);
     align-items: center;
   }
 
-  .processSteps__item :deep(picture) img {
+  .steps__image :deep(img),
+  .steps__image {
     aspect-ratio: 5 / 4;
   }
 }

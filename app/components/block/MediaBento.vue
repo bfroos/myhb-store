@@ -2,70 +2,57 @@
   <UiLayoutSectionBlock v-if="showBlock">
     <UiOrganismMediaBento
       :card-settings="cardSettings"
-      :layout="layout ?? MediaBentoLayout.MEDIA_LEFT"
-      :media-item-alignment="
-        mediaItemAlignment ?? MediaBentoMediaItemAlignment.HORIZONTAL
-      "
+      :layout="effectiveLayout"
+      :media-item-alignment="effectiveAlignment"
     >
-      <template v-if="mediaItems && mediaItems.length > 0" #firstMedia>
+      <template v-if="firstMedia" #firstMedia>
         <UiAtomMediaPicture
-          v-if="mediaItems[0] && isMediaImage(mediaItems[0])"
-          :media="mediaItems[0]"
-          :sources="{
-            [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-            [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
-          }"
-          class="mediaBentoBlock__image"
+          v-if="isMediaImage(firstMedia)"
+          :media="firstMedia"
+          :sources="imageSources"
+          class="bento__image"
         />
         <UiAtomMediaVideo
-          v-else-if="mediaItems[0] && isMediaVideo(mediaItems[0])"
-          :media="mediaItems[0]"
+          v-else-if="isMediaVideo(firstMedia)"
+          :media="firstMedia"
           :video-settings="videoSettings"
         />
       </template>
       <template #headline>
-        <h2 v-if="headline" class="mediaBento__headline">{{ headline }}</h2>
+        <h2 v-if="headline" class="bento__headline">{{ headline }}</h2>
       </template>
       <template #intro>
-        <p v-if="intro" class="mediaBento__intro">{{ intro }}</p>
+        <p v-if="intro" class="bento__intro">{{ intro }}</p>
       </template>
       <template #content>
-        <div v-if="content && content.length > 0" class="mediaBento__content">
+        <div v-if="hasContent" class="bento__content">
           <UiLayoutRichText :blocks="content ?? []" />
         </div>
       </template>
       <template #links>
-        <div v-if="links && links.length > 0" class="mediaBento__links">
+        <div v-if="hasLinks" class="bento__links">
           <UiMoleculeButtonGroup>
             <SharedButton v-for="link in links" :key="link.id" :button="link" />
           </UiMoleculeButtonGroup>
         </div>
-        <div v-if="showReviewsBadge" class="mediaBento__globalReviewsBadge">
-          <UiMoleculeReviewsBadge
-            show-text
-            :source="ReviewSource.GOOGLE"
-            :rating="5"
-          />
-        </div>
+        <UiMoleculeReviewsBadge
+          v-if="showReviewsBadge"
+          show-text
+          :source="ReviewSource.GOOGLE"
+          :rating="5"
+          class="bento__reviews"
+        />
       </template>
-      <template
-        v-if="
-          mediaItems && mediaItems.length > 1 && mediaItems[1] && mediaItems[1]
-        "
-        #secondMedia
-      >
+      <template v-if="secondMedia" #secondMedia>
         <UiAtomMediaPicture
-          v-if="mediaItems[1] && isMediaImage(mediaItems[1])"
-          :media="mediaItems[1]"
-          :sources="{
-            [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-            [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
-          }"
-          class="mediaBentoBlock__image"
+          v-if="isMediaImage(secondMedia)"
+          :media="secondMedia"
+          :sources="imageSources"
+          class="bento__image"
         />
         <UiAtomMediaVideo
-          v-else-if="mediaItems[1] && isMediaVideo(mediaItems[1])"
-          :media="mediaItems[1]"
+          v-else-if="isMediaVideo(secondMedia)"
+          :media="secondMedia"
           :video-settings="videoSettings"
         />
       </template>
@@ -74,7 +61,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import {
   MediaBentoLayout,
   ImageFormat,
@@ -83,49 +69,71 @@ import {
   ReviewSource,
 } from "~/lib/strapi/dto/enums";
 import type { BlockMediaBentoDto } from "~/lib/strapi/dto/components";
+import { isMediaImage, isMediaVideo } from "~/utils/media";
 
 const props = defineProps<BlockMediaBentoDto>();
 
-const showBlock = computed(() => {
-  return (
-    (props.mediaItems && props.mediaItems.length > 0) ||
-    props.headline ||
-    props.intro ||
-    props.content
-  );
-});
+const effectiveLayout = computed(
+  () => props.layout ?? MediaBentoLayout.MEDIA_LEFT,
+);
+
+const effectiveAlignment = computed(
+  () => props.mediaItemAlignment ?? MediaBentoMediaItemAlignment.HORIZONTAL,
+);
+
+const firstMedia = computed(() => props.mediaItems?.[0] ?? null);
+
+const secondMedia = computed(() => props.mediaItems?.[1] ?? null);
+
+const hasContent = computed(() => (props.content?.length ?? 0) > 0);
+
+const hasLinks = computed(() => (props.links?.length ?? 0) > 0);
+
+const showBlock = computed(
+  () =>
+    (props.mediaItems?.length ?? 0) > 0 ||
+    !!props.headline ||
+    !!props.intro ||
+    (props.content?.length ?? 0) > 0,
+);
+
+const imageSources = {
+  [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
+  [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
+};
 </script>
 
 <style scoped>
-.mediaBentoBlock__image {
+.bento__image {
   display: block;
 }
 
-.mediaBento__headline {
+.bento__headline {
   margin: 0 0 var(--space-600);
 }
-.mediaBento__intro {
+
+.bento__intro {
   font-size: var(--font-lg);
   line-height: var(--line-lg);
-  padding: 0 0 var(--space-600);
   margin: 0 0 var(--space-600);
+  padding-bottom: var(--space-600);
   border-bottom: 1px solid var(--color-border-mute);
 }
 
-.mediaBento__content {
+.bento__content {
   color: var(--color-text-light);
 }
 
-.mediaBento__links,
-.mediaBento__globalReviewsBadge {
+.bento__links,
+.bento__reviews {
   margin-top: var(--space-600);
 }
 
-@media screen and (min-width: 900px) {
-  .mediaBentoBlock__image :deep(img:last-child) {
+@media (min-width: 900px) {
+  .bento__image :deep(img:last-child) {
     display: block;
   }
-  .mediaBentoBlock__image :deep(img:first-child) {
+  .bento__image :deep(img:first-child) {
     display: none;
   }
 }

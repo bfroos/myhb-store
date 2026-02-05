@@ -1,5 +1,5 @@
 <template>
-  <UiLayoutSectionBlock>
+  <UiLayoutSectionBlock v-if="hasContent">
     <UiLayoutCardSurface :card-settings="cardSettings">
       <div class="productHero">
         <BlockProductHeroDetails
@@ -14,68 +14,57 @@
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
+
 <script setup lang="ts">
-import type { BlockProductHeroDto } from "~/lib/strapi/dto/components";
-import type { ProductVariantDto } from "~/lib/strapi/dto/components";
+import type {
+  BlockProductHeroDto,
+  ProductVariantDto,
+} from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockProductHeroDto>();
 
 const route = useRoute();
 const router = useRouter();
 
-const activeVariants = computed(() => {
-  return props.variants.filter((v) => v.isActive);
-});
+const activeVariants = computed(() => props.variants.filter((v) => v.isActive));
 
 const currentVariant = ref<ProductVariantDto | null>(
   activeVariants.value[0] ?? null,
 );
 
-onMounted(() => {
-  syncVariantFromRoute();
-});
+const hasContent = computed(
+  () => !!props.productName && (props.variants?.length ?? 0) > 0,
+);
 
-watch([() => route.hash, () => route.query.v], () => {
-  syncVariantFromRoute();
-});
+onMounted(() => syncVariantFromRoute());
+
+watch([() => route.hash, () => route.query.v], syncVariantFromRoute);
 
 function findVariantBySlug(slug: string): ProductVariantDto | null {
   return activeVariants.value.find((v) => v.slug === slug) ?? null;
 }
 
-function pickInitialVariant(): ProductVariantDto | null {
-  if (!activeVariants.value || activeVariants.value.length === 0) return null;
-  return (
-    activeVariants.value.find((v) => v.isActive) ??
-    activeVariants.value[0] ??
-    null
-  );
-}
+function getVariantSlugFromRoute(): string | null {
+  const fromQuery = route.query.v;
+  const raw = Array.isArray(fromQuery) ? fromQuery[0] : fromQuery;
+  if (raw && typeof raw === "string") return raw;
 
-function applyVariantFromQuery(): boolean {
-  const raw = route.query.v;
-  const variantSlug = Array.isArray(raw) ? raw[0] : raw;
-  if (!variantSlug || typeof variantSlug !== "string") return false;
-  const v = findVariantBySlug(variantSlug);
-  if (!v) return false;
-  currentVariant.value = v;
-  return true;
-}
-
-function applyVariantFromHash(hash: string): boolean {
-  const anchor = hash.replace(/^#/, "");
-  if (!anchor) return false;
-  const v = findVariantBySlug(anchor);
-  if (!v) return false;
-  currentVariant.value = v;
-  return true;
+  const hash = route.hash.replace(/^#/, "");
+  return hash || null;
 }
 
 function syncVariantFromRoute(): void {
-  if (applyVariantFromQuery()) return;
-  if (applyVariantFromHash(route.hash)) return;
+  const slug = getVariantSlugFromRoute();
+  if (slug) {
+    const variant = findVariantBySlug(slug);
+    if (variant) {
+      currentVariant.value = variant;
+      return;
+    }
+  }
+
   if (!currentVariant.value) {
-    currentVariant.value = pickInitialVariant();
+    currentVariant.value = activeVariants.value[0] ?? null;
   }
 }
 
@@ -87,14 +76,19 @@ function setCurrentVariant(variant: ProductVariantDto): void {
   });
 }
 </script>
+
 <style scoped>
 .productHero {
   display: flex;
   flex-direction: column-reverse;
-  gap: 0;
+  width: 100%;
 }
 
-@media screen and (min-width: 900px) {
+.productHero > * {
+  min-width: 0;
+}
+
+@media (min-width: 900px) {
   .productHero {
     flex-direction: row-reverse;
   }

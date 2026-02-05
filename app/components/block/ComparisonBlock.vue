@@ -1,81 +1,119 @@
 <template>
-  <UiLayoutSectionBlock v-if="firstItem || secondItem">
+  <UiLayoutSectionBlock v-if="hasItems">
     <UiLayoutCardSurface :card-settings="cardSettings">
-      <div
-        class="comparisonBlock"
-        role="region"
-        :aria-label="$t('common.comparison')"
-      >
-        <article v-if="firstItem" class="comparisonBlock__item">
-          <div class="comparisonBlock__item_inner theme-light">
+      <div class="comparison">
+        <article
+          v-for="(item, index) in comparisonItems"
+          :key="index"
+          class="comparison__item"
+        >
+          <div class="comparison__card" :class="{ 'theme-light': index === 0 }">
             <UiLayoutIconWrapper
-              v-if="firstItem.icon && firstItem.icon.iconData"
+              v-if="item.icon?.iconData"
               :size="56"
+              class="comparison__icon"
             >
-              <g v-html="firstItem.icon.iconData" />
+              <g v-html="item.icon.iconData" />
             </UiLayoutIconWrapper>
-            <IconThumbUp v-else :size="56" stroke="1.5" aria-hidden="true" />
-            <h2>{{ firstItem.heading }}</h2>
-            <UiLayoutRichText :blocks="firstItem.content ?? []" />
+            <component
+              :is="item.fallbackIcon"
+              v-else
+              :size="56"
+              stroke="1.5"
+              class="comparison__icon"
+              aria-hidden="true"
+            />
+            <h2 class="comparison__heading">{{ item.heading }}</h2>
+            <UiLayoutRichText :blocks="item.content ?? []" />
           </div>
-        </article>
-        <article v-if="secondItem" class="comparisonBlock__item">
-          <UiLayoutIconWrapper
-            v-if="secondItem.icon && secondItem.icon.iconData"
-            :size="56"
-          >
-            <g v-html="secondItem.icon.iconData" />
-          </UiLayoutIconWrapper>
-          <IconThumbDown v-else :size="56" stroke="1.5" aria-hidden="true" />
-          <h2>{{ secondItem.heading }}</h2>
-          <UiLayoutRichText :blocks="secondItem.content ?? []" />
         </article>
       </div>
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
+
 <script setup lang="ts">
 import { IconThumbUp, IconThumbDown } from "@tabler/icons-vue";
 import type { BlockComparisonBlockDto } from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockComparisonBlockDto>();
+
+const hasItems = computed(() => !!props.firstItem || !!props.secondItem);
+
+const comparisonItems = computed(() => {
+  const items: Array<
+    (typeof props.firstItem | typeof props.secondItem) & {
+      fallbackIcon: typeof IconThumbUp;
+    }
+  > = [];
+
+  if (props.firstItem) {
+    items.push({ ...props.firstItem, fallbackIcon: IconThumbUp });
+  }
+  if (props.secondItem) {
+    items.push({ ...props.secondItem, fallbackIcon: IconThumbDown });
+  }
+
+  return items;
+});
 </script>
+
 <style scoped>
-.comparisonBlock {
+.comparison {
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-.comparisonBlock__item,
-.comparisonBlock__item_inner {
+
+.comparison__item {
   display: flex;
   flex-direction: column;
   gap: var(--space-500);
   color: var(--color-text);
   padding: var(--space-card-pad);
 }
-.comparisonBlock__item:first-child {
-  padding: var(--space-card-figure-pad) var(--space-card-figure-pad) 0
-    var(--space-card-figure-pad);
+
+.comparison__item:first-child {
+  padding-top: var(--space-card-figure-pad);
+  padding-bottom: 0;
+  padding-left: var(--space-card-figure-pad);
+  padding-right: var(--space-card-figure-pad);
 }
-.comparisonBlock__item_inner {
+
+.comparison__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-500);
   padding: calc(var(--space-card-pad) - var(--space-card-figure-pad));
   border-radius: var(--border-radius-card-figure);
+  color: var(--color-text);
 }
-.comparisonBlock h2 {
+
+.comparison__icon {
+  flex-shrink: 0;
+}
+
+.comparison__heading {
   margin: 0 0 var(--space-300);
 }
 
-@media screen and (min-width: 900px) {
-  .comparisonBlock {
+@media (min-width: 900px) {
+  .comparison {
     flex-direction: row;
   }
-  .comparisonBlock__item {
+
+  .comparison__item {
     flex: 1 0 50%;
   }
-  .comparisonBlock__item:first-child {
-    padding: var(--space-card-figure-pad) 0 var(--space-card-figure-pad)
-      var(--space-card-figure-pad);
+
+  .comparison__item:first-child {
+    padding: var(--space-card-figure-pad);
+    padding-right: 0;
+  }
+
+  .comparison__item:nth-child(2) {
+    padding: var(--space-card-figure-pad);
+    padding-left: 0;
   }
 }
 </style>

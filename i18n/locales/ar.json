@@ -1,7 +1,6 @@
 {
   "common": {
     "discount": "خصم",
-    "comparison": "مقارنة",
     "reviews": "التقييمات",
     "five-star": "5 نجوم",
     "showLess": "أقل",
@@ -286,7 +285,8 @@
       "endOfPlanText": "اكتمال العلاج",
       "age": "العمر",
       "treatmentGoal": "الهدف",
-      "week": "الأسبوع"
+      "week": "الأسبوع",
+      "stepsAriaLabel": "خطوات خطة العلاج"
     },
     "locationTeasers": {
       "filter": {

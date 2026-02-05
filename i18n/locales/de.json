@@ -1,7 +1,6 @@
 {
   "common": {
     "discount": "Rabatt",
-    "comparison": "Vergleich",
     "reviews": "Bewertungen",
     "five-star": "5-Sterne",
     "showLess": "Weniger anzeigen",
@@ -287,7 +286,8 @@
       "endOfPlanText": "Behandlung abgeschlossen",
       "age": "Alter",
       "treatmentGoal": "Ziel",
-      "week": "Woche"
+      "week": "Woche",
+      "stepsAriaLabel": "Behandlungsplan Schritte"
     },
     "locationTeasers": {
       "filter": {

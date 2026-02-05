@@ -1,90 +1,86 @@
 <template>
-  <UiLayoutSectionBlock v-if="hasItems">
+  <UiLayoutSectionBlock v-if="hasContent">
     <UiLayoutCardSurface :card-settings="cardSettings">
-      <article class="faqBlock">
-        <header v-if="headline" class="faqBlock__header">
-          <h2>
-            {{ headline }}
-          </h2>
+      <div class="faq">
+        <header v-if="headline" class="faq__header">
+          <h2 class="faq__heading">{{ headline }}</h2>
         </header>
-        <div
-          v-if="(faqs && faqs.length > 0) || (faqSets && faqSets.length > 0)"
-          class="faqBlock__questions"
-          role="list"
-        >
+        <div v-if="hasItems" class="faq__list" role="list">
           <UiMoleculeCollabsibleItem
-            v-for="faq in faqs"
+            v-for="faq in allFaqs"
             :key="faq.id"
             :id="faq.id"
             :title="faq.question"
             :content="faq.answer"
           />
-          <template v-for="faqSet in faqSets" :key="faqSet.id">
-            <UiMoleculeCollabsibleItem
-              v-for="faq in faqSet.faqs"
-              :key="faqSet.id"
-              :id="faq.id"
-              :title="faq.question"
-              :content="faq.answer"
-            />
-          </template>
         </div>
-      </article>
+      </div>
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
+
 <script setup lang="ts">
 import type { BlockFaqBlockDto } from "~/lib/strapi/dto/components";
+import type { FaqDto } from "~/lib/strapi/dto/collections";
 
 const props = defineProps<BlockFaqBlockDto>();
 
-const hasItems = computed(() => {
-  return (
-    (props.faqs && props.faqs.length > 0) ||
-    (props.faqSets && props.faqSets.length > 0)
-  );
+const hasContent = computed(
+  () =>
+    (!!props.headline && (props.faqs?.length ?? 0) > 0) ||
+    (props.faqSets?.length ?? 0) > 0,
+);
+
+const hasItems = computed(
+  () => (props.faqs?.length ?? 0) > 0 || (props.faqSets?.length ?? 0) > 0,
+);
+
+const allFaqs = computed((): FaqDto[] => {
+  const items: FaqDto[] = [];
+  if (props.faqs) items.push(...props.faqs);
+  props.faqSets?.forEach((set) => {
+    if (set.faqs) items.push(...set.faqs);
+  });
+  return items;
 });
 </script>
+
 <style scoped>
-.faqBlock {
+.faq {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.faqBlock__header {
+.faq__header {
   padding: var(--space-card-pad);
-  border-color: var(--color-border-mute);
-  border-style: solid;
-  border-width: 0 0 1px 0;
+  border-bottom: 1px solid var(--color-border-mute);
   color: var(--color-text);
 }
 
-.faqBlock__body {
-  flex: 1;
-  padding: var(--space-card-pad-sm) var(--space-card-pad);
-  border-bottom: 1px solid var(--color-border-mute);
+.faq__heading {
+  margin: 0;
 }
 
-.faqBlock__questions {
+.faq__list {
   padding: calc(var(--space-card-pad) - var(--space-500)) var(--space-card-pad);
 }
 
-.faqBlock__body:last-child {
-  border-bottom: none;
-}
-
-@media screen and (min-width: 900px) {
-  .faqBlock {
+@media (min-width: 900px) {
+  .faq {
     flex-direction: row;
   }
-  .faqBlock__header {
+
+  .faq__header {
     flex: 0 0 30%;
     min-width: 20ch;
-    border-width: 0 1px 0 0;
+    border-bottom: none;
+    border-right: 1px solid var(--color-border-mute);
     border-radius: var(--border-radius-card) 0 0 var(--border-radius-card);
   }
 
-  .faqBlock__questions {
+  .faq__list {
+    flex: 1;
     padding: var(--space-card-pad);
   }
 }

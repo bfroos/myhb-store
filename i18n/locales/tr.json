@@ -1,7 +1,6 @@
 {
   "common": {
     "discount": "İndirim",
-    "comparison": "Karşılaştırma",
     "reviews": "Yorumlar",
     "five-star": "5 Yıldız",
     "showLess": "Daha az",
@@ -287,7 +286,8 @@
       "endOfPlanText": "Tedavi tamamlandı",
       "age": "Yaş",
       "treatmentGoal": "Hedef",
-      "week": "Hafta"
+      "week": "Hafta",
+      "stepsAriaLabel": "Tedavi planı adımları"
     },
     "locationTeasers": {
       "filter": {

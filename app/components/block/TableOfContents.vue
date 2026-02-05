@@ -1,19 +1,16 @@
 <template>
   <UiLayoutSectionBlock>
     <UiLayoutCardSurface :card-settings="cardSettings">
-      <div class="tableOfContentsBlock">
-        <div class="tableOfContentsBlock__body">
-          <div class="tableOfContentsBlock__header">
-            <h2 v-if="headline">{{ headline }}</h2>
-            <p v-if="intro" class="tableOfContentsBlock__intro">{{ intro }}</p>
-            <div v-if="content" class="tableOfContentsBlock__content">
-              <UiLayoutRichText v-if="content" :blocks="content ?? []" />
+      <article class="toc">
+        <div class="toc__body">
+          <header class="toc__header">
+            <h2 v-if="headline" class="toc__title">{{ headline }}</h2>
+            <p v-if="intro" class="toc__intro">{{ intro }}</p>
+            <div v-if="content" class="toc__content">
+              <UiLayoutRichText :blocks="content ?? []" />
             </div>
-          </div>
-          <div
-            v-if="links && links.length > 0"
-            class="tableOfContentsBlock__cta"
-          >
+          </header>
+          <div v-if="hasLinks" class="toc__cta">
             <UiMoleculeButtonGroup>
               <SharedButton
                 v-for="link in links"
@@ -28,31 +25,43 @@
             />
           </div>
         </div>
-        <div class="tableOfContentsBlock__summay">
-          <h3>{{ $t("blocks.tableOfContents.content") }}</h3>
-          <ol>
-            <li v-for="item in contentsWithAnchorAndLabel" :key="item.anchor">
-              <a :href="`#${item.anchor}`">{{ item.label }}</a>
+        <nav v-if="hasIndex" class="toc__nav" aria-labelledby="toc-heading">
+          <h3 id="toc-heading" class="toc__nav-title">
+            {{ $t("blocks.tableOfContents.content") }}
+          </h3>
+          <ol class="toc__list" role="list">
+            <li
+              v-for="item in contentsWithAnchorAndLabel"
+              :key="item.anchor"
+              class="toc__item"
+            >
+              <a :href="`#${item.anchor}`" class="toc__link">
+                {{ item.label }}
+              </a>
             </li>
           </ol>
-        </div>
-      </div>
+        </nav>
+      </article>
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
 
 <script setup lang="ts">
-import type { BlockTableOfContentsDto } from "~/lib/strapi/dto/components";
+import type {
+  BlockTableOfContentsDto,
+  SharedKeyValueDto,
+} from "~/lib/strapi/dto/components";
 import { ReviewSource } from "~/lib/strapi/dto/enums";
-import type { SharedKeyValueDto } from "~/lib/strapi/dto/components";
 import type { TableOfContentsItem } from "~/lib/ui/types";
 
 const props = defineProps<BlockTableOfContentsDto>();
 
+const hasLinks = computed(() => (props.links?.length ?? 0) > 0);
+
+const hasIndex = computed(() => (props.index?.length ?? 0) > 0);
+
 const contentsWithAnchorAndLabel = computed(() => {
-  if (!props.index || props.index.length === 0) {
-    return [];
-  }
+  if (!props.index?.length) return [];
 
   return props.index.map((item: SharedKeyValueDto) => ({
     anchor: item.key,
@@ -62,61 +71,62 @@ const contentsWithAnchorAndLabel = computed(() => {
 </script>
 
 <style scoped>
-.tableOfContentsBlock__body {
+.toc__body {
   display: flex;
   flex-direction: column;
-  align-items: space-between;
   gap: var(--space-600);
   padding: var(--space-card-pad);
 }
 
-.tableOfContentsBlock__body h2 {
+.toc__title {
   margin: 0 0 var(--space-600);
 }
 
-.tableOfContentsBlock__intro {
+.toc__intro {
   font-size: var(--font-lg);
   line-height: var(--line-lg);
-  padding: 0 0 var(--space-600);
   margin: 0 0 var(--space-600);
+  padding-bottom: var(--space-600);
   border-bottom: 1px solid var(--color-border-mute);
 }
 
-.tableOfContentsBlock__content {
+.toc__content {
   color: var(--color-text-light);
 }
 
-.tableOfContentsBlock__cta {
+.toc__cta {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-600);
 }
 
-.tableOfContentsBlock__summay {
+.toc__nav {
   padding: var(--space-card-pad);
   border-top: 1px solid var(--color-border-mute);
 }
 
-.tableOfContentsBlock__summay ol {
-  counter-reset: toc-item;
+.toc__nav-title {
+  margin: 0 0 var(--space-400);
 }
 
-.tableOfContentsBlock__summay ol li {
+.toc__list {
+  counter-reset: toc-item;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc__item {
   position: relative;
-  margin: var(--space-200) 0;
+  counter-increment: toc-item;
+  margin-top: var(--space-200);
+  margin-bottom: var(--space-200);
   border-top: 1px solid var(--color-border-mute);
 }
 
-.tableOfContentsBlock__summay ol li a {
-  display: block;
-  padding: var(--space-400) 0 var(--space-400) var(--space-700);
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-}
-
-.tableOfContentsBlock__summay ol li::before {
+.toc__item::before {
   content: counter(toc-item, decimal-leading-zero);
-  counter-increment: toc-item;
   position: absolute;
   left: 0;
   top: var(--space-400);
@@ -124,12 +134,33 @@ const contentsWithAnchorAndLabel = computed(() => {
   color: var(--color-text-light);
 }
 
-@media screen and (min-width: 900px) {
-  .tableOfContentsBlock {
+.toc__link {
+  display: block;
+  padding-top: var(--space-400);
+  padding-bottom: var(--space-400);
+  padding-left: var(--space-700);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  text-decoration: underline;
+  color: inherit;
+}
+
+.toc__link:hover {
+  text-decoration: none;
+}
+
+@media (min-width: 900px) {
+  .toc {
     display: grid;
     grid-template-columns: 3fr 2fr;
   }
-  .tableOfContentsBlock__summay {
+
+  .toc__body {
+    grid-column: 1;
+  }
+
+  .toc__nav {
+    grid-column: 2;
     border-top: none;
     border-left: 1px solid var(--color-border-mute);
   }

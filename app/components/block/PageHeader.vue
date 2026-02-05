@@ -1,55 +1,75 @@
 <template>
-  <UiLayoutSectionBlock>
+  <UiLayoutSectionBlock v-if="hasContent">
     <UiOrganismMediaCard
-      :layout="OrganismMediaCardLayout.MEDIA_RIGHT"
-      :full-height="layout === BlockPageHeaderLayout.SPLIT"
-      :fixed-image-aspect-ratio="fixedImageAspectRatio"
-      :is-media-video="media && isMediaVideo(media)"
       :card-settings="cardSettings"
+      :layout="OrganismMediaCardLayout.MEDIA_RIGHT"
+      :full-height="isSplitLayout"
+      :fixed-image-aspect-ratio="fixedImageAspectRatio"
+      :is-media-video="hasVideo"
     >
       <template #media>
         <UiAtomMediaPicture
-          v-if="media && isMediaImage(media)"
-          :media="media"
-          :sources="{
-            [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-            [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
-          }"
+          v-if="hasImage"
+          :media="media!"
+          :sources="imageSources"
         />
         <UiAtomMediaVideo
-          v-else-if="media && isMediaVideo(media)"
-          :media="media"
+          v-else-if="hasVideo"
+          :media="media!"
           :video-settings="videoSettings"
         />
       </template>
       <template #body>
-        <div
+        <header
           class="pageHeader"
           :class="{
-            'pageHeader--split': layout === BlockPageHeaderLayout.SPLIT,
-            'pageHeader--withoutImage': !media,
+            'pageHeader--split': isSplitLayout,
+            'pageHeader--noMedia': !hasMedia,
           }"
         >
-          <h1 v-if="headline">{{ headline }}</h1>
-          <p v-if="intro">{{ intro }}</p>
-        </div>
+          <h1 v-if="headline" class="pageHeader__title">{{ headline }}</h1>
+          <p v-if="intro" class="pageHeader__intro">{{ intro }}</p>
+        </header>
       </template>
     </UiOrganismMediaCard>
   </UiLayoutSectionBlock>
 </template>
+
 <script setup lang="ts">
-import type { BlockPageHeaderDto } from "~/lib/strapi/dto/components";
 import {
   BlockPageHeaderLayout,
-  ImageFormat,
   ImageBreakpoint,
+  ImageFormat,
 } from "~/lib/strapi/dto/enums";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
+import type { BlockPageHeaderDto } from "~/lib/strapi/dto/components";
+import { isMediaImage, isMediaVideo } from "~/utils/media";
 
 const props = withDefaults(defineProps<BlockPageHeaderDto>(), {
   layout: () => BlockPageHeaderLayout.COMPACT,
 });
+
+const imageSources = {
+  [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
+  [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
+};
+
+const hasContent = computed(() => !!props.headline || !!props.intro);
+
+const hasMedia = computed(
+  () =>
+    !!props.media && (isMediaImage(props.media) || isMediaVideo(props.media)),
+);
+
+const hasImage = computed(() => !!props.media && isMediaImage(props.media));
+
+const hasVideo = computed(() => !!props.media && isMediaVideo(props.media));
+
+const isSplitLayout = computed(
+  () => props.layout === BlockPageHeaderLayout.SPLIT,
+);
 </script>
+
 <style scoped>
 .pageHeader {
   display: flex;
@@ -59,15 +79,19 @@ const props = withDefaults(defineProps<BlockPageHeaderDto>(), {
   height: 100%;
   text-align: center;
 }
-.pageHeader h1 {
+
+.pageHeader__title {
+  margin: 0;
   font-size: var(--font-5xl);
   line-height: var(--line-5xl);
 }
-.pageHeader p {
+
+.pageHeader__intro {
+  margin: 0;
   color: var(--color-text-light);
 }
 
-@media screen and (min-width: 900px) {
+@media (min-width: 900px) {
   .pageHeader {
     text-align: left;
   }
@@ -77,12 +101,12 @@ const props = withDefaults(defineProps<BlockPageHeaderDto>(), {
     gap: var(--space-1200);
   }
 
-  .pageHeader--withoutImage.pageHeader--split {
+  .pageHeader--noMedia.pageHeader--split {
     grid-template-columns: 1fr 1fr;
     row-gap: var(--space-1200);
   }
 
-  .pageHeader p {
+  .pageHeader__intro {
     display: flex;
     align-items: flex-end;
     height: 100%;
