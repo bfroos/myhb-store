@@ -1,20 +1,23 @@
 <template>
-  <div class="videoTile" :class="{ 'videoTile--playing': isPlaying }">
+  <div
+    class="videoTile"
+    :class="{ 'videoTile--playing': isPlaying }"
+    ref="tileRef"
+  >
     <video
       v-if="isVideoLoaded"
       class="videoTile__video"
       ref="videoRef"
       :src="videoUrl"
-      :poster="posterUrl"
+      :poster="lazyPosterUrl"
       :aria-label="`${title} - ${subtitle}`"
       :controls="isPlaying"
     />
     <img
-      v-else
+      v-else-if="lazyPosterUrl"
       class="videoTile__poster"
-      :src="posterUrl"
+      :src="lazyPosterUrl"
       :alt="`${title} - ${subtitle}`"
-      loading="lazy"
     />
     <div
       v-if="!isPlaying"
@@ -56,6 +59,7 @@ const emit = defineEmits<{
 
 const isPlaying = ref(false);
 const isVideoLoaded = ref(false);
+const isInViewport = ref(false);
 
 const videoUrl = computed(() => props.video ?? "");
 
@@ -65,7 +69,32 @@ const posterUrl = computed(() => {
   return buildVideoPosterUrl(props.video);
 });
 
+// Lazy poster URL - only set when component enters viewport
+const lazyPosterUrl = computed(() =>
+  isInViewport.value ? posterUrl.value : "",
+);
+
 const videoRef = ref<HTMLVideoElement | null>(null);
+const tileRef = ref<HTMLElement | null>(null);
+
+// Native IntersectionObserver for true lazy loading
+let observer: IntersectionObserver | null = null;
+
+onMounted(() => {
+  if (!tileRef.value) return;
+
+  observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0]?.isIntersecting) {
+        isInViewport.value = true;
+        observer?.disconnect();
+      }
+    },
+    { rootMargin: "200px" },
+  );
+
+  observer.observe(tileRef.value);
+});
 
 const handlePlay = () => {
   isPlaying.value = true;
@@ -94,6 +123,7 @@ onUnmounted(() => {
     video.removeEventListener("play", handlePlay);
     video.removeEventListener("pause", handlePause);
   }
+  observer?.disconnect();
 });
 
 defineExpose({
