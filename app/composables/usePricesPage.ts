@@ -33,8 +33,9 @@ export function usePricesPage() {
 
     page.value = data.value.data.pricesPage || null;
     productCategories.value = data.value.data.productCategories || null;
-    topBlocks.value = data.value.data.topBlocks || [];
-    bottomBlocks.value = data.value.data.bottomBlocks || [];
+    topBlocks.value = data.value.data.pricesPage.topBlocks || [];
+    bottomBlocks.value = data.value.data.pricesPage.bottomBlocks || [];
+    seo.value = data.value.data.pricesPage.seo || null;
 
     return true;
   }

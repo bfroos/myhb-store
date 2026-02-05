@@ -3,12 +3,13 @@
     <header class="productCategoryPriceOverviewCard__header">
       <h2>{{ productCategory.name }}</h2>
     </header>
-    <section
-      v-if="productCategory.treatments && productCategory.treatments.length > 0"
-      class="productCategoryPriceOverviewCard__section"
-    >
+    <section class="productCategoryPriceOverviewCard__section">
       <h3>{{ $t("blocks.productCategoryPriceOverview.treatments") }}</h3>
-      <ul>
+      <ul
+        v-if="
+          productCategory.treatments && productCategory.treatments.length > 0
+        "
+      >
         <li
           v-for="treatment in productCategory.treatments"
           :key="treatment.id"
@@ -48,6 +49,9 @@
           </div>
         </li>
       </ul>
+      <p v-else class="productCategoryPriceOverviewCard__noTreatments">
+        {{ $t("blocks.productCategoryPriceOverview.noTreatments") }}
+      </p>
     </section>
     <section
       v-if="productCategory.products && productCategory.products.length > 0"
@@ -131,8 +135,8 @@ const getActiveVariants = (variants: ProductVariantDto[]) => {
 }
 
 .productCategoryPriceOverviewCard__header h2 {
-  font-size: var(--font-2xl);
-  line-height: var(--line-2xl);
+  font-size: var(--font-3xl);
+  line-height: var(--line-3xl);
   margin: 0;
 }
 
@@ -147,6 +151,8 @@ const getActiveVariants = (variants: ProductVariantDto[]) => {
 }
 
 .productCategoryPriceOverviewCard__section h3 {
+  font-size: var(--font-2xl);
+  line-height: var(--line-2xl);
   margin: 0 0 var(--space-400);
 }
 
@@ -177,6 +183,11 @@ const getActiveVariants = (variants: ProductVariantDto[]) => {
   gap: var(--space-400);
 }
 
+.productCategoryPriceOverviewCard__productHeader h4 {
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
+}
+
 .productCategoryPriceOverviewCard__productHeader h4 span {
   display: block;
   font-weight: var(--font-regular);
@@ -188,8 +199,21 @@ const getActiveVariants = (variants: ProductVariantDto[]) => {
   height: 24px;
 }
 
-.productCategoryPriceOverviewCard__section section + section {
-  margin-top: var(--space-800);
+.productCategoryPriceOverviewCard__section > section,
+.productCategoryPriceOverviewCard__section > ul {
+  border-top: 1px solid var(--color-border-light);
+  padding: var(--space-600) 0 0;
+}
+
+.productCategoryPriceOverviewCard__section section + section,
+.productCategoryPriceOverviewCard__section > ul + ul {
+  margin-top: var(--space-600);
+}
+
+.productCategoryPriceOverviewCard__noTreatments {
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
 }
 
 @media screen and (min-width: 900px) {

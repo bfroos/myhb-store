@@ -358,7 +358,8 @@
       "treatments": "Tedaviler",
       "products": "Ürünler",
       "treatmentDetails": "Tedavi detayları",
-      "productDetails": "Ürün detayları"
+      "productDetails": "Ürün detayları",
+      "noTreatments": "Şu anda, bu kategori için hiçbir tedavi yok."
     },
     "productHero": {
       "previousImage": "Önceki resim",

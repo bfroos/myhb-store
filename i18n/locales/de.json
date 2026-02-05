@@ -358,7 +358,8 @@
       "treatments": "Behandlungen",
       "products": "Produkte",
       "treatmentDetails": "Behandlungdetails",
-      "productDetails": "Produktdetails"
+      "productDetails": "Produktdetails",
+      "noTreatments": "Aktuell haben wir keine Behandlungen in dieser Kategorie."
     },
     "productHero": {
       "previousImage": "Vorheriges Bild",

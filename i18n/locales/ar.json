@@ -357,7 +357,8 @@
       "treatments": "العلاجات",
       "products": "المنتجات",
       "treatmentDetails": "تفاصيل العلاج",
-      "productDetails": "تفاصيل المنتج"
+      "productDetails": "تفاصيل المنتج",
+      "noTreatments": "في الوقت الحالي، ليس لدينا أي علاجات في هذه الفئة."
     },
     "productHero": {
       "previousImage": "الصورة السابقة",
