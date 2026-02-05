@@ -1,33 +1,6 @@
 <script setup lang="ts">
-import TreatmentHero from "./TreatmentHero.vue";
-import LocationMap from "./LocationMap.vue";
-import ReviewsBlock from "./ReviewsBlock.vue";
-import StoriesBlock from "./StoriesBlock.vue";
-import EmployeeBlock from "./EmployeeBlock.vue";
-import EmployeeList from "./EmployeeList.vue";
-import MediaCard from "./MediaCard.vue";
-import TrustGrid from "./TrustGrid.vue";
-import MediaBento from "./MediaBento.vue";
-import MyClub from "./MyClub.vue";
-import TreatmentTeasers from "./TreatmentTeasers.vue";
-import FaqBlock from "./FaqBlock.vue";
-import HighlightsStrip from "./HighlightsStrip.vue";
-import PageHeader from "./PageHeader.vue";
-import ProcessSteps from "./ProcessSteps.vue";
-import ProductCategoryPriceOverview from "./ProductCategoryPriceOverview.vue";
-import TextContent from "./TextContent.vue";
-import LocationContact from "./LocationContact.vue";
-import LocationDirections from "./LocationDirections.vue";
-import TreatmentDetails from "./TreatmentDetails.vue";
-import ComparisonBlock from "./ComparisonBlock.vue";
-import TreatmentPlan from "./TreatmentPlan.vue";
-import BenefitsList from "./BenefitsList.vue";
-import TableOfContents from "./TableOfContents.vue";
+import { defineAsyncComponent } from "vue";
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
-import TextBlock from "../blog/TextBlock.vue";
-import ImageBlock from "../blog/ImageBlock.vue";
-import NewsletterBlock from "../blog/NewsletterBlock.vue";
-import CtaBlock from "../blog/CtaBlock.vue";
 
 const props = defineProps<{
   blocks: StrapiBlock[];
@@ -38,35 +11,67 @@ const getBlockProps = (block: StrapiBlock) => {
   return props;
 };
 
-const registry: Record<string, any> = {
-  "blocks.benefits-list": BenefitsList,
-  "blocks.comparison-block": ComparisonBlock,
-  "blocks.directions": LocationDirections,
-  "blocks.employee": EmployeeBlock,
-  "blocks.employee-list": EmployeeList,
-  "blocks.faq": FaqBlock,
-  "blocks.highlights-strip": HighlightsStrip,
-  "blocks.location-map": LocationMap,
-  "blocks.media-bento": MediaBento,
-  "blocks.media-card": MediaCard,
-  "blocks.my-club": MyClub,
-  "blocks.page-header": PageHeader,
-  "blocks.process-steps": ProcessSteps,
-  "blocks.product-category-price-overview": ProductCategoryPriceOverview,
-  "blocks.reviews": ReviewsBlock,
-  "blocks.stories": StoriesBlock,
-  "blocks.table-of-contents": TableOfContents,
-  "blocks.text-content": TextContent,
-  "blocks.treatment-details": TreatmentDetails,
-  "blocks.treatment-hero": TreatmentHero,
-  "blocks.treatment-plan": TreatmentPlan,
-  "blocks.treatment-teasers": TreatmentTeasers,
-  "blocks.location-contact": LocationContact,
-  "blocks.trust-grid": TrustGrid,
-  "blog.cta": CtaBlock,
-  "blog.image": ImageBlock,
-  "blog.newsletter": NewsletterBlock,
-  "blog.text": TextBlock,
+const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
+  "blocks.benefits-list": defineAsyncComponent(
+    () => import("./BenefitsList.vue"),
+  ),
+  "blocks.comparison-block": defineAsyncComponent(
+    () => import("./ComparisonBlock.vue"),
+  ),
+  "blocks.directions": defineAsyncComponent(
+    () => import("./LocationDirections.vue"),
+  ),
+  "blocks.employee": defineAsyncComponent(() => import("./EmployeeBlock.vue")),
+  "blocks.employee-list": defineAsyncComponent(
+    () => import("./EmployeeList.vue"),
+  ),
+  "blocks.faq": defineAsyncComponent(() => import("./FaqBlock.vue")),
+  "blocks.highlights-strip": defineAsyncComponent(
+    () => import("./HighlightsStrip.vue"),
+  ),
+  "blocks.location-map": defineAsyncComponent(
+    () => import("./LocationMap.vue"),
+  ),
+  "blocks.media-bento": defineAsyncComponent(() => import("./MediaBento.vue")),
+  "blocks.media-card": defineAsyncComponent(() => import("./MediaCard.vue")),
+  "blocks.my-club": defineAsyncComponent(() => import("./MyClub.vue")),
+  "blocks.page-header": defineAsyncComponent(() => import("./PageHeader.vue")),
+  "blocks.process-steps": defineAsyncComponent(
+    () => import("./ProcessSteps.vue"),
+  ),
+  "blocks.product-category-price-overview": defineAsyncComponent(
+    () => import("./ProductCategoryPriceOverview.vue"),
+  ),
+  "blocks.reviews": defineAsyncComponent(() => import("./ReviewsBlock.vue")),
+  "blocks.stories": defineAsyncComponent(() => import("./StoriesBlock.vue")),
+  "blocks.table-of-contents": defineAsyncComponent(
+    () => import("./TableOfContents.vue"),
+  ),
+  "blocks.text-content": defineAsyncComponent(
+    () => import("./TextContent.vue"),
+  ),
+  "blocks.treatment-details": defineAsyncComponent(
+    () => import("./TreatmentDetails.vue"),
+  ),
+  "blocks.treatment-hero": defineAsyncComponent(
+    () => import("./TreatmentHero.vue"),
+  ),
+  "blocks.treatment-plan": defineAsyncComponent(
+    () => import("./TreatmentPlan.vue"),
+  ),
+  "blocks.treatment-teasers": defineAsyncComponent(
+    () => import("./TreatmentTeasers.vue"),
+  ),
+  "blocks.location-contact": defineAsyncComponent(
+    () => import("./LocationContact.vue"),
+  ),
+  "blocks.trust-grid": defineAsyncComponent(() => import("./TrustGrid.vue")),
+  "blog.cta": defineAsyncComponent(() => import("../blog/CtaBlock.vue")),
+  "blog.image": defineAsyncComponent(() => import("../blog/ImageBlock.vue")),
+  "blog.newsletter": defineAsyncComponent(
+    () => import("../blog/NewsletterBlock.vue"),
+  ),
+  "blog.text": defineAsyncComponent(() => import("../blog/TextBlock.vue")),
 };
 </script>
 
