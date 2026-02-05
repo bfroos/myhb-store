@@ -30,7 +30,7 @@ export type RedirectResult = {
   code: number;
 };
 
-const CACHE_TTL_MS = 5 * 60 * 1000;
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h – Redirects ändern sich selten
 const PAGE_SIZE = 200;
 const SKIP_PATHS = new Set(["/favicon.ico", "/robots.txt", "/sitemap.xml"]);
 const SKIP_PREFIXES = ["/_nuxt", "/__nuxt", "/api"];

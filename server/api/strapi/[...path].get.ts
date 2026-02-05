@@ -1,4 +1,4 @@
-// Strapi proxy with server-side caching (5 minutes).
+// Strapi proxy with server-side caching (1h fresh, 24h stale-while-revalidate).
 // Important: Cache key includes the ENTIRE query string (including locale),
 // so /about-us-page?locale=en and ?locale=de are cached separately.
 export default defineCachedEventHandler(
@@ -30,8 +30,8 @@ export default defineCachedEventHandler(
     }
   },
   {
-    maxAge: 300,
-    staleMaxAge: 60,
+    maxAge: 3600,
+    staleMaxAge: 86400,
     getKey: (event) => {
       const url = getRequestURL(event);
       const path = url.pathname.replace(/^\/api\/strapi/, "");

@@ -33,6 +33,28 @@ export default defineNuxtConfig({
     head: {
       viewport: "width=device-width, initial-scale=1",
       link: [
+        ...(process.env.NUXT_PUBLIC_MEDIA_URL
+          ? [
+              {
+                rel: "preconnect" as const,
+                href: new URL(process.env.NUXT_PUBLIC_MEDIA_URL).origin,
+                crossorigin: "anonymous" as const,
+              },
+            ]
+          : []),
+        ...(process.env.NUXT_PUBLIC_STRAPI_URL
+          ? [
+              {
+                rel: "preconnect" as const,
+                href: new URL(process.env.NUXT_PUBLIC_STRAPI_URL).origin,
+                crossorigin: "anonymous" as const,
+              },
+            ]
+          : []),
+        {
+          rel: "dns-prefetch",
+          href: "https://www.googletagmanager.com",
+        },
         {
           rel: "icon",
           type: "image/svg+xml",
@@ -231,6 +253,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
+    // API routes: no caching (handled by server-side)
     "/api/strapi/**": {
       isr: false,
       headers: {
@@ -239,7 +262,7 @@ export default defineNuxtConfig({
         "vercel-cdn-cache-control": "no-store",
       },
     },
-    // Static assets: aggressive caching (1 year, immutable)
+    // Static assets: aggressive caching (1y, immutable)
     "/favicon/**": {
       headers: {
         "cache-control": "public, max-age=31536000, immutable",
@@ -250,13 +273,29 @@ export default defineNuxtConfig({
         "cache-control": "public, max-age=31536000, immutable",
       },
     },
-    // Cache sitemap.xml (24 hours)
+    // Cache sitemap.xml (24h)
     "/sitemap.xml": {
       cache: { maxAge: 86400 },
     },
-    // ISR: Seiten werden nach 5 Minuten revalidiert
+    // Cache redirect-lookup API (24h)
+    "/api/redirect-lookup": {
+      cache: { maxAge: 86400 },
+    },
+    "/": {
+      isr: 3600,
+    },
+    "/en": {
+      isr: 3600,
+    },
+    "/tr": {
+      isr: 3600,
+    },
+    "/ar": {
+      isr: 3600,
+    },
+    // ISR: Blog, Marketing, Docs etc. – 24h (rarely change)
     "/**": {
-      isr: 300,
+      isr: 86400,
     },
   },
 });
