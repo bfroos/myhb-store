@@ -1,15 +1,12 @@
 import {
   ColorTheme,
   SharedButtonAction,
-  SharedButtonCollection,
   SharedButtonMethod,
+  SharedButtonSingleType,
+  SharedButtonTargetType,
 } from "../dto/enums";
 import type { SharedButtonDto, SharedKeyValueDto } from "../dto/components";
-import type {
-  GeneralPageDto,
-  LocationDto,
-  TreatmentPageDto,
-} from "../dto/collections";
+import type { LocationDto, TreatmentPageDto } from "../dto/collections";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 
 export function mapTreatmentCommonFixedBlocks(
@@ -209,10 +206,8 @@ export function mapTreatmentCommonFixedBlocks(
     const link: SharedButtonDto = {
       label: t("cta.learnMore"),
       method: SharedButtonMethod.INTERNAL_LINK,
-      collection: SharedButtonCollection.PAGE,
-      page: {
-        slug: "aerzte",
-      } as GeneralPageDto,
+      targetType: SharedButtonTargetType.SINGLE_TYPE,
+      singleType: SharedButtonSingleType.DOCTORS,
     };
 
     tableOfContents.push({
