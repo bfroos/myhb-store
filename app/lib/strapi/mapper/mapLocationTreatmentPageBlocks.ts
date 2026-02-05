@@ -65,6 +65,7 @@ export function mapLocationTreatmentPageFixedBlocks(
       showReviews: true,
       treatment: treatmentPage.treatment,
       cta: link,
+      googlePlaceId: location?.googlePlaceId ?? undefined,
     };
   }
 

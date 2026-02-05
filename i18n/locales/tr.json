@@ -2,6 +2,10 @@
   "common": {
     "discount": "İndirim",
     "reviews": "Yorumlar",
+    "reviewsCount": "{count} yorum",
+    "review": "Yorum",
+    "rating": "Değerlendirme",
+    "reviewLinkLabel": "{source} üzerindeki değerlendirmeye git",
     "five-star": "5 Yıldız",
     "showLess": "Daha az",
     "showMore": "Daha fazla",

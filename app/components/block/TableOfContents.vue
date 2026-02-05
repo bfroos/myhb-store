@@ -18,11 +18,7 @@
                 :button="link"
               />
             </UiMoleculeButtonGroup>
-            <UiMoleculeReviewsBadge
-              show-text
-              :source="ReviewSource.GOOGLE"
-              :rating="5"
-            />
+            <UiMoleculeReviewsBadge :source="ReviewSource.GOOGLE" :rating="5" />
           </div>
         </div>
         <nav v-if="hasIndex" class="toc__nav" aria-labelledby="toc-heading">

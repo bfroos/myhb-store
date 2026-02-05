@@ -78,6 +78,7 @@ export function mapLocationFixedBlocks(
       showCompanyLogos: true,
       showReviews: true,
       calendlyUrl: location?.calendlyUrl,
+      googlePlaceId: location?.googlePlaceId ?? undefined,
     };
   }
 

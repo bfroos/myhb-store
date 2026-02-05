@@ -2,6 +2,10 @@
   "common": {
     "discount": "Discount",
     "reviews": "Reviews",
+    "reviewsCount": "{count} reviews",
+    "review": "Review",
+    "rating": "Rating",
+    "reviewLinkLabel": "View review on {source}",
     "five-star": "5-Stars",
     "showLess": "Show less",
     "showMore": "Show more",

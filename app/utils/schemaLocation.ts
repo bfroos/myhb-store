@@ -32,10 +32,15 @@ export function buildLocalBusinessSchema(
   const openingHours = buildOpeningHours(location.openingHours?.week);
   const geo = buildGeo(location.coordinates);
 
+  // Name im Format "Brand Standortname" für Übereinstimmung mit Google My Business
+  const businessName = ctx.brandName
+    ? `${ctx.brandName} ${location.name}`
+    : location.name;
+
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    name: location.name,
+    name: businessName,
     url: pageUrl,
     ...(address && { address }),
     ...(location.contact?.phoneNumber && {

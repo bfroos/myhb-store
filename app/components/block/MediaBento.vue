@@ -37,7 +37,6 @@
         </div>
         <UiMoleculeReviewsBadge
           v-if="showReviewsBadge"
-          show-text
           :source="ReviewSource.GOOGLE"
           :rating="5"
           class="bento__reviews"

@@ -262,6 +262,7 @@ export type BlockTreatmentHeroDto = {
   treatment?: TreatmentDto;
   cardSettings?: CardSettingsDto;
   calendlyUrl?: string;
+  googlePlaceId?: string;
 };
 
 export type BlockTreatmentPlanDto = {

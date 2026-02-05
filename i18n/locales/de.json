@@ -2,6 +2,10 @@
   "common": {
     "discount": "Rabatt",
     "reviews": "Bewertungen",
+    "reviewsCount": "{count} Bewertungen",
+    "review": "Bewertung",
+    "rating": "Bewertung",
+    "reviewLinkLabel": "Zur Bewertung bei {source}",
     "five-star": "5-Sterne",
     "showLess": "Weniger anzeigen",
     "showMore": "Mehr anzeigen",

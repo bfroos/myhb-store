@@ -1,24 +1,12 @@
 <template>
   <div class="reviewContent">
     <div class="reviewContent__header">
-      <a
-        v-if="sourceUrl"
-        :href="sourceUrl"
-        target="_blank"
-        rel="noopener nofollow"
-        :aria-label="`Zur Bewertung bei ${source?.toLowerCase()}`"
-      >
-        <UiMoleculeReviewsBadge
-          :rating="rating"
-          :source="source"
-          height="1.75rem"
-        />
-      </a>
       <UiMoleculeReviewsBadge
-        v-else
         :rating="rating"
         :source="source"
+        single-review
         height="1.75rem"
+        :source-url="sourceUrl"
       />
       <div class="reviewContent__name">{{ author }}</div>
       <div class="reviewContent__text">

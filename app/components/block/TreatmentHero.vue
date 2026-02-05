@@ -86,13 +86,23 @@
                   :button-props="{ size: 'lg', variant: 'secondary' }"
                 />
               </div>
-              <UiMoleculeReviewsBadge
-                v-if="showReviews"
-                show-text
-                :source="ReviewSource.GOOGLE"
-                :rating="5"
-                class="hero__reviews"
-              />
+              <template v-if="showReviews">
+                <UiMoleculeReviewsBadge
+                  v-if="googlePlaceId"
+                  show-text
+                  :source="ReviewSource.GOOGLE"
+                  :rating="googlePlaceId ? undefined : 5"
+                  :google-place-id="googlePlaceId"
+                  class="hero__reviews"
+                />
+                <UiMoleculeReviewsBadge
+                  v-else
+                  show-text
+                  :source="ReviewSource.GOOGLE"
+                  :rating="5"
+                  class="hero__reviews"
+                />
+              </template>
             </header>
             <ul v-if="showCompanyLogos" class="hero__logos" role="list">
               <li class="hero__logo">
@@ -328,7 +338,7 @@ const discountLabel = computed(() => {
 }
 
 .hero__reviews {
-  margin-top: var(--space-200);
+  margin-top: var(--space-500);
 }
 
 .hero__logos {

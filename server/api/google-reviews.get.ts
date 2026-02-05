@@ -1,25 +1,16 @@
-type GooglePlaceReview = {
-  author_name?: string;
-  author_url?: string;
-  language?: string;
-  rating?: number;
-  text?: string;
-  time?: number;
-};
-
 type GooglePlaceDetailsResponse = {
-  result?: {
-    name?: string;
-    url?: string;
-    reviews?: GooglePlaceReview[];
+  displayName?: {
+    text?: string;
+    languageCode?: string;
   };
-  status?: string;
-  error_message?: string;
+  googleMapsUri?: string;
+  rating?: number;
+  userRatingCount?: number;
 };
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
-  const apiKey = (config as any).googlePlacesApiKey as string | undefined;
+  const apiKey = config.public.googleMapsKey as string | undefined;
 
   const query = getQuery(event);
   const placeId = (query.placeId as string | undefined)?.trim();
@@ -36,49 +27,34 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage:
-        "Missing server runtimeConfig: googlePlacesApiKey (set NUXT_GOOGLE_PLACES_API_KEY)",
+        "Missing runtimeConfig.public.googleMapsKey (set NUXT_PUBLIC_GOOGLE_MAPS_API_KEY)",
     });
   }
 
-  // Places Details API (classic). Note: Google may limit number of returned reviews.
-  const url = "https://maps.googleapis.com/maps/api/place/details/json";
-  const res = await $fetch<GooglePlaceDetailsResponse>(url, {
-    query: {
-      place_id: placeId,
-      fields: "name,url,reviews",
-      language: language || undefined,
-      key: apiKey,
-    },
-  });
+  const url = `https://places.googleapis.com/v1/places/${placeId}`;
 
-  if (res?.status && res.status !== "OK") {
+  try {
+    const res = await $fetch<GooglePlaceDetailsResponse>(url, {
+      query: {
+        fields: "displayName,googleMapsUri,rating,userRatingCount",
+        languageCode: language || undefined,
+        key: apiKey,
+      },
+    });
+
+    return {
+      placeId,
+      placeName: res?.displayName?.text ?? null,
+      placeUrl: res?.googleMapsUri ?? null,
+      rating: res?.rating ?? null,
+      userRatingsTotal: res?.userRatingCount ?? null,
+    };
+  } catch (error: any) {
     throw createError({
-      statusCode: 502,
-      statusMessage: `Google Places API error: ${res.status}${
-        res.error_message ? ` (${res.error_message})` : ""
+      statusCode: error?.statusCode || 502,
+      statusMessage: `Google Places API error: ${
+        error?.message || "Unknown error"
       }`,
     });
   }
-
-  const placeName = res?.result?.name ?? null;
-  const placeUrl = res?.result?.url ?? null;
-  const reviews = (res?.result?.reviews ?? []).map((r) => ({
-    rating: r.rating ?? 5,
-    author: r.author_name ?? "Google User",
-    text: r.text ?? "",
-    source: "google",
-    // Prefer the place URL; fallback to author url if present.
-    sourceUrl: placeUrl ?? r.author_url ?? undefined,
-    // Helpful for consumers that want to show the place name.
-    placeName,
-    language: r.language ?? null,
-    time: r.time ?? null,
-  }));
-
-  return {
-    placeId,
-    placeName,
-    placeUrl,
-    reviews,
-  };
 });

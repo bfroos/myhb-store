@@ -2,6 +2,10 @@
   "common": {
     "discount": "خصم",
     "reviews": "التقييمات",
+    "reviewsCount": "{count} تقييم",
+    "review": "تقييم",
+    "rating": "التقييم",
+    "reviewLinkLabel": "عرض التقييم على {source}",
     "five-star": "5 نجوم",
     "showLess": "أقل",
     "showMore": "أكثر",
