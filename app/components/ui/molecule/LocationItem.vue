@@ -186,11 +186,10 @@ const buildLocationPath = (item: MoleculeLocationItem) => {
 }
 
 .locationTile__content {
+  flex: 1;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--space-400);
-  flex: 1 0 300px;
-  max-width: 100%;
   padding: var(--space-500) var(--space-400) var(--space-400);
 }
 
@@ -214,16 +213,6 @@ const buildLocationPath = (item: MoleculeLocationItem) => {
   font-size: var(--font-sm);
   line-height: var(--line-sm);
   color: var(--color-text-light);
-}
-
-.locationTile__contactInfo {
-  flex: 1 0 300px;
-  max-width: 100%;
-}
-
-.locationTile__actions {
-  flex: 1 0 300px;
-  max-width: 100%;
 }
 
 .locationTile__badge {

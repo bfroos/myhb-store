@@ -1,27 +1,23 @@
 <template>
-  <UiLayoutSectionBlock>
-    <UiLayoutCardSurface
-      :card-settings="{
-        colorTheme: ColorTheme.STRONG,
-      }"
-    >
-      <div class="locationSearch">
-        <div class="locationSearch__search">
+  <UiLayoutSectionBlock v-if="hasContent">
+    <UiLayoutCardSurface :card-settings="cardSettings">
+      <div class="finder">
+        <div class="finder__search">
           <BlockLocationFinderSearch
             :locations="locations"
-            @fit-map-to-locations="onFitMapToLocations"
+            @fit-map-to-locations="fitBoundsLocations = $event"
           />
         </div>
-        <div class="locationSearch__map">
-          <div class="locationSearch__mapInner">
+        <div class="finder__map">
+          <div class="finder__map-inner">
             <ClientOnly>
               <UiMoleculeLocationMapMarkers
                 :locations="locations"
                 :fit-bounds-locations="fitBoundsLocations"
               />
               <template #fallback>
-                <div class="locationSearch__mapPlaceholder">
-                  {{ $t("blocks.locationFinder.mapLoading") }}
+                <div class="finder__map-placeholder">
+                  {{ t("blocks.locationFinder.mapLoading") }}
                 </div>
               </template>
             </ClientOnly>
@@ -31,6 +27,7 @@
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
+
 <script setup lang="ts">
 import { ColorTheme } from "~/lib/strapi/dto/enums";
 import type { LocationDto } from "~/lib/strapi/dto/collections";
@@ -39,39 +36,53 @@ const props = defineProps<{
   locations: LocationDto[];
 }>();
 
+const { t } = useI18n();
+
 const fitBoundsLocations = ref<LocationDto[] | null>(null);
 
-function onFitMapToLocations(locations: LocationDto[] | null) {
-  fitBoundsLocations.value = locations;
-}
+const hasContent = computed(() => (props.locations?.length ?? 0) > 0);
+
+const cardSettings = { colorTheme: ColorTheme.STRONG };
 </script>
+
 <style scoped>
-.locationSearch {
+.finder {
   display: flex;
   flex-direction: column-reverse;
+  width: 100%;
 }
 
-.locationSearch__map {
+.finder__map {
   position: relative;
   padding: var(--space-card-figure-pad);
 }
 
-.locationSearch__mapInner {
+.finder__map-inner {
   width: 100%;
   height: 50vh;
   border-radius: var(--border-radius-card-figure);
   overflow: hidden;
 }
 
-@media screen and (min-width: 900px) {
-  .locationSearch {
+.finder__map-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 200px;
+  color: var(--color-text-light);
+}
+
+@media (min-width: 900px) {
+  .finder {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: var(--space-card-figure-pad);
     height: calc(100vh - 200px);
   }
 
-  .locationSearch__search {
+  .finder__search {
     position: relative;
     height: 100%;
     overflow-y: auto;
@@ -79,7 +90,7 @@ function onFitMapToLocations(locations: LocationDto[] | null) {
     scrollbar-color: var(--color-white) var(--color-black);
   }
 
-  .locationSearch__mapInner {
+  .finder__map-inner {
     height: 100%;
   }
 }

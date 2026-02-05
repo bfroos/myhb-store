@@ -1,64 +1,62 @@
 <template>
-  <div class="locationFinderSearch" :class="classes">
-    <header>
-      <h1>{{ $t("blocks.locationFinder.headline") }}</h1>
-      <div class="locationFinderSearch__mobile">
-        <div class="locationFinderSearch__mobileClose">
-          <UiAtomBaseButton
-            variant="tertiary"
-            aria-label="Schließen"
-            @click="closeFullscreenSearch"
-          >
-            <IconX size="16" />
-          </UiAtomBaseButton>
-        </div>
-        <div class="locationFinderSearch__mobileInput">
+  <div class="search" :class="{ 'search--fullscreen': isFullscreen }">
+    <header class="search__header">
+      <h1 class="search__heading">{{ t("blocks.locationFinder.headline") }}</h1>
+      <div class="search__mobile">
+        <UiAtomBaseButton
+          variant="tertiary"
+          :aria-label="t('cta.close')"
+          class="search__close"
+          @click="closeFullscreen"
+        >
+          <IconX size="16" aria-hidden="true" />
+        </UiAtomBaseButton>
+        <div class="search__input search__input--mobile">
           <IconField>
             <InputIcon>
-              <IconSearch size="16" />
+              <IconSearch size="16" aria-hidden="true" />
             </InputIcon>
             <AutoComplete
               v-model="cityInput"
               :suggestions="citySuggestions"
-              :placeholder="$t('blocks.locationFinder.searchPlaceholder')"
+              :placeholder="t('blocks.locationFinder.searchPlaceholder')"
               option-label="label"
               :loading="cityLoading"
               fluid
-              showClear
-              @complete="onCitySearch"
-              @item-select="onCitySelect"
-              @focus="onCityFocus"
+              show-clear
+              @complete="onSearch"
+              @item-select="onSelect"
+              @focus="openFullscreen"
             />
           </IconField>
         </div>
       </div>
-      <div class="locationFinderSearch__desktop">
+      <div class="search__desktop">
         <IconField>
           <InputIcon>
-            <IconSearch size="16" />
+            <IconSearch size="16" aria-hidden="true" />
           </InputIcon>
           <AutoComplete
             v-model="cityInput"
             :suggestions="citySuggestions"
-            :placeholder="$t('blocks.locationFinder.searchPlaceholder')"
+            :placeholder="t('blocks.locationFinder.searchPlaceholder')"
             option-label="label"
             :loading="cityLoading"
             fluid
-            showClear
-            @complete="onCitySearch"
-            @item-select="onCitySelect"
+            show-clear
+            @complete="onSearch"
+            @item-select="onSelect"
           />
         </IconField>
       </div>
-      <span v-if="cityError" class="locationFinderSearch__error">
-        {{ cityError }}
-      </span>
+      <span v-if="cityError" class="search__error">{{ cityError }}</span>
     </header>
-    <div class="locationFinderSearch__results">
+    <div class="search__results">
       <BlockLocationFinderSearchResults :locations="sortedLocations" />
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { IconSearch, IconX } from "@tabler/icons-vue";
 import AutoComplete, {
@@ -66,45 +64,18 @@ import AutoComplete, {
 } from "primevue/autocomplete";
 import type { LocationDto } from "~/lib/strapi/dto/collections";
 import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
+import { getLocationDistance } from "~/utils/locations";
 
 const props = defineProps<{
   locations: LocationDto[];
 }>();
 
-const classes = computed(() => {
-  return {
-    "locationFinderSearch--fullscreen": showFullscreenSearch.value,
-  };
-});
-
-const sortedLocations = computed(() => {
-  return (props.locations ?? [])
-    .map((location) => {
-      const getDistance = () => {
-        if (!location.coordinates || !selectedCity.value) return undefined;
-        return getLocationDistance(location.coordinates, {
-          lat: selectedCity.value.lat,
-          long: selectedCity.value.lng,
-        });
-      };
-
-      return {
-        ...location,
-        distanceInKilometers: getDistance(),
-      };
-    })
-    .sort((a, b) => {
-      return (
-        (a.distanceInKilometers ?? Infinity) -
-        (b.distanceInKilometers ?? Infinity)
-      );
-    });
-});
-
 const emit = defineEmits<{
-  (e: "citySelect", city: CitySuggestion | null): void;
-  (e: "fitMapToLocations", locations: LocationDto[] | null): void;
+  citySelect: [city: CitySuggestion | null];
+  fitMapToLocations: [locations: LocationDto[] | null];
 }>();
+
+const { t } = useI18n();
 
 const {
   suggestions: citySuggestions,
@@ -115,33 +86,56 @@ const {
 
 const cityInput = ref<string | null>(null);
 const selectedCity = ref<CitySuggestion | null>(null);
-const showFullscreenSearch = ref(false);
+const isFullscreen = ref(false);
 
-function onCitySearch(event: { query: string }) {
-  citySearch(event.query);
-}
+const sortedLocations = computed(() => {
+  const locs = props.locations ?? [];
+  const city = selectedCity.value;
+  if (!city) return locs;
 
-function getFirstThreeWithCoordinates() {
+  return [...locs]
+    .map((loc) => ({
+      ...loc,
+      distanceInKilometers: loc.coordinates
+        ? getLocationDistance(loc.coordinates, {
+            lat: city.lat,
+            long: city.lng,
+          })
+        : undefined,
+    }))
+    .sort(
+      (a, b) =>
+        (a.distanceInKilometers ?? Infinity) -
+        (b.distanceInKilometers ?? Infinity),
+    );
+});
+
+function getLocationsForMapBounds(): LocationDto[] | null {
+  if (!selectedCity.value) return null;
   return sortedLocations.value
     .filter((l) => l.coordinates?.lat != null && l.coordinates?.long != null)
     .slice(0, 3);
 }
 
-function onCitySelect(event: AutoCompleteOptionSelectEvent) {
+function onSearch(event: { query: string }) {
+  citySearch(event.query);
+}
+
+function onSelect(event: AutoCompleteOptionSelectEvent) {
   selectedCity.value = event.value as CitySuggestion;
-  emit("fitMapToLocations", getFirstThreeWithCoordinates());
+  emit("fitMapToLocations", getLocationsForMapBounds());
 }
 
-function onCityFocus() {
-  showFullscreenSearch.value = true;
+function openFullscreen() {
+  isFullscreen.value = true;
 }
 
-function closeFullscreenSearch() {
-  showFullscreenSearch.value = false;
+function closeFullscreen() {
+  isFullscreen.value = false;
 }
 
-watch(showFullscreenSearch, (isOpen) => {
-  document.body.style.overflow = isOpen ? "hidden" : "";
+watch(isFullscreen, (open) => {
+  document.body.style.overflow = open ? "hidden" : "";
 });
 
 watch(selectedCity, (city) => {
@@ -152,13 +146,15 @@ onBeforeUnmount(() => {
   document.body.style.overflow = "";
 });
 </script>
+
 <style scoped>
-.locationFinderSearch {
+.search {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
-.locationFinderSearch header {
+.search__header {
   position: sticky;
   top: 0;
   z-index: 1;
@@ -168,39 +164,42 @@ onBeforeUnmount(() => {
   padding: var(--space-card-pad-xs) var(--space-card-pad) var(--space-card-pad);
 }
 
-.locationFinderSearch h1 {
+.search__heading {
+  margin: 0;
   font-size: var(--font-2xl);
   line-height: var(--line-2xl);
   font-weight: var(--font-bold);
 }
 
-.locationFinderSearch__results {
+.search__results {
   display: none;
   padding: 0 var(--space-card-pad-xs) var(--space-card-pad-sm)
     var(--space-card-pad-sm);
 }
 
-.locationFinderSearch__error {
+.search__error {
   font-size: var(--font-sm);
+  color: var(--color-text-muted);
 }
 
-.locationFinderSearch__desktop,
-.locationFinderSearch__mobileClose {
+.search__desktop,
+.search__close {
   display: none;
 }
 
-.locationFinderSearch__mobile {
+.search__mobile {
   display: flex;
   align-items: center;
   gap: var(--space-400);
 }
 
-.locationFinderSearch__mobileInput {
+.search__input--mobile {
   flex: 1;
+  min-width: 0;
 }
 
-@media screen and (max-width: 899px) {
-  .locationFinderSearch--fullscreen {
+@media (max-width: 899px) {
+  .search--fullscreen {
     position: fixed;
     z-index: 1000;
     top: 0;
@@ -211,7 +210,7 @@ onBeforeUnmount(() => {
     background: var(--color-card-bg-strong);
   }
 
-  .locationFinderSearch--fullscreen header {
+  .search--fullscreen .search__header {
     padding: var(--space-card-pad-sm) var(--space-card-pad-xs) var(--space-500)
       var(--space-card-pad-sm);
     background: linear-gradient(
@@ -221,26 +220,26 @@ onBeforeUnmount(() => {
     );
   }
 
-  .locationFinderSearch--fullscreen h1 {
+  .search--fullscreen .search__heading {
     display: none;
   }
 
-  .locationFinderSearch--fullscreen .locationFinderSearch__results,
-  .locationFinderSearch--fullscreen .locationFinderSearch__mobileClose {
+  .search--fullscreen .search__results,
+  .search--fullscreen .search__close {
     display: block;
   }
 }
 
-@media screen and (min-width: 900px) {
-  .locationFinderSearch__desktop {
+@media (min-width: 900px) {
+  .search__desktop {
     display: block;
   }
 
-  .locationFinderSearch__mobile {
+  .search__mobile {
     display: none;
   }
 
-  .locationFinderSearch header {
+  .search__header {
     padding: var(--space-card-pad-sm) var(--space-card-pad-xs) var(--space-500)
       var(--space-card-pad-sm);
     border-radius: var(--border-radius-card) 0 0 0;
@@ -251,7 +250,7 @@ onBeforeUnmount(() => {
     );
   }
 
-  .locationFinderSearch__results {
+  .search__results {
     display: block;
   }
 }
