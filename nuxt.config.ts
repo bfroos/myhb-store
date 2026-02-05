@@ -68,12 +68,7 @@ export default defineNuxtConfig({
       "http://localhost:3000",
     defaultLocale: "de",
     strategy: "prefix_except_default",
-    detectBrowserLanguage: {
-      useCookie: true,
-      cookieKey: "i18n_redirected",
-      redirectOn: "root",
-      alwaysRedirect: false,
-    },
+    detectBrowserLanguage: false,
     compilation: {
       strictMessage: false,
     },
