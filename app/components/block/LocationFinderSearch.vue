@@ -73,6 +73,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   citySelect: [city: CitySuggestion | null];
   fitMapToLocations: [locations: LocationDto[] | null];
+  scrollToTop: [];
 }>();
 
 const { t } = useI18n();
@@ -124,6 +125,7 @@ function onSearch(event: { query: string }) {
 function onSelect(event: AutoCompleteOptionSelectEvent) {
   selectedCity.value = event.value as CitySuggestion;
   emit("fitMapToLocations", getLocationsForMapBounds());
+  emit("scrollToTop");
 }
 
 function openFullscreen() {

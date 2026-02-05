@@ -2,10 +2,11 @@
   <UiLayoutSectionBlock v-if="hasContent">
     <UiLayoutCardSurface :card-settings="cardSettings">
       <div class="finder">
-        <div class="finder__search">
+        <div ref="searchRef" class="finder__search">
           <BlockLocationFinderSearch
             :locations="locations"
             @fit-map-to-locations="fitBoundsLocations = $event"
+            @scroll-to-top="scrollSearchToTop"
           />
         </div>
         <div class="finder__map">
@@ -39,8 +40,17 @@ const props = defineProps<{
 const { t } = useI18n();
 
 const fitBoundsLocations = ref<LocationDto[] | null>(null);
+const searchRef = ref<HTMLElement | null>(null);
 
 const hasContent = computed(() => (props.locations?.length ?? 0) > 0);
+
+function scrollSearchToTop() {
+  nextTick(() => {
+    setTimeout(() => {
+      searchRef.value?.scrollTo({ top: 0, behavior: "smooth" });
+    }, 150);
+  });
+}
 
 const cardSettings = { colorTheme: ColorTheme.STRONG };
 </script>
