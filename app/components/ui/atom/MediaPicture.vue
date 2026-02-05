@@ -11,7 +11,8 @@
       :src="imgSrc"
       :width="imgDimensions?.width"
       :height="imgDimensions?.height"
-      :loading="loading ?? 'lazy'"
+      :loading="imgLoading"
+      :fetchpriority="priority ? 'high' : undefined"
       decoding="async"
       :alt="alt ?? media.alternativeText ?? media.caption ?? ''"
       class="media-picture__img"
@@ -29,6 +30,12 @@ const props = defineProps<AtomMediaPicture>();
 const imgSrc = computed(() =>
   getMediaUrl(props.media, props.defaultFormat ?? ImageFormat.SMALL),
 );
+
+// Priority images should load eagerly
+const imgLoading = computed(() => {
+  if (props.priority) return "eager";
+  return props.loading ?? "lazy";
+});
 
 const sortedSources = computed(() => {
   if (!props.sources) return [];

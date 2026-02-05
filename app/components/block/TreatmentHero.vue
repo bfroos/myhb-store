@@ -41,6 +41,7 @@
                 [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
                 [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
               }"
+              priority
             />
           </div>
           <div class="hero__body">

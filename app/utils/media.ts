@@ -14,25 +14,25 @@ export const IMAGE_SIZE_PRESETS: Record<
 > = {
   [ImageFormatEnum.THUMBNAIL]: {
     width: 150,
-    format: "webp",
+    format: "auto", // Cloudflare serves AVIF if supported, else WebP
     quality: 80,
     fit: "scale-down",
   },
   [ImageFormatEnum.SMALL]: {
     width: 460,
-    format: "webp",
+    format: "auto",
     quality: 85,
     fit: "scale-down",
   },
   [ImageFormatEnum.MEDIUM]: {
     width: 760,
-    format: "webp",
+    format: "auto",
     quality: 85,
     fit: "scale-down",
   },
   [ImageFormatEnum.LARGE]: {
     width: 1100,
-    format: "webp",
+    format: "auto",
     quality: 85,
     fit: "scale-down",
   },

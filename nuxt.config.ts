@@ -244,6 +244,17 @@ export default defineNuxtConfig({
         "vercel-cdn-cache-control": "no-store",
       },
     },
+    // Static assets: aggressive caching (1 year, immutable)
+    "/favicon/**": {
+      headers: {
+        "cache-control": "public, max-age=31536000, immutable",
+      },
+    },
+    "/_nuxt/**": {
+      headers: {
+        "cache-control": "public, max-age=31536000, immutable",
+      },
+    },
     // Cache sitemap.xml (24 hours)
     "/sitemap.xml": {
       cache: { maxAge: 86400 },

@@ -133,6 +133,8 @@ export type AtomMediaPicture = {
   defaultFormat?: ImageFormat;
   alt?: string;
   loading?: "lazy" | "eager";
+  /** High priority for above-the-fold images (sets fetchpriority="high" and loading="eager") */
+  priority?: boolean;
   width?: number;
   height?: number;
 };

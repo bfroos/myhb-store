@@ -12,6 +12,7 @@
           v-if="hasImage"
           :media="media!"
           :sources="imageSources"
+          priority
         />
         <UiAtomMediaVideo
           v-else-if="hasVideo"

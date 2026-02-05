@@ -8,6 +8,7 @@
           :media="currentImage"
           :sources="imageSources"
           :default-format="ImageFormat.MEDIUM"
+          :priority="currentImageIndex === 0"
         />
       </div>
       <div v-if="hasMultipleImages" class="productHero__gallery__nav">
