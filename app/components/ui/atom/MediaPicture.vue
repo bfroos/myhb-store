@@ -45,12 +45,11 @@ const sortedSources = computed(() => {
 });
 
 const imgDimensions = computed(() => {
+  // 1. Explicit width/height props take priority
   if (props.width != null && props.height != null) {
     return { width: props.width, height: props.height };
   }
-  if (props.media.width != null && props.media.height != null) {
-    return { width: props.media.width, height: props.media.height };
-  }
+  // 2. Calculate dimensions based on the actual loaded format (preset width + aspect ratio)
   return getImageDimensions(
     props.media,
     props.defaultFormat ?? ImageFormat.SMALL,
@@ -63,14 +62,20 @@ function getImageDimensions(
 ): { width: number; height: number } | undefined {
   if (!media?.mime?.startsWith("image/")) return undefined;
 
-  const presetWidth = IMAGE_SIZE_PRESETS[format]?.width ?? 460;
+  const preset = IMAGE_SIZE_PRESETS[format];
+  const presetWidth = preset?.width ?? 460;
   const aspectRatio = getAspectRatioFromMedia(media, format);
 
   if (aspectRatio == null) return undefined;
 
+  // Cloudflare uses fit=scale-down, so image won't be upscaled
+  // Use the smaller of preset width or original width
+  const originalWidth = media.width ?? presetWidth;
+  const actualWidth = Math.min(presetWidth, originalWidth);
+
   return {
-    width: presetWidth,
-    height: Math.round(presetWidth / aspectRatio),
+    width: actualWidth,
+    height: Math.round(actualWidth / aspectRatio),
   };
 }
 
