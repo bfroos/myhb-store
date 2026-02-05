@@ -24,6 +24,8 @@ const {
   locationLocalizations,
   cityLocalizations,
   treatmentPageLocalizations,
+  treatmentPage,
+  location,
 } = useLocationTreatmentPage();
 
 const pageLoaded = await fetchPage();
@@ -48,4 +50,19 @@ if (pageLoaded) {
   ]);
   await setPageSeo(seo.value);
 }
+
+// Schema.org MedicalProcedure
+const config = useRuntimeConfig();
+const route = useRoute();
+const { brandName } = useBrand();
+
+const medicalProcedureSchema = computed(() =>
+  buildMedicalProcedureSchema(treatmentPage.value, location.value, {
+    publicUrl: (config.public.publicUrl as string) || "",
+    path: route.path,
+    brandName: brandName.value,
+  }),
+);
+
+useSchemaOrg(medicalProcedureSchema);
 </script>

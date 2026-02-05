@@ -146,6 +146,8 @@ export function useLocationTreatmentPage() {
     locationLocalizations,
     cityLocalizations,
     treatmentPageLocalizations,
+    treatmentPage,
+    location,
     seo,
   };
 }

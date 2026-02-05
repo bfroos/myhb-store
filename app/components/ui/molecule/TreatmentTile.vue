@@ -115,13 +115,16 @@ const priceLabel = computed(() => {
 }
 
 .treatment__overlayContent h3 {
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
+  font-weight: var(--font-bold);
+  margin: 0 0 var(--space-200);
 }
 
 .treatment__overlayContent p {
   font-size: var(--font-sm);
   line-height: var(--line-sm);
+  opacity: 0.8;
 }
 
 .treatment__overlay::before {

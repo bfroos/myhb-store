@@ -98,5 +98,6 @@ export function useTreatmentPage() {
     seo,
     localizations,
     blocks,
+    treatmentPage,
   };
 }
