@@ -1,6 +1,10 @@
 <template>
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
-  <BlockTreatmentHero v-if="fixedBlocks?.hero" v-bind="fixedBlocks.hero" />
+  <BlockTreatmentHero
+    v-if="fixedBlocks?.hero"
+    v-bind="fixedBlocks.hero"
+    show-floating-cta
+  />
   <BlockLocationContact
     v-if="fixedBlocks?.locationContact"
     v-bind="fixedBlocks.locationContact"

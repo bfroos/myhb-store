@@ -1,7 +1,7 @@
 <template>
   <UiLayoutSectionBlock>
     <UiLayoutCardSurface :card-settings="cardSettings">
-      <div class="hero-card">
+      <div class="hero-card" ref="heroCardRef">
         <div v-if="hasMarquee" class="hero__marquee-wrapper">
           <div class="hero__marquee" role="marquee" aria-live="polite">
             <div class="hero__marquee-viewport">
@@ -123,6 +123,51 @@
       </div>
     </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
+
+  <Teleport to="body" v-if="showFloatingCta && isMounted">
+    <Transition name="floating-cta">
+      <div v-show="showFloatingBanner" class="floating-cta">
+        <div class="floating-cta__content">
+          <div class="floating-cta__text">
+            <strong v-if="priceLabel" class="floating-cta__price">
+              {{ priceLabel }}
+            </strong>
+            <span v-if="eyebrow || headline" class="floating-cta__title">
+              {{ eyebrow || headline }}
+            </span>
+          </div>
+          <div class="floating-cta__actions">
+            <template v-if="showReviews">
+              <UiMoleculeReviewsBadge
+                v-if="googlePlaceId"
+                show-text
+                :source="ReviewSource.GOOGLE"
+                :rating="googlePlaceId ? undefined : 5"
+                :google-place-id="googlePlaceId"
+                class="floating-cta__reviews"
+              />
+              <UiMoleculeReviewsBadge
+                v-else
+                show-text
+                :source="ReviewSource.GOOGLE"
+                :rating="5"
+                class="floating-cta__reviews"
+              />
+            </template>
+            <SharedButton
+              v-if="cta"
+              :button="cta"
+              :data="{ calendlyUrl: calendlyUrl }"
+              :button-props="{
+                size: 'md',
+                variant: 'primary',
+              }"
+            />
+          </div>
+        </div>
+      </div>
+    </Transition>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
@@ -137,9 +182,40 @@ import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import { IconAsterisk } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
 
-const props = defineProps<BlockTreatmentHeroDto>();
+const props = withDefaults(
+  defineProps<BlockTreatmentHeroDto & { showFloatingCta?: boolean }>(),
+  {
+    showFloatingCta: false,
+  },
+);
 const { t } = useI18n();
 const globals = useGlobals();
+
+// Floating CTA logic
+const heroCardRef = ref<HTMLElement | null>(null);
+const isMounted = ref(false);
+const showFloatingBanner = ref(false);
+
+onMounted(() => {
+  isMounted.value = true;
+
+  if (!props.showFloatingCta) return;
+
+  const handleScroll = () => {
+    if (!heroCardRef.value) return;
+
+    const rect = heroCardRef.value.getBoundingClientRect();
+    const isHeroOutOfView = rect.bottom < 0;
+
+    showFloatingBanner.value = isHeroOutOfView;
+  };
+
+  window.addEventListener("scroll", handleScroll, { passive: true });
+
+  onUnmounted(() => {
+    window.removeEventListener("scroll", handleScroll);
+  });
+});
 
 const hasMarquee = computed(
   () => (props.announcementText ?? "").trim().length > 0,
@@ -467,6 +543,107 @@ const discountLabel = computed(() => {
   .hero--has-marquee .hero__media-image :deep(img) {
     border-radius: var(--border-radius-200) var(--border-radius-200)
       var(--border-radius-card-figure) var(--border-radius-card-figure);
+  }
+}
+
+/* Floating CTA */
+.floating-cta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background: var(--color-white);
+  border-top: 1px solid var(--color-border);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+  padding: var(--space-400);
+  backdrop-filter: blur(10px);
+}
+
+.theme-strong .floating-cta {
+  background: var(--color-gray-900);
+}
+
+.floating-cta__content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-400);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.floating-cta__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-100);
+  min-width: 0;
+  flex: 1;
+}
+
+.floating-cta__price {
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
+}
+
+.floating-cta__title {
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Transition */
+.floating-cta-enter-active,
+.floating-cta-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.floating-cta-enter-from,
+.floating-cta-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.floating-cta__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-400);
+  flex-shrink: 0;
+}
+
+.floating-cta__reviews {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .floating-cta {
+    padding: var(--space-500) var(--space-600);
+    border-radius: var(--border-radius-card) var(--border-radius-card) 0 0;
+  }
+
+  .floating-cta__content {
+    gap: var(--space-600);
+  }
+
+  .floating-cta__text {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-400);
+  }
+
+  .floating-cta__title {
+    white-space: normal;
+  }
+}
+
+@media (min-width: 900px) {
+  .floating-cta__reviews {
+    display: flex;
   }
 }
 </style>
