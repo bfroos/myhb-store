@@ -296,6 +296,7 @@ const discountLabel = computed(() => {
   padding-top: var(--space-card-figure-pad);
   padding-left: var(--space-card-figure-pad);
   padding-right: var(--space-card-figure-pad);
+  width: 100%;
 }
 
 .hero__media-image {
