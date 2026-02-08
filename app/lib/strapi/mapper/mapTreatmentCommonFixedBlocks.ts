@@ -1,5 +1,7 @@
 import {
   ColorTheme,
+  MediaBentoLayout,
+  MediaBentoMediaItemAlignment,
   SharedButtonAction,
   SharedButtonMethod,
   SharedButtonSingleType,
@@ -91,6 +93,8 @@ export function mapTreatmentCommonFixedBlocks(
       intro: treatmentPage?.about?.intro,
       content: treatmentPage?.about?.content,
       mediaItems: [treatmentPage?.about?.media],
+      layout: MediaBentoLayout.MEDIA_LEFT,
+      mediaItemAlignment: MediaBentoMediaItemAlignment.HORIZONTAL,
     };
   }
 

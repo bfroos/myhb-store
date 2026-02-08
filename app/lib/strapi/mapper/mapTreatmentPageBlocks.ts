@@ -34,8 +34,6 @@ export function mapTreatmentPageFixedBlocks(
       text: treatmentPage?.hero?.text,
       cover: treatmentPage?.hero?.cover,
       cta: link,
-      priceInEuroCent: treatmentPage?.treatment?.priceInEuroCent,
-      isStartingPrice: treatmentPage?.treatment?.isStartingPrice,
       showPrice: treatmentPage?.hero?.showPrice,
       showGlobalDiscount: treatmentPage?.hero?.showDiscount,
       treatment: treatmentPage?.treatment,
