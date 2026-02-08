@@ -1,12 +1,15 @@
 <template>
   <div class="locationMap">
-    <div v-if="!isReady" class="locationMap__loading">
+    <div v-if="!isReady && !didTimeout" class="locationMap__loading">
       <UiLayoutIconWrapper :size="40" rotate>
         <IconLoader />
       </UiLayoutIconWrapper>
     </div>
 
-    <div v-else-if="!hasPreferencesConsent" class="locationMap__consent">
+    <div
+      v-else-if="(!isReady && didTimeout) || !hasPreferencesConsent"
+      class="locationMap__consent"
+    >
       <UiLayoutIconWrapper :size="40">
         <IconMapOff />
       </UiLayoutIconWrapper>
@@ -54,7 +57,7 @@ const props = defineProps<{
   onMarkerClick?: (loc: Location) => void;
 }>();
 
-const { hasPreferencesConsent, checkConsent, openCookieSettings, isReady } =
+const { hasPreferencesConsent, openCookieSettings, isReady, didTimeout } =
   useCookiebot();
 
 const emit = defineEmits<{
@@ -280,7 +283,6 @@ onMounted(async () => {
     console.warn("Google Maps: mapId fehlt");
   }
 
-  checkConsent();
   if (!isReady.value) return;
   if (!hasPreferencesConsent.value) return;
 
