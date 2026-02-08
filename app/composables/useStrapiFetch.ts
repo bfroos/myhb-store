@@ -26,6 +26,17 @@ function buildUrl(path: string, query: QueryObject): string {
   return qsString ? `/api/strapi${path}?${qsString}` : `/api/strapi${path}`;
 }
 
+export async function strapiFetch<T>(
+  path: string,
+  opts: { query?: QueryLike } = {},
+): Promise<T> {
+  if (!path.startsWith("/")) {
+    throw new Error("strapiFetch path must start with '/'");
+  }
+  const url = buildUrl(path, resolveQuery(opts.query));
+  return (await $fetch<T>(url)) as T;
+}
+
 export function useStrapiFetch<T>(path: string, opts: any = {}) {
   if (!path.startsWith("/")) {
     throw new Error("useStrapiFetch path must start with '/'");

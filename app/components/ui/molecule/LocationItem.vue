@@ -18,7 +18,10 @@
         <div class="locationTitle__header">
           <b v-if="item.city" class="locationTile__title">{{ title }}</b>
           <span
-            v-if="item.distanceInKilometers"
+            v-if="
+              item.distanceInKilometers &&
+              Number.isFinite(Number(item.distanceInKilometers))
+            "
             class="locationTitle__distance"
           >
             <IconDirectionSign size="1.5em" stroke="2" />
@@ -79,10 +82,9 @@ import {
 import { isMediaImage } from "~/utils/media";
 
 const { locale, locales } = useI18n();
-
 const emit = defineEmits<{
   book: [];
-  close: any;
+  navigate: any;
 }>();
 
 const props = withDefaults(
@@ -91,6 +93,7 @@ const props = withDefaults(
     mainInformation?: "location" | "city";
     showBuildingImage?: boolean;
     onBook?: () => void;
+    onBeforeNavigate?: () => void;
   }>(),
   {
     mainInformation: "location",
@@ -118,7 +121,8 @@ const handleBookClick = () => {
 };
 
 const handleDetailsClick = () => {
-  emit("close");
+  props.onBeforeNavigate?.();
+  emit("navigate");
 };
 
 const isMainInformationLocation = computed(() => {

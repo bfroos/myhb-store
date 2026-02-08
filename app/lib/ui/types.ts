@@ -1,6 +1,7 @@
 import type {
   CardSettingsDto,
   SharedAddressDto,
+  SharedCoordinatesDto,
   SharedVideoSettingsDto,
 } from "../strapi/dto/components";
 import type { StrapiMedia } from "../strapi/dto/types";
@@ -89,6 +90,8 @@ export type MoleculeLocationItem = {
   address?: SharedAddressDto;
   buildingImage?: StrapiMedia;
   distanceInKilometers?: number;
+  calendlyUrl?: string;
+  coordinates?: SharedCoordinatesDto;
 };
 
 export type LocationItem = {

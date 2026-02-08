@@ -5,7 +5,13 @@
       :key="location.id"
       class="results__item theme-light"
     >
-      <UiMoleculeLocationItem :item="location" main-information="location" />
+      <UiMoleculeLocationItem
+        :item="location"
+        main-information="location"
+        :on-book="onBook ? () => onBook!(location) : undefined"
+        :on-before-navigate="onNavigate"
+        v-bind="locationItemProps"
+      />
     </li>
   </ul>
 </template>
@@ -15,6 +21,9 @@ import type { MoleculeLocationItem } from "~/lib/ui/types";
 
 const props = defineProps<{
   locations: MoleculeLocationItem[];
+  locationItemProps?: Partial<MoleculeLocationItem>;
+  onBook?: (location: MoleculeLocationItem) => void;
+  onNavigate?: () => void;
 }>();
 
 const hasItems = computed(() => (props.locations?.length ?? 0) > 0);

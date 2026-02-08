@@ -17,16 +17,16 @@
               <IconSearch size="16" aria-hidden="true" />
             </InputIcon>
             <AutoComplete
-              v-model="cityInput"
+              :model-value="cityInput"
               :suggestions="citySuggestions"
               :placeholder="t('blocks.locationFinder.searchPlaceholder')"
               option-label="label"
               :loading="cityLoading"
               fluid
               show-clear
-              @complete="onSearch"
-              @item-select="onSelect"
               @focus="openFullscreen"
+              @complete="onSearch?.($event)"
+              @update:model-value="onInputUpdate"
             />
           </IconField>
         </div>
@@ -37,95 +37,64 @@
             <IconSearch size="16" aria-hidden="true" />
           </InputIcon>
           <AutoComplete
-            v-model="cityInput"
+            :model-value="cityInput"
             :suggestions="citySuggestions"
             :placeholder="t('blocks.locationFinder.searchPlaceholder')"
             option-label="label"
             :loading="cityLoading"
             fluid
             show-clear
-            @complete="onSearch"
-            @item-select="onSelect"
+            @complete="onSearch?.($event)"
+            @update:model-value="onInputUpdate"
           />
         </IconField>
       </div>
       <span v-if="cityError" class="search__error">{{ cityError }}</span>
     </header>
     <div class="search__results">
-      <BlockLocationFinderSearchResults :locations="sortedLocations" />
+      <UiMoleculeLocationSearchResults
+        :locations="locations"
+        :on-book="handleLocationBook"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { IconSearch, IconX } from "@tabler/icons-vue";
-import AutoComplete, {
-  type AutoCompleteOptionSelectEvent,
-} from "primevue/autocomplete";
+import AutoComplete from "primevue/autocomplete";
+import type { MoleculeLocationItem } from "~/lib/ui/types";
 import type { LocationDto } from "~/lib/strapi/dto/collections";
 import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
-import { getLocationDistance } from "~/utils/locations";
 
 const props = defineProps<{
   locations: LocationDto[];
-}>();
-
-const emit = defineEmits<{
-  citySelect: [city: CitySuggestion | null];
-  fitMapToLocations: [locations: LocationDto[] | null];
-  scrollToTop: [];
+  citySuggestions: CitySuggestion[];
+  cityLoading: boolean;
+  cityError: string | null;
+  cityInput: string | CitySuggestion | null;
+  onSearch?: (event: { query: string }) => void;
+  onSelect?: (event: { value: CitySuggestion | null }) => void;
+  onCityInput?: (value: string | CitySuggestion | null) => void;
+  onBook?: (location: MoleculeLocationItem) => void;
 }>();
 
 const { t } = useI18n();
-
-const {
-  suggestions: citySuggestions,
-  loading: cityLoading,
-  error: cityError,
-  search: citySearch,
-} = useGoogleCitySearch();
-
-const cityInput = ref<string | null>(null);
-const selectedCity = ref<CitySuggestion | null>(null);
 const isFullscreen = ref(false);
 
-const sortedLocations = computed(() => {
-  const locs = props.locations ?? [];
-  const city = selectedCity.value;
-  if (!city) return locs;
+const emit = defineEmits<{
+  openFullscreen: [];
+}>();
 
-  return [...locs]
-    .map((loc) => ({
-      ...loc,
-      distanceInKilometers: loc.coordinates
-        ? getLocationDistance(loc.coordinates, {
-            lat: city.lat,
-            long: city.lng,
-          })
-        : undefined,
-    }))
-    .sort(
-      (a, b) =>
-        (a.distanceInKilometers ?? Infinity) -
-        (b.distanceInKilometers ?? Infinity),
-    );
-});
-
-function getLocationsForMapBounds(): LocationDto[] | null {
-  if (!selectedCity.value) return null;
-  return sortedLocations.value
-    .filter((l) => l.coordinates?.lat != null && l.coordinates?.long != null)
-    .slice(0, 3);
+function onInputUpdate(val: string | CitySuggestion | null) {
+  props.onCityInput?.(val);
+  if (val != null && typeof val === "object" && "lat" in val && "lng" in val) {
+    props.onSelect?.({ value: val as CitySuggestion });
+  }
 }
 
-function onSearch(event: { query: string }) {
-  citySearch(event.query);
-}
-
-function onSelect(event: AutoCompleteOptionSelectEvent) {
-  selectedCity.value = event.value as CitySuggestion;
-  emit("fitMapToLocations", getLocationsForMapBounds());
-  emit("scrollToTop");
+function handleLocationBook(location: MoleculeLocationItem) {
+  props.onBook?.(location);
 }
 
 function openFullscreen() {
@@ -138,14 +107,6 @@ function closeFullscreen() {
 
 watch(isFullscreen, (open) => {
   document.body.style.overflow = open ? "hidden" : "";
-});
-
-watch(selectedCity, (city) => {
-  if (!city) emit("fitMapToLocations", null);
-});
-
-onBeforeUnmount(() => {
-  document.body.style.overflow = "";
 });
 </script>
 

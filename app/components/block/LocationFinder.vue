@@ -1,21 +1,27 @@
 <template>
-  <UiLayoutSectionBlock v-if="hasContent">
+  <UiLayoutSectionBlock>
     <UiLayoutCardSurface :card-settings="cardSettings">
       <div class="finder">
         <div class="finder__search">
           <div ref="searchRef" class="finder__search-inner">
             <BlockLocationFinderSearch
-              :locations="locations"
-              @fit-map-to-locations="fitBoundsLocations = $event"
-              @scroll-to-top="scrollSearchToTop"
+              :locations="sortedLocations"
+              :city-input="cityInput"
+              :city-suggestions="citySuggestions"
+              :city-loading="cityLoading"
+              :city-error="cityError"
+              :on-search="onSearch"
+              :on-select="onSelect"
+              :on-city-input="handleCityInputUpdate"
+              :on-book="handleLocationBook"
             />
           </div>
         </div>
         <div class="finder__map">
           <div class="finder__map-inner">
             <UiMoleculeLocationMap
-              :locations="locations"
-              :fit-bounds-locations="fitBoundsLocations"
+              :locations="mapLocations"
+              :fit-bounds-locations="mapFitBoundsLocations"
             />
           </div>
         </div>
@@ -25,29 +31,91 @@
 </template>
 
 <script setup lang="ts">
+import { defineAsyncComponent } from "vue";
+import { useDialog } from "primevue/usedialog";
 import { ColorTheme } from "~/lib/strapi/dto/enums";
-import type { LocationDto } from "~/lib/strapi/dto/collections";
-
-const props = defineProps<{
-  locations: LocationDto[];
-}>();
+import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
+import type { MoleculeLocationItem } from "~/lib/ui/types";
 
 const { t } = useI18n();
+const dialog = useDialog();
+const {
+  fetchLocations,
+  citySuggestions,
+  cityLoading,
+  cityError,
+  cityInput,
+  selectedCity,
+  locations,
+  sortedLocations,
+  getThreeNearestLocations,
+  onSearch,
+  onSelect,
+} = useLocationFinder();
 
-const fitBoundsLocations = ref<LocationDto[] | null>(null);
 const searchRef = ref<HTMLElement | null>(null);
 
-const hasContent = computed(() => (props.locations?.length ?? 0) > 0);
+const mapLocations = computed(() =>
+  selectedCity.value
+    ? getThreeNearestLocations(selectedCity.value) ?? []
+    : locations.value ?? [],
+);
+const mapFitBoundsLocations = computed(() =>
+  getThreeNearestLocations(selectedCity.value),
+);
+const cardSettings = { colorTheme: ColorTheme.STRONG };
+
+function handleCityInputUpdate(val: string | CitySuggestion | null) {
+  cityInput.value = val;
+}
+
+function handleLocationBook(location: MoleculeLocationItem) {
+  if (!location.calendlyUrl) return;
+  dialog.open(
+    defineAsyncComponent(
+      () => import("~/components/ui/organism/CalendlyDialog.vue"),
+    ),
+    {
+      data: { url: location.calendlyUrl },
+      props: {
+        modal: true,
+        draggable: false,
+        header: t("dialogs.calendly.header"),
+        style: {
+          width: "600px",
+          height: "90svh",
+          maxHeight: "98svh",
+          margin: "0",
+          padding: "0",
+        },
+        contentStyle: {
+          height: "100%",
+          padding: "0",
+        },
+        breakpoints: {
+          "960px": "100vw",
+          "640px": "100vw",
+        },
+      },
+    },
+  );
+}
 
 function scrollSearchToTop() {
   nextTick(() => {
     setTimeout(() => {
       searchRef.value?.scrollTo({ top: 0, behavior: "smooth" });
-    }, 150);
+    }, 100);
   });
 }
 
-const cardSettings = { colorTheme: ColorTheme.STRONG };
+onMounted(async () => {
+  await fetchLocations();
+});
+
+watch(selectedCity, (city) => {
+  if (city) scrollSearchToTop();
+});
 </script>
 
 <style scoped>
