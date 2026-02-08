@@ -31,14 +31,11 @@
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent } from "vue";
-import { useDialog } from "primevue/usedialog";
 import { ColorTheme } from "~/lib/strapi/dto/enums";
 import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
 import type { MoleculeLocationItem } from "~/lib/ui/types";
 
-const { t } = useI18n();
-const dialog = useDialog();
+const { openCalendlyDialog } = useCalendlyDialog();
 const {
   fetchLocations,
   citySuggestions,
@@ -71,34 +68,7 @@ function handleCityInputUpdate(val: string | CitySuggestion | null) {
 
 function handleLocationBook(location: MoleculeLocationItem) {
   if (!location.calendlyUrl) return;
-  dialog.open(
-    defineAsyncComponent(
-      () => import("~/components/ui/organism/CalendlyDialog.vue"),
-    ),
-    {
-      data: { url: location.calendlyUrl },
-      props: {
-        modal: true,
-        draggable: false,
-        header: t("dialogs.calendly.header"),
-        style: {
-          width: "600px",
-          height: "90svh",
-          maxHeight: "98svh",
-          margin: "0",
-          padding: "0",
-        },
-        contentStyle: {
-          height: "100%",
-          padding: "0",
-        },
-        breakpoints: {
-          "960px": "100vw",
-          "640px": "100vw",
-        },
-      },
-    },
-  );
+  openCalendlyDialog(location.calendlyUrl);
 }
 
 function scrollSearchToTop() {

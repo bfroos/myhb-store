@@ -16,6 +16,7 @@
 import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import type { SharedButtonDto } from "~/lib/strapi/dto/components";
+import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
 import { SharedButtonAction } from "~/lib/strapi/dto/enums";
 import type { BaseButtonProps } from "~/lib/ui/types";
 
@@ -133,50 +134,24 @@ function resolveInternalToFromSharedButton(
 }
 
 const dialog = useDialog();
+const { openCalendlyDialog } = useCalendlyDialog();
 
 const handleClick = () => {
   if (props.button.method !== "action" || !props.button.action) return;
 
   if (props.button.action === SharedButtonAction.APPOINTMENT_BOOKING) {
-    openCalendlyDialog();
+    openCalendlyDialogForButton();
   }
   if (props.button.action === SharedButtonAction.NEWSLETTER_SIGN_UP) {
     openNewsletterSignUpDialog();
   }
 };
 
-const openCalendlyDialog = () => {
-  dialog.open(
-    defineAsyncComponent(
-      () => import("~/components/ui/organism/CalendlyDialog.vue"),
-    ),
-    {
-      data: {
-        url: props.data?.calendlyUrl || props.button?.data?.calendlyUrl,
-      },
-      props: {
-        modal: true,
-        draggable: false,
-        header: t("dialogs.calendly.header"),
-        style: {
-          width: "600px",
-          height: "90svh",
-          maxHeight: "98svh",
-          margin: "0",
-          padding: "0",
-        },
-        contentStyle: {
-          height: "100%",
-          padding: "0",
-        },
-        breakpoints: {
-          "960px": "100vw",
-          "640px": "100vw",
-        },
-      },
-    },
-  );
-};
+function openCalendlyDialogForButton() {
+  const url =
+    props.data?.calendlyUrl || props.button?.data?.calendlyUrl;
+  openCalendlyDialog(url);
+}
 
 const openNewsletterSignUpDialog = () => {
   dialog.open(
