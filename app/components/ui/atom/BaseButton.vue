@@ -383,9 +383,17 @@ const handleClick = (event: MouseEvent) => {
   --button-color-bg: transparent;
   --button-color-bg-hover: transparent;
   --button-color-text: var(--color-text);
+  display: inline;
   padding: 0;
   height: auto;
+  font-size: var(--font-md);
   font-weight: var(--font-regular);
+  line-height: var(--line-md);
+  vertical-align: text-top;
+}
+
+.button--text {
+  color: inherit;
 }
 
 .button--sm :is(.button__label, .button__icon) {

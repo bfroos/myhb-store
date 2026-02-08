@@ -1,7 +1,36 @@
 <template>
-  <div ref="mapEl" class="locationMapMarkers"></div>
+  <div class="locationMap">
+    <div v-if="!isReady" class="locationMap__loading">
+      <UiLayoutIconWrapper :size="40" rotate>
+        <IconLoader />
+      </UiLayoutIconWrapper>
+    </div>
+
+    <div v-else-if="!hasPreferencesConsent" class="locationMap__consent">
+      <UiLayoutIconWrapper :size="40">
+        <IconMapOff />
+      </UiLayoutIconWrapper>
+      <h3>
+        {{ $t("googleMaps.consentRequired") }}
+      </h3>
+      <p>
+        {{ $t("googleMaps.consentDescription") }}
+      </p>
+      <UiAtomBaseButton
+        type="button"
+        variant="link"
+        size="sm"
+        @click="openCookieSettings"
+      >
+        {{ $t("googleMaps.consentButton") }}
+      </UiAtomBaseButton>
+    </div>
+
+    <div v-show="isReady && hasPreferencesConsent" ref="mapEl"></div>
+  </div>
 </template>
 <script setup lang="ts">
+import { IconLoader, IconMapOff } from "@tabler/icons-vue";
 import type { Marker as ClusterMarker } from "@googlemaps/markerclusterer";
 import { loadGoogleMaps } from "~/composables/useGoogleMaps";
 import markerIcon from "~/assets/images/my-circle.svg";
@@ -24,6 +53,9 @@ const props = defineProps<{
   fitBoundsLocations?: Location[] | null;
   onMarkerClick?: (loc: Location) => void;
 }>();
+
+const { hasPreferencesConsent, checkConsent, openCookieSettings, isReady } =
+  useCookiebot();
 
 const emit = defineEmits<{
   (e: "markerClick", loc: Location): void;
@@ -112,6 +144,16 @@ function cleanup() {
   if (clustererRef.value) {
     clustererRef.value.clearMarkers();
     clustererRef.value = null;
+  }
+}
+
+function teardownMap() {
+  cleanup();
+  mapRef.value = null;
+  MarkerClustererClassRef.value = null;
+  AdvancedMarkerRef.value = null;
+  if (mapEl.value) {
+    mapEl.value.innerHTML = "";
   }
 }
 
@@ -204,12 +246,8 @@ function renderMarkers() {
   }
 }
 
-onMounted(async () => {
-  if (!import.meta.client || !mapEl.value) return;
-
-  if (!mapId) {
-    console.warn("Google Maps: mapId fehlt");
-  }
+async function initMap() {
+  if (mapRef.value) return;
 
   const { MarkerClusterer } = await import("@googlemaps/markerclusterer");
   MarkerClustererClassRef.value = MarkerClusterer;
@@ -220,7 +258,7 @@ onMounted(async () => {
   )) as google.maps.MarkerLibrary;
   AdvancedMarkerRef.value = markerLib.AdvancedMarkerElement;
 
-  mapRef.value = new google.maps.Map(mapEl.value, {
+  mapRef.value = new google.maps.Map(mapEl.value!, {
     center: { lat: 51.1657, lng: 10.4515 },
     zoom: 5,
     mapId,
@@ -233,6 +271,20 @@ onMounted(async () => {
   });
 
   renderMarkers();
+}
+
+onMounted(async () => {
+  if (!import.meta.client || !mapEl.value) return;
+
+  if (!mapId) {
+    console.warn("Google Maps: mapId fehlt");
+  }
+
+  checkConsent();
+  if (!isReady.value) return;
+  if (!hasPreferencesConsent.value) return;
+
+  await initMap();
 });
 
 watch(
@@ -241,14 +293,59 @@ watch(
   { deep: true },
 );
 
-onUnmounted(() => {
-  cleanup();
-  mapRef.value = null;
+watch(hasPreferencesConsent, async (hasConsent) => {
+  if (hasConsent) {
+    await initMap();
+  } else {
+    teardownMap();
+  }
+});
+
+watch(isReady, async (ready) => {
+  if (!ready) return;
+  // If consent was already granted before Cookiebot finished loading, init now.
+  if (hasPreferencesConsent.value) {
+    await initMap();
+  }
 });
 </script>
 <style scoped>
-.locationMapMarkers {
+.locationMap,
+.locationMap > div {
   width: 100%;
   height: 100%;
+}
+
+.locationMap__loading,
+.locationMap__consent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-400);
+  padding: var(--space-600);
+  text-align: center;
+  color: var(--color-text-muted);
+  background-color: var(--color-gray-900);
+}
+
+.locationMap__loading :deep(svg),
+.locationMap__consent :deep(svg) {
+  color: var(--color-text-muted);
+}
+
+.locationMap__loading h3,
+.locationMap__consent h3 {
+  margin: 0;
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
+  font-weight: var(--font-bold);
+}
+
+.locationMap__consent p {
+  margin: 0;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  max-width: 60ch;
 }
 </style>

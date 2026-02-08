@@ -92,6 +92,15 @@
               {{ $t("navigation.meta.privacyPolicy") }}
             </NuxtLinkLocale>
           </li>
+          <li>
+            <UiAtomBaseButton
+              type="button"
+              variant="text"
+              @click="openCookieSettings"
+            >
+              {{ $t("navigation.meta.cookieSettings") }}
+            </UiAtomBaseButton>
+          </li>
         </ul>
       </nav>
       <ul class="appFooter__paymentTypes">
@@ -189,6 +198,8 @@ import {
 const { treatmentPages, productCategories } = useMenu(
   "treatment-pages,product-categories",
 );
+
+const { openCookieSettings } = useCookiebot();
 </script>
 <style scoped>
 .appFooter a:not(.button) {

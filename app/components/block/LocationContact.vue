@@ -4,14 +4,10 @@
       <div class="contact">
         <div class="contact__map">
           <div class="contact__map-inner">
-            <ClientOnly v-if="mapLocation">
-              <UiMoleculeLocationMapMarkers :locations="[mapLocation]" />
-              <template #fallback>
-                <div class="contact__map-placeholder">
-                  {{ t("blocks.locationFinder.mapLoading") }}
-                </div>
-              </template>
-            </ClientOnly>
+            <UiMoleculeLocationMap
+              v-if="mapLocation"
+              :locations="[mapLocation]"
+            />
           </div>
         </div>
         <div v-if="hasAddressOrActions" class="contact__section">

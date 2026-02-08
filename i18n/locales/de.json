@@ -74,7 +74,8 @@
     },
     "meta": {
       "privacyPolicy": "Datenschutz",
-      "imprint": "Impressum"
+      "imprint": "Impressum",
+      "cookieSettings": "Cookies"
     }
   },
 
@@ -96,6 +97,12 @@
       "whatsapp": "Auf WhatsApp teilen",
       "facebook": "Auf Facebook teilen"
     }
+  },
+
+  "googleMaps": {
+    "consentRequired": "Karte nicht verfügbar",
+    "consentDescription": "Um die Karte anzuzeigen, benötigen wir deine Zustimmung für Google Maps. Bitte akzeptiere die Cookie-Einstellungen.",
+    "consentButton": "Cookie-Einstellungen öffnen"
   },
 
   "location": {

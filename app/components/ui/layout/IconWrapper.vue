@@ -10,6 +10,7 @@
     :width="size"
     :height="size"
     aria-hidden="true"
+    :class="{ 'icon-wrapper--rotate': rotate }"
   >
     <slot />
   </svg>
@@ -33,9 +34,14 @@ const props = withDefaults(
      * Optional override, e.g. "0 0 640 640". Takes precedence over `icon`.
      */
     viewBox?: string;
+    /**
+     * Continuous rotation, e.g. for loader icons.
+     */
+    rotate?: boolean;
   }>(),
   {
     strokeWidth: 1.25,
+    rotate: false,
   },
 );
 
@@ -60,5 +66,18 @@ const computedViewBox = computed(() => {
 <style scoped>
 svg :deep(*) {
   stroke-width: v-bind(strokeWidth);
+}
+
+.icon-wrapper--rotate {
+  animation: icon-wrapper-rotate 3s linear infinite;
+}
+
+@keyframes icon-wrapper-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

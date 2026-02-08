@@ -2,26 +2,21 @@
   <UiLayoutSectionBlock v-if="hasContent">
     <UiLayoutCardSurface :card-settings="cardSettings">
       <div class="finder">
-        <div ref="searchRef" class="finder__search">
-          <BlockLocationFinderSearch
-            :locations="locations"
-            @fit-map-to-locations="fitBoundsLocations = $event"
-            @scroll-to-top="scrollSearchToTop"
-          />
+        <div class="finder__search">
+          <div ref="searchRef" class="finder__search-inner">
+            <BlockLocationFinderSearch
+              :locations="locations"
+              @fit-map-to-locations="fitBoundsLocations = $event"
+              @scroll-to-top="scrollSearchToTop"
+            />
+          </div>
         </div>
         <div class="finder__map">
           <div class="finder__map-inner">
-            <ClientOnly>
-              <UiMoleculeLocationMapMarkers
-                :locations="locations"
-                :fit-bounds-locations="fitBoundsLocations"
-              />
-              <template #fallback>
-                <div class="finder__map-placeholder">
-                  {{ t("blocks.locationFinder.mapLoading") }}
-                </div>
-              </template>
-            </ClientOnly>
+            <UiMoleculeLocationMap
+              :locations="locations"
+              :fit-bounds-locations="fitBoundsLocations"
+            />
           </div>
         </div>
       </div>
@@ -95,9 +90,30 @@ const cardSettings = { colorTheme: ColorTheme.STRONG };
   .finder__search {
     position: relative;
     height: 100%;
+    overflow: hidden;
+  }
+
+  .finder__search-inner {
+    height: 100%;
     overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: var(--color-white) var(--color-black);
+  }
+
+  .finder__search::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 20px;
+    height: 20px;
+    background: linear-gradient(
+      to top,
+      var(--color-card-bg-strong) 0%,
+      transparent 100%
+    );
+    border-radius: 0 0 0 var(--border-radius-card-figure);
+    pointer-events: none;
   }
 
   .finder__map-inner {
