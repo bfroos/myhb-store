@@ -128,31 +128,68 @@ const globals = useGlobals();
 
 const isLocationVariant = computed(() => !!props.googlePlaceId);
 
-const asyncDataKey = computed(() => {
+const reviewsCache = useState<Record<string, GoogleReviewsResponse | null>>(
+  "google-reviews-cache",
+  () => ({}),
+);
+const reviewsInflight = useState<
+  Record<string, Promise<GoogleReviewsResponse | null> | null>
+>("google-reviews-inflight", () => ({}));
+
+const cacheKey = computed(() => {
   if (!props.googlePlaceId) return null;
   return `google-reviews:${props.googlePlaceId}:${locale.value}`;
 });
 
-const { data: locationFetchData } =
-  await useAsyncData<GoogleReviewsResponse | null>(
-    () => asyncDataKey.value ?? "google-reviews:none",
-    async () => {
-      if (!props.googlePlaceId) return null;
-      try {
-        return await $fetch<GoogleReviewsResponse>("/api/google-reviews", {
-          query: {
-            placeId: props.googlePlaceId,
-            language: locale.value,
-          },
-        });
-      } catch {
-        return null;
-      }
-    },
-    {
-      watch: [() => props.googlePlaceId, () => locale.value],
-    },
-  );
+const locationFetchData = computed<GoogleReviewsResponse | null>(() => {
+  const key = cacheKey.value;
+  if (!key) return null;
+  return reviewsCache.value[key] ?? null;
+});
+
+async function ensureGoogleReviewsLoaded(): Promise<void> {
+  const key = cacheKey.value;
+  const placeId = props.googlePlaceId;
+  if (!key || !placeId) return;
+
+  if (key in reviewsCache.value) return;
+
+  const pending = reviewsInflight.value[key];
+  if (pending) {
+    await pending;
+    return;
+  }
+
+  const p = (async () => {
+    try {
+      return await $fetch<GoogleReviewsResponse>("/api/google-reviews", {
+        query: {
+          placeId,
+          language: locale.value,
+        },
+      });
+    } catch {
+      return null;
+    }
+  })();
+
+  reviewsInflight.value[key] = p;
+  const res = await p;
+  reviewsCache.value[key] = res;
+  reviewsInflight.value[key] = null;
+}
+
+if (import.meta.server) {
+  await ensureGoogleReviewsLoaded();
+}
+
+watch(
+  () => cacheKey.value,
+  () => {
+    void ensureGoogleReviewsLoaded();
+  },
+  { immediate: true },
+);
 
 const locationData = computed(() => {
   const data = locationFetchData.value;
