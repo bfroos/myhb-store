@@ -126,23 +126,31 @@ const { t, locale } = useI18n();
 const { formatInteger, localeIso } = useFormatInteger();
 const globals = useGlobals();
 
-// Location data fetching
 const isLocationVariant = computed(() => !!props.googlePlaceId);
+
+const asyncDataKey = computed(() => {
+  if (!props.googlePlaceId) return null;
+  return `google-reviews:${props.googlePlaceId}:${locale.value}`;
+});
 
 const { data: locationFetchData } =
   await useAsyncData<GoogleReviewsResponse | null>(
-    () => `google-reviews-${props.googlePlaceId ?? "none"}`,
+    () => asyncDataKey.value ?? "google-reviews:none",
     async () => {
       if (!props.googlePlaceId) return null;
-      return $fetch<GoogleReviewsResponse>("/api/google-reviews", {
-        query: {
-          placeId: props.googlePlaceId,
-          language: locale.value,
-        },
-      });
+      try {
+        return await $fetch<GoogleReviewsResponse>("/api/google-reviews", {
+          query: {
+            placeId: props.googlePlaceId,
+            language: locale.value,
+          },
+        });
+      } catch {
+        return null;
+      }
     },
     {
-      watch: [() => props.googlePlaceId],
+      watch: [() => props.googlePlaceId, () => locale.value],
     },
   );
 
@@ -156,7 +164,6 @@ const locationData = computed(() => {
   };
 });
 
-// Rating calculations
 const effectiveRating = computed(() => {
   if (isLocationVariant.value && locationData.value?.rating != null) {
     return locationData.value.rating;
@@ -170,39 +177,26 @@ const normalizedRating = computed(() => {
   return Math.max(0, Math.min(5, value));
 });
 
-// Star distribution calculation
-const stars = computed<StarDistribution>(() => {
-  const rating = normalizedRating.value;
+function getStarDistribution(rating: number): StarDistribution {
   const floor = Math.floor(rating);
   const decimal = rating - floor;
 
-  // >= 0.75: Aufrunden auf vollen Stern
   if (decimal >= 0.75) {
-    return {
-      full: Math.ceil(rating),
-      half: false,
-      empty: 5 - Math.ceil(rating),
-    };
+    const full = Math.ceil(rating);
+    return { full, half: false, empty: 5 - full };
   }
 
-  // 0.25 - 0.74: Halber Stern
   if (decimal >= 0.25) {
-    return {
-      full: floor,
-      half: true,
-      empty: 5 - floor - 1,
-    };
+    return { full: floor, half: true, empty: 5 - floor - 1 };
   }
 
-  // < 0.25: Abrunden
-  return {
-    full: floor,
-    half: false,
-    empty: 5 - floor,
-  };
-});
+  return { full: floor, half: false, empty: 5 - floor };
+}
 
-// Display values
+const stars = computed<StarDistribution>(() =>
+  getStarDistribution(normalizedRating.value),
+);
+
 const ratingDisplay = computed(() => {
   return normalizedRating.value.toLocaleString(localeIso.value, {
     minimumFractionDigits: 1,
@@ -211,10 +205,9 @@ const ratingDisplay = computed(() => {
 });
 
 const showRatingCircle = computed(
-  () => isLocationVariant.value && !!locationData.value,
+  () => isLocationVariant.value && locationData.value != null,
 );
 
-// Review count text
 const reviewCountText = computed(() => {
   if (props.singleReview) {
     return t("common.review");
@@ -229,13 +222,14 @@ const reviewCountText = computed(() => {
   return `${formatInteger(count)}+ ${t("common.five-star")}`;
 });
 
-// Link and labels
 const locationLink = computed(
-  () => locationData.value?.placeUrl ?? props.sourceUrl ?? null,
+  () => props.sourceUrl ?? locationData.value?.placeUrl ?? null,
 );
 
 const linkAriaLabel = computed(() => {
-  const sourceName = props.source?.toLowerCase() ?? "review";
+  const sourceName = (props.source ?? ReviewSource.GOOGLE)
+    .toString()
+    .toLowerCase();
   return t("common.reviewLinkLabel", { source: sourceName });
 });
 
