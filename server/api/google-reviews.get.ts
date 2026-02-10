@@ -10,7 +10,7 @@ type GooglePlaceDetailsResponse = {
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
-  const apiKey = config.public.googleMapsKey as string | undefined;
+  const apiKey = config.googlePlacesApiKey as string | undefined;
 
   const query = getQuery(event);
   const placeId = (query.placeId as string | undefined)?.trim();
@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 500,
       statusMessage:
-        "Missing runtimeConfig.public.googleMapsKey (set NUXT_PUBLIC_GOOGLE_MAPS_API_KEY)",
+        "Missing runtimeConfig.googlePlacesApiKey (set GOOGLE_PLACES_API_KEY)",
     });
   }
 

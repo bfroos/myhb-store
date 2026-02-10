@@ -258,6 +258,7 @@ export default defineNuxtConfig({
     mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
     mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,
     mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
+    googlePlacesApiKey: process.env.GOOGLE_PLACES_API_KEY,
     public: {
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL,
       publicUrl: process.env.NUXT_PUBLIC_URL,
