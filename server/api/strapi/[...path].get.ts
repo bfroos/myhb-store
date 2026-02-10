@@ -30,8 +30,8 @@ export default defineCachedEventHandler(
     }
   },
   {
-    maxAge: 3600,
-    staleMaxAge: 86400,
+    maxAge: 600,
+    staleMaxAge: 3600,
     getKey: (event) => {
       const url = getRequestURL(event);
       const path = url.pathname.replace(/^\/api\/strapi/, "");
@@ -39,7 +39,7 @@ export default defineCachedEventHandler(
       params.sort();
       return `strapi:${path}:${params.toString()}`;
     },
-    shouldBypassCache: () => true,
+    shouldBypassCache: () => false,
     shouldInvalidateCache: (event) => false,
   },
 );
