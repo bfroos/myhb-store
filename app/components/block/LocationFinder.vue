@@ -35,6 +35,10 @@ import { ColorTheme } from "~/lib/strapi/dto/enums";
 import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
 import type { MoleculeLocationItem } from "~/lib/ui/types";
 
+const UiMoleculeLocationMap = defineAsyncComponent(
+  () => import("~/components/ui/molecule/LocationMap.vue"),
+);
+
 const { openCalendlyDialog } = useCalendlyDialog();
 const {
   fetchLocations,

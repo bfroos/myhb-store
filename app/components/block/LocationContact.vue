@@ -82,6 +82,10 @@ import {
   IconNavigation,
   IconPhone,
 } from "@tabler/icons-vue";
+
+const UiMoleculeLocationMap = defineAsyncComponent(
+  () => import("~/components/ui/molecule/LocationMap.vue"),
+);
 import { formatDate } from "~/utils/date";
 import { getLocationOpenStatus } from "~/utils/locations";
 import type {

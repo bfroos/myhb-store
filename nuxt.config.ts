@@ -266,50 +266,173 @@ export default defineNuxtConfig({
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
     },
   },
+  vite: {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes("node_modules")) {
+              // Split PrimeVue/PrimeUIX into separate chunks per component (otherwise 1.8MB+ in a single chunk)
+              if (id.includes("primevue/")) {
+                const m = id.match(/primevue\/([^/]+)/);
+                return m ? `pv-${m[1]}` : "primevue";
+              }
+              if (id.includes("@primevue/")) {
+                const m = id.match(/@primevue\/([^/]+)/);
+                return m ? `pv-${m[1]}` : "primevue";
+              }
+              if (id.includes("@primeuix/")) {
+                const m = id.match(/@primeuix\/([^/]+)/);
+                return m ? `puix-${m[1]}` : "primeuix";
+              }
+              if (id.includes("vue-i18n") || id.includes("@nuxtjs/i18n")) {
+                return "i18n";
+              }
+              if (id.includes("nuxt-calendly")) {
+                return "calendly";
+              }
+              if (id.includes("@tabler/icons")) {
+                return "icons";
+              }
+              if (id.includes("@googlemaps") || id.includes("googlemaps")) {
+                return "googlemaps";
+              }
+              if (id.includes("mailchimp")) {
+                return "mailchimp";
+              }
+              if (
+                id.includes("/vue/") ||
+                id.includes("vue-router") ||
+                id.includes("@unhead/") ||
+                id.includes("@vue/")
+              ) {
+                return "vue-vendor";
+              }
+              return "vendor";
+            }
+          },
+        },
+      },
+    },
+  },
+  nitro: {
+    prerender: {
+      crawlLinks: true,
+      routes: ["/"],
+      ignore: ["/api", "/en", "/tr", "/ar"],
+    },
+  },
   routeRules: {
-    // API routes: no caching (handled by server-side)
-    // "/api/strapi/**": {
-    //   isr: false,
-    //   headers: {
-    //     "cache-control": "private, no-store",
-    //     "cdn-cache-control": "no-store",
-    //     "vercel-cdn-cache-control": "no-store",
-    //   },
-    // },
-    // Static assets: aggressive caching (1y, immutable)
+    "/**": {
+      isr: 86400, // 24h
+    },
+    "/api/strapi/**": {
+      isr: false,
+      headers: {
+        "cache-control": "private, no-store",
+        "cdn-cache-control": "no-store",
+        "vercel-cdn-cache-control": "no-store",
+      },
+    },
+    // Places API content (rating, reviews) – no caching per Google ToS
+    "/api/google-reviews": {
+      isr: false,
+      headers: {
+        "cache-control": "private, no-store",
+      },
+    },
     "/favicon/**": {
       headers: {
         "cache-control": "public, max-age=31536000, immutable",
       },
     },
-    // "/_nuxt/**": {
-    //   headers: {
-    //     "cache-control": "public, max-age=31536000, immutable",
-    //   },
-    // },
-    // Cache sitemap.xml (24h)
-    // "/sitemap.xml": {
-    //   cache: { maxAge: 86400 },
-    // },
-    // Cache redirect-lookup API (24h)
-    // "/api/redirect-lookup": {
-    //   cache: { maxAge: 86400 },
-    // },
-    // "/": {
-    //   isr: 3600,
-    // },
-    // "/en": {
-    //   isr: 3600,
-    // },
-    // "/tr": {
-    //   isr: 3600,
-    // },
-    // "/ar": {
-    //   isr: 3600,
-    // },
-    // ISR: Blog, Marketing, Docs etc. – 24h (rarely change)
-    // "/**": {
-    //   isr: 86400,
-    // },
+    "/_nuxt/**": {
+      headers: {
+        "cache-control": "public, max-age=31536000, immutable",
+      },
+    },
+    "/sitemap.xml": {
+      prerender: true,
+      cache: { maxAge: 86400 }, // 24h
+    },
+    // Homepages 1 hour
+    "/": { isr: 3600 },
+    "/en": { isr: 3600 },
+    "/tr": { isr: 3600 },
+    "/ar": { isr: 3600 },
+
+    // Doctors 3 hours
+    "/aerzte/[slug]": { isr: 10800 },
+    "/en/doctors/[slug]": { isr: 10800 },
+    "/tr/doktorlar/[slug]": { isr: 10800 },
+    "/ar/atibba/[slug]": { isr: 10800 },
+
+    // Treatments 3 hours
+    "/behandlungen": { isr: 10800 },
+    "/behandlungen/[...slug]": { isr: 10800 },
+    "/en/treatments": { isr: 10800 },
+    "/en/treatments/[...slug]": { isr: 10800 },
+    "/tr/tedaviler": { isr: 10800 },
+    "/tr/tedaviler/[...slug]": { isr: 10800 },
+    "/ar/ilajat": { isr: 10800 },
+    "/ar/ilajat/[...slug]": { isr: 10800 },
+
+    // Blog 1 hour
+    "/blog": { isr: 21600 },
+    "/blog/**": { isr: 21600 },
+    "/en/blog": { isr: 21600 },
+    "/en/blog/**": { isr: 21600 },
+    "/tr/blog": { isr: 21600 },
+    "/tr/blog/**": { isr: 21600 },
+    "/ar/mudawwana": { isr: 21600 },
+    "/ar/mudawwana/**": { isr: 21600 },
+
+    // Careers 12 hours
+    "/karriere": { isr: 43200 },
+    "/karriere/**": { isr: 43200 },
+    "/en/careers": { isr: 43200 },
+    "/en/careers/**": { isr: 43200 },
+    "/tr/kariyer": { isr: 43200 },
+    "/tr/kariyer/**": { isr: 43200 },
+    "/ar/masar-mihani": { isr: 43200 },
+    "/ar/masar-mihani/**": { isr: 43200 },
+
+    // General Pages 1 hour
+    "/p/**": { isr: 3600 },
+    "/en/p/*": { isr: 3600 },
+    "/tr/p/*": { isr: 3600 },
+    "/ar/p/*": { isr: 3600 },
+
+    // Prices 1 hour
+    "/preise": { isr: 3600 },
+    "/en/prices": { isr: 3600 },
+    "/tr/fiyatlar": { isr: 3600 },
+    "/ar/asaar": { isr: 3600 },
+
+    // Products 1 hours
+    "/produkte": { isr: 3600 },
+    "/produkte/**": { isr: 3600 },
+    "/en/products": { isr: 3600 },
+    "/en/products/**": { isr: 3600 },
+    "/tr/urunler": { isr: 3600 },
+    "/tr/urunler/**": { isr: 3600 },
+    "/ar/muntajat": { isr: 3600 },
+    "/ar/muntajat/**": { isr: 3600 },
+
+    // Locations 3 hours
+    "/standorte": { isr: 10800 },
+    "/standorte/**": { isr: 10800 },
+    "/en/locations": { isr: 10800 },
+    "/en/locations/**": { isr: 10800 },
+    "/tr/konumlar": { isr: 10800 },
+    "/tr/konumlar/**": { isr: 10800 },
+    "/ar/mawaqea": { isr: 10800 },
+    "/ar/mawaqea/**": { isr: 10800 },
+
+    // About Us 6 hour
+    "/ueber-uns": { isr: 21600 },
+    "/en/about-us": { isr: 21600 },
+    "/tr/hakkimizda": { isr: 21600 },
+    "/ar/man-nahnu": { isr: 21600 },
   },
 });
