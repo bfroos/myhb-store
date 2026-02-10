@@ -351,16 +351,24 @@ function getDayHours(day: {
 
 .contact__map {
   flex: 1;
+  min-height: 260px;
   padding: var(--space-card-figure-pad);
 }
 
 .contact__map-inner {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   aspect-ratio: 16 / 9;
   min-height: 260px;
   overflow: hidden;
   border-radius: var(--border-radius-card-figure);
+}
+
+.contact__map-inner > * {
+  flex: 1;
+  min-height: 0;
 }
 
 .contact__map-placeholder {
