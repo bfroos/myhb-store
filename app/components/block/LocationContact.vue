@@ -351,7 +351,6 @@ function getDayHours(day: {
 
 .contact__map {
   flex: 1;
-  min-height: 260px;
   padding: var(--space-card-figure-pad);
 }
 
@@ -359,6 +358,7 @@ function getDayHours(day: {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
+  min-height: 260px;
   overflow: hidden;
   border-radius: var(--border-radius-card-figure);
 }
@@ -426,8 +426,15 @@ function getDayHours(day: {
 
 .contact__hours-item {
   display: grid;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 90px 1fr;
   margin: 0;
+}
+
+.contact__hours-item dt {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .contact__hours-item dt,

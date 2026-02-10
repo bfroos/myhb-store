@@ -11,6 +11,7 @@
             method: SharedButtonMethod.ACTION,
             action: SharedButtonAction.APPOINTMENT_BOOKING,
           }"
+          @click="closeMobileMenu"
         />
       </div>
       <div class="mobileMenu__content">

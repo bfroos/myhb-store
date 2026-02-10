@@ -9,7 +9,7 @@
     </NuxtLinkLocale>
     <ol class="breadcrumb__list">
       <li
-        v-for="(item, index) in normalizedItems"
+        v-for="(item, index) in displayItems"
         :key="item.id"
         class="breadcrumb__item"
       >
@@ -17,16 +17,26 @@
           <IconChevronRight :size="16" />
         </span>
 
+        <template v-if="item.isEllipsis">
+          <span class="breadcrumb__ellipsis" aria-hidden="true">
+            {{ item.title }}
+          </span>
+        </template>
         <NuxtLinkLocale
-          v-if="item.to && index < normalizedItems.length - 1"
+          v-else-if="item.to && index < displayItems.length - 1"
           :to="item.to"
           class="breadcrumb__link"
+          :title="item.title"
         >
-          {{ item.title }}
+          {{ displayTitle(item) }}
         </NuxtLinkLocale>
-
-        <span v-else aria-current="page" class="breadcrumb__item__current">
-          {{ item.title }}
+        <span
+          v-else
+          aria-current="page"
+          class="breadcrumb__item__current"
+          :title="item.title"
+        >
+          {{ displayTitle(item) }}
         </span>
       </li>
     </ol>
@@ -49,7 +59,65 @@ const normalizedItems = computed(() => {
       id: `${index}-${item.to ?? item.title}`,
       title: item.title,
       to: item.to,
+      isEllipsis: false,
     }));
+});
+
+const isMobile = ref(false);
+const MOBILE_MAX = 900;
+
+function updateMobile() {
+  if (import.meta.client) {
+    isMobile.value = window.innerWidth < MOBILE_MAX;
+  }
+}
+
+onMounted(() => {
+  updateMobile();
+  window.addEventListener("resize", updateMobile);
+});
+
+onUnmounted(() => {
+  if (import.meta.client) {
+    window.removeEventListener("resize", updateMobile);
+  }
+});
+
+type DisplayItem = {
+  id: string;
+  title: string;
+  to?: string;
+  isEllipsis: boolean;
+};
+
+const MOBILE_TITLE_MAX_LEN = 10;
+
+function displayTitle(item: DisplayItem): string {
+  if (item.isEllipsis) return item.title;
+  const onlyOneLevel = normalizedItems.value.length === 1;
+  if (
+    onlyOneLevel ||
+    !isMobile.value ||
+    item.title.length <= MOBILE_TITLE_MAX_LEN
+  ) {
+    return item.title;
+  }
+  return item.title.slice(0, MOBILE_TITLE_MAX_LEN) + "…";
+}
+
+const displayItems = computed<DisplayItem[]>(() => {
+  const items = normalizedItems.value;
+  if (!isMobile.value) return items;
+  if (items.length === 0) return items;
+  if (items.length <= 2) return items;
+  const ellipsis: DisplayItem = {
+    id: "ellipsis",
+    title: "…",
+    to: undefined,
+    isEllipsis: true,
+  };
+  const lastTwo = items.slice(-2);
+  return [ellipsis, ...lastTwo];
 });
 </script>
 <style scoped>
@@ -89,6 +157,11 @@ const normalizedItems = computed(() => {
 }
 
 .breadcrumb__separator {
+  color: var(--color-text-muted);
+}
+
+.breadcrumb__ellipsis {
+  padding: 0 var(--space-100);
   color: var(--color-text-muted);
 }
 
