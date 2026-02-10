@@ -39,7 +39,6 @@
               :media="cover!"
               :sources="{
                 [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-                [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
               }"
               priority
             />

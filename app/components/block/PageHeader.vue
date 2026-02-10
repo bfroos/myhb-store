@@ -52,7 +52,6 @@ const props = withDefaults(defineProps<BlockPageHeaderDto>(), {
 
 const imageSources = {
   [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-  [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
 };
 
 const hasContent = computed(() => !!props.headline || !!props.intro);

@@ -47,10 +47,7 @@
           </h2>
           <div class="myClub__groupon-grid">
             <div v-if="hasGrouponImage" class="myClub__groupon-image">
-              <UiAtomMediaPicture
-                :media="grouponImage!"
-                :sources="imageSources"
-              />
+              <UiAtomMediaPicture :media="grouponImage!" />
             </div>
             <div class="myClub__groupon-content">
               <div v-if="hasGrouponContent">
@@ -83,11 +80,6 @@ const props = defineProps<BlockMyClubDto>();
 const { t } = useI18n();
 const globals = useGlobals();
 const { brandNameShort } = useBrand();
-
-const imageSources = {
-  [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-  [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
-};
 
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 const grouponUrl = computed(() => globals.value?.ecommerce?.couponUrl ?? null);

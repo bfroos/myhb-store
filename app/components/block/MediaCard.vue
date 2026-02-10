@@ -55,7 +55,6 @@ const props = defineProps<BlockMediaCardDto>();
 
 const imageSources = {
   [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-  [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
 };
 
 const hasContent = computed(

@@ -98,7 +98,6 @@ const showBlock = computed(
 
 const imageSources = {
   [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
-  [ImageBreakpoint.LARGE]: ImageFormat.LARGE,
 };
 </script>
 
