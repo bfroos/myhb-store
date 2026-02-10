@@ -230,6 +230,20 @@ export default defineNuxtConfig({
     },
   },
   primevue: {
+    autoImport: false,
+    components: {
+      include: [
+        "AutoComplete",
+        "DynamicDialog",
+        "IconField",
+        "InputIcon",
+        "InputText",
+        "Message",
+        "Paginator",
+        "Select",
+        "Toast",
+      ],
+    },
     options: {
       theme: {
         preset: Aura,
