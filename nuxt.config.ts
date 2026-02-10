@@ -254,48 +254,48 @@ export default defineNuxtConfig({
   },
   routeRules: {
     // API routes: no caching (handled by server-side)
-    "/api/strapi/**": {
-      isr: false,
-      headers: {
-        "cache-control": "private, no-store",
-        "cdn-cache-control": "no-store",
-        "vercel-cdn-cache-control": "no-store",
-      },
-    },
+    // "/api/strapi/**": {
+    //   isr: false,
+    //   headers: {
+    //     "cache-control": "private, no-store",
+    //     "cdn-cache-control": "no-store",
+    //     "vercel-cdn-cache-control": "no-store",
+    //   },
+    // },
     // Static assets: aggressive caching (1y, immutable)
     "/favicon/**": {
       headers: {
         "cache-control": "public, max-age=31536000, immutable",
       },
     },
-    "/_nuxt/**": {
-      headers: {
-        "cache-control": "public, max-age=31536000, immutable",
-      },
-    },
+    // "/_nuxt/**": {
+    //   headers: {
+    //     "cache-control": "public, max-age=31536000, immutable",
+    //   },
+    // },
     // Cache sitemap.xml (24h)
-    "/sitemap.xml": {
-      cache: { maxAge: 86400 },
-    },
+    // "/sitemap.xml": {
+    //   cache: { maxAge: 86400 },
+    // },
     // Cache redirect-lookup API (24h)
-    "/api/redirect-lookup": {
-      cache: { maxAge: 86400 },
-    },
-    "/": {
-      isr: 3600,
-    },
-    "/en": {
-      isr: 3600,
-    },
-    "/tr": {
-      isr: 3600,
-    },
-    "/ar": {
-      isr: 3600,
-    },
+    // "/api/redirect-lookup": {
+    //   cache: { maxAge: 86400 },
+    // },
+    // "/": {
+    //   isr: 3600,
+    // },
+    // "/en": {
+    //   isr: 3600,
+    // },
+    // "/tr": {
+    //   isr: 3600,
+    // },
+    // "/ar": {
+    //   isr: 3600,
+    // },
     // ISR: Blog, Marketing, Docs etc. – 24h (rarely change)
-    "/**": {
-      isr: 86400,
-    },
+    // "/**": {
+    //   isr: 86400,
+    // },
   },
 });
