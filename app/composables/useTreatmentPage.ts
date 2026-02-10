@@ -91,11 +91,46 @@ export function useTreatmentPage() {
     mapTreatmentPageFixedBlocks(treatmentPage.value),
   );
 
+  const seoWithFallback = computed(() => {
+    const price = treatmentPage.value?.treatment?.priceInEuroCent;
+
+    const treatmentLabel =
+      (fixedBlocks.value?.hero?.headline || treatmentPage.value?.name) ?? "";
+
+    let priceLabel: string | null = null;
+
+    if (fixedBlocks.value?.hero?.showPrice && price != null) {
+      if (treatmentPage.value?.treatment?.isStartingPrice) {
+        priceLabel =
+          t("common.price.startingPrefix") + " " + formatPriceInEuro(price);
+      } else {
+        priceLabel = formatPriceInEuro(price);
+      }
+    }
+
+    const titleParts = [treatmentLabel, priceLabel].filter(
+      (x): x is string => x != null && x !== "",
+    );
+    const metaTitle =
+      titleParts.length > 0
+        ? titleParts.join(" ")
+        : treatmentLabel || undefined;
+
+    const metaDescription = t("treatment.seo.description", {
+      description: fixedBlocks.value?.hero?.text ?? "",
+    });
+
+    return {
+      metaTitle,
+      metaDescription,
+    };
+  });
+
   return {
     fetchTreatment,
     fixedBlocks,
     breadcrumbItems,
-    seo,
+    seo: seoWithFallback,
     localizations,
     blocks,
     treatmentPage,

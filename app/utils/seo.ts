@@ -60,6 +60,16 @@ export async function setPageSeo(
       .filter(Boolean)
       .join(" ");
 
+    const ogTitle = pageSeo?.openGraph?.ogTitle
+      ? pageSeo.openGraph.ogTitle
+      : [
+          pageSeo?.metaTitle || globalsSeo?.defaultTitle,
+          globalsSeo?.titleSeparator,
+          globalsSeo?.titleSuffix,
+        ]
+          .filter(Boolean)
+          .join(" ");
+
     useSeoMeta({
       title,
       description: pageSeo?.metaDescription || globalsSeo?.defaultDescription,
@@ -67,10 +77,7 @@ export async function setPageSeo(
       ogType: "website",
       ogLocale: mapStrapiLocaleToOpenGraphLocale(currentLocale),
       ogUrl: canonicalUrl,
-      ogTitle:
-        pageSeo?.openGraph?.ogTitle ||
-        pageSeo?.metaTitle ||
-        globalsSeo?.defaultTitle,
+      ogTitle,
       ogDescription:
         pageSeo?.openGraph?.ogDescription ||
         pageSeo?.metaDescription ||

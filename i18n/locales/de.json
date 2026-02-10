@@ -258,6 +258,12 @@
     }
   },
 
+  "treatment": {
+    "seo": {
+      "description": "{description} Erfahrene Ärzte, sichere Behandlung & individueller Plan. Jetzt Termin buchen!"
+    }
+  },
+
   "productPage": {
     "error": {
       "productNotFound": "Produkt nicht gefunden",
