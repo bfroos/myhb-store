@@ -39,7 +39,7 @@ export default defineCachedEventHandler(
       params.sort();
       return `strapi:${path}:${params.toString()}`;
     },
-    shouldBypassCache: (event) => false,
+    shouldBypassCache: () => true,
     shouldInvalidateCache: (event) => false,
   },
 );
