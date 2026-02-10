@@ -351,7 +351,8 @@
     "locationFinder": {
       "mapLoading": "Karte wird geladen…",
       "headline": "Standort finden",
-      "searchPlaceholder": "PLZ oder Ort"
+      "searchPlaceholder": "PLZ oder Ort",
+      "useMyLocation": "Mein Standort"
     },
     "locationMap": {
       "footer": {

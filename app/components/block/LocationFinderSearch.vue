@@ -11,8 +11,44 @@
         >
           <IconX size="16" aria-hidden="true" />
         </UiAtomBaseButton>
-        <div class="search__input search__input--mobile">
-          <IconField>
+        <div class="search__row search__row--mobile">
+          <div class="search__input search__input--mobile">
+            <IconField>
+              <InputIcon>
+                <IconSearch size="16" aria-hidden="true" />
+              </InputIcon>
+              <AutoComplete
+                :model-value="cityInput"
+                :suggestions="citySuggestions"
+                :placeholder="t('blocks.locationFinder.searchPlaceholder')"
+                option-label="label"
+                :loading="cityLoading"
+                fluid
+                show-clear
+                @focus="openFullscreen"
+                @complete="onSearch?.($event)"
+                @item-select="onItemSelect"
+                @update:model-value="onInputUpdate"
+              />
+            </IconField>
+          </div>
+          <UiAtomBaseButton
+            v-if="onUseMyLocation"
+            type="button"
+            variant="tertiary"
+            :aria-label="t('blocks.locationFinder.useMyLocation')"
+            :disabled="geolocationLoading"
+            class="search__geo-btn"
+            v-tooltip.top="t('blocks.locationFinder.useMyLocation')"
+            @click="onUseMyLocationClickMobile"
+          >
+            <IconCurrentLocation size="20" aria-hidden="true" />
+          </UiAtomBaseButton>
+        </div>
+      </div>
+      <div class="search__desktop">
+        <div class="search__row search__row--desktop">
+          <IconField class="search__input search__input--desktop">
             <InputIcon>
               <IconSearch size="16" aria-hidden="true" />
             </InputIcon>
@@ -24,30 +60,24 @@
               :loading="cityLoading"
               fluid
               show-clear
-              @focus="openFullscreen"
               @complete="onSearch?.($event)"
+              @item-select="onItemSelect"
               @update:model-value="onInputUpdate"
             />
           </IconField>
+          <UiAtomBaseButton
+            v-if="onUseMyLocation"
+            type="button"
+            variant="tertiary"
+            :aria-label="t('blocks.locationFinder.useMyLocation')"
+            :disabled="geolocationLoading"
+            class="search__geo-btn"
+            v-tooltip.top="t('blocks.locationFinder.useMyLocation')"
+            @click="onUseMyLocation"
+          >
+            <IconCurrentLocation size="20" aria-hidden="true" />
+          </UiAtomBaseButton>
         </div>
-      </div>
-      <div class="search__desktop">
-        <IconField>
-          <InputIcon>
-            <IconSearch size="16" aria-hidden="true" />
-          </InputIcon>
-          <AutoComplete
-            :model-value="cityInput"
-            :suggestions="citySuggestions"
-            :placeholder="t('blocks.locationFinder.searchPlaceholder')"
-            option-label="label"
-            :loading="cityLoading"
-            fluid
-            show-clear
-            @complete="onSearch?.($event)"
-            @update:model-value="onInputUpdate"
-          />
-        </IconField>
       </div>
       <span v-if="cityError" class="search__error">{{ cityError }}</span>
     </header>
@@ -61,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { IconSearch, IconX } from "@tabler/icons-vue";
+import { IconCurrentLocation, IconSearch, IconX } from "@tabler/icons-vue";
 import AutoComplete from "primevue/autocomplete";
 import type { MoleculeLocationItem } from "~/lib/ui/types";
 import type { LocationDto } from "~/lib/strapi/dto/collections";
@@ -76,6 +106,8 @@ const props = defineProps<{
   onSearch?: (event: { query: string }) => void;
   onSelect?: (event: { value: CitySuggestion | null }) => void;
   onCityInput?: (value: string | CitySuggestion | null) => void;
+  onUseMyLocation?: () => void;
+  geolocationLoading?: boolean;
   onBook?: (location: MoleculeLocationItem) => void;
 }>();
 
@@ -88,13 +120,19 @@ const emit = defineEmits<{
 
 function onInputUpdate(val: string | CitySuggestion | null) {
   props.onCityInput?.(val);
-  if (val != null && typeof val === "object" && "lat" in val && "lng" in val) {
-    props.onSelect?.({ value: val as CitySuggestion });
-  }
+}
+
+function onItemSelect(event: { value: CitySuggestion }) {
+  props.onSelect?.({ value: event.value });
 }
 
 function handleLocationBook(location: MoleculeLocationItem) {
   props.onBook?.(location);
+}
+
+function onUseMyLocationClickMobile() {
+  openFullscreen();
+  props.onUseMyLocation?.();
 }
 
 function openFullscreen() {
@@ -150,6 +188,17 @@ watch(isFullscreen, (open) => {
   display: none;
 }
 
+.search__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-400);
+}
+
+.search__row--mobile {
+  flex: 1;
+  min-width: 0;
+}
+
 .search__mobile {
   display: flex;
   align-items: center;
@@ -159,6 +208,19 @@ watch(isFullscreen, (open) => {
 .search__input--mobile {
   flex: 1;
   min-width: 0;
+}
+
+.search__row--desktop {
+  width: 100%;
+}
+
+.search__row--desktop .search__input--desktop {
+  flex: 1;
+  min-width: 0;
+}
+
+.search__geo-btn {
+  flex-shrink: 0;
 }
 
 @media (max-width: 899px) {

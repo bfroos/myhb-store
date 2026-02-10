@@ -338,7 +338,8 @@
     "locationFinder": {
       "mapLoading": "جاري تحميل الخريطة…",
       "headline": "العثور على موقع",
-      "searchPlaceholder": "الرمز البريدي أو المدينة"
+      "searchPlaceholder": "الرمز البريدي أو المدينة",
+      "useMyLocation": "استخدام موقعي"
     },
     "locationMap": {
       "footer": {

@@ -339,7 +339,8 @@
     "locationFinder": {
       "mapLoading": "Loading map…",
       "headline": "Find a location",
-      "searchPlaceholder": "ZIP or city"
+      "searchPlaceholder": "ZIP or city",
+      "useMyLocation": "Use my location"
     },
     "locationMap": {
       "footer": {

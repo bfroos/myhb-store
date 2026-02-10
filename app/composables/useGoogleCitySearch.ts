@@ -1,154 +1,189 @@
+import { loadGoogleMaps } from "./useGoogleMaps";
+
 export type CitySuggestion = {
   label: string;
+  placeId: string;
+  secondaryText: string;
+  /** Keep the native prediction so we can call toPlace() (works with session token) */
+  placePrediction: google.maps.places.PlacePrediction;
+};
+
+export type CityResolved = {
+  label: string;
+  placeId: string;
+  formattedAddress: string;
   lat: number;
   lng: number;
-  formattedAddress: string;
 };
 
 const DEBOUNCE_MS = 300;
 const MIN_QUERY_LEN = 2;
 const MAX_RESULTS = 8;
-const COUNTRY = "de";
+const REGION = "DE";
 
-type GeocodeResponse = {
-  status: string;
-  results?: Array<{
-    formatted_address: string;
-    geometry: { location: { lat: number; lng: number } };
-    address_components?: Array<{ long_name: string; types: string[] }>;
-  }>;
-};
+let placesLib: google.maps.PlacesLibrary | null = null;
+let sessionToken: google.maps.places.AutocompleteSessionToken | null = null;
+
+function getSessionToken(): google.maps.places.AutocompleteSessionToken {
+  if (!placesLib) {
+    throw new Error("Places library not loaded");
+  }
+  sessionToken ??= new placesLib.AutocompleteSessionToken();
+  return sessionToken;
+}
+
+function resetSessionToken() {
+  sessionToken = null;
+}
 
 export function useGoogleCitySearch() {
-  const config = useRuntimeConfig();
-  const apiKey = config.public.googleMapsKey as string | undefined;
-  const { locale } = useI18n();
-
   const suggestions = ref<CitySuggestion[]>([]);
   const loading = ref(false);
+  const resolving = ref(false);
   const error = ref<string | null>(null);
 
   let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-  let runId = 0; // helps ignore stale responses
+  let runId = 0;
+
+  async function ensurePlacesLib() {
+    const g = await loadGoogleMaps();
+    placesLib ??= (await g.maps.importLibrary(
+      "places",
+    )) as google.maps.PlacesLibrary;
+  }
 
   function clearResults() {
     suggestions.value = [];
   }
 
-  function setError(message: string | null) {
-    error.value = message;
-  }
-
-  function getLanguage(): string {
-    return ((locale.value || "de").split("-")[0] ?? "de").toLowerCase();
-  }
-
-  function buildUrl(query: string): string {
-    const url = new URL("https://maps.googleapis.com/maps/api/geocode/json");
-    url.searchParams.set("address", query);
-    url.searchParams.set("key", apiKey as string);
-    url.searchParams.set("language", getLanguage());
-    url.searchParams.set("components", `country:${COUNTRY}`);
-    return url.toString();
-  }
-
-  function toSuggestions(results: NonNullable<GeocodeResponse["results"]>): CitySuggestion[] {
-    const seen = new Set<string>();
-
-    const out: CitySuggestion[] = [];
-    for (const r of results) {
-      const locality =
-        r.address_components?.find((c) => c.types.includes("locality"))?.long_name ??
-        r.formatted_address.split(",")[0]?.trim() ??
-        r.formatted_address;
-
-      const key = `${locality}-${r.geometry.location.lat.toFixed(4)}-${r.geometry.location.lng.toFixed(4)}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-
-      out.push({
-        label: locality,
-        formattedAddress: r.formatted_address,
-        lat: r.geometry.location.lat,
-        lng: r.geometry.location.lng,
-      });
-
-      if (out.length >= MAX_RESULTS) break;
-    }
-
-    return out;
-  }
-
-  async function searchNow(query: string): Promise<void> {
+  async function searchNow(query: string) {
     const q = query.trim();
-
-    // early exits
     if (q.length < MIN_QUERY_LEN) {
       loading.value = false;
       clearResults();
-      setError(null);
-      return;
-    }
-    if (!apiKey) {
-      loading.value = false;
-      clearResults();
-      setError("Google API Key fehlt.");
+      error.value = null;
+      resetSessionToken();
       return;
     }
 
     const myRun = ++runId;
     loading.value = true;
-    setError(null);
+    error.value = null;
 
     try {
-      const data = await $fetch<GeocodeResponse>(buildUrl(q));
+      await ensurePlacesLib();
 
-      // ignore stale results
+      // AutocompleteSuggestion is the supported API for new customers/keys.
+      const req: google.maps.places.AutocompleteRequest = {
+        input: q,
+        includedRegionCodes: [REGION],
+        // City-like results only. (Equivalent-ish to legacy "(cities)")
+        includedPrimaryTypes: ["locality", "administrative_area_level_3"],
+        sessionToken: getSessionToken(),
+      };
+
+      const { suggestions: raw } =
+        await placesLib!.AutocompleteSuggestion.fetchAutocompleteSuggestions(
+          req,
+        );
+
       if (myRun !== runId) return;
 
-      if (data.status !== "OK" && data.status !== "ZERO_RESULTS") {
-        setError(
-          data.status === "REQUEST_DENIED" ? "Geocoding nicht erlaubt." : data.status,
-        );
-        clearResults();
-        return;
-      }
+      const placePreds = raw
+        .map((s) => s.placePrediction)
+        .filter((p): p is google.maps.places.PlacePrediction => !!p);
 
-      suggestions.value = toSuggestions(data.results ?? []);
+      suggestions.value = placePreds.slice(0, MAX_RESULTS).map((p) => ({
+        label: p.mainText?.text ?? p.text?.toString() ?? "",
+        placeId: p.placeId,
+        secondaryText: p.secondaryText?.text ?? "",
+        placePrediction: p,
+      }));
+
+      if (suggestions.value.length === 0) {
+        // Keep this neutral; empty results can also happen with aggressive restrictions.
+        error.value = null;
+      }
     } catch (e) {
       if (myRun !== runId) return;
-      setError(e instanceof Error ? e.message : "Suche fehlgeschlagen.");
+      error.value =
+        e instanceof Error
+          ? e.message
+          : "Suche fehlgeschlagen (Places Autocomplete).";
       clearResults();
+      // Token is potentially invalid after an error; start a fresh session.
+      resetSessionToken();
     } finally {
       if (myRun === runId) loading.value = false;
     }
   }
 
-  function search(query: string): void {
-    const q = query?.trim() ?? "";
+  function search(query: string) {
+    const q = (query ?? "").trim();
 
     if (debounceTimer) clearTimeout(debounceTimer);
 
     if (q.length < MIN_QUERY_LEN) {
       loading.value = false;
       clearResults();
-      setError(null);
+      error.value = null;
+      resetSessionToken();
       return;
     }
 
-    // show spinner immediately while user pauses typing
     loading.value = true;
-
     debounceTimer = setTimeout(() => {
       debounceTimer = null;
       searchNow(q);
     }, DEBOUNCE_MS);
   }
 
+  async function resolveSuggestion(
+    s: CitySuggestion,
+  ): Promise<CityResolved | null> {
+    resolving.value = true;
+    error.value = null;
+
+    try {
+      await ensurePlacesLib();
+
+      // Use the prediction’s toPlace() + fetchFields(), which also closes the session.
+      const place = s.placePrediction.toPlace();
+      await place.fetchFields({
+        fields: ["displayName", "formattedAddress", "location"],
+      });
+
+      if (!place.location) return null;
+
+      const lat = place.location.lat();
+      const lng = place.location.lng();
+
+      return {
+        label: s.label,
+        placeId: s.placeId,
+        formattedAddress:
+          place.formattedAddress ??
+          `${s.label}${s.secondaryText ? ", " + s.secondaryText : ""}`,
+        lat,
+        lng,
+      };
+    } catch (e) {
+      error.value = e instanceof Error ? e.message : "Auflösen fehlgeschlagen.";
+      return null;
+    } finally {
+      resolving.value = false;
+      // The session is concluded when fetchFields() is called; start fresh next time.
+      resetSessionToken();
+    }
+  }
+
   return {
     suggestions,
     loading,
+    resolving,
     error,
     search,
+    resolveSuggestion,
+    clearResults,
   };
 }

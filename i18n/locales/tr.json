@@ -339,7 +339,8 @@
     "locationFinder": {
       "mapLoading": "Harita yükleniyor…",
       "headline": "Konum bul",
-      "searchPlaceholder": "Posta kodu veya şehir"
+      "searchPlaceholder": "Posta kodu veya şehir",
+      "useMyLocation": "Konumumu kullan"
     },
     "locationMap": {
       "footer": {

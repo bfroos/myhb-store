@@ -259,11 +259,12 @@ export default defineNuxtConfig({
     mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,
     mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
     googlePlacesApiKey: process.env.GOOGLE_PLACES_API_KEY,
+    googleGeolocationApiKey: process.env.GOOGLE_GEOLOCATION_API_KEY,
     public: {
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL,
       publicUrl: process.env.NUXT_PUBLIC_URL,
       mediaUrl: process.env.NUXT_PUBLIC_MEDIA_URL,
-      googleMapsKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+      googleMapsKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY,
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
     },
   },
@@ -294,6 +295,12 @@ export default defineNuxtConfig({
     },
     // Places API content (rating, reviews) – no caching per Google ToS
     "/api/google-reviews": {
+      isr: false,
+      headers: {
+        "cache-control": "private, no-store",
+      },
+    },
+    "/api/geolocate": {
       isr: false,
       headers: {
         "cache-control": "private, no-store",

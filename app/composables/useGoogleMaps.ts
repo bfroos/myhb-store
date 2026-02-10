@@ -19,7 +19,9 @@ export function loadGoogleMaps(): Promise<typeof google> {
 
   if (!apiKey) {
     return Promise.reject(
-      new Error("Missing runtimeConfig.public.googleMapsKey"),
+      new Error(
+        "Missing runtimeConfig.public.googleMapsKey (set NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY)",
+      ),
     );
   }
 

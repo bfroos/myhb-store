@@ -1,27 +1,38 @@
 import type { LocationDto } from "~/lib/strapi/dto/collections";
-import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
+import type {
+  CitySuggestion,
+  CityResolved,
+} from "~/composables/useGoogleCitySearch";
 import { getLocationDistance } from "~/utils/locations";
 
 const locationsCache = ref<LocationDto[]>([]);
 const locationsCacheLocale = ref<string | null>(null);
 
 export function useLocationFinder() {
-  const { locale, fallbackLocale } = useI18n();
+  const { locale, fallbackLocale, t } = useI18n();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
 
   const {
     suggestions: citySuggestions,
     loading: cityLoading,
+    resolving: cityResolving,
     error: cityError,
     search: citySearch,
+    resolveSuggestion,
   } = useGoogleCitySearch();
+
+  const {
+    requestLocation,
+    loading: geolocationLoading,
+    error: geolocationError,
+  } = useUserGeolocation();
 
   const locations = locationsCache;
   const cityInput = ref<string | CitySuggestion | null>(null);
-  const selectedCity = ref<CitySuggestion | null>(null);
+  const selectedCity = ref<CityResolved | null>(null);
 
   function sortLocationsByCity(
-    city: CitySuggestion,
+    city: CityResolved,
     locs: LocationDto[],
   ): LocationDto[] {
     return [...locs]
@@ -48,7 +59,7 @@ export function useLocationFinder() {
   });
 
   function getThreeNearestLocations(
-    city: CitySuggestion | null,
+    city: CityResolved | null,
   ): LocationDto[] | null {
     if (!city) return null;
     const locs = locations.value ?? [];
@@ -61,16 +72,32 @@ export function useLocationFinder() {
     citySearch(event.query);
   }
 
-  function onSelect(event: { value: CitySuggestion | string | null }) {
-    const val = event.value;
-    if (
-      val != null &&
-      typeof val === "object" &&
-      "lat" in val &&
-      "lng" in val
-    ) {
-      selectedCity.value = val as CitySuggestion;
+  async function onSelect(event: { value: CitySuggestion | null }) {
+    const suggestion = event.value;
+    if (!suggestion) {
+      selectedCity.value = null;
+      return;
     }
+    const resolved = await resolveSuggestion(suggestion);
+    selectedCity.value = resolved ?? null;
+    if (resolved) {
+      cityInput.value = resolved.label;
+    }
+  }
+
+  async function useMyLocation() {
+    const result = await requestLocation();
+    if (!result) return;
+    const label = t("blocks.locationFinder.useMyLocation");
+    const synthetic: CityResolved = {
+      label,
+      placeId: "",
+      formattedAddress: label,
+      lat: result.lat,
+      lng: result.lng,
+    };
+    selectedCity.value = synthetic;
+    cityInput.value = label;
   }
 
   async function fetchLocations() {
@@ -92,6 +119,7 @@ export function useLocationFinder() {
   return {
     citySuggestions,
     cityLoading,
+    cityResolving,
     cityError,
     cityInput,
     selectedCity,
@@ -100,6 +128,9 @@ export function useLocationFinder() {
     getThreeNearestLocations,
     onSearch,
     onSelect,
+    useMyLocation,
+    geolocationLoading,
+    geolocationError,
     fetchLocations,
   };
 }

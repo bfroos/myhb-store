@@ -8,11 +8,13 @@
               :locations="sortedLocations"
               :city-input="cityInput"
               :city-suggestions="citySuggestions"
-              :city-loading="cityLoading"
+              :city-loading="cityLoading || cityResolving"
               :city-error="cityError"
               :on-search="onSearch"
               :on-select="onSelect"
               :on-city-input="handleCityInputUpdate"
+              :on-use-my-location="useMyLocation"
+              :geolocation-loading="geolocationLoading"
               :on-book="handleLocationBook"
             />
           </div>
@@ -44,6 +46,7 @@ const {
   fetchLocations,
   citySuggestions,
   cityLoading,
+  cityResolving,
   cityError,
   cityInput,
   selectedCity,
@@ -52,6 +55,8 @@ const {
   getThreeNearestLocations,
   onSearch,
   onSelect,
+  useMyLocation,
+  geolocationLoading,
 } = useLocationFinder();
 
 const searchRef = ref<HTMLElement | null>(null);
