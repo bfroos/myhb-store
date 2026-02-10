@@ -126,6 +126,14 @@
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Knowledge, news and everything about health and beauty.",
+    "article": {
+      "share": {
+        "copy": "Copy link",
+        "copied": "Link copied",
+        "whatsapp": "Share on WhatsApp",
+        "facebook": "Share on Facebook"
+      }
+    },
     "emptyState": {
       "title": "No articles found",
       "description": "Unfortunately, no articles are available for this category in your selected language."

@@ -132,6 +132,14 @@
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
+    "article": {
+      "share": {
+        "copy": "Link kopieren",
+        "copied": "Link kopiert",
+        "whatsapp": "Auf WhatsApp teilen",
+        "facebook": "Auf Facebook teilen"
+      }
+    },
     "emptyState": {
       "title": "Keine Artikel gefunden",
       "description": "Leider sind keine Artikel für diese Kategorie in deiner ausgewählten Sprache verfügbar."

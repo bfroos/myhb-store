@@ -126,6 +126,14 @@
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Sağlık ve güzellik konusunda bilgi, haberler ve her şey.",
+    "article": {
+      "share": {
+        "copy": "Bağlantıyı kopyala",
+        "copied": "Bağlantı kopyalandı",
+        "whatsapp": "WhatsApp'ta paylaş",
+        "facebook": "Facebook'ta paylaş"
+      }
+    },
     "emptyState": {
       "title": "Makale bulunamadı",
       "description": "Maalesef, seçilen dilde bu kategori için makale bulunmamaktadır."
