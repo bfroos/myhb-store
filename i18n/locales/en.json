@@ -81,6 +81,7 @@
 
   "cta": {
     "bookAppointment": "Book appointment",
+    "bookAppointmentNotAvailable": "Booking not available",
     "learnMore": "Learn more",
     "details": "Details",
     "subscribe": "Subscribe",

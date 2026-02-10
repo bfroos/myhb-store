@@ -48,8 +48,15 @@
       </div>
       <div class="locationTile__actions">
         <UiMoleculeButtonGroup>
-          <UiAtomBaseButton size="sm" @click="handleBookClick">
+          <UiAtomBaseButton
+            v-if="item.calendlyUrl"
+            size="sm"
+            @click="handleBookClick"
+          >
             {{ $t("cta.bookAppointment") }}
+          </UiAtomBaseButton>
+          <UiAtomBaseButton v-else :disabled="true" size="sm">
+            {{ $t("cta.bookAppointmentNotAvailable") }}
           </UiAtomBaseButton>
           <UiAtomBaseButton
             size="sm"

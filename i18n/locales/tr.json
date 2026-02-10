@@ -81,6 +81,7 @@
 
   "cta": {
     "bookAppointment": "Randevu al",
+    "bookAppointmentNotAvailable": "Randevu alınamaz",
     "learnMore": "Daha fazla bilgi",
     "details": "Detaylar",
     "subscribe": "Abone ol",

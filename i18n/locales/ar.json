@@ -81,6 +81,7 @@
 
   "cta": {
     "bookAppointment": "احجز موعدًا",
+    "bookAppointmentNotAvailable": "احجز موعدًا غير متاح",
     "learnMore": "اعرف المزيد",
     "details": "التفاصيل",
     "subscribe": "اشترك",

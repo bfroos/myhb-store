@@ -81,6 +81,7 @@
 
   "cta": {
     "bookAppointment": "Termin buchen",
+    "bookAppointmentNotAvailable": "Nicht buchbar",
     "learnMore": "Mehr erfahren",
     "details": "Details",
     "subscribe": "Abonnieren",
