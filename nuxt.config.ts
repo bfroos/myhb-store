@@ -266,61 +266,18 @@ export default defineNuxtConfig({
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
     },
   },
-  vite: {
-    build: {
-      rollupOptions: {
-        output: {
-          manualChunks(id) {
-            if (id.includes("node_modules")) {
-              // Split PrimeVue/PrimeUIX into separate chunks per component (otherwise 1.8MB+ in a single chunk)
-              if (id.includes("primevue/")) {
-                const m = id.match(/primevue\/([^/]+)/);
-                return m ? `pv-${m[1]}` : "primevue";
-              }
-              if (id.includes("@primevue/")) {
-                const m = id.match(/@primevue\/([^/]+)/);
-                return m ? `pv-${m[1]}` : "primevue";
-              }
-              if (id.includes("@primeuix/")) {
-                const m = id.match(/@primeuix\/([^/]+)/);
-                return m ? `puix-${m[1]}` : "primeuix";
-              }
-              if (id.includes("vue-i18n") || id.includes("@nuxtjs/i18n")) {
-                return "i18n";
-              }
-              if (id.includes("nuxt-calendly")) {
-                return "calendly";
-              }
-              if (id.includes("@tabler/icons")) {
-                return "icons";
-              }
-              if (id.includes("@googlemaps") || id.includes("googlemaps")) {
-                return "googlemaps";
-              }
-              if (id.includes("mailchimp")) {
-                return "mailchimp";
-              }
-              if (
-                id.includes("/vue/") ||
-                id.includes("vue-router") ||
-                id.includes("@unhead/") ||
-                id.includes("@vue/")
-              ) {
-                return "vue-vendor";
-              }
-              return "vendor";
-            }
-          },
-        },
-      },
-    },
-  },
   nitro: {
-    prerender: {
-      crawlLinks: true,
-      routes: ["/"],
-      ignore: ["/api", "/en", "/tr", "/ar"],
-    },
+    prerender:
+      process.env.NITRO_DISABLE_PRERENDER === "true"
+        ? {
+            crawlLinks: false,
+            routes: [],
+          }
+        : {
+            crawlLinks: true,
+            routes: ["/"],
+            ignore: ["/api", "/en", "/tr", "/ar"],
+          },
   },
   routeRules: {
     "/**": {
