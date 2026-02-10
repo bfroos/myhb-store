@@ -88,6 +88,9 @@
             </NuxtLinkLocale>
           </li>
           <li>
+            <NuxtLinkLocale to="/impressum"> Test </NuxtLinkLocale>
+          </li>
+          <li>
             <NuxtLinkLocale to="/p/datenschutz">
               {{ $t("navigation.meta.privacyPolicy") }}
             </NuxtLinkLocale>

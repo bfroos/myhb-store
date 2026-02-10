@@ -2,7 +2,6 @@ import { readFile } from "node:fs/promises";
 import { isAbsolute, resolve as resolvePath } from "node:path";
 import qs from "qs";
 
-/** Build-time import: wird ins Bundle eingebettet, funktioniert zuverlässig in Production */
 import bundledRedirects from "../assets/redirects.json";
 
 type StrapiPagination = {
@@ -30,16 +29,26 @@ export type RedirectResult = {
   code: number;
 };
 
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h – Redirects ändern sich selten
+const LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
+const STRAPI_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+
 const PAGE_SIZE = 200;
 const SKIP_PATHS = new Set(["/favicon.ico", "/robots.txt", "/sitemap.xml"]);
 const SKIP_PREFIXES = ["/_nuxt", "/__nuxt", "/api"];
 const MAX_REDIRECT_HOPS = 5;
 const DEFAULT_REDIRECTS_FILE = "server/assets/redirects.json";
 
-let cached: { timestamp: number; map: Map<string, RedirectAttributes> } | null =
-  null;
-let inFlight: Promise<Map<string, RedirectAttributes>> | null = null;
+let localCached: {
+  timestamp: number;
+  map: Map<string, RedirectAttributes>;
+} | null = null;
+let localInFlight: Promise<Map<string, RedirectAttributes>> | null = null;
+
+let strapiCached: {
+  timestamp: number;
+  map: Map<string, RedirectAttributes>;
+} | null = null;
+let strapiInFlight: Promise<Map<string, RedirectAttributes>> | null = null;
 
 const normalizePath = (input: string) => {
   let path = input || "/";
@@ -151,10 +160,12 @@ const loadLocalRedirects = async (): Promise<
   return parseRedirectItems(parsed);
 };
 
-const fetchRedirects = async (): Promise<Map<string, RedirectAttributes>> => {
+const fetchStrapiRedirects = async (): Promise<
+  Map<string, RedirectAttributes>
+> => {
   const config = useRuntimeConfig();
   const strapiUrl = config.public.strapiUrl;
-  const map = await loadLocalRedirects();
+  const map = new Map<string, RedirectAttributes>();
   if (!strapiUrl) return map;
   let page = 1;
   let pageCount = 1;
@@ -170,16 +181,10 @@ const fetchRedirects = async (): Promise<Map<string, RedirectAttributes>> => {
     const url = `${strapiUrl.replace(/\/+$/, "")}/api/redirects?${query}`;
     let response: StrapiListResponse<RedirectAttributes>;
     try {
-      response = await $fetch<StrapiListResponse<RedirectAttributes>>(url, {
-        headers: {
-          // Strapi v5: v4 format returns attributes wrapper; v5 is flat.
-          // Our parser handles both; v4 header ensures consistent format.
-          "Strapi-Response-Format": "v4",
-        },
-      });
+      response = await $fetch<StrapiListResponse<RedirectAttributes>>(url);
     } catch (err) {
       // Fail-open: don't block site if redirects API is down.
-      // Prüfe Strapi Permissions: Redirects → find/findMany für Public.
+      // Check Strapi permissions: Redirects → find/findMany for Public.
       if (process.env.NODE_ENV === "development") {
         console.warn("[redirects] Strapi API fehlgeschlagen:", err);
       }
@@ -203,22 +208,57 @@ const fetchRedirects = async (): Promise<Map<string, RedirectAttributes>> => {
   return map;
 };
 
-const getRedirectMap = async () => {
+const getLocalRedirectMap = async () => {
   const now = Date.now();
-  if (cached && now - cached.timestamp < CACHE_TTL_MS) {
-    return cached.map;
+  if (localCached && now - localCached.timestamp < LOCAL_CACHE_TTL_MS) {
+    return localCached.map;
   }
-  if (!inFlight) {
-    inFlight = fetchRedirects()
+  if (!localInFlight) {
+    localInFlight = loadLocalRedirects()
       .then((map) => {
-        cached = { timestamp: Date.now(), map };
+        localCached = { timestamp: Date.now(), map };
         return map;
       })
       .finally(() => {
-        inFlight = null;
+        localInFlight = null;
       });
   }
-  return inFlight;
+  return localInFlight;
+};
+
+const getStrapiRedirectMap = async () => {
+  const now = Date.now();
+  if (strapiCached && now - strapiCached.timestamp < STRAPI_CACHE_TTL_MS) {
+    return strapiCached.map;
+  }
+  if (!strapiInFlight) {
+    strapiInFlight = fetchStrapiRedirects()
+      .then((map) => {
+        strapiCached = { timestamp: Date.now(), map };
+        return map;
+      })
+      .finally(() => {
+        strapiInFlight = null;
+      });
+  }
+  return strapiInFlight;
+};
+
+const getRedirectMap = async () => {
+  const [localMap, strapiMap] = await Promise.all([
+    getLocalRedirectMap(),
+    getStrapiRedirectMap(),
+  ]);
+
+  if (strapiMap.size === 0) {
+    return localMap;
+  }
+
+  const merged = new Map(localMap);
+  for (const [key, value] of strapiMap) {
+    merged.set(key, value);
+  }
+  return merged;
 };
 
 export const splitPathAndSearch = (value: string) => {
