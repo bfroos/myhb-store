@@ -187,8 +187,8 @@ function formatLocations(locations: LocationDto[]): string {
 
 .jobs__heading {
   margin: 0;
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
 }
 
 .jobs__filter {

@@ -15,9 +15,7 @@
       </li>
     </ul>
     <Message v-if="success" severity="success">
-      {{
-        $t("newsletter.success", { brandNameShort })
-      }}
+      {{ $t("newsletter.success", { brandNameShort }) }}
     </Message>
     <form v-else class="newsletterSubscriptionForm__form" @submit="submit">
       <Message v-if="error" severity="error">
@@ -49,6 +47,7 @@ import {
   IconRosetteDiscountCheck,
 } from "@tabler/icons-vue";
 
+const route = useRoute();
 const { brandNameShort } = useBrand();
 const {
   email,
@@ -68,6 +67,19 @@ async function submit(event: SubmitEvent) {
 
   await submitNewsletter();
 }
+
+function resetFormState() {
+  success.value = null;
+  error.value = null;
+  email.value = "";
+}
+
+watch(
+  () => route.fullPath,
+  () => {
+    resetFormState();
+  },
+);
 </script>
 <style scoped>
 .newsletterSubscriptionForm {

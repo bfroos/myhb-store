@@ -78,8 +78,8 @@ const hasLinks = computed(() => (props.links?.length ?? 0) > 0);
 <style scoped>
 .mediaCard__heading {
   margin: 0 0 var(--space-600);
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
 }
 
 .mediaCard__image {

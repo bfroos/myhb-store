@@ -207,7 +207,11 @@ onMounted(() => {
     const rect = heroCardRef.value.getBoundingClientRect();
     const isHeroOutOfView = rect.bottom < 0;
 
-    showFloatingBanner.value = isHeroOutOfView;
+    const scrollBottom = window.scrollY + window.innerHeight;
+    const pageEnd = document.documentElement.scrollHeight - 80;
+    const hasReachedPageEnd = scrollBottom >= pageEnd;
+
+    showFloatingBanner.value = isHeroOutOfView && !hasReachedPageEnd;
   };
 
   window.addEventListener("scroll", handleScroll, { passive: true });

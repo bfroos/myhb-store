@@ -87,8 +87,8 @@ const hasSteps = computed(() => (props.steps?.length ?? 0) > 0);
 }
 
 .steps__heading {
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
   margin: 0 0 var(--space-600);
 }
 

@@ -130,13 +130,14 @@ const hasVitaEntries = computed(() => (props.vitaEntries?.length ?? 0) > 0);
   display: flex;
   flex-direction: column;
   gap: var(--space-200);
+  row-gap: var(--space-400);
   margin: 0;
 }
 
 .qualifications__vita-entry {
   display: flex;
   flex-direction: column;
-  gap: var(--space-200);
+  gap: var(--space-100);
 }
 
 .qualifications__vita-term {
@@ -145,7 +146,6 @@ const hasVitaEntries = computed(() => (props.vitaEntries?.length ?? 0) > 0);
   line-height: var(--line-sm);
   color: var(--color-text-light);
   text-transform: uppercase;
-  margin: 0 0 var(--space-200);
 }
 
 .qualifications__vita-detail {

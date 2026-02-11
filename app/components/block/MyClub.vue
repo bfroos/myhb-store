@@ -200,6 +200,7 @@ const hasGrouponImage = computed(
   flex-direction: column;
   gap: var(--space-400);
   flex: 3 0 300px;
+  max-width: 100%;
   min-width: 0;
 }
 

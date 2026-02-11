@@ -119,8 +119,8 @@ const directionItems = computed((): DirectionItem[] => {
 <style scoped>
 .directions__heading {
   margin: 0 0 var(--space-600);
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
 }
 
 .directions__intro {
