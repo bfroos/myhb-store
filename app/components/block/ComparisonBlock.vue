@@ -70,10 +70,6 @@ const comparisonItems = computed(() => {
   flex-direction: column;
   gap: var(--space-500);
   color: var(--color-text);
-  padding: var(--space-card-pad);
-}
-
-.comparison__item:first-child {
   padding-top: var(--space-card-figure-pad);
   padding-bottom: 0;
   padding-left: var(--space-card-figure-pad);
