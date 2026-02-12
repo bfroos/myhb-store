@@ -36,10 +36,17 @@ const hasItems = computed(
 );
 
 const allFaqs = computed((): FaqDto[] => {
+  const idsInFaqSets = new Set<number | string>();
+  props.faqSets?.forEach((set) => {
+    set.faqs?.forEach((faq) => idsInFaqSets.add(faq.id));
+  });
+
   const items: FaqDto[] = [];
-  if (props.faqs) items.push(...props.faqs);
   props.faqSets?.forEach((set) => {
     if (set.faqs) items.push(...set.faqs);
+  });
+  props.faqs?.forEach((faq) => {
+    if (!idsInFaqSets.has(faq.id)) items.push(faq);
   });
   return items;
 });
