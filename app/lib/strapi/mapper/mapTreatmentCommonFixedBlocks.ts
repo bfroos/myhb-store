@@ -292,6 +292,7 @@ export function mapTreatmentCommonFixedBlocks(
     return {
       headline: treatmentPage?.faq?.headline,
       faqs: treatmentPage?.faq?.faqs,
+      faqSets: treatmentPage?.faq?.faqSets,
       cardSettings: {
         colorTheme: ColorTheme.NEUTRAL,
       },

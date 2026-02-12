@@ -532,6 +532,7 @@ export type TreatmentPageAboutDto = {
 export type TreatmentPageFaqDto = {
   headline?: string;
   faqs?: FaqDto[];
+  faqSets?: FaqSetDto[];
 };
 
 export type TreatmentPageHeroDto = {
