@@ -320,7 +320,22 @@ export default defineNuxtConfig({
         : {
             crawlLinks: true,
             routes: ["/"],
-            ignore: ["/api", "/en", "/tr", "/ar"],
+            ignore: [
+              "/api",
+              "/en",
+              "/tr",
+              "/ar",
+              // Location Treatment Pages
+              /^\/standorte\/[^/]+\/[^/]+\/.+/,
+              // Product Detail Pages
+              /^\/produkte\/[^/]+\/[^/]+$/,
+              // Blog Article Pages
+              /^\/blog\/[^/]+$/,
+              // Doctor Detail Pages
+              /^\/aerzte\/[^/]+$/,
+              // Career Job Detail Pages
+              /^\/karriere\/jobs\/[^/]+$/,
+            ],
           },
   },
   routeRules: {
