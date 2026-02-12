@@ -3426,5 +3426,445 @@
     "from": "/pages/glucksrad-promo",
     "to": "/p/glucksrad-promo",
     "code": 410
+  },
+  {
+    "from": "/products/vitamin-c-infusion",
+    "to": "/produkte/infusionen/vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/products/power-drip-anti-hangover",
+    "to": "/produkte/infusionen/power-infusion-mit-glutathion",
+    "code": 301
+  },
+  {
+    "from": "/products/immun-infusion",
+    "to": "/produkte/infusionen/immun-infusion",
+    "code": 301
+  },
+  {
+    "from": "/products/regenerations-infusion",
+    "to": "/produkte/infusionen/regenerations-infusion",
+    "code": 301
+  },
+  {
+    "from": "/products/lebensmittelunvertraglichkeitstest",
+    "to": "/produkte/lebensmittelunvertraglichkeitstest",
+    "code": 410
+  },
+  {
+    "from": "/products/weight-balance-test",
+    "to": "/products/weight-balance-test",
+    "code": 410
+  },
+  {
+    "from": "/products/meso-therapie",
+    "to": "/produkte/anti-haarausfall/nctf-135-ha",
+    "code": 301
+  },
+  {
+    "from": "/products/profhilo%C2%AE-behandlung",
+    "to": "/produkte/skinbooster/profhilo",
+    "code": 301
+  },
+  {
+    "from": "/products/vampirlifting",
+    "to": "/behandlungen/skinbooster/vampir-lifting-prp",
+    "code": 301
+  },
+  {
+    "from": "/products/haarausfallbehandlung-prp-eigenblut-therapie",
+    "to": "/behandlungen/anti-haarausfall/prp-haartherapie",
+    "code": 301
+  },
+  {
+    "from": "/products/haarausfallbehandlung-meso-therapie-mesohair",
+    "to": "/produkte/anti-haarausfall/nctf-135-ha",
+    "code": 301
+  },
+  {
+    "from": "/products/myh-b-geschenkgutschein",
+    "to": "/myh-b-geschenkgutschein",
+    "code": 301
+  },
+  {
+    "from": "/products/hyaloron-behandlung",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/products/skinbooster-behandlung",
+    "to": "/behandlungen/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/products/restylane-kysse-1-ml-filler-behandlung-1",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/kopie-von-hyaluron-filler-1-ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/fett-weg-spritze",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-kiss-0-7-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=0-7-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-kiss-1-4-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-redensity-2-i-1-0-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teosyal-redensity-2?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-3-i-1-0-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/product?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-ultra-deep-1-2-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-ultra-deep-1-2-ml?v=1-2-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/hylase-1-0-ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/hylase?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/lemon-bottle-doppelkinn",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=doppelkinn",
+    "code": 301
+  },
+  {
+    "from": "/products/lemon-bottle-oberarm",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=oberarm",
+    "code": 301
+  },
+  {
+    "from": "/products/lemon-bottle-backen-wangen",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=wangen",
+    "code": 301
+  },
+  {
+    "from": "/products/lemon-bottle-huefte",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=huefte",
+    "code": 301
+  },
+  {
+    "from": "/products/lemon-bottle-bauch",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=bauch",
+    "code": 301
+  },
+  {
+    "from": "/products/lemon-bottle-oberschenkel",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=oberschenkel",
+    "code": 301
+  },
+  {
+    "from": "/products/lemon-bottle-knie",
+    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=knie",
+    "code": 301
+  },
+  {
+    "from": "/products/power-infusion",
+    "to": "/produkte/infusionen/power-infusion-mit-glutathion?v=infusionssitzung",
+    "code": 301
+  },
+  {
+    "from": "/products/relax-infusion-vitamin-b-komplex",
+    "to": "/produkte/infusionen/vitamin-b-komplex-infusion?v=infusionssitzung",
+    "code": 301
+  },
+  {
+    "from": "/products/kostenlose-nachbehandlung",
+    "to": "/kostenlose-nachbehandlung",
+    "code": 410
+  },
+  {
+    "from": "/products/relax-infusion",
+    "to": "/produkte/infusionen/relax-infusion?v=infusionssitzung",
+    "code": 301
+  },
+  {
+    "from": "/products/revolax-deep-hyaluron-filler-0-5ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=0-7-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/revolax-deep-hyaluron-filler-1ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/bluttest-cholesterin-ldl-hdl",
+    "to": "/produkte/bluttest/cholesterin-ldl-hdl",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-schilddruesen-test",
+    "to": "/produkte/bluttest/schilddruesen-test",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-leberwerte",
+    "to": "/produkte/bluttest/leberwerte",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-vegetarierer-veganer",
+    "to": "/produkte/bluttest/vegetarierer-veganer",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-fitness-check",
+    "to": "/produkte/bluttest/fitness-check",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-calcium-test",
+    "to": "/produkte/bluttest/calcium-test",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-ferritin-eisenmangel",
+    "to": "/produkte/bluttest/ferritin-eisenmangel",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-hba1c-langzeitblutzucker",
+    "to": "/produkte/bluttest/hba1c-langzeitblutzucker",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-magnesium",
+    "to": "/produkte/bluttest/magnesium",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-testosteron",
+    "to": "/produkte/bluttest/testosteron",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-vitamin-b12",
+    "to": "/produkte/bluttest/vitamin-b12",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-vitamin-b12-holotranscobalmin-aktiv",
+    "to": "/produkte/bluttest/vitamin-b12-holotranscobalmin-aktiv",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-vitamin-b9-folsaure",
+    "to": "/produkte/bluttest/vitamin-b9-folsaure",
+    "code": 410
+  },
+  {
+    "from": "/products/bluttest-vitamin-d",
+    "to": "/produkte/bluttest/vitamin-d",
+    "code": 410
+  },
+  {
+    "from": "/products/juvederm-ultra-smile-0-5ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=0-55-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/juvederm%C2%AE-ultra-smile-1-1ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=1-1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/mona-lisa-hyaluron-filler-0-5-ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=0-55-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/lumi-eyes-behandlung",
+    "to": "/produkte/skinbooster/lumi-eyes?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/hyperhidrose-behandlung-mit-botox",
+    "to": "/produkte/botox/botox?v=hyperhidrose",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-masseter",
+    "to": "/produkte/botox/botox?v=masseter",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-kostenlose-nachbehandlung",
+    "to": "/produkte/botox/original-botox%C2%AE-kostenlose-nachbehandlung",
+    "code": 410
+  },
+  {
+    "from": "/products/botox%C2%AE-weitere-zone-kopie",
+    "to": "/produkte/botox/botox%C2%AE-weitere-zone-kopie",
+    "code": 410
+  },
+  {
+    "from": "/products/original-botox%C2%AE-6-zonen",
+    "to": "/produkte/botox/botox?v=6-zonen",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-2-zonen",
+    "to": "/produkte/botox/botox?v=2-zonen",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-3-zonen",
+    "to": "/produkte/botox/botox?v=3-zonen",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-4-zonen",
+    "to": "/produkte/botox/botox?v=4-zonen",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-5-zonen",
+    "to": "/produkte/botox/botox?v=5-zonen",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-1-zone",
+    "to": "/produkte/botox/botox?v=1-zone",
+    "code": 301
+  },
+  {
+    "from": "/products/original-botox%C2%AE-hyperhidrose-behandlung-myh-b",
+    "to": "/produkte/botox/botox?v=hyperhidrose",
+    "code": 301
+  },
+  {
+    "from": "/products/mona-lisa-hyaluron-filler-2-ml-paket",
+    "to": "/produkte/hyaluron-und-filler/aliaxin-sr?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/mona-lisa-hyaluron-filler-3-ml-paket-kopie",
+    "to": "/produkte/hyaluron-und-filler/aliaxin-sr?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/mona-lisa-hyaluron-filler-4-ml-paket",
+    "to": "/produkte/hyaluron-und-filler/aliaxin-sr?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/mona-lisa-hyaluron-filler-5-ml-paket",
+    "to": "/produkte/hyaluron-und-filler/aliaxin-sr?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-1-2-ml-filler-behandlung-kopie",
+    "to": "/produkte/hyaluron-und-filler/teosyal-rha-1?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-kiss-0-5-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-pure-kiss-0-7-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-pure-kiss-0-5-ml-filler-behandlung-kopie",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-pure-kiss-1-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teoxane-pure-kiss?v=1-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-redensity-1-skinbooster-behandlung",
+    "to": "/produkte/skinbooster/teosyal-redensity-1?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-3-i-1-0-ml-filler-behandlung-kopie",
+    "to": "/produkte/hyaluron-und-filler/teosyal-rha-3?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-4-i-1-2-ml-filler-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teosyal-rha-4?v=1-2-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-rha-kiss-0-5-ml-filler-behandlung-1",
+    "to": "/produkte/hyaluron-und-filler/teosyal-rha-kiss?v=0-5-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-redensity-1-skinbooster-3ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teosyal-redensity-2?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/teoxane-redensity-1-skinbooster-1ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/teosyal-redensity-2?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/a-l-i-a-x-i-n-%C2%AE-hyaluron-filler-0-5-ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/aliaxin-sr?v=0-5-ml",
+    "code": 301
+  },
+  {
+    "from": "/products/a-l-i-a-x-i-n-%C2%AE-hyaluron-filler-1-ml-behandlung",
+    "to": "/produkte/hyaluron-und-filler/aliaxin-sr?v=1-0-ml",
+    "code": 301
+  },
+  {
+    "from": "/collections/locations",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/collections/karriere",
+    "to": "/karriere",
+    "code": 301
+  },
+  {
+    "from": "/collections/lippenbehandlung-mit-hyaluron",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/collections/hyaluron-filler",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/collections/skinbooster",
+    "to": "/behandlungen/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/collections/deine-skinbooster-anwendungen",
+    "to": "/behandlungen/skinbooster",
+    "code": 301
   }
 ]
