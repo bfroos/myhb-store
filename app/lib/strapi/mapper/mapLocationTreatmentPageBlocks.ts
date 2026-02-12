@@ -65,6 +65,7 @@ export function mapLocationTreatmentPageFixedBlocks(
       showReviews: true,
       treatment: treatmentPage.treatment,
       cta: link,
+      calendlyUrl: location?.calendlyUrl ?? undefined,
       googlePlaceId: location?.googlePlaceId ?? undefined,
     };
   }
