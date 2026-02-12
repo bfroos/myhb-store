@@ -30,7 +30,9 @@
                 'appHeaderMainNav__link--active': currentMainNavId === link.id,
               }"
               :to="link.href"
-              @mouseenter="showSubnav(link.id)"
+              @mouseenter="onLinkMouseEnter(link.id)"
+              @mouseleave="onLinkMouseLeave"
+              @click="emit('hideSubnav')"
             >
               {{ link.label }}
             </NuxtLinkLocale>
@@ -101,10 +103,34 @@ const emit = defineEmits<{
   (e: "showSubnav", id: number): void;
   (e: "requestHideSubnav"): void;
   (e: "cancelHideSubnav"): void;
+  (e: "hideSubnav"): void;
 }>();
 
-function showSubnav(id: number) {
-  emit("showSubnav", id);
+let showSubnavTimeout: ReturnType<typeof setTimeout> | null = null;
+
+const SUBNAV_SWITCH_DELAY_MS = 150;
+
+function onLinkMouseEnter(id: number) {
+  if (showSubnavTimeout != null) {
+    clearTimeout(showSubnavTimeout);
+    showSubnavTimeout = null;
+  }
+  if (id === props.currentMainNavId) return;
+  if (props.currentMainNavId == null) {
+    emit("showSubnav", id);
+    return;
+  }
+  showSubnavTimeout = setTimeout(() => {
+    emit("showSubnav", id);
+    showSubnavTimeout = null;
+  }, SUBNAV_SWITCH_DELAY_MS);
+}
+
+function onLinkMouseLeave() {
+  if (showSubnavTimeout != null) {
+    clearTimeout(showSubnavTimeout);
+    showSubnavTimeout = null;
+  }
 }
 
 function requestHideSubnav() {
@@ -120,7 +146,6 @@ function updateOverflow() {
   const scrollEl = scrollContainer.value;
   const list = listEl.value;
   if (!wrapEl || !scrollEl) return;
-  // Sichtbare Breite = Wrap; Overflow = wenn Liste breiter ist
   const visibleWidth = wrapEl.clientWidth;
   const contentWidth = list ? list.scrollWidth : scrollEl.scrollWidth;
   hasOverflow.value = contentWidth > visibleWidth;
@@ -180,6 +205,10 @@ watch(
 );
 
 onBeforeUnmount(() => {
+  if (showSubnavTimeout != null) {
+    clearTimeout(showSubnavTimeout);
+    showSubnavTimeout = null;
+  }
   ro?.disconnect();
   ro = null;
   if (onResize) {

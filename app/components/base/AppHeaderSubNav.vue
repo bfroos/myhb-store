@@ -6,7 +6,11 @@
   >
     <ul v-if="items && items.length > 0" class="appheader__subNav__list">
       <li v-for="item in items" :key="item.href">
-        <NuxtLinkLocale class="appheader__subNav__link" :to="item.href">
+        <NuxtLinkLocale
+          class="appheader__subNav__link"
+          :to="item.href"
+          @click="emit('hideSubnav')"
+        >
           {{ item.label }}
         </NuxtLinkLocale>
       </li>
@@ -18,6 +22,7 @@
 const emit = defineEmits<{
   (e: "requestHideSubnav"): void;
   (e: "cancelHideSubnav"): void;
+  (e: "hideSubnav"): void;
 }>();
 
 type SubnavItem = {
@@ -52,6 +57,15 @@ function cancelHideSubnav() {
   list-style: none;
   margin: 0;
   z-index: 1000;
+}
+
+.appHeader__subNav::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: var(--space-200);
 }
 .appheader__subNav__list {
   display: grid;

@@ -38,6 +38,7 @@
               @showSubnav="showSubnav"
               @requestHideSubnav="requestHideSubnav"
               @cancelHideSubnav="cancelHideSubnav"
+              @hideSubnav="hideSubnav"
             />
           </div>
           <BaseAppHeaderSubNav
@@ -45,6 +46,7 @@
             :items="subnavItems"
             @requestHideSubnav="requestHideSubnav"
             @cancelHideSubnav="cancelHideSubnav"
+            @hideSubnav="hideSubnav"
           />
         </div>
         <div class="appHeader__mobile">
@@ -141,6 +143,11 @@ function requestHideSubnav() {
     hideSubnavTimeout = null;
     mainNavId.value = null;
   }, 180);
+}
+
+function hideSubnav() {
+  cancelHideSubnav();
+  mainNavId.value = null;
 }
 
 function openMobileMenu() {
