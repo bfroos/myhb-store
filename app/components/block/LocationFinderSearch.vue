@@ -85,6 +85,7 @@
       <UiMoleculeLocationSearchResults
         :locations="locations"
         :on-book="handleLocationBook"
+        :on-navigate="closeFullscreen"
       />
     </div>
   </div>
@@ -145,6 +146,10 @@ function closeFullscreen() {
 
 watch(isFullscreen, (open) => {
   document.body.style.overflow = open ? "hidden" : "";
+});
+
+onBeforeUnmount(() => {
+  document.body.style.overflow = "";
 });
 </script>
 
