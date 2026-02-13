@@ -30,8 +30,8 @@ export default defineCachedEventHandler(
     }
   },
   {
-    maxAge: 600,
-    staleMaxAge: 3600,
+    maxAge: 60,
+    staleMaxAge: 240,
     getKey: (event) => {
       const url = getRequestURL(event);
       const path = url.pathname.replace(/^\/api\/strapi/, "");
