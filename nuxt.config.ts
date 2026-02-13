@@ -389,15 +389,15 @@ export default defineNuxtConfig({
     "/tr/doktorlar/[slug]": { isr: 10800 },
     "/ar/atibba/[slug]": { isr: 10800 },
 
-    // Treatments 3 hours
-    "/behandlungen": { isr: 10800 },
-    "/behandlungen/[...slug]": { isr: 10800 },
-    "/en/treatments": { isr: 10800 },
-    "/en/treatments/[...slug]": { isr: 10800 },
-    "/tr/tedaviler": { isr: 10800 },
-    "/tr/tedaviler/[...slug]": { isr: 10800 },
-    "/ar/ilajat": { isr: 10800 },
-    "/ar/ilajat/[...slug]": { isr: 10800 },
+    // Treatments 15 minutes
+    "/behandlungen": { isr: 900 },
+    "/behandlungen/[...slug]": { isr: 900 },
+    "/en/treatments": { isr: 900 },
+    "/en/treatments/[...slug]": { isr: 900 },
+    "/tr/tedaviler": { isr: 900 },
+    "/tr/tedaviler/[...slug]": { isr: 900 },
+    "/ar/ilajat": { isr: 900 },
+    "/ar/ilajat/[...slug]": { isr: 900 },
 
     // Blog 1 hour
     "/blog": { isr: 21600 },
