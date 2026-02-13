@@ -340,7 +340,7 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/**": {
-      isr: 86400, // 24h
+      isr: 3600, // 1 hour
     },
     "/api/strapi/**": {
       isr: false,
