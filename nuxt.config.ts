@@ -349,8 +349,13 @@ export default defineNuxtConfig({
       },
     },
     "/sitemap.xml": {
-      prerender: true,
-      cache: { maxAge: 3600 }, // 3 hours
+      isr: false,
+      // The sitemap is generated dynamically in `server/routes/sitemap.xml.ts` and already cached server-side.
+      // These headers control edge/browser caching without prerendering.
+      headers: {
+        "cache-control":
+          "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+      },
     },
     // Homepages 15 minutes
     "/": { isr: 900 },
