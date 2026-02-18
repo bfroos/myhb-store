@@ -310,34 +310,6 @@ export default defineNuxtConfig({
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
     },
   },
-  nitro: {
-    prerender:
-      process.env.NITRO_DISABLE_PRERENDER === "true"
-        ? {
-            crawlLinks: false,
-            routes: [],
-          }
-        : {
-            crawlLinks: true,
-            routes: ["/"],
-            ignore: [
-              "/api",
-              "/en",
-              "/tr",
-              "/ar",
-              // Location Treatment Pages
-              /^\/standorte\/[^/]+\/[^/]+\/.+/,
-              // Product Detail Pages
-              /^\/produkte\/[^/]+\/[^/]+$/,
-              // Blog Article Pages
-              /^\/blog\/[^/]+$/,
-              // Doctor Detail Pages
-              /^\/aerzte\/[^/]+$/,
-              // Career Job Detail Pages
-              /^\/karriere\/jobs\/[^/]+$/,
-            ],
-          },
-  },
   routeRules: {
     "/**": {
       isr: 3600, // 1 hour
