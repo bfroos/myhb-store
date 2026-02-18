@@ -375,7 +375,7 @@ export default defineNuxtConfig({
     },
     "/sitemap.xml": {
       prerender: true,
-      cache: { maxAge: 86400 }, // 24h
+      cache: { maxAge: 3600 }, // 3 hours
     },
     // Homepages 15 minutes
     "/": { isr: 900 },
