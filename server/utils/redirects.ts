@@ -66,7 +66,7 @@ const getRedirectTtls = () => {
   };
 };
 
-const PAGE_SIZE = 200;
+const PAGE_SIZE = 100;
 const SKIP_PATHS = new Set(["/favicon.ico", "/robots.txt", "/sitemap.xml"]);
 const SKIP_PREFIXES = ["/_nuxt", "/__nuxt", "/api"];
 const MAX_REDIRECT_HOPS = 5;
