@@ -377,11 +377,11 @@ export default defineNuxtConfig({
       prerender: true,
       cache: { maxAge: 86400 }, // 24h
     },
-    // Homepages 1 hour
-    "/": { isr: 3600 },
-    "/en": { isr: 3600 },
-    "/tr": { isr: 3600 },
-    "/ar": { isr: 3600 },
+    // Homepages 15 minutes
+    "/": { isr: 900 },
+    "/en": { isr: 900 },
+    "/tr": { isr: 900 },
+    "/ar": { isr: 900 },
 
     // Doctors 3 hours
     "/aerzte/[slug]": { isr: 10800 },
@@ -425,31 +425,31 @@ export default defineNuxtConfig({
     "/tr/p/*": { isr: 3600 },
     "/ar/p/*": { isr: 3600 },
 
-    // Prices 1 hour
-    "/preise": { isr: 3600 },
-    "/en/prices": { isr: 3600 },
-    "/tr/fiyatlar": { isr: 3600 },
-    "/ar/asaar": { isr: 3600 },
+    // Prices 15 minutes
+    "/preise": { isr: 900 },
+    "/en/prices": { isr: 900 },
+    "/tr/fiyatlar": { isr: 900 },
+    "/ar/asaar": { isr: 900 },
 
-    // Products 1 hours
-    "/produkte": { isr: 3600 },
-    "/produkte/**": { isr: 3600 },
-    "/en/products": { isr: 3600 },
-    "/en/products/**": { isr: 3600 },
-    "/tr/urunler": { isr: 3600 },
-    "/tr/urunler/**": { isr: 3600 },
-    "/ar/muntajat": { isr: 3600 },
-    "/ar/muntajat/**": { isr: 3600 },
+    // Products 15 minutes
+    "/produkte": { isr: 900 },
+    "/produkte/**": { isr: 900 },
+    "/en/products": { isr: 900 },
+    "/en/products/**": { isr: 900 },
+    "/tr/urunler": { isr: 900 },
+    "/tr/urunler/**": { isr: 900 },
+    "/ar/muntajat": { isr: 900 },
+    "/ar/muntajat/**": { isr: 900 },
 
-    // Locations 3 hours
-    "/standorte": { isr: 10800 },
-    "/standorte/**": { isr: 10800 },
-    "/en/locations": { isr: 10800 },
-    "/en/locations/**": { isr: 10800 },
-    "/tr/konumlar": { isr: 10800 },
-    "/tr/konumlar/**": { isr: 10800 },
-    "/ar/mawaqea": { isr: 10800 },
-    "/ar/mawaqea/**": { isr: 10800 },
+    // Locations 15 minutes
+    "/standorte": { isr: 900 },
+    "/standorte/**": { isr: 900 },
+    "/en/locations": { isr: 900 },
+    "/en/locations/**": { isr: 900 },
+    "/tr/konumlar": { isr: 900 },
+    "/tr/konumlar/**": { isr: 900 },
+    "/ar/mawaqea": { isr: 900 },
+    "/ar/mawaqea/**": { isr: 900 },
 
     // About Us 6 hour
     "/ueber-uns": { isr: 21600 },
