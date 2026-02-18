@@ -315,27 +315,14 @@ export default defineNuxtConfig({
   },
   routeRules: {
     "/**": {
-      isr: 3600, // 1 hour
+      isr: 900, // 15 minutes
     },
-    "/api/strapi/**": {
+    "/api/**": {
       isr: false,
       headers: {
         "cache-control": "private, no-store",
         "cdn-cache-control": "no-store",
         "vercel-cdn-cache-control": "no-store",
-      },
-    },
-    // Places API content (rating, reviews) – no caching per Google ToS
-    "/api/google-reviews": {
-      isr: false,
-      headers: {
-        "cache-control": "private, no-store",
-      },
-    },
-    "/api/geolocate": {
-      isr: false,
-      headers: {
-        "cache-control": "private, no-store",
       },
     },
     "/favicon/**": {
