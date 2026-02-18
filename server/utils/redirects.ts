@@ -29,8 +29,42 @@ export type RedirectResult = {
   code: number;
 };
 
+// Cache TTLs
+// - Local redirects file changes only on deploy, so a long TTL is fine.
+// - Strapi redirects should refresh frequently so editors see changes quickly.
+// - If Strapi fails (or returns empty), retry soon to avoid caching an outage for too long.
 const LOCAL_CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
-const STRAPI_CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+const STRAPI_CACHE_TTL_MS = 5 * 60 * 1000; // 5 min
+const STRAPI_EMPTY_CACHE_TTL_MS = 30 * 1000; // 30s
+
+const readTtlOverride = (value: unknown) => {
+  if (typeof value === "number" && Number.isFinite(value) && value >= 0)
+    return value;
+  if (typeof value === "string" && value.trim()) {
+    const n = Number(value);
+    if (Number.isFinite(n) && n >= 0) return n;
+  }
+  return undefined;
+};
+
+const getRedirectTtls = () => {
+  const config = useRuntimeConfig();
+  const localOverride = readTtlOverride(
+    (config as any).redirectsLocalCacheTtlMs,
+  );
+  const strapiOverride = readTtlOverride(
+    (config as any).redirectsStrapiCacheTtlMs,
+  );
+  const strapiEmptyOverride = readTtlOverride(
+    (config as any).redirectsStrapiEmptyCacheTtlMs,
+  );
+
+  return {
+    local: localOverride ?? LOCAL_CACHE_TTL_MS,
+    strapi: strapiOverride ?? STRAPI_CACHE_TTL_MS,
+    strapiEmpty: strapiEmptyOverride ?? STRAPI_EMPTY_CACHE_TTL_MS,
+  };
+};
 
 const PAGE_SIZE = 200;
 const SKIP_PATHS = new Set(["/favicon.ico", "/robots.txt", "/sitemap.xml"]);
@@ -40,12 +74,14 @@ const DEFAULT_REDIRECTS_FILE = "server/assets/redirects.json";
 
 let localCached: {
   timestamp: number;
+  ttlMs: number;
   map: Map<string, RedirectAttributes>;
 } | null = null;
 let localInFlight: Promise<Map<string, RedirectAttributes>> | null = null;
 
 let strapiCached: {
   timestamp: number;
+  ttlMs: number;
   map: Map<string, RedirectAttributes>;
 } | null = null;
 let strapiInFlight: Promise<Map<string, RedirectAttributes>> | null = null;
@@ -210,13 +246,14 @@ const fetchStrapiRedirects = async (): Promise<
 
 const getLocalRedirectMap = async () => {
   const now = Date.now();
-  if (localCached && now - localCached.timestamp < LOCAL_CACHE_TTL_MS) {
+  const ttls = getRedirectTtls();
+  if (localCached && now - localCached.timestamp < localCached.ttlMs) {
     return localCached.map;
   }
   if (!localInFlight) {
     localInFlight = loadLocalRedirects()
       .then((map) => {
-        localCached = { timestamp: Date.now(), map };
+        localCached = { timestamp: Date.now(), ttlMs: ttls.local, map };
         return map;
       })
       .finally(() => {
@@ -228,13 +265,16 @@ const getLocalRedirectMap = async () => {
 
 const getStrapiRedirectMap = async () => {
   const now = Date.now();
-  if (strapiCached && now - strapiCached.timestamp < STRAPI_CACHE_TTL_MS) {
+  const ttls = getRedirectTtls();
+  if (strapiCached && now - strapiCached.timestamp < strapiCached.ttlMs) {
     return strapiCached.map;
   }
   if (!strapiInFlight) {
     strapiInFlight = fetchStrapiRedirects()
       .then((map) => {
-        strapiCached = { timestamp: Date.now(), map };
+        // If Strapi returns empty (including during an outage), retry soon.
+        const ttlMs = map.size === 0 ? ttls.strapiEmpty : ttls.strapi;
+        strapiCached = { timestamp: Date.now(), ttlMs, map };
         return map;
       })
       .finally(() => {

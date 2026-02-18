@@ -297,6 +297,9 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     redirectsFile: process.env.REDIRECTS_FILE,
+    redirectsStrapiCacheTtlMs: 5 * 60 * 1000,
+    redirectsStrapiEmptyCacheTtlMs: 30 * 1000,
+    redirectsLocalCacheTtlMs: 24 * 60 * 60 * 1000,
     mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
     mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,
     mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
