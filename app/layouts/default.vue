@@ -1,9 +1,9 @@
 <template>
   <div class="app">
-    <div>
-      <BaseAppHeader />
+    <BaseAppHeader />
+    <main>
       <slot />
-    </div>
+    </main>
     <BaseAppFooter />
     <Toast />
     <DynamicDialog />
@@ -15,10 +15,7 @@
   flex-direction: column;
   min-height: 100vh;
 }
-.app > * {
+.app > :nth-child(2) {
   flex: 1;
-}
-.app > :last-child {
-  flex: none;
 }
 </style>
