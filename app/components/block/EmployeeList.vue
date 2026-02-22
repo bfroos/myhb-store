@@ -14,6 +14,11 @@
               <NuxtLinkLocale
                 :to="`/aerzte/${emp.slug}`"
                 class="employees__figure"
+                :aria-label="
+                  $t('blocks.employeeList.showProfile', {
+                    name: getEmployeeFullName(emp),
+                  })
+                "
               >
                 <UiAtomMediaPicture
                   v-if="emp.photo && isMediaImage(emp.photo)"

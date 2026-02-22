@@ -294,7 +294,8 @@
       "vita": "Werdegang"
     },
     "employeeList": {
-      "readMore": "Zum Profil"
+      "readMore": "Zum Profil",
+      "showProfile": "Zum Profil von {name}"
     },
     "treatmentDetails": {
       "price": "Preis",

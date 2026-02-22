@@ -282,7 +282,8 @@
       "vita": "Vita"
     },
     "employeeList": {
-      "readMore": "To profile"
+      "readMore": "To profile",
+      "showProfile": "View {name}'s profile"
     },
     "treatmentDetails": {
       "price": "Price",

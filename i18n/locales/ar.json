@@ -281,7 +281,8 @@
       "vita": "السيرة الذاتية"
     },
     "employeeList": {
-      "readMore": "الملف الشخصي"
+      "readMore": "الملف الشخصي",
+      "showProfile": "عرض الملف الشخصي لـ {name}"
     },
     "treatmentDetails": {
       "price": "السعر",

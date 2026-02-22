@@ -279,7 +279,8 @@
       "vita": "Özgeçmiş"
     },
     "employeeList": {
-      "readMore": "Profile git"
+      "readMore": "Profile git",
+      "showProfile": "{name} profilini görüntüle"
     },
     "treatmentDetails": {
       "price": "Fiyat",
