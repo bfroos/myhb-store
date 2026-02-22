@@ -13,53 +13,51 @@
             <div class="jobDescription__aside__inner">
               <h2>{{ $t("career.job.description.details") }}</h2>
               <dl>
-                <template v-if="employmentTypesLabel">
-                  <dt>{{ $t("career.job.description.employmentType") }}</dt>
-                  <dd>
-                    <span>
-                      {{ employmentTypesLabel }}
-                    </span>
-                  </dd>
-                </template>
-                <template v-if="contractTypesLabel">
-                  <dt>{{ $t("career.job.description.contractType") }}</dt>
-                  <dd>
-                    <span>
-                      {{ contractTypesLabel }}
-                    </span>
-                  </dd>
-                </template>
-                <template>
-                  <dt>
-                    {{ $t("career.job.description.startDate") }}
-                  </dt>
-                  <dd>
-                    <span v-if="startDate">
-                      {{ startDate }}
-                    </span>
-                    <span v-else>
-                      {{ $t("career.job.description.asOfNow") }}
-                    </span>
-                  </dd>
-                </template>
-                <template v-if="hourlyRate">
-                  <dt>{{ $t("career.job.description.hourlyRate") }}</dt>
-                  <dd>
-                    <span>
-                      {{ hourlyRate }}
-                    </span>
-                  </dd>
-                </template>
-                <template v-if="locations && locations.length > 0">
-                  <dt>{{ $t("career.job.description.locations") }}</dt>
-                  <dd>
-                    <ul>
-                      <li v-for="location in locations" :key="location">
-                        {{ location }}
-                      </li>
-                    </ul>
-                  </dd>
-                </template>
+                <dt v-if="employmentTypesLabel">
+                  {{ $t("career.job.description.employmentType") }}
+                </dt>
+                <dd v-if="employmentTypesLabel">
+                  <span>
+                    {{ employmentTypesLabel }}
+                  </span>
+                </dd>
+                <dt v-if="contractTypesLabel">
+                  {{ $t("career.job.description.contractType") }}
+                </dt>
+                <dd v-if="contractTypesLabel">
+                  <span>
+                    {{ contractTypesLabel }}
+                  </span>
+                </dd>
+                <dt v-if="startDate">
+                  {{ $t("career.job.description.startDate") }}
+                </dt>
+                <dd v-if="startDate">
+                  <span v-if="startDate">
+                    {{ startDate }}
+                  </span>
+                  <span v-else>
+                    {{ $t("career.job.description.asOfNow") }}
+                  </span>
+                </dd>
+                <dt v-if="hourlyRate">
+                  {{ $t("career.job.description.hourlyRate") }}
+                </dt>
+                <dd v-if="hourlyRate">
+                  <span>
+                    {{ hourlyRate }}
+                  </span>
+                </dd>
+                <dt v-if="locations && locations.length > 0">
+                  {{ $t("career.job.description.locations") }}
+                </dt>
+                <dd v-if="locations && locations.length > 0">
+                  <ul>
+                    <li v-for="location in locations" :key="location">
+                      {{ location }}
+                    </li>
+                  </ul>
+                </dd>
               </dl>
               <UiAtomBaseButton
                 v-if="applyTarget === JobApplyTarget.URL"
