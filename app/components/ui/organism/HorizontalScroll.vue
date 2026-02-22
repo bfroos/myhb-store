@@ -3,7 +3,7 @@
     <div
       ref="scrollContainer"
       class="horizontalScroll__container"
-      @scroll="updateScrollbar"
+      @scroll.passive="onScroll"
     >
       <slot />
     </div>
@@ -69,58 +69,86 @@ const scrollbarThumbLeft = ref(0);
 const canScrollLeft = ref(false);
 const canScrollRight = ref(false);
 
-const updateScrollbar = () => {
-  if (!scrollContainer.value) return;
+// Throttle layout reads/writes to at most once per animation frame.
+let rafId: number | null = null;
+let scheduled = false;
+let resizeObserver: ResizeObserver | null = null;
 
+function setIfChanged(target: { value: any }, next: any, eps = 0.0001) {
+  const prev = target.value;
+  if (typeof prev === "number" && typeof next === "number") {
+    if (Math.abs(prev - next) < eps) return;
+  } else {
+    if (prev === next) return;
+  }
+  target.value = next;
+}
+
+const updateScrollbar = () => {
   const container = scrollContainer.value;
+  if (!container) return;
+
+  // --- READS (layout/scroll metrics)
   const scrollWidth = container.scrollWidth;
   const clientWidth = container.clientWidth;
   const scrollLeft = container.scrollLeft;
   const maxScrollLeft = scrollWidth - clientWidth;
 
-  // Berechne die Breite des Thumbs basierend auf dem sichtbaren Bereich
-  if (scrollWidth > clientWidth) {
-    scrollbarThumbWidth.value = (clientWidth / scrollWidth) * 100;
-  } else {
-    scrollbarThumbWidth.value = 100;
-  }
+  // --- CALC
+  const nextThumbWidth =
+    scrollWidth > clientWidth ? (clientWidth / scrollWidth) * 100 : 100;
 
-  // Berechne die Position des Thumbs
-  if (maxScrollLeft > 0) {
-    scrollbarThumbLeft.value =
-      (scrollLeft / maxScrollLeft) * (100 - scrollbarThumbWidth.value);
-  } else {
-    scrollbarThumbLeft.value = 0;
-  }
+  const nextThumbLeft =
+    maxScrollLeft > 0
+      ? (scrollLeft / maxScrollLeft) * (100 - nextThumbWidth)
+      : 0;
 
-  // Aktualisiere Button-Status
-  canScrollLeft.value = scrollLeft > 0;
-  canScrollRight.value = scrollLeft < maxScrollLeft - 1; // -1 für Rundungsfehler
+  const nextCanLeft = scrollLeft > 0;
+  const nextCanRight = scrollLeft < maxScrollLeft - 1; // -1 for rounding
+
+  // --- WRITES (reactive state)
+  setIfChanged(scrollbarThumbWidth, nextThumbWidth);
+  setIfChanged(scrollbarThumbLeft, nextThumbLeft);
+  setIfChanged(canScrollLeft, nextCanLeft);
+  setIfChanged(canScrollRight, nextCanRight);
+};
+
+const scheduleUpdateScrollbar = () => {
+  if (scheduled) return;
+  scheduled = true;
+
+  rafId = window.requestAnimationFrame(() => {
+    scheduled = false;
+    updateScrollbar();
+  });
+};
+
+const onScroll = () => {
+  scheduleUpdateScrollbar();
 };
 
 const scrollToNext = () => {
-  if (!scrollContainer.value) return;
-
   const container = scrollContainer.value;
-  const children = Array.from(container.children) as HTMLElement[];
+  if (!container) return;
 
+  const children = Array.from(container.children) as HTMLElement[];
   if (children.length === 0) return;
 
-  const containerRect = container.getBoundingClientRect();
+  // Avoid getBoundingClientRect() in a loop (common forced reflow trigger).
   const scrollLeft = container.scrollLeft;
   const containerWidth = container.clientWidth;
+  const visibleRight = scrollLeft + containerWidth;
 
-  // Finde das erste Element, das nicht vollständig sichtbar ist
+  // Find the first element that is not fully visible to the right.
   for (let i = 0; i < children.length; i++) {
     const child = children[i];
     if (!child) continue;
 
-    const childRect = child.getBoundingClientRect();
-    const childLeft = childRect.left - containerRect.left + scrollLeft;
+    const childLeft = child.offsetLeft;
+    const childRight = childLeft + child.offsetWidth;
 
-    // Wenn das Element rechts vom sichtbaren Bereich ist, scrolle zu ihm
-    if (childLeft + childRect.width > scrollLeft + containerWidth) {
-      // scrollIntoView berücksichtigt automatisch scroll-padding
+    if (childRight > visibleRight + 1) {
+      // Keep scrollIntoView to respect scroll-padding.
       child.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
@@ -132,27 +160,22 @@ const scrollToNext = () => {
 };
 
 const scrollToPrevious = () => {
-  if (!scrollContainer.value) return;
-
   const container = scrollContainer.value;
-  const children = Array.from(container.children) as HTMLElement[];
+  if (!container) return;
 
+  const children = Array.from(container.children) as HTMLElement[];
   if (children.length === 0) return;
 
-  const containerRect = container.getBoundingClientRect();
   const scrollLeft = container.scrollLeft;
 
-  // Finde das letzte Element, das nicht vollständig sichtbar ist
+  // Find the last element that is not fully visible to the left.
   for (let i = children.length - 1; i >= 0; i--) {
     const child = children[i];
     if (!child) continue;
 
-    const childRect = child.getBoundingClientRect();
-    const childLeft = childRect.left - containerRect.left + scrollLeft;
+    const childLeft = child.offsetLeft;
 
-    // Wenn das Element links vom sichtbaren Bereich ist, scrolle zu ihm
-    if (childLeft < scrollLeft) {
-      // scrollIntoView berücksichtigt automatisch scroll-padding
+    if (childLeft < scrollLeft - 1) {
       child.scrollIntoView({
         behavior: "smooth",
         block: "nearest",
@@ -164,9 +187,12 @@ const scrollToPrevious = () => {
 };
 
 const handleScrollbarClick = (event: MouseEvent) => {
-  if (!scrollContainer.value || !scrollbarTrack.value) return;
+  const container = scrollContainer.value;
+  const track = scrollbarTrack.value;
+  if (!container || !track) return;
 
-  const trackRect = scrollbarTrack.value.getBoundingClientRect();
+  // Single rect read per click is fine; avoid doing it in scroll loops.
+  const trackRect = track.getBoundingClientRect();
   const clickX = event.clientX - trackRect.left;
   const clickPercent = clickX / trackRect.width;
 
@@ -174,9 +200,9 @@ const handleScrollbarClick = (event: MouseEvent) => {
 };
 
 const scrollToPosition = (percent: number) => {
-  if (!scrollContainer.value) return;
-
   const container = scrollContainer.value;
+  if (!container) return;
+
   const scrollWidth = container.scrollWidth;
   const clientWidth = container.clientWidth;
   const maxScrollLeft = scrollWidth - clientWidth;
@@ -190,23 +216,23 @@ const scrollToPosition = (percent: number) => {
 };
 
 const handleScrollbarKeydown = (event: KeyboardEvent) => {
-  if (!scrollContainer.value) return;
-
   const container = scrollContainer.value;
+  if (!container) return;
+
   const scrollWidth = container.scrollWidth;
   const clientWidth = container.clientWidth;
   const maxScrollLeft = scrollWidth - clientWidth;
   const currentScrollLeft = container.scrollLeft;
   const scrollPercent =
     maxScrollLeft > 0 ? currentScrollLeft / maxScrollLeft : 0;
-  const stepPercent = 0.1; // 10% pro Schritt
+  const stepPercent = 0.1; // 10% per step
 
   if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
     event.preventDefault();
     const direction = event.key === "ArrowRight" ? 1 : -1;
     const newPercent = Math.max(
       0,
-      Math.min(1, scrollPercent + direction * stepPercent)
+      Math.min(1, scrollPercent + direction * stepPercent),
     );
     scrollToPosition(newPercent);
   } else if (event.key === "Home") {
@@ -227,29 +253,33 @@ const handleScrollbarKeydown = (event: KeyboardEvent) => {
 };
 
 const handleResize = () => {
-  updateScrollbar();
+  scheduleUpdateScrollbar();
 };
 
 onMounted(() => {
-  updateScrollbar();
-  window.addEventListener("resize", handleResize);
+  scheduleUpdateScrollbar();
+  window.addEventListener("resize", handleResize, { passive: true });
 
-  // Verwende ResizeObserver für bessere Performance bei Container-Änderungen
   if (scrollContainer.value) {
-    const resizeObserver = new ResizeObserver(() => {
-      updateScrollbar();
+    resizeObserver = new ResizeObserver(() => {
+      scheduleUpdateScrollbar();
     });
     resizeObserver.observe(scrollContainer.value);
-
-    // Cleanup beim Unmount
-    onUnmounted(() => {
-      resizeObserver.disconnect();
-    });
   }
 });
 
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
+
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+    resizeObserver = null;
+  }
+
+  if (rafId != null) {
+    window.cancelAnimationFrame(rafId);
+    rafId = null;
+  }
 });
 </script>
 

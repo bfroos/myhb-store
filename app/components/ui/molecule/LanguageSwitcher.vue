@@ -7,6 +7,7 @@
     size="small"
     append-to="self"
     overlay-class="languageSwitcher__overlay--alignRight"
+    :aria-label="$t('navigation.header.languageSwitcher')"
     :pt="{
       root: 'languageSwitcher',
       label: 'languageSwitcher__label',

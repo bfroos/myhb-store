@@ -56,6 +56,9 @@
   },
 
   "navigation": {
+    "header": {
+      "languageSwitcher": "Dil değiştir"
+    },
     "secondary": {
       "doctors": "Doktorlar",
       "locations": "Konumlar",

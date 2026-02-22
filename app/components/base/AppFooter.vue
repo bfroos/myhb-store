@@ -142,6 +142,7 @@
               href="https://www.facebook.com/myhealthbeautylounge"
               target="_blank"
               no-follow
+              aria-label="Facebook"
             >
               <IconBrandFacebook />
             </UiAtomBaseButton>
@@ -154,6 +155,7 @@
               href="https://de.linkedin.com/company/my-health-beauty"
               target="_blank"
               no-follow
+              aria-label="Linkedin"
             >
               <IconBrandLinkedin />
             </UiAtomBaseButton>
@@ -166,6 +168,7 @@
               href="https://www.instagram.com/myhealthandbeauty.app/"
               target="_blank"
               no-follow
+              aria-label="Instagram"
             >
               <IconBrandInstagram />
             </UiAtomBaseButton>
@@ -178,6 +181,7 @@
               href="https://www.tiktok.com/@myhealthandbeauty.com"
               target="_blank"
               no-follow
+              aria-label="Tiktok"
             >
               <IconBrandTiktok />
             </UiAtomBaseButton>

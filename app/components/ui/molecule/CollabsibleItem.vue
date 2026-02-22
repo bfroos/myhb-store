@@ -2,6 +2,7 @@
   <div
     class="collabsibleItem"
     :class="{ 'collabsibleItem--tight': tightSpacing }"
+    role="listitem"
   >
     <button
       :id="`collabsible-button-${id}`"

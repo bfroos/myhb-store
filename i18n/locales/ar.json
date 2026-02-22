@@ -56,6 +56,9 @@
   },
 
   "navigation": {
+    "header": {
+      "languageSwitcher": "تغيير اللغة"
+    },
     "secondary": {
       "doctors": "الأطباء",
       "locations": "المواقع",
@@ -76,6 +79,9 @@
       "privacyPolicy": "سياسة الخصوصية",
       "imprint": "الشروط والأحكام",
       "cookieSettings": "الكوكيز"
+    },
+    "treatmentTile": {
+      "goToTreatment": "العلاج"
     }
   },
 

@@ -18,11 +18,22 @@
           <p v-if="shortDescription">{{ shortDescription }}</p>
           <div class="treatment__overlayCTA">
             <UiAtomLabelButton v-if="priceLabel" :label="priceLabel">
-              <UiAtomBaseButton icon-only size="sm" :to="path">
+              <UiAtomBaseButton
+                icon-only
+                size="sm"
+                :to="path"
+                :aria-label="$t('navigation.treatmentTile.goToTreatment')"
+              >
                 <IconArrowRight />
               </UiAtomBaseButton>
             </UiAtomLabelButton>
-            <UiAtomBaseButton v-else icon-only size="sm" :to="path">
+            <UiAtomBaseButton
+              v-else
+              icon-only
+              size="sm"
+              :to="path"
+              :aria-label="$t('navigation.treatmentTile.goToTreatment')"
+            >
               <IconArrowRight />
             </UiAtomBaseButton>
           </div>

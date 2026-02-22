@@ -56,6 +56,9 @@
   },
 
   "navigation": {
+    "header": {
+      "languageSwitcher": "Change language"
+    },
     "secondary": {
       "doctors": "Doctors",
       "locations": "Locations",
@@ -76,6 +79,9 @@
       "privacyPolicy": "Privacy Policy",
       "imprint": "Imprint",
       "cookieSettings": "Cookies"
+    },
+    "treatmentTile": {
+      "goToTreatment": "Go to treatment"
     }
   },
 
