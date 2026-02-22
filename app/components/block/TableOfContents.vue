@@ -59,10 +59,12 @@ const hasIndex = computed(() => (props.index?.length ?? 0) > 0);
 const contentsWithAnchorAndLabel = computed(() => {
   if (!props.index?.length) return [];
 
-  return props.index.map((item: SharedKeyValueDto) => ({
-    anchor: item.key,
-    label: item.value,
-  })) as TableOfContentsItem[];
+  return props.index
+    .filter((item: SharedKeyValueDto) => item.value?.trim())
+    .map((item: SharedKeyValueDto) => ({
+      anchor: item.key,
+      label: item.value,
+    })) as TableOfContentsItem[];
 });
 </script>
 
