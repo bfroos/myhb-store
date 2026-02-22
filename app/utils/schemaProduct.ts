@@ -45,7 +45,10 @@ export function buildProductSchema(
   };
 
   if (product.manufacturer?.name) {
-    schema.brand = product.manufacturer.name;
+    schema.brand = {
+      "@type": "Brand",
+      name: "product.manufacturer.name",
+    };
     schema.manufacturer = {
       "@type": "Organization",
       name: product.manufacturer.name,
