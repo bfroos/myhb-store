@@ -431,7 +431,7 @@
   "newsletter": {
     "marketingText": {
       "headline": "Deals und News. Jetzt im Newsletter!",
-      "headlineDiscount": "Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
+      "headlineDiscount": "Für alle Neukunden: Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
       "exlusiveOffers": "Exklusive Angebote",
       "treatmentNews": "News zu Behandlungen",
       "eventInvitations": "Einladungen zu Events"

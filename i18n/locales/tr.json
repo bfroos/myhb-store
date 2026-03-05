@@ -416,7 +416,7 @@
   "newsletter": {
     "marketingText": {
       "headline": "Deals and news. Now in the newsletter!",
-      "headlineDiscount": "Şimdi {newsletterDiscountPercentage}% indirim kazan!",
+      "headlineDiscount": "Yeni müşteriler için: {newsletterDiscountPercentage}% özel indirim kazan!",
       "exlusiveOffers": "Özel Teklifler",
       "treatmentNews": "Tedavi Haberleri",
       "eventInvitations": "Etkinlik Davetleri"

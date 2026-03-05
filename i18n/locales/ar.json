@@ -418,7 +418,7 @@
   "newsletter": {
     "marketingText": {
       "headline": "عروض وأخبار. الآن في النشرة الإخبارية!",
-      "headlineDiscount": "احصل على خصم {newsletterDiscountPercentage}% حصري!",
+      "headlineDiscount": "لجميع العملاء الجدد: احصل على خصم {newsletterDiscountPercentage}% حصري!",
       "exlusiveOffers": "عروض حصرية",
       "treatmentNews": "أخبار عن العلاجات",
       "eventInvitations": "دعوات للحدثات"

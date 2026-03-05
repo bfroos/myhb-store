@@ -419,7 +419,7 @@
   "newsletter": {
     "marketingText": {
       "headline": "Deals and news. Now in the newsletter!",
-      "headlineDiscount": "Get {newsletterDiscountPercentage}% exclusive discount!",
+      "headlineDiscount": "For all new customers: Get {newsletterDiscountPercentage}% exclusive discount!",
       "exlusiveOffers": "Exclusive Offers",
       "treatmentNews": "News about treatments",
       "eventInvitations": "Event invitations"
