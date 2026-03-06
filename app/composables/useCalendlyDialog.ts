@@ -1,17 +1,18 @@
 import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
+import type { TreatmentType } from "~/lib/strapi/dto/enums";
 
 export function useCalendlyDialog() {
   const dialog = useDialog();
   const { t } = useI18n();
 
-  function openCalendlyDialog(url?: string) {
+  function openCalendlyDialog(url?: string, treatmentType?: TreatmentType) {
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/CalendlyDialog.vue"),
       ),
       {
-        data: { url },
+        data: { url, treatmentType },
         props: {
           modal: true,
           draggable: false,

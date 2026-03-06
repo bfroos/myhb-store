@@ -68,7 +68,10 @@
                   <SharedButton
                     v-if="cta"
                     :button="cta"
-                    :data="{ calendlyUrl: calendlyUrl }"
+                    :data="{
+                      calendlyUrl: calendlyUrl,
+                      treatmentType: treatment?.type,
+                    }"
                     :button-props="{
                       size: 'lg',
                       variant: 'primary',
@@ -157,7 +160,10 @@
             <SharedButton
               v-if="cta"
               :button="cta"
-              :data="{ calendlyUrl: calendlyUrl }"
+              :data="{
+                calendlyUrl: calendlyUrl,
+                treatmentType: treatment?.type,
+              }"
               :button-props="{
                 size: 'md',
                 variant: 'primary',

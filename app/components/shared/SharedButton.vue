@@ -148,9 +148,10 @@ const handleClick = () => {
 };
 
 function openCalendlyDialogForButton() {
-  const url =
-    props.data?.calendlyUrl || props.button?.data?.calendlyUrl;
-  openCalendlyDialog(url);
+  const url = props.data?.calendlyUrl || props.button?.data?.calendlyUrl;
+  const treatmentType =
+    props.data?.treatmentType || props.button?.data?.treatmentType;
+  openCalendlyDialog(url, treatmentType);
 }
 
 const openNewsletterSignUpDialog = () => {

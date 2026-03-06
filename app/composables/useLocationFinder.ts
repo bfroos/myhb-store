@@ -4,9 +4,10 @@ import type {
   CityResolved,
 } from "~/composables/useGoogleCitySearch";
 import { getLocationDistance } from "~/utils/locations";
+import type { TreatmentType } from "~/lib/strapi/dto/enums";
 
 const locationsCache = ref<LocationDto[]>([]);
-const locationsCacheLocale = ref<string | null>(null);
+const locationsCacheKey = ref<string | null>(null);
 
 export function useLocationFinder() {
   const { locale, fallbackLocale, t } = useI18n();
@@ -100,20 +101,23 @@ export function useLocationFinder() {
     cityInput.value = label;
   }
 
-  async function fetchLocations() {
-    if (
-      locationsCacheLocale.value === currentLocale &&
-      locationsCache.value.length > 0
-    ) {
+  async function fetchLocations(options?: {
+    treatmentType?: TreatmentType;
+    force?: boolean;
+  }) {
+    const cacheKey = `${currentLocale}::${options?.treatmentType ?? ""}`;
+    if (!options?.force && locationsCacheKey.value === cacheKey && locationsCache.value.length > 0) {
       return;
     }
     const response = await strapiFetch<{ data: LocationDto[] }>(
       "/locations/bookable",
-      { query: { locale: currentLocale } },
+      {
+        query: { locale: currentLocale, treatmentType: options?.treatmentType },
+      },
     );
     const data = response?.data ?? [];
     locations.value = data;
-    locationsCacheLocale.value = currentLocale;
+    locationsCacheKey.value = cacheKey;
   }
 
   return {
