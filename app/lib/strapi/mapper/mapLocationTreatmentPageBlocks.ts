@@ -23,6 +23,7 @@ export function mapLocationTreatmentPageFixedBlocks(
   }
 
   const { t, locale, localeProperties } = useI18n();
+  const { isAdsMode } = useSiteModeFlags();
   const dateLocale = computed<string>(() => {
     const iso = localeProperties.value?.iso as string | undefined;
     return iso ?? locale.value;
@@ -95,7 +96,7 @@ export function mapLocationTreatmentPageFixedBlocks(
   }
 
   function buildAboutLocationBlockModel() {
-    if (!location?.about) {
+    if (isAdsMode.value || !location?.about) {
       return;
     }
 

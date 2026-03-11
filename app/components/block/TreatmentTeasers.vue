@@ -6,7 +6,7 @@
           <h2 v-if="headline" class="teasers__heading">{{ headline }}</h2>
         </template>
         <UiMoleculeTreatmentTile
-          v-for="page in treatmentPages"
+          v-for="page in treatmentItems"
           :key="page.id"
           v-bind="getTileProps(page)"
         />
@@ -17,14 +17,23 @@
 
 <script setup lang="ts">
 import type { BlockTreatmentTeasersDto } from "~/lib/strapi/dto/components";
-import type { TreatmentPageDto } from "~/lib/strapi/dto/collections";
+import type {
+  TreatmentAdsPageDto,
+  TreatmentPageDto,
+} from "~/lib/strapi/dto/collections";
 import type { MoleculeTreatmentTile } from "~/lib/ui/types";
 
 const props = defineProps<BlockTreatmentTeasersDto>();
 
-const hasItems = computed(() => (props.treatmentPages?.length ?? 0) > 0);
+const treatmentItems = computed<
+  Array<TreatmentPageDto | TreatmentAdsPageDto>
+>(() => props.treatmentAdsPages ?? props.treatmentPages ?? []);
 
-function getTileProps(page: TreatmentPageDto): MoleculeTreatmentTile {
+const hasItems = computed(() => treatmentItems.value.length > 0);
+
+function getTileProps(
+  page: TreatmentPageDto | TreatmentAdsPageDto,
+): MoleculeTreatmentTile {
   return {
     title: page.teaser?.title ?? page.name ?? "",
     shortDescription: props.showShortDescriptions

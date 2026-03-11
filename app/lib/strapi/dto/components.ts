@@ -12,6 +12,7 @@ import type {
   ProductCategoryDto,
   StoryDto,
   JobDto,
+  TreatmentAdsPageDto,
 } from "./collections";
 import {
   CardElevation,
@@ -283,6 +284,7 @@ export type BlockTreatmentTeasersDto = {
   showPrices: boolean;
   showDescriptions: boolean;
   treatmentPages?: TreatmentPageDto[];
+  treatmentAdsPages?: TreatmentAdsPageDto[];
   locationPathKey?: string;
   cardSettings?: CardSettingsDto;
 };
@@ -555,6 +557,7 @@ export type TreatmentPageMedicalTeamHighlightDto = {
 export type TreatmentPageRelatedTreatmentsDto = {
   headline?: string;
   treatmentPages?: TreatmentPageDto[];
+  treatmentAdsPages?: TreatmentAdsPageDto[];
 };
 
 export type TreatmentPageReviewsDto = {
@@ -623,14 +626,23 @@ export type TreatmentPageSuitabilityDto = {
  * ==============================
  */
 
+type TreatmentPlanStepTreatment =
+  | {
+      label: string;
+      treatmentPage: TreatmentPageDto;
+      treatmentAdsPage?: never;
+    }
+  | {
+      label: string;
+      treatmentAdsPage: TreatmentAdsPageDto;
+      treatmentPage?: never;
+    };
+
 export type TreatmentPlanStepDto = {
   type: TreatmentPlanStepType;
   week?: number;
   description?: string;
-  treatments?: {
-    label: string;
-    treatmentPage: TreatmentPageDto;
-  }[];
+  treatments?: TreatmentPlanStepTreatment[];
   followUpPlanText?: string;
   endOfPlanText?: string;
 };

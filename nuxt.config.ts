@@ -305,12 +305,14 @@ export default defineNuxtConfig({
     mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
     googlePlacesApiKey: process.env.GOOGLE_PLACES_API_KEY,
     googleGeolocationApiKey: process.env.GOOGLE_GEOLOCATION_API_KEY,
+    siteMode: process.env.NUXT_PUBLIC_SITE_MODE,
     public: {
       strapiUrl: process.env.NUXT_PUBLIC_STRAPI_URL,
       publicUrl: process.env.NUXT_PUBLIC_URL,
       mediaUrl: process.env.NUXT_PUBLIC_MEDIA_URL,
       googleMapsKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY,
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
+      siteMode: process.env.NUXT_PUBLIC_SITE_MODE,
     },
   },
   routeRules:

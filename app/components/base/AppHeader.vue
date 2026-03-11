@@ -1,7 +1,7 @@
 <template>
   <header class="appHeader">
     <div class="appHeader__inner">
-      <nav class="appHeader__secondaryNav appHeader__desktop">
+      <nav v-if="!isAdsMode" class="appHeader__secondaryNav appHeader__desktop">
         <ul>
           <li v-for="item in secondaryNavItems" :key="item.slug">
             <NuxtLinkLocale :to="`/${item.slug}`" class="text-link">
@@ -24,12 +24,14 @@
           </UiAtomBaseButton>
         </div>
         <NuxtLinkLocale
+          v-if="!isAdsMode"
           to="/"
           class="appHeader__mainNav__brand"
           :aria-label="$t('cta.goToHome')"
         >
           <ImageAppLogo />
         </NuxtLinkLocale>
+        <span v-else class="appHeader__mainNav__brand"><ImageAppLogo /></span>
         <div class="appHeader__desktop appHeader__mainNav__menu">
           <div class="appHeader__priorityWrap">
             <BaseAppHeaderMainNav
@@ -49,7 +51,7 @@
             @hideSubnav="hideSubnav"
           />
         </div>
-        <div class="appHeader__mobile">
+        <div v-if="!isAdsMode" class="appHeader__mobile">
           <UiMoleculeLanguageSwitcher />
         </div>
         <div class="appHeader__desktop">
@@ -76,6 +78,7 @@
 import { IconMenu2 } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
+const { isAdsMode } = useSiteModeFlags();
 const { treatmentPages } = useMenu("treatment-pages,product-categories");
 
 const isMobileMenuOpen = ref(false);
