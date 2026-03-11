@@ -20,6 +20,7 @@
             fluid
             show-clear
             @complete="onSearch"
+            @item-select="onItemSelect"
             @update:model-value="onInputUpdate"
           />
         </IconField>
@@ -86,9 +87,10 @@ function scrollContentToTop() {
 
 function onInputUpdate(val: string | CitySuggestion | null) {
   cityInput.value = val;
-  if (val != null && typeof val === "object" && "lat" in val && "lng" in val) {
-    onSelect({ value: val as CitySuggestion });
-  }
+}
+
+function onItemSelect(event: { value: CitySuggestion }) {
+  onSelect({ value: event.value });
 }
 
 onMounted(async () => {

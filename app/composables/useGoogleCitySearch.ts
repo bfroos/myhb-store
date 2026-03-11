@@ -77,8 +77,12 @@ export function useGoogleCitySearch() {
       const req: google.maps.places.AutocompleteRequest = {
         input: q,
         includedRegionCodes: [REGION],
-        // City-like results only. (Equivalent-ish to legacy "(cities)")
-        includedPrimaryTypes: ["locality", "administrative_area_level_3"],
+        // City-like results + postal codes.
+        includedPrimaryTypes: [
+          "locality",
+          "administrative_area_level_3",
+          "postal_code",
+        ],
         sessionToken: getSessionToken(),
       };
 
