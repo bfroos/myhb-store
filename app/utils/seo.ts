@@ -42,6 +42,11 @@ export async function setPageSeo(
   const globalsSeo = globals.value?.seo;
   const canonicalUrl = `${config.public.publicUrl}${route.path}`;
 
+  const robots = computed(() => {
+    const { isAdsMode } = useSiteModeFlags();
+    return isAdsMode.value ? "noindex, nofollow" : "index, follow";
+  });
+
   nuxtApp.runWithContext(() => {
     useHead({
       link: [
@@ -73,7 +78,7 @@ export async function setPageSeo(
     useSeoMeta({
       title,
       description: pageSeo?.metaDescription || globalsSeo?.defaultDescription,
-      robots: pageSeo?.metaRobots,
+      robots: robots.value,
       ogType: "website",
       ogLocale: mapStrapiLocaleToOpenGraphLocale(currentLocale),
       ogUrl: canonicalUrl,

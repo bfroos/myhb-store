@@ -116,8 +116,8 @@
                     :key="treatment.label"
                   >
                     <NuxtLinkLocale
-                      v-if="treatment.treatmentPage"
-                      :to="`/behandlungen/${treatment.treatmentPage.pathKey}`"
+                      v-if="getTreatmentLinkPath(treatment)"
+                      :to="getTreatmentLinkPath(treatment)"
                     >
                       {{ treatment.label }}
                     </NuxtLinkLocale>
@@ -187,6 +187,15 @@ function isLastTreatment(step: TreatmentPlanStepDto, index: number): boolean {
 
 function hasTreatments(step: TreatmentPlanStepDto): boolean {
   return (step.treatments?.length ?? 0) > 0;
+}
+
+function getTreatmentLinkPath(
+  treatment: NonNullable<TreatmentPlanStepDto["treatments"]>[number],
+): string | undefined {
+  const pathKey =
+    treatment.treatmentAdsPage?.pathKey ?? treatment.treatmentPage?.pathKey;
+
+  return pathKey ? `/behandlungen/${pathKey}` : undefined;
 }
 </script>
 

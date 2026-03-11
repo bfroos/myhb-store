@@ -7,7 +7,6 @@ import {
   MediaBentoMediaItemAlignment,
   MediaBentoLayout,
 } from "../dto/enums";
-import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import type { SharedButtonDto } from "../dto/components";
 import type { LocationDto, TreatmentPageDto } from "../dto/collections";
 import { DEFAULT_TIMEZONE } from "../config";
@@ -28,7 +27,7 @@ export function mapLocationFixedBlocks(
     const iso = localeProperties.value?.iso as string | undefined;
     return iso ?? locale.value;
   });
-
+  const { isAdsMode } = useSiteModeFlags();
   const fixed = {
     hero: buildTreatmentHeroBlockModel(),
     reviews: buildReviewsBlockModel(),
@@ -83,7 +82,11 @@ export function mapLocationFixedBlocks(
   }
 
   function buildReviewsBlockModel() {
-    if (!location?.reviews || location?.reviews?.length === 0) {
+    if (
+      isAdsMode.value ||
+      !location?.reviews ||
+      location?.reviews?.length === 0
+    ) {
       return;
     }
 
@@ -120,7 +123,7 @@ export function mapLocationFixedBlocks(
   }
 
   function buildAboutBlockModel() {
-    if (!location?.about) {
+    if (isAdsMode.value || !location?.about) {
       return;
     }
 
@@ -177,11 +180,15 @@ export function mapLocationFixedBlocks(
   }
 
   function buildJobTeasersBlockModel() {
-    const jobs = location?.jobs;
-
-    if (!jobs || jobs.length === 0) {
+    if (
+      isAdsMode.value ||
+      !location?.jobs ||
+      location?.jobs?.length === 0
+    ) {
       return;
     }
+
+    const jobs = location?.jobs;
 
     return {
       headline: t("location.jobTeasers.headline", {
@@ -196,6 +203,14 @@ export function mapLocationFixedBlocks(
   }
 
   function buildTreatmentTeasersBlockModel() {
+    if (
+      isAdsMode.value ||
+      !treatmentPages ||
+      treatmentPages.length === 0
+    ) {
+      return;
+    }
+
     const isNotYetOpen =
       locationOpenStatus === LocationOpenStatus.OPEN_SOON ||
       locationOpenStatus === LocationOpenStatus.COMING_SOON;

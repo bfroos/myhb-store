@@ -3,8 +3,9 @@
 // so /about-us-page?locale=en and ?locale=de are cached separately.
 export default defineCachedEventHandler(
   async (event) => {
-    const config = useRuntimeConfig();
+    const config = useRuntimeConfig(event);
     const incoming = getRequestURL(event);
+    const siteMode = config.siteMode || config.public.siteMode;
 
     setHeader(event, "X-MyHB-Strapi-Proxy", "1");
 
@@ -20,7 +21,13 @@ export default defineCachedEventHandler(
     const strapiUrl = `${strapiBase}/api${restPath}${incoming.search}`;
 
     try {
-      return await $fetch(strapiUrl);
+      return await $fetch(strapiUrl, {
+        headers: siteMode
+          ? {
+              "x-site-mode": siteMode,
+            }
+          : undefined,
+      });
     } catch (error: any) {
       throw createError({
         statusCode: error?.statusCode || error?.status || 500,
@@ -30,14 +37,16 @@ export default defineCachedEventHandler(
     }
   },
   {
-    maxAge: 60,
-    staleMaxAge: 240,
+    maxAge: process.env.NODE_ENV === "production" ? 60 : 0,
+    staleMaxAge: process.env.NODE_ENV === "production" ? 240 : 0,
     getKey: (event) => {
       const url = getRequestURL(event);
       const path = url.pathname.replace(/^\/api\/strapi/, "");
       const params = new URLSearchParams(url.search);
       params.sort();
-      return `strapi:${path}:${params.toString()}`;
+      const config = useRuntimeConfig(event);
+      const siteMode = config.siteMode || config.public.siteMode || "default";
+      return `strapi:${path}:${params.toString()}:${siteMode}`;
     },
     shouldBypassCache: () => false,
     shouldInvalidateCache: (event) => false,

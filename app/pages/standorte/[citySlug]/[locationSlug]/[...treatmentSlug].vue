@@ -1,5 +1,8 @@
 <template>
-  <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
+  <UiOrganismBaseBreadcrumb
+    v-if="!isAdsMode"
+    :items="breadcrumbItems"
+  />
   <BlockTreatmentHero
     v-if="fixedBlocks?.hero"
     v-bind="fixedBlocks.hero"
@@ -32,6 +35,7 @@ const {
   location,
 } = useLocationTreatmentPage();
 
+const { isAdsMode } = useSiteModeFlags();
 const pageLoaded = await fetchPage();
 
 if (pageLoaded) {

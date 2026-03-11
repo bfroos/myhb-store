@@ -1,5 +1,8 @@
 <template>
-  <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
+  <UiOrganismBaseBreadcrumb
+    v-if="!isAdsMode"
+    :items="breadcrumbItems"
+  />
   <BlockTreatmentHero
     v-if="fixedBlocks.hero"
     v-bind="fixedBlocks.hero"
@@ -9,6 +12,8 @@
   <BlockRenderer v-if="blocks" :blocks="blocks" />
 </template>
 <script setup lang="ts">
+const config = useRuntimeConfig();
+const { isAdsMode } = useSiteModeFlags();
 const {
   fetchTreatment,
   fixedBlocks,
@@ -27,7 +32,7 @@ if (treatmentPageLoaded) {
 }
 
 // Schema.org MedicalProcedure
-const config = useRuntimeConfig();
+
 const route = useRoute();
 const { brandName } = useBrand();
 

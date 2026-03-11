@@ -1,5 +1,8 @@
 <template>
-  <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
+  <UiOrganismBaseBreadcrumb
+    v-if="!isAdsMode"
+    :items="breadcrumbItems"
+  />
   <BlockTreatmentHero v-if="fixedBlocks?.hero" v-bind="fixedBlocks.hero" />
   <BlockLocationContact
     v-if="fixedBlocks?.locationContact"
@@ -21,6 +24,7 @@
   />
 </template>
 <script setup lang="ts">
+const { isAdsMode } = useSiteModeFlags();
 const {
   fetchWithTreatments,
   fixedBlocks,

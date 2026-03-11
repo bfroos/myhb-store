@@ -8,16 +8,16 @@ import {
   SharedButtonTargetType,
 } from "../dto/enums";
 import type { SharedButtonDto, SharedKeyValueDto } from "../dto/components";
-import type { LocationDto, TreatmentPageDto } from "../dto/collections";
+import type { LocationDto, TreatmentPageLikeDto } from "../dto/collections";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 
 export function mapTreatmentCommonFixedBlocks(
-  treatmentPage: TreatmentPageDto,
+  treatmentPage: TreatmentPageLikeDto,
   tableOfContents: SharedKeyValueDto[],
   location?: LocationDto,
 ) {
   const { t } = useI18n();
-
+  const { isAdsMode } = useSiteModeFlags();
   const fixed = {
     tableOfContents: buildTableOfContentsBlockModel(),
     reviews: buildReviewsBlockModel(),
@@ -230,7 +230,7 @@ export function mapTreatmentCommonFixedBlocks(
       content: treatmentPage?.medicalTeamHighlight?.content,
       employee,
       layout: OrganismMediaCardLayout.MEDIA_LEFT,
-      links: [link],
+      links: isAdsMode.value ? [] : [link],
       cardSettings: {
         colorTheme: ColorTheme.NEUTRAL,
       },
@@ -267,6 +267,7 @@ export function mapTreatmentCommonFixedBlocks(
     return {
       headline: treatmentPage?.relatedTreatments?.headline,
       treatmentPages: treatmentPage?.relatedTreatments?.treatmentPages,
+      treatmentAdsPages: treatmentPage?.relatedTreatments?.treatmentAdsPages,
       showShortDescriptions: true,
       showPrices: true,
       showDescriptions: true,

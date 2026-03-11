@@ -72,7 +72,7 @@
             </li>
           </ul>
         </nav>
-        <nav class="mobileMenu__secondaryNav">
+        <nav v-if="!isAdsMode" class="mobileMenu__secondaryNav">
           <ul>
             <li v-for="item in props.items.secondaryNavItems" :key="item.slug">
               <NuxtLinkLocale
@@ -93,7 +93,7 @@
 <script setup lang="ts">
 import { IconChevronDown, IconChevronUp, IconX } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
-
+const { isAdsMode } = useSiteModeFlags();
 const emit = defineEmits<{
   (e: "closeMobileMenu"): void;
 }>();

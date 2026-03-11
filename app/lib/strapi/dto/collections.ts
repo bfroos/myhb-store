@@ -240,6 +240,34 @@ export type TreatmentPageDto = {
   benefits?: TreatmentPageBenefitsDto;
 };
 
+export type TreatmentAdsPageDto = {
+  id: number | string;
+  slug: string;
+  ancestorSlugs: string[];
+  ancestors: { slug: string; name: string }[];
+  pathKey: string;
+  showInMenu: boolean;
+  name: string;
+  faq?: TreatmentPageFaqDto;
+  treatment?: TreatmentDto;
+  blocks?: StrapiBlock[];
+  seo?: SharedSeoDto;
+  hero?: TreatmentPageHeroDto;
+  teaser?: TreatmentPageTeaserDto;
+  about?: TreatmentPageAboutDto;
+  medicalTeamHighlight?: TreatmentPageMedicalTeamHighlightDto;
+  relatedTreatments?: TreatmentPageRelatedTreatmentsDto;
+  reviews?: TreatmentPageReviewsDto;
+  tableOfContents?: TreatmentPageTableOfContentsDto;
+  treatmentDetails?: TreatmentPageTreatmentDetailsDto;
+  treatmentPlan?: TreatmentPageTreatmentPlanDto;
+  treatmentProcess?: TreatmentPageTreatmentProcessStepsDto;
+  suitability?: TreatmentPageSuitabilityDto;
+  benefits?: TreatmentPageBenefitsDto;
+};
+
+export type TreatmentPageLikeDto = TreatmentPageDto | TreatmentAdsPageDto;
+
 export type TreatmentTeaserDto = {
   id: number | string;
   title: string;
