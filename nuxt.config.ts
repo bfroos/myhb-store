@@ -313,115 +313,109 @@ export default defineNuxtConfig({
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
     },
   },
-  routeRules: {
-    "/**": {
-      isr: 900, // 15 minutes
-    },
-    "/api/**": {
-      isr: false,
-      headers: {
-        "cache-control": "private, no-store",
-        "cdn-cache-control": "no-store",
-        "vercel-cdn-cache-control": "no-store",
-      },
-    },
-    "/favicon/**": {
-      headers: {
-        "cache-control": "public, max-age=31536000, immutable",
-      },
-    },
-    "/_nuxt/**": {
-      headers: {
-        "cache-control": "public, max-age=31536000, immutable",
-      },
-    },
-    "/sitemap.xml": {
-      isr: false,
-      // The sitemap is generated dynamically in `server/routes/sitemap.xml.ts` and already cached server-side.
-      // These headers control edge/browser caching without prerendering.
-      headers: {
-        "cache-control":
-          "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
-      },
-    },
-    // Homepages 15 minutes
-    "/": { isr: 900 },
-    "/en": { isr: 900 },
-    "/tr": { isr: 900 },
-    "/ar": { isr: 900 },
-
-    // Doctors 3 hours
-    "/aerzte/[slug]": { isr: 10800 },
-    "/en/doctors/[slug]": { isr: 10800 },
-    "/tr/doktorlar/[slug]": { isr: 10800 },
-    "/ar/atibba/[slug]": { isr: 10800 },
-
-    // Treatments 15 minutes
-    "/behandlungen": { isr: 900 },
-    "/behandlungen/[...slug]": { isr: 900 },
-    "/en/treatments": { isr: 900 },
-    "/en/treatments/[...slug]": { isr: 900 },
-    "/tr/tedaviler": { isr: 900 },
-    "/tr/tedaviler/[...slug]": { isr: 900 },
-    "/ar/ilajat": { isr: 900 },
-    "/ar/ilajat/[...slug]": { isr: 900 },
-
-    // Blog 1 hour
-    "/blog": { isr: 21600 },
-    "/blog/**": { isr: 21600 },
-    "/en/blog": { isr: 21600 },
-    "/en/blog/**": { isr: 21600 },
-    "/tr/blog": { isr: 21600 },
-    "/tr/blog/**": { isr: 21600 },
-    "/ar/mudawwana": { isr: 21600 },
-    "/ar/mudawwana/**": { isr: 21600 },
-
-    // Careers 12 hours
-    "/karriere": { isr: 43200 },
-    "/karriere/**": { isr: 43200 },
-    "/en/careers": { isr: 43200 },
-    "/en/careers/**": { isr: 43200 },
-    "/tr/kariyer": { isr: 43200 },
-    "/tr/kariyer/**": { isr: 43200 },
-    "/ar/masar-mihani": { isr: 43200 },
-    "/ar/masar-mihani/**": { isr: 43200 },
-
-    // General Pages 1 hour
-    "/p/**": { isr: 3600 },
-    "/en/p/*": { isr: 3600 },
-    "/tr/p/*": { isr: 3600 },
-    "/ar/p/*": { isr: 3600 },
-
-    // Prices 15 minutes
-    "/preise": { isr: 900 },
-    "/en/prices": { isr: 900 },
-    "/tr/fiyatlar": { isr: 900 },
-    "/ar/asaar": { isr: 900 },
-
-    // Products 15 minutes
-    "/produkte": { isr: 900 },
-    "/produkte/**": { isr: 900 },
-    "/en/products": { isr: 900 },
-    "/en/products/**": { isr: 900 },
-    "/tr/urunler": { isr: 900 },
-    "/tr/urunler/**": { isr: 900 },
-    "/ar/muntajat": { isr: 900 },
-    "/ar/muntajat/**": { isr: 900 },
-
-    // Locations 15 minutes
-    "/standorte": { isr: 900 },
-    "/standorte/**": { isr: 900 },
-    "/en/locations": { isr: 900 },
-    "/en/locations/**": { isr: 900 },
-    "/tr/konumlar": { isr: 900 },
-    "/tr/konumlar/**": { isr: 900 },
-    "/ar/mawaqea": { isr: 900 },
-    "/ar/mawaqea/**": { isr: 900 },
-
-    // About Us 6 hour
-    "/ueber-uns": { isr: 21600 },
-    "/en/about-us": { isr: 21600 },
-    "/tr/hakkimizda": { isr: 21600 },
-    "/ar/man-nahnu": { isr: 21600 },
-  },
+  routeRules:
+    process.env.NODE_ENV === "production"
+      ? {
+          "/**": {
+            isr: 900, // 15 minutes
+          },
+          "/api/**": {
+            isr: false,
+            headers: {
+              "cache-control": "private, no-store",
+              "cdn-cache-control": "no-store",
+              "vercel-cdn-cache-control": "no-store",
+            },
+          },
+          "/favicon/**": {
+            headers: {
+              "cache-control": "public, max-age=31536000, immutable",
+            },
+          },
+          "/_nuxt/**": {
+            headers: {
+              "cache-control": "public, max-age=31536000, immutable",
+            },
+          },
+          "/sitemap.xml": {
+            isr: false,
+            // The sitemap is generated dynamically in `server/routes/sitemap.xml.ts` and already cached server-side.
+            // These headers control edge/browser caching without prerendering.
+            headers: {
+              "cache-control":
+                "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
+            },
+          },
+          // Homepages 15 minutes
+          "/": { isr: 900 },
+          "/en": { isr: 900 },
+          "/tr": { isr: 900 },
+          "/ar": { isr: 900 },
+          // Doctors 3 hours
+          "/aerzte/[slug]": { isr: 10800 },
+          "/en/doctors/[slug]": { isr: 10800 },
+          "/tr/doktorlar/[slug]": { isr: 10800 },
+          "/ar/atibba/[slug]": { isr: 10800 },
+          // Treatments 15 minutes
+          "/behandlungen": { isr: 900 },
+          "/behandlungen/[...slug]": { isr: 900 },
+          "/en/treatments": { isr: 900 },
+          "/en/treatments/[...slug]": { isr: 900 },
+          "/tr/tedaviler": { isr: 900 },
+          "/tr/tedaviler/[...slug]": { isr: 900 },
+          "/ar/ilajat": { isr: 900 },
+          "/ar/ilajat/[...slug]": { isr: 900 },
+          // Blog 1 hour
+          "/blog": { isr: 21600 },
+          "/blog/**": { isr: 21600 },
+          "/en/blog": { isr: 21600 },
+          "/en/blog/**": { isr: 21600 },
+          "/tr/blog": { isr: 21600 },
+          "/tr/blog/**": { isr: 21600 },
+          "/ar/mudawwana": { isr: 21600 },
+          "/ar/mudawwana/**": { isr: 21600 },
+          // Careers 12 hours
+          "/karriere": { isr: 43200 },
+          "/karriere/**": { isr: 43200 },
+          "/en/careers": { isr: 43200 },
+          "/en/careers/**": { isr: 43200 },
+          "/tr/kariyer": { isr: 43200 },
+          "/tr/kariyer/**": { isr: 43200 },
+          "/ar/masar-mihani": { isr: 43200 },
+          "/ar/masar-mihani/**": { isr: 43200 },
+          // General Pages 1 hour
+          "/p/**": { isr: 3600 },
+          "/en/p/*": { isr: 3600 },
+          "/tr/p/*": { isr: 3600 },
+          "/ar/p/*": { isr: 3600 },
+          // Prices 15 minutes
+          "/preise": { isr: 900 },
+          "/en/prices": { isr: 900 },
+          "/tr/fiyatlar": { isr: 900 },
+          "/ar/asaar": { isr: 900 },
+          // Products 15 minutes
+          "/produkte": { isr: 900 },
+          "/produkte/**": { isr: 900 },
+          "/en/products": { isr: 900 },
+          "/en/products/**": { isr: 900 },
+          "/tr/urunler": { isr: 900 },
+          "/tr/urunler/**": { isr: 900 },
+          "/ar/muntajat": { isr: 900 },
+          "/ar/muntajat/**": { isr: 900 },
+          // Locations 15 minutes
+          "/standorte": { isr: 900 },
+          "/standorte/**": { isr: 900 },
+          "/en/locations": { isr: 900 },
+          "/en/locations/**": { isr: 900 },
+          "/tr/konumlar": { isr: 900 },
+          "/tr/konumlar/**": { isr: 900 },
+          "/ar/mawaqea": { isr: 900 },
+          "/ar/mawaqea/**": { isr: 900 },
+          // About Us 6 hour
+          "/ueber-uns": { isr: 21600 },
+          "/en/about-us": { isr: 21600 },
+          "/tr/hakkimizda": { isr: 21600 },
+          "/ar/man-nahnu": { isr: 21600 },
+        }
+      : {},
 });

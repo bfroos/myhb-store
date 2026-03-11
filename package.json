@@ -5,6 +5,11 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:seo:local": "NUXT_PUBLIC_SITE_MODE=seo NUXT_PUBLIC_STRAPI_URL=http://localhost:1337 nuxt dev",
+    "dev:seo:prod": "NUXT_PUBLIC_SITE_MODE=seo NUXT_PUBLIC_STRAPI_URL=https://striking-bear-e5a15ddc94.strapiapp.com nuxt dev",
+    "dev:ads:local": "NUXT_PUBLIC_SITE_MODE=ads NUXT_PUBLIC_STRAPI_URL=http://localhost:1337 nuxt dev",
+    "dev:ads:prod": "NUXT_PUBLIC_SITE_MODE=ads NUXT_PUBLIC_STRAPI_URL=https://striking-bear-e5a15ddc94.strapiapp.com nuxt dev",
+    "clear:cache": "rm -rf .nuxt .output node_modules/.cache",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
