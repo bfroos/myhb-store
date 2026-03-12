@@ -174,6 +174,14 @@ const ROUTE_MAP: Record<
 export default defineCachedEventHandler(
   async (event) => {
     const config = useRuntimeConfig();
+
+    if (config.public.siteMode === "ads") {
+      throw createError({
+        statusCode: 404,
+        statusMessage: "Sitemap is disabled in ads mode",
+      });
+    }
+
     const strapiUrl = config.public.strapiUrl;
     if (!strapiUrl) {
       throw createError({
