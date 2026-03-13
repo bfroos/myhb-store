@@ -3,6 +3,10 @@
     v-if="params.url"
     :url="params.url"
     class="calendlyDialog"
+    :page-settings="{
+      hideLandingPageDetails: true,
+      hideEventTypeDetails: true,
+    }"
   />
   <template v-else>
     <div ref="contentRef" class="calendlyDialog__content">
