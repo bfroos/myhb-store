@@ -6,6 +6,7 @@
     :page-settings="{
       hideLandingPageDetails: true,
       hideEventTypeDetails: true,
+      hideGdprBanner: true,
     }"
   />
   <template v-else>
