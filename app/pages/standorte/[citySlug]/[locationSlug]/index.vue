@@ -1,8 +1,5 @@
 <template>
-  <UiOrganismBaseBreadcrumb
-    v-if="!isAdsMode"
-    :items="breadcrumbItems"
-  />
+  <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
   <BlockTreatmentHero v-if="fixedBlocks?.hero" v-bind="fixedBlocks.hero" />
   <BlockLocationContact
     v-if="fixedBlocks?.locationContact"

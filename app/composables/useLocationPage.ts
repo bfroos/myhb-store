@@ -9,6 +9,7 @@ import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 
 export function useLocationPage() {
   const { locale, fallbackLocale, t } = useI18n();
+  const { isAdsMode } = useSiteModeFlags();
   const route = useRoute();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const location = ref<LocationDto | null>(null);
@@ -34,14 +35,18 @@ export function useLocationPage() {
   ]);
 
   async function fetchWithTreatments(): Promise<boolean> {
+    const endpoint = isAdsMode.value
+      ? `/locations/${citySlug}/${locationSlug}/with-treatments-ads`
+      : `/locations/${citySlug}/${locationSlug}/with-treatments`;
+
     const { data, error } = await useStrapiFetch<any>(
-      `/locations/${citySlug}/${locationSlug}/with-treatments`,
+      endpoint,
       {
         query: {
           locale: currentLocale,
         },
         fetchOptions: {
-          key: `location-page:${currentLocale}:${citySlug}:${locationSlug}`,
+          key: `location-page:${currentLocale}:${citySlug}:${locationSlug}:${isAdsMode.value ? "ads" : "seo"}`,
         },
       },
     );
