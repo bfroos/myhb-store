@@ -20,14 +20,19 @@ type MenuResponse = {
   };
 };
 
-export function useMenu(types: string | string[] = "treatment-pages") {
+export function useMenu(
+  types: MaybeRefOrGetter<string | string[]> = "treatment-pages",
+) {
   const { locale, fallbackLocale } = useI18n();
-
-  const typesString = Array.isArray(types) ? types.join(",") : types;
 
   const query = computed(() => ({
     locale: (locale.value || fallbackLocale.value) as string,
-    types: typesString,
+    types: (() => {
+      const resolvedTypes = toValue(types);
+      return Array.isArray(resolvedTypes)
+        ? resolvedTypes.join(",")
+        : resolvedTypes;
+    })(),
   }));
 
   const { data, error, pending, refresh } = useStrapiFetch<MenuResponse>(

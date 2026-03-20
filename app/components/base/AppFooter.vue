@@ -202,12 +202,11 @@ import {
   IconBrandTiktok,
 } from "@tabler/icons-vue";
 
-const { treatmentPages, productCategories } = useMenu(
-  "treatment-pages,product-categories",
-);
-
-const { openCookieSettings } = useCookiebot();
 const { isAdsMode } = useSiteModeFlags();
+const { treatmentPages, productCategories } = useMenu(() =>
+  isAdsMode.value ? "treatment-pages" : "treatment-pages,product-categories",
+);
+const { openCookieSettings } = useCookiebot();
 </script>
 <style scoped>
 .appFooter a:not(.button) {

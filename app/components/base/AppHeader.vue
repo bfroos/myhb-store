@@ -79,7 +79,7 @@ import { IconMenu2 } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
-const { treatmentPages } = useMenu("treatment-pages,product-categories");
+const { treatmentPages } = useMenu("treatment-pages");
 
 const isMobileMenuOpen = ref(false);
 
