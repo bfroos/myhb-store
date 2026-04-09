@@ -50,8 +50,18 @@ export function useStrapiFetch<T>(path: string, opts: any = {}) {
   // Make the request URL reactive when `query` is a ref/computed.
   const url = computed(() => buildUrl(path, resolveQuery(query)));
 
-  // Keep key behavior simple. A constant key is OK because `url` changes will refetch.
-  const key = fetchOptions?.key ?? opts.key ?? `strapi:${path}`;
+  // Ensure different query variants do not share a cache entry.
+  const key =
+    fetchOptions?.key ??
+    opts.key ??
+    computed(() => {
+      const resolvedQuery = resolveQuery(query);
+      const qsString =
+        resolvedQuery && Object.keys(resolvedQuery).length > 0
+          ? qs.stringify(resolvedQuery, { encodeValuesOnly: true })
+          : "";
+      return qsString ? `strapi:${path}?${qsString}` : `strapi:${path}`;
+    });
 
   const watchQuery =
     isRef(query) || isReactive(query) ? (query as any) : undefined;
