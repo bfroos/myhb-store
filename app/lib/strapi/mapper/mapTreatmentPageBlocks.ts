@@ -13,6 +13,11 @@ export function mapTreatmentPageFixedBlocks(
   const commonBlocks = mapTreatmentCommonFixedBlocks(
     treatmentPage,
     tableOfContents,
+    undefined,
+    {
+      city: "",
+      cityPhrase: "",
+    },
   );
 
   const fixed = {

@@ -10,14 +10,37 @@ import {
 import type { SharedButtonDto, SharedKeyValueDto } from "../dto/components";
 import type { LocationDto, TreatmentPageLikeDto } from "../dto/collections";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
+import { replacePlaceholderString } from "~/utils/placeholder";
+
+type PlaceholderContext = {
+  city?: string;
+  cityPhrase?: string;
+};
 
 export function mapTreatmentCommonFixedBlocks(
   treatmentPage: TreatmentPageLikeDto,
   tableOfContents: SharedKeyValueDto[],
   location?: LocationDto,
+  placeholderContext?: PlaceholderContext,
 ) {
   const { t } = useI18n();
   const { isAdsMode } = useSiteModeFlags();
+  const city = placeholderContext?.city ?? "";
+  const cityPhrase = placeholderContext?.cityPhrase ?? "";
+  const replacements = [
+    {
+      placeholder: "{{ cityPhrase }}",
+      replacement: cityPhrase,
+    },
+    {
+      placeholder: "{{ cityName }}",
+      replacement: city,
+    },
+  ];
+
+  function withPlaceholders(value: string | null | undefined): string | undefined {
+    return replacePlaceholderString(value, replacements) ?? undefined;
+  }
   const fixed = {
     tableOfContents: buildTableOfContentsBlockModel(),
     reviews: buildReviewsBlockModel(),
@@ -47,7 +70,7 @@ export function mapTreatmentCommonFixedBlocks(
     };
 
     return {
-      headline: treatmentPage?.tableOfContents?.headline,
+      headline: withPlaceholders(treatmentPage?.tableOfContents?.headline),
       intro: treatmentPage?.tableOfContents?.intro,
       content: treatmentPage?.tableOfContents?.content,
       index: tableOfContents,
@@ -66,13 +89,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.reviews?.headline);
+
     tableOfContents.push({
       key: "reviews",
-      value: treatmentPage?.reviews?.headline ?? t("blocks.reviews.headline"),
+      value: headline ?? t("blocks.reviews.headline"),
     });
 
     return {
-      headline: treatmentPage?.reviews?.headline,
+      headline,
       reviews:
         treatmentPage?.reviews?.reviews ?? treatmentPage?.treatment?.reviews,
     };
@@ -83,13 +108,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.about?.headline);
+
     tableOfContents.push({
       key: "how-it-works",
-      value: treatmentPage?.about?.headline ?? "",
+      value: headline ?? "",
     });
 
     return {
-      headline: treatmentPage?.about?.headline,
+      headline,
       intro: treatmentPage?.about?.intro,
       content: treatmentPage?.about?.content,
       mediaItems: [treatmentPage?.about?.media],
@@ -103,13 +130,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.treatmentDetails?.headline);
+
     tableOfContents.push({
       key: "treatment-details",
-      value: treatmentPage?.treatmentDetails?.headline ?? "",
+      value: headline ?? "",
     });
 
     return {
-      headline: treatmentPage?.treatmentDetails?.headline,
+      headline,
       priceInEuroCent: treatmentPage?.treatment?.priceInEuroCent,
       price: treatmentPage?.treatmentDetails?.price,
       duration: treatmentPage?.treatmentDetails?.duration,
@@ -134,13 +163,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.treatmentPlan?.headline);
+
     tableOfContents.push({
       key: "treatment-plan",
-      value: treatmentPage?.treatmentPlan?.headline ?? "",
+      value: headline ?? "",
     });
 
     return {
-      headline: treatmentPage?.treatmentPlan?.headline,
+      headline,
       content: treatmentPage?.treatmentPlan?.content,
       additionalInfos: treatmentPage?.treatmentPlan?.additionalInfos,
       personaPhoto: treatmentPage?.treatmentPlan?.personaPhoto,
@@ -155,13 +186,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.benefits?.headline);
+
     tableOfContents.push({
       key: "benefits",
-      value: treatmentPage?.benefits?.headline ?? "",
+      value: headline ?? "",
     });
 
     return {
-      headline: treatmentPage?.benefits?.headline,
+      headline,
       items: treatmentPage?.benefits?.items,
       media: treatmentPage?.benefits?.media,
       layout: OrganismMediaCardLayout.MEDIA_LEFT,
@@ -180,22 +213,43 @@ export function mapTreatmentCommonFixedBlocks(
     }
 
     if (treatmentPage?.suitability?.suitableFor) {
+      const suitableForHeading = withPlaceholders(
+        treatmentPage?.suitability?.suitableFor?.heading,
+      );
       tableOfContents.push({
         key: "suitability",
-        value: treatmentPage?.suitability?.suitableFor?.heading ?? "",
+        value: suitableForHeading ?? "",
       });
     }
 
     if (treatmentPage?.suitability?.notSuitableFor) {
+      const notSuitableForHeading = withPlaceholders(
+        treatmentPage?.suitability?.notSuitableFor?.heading,
+      );
       tableOfContents.push({
         key: "suitability",
-        value: treatmentPage?.suitability?.notSuitableFor?.heading ?? "",
+        value: notSuitableForHeading ?? "",
       });
     }
 
+    const firstItem = treatmentPage?.suitability?.suitableFor
+      ? {
+          ...treatmentPage.suitability.suitableFor,
+          heading: withPlaceholders(treatmentPage.suitability.suitableFor.heading),
+        }
+      : undefined;
+    const secondItem = treatmentPage?.suitability?.notSuitableFor
+      ? {
+          ...treatmentPage.suitability.notSuitableFor,
+          heading: withPlaceholders(
+            treatmentPage.suitability.notSuitableFor.heading,
+          ),
+        }
+      : undefined;
+
     return {
-      firstItem: treatmentPage?.suitability?.suitableFor,
-      secondItem: treatmentPage?.suitability?.notSuitableFor,
+      firstItem,
+      secondItem,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,
       },
@@ -214,9 +268,11 @@ export function mapTreatmentCommonFixedBlocks(
       singleType: SharedButtonSingleType.DOCTORS,
     };
 
+    const headline = withPlaceholders(treatmentPage?.medicalTeamHighlight?.headline);
+
     tableOfContents.push({
       key: "employee",
-      value: treatmentPage?.medicalTeamHighlight?.headline ?? "",
+      value: headline ?? "",
     });
 
     const employee = treatmentPage?.medicalTeamHighlight?.employee
@@ -225,7 +281,7 @@ export function mapTreatmentCommonFixedBlocks(
       : treatmentPage?.medicalTeamHighlight?.employee;
 
     return {
-      headline: treatmentPage?.medicalTeamHighlight?.headline,
+      headline,
       intro: treatmentPage?.medicalTeamHighlight?.intro,
       content: treatmentPage?.medicalTeamHighlight?.content,
       employee,
@@ -242,13 +298,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.treatmentProcess?.headline);
+
     tableOfContents.push({
       key: "treatment-process-steps",
-      value: treatmentPage?.treatmentProcess?.headline ?? "",
+      value: headline ?? "",
     });
 
     return {
-      headline: treatmentPage?.treatmentProcess?.headline,
+      headline,
       content: treatmentPage?.treatmentProcess?.content,
       steps: treatmentPage?.treatmentProcess?.steps,
     };
@@ -259,13 +317,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.relatedTreatments?.headline);
+
     tableOfContents.push({
       key: "related-treatments",
-      value: treatmentPage?.relatedTreatments?.headline ?? "",
+      value: headline ?? "",
     });
 
     return {
-      headline: treatmentPage?.relatedTreatments?.headline,
+      headline,
       treatmentPages: treatmentPage?.relatedTreatments?.treatmentPages,
       treatmentAdsPages: treatmentPage?.relatedTreatments?.treatmentAdsPages,
       showShortDescriptions: true,
@@ -285,13 +345,15 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
+    const headline = withPlaceholders(treatmentPage?.faq?.headline);
+
     tableOfContents.push({
       key: "faq",
-      value: treatmentPage?.faq?.headline ?? "",
+      value: headline ?? "",
     });
 
     return {
-      headline: treatmentPage?.faq?.headline,
+      headline,
       faqs: treatmentPage?.faq?.faqs,
       faqSets: treatmentPage?.faq?.faqSets,
       cardSettings: {

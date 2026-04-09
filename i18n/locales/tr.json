@@ -198,7 +198,8 @@
       },
       "openingHoursOpenNewToday": "Bugün yeni açılış",
       "openingHoursOpenSoon": "{date} tarihinden itibaren",
-      "openingHoursComingSoon": "Yakında"
+      "openingHoursComingSoon": "Yakında",
+      "cityPhrase": "{city} şehrinde"
     },
     "city": {
       "allLocations": "{city} şehrindeki tüm konumlar",

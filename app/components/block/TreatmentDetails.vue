@@ -69,6 +69,9 @@ const { t } = useI18n();
 const hasImage = computed(() => !!props.image && isMediaImage(props.image));
 
 const displayHeadline = computed(() => {
+  if (props.headline) {
+    return props.headline;
+  }
   if (!props.treatment?.name) {
     return t("blocks.treatmentDetails.headline");
   }

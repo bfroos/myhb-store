@@ -207,7 +207,8 @@
       },
       "openingHoursOpenNewToday": "Neueröffnung heute",
       "openingHoursOpenSoon": "ab {date}",
-      "openingHoursComingSoon": "Coming Soon"
+      "openingHoursComingSoon": "Coming Soon",
+      "cityPhrase": "in {city}"
     },
     "city": {
       "allLocations": "Alle Standorte in {city}",

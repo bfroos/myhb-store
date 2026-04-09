@@ -34,6 +34,14 @@ export function mapLocationTreatmentPageFixedBlocks(
     treatmentPage,
     tableOfContents,
     location,
+    {
+      city: location.city?.name ?? "",
+      cityPhrase: location.city?.name
+        ? t("locations.location.cityPhrase", {
+            city: location.city.name,
+          })
+        : "",
+    },
   );
 
   const fixed = {

@@ -29,7 +29,14 @@ function replaceInString(text: string, replacements: Replacement[]): string {
     const regex = new RegExp(`\\{\\{\\s*${escapeRegExp(key)}\\s*\\}\\}`, "g");
     result = result.replace(regex, replacement);
   }
-  return result;
+  return normalizePlaceholderResult(result);
+}
+
+function normalizePlaceholderResult(text: string): string {
+  return text
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+([,.;:!?])/g, "$1")
+    .trim();
 }
 
 function escapeRegExp(string: string): string {

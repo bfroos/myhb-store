@@ -201,7 +201,8 @@
       },
       "openingHoursOpenNewToday": "افتتاح جديد اليوم",
       "openingHoursOpenSoon": "من {date}",
-      "openingHoursComingSoon": "قريباً"
+      "openingHoursComingSoon": "قريباً",
+      "cityPhrase": "في {city}"
     },
     "city": {
       "allLocations": "جميع المواقع في {city}",
