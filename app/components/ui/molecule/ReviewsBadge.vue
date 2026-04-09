@@ -9,7 +9,11 @@
     :rel="locationLink ? 'noopener noreferrer' : undefined"
     :aria-label="linkAriaLabel"
   >
-    <div class="reviewsBadge__icons">
+    <div v-if="isResolvingLocalDecision" class="reviewsBadge__placeholder">
+      <span class="reviewsBadge__placeholder-brand" aria-hidden="true" />
+      <span class="reviewsBadge__placeholder-line" aria-hidden="true" />
+    </div>
+    <div v-else class="reviewsBadge__icons">
       <svg
         v-if="source === ReviewSource.GOOGLE"
         class="reviewsBadge__icons__brand"
@@ -113,12 +117,16 @@ const props = withDefaults(
     height?: string;
     source?: ReviewSource;
     googlePlaceId?: string;
+    localRatingThreshold?: number;
+    localMinReviews?: number;
     singleReview?: boolean;
     sourceUrl?: string;
   }>(),
   {
     source: ReviewSource.GOOGLE,
     height: "2rem",
+    localRatingThreshold: 0,
+    localMinReviews: 0,
   },
 );
 
@@ -146,6 +154,16 @@ const locationFetchData = computed<GoogleReviewsResponse | null>(() => {
   if (!key) return null;
   return reviewsCache.value[key] ?? null;
 });
+
+const hasResolvedLocalDecision = computed(() => {
+  const key = cacheKey.value;
+  if (!key) return true;
+  return key in reviewsCache.value;
+});
+
+const isResolvingLocalDecision = computed(
+  () => isLocationVariant.value && !hasResolvedLocalDecision.value,
+);
 
 async function ensureGoogleReviewsLoaded(): Promise<void> {
   const key = cacheKey.value;
@@ -201,11 +219,24 @@ const locationData = computed(() => {
   };
 });
 
+const shouldUseLocalRating = computed(() => {
+  if (!isLocationVariant.value) return false;
+
+  const rating = locationData.value?.rating;
+  const userRatingsTotal = locationData.value?.userRatingsTotal ?? 0;
+  if (rating == null) return false;
+
+  return (
+    rating >= props.localRatingThreshold &&
+    userRatingsTotal >= props.localMinReviews
+  );
+});
+
 const effectiveRating = computed(() => {
-  if (isLocationVariant.value && locationData.value?.rating != null) {
+  if (shouldUseLocalRating.value && locationData.value?.rating != null) {
     return locationData.value.rating;
   }
-  return props.rating ?? (isLocationVariant.value ? 5 : 0);
+  return props.rating ?? 0;
 });
 
 const normalizedRating = computed(() => {
@@ -242,7 +273,7 @@ const ratingDisplay = computed(() => {
 });
 
 const showRatingCircle = computed(
-  () => isLocationVariant.value && locationData.value != null,
+  () => shouldUseLocalRating.value && locationData.value != null,
 );
 
 const reviewCountText = computed(() => {
@@ -250,7 +281,7 @@ const reviewCountText = computed(() => {
     return t("common.review");
   }
 
-  if (isLocationVariant.value) {
+  if (shouldUseLocalRating.value) {
     const count = locationData.value?.userRatingsTotal ?? 0;
     return t("common.reviewsCount", { count: formatInteger(count) });
   }
@@ -260,7 +291,10 @@ const reviewCountText = computed(() => {
 });
 
 const locationLink = computed(
-  () => props.sourceUrl ?? locationData.value?.placeUrl ?? null,
+  () =>
+    props.sourceUrl ??
+    (shouldUseLocalRating.value ? locationData.value?.placeUrl : null) ??
+    null,
 );
 
 const linkAriaLabel = computed(() => {
@@ -298,6 +332,29 @@ const ratingAriaLabel = computed(
   align-items: center;
   justify-content: center;
   gap: var(--space-200);
+}
+
+.reviewsBadge__placeholder {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-200);
+}
+
+.reviewsBadge__placeholder-brand {
+  width: 1em;
+  height: 1em;
+  border-radius: 999px;
+  background: var(--color-gray-200);
+  animation: reviews-badge-pulse 1.1s ease-in-out infinite;
+}
+
+.reviewsBadge__placeholder-line {
+  width: 4.8em;
+  height: 0.75em;
+  border-radius: 999px;
+  background: var(--color-gray-200);
+  animation: reviews-badge-pulse 1.1s ease-in-out infinite;
 }
 
 .reviewsBadge__icons__brand {
@@ -363,5 +420,15 @@ const ratingAriaLabel = computed(
   height: 0.45em;
   width: 0.45em;
   color: var(--color-text-light);
+}
+
+@keyframes reviews-badge-pulse {
+  0%,
+  100% {
+    opacity: 0.45;
+  }
+  50% {
+    opacity: 0.85;
+  }
 }
 </style>

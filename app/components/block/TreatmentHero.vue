@@ -94,7 +94,9 @@
                   v-if="googlePlaceId"
                   show-text
                   :source="ReviewSource.GOOGLE"
-                  :rating="googlePlaceId ? undefined : 5"
+                  :rating="5"
+                  :local-rating-threshold="4"
+                  :local-min-reviews="5"
                   :google-place-id="googlePlaceId"
                   class="hero__reviews"
                 />
@@ -145,7 +147,9 @@
                 v-if="googlePlaceId"
                 show-text
                 :source="ReviewSource.GOOGLE"
-                :rating="googlePlaceId ? undefined : 5"
+                :rating="5"
+                :local-rating-threshold="4"
+                :local-min-reviews="5"
                 :google-place-id="googlePlaceId"
                 class="floating-cta__reviews"
               />
