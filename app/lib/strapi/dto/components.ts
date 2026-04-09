@@ -123,6 +123,7 @@ export type BlockLocationTeasersDto = {
   locations?: LocationDto[];
   cardSettings?: CardSettingsDto;
   showFilters?: boolean;
+  treatmentPathKey?: string;
 };
 
 export type BlockMediaBentoDto = {

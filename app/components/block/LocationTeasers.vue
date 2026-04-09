@@ -13,6 +13,7 @@
         v-for="location in filteredLocations"
         :key="location.slug"
         :item="location"
+        :to="buildLocationPath(location)"
         main-information="city"
         show-building-image
         :on-book="() => handleLocationBook(location)"
@@ -57,6 +58,14 @@ const filteredLocations = computed(() => {
     (loc) => loc.city?.federalState === selectedFederalState.value,
   );
 });
+
+function buildLocationPath(location: LocationDto): string {
+  if (!props.treatmentPathKey) {
+    return `/standorte/${location.city.slug}/${location.slug}`;
+  }
+
+  return `/standorte/${location.city.slug}/${location.slug}/${props.treatmentPathKey}`;
+}
 
 function handleLocationBook(location: LocationDto) {
   openCalendlyDialog(location.calendlyUrl);

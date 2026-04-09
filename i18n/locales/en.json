@@ -252,6 +252,9 @@
     },
     "treatment": {
       "allTreatments": "Treatments",
+      "locationTeasers": {
+        "headline": "{treatment} at our locations"
+      },
       "error": {
         "treatmentNotFound": "Treatment not found",
         "treatmentNotFoundDescription": "The requested treatment does not exist."

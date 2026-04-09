@@ -252,6 +252,9 @@
     },
     "treatment": {
       "allTreatments": "العلاجات",
+      "locationTeasers": {
+        "headline": "{treatment} في مواقعنا"
+      },
       "error": {
         "treatmentNotFound": "العلاج غير موجود",
         "treatmentNotFoundDescription": "العلاج المطلوب غير موجود."

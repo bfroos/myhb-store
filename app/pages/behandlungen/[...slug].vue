@@ -1,19 +1,26 @@
 <template>
-  <UiOrganismBaseBreadcrumb
-    v-if="!isAdsMode"
-    :items="breadcrumbItems"
-  />
+  <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
   <BlockTreatmentHero
     v-if="fixedBlocks.hero"
     v-bind="fixedBlocks.hero"
     show-floating-cta
   />
   <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
+  <BlockLocationTeasers
+    v-if="hasTreatmentLocations"
+    :headline="treatmentLocationTeasersHeadline"
+    :locations="treatmentLocations"
+    :treatment-path-key="treatmentPage?.pathKey"
+    :show-filters="false"
+  />
   <BlockRenderer v-if="blocks" :blocks="blocks" />
 </template>
 <script setup lang="ts">
+import type { TreatmentType } from "~/lib/strapi/dto/enums";
+
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
+const { t } = useI18n();
 const {
   fetchTreatment,
   fixedBlocks,
@@ -23,10 +30,28 @@ const {
   blocks,
   treatmentPage,
 } = useTreatmentPage();
+const { locations: treatmentLocations, fetchLocations } = useLocationFinder();
+
+const treatmentType = computed<TreatmentType | undefined>(
+  () => treatmentPage.value?.treatment?.type,
+);
+
+const hasTreatmentLocations = computed(
+  () => (treatmentLocations.value?.length ?? 0) > 0,
+);
+
+const treatmentLocationTeasersHeadline = computed(() =>
+  t("treatments.treatment.locationTeasers.headline", {
+    treatment: treatmentPage.value?.name ?? "",
+  }),
+);
 
 const treatmentPageLoaded = await fetchTreatment();
 
 if (treatmentPageLoaded) {
+  if (treatmentType.value) {
+    await fetchLocations({ treatmentType: treatmentType.value });
+  }
   usePageI18nParams(localizations.value, "pathKey");
   await setPageSeo(seo.value);
 }

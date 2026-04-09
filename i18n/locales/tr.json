@@ -249,6 +249,9 @@
     },
     "treatment": {
       "allTreatments": "Tedaviler",
+      "locationTeasers": {
+        "headline": "{treatment} tedavisi sunulan konumlarımız"
+      },
       "error": {
         "treatmentNotFound": "Tedavi bulunamadı",
         "treatmentNotFoundDescription": "İstenen tedavi bulunamadı."

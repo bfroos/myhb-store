@@ -101,6 +101,7 @@ const props = withDefaults(
     showBuildingImage?: boolean;
     onBook?: () => void;
     onBeforeNavigate?: () => void;
+    to?: string;
   }>(),
   {
     mainInformation: "location",
@@ -178,6 +179,10 @@ const badgeText = computed(() => {
 });
 
 const buildLocationPath = (item: MoleculeLocationItem) => {
+  if (props.to) {
+    return props.to;
+  }
+
   return {
     name: "standorte-citySlug-locationSlug",
     params: { citySlug: item.city.slug, locationSlug: item.slug },
