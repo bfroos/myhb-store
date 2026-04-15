@@ -29,7 +29,7 @@ function replaceInString(text: string, replacements: Replacement[]): string {
     const regex = new RegExp(`\\{\\{\\s*${escapeRegExp(key)}\\s*\\}\\}`, "g");
     result = result.replace(regex, replacement);
   }
-  return normalizePlaceholderResult(result);
+  return result;
 }
 
 function normalizePlaceholderResult(text: string): string {
@@ -107,7 +107,7 @@ export function replacePlaceholderString(
   }
 
   if (typeof value === "string") {
-    return replaceInString(value, replacements);
+    return normalizePlaceholderResult(replaceInString(value, replacements));
   }
 
   return undefined;
