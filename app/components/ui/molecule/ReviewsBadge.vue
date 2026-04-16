@@ -130,7 +130,7 @@ const props = withDefaults(
   },
 );
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 const { formatInteger, localeIso } = useFormatInteger();
 const globals = useGlobals();
 
@@ -146,7 +146,7 @@ const reviewsInflight = useState<
 
 const cacheKey = computed(() => {
   if (!props.googlePlaceId) return null;
-  return `google-reviews:${props.googlePlaceId}:${locale.value}`;
+  return `google-reviews:${props.googlePlaceId}`;
 });
 
 const locationFetchData = computed<GoogleReviewsResponse | null>(() => {
@@ -183,7 +183,6 @@ async function ensureGoogleReviewsLoaded(): Promise<void> {
       return await $fetch<GoogleReviewsResponse>("/api/google-reviews", {
         query: {
           placeId,
-          language: locale.value,
         },
       });
     } catch {
