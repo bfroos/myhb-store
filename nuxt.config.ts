@@ -11,13 +11,6 @@ export default defineNuxtConfig({
     "nuxt-calendly",
     "@nuxt/scripts",
   ],
-  scripts: {
-    registry: {
-      googleTagManager: {
-        id: "GTM-5KCNWFWS",
-      },
-    },
-  },
   fonts: {
     provider: "bunny",
     families: [
@@ -51,10 +44,6 @@ export default defineNuxtConfig({
               },
             ]
           : []),
-        {
-          rel: "dns-prefetch",
-          href: "https://www.googletagmanager.com",
-        },
         {
           rel: "icon",
           type: "image/svg+xml",
