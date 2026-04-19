@@ -408,7 +408,7 @@
       "button": "Ana sayfaya git"
     },
     "404": {
-      "statusMessage": "Sayfa bulunamadı",
+      "statusMessage": "Sayfa maalesef bulunamadı:",
       "message": "İstenen sayfa seçilen dilde mevcut değil.",
       "button": "Ana sayfaya git"
     }

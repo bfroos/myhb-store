@@ -411,7 +411,7 @@
       "button": "Back to Home"
     },
     "404": {
-      "statusMessage": "Not found",
+      "statusMessage": "Page unfortunately not found:",
       "message": "The requested page does not exist or is not available in the selected language.",
       "button": "Back to Home"
     }

@@ -423,7 +423,7 @@
       "button": "Zur Startseite"
     },
     "404": {
-      "statusMessage": "Nicht schön!",
+      "statusMessage": "Seite leider nicht gefunden:",
       "message": "Die angeforderte Seite existiert nicht oder ist in der ausgewählten Sprache nicht verfügbar.",
       "button": "Zur Startseite"
     }
