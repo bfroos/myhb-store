@@ -284,6 +284,7 @@ export type BlockTreatmentTeasersDto = {
   showShortDescriptions: boolean;
   showPrices: boolean;
   showDescriptions: boolean;
+  showTopCategoryFilters?: boolean;
   treatmentPages?: TreatmentPageDto[];
   treatmentAdsPages?: TreatmentAdsPageDto[];
   locationPathKey?: string;

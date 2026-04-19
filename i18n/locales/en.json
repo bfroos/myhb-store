@@ -282,6 +282,11 @@
         "all": "All locations"
       }
     },
+    "treatmentTeasers": {
+      "filter": {
+        "all": "All"
+      }
+    },
     "qualifications": {
       "headline": "Qualifications",
       "vita": "Vita"

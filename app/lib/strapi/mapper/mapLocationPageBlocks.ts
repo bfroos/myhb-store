@@ -234,12 +234,36 @@ export function mapLocationFixedBlocks(
 
     const headline = headlines[location?.type as LocationType];
 
+    const collator = new Intl.Collator(locale.value);
+    const sortedTreatmentPages = [...treatmentPages].sort((a, b) => {
+      const aTopCategory =
+        a.topCategory?.name ??
+        a.topCategory?.slug ??
+        a.ancestorSlugs?.[0] ??
+        a.slug ??
+        "";
+      const bTopCategory =
+        b.topCategory?.name ??
+        b.topCategory?.slug ??
+        b.ancestorSlugs?.[0] ??
+        b.slug ??
+        "";
+      const categoryCompare = collator.compare(aTopCategory, bTopCategory);
+
+      if (categoryCompare !== 0) {
+        return categoryCompare;
+      }
+
+      return collator.compare(a.name ?? "", b.name ?? "");
+    });
+
     return {
       headline,
       showShortDescriptions: true,
       showPrices: true,
       showDescriptions: true,
-      treatmentPages,
+      showTopCategoryFilters: true,
+      treatmentPages: sortedTreatmentPages,
       locationPathKey: `${location?.city?.slug}/${location?.slug}`,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,

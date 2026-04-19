@@ -219,6 +219,7 @@ export type TreatmentPageDto = {
   slug: string;
   ancestorSlugs: string[];
   ancestors: { slug: string; name: string }[];
+  topCategory?: { slug: string; name: string };
   pathKey: string;
   showInMenu: boolean;
   name: string;
@@ -245,6 +246,7 @@ export type TreatmentAdsPageDto = {
   slug: string;
   ancestorSlugs: string[];
   ancestors: { slug: string; name: string }[];
+  topCategory?: { slug: string; name: string };
   pathKey: string;
   showInMenu: boolean;
   name: string;

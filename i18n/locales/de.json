@@ -294,6 +294,11 @@
         "all": "Alle Standorte"
       }
     },
+    "treatmentTeasers": {
+      "filter": {
+        "all": "Alle"
+      }
+    },
     "qualifications": {
       "headline": "Qualifikationen",
       "vita": "Werdegang"

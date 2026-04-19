@@ -281,6 +281,11 @@
         "all": "جميع المواقع"
       }
     },
+    "treatmentTeasers": {
+      "filter": {
+        "all": "الكل"
+      }
+    },
     "qualifications": {
       "headline": "المؤهلات",
       "vita": "السيرة الذاتية"

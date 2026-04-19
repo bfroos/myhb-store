@@ -279,6 +279,11 @@
         "all": "Tüm konumlar"
       }
     },
+    "treatmentTeasers": {
+      "filter": {
+        "all": "Tümü"
+      }
+    },
     "qualifications": {
       "headline": "Nitelikler",
       "vita": "Özgeçmiş"
