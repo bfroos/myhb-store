@@ -9,10 +9,10 @@
           class="reviews__header reviews__header--static"
           :class="themeClass(1)"
         >
-          <h2 v-if="displayHeadline" :id="headingId">{{ displayHeadline }}</h2>
+          <h2 v-if="displayHeadline" :id="mobileHeadingId">{{ displayHeadline }}</h2>
           <SharedButton :button="ctaButton" />
         </header>
-        <div v-if="!isDesktop" class="reviews__body reviews__body--scroll">
+        <div class="reviews__body reviews__body--scroll">
           <UiOrganismHorizontalScroll class="reviews__scroll">
             <article
               v-for="(review, index) in reviews"
@@ -32,12 +32,12 @@
             </article>
           </UiOrganismHorizontalScroll>
         </div>
-        <div v-else class="reviews__body reviews__body--grid">
+        <div class="reviews__body reviews__body--grid">
           <header
             class="reviews__header reviews__header--floating"
             :class="themeClass(1)"
           >
-            <h2 :id="headingId">{{ displayHeadline }}</h2>
+            <h2 :id="desktopHeadingId">{{ displayHeadline }}</h2>
             <div>
               <SharedButton :button="ctaButton" />
             </div>
@@ -75,24 +75,8 @@ import type { BlockReviewsDto } from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockReviewsDto>();
 const { t } = useI18n();
-const headingId = useId();
-const isDesktop = ref(false);
-
-let mq: MediaQueryList | null = null;
-
-function setDesktop(e?: MediaQueryListEvent) {
-  isDesktop.value = e?.matches ?? mq?.matches ?? false;
-}
-
-onMounted(() => {
-  mq = window.matchMedia("(min-width: 1200px)");
-  setDesktop();
-  mq.addEventListener("change", setDesktop);
-});
-
-onUnmounted(() => {
-  mq?.removeEventListener("change", setDesktop);
-});
+const mobileHeadingId = useId();
+const desktopHeadingId = useId();
 
 const reviews = computed(() => (props.reviews ?? []) as ReviewDto[]);
 
@@ -165,10 +149,7 @@ function themeClass(index: number) {
 }
 
 .reviews__body--grid {
-  display: flex;
-  flex-wrap: wrap;
-  overflow-x: hidden;
-  border-radius: var(--border-radius-card-figure);
+  display: none;
 }
 
 .reviews__body--grid > *:nth-child(-n + 3) {
@@ -197,7 +178,18 @@ function themeClass(index: number) {
     display: block;
   }
 
-  .reviews__body {
+  .reviews__body--scroll {
+    display: none;
+  }
+
+  .reviews__body--grid {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    border-radius: var(--border-radius-card-figure);
+  }
+
+  .reviews__body--grid {
     display: flex;
     gap: var(--space-card-figure-pad);
     border-radius: var(--border-radius-100) var(--border-radius-100)
