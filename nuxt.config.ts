@@ -45,6 +45,13 @@ export default defineNuxtConfig({
     "@nuxt/scripts",
   ],
 
+  // Calendly: Widget-Script erst bei Bedarf laden (spart ~120KB beim ersten Load)
+  calendly: {
+    loadWidgetCSS: true,
+    loadWidgetCloseAnimation: true,
+    lazyLoad: true,
+  },
+
   // 3. Font-Optimierung: nur benötigte Weights, display:swap
   fonts: {
     provider: "bunny",
