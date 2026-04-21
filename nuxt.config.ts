@@ -4,6 +4,39 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
   css: ["~/assets/css/main.css"],
+
+  // ── PERFORMANCE OPTIMIERUNGEN ──────────────────────────────
+  // 1. Nuxt Payload Optimierung: reduziert window.__NUXT__ inline JS
+  experimental: {
+    inlineSSRStyles: false,       // CSS nicht inline rendern → eigene Dateien, cached
+    payloadExtraction: true,      // Payload als separate Datei, nicht inline
+    renderJsonPayloads: true,     // JSON-Payload komprimierbar
+  },
+
+  // 2. Vite Build-Optimierungen
+  vite: {
+    build: {
+      // CSS Code-Splitting: gemeinsame CSS in wenige Chunks bündeln
+      cssCodeSplit: true,
+      rollupOptions: {
+        output: {
+          // JS Chunks sinnvoll aufteilen
+          manualChunks: (id) => {
+            if (id.includes("node_modules/primevue") || id.includes("node_modules/@primeuix")) {
+              return "primevue";
+            }
+            if (id.includes("node_modules/@googlemaps")) {
+              return "googlemaps";
+            }
+            if (id.includes("node_modules/@tabler")) {
+              return "icons";
+            }
+          },
+        },
+      },
+    },
+  },
+
   modules: [
     "@nuxt/fonts",
     "@nuxtjs/i18n",
@@ -11,6 +44,8 @@ export default defineNuxtConfig({
     "nuxt-calendly",
     "@nuxt/scripts",
   ],
+
+  // 3. Font-Optimierung: nur benötigte Weights, display:swap
   fonts: {
     provider: "bunny",
     families: [
@@ -19,12 +54,15 @@ export default defineNuxtConfig({
         weights: [400, 500],
         styles: ["normal"],
         subsets: ["latin"],
+        display: "swap",  // verhindert FOIT (Flash of Invisible Text)
       },
     ],
   },
+
   app: {
     head: {
       viewport: "width=device-width, initial-scale=1",
+      // 4. Resource Hints für externe Domains
       link: [
         ...(process.env.NUXT_PUBLIC_MEDIA_URL
           ? [
@@ -32,6 +70,10 @@ export default defineNuxtConfig({
                 rel: "preconnect" as const,
                 href: new URL(process.env.NUXT_PUBLIC_MEDIA_URL).origin,
                 crossorigin: "anonymous" as const,
+              },
+              {
+                rel: "dns-prefetch" as const,
+                href: new URL(process.env.NUXT_PUBLIC_MEDIA_URL).origin,
               },
             ]
           : []),
@@ -72,6 +114,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+
   i18n: {
     baseUrl:
       process.env.BASE_URL ||
@@ -218,6 +261,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   primevue: {
     autoImport: false,
     components: {
@@ -284,6 +328,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   runtimeConfig: {
     redirectsFile: process.env.REDIRECTS_FILE,
     redirectsStrapiCacheTtlMs: 5 * 60 * 1000,
@@ -304,11 +349,17 @@ export default defineNuxtConfig({
       siteMode: process.env.NUXT_PUBLIC_SITE_MODE,
     },
   },
+
   routeRules:
     process.env.NODE_ENV === "production"
       ? {
           "/**": {
-            isr: 900, // 15 minutes
+            isr: 900,
+            // 5. Security & Performance Headers
+            headers: {
+              "x-content-type-options": "nosniff",
+              "x-frame-options": "SAMEORIGIN",
+            },
           },
           "/api/**": {
             isr: false,
@@ -330,8 +381,6 @@ export default defineNuxtConfig({
           },
           "/sitemap.xml": {
             isr: false,
-            // The sitemap is generated dynamically in `server/routes/sitemap.xml.ts` and already cached server-side.
-            // These headers control edge/browser caching without prerendering.
             headers: {
               "cache-control":
                 "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
@@ -356,7 +405,7 @@ export default defineNuxtConfig({
           "/tr/tedaviler/[...slug]": { isr: 900 },
           "/ar/ilajat": { isr: 900 },
           "/ar/ilajat/[...slug]": { isr: 900 },
-          // Blog 1 hour
+          // Blog 6 hours
           "/blog": { isr: 21600 },
           "/blog/**": { isr: 21600 },
           "/en/blog": { isr: 21600 },
@@ -402,7 +451,7 @@ export default defineNuxtConfig({
           "/tr/konumlar/**": { isr: 900 },
           "/ar/mawaqea": { isr: 900 },
           "/ar/mawaqea/**": { isr: 900 },
-          // About Us 6 hour
+          // About Us 6 hours
           "/ueber-uns": { isr: 21600 },
           "/en/about-us": { isr: 21600 },
           "/tr/hakkimizda": { isr: 21600 },
