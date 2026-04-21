@@ -15,6 +15,18 @@ const WEEKDAY_TO_SCHEMA: Record<string, string> = {
   sunday: "Su",
 };
 
+const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = {
+  "ChIJoesgRlglv0cRh0fAgCZ9MTk": { rating: "4.9", count: "382" },
+  "ChIJoct0O2RTqEcRZthU8Tn5dGs": { rating: "4.9", count: "208" },
+  "ChIJYyPheE7LuEcRAIgZkPAOJyU": { rating: "4.9", count: "148" },
+  "ChIJ_7Xx1HetuEcRUE0rtbPlvEQ": { rating: "4.9", count: "142" },
+  "ChIJr60IH9PjuEcRdVPR8YiTgSo": { rating: "4.9", count: "149" },
+  "ChIJf4C6OSkTlkcRpTMm00E5JLE": { rating: "4.9", count: "67" },
+  "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": { rating: "5", count: "113" },
+  "ChIJuVWkFmyZwEcRM9nuZ1SejT4": { rating: "5", count: "8" },
+  "ChIJiV6-12Z6hUcR3d5X8yL6b5Q": { rating: "4.9", count: "100" },
+};
+
 /**
  * Schema.org LocalBusiness for location pages.
  * Supports Google local business search, knowledge panel, and rich results.
@@ -84,14 +96,14 @@ export function buildLocalBusinessSchema(
     paymentAccepted: "Cash, Credit Card, Debit Card",
     // Image
     ...(imageUrl && { image: imageUrl }),
-    // Aggregate rating — wird von Strapi befüllt wenn Google Reviews verfügbar
-    ...(location.googlePlaceId && {
+    // Aggregate rating — echte Google-Daten pro Standort
+    ...(location.googlePlaceId && GOOGLE_RATINGS[location.googlePlaceId] && {
       aggregateRating: {
         "@type": "AggregateRating",
-        ratingValue: "4.8",
+        ratingValue: GOOGLE_RATINGS[location.googlePlaceId]?.rating ?? "4.9",
         bestRating: "5",
         worstRating: "1",
-        ratingCount: "150",
+        ratingCount: GOOGLE_RATINGS[location.googlePlaceId]?.count ?? "100",
       },
     }),
   };
