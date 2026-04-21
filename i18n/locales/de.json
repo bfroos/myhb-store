@@ -54,7 +54,6 @@
       "forPrefix": "für"
     }
   },
-
   "navigation": {
     "header": {
       "languageSwitcher": "Sprache wechseln"
@@ -84,7 +83,6 @@
       "goToTreatment": "Zur Behandlung"
     }
   },
-
   "cta": {
     "bookAppointment": "Termin buchen",
     "bookAppointmentNotAvailable": "Nicht buchbar",
@@ -105,13 +103,11 @@
       "facebook": "Auf Facebook teilen"
     }
   },
-
   "googleMaps": {
     "consentRequired": "Karte nicht verfügbar",
     "consentDescription": "Um die Karte anzuzeigen, benötigen wir deine Zustimmung für Google Maps. Bitte akzeptiere die Cookie-Einstellungen.",
     "consentButton": "Cookie-Einstellungen öffnen"
   },
-
   "location": {
     "comingSoon": "Coming soon",
     "sinceToday": "Neueröffnung heute",
@@ -133,7 +129,6 @@
       "headline": "Stellenangebote in {city}"
     }
   },
-
   "blog": {
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
@@ -151,7 +146,6 @@
       "description": "Leider sind keine Artikel für diese Kategorie in deiner ausgewählten Sprache verfügbar."
     }
   },
-
   "career": {
     "breadcrumbTitle": "Karriere",
     "job": {
@@ -182,7 +176,6 @@
       }
     }
   },
-
   "locations": {
     "headline": "Standorte",
     "breadcrumbTitle": "Standorte",
@@ -197,13 +190,13 @@
         "clinic": "Privatklinik"
       },
       "seo": {
-        "title": "{brandNameShort} {locationType} {city}, {locationName}, {street} {houseNumber}, {postalCode} {city}",
-        "description": "{brandName} in {city}, {locationName} – Öffnungszeiten, Behandlungen & mehr. Hier findest Du alle Infos!"
+        "title": "{brandNameShort} {locationName} {city} | Botox & Hyaluron",
+        "description": "{brandName} {locationName} {city} ✓ Botox & Hyaluron ✓ Zertifizierte Ärzte ✓ Jetzt Termin buchen"
       },
       "locationTreatment": {
         "seo": {
-          "title": "{treatmentName} Behandlung bei {brandNameShort} in {city}, {locationName}",
-          "description": "{brandName} in {city}, {locationName} – {treatmentName} – Öffnungszeiten und alle Details zur Behandlung."
+          "title": "{treatmentName} {city} | {brandNameShort} {locationName}",
+          "description": "{treatmentName} in {city} bei {brandName} {locationName} ✓ Zertifizierte Ärzte ✓ Termin online buchen"
         }
       },
       "openingHoursOpenNewToday": "Neueröffnung heute",
@@ -221,7 +214,6 @@
       }
     }
   },
-
   "doctors": {
     "headline": "Ärzte",
     "breadcrumbTitle": "Ärzte",
@@ -244,7 +236,6 @@
       }
     }
   },
-
   "treatments": {
     "breadcrumbTitle": "Behandlungen",
     "seo": {
@@ -268,13 +259,11 @@
       }
     }
   },
-
   "treatment": {
     "seo": {
       "description": "{description} Erfahrene Ärzte, sichere Behandlung & individueller Plan. Jetzt Termin buchen!"
     }
   },
-
   "productPage": {
     "error": {
       "productNotFound": "Produkt nicht gefunden",
@@ -283,7 +272,6 @@
     "productDescription": "Produktbeschreibung",
     "metaDescription": "{name} von {manufacturer} in den Varianten {variants} ab {price} in deiner Nähe erhältlich"
   },
-
   "blocks": {
     "jobTeasers": {
       "headline": "Aktuelle Stellenangebote",
@@ -415,7 +403,6 @@
       "treatmentsWith": "Behandlungen mit {manufacturer} {product}"
     }
   },
-
   "error": {
     "500": {
       "statusMessage": "Hoppla! Etwas ist schiefgelaufen.",
@@ -428,7 +415,6 @@
       "button": "Zur Startseite"
     }
   },
-
   "dialogs": {
     "calendly": {
       "header": "Buche deinen Termin jetzt über Calendly"
@@ -437,7 +423,6 @@
       "header": "Newsletter abonnieren"
     }
   },
-
   "newsletter": {
     "marketingText": {
       "headline": "Deals und News. Jetzt im Newsletter!",
