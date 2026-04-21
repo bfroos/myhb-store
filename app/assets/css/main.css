@@ -117,3 +117,41 @@ a.text-link:hover {
   white-space: nowrap;
   border-width: 0;
 }
+
+/* ── PERFORMANCE & SEO FIXES ────────────────────────────────────────────────
+   Fix: Mobile tap targets min 48x48px (Google Lighthouse / HubSpot SEO)
+   Fix: Aspect-ratio on images to prevent CLS (Cumulative Layout Shift)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Tap targets: alle interaktiven Elemente mindestens 48x48px */
+a,
+button,
+[role="button"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+label[for],
+select {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Ausnahme: Inline-Links im Fließtext sollen nicht vergrößert werden */
+p a,
+li a,
+.text-link {
+  min-height: unset;
+  min-width: unset;
+}
+
+/* CLS-Prävention: Bilder reservieren ihren Platz bevor sie geladen sind */
+img {
+  height: auto;
+}
+
+/* CLS-Prävention: Aspect-Ratio für häufige Bild-Container */
+picture img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
