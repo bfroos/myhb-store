@@ -70,9 +70,16 @@ export function buildLocalBusinessSchema(
     ? location.buildingImage.url
     : null;
 
+  // Shopping-Center-Standorte bekommen zusätzlich "HealthAndBeautyBusiness"
+  // Mediapark Köln (ChIJoiV6-12Z6hUcR3d5X8yL6b5Q) bleibt nur MedicalClinic
+  const isMediaparkClinic = location.googlePlaceId === "ChIJiV6-12Z6hUcR3d5X8yL6b5Q";
+  const schemaTypes = isMediaparkClinic
+    ? ["LocalBusiness", "MedicalClinic"]
+    : ["LocalBusiness", "MedicalClinic", "HealthAndBeautyBusiness"];
+
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": ["LocalBusiness", "MedicalClinic"],
+    "@type": schemaTypes,
     name: businessName,
     url: pageUrl,
     ...(address && { address }),
@@ -106,6 +113,41 @@ export function buildLocalBusinessSchema(
         ratingCount: GOOGLE_RATINGS[location.googlePlaceId]?.count ?? "100",
       },
     }),
+    // Offer Catalog mit Hauptleistungen
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Ästhetische Behandlungen",
+      itemListElement: [
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "MedicalProcedure",
+            name: "Botox®",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "MedicalProcedure",
+            name: "Hyaluron Filler",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "MedicalProcedure",
+            name: "PRP-Therapie",
+          },
+        },
+        {
+          "@type": "Offer",
+          itemOffered: {
+            "@type": "MedicalProcedure",
+            name: "Fettwegspritze",
+          },
+        },
+      ],
+    },
   };
 
   if (ctx.brandName) {
