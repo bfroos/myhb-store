@@ -1,3 +1,3 @@
 User-Agent: *
 Disallow:
-Sitemap: https://myhealthandbeauty.com/sitemap.xml
+Sitemap: https://www.myhealthandbeauty.com/sitemap.xml
