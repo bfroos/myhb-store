@@ -8,16 +8,24 @@ export default defineNuxtConfig({
   // ── PERFORMANCE OPTIMIERUNGEN ──────────────────────────────
   // 1. Nuxt Payload Optimierung: reduziert window.__NUXT__ inline JS
   experimental: {
-    inlineSSRStyles: false,       // CSS nicht inline rendern → eigene Dateien, cached
+    // inlineSSRStyles: kritische CSS inline rendern → verhindert FOUC und reduziert render-blocking CSS-Files.
+    // true = kritische Styles kommen inline im HTML, Rest wird lazy geladen.
+    inlineSSRStyles: true,
     payloadExtraction: true,      // Payload als separate Datei, nicht inline
     renderJsonPayloads: true,     // JSON-Payload komprimierbar
+    // Komponenten-Islands: non-interactive Blöcke werden als statisches HTML gerendert
+    componentIslands: true,
   },
 
   // 2. Vite Build-Optimierungen
   vite: {
     build: {
-      // CSS Code-Splitting: gemeinsame CSS in wenige Chunks bündeln
-      cssCodeSplit: true,
+      // CSS Code-Splitting deaktivieren: verhindert 20+ kleine CSS-Dateien die Rendering blockieren.
+      // Stattdessen: alle CSS in wenige grosse Chunks → weniger render-blocking requests.
+      cssCodeSplit: false,
+      // Moderne Browser anvisieren: weniger Transpilierung = ~90 KiB weniger JS.
+      // Supports Chrome 90+, Firefox 88+, Safari 14+ (>95% der User).
+      target: "es2020",
       rollupOptions: {
         output: {
           // JS Chunks sinnvoll aufteilen
@@ -34,6 +42,10 @@ export default defineNuxtConfig({
           },
         },
       },
+    },
+    // Esbuild für schnelleres Minifizieren + moderne Syntax
+    esbuild: {
+      target: "es2020",
     },
   },
 
