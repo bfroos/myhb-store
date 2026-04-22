@@ -34,8 +34,9 @@ export async function setPageSeo(
   fallbackOgImage?: StrapiMedia | null,
 ): Promise<void> {
   const nuxtApp = useNuxtApp();
-  const { locale, fallbackLocale } = useI18n();
+  const { locale, fallbackLocale, locales } = useI18n();
   const route = useRoute();
+  const switchLocalePath = useSwitchLocalePath();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const config = useRuntimeConfig();
   const globals = useGlobals();
@@ -48,14 +49,39 @@ export async function setPageSeo(
   });
 
   nuxtApp.runWithContext(() => {
+    // Hreflang für multilinguale SEO
+    const hreflangLinks = [
+      {
+        rel: "alternate",
+        hreflang: "x-default",
+        href: canonicalUrl,
+      },
+    ];
+
+    // Füge hreflang für alle verfügbaren Sprachen hinzu
+    const localesList = Array.isArray(locales.value) ? locales.value : [];
+    localesList.forEach((loc: any) => {
+      const localeCode = typeof loc === "string" ? loc : loc.code;
+      const localePath = switchLocalePath(localeCode);
+      if (localePath) {
+        hreflangLinks.push({
+          rel: "alternate",
+          hreflang: localeCode,
+          href: `${config.public.publicUrl}${localePath}`,
+        });
+      }
+    });
+
     useHead({
       link: [
         {
           rel: "canonical",
           href: canonicalUrl,
         },
+        ...hreflangLinks,
       ],
     });
+
 
     const title = [
       pageSeo?.metaTitle || globalsSeo?.defaultTitle,
