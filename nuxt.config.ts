@@ -71,6 +71,25 @@ export default defineNuxtConfig({
       viewport: "width=device-width, initial-scale=1",
       // 4. Resource Hints für externe Domains
       link: [
+        // Performance: Stape/GTM Server-Side Tagging frühzeitig verbinden
+        {
+          rel: "preconnect" as const,
+          href: "https://engine.myhealthandbeauty.com",
+        },
+        {
+          rel: "dns-prefetch" as const,
+          href: "https://engine.myhealthandbeauty.com",
+        },
+        // Performance: Facebook Pixel Domain vorverbinden (wichtig für Tracking)
+        {
+          rel: "dns-prefetch" as const,
+          href: "https://connect.facebook.net",
+        },
+        // Performance: Cookiebot vorverbinden
+        {
+          rel: "preconnect" as const,
+          href: "https://consent.cookiebot.com",
+        },
         ...(process.env.NUXT_PUBLIC_MEDIA_URL
           ? [
               {

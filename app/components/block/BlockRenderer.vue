@@ -77,9 +77,10 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
 
 <template>
   <component
-    v-for="block in blocks"
+    v-for="(block, index) in blocks"
     :key="block.id"
     :is="registry[block.__component]"
     v-bind="getBlockProps(block)"
+    :priority="index === 0"
   />
 </template>
