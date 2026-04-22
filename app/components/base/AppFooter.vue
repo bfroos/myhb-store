@@ -144,7 +144,7 @@
               variant="quaternary"
               href="https://www.facebook.com/myhealthbeautylounge"
               target="_blank"
-              no-follow
+              rel="noopener noreferrer nofollow"
               aria-label="Facebook"
             >
               <IconBrandFacebook />
@@ -157,7 +157,7 @@
               variant="quaternary"
               href="https://de.linkedin.com/company/my-health-beauty"
               target="_blank"
-              no-follow
+              rel="noopener noreferrer nofollow"
               aria-label="Linkedin"
             >
               <IconBrandLinkedin />
@@ -170,7 +170,7 @@
               variant="quaternary"
               href="https://www.instagram.com/myhealthandbeauty.app/"
               target="_blank"
-              no-follow
+              rel="noopener noreferrer nofollow"
               aria-label="Instagram"
             >
               <IconBrandInstagram />
@@ -183,7 +183,7 @@
               variant="quaternary"
               href="https://www.tiktok.com/@myhealthandbeauty.com"
               target="_blank"
-              no-follow
+              rel="noopener noreferrer nofollow"
               aria-label="Tiktok"
             >
               <IconBrandTiktok />
