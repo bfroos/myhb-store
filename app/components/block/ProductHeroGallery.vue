@@ -52,7 +52,7 @@
       >
         <img
           :src="getThumbnailSrc(image)"
-          alt=""
+          :alt="image.alternativeText || image.caption || `Produktbild ${index + 1}`"
           loading="lazy"
           width="60"
           height="60"

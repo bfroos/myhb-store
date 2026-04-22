@@ -8,7 +8,7 @@
           [ImageBreakpoint.MEDIUM]: ImageFormat.MEDIUM,
         }"
         class="treatment__picture"
-        alt=""
+        :alt="image.alternativeText || title || 'Behandlung'"
       />
       <div class="treatment__overlay">
         <div class="treatment__overlayContent">
