@@ -257,7 +257,8 @@
         "treatmentNotFound": "Behandlung nicht gefunden",
         "treatmentNotFoundDescription": "Die angeforderte Behandlung existiert nicht."
       }
-    }
+    },
+    "pageTitle": "Botox®, Hyaluron & ästhetische Behandlungen"
   },
   "treatment": {
     "seo": {

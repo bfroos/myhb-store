@@ -6,6 +6,7 @@
   />
   <template v-else>
     <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
+    <h1 class="treatments-page__title">{{ $t('treatments.pageTitle') }}</h1>
     <BlockTreatmentTeasers
       v-for="(group, index) in treatmentPageGroups"
       :key="group.groupId"
@@ -39,3 +40,21 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 </script>
+<style scoped>
+.treatments-page__title {
+  font-size: var(--font-2xl);
+  line-height: var(--line-2xl);
+  font-weight: var(--font-bold);
+  margin: var(--space-600) 0 var(--space-500);
+  padding: 0 var(--space-page-x);
+  text-align: center;
+}
+
+@media (min-width: 900px) {
+  .treatments-page__title {
+    font-size: var(--font-3xl);
+    line-height: var(--line-3xl);
+    margin: var(--space-700) 0 var(--space-600);
+  }
+}
+</style>
