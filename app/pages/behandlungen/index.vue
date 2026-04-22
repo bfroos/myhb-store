@@ -39,6 +39,13 @@ const breadcrumbItems = computed(() => [
     to: "/behandlungen",
   },
 ]);
+
+// Schema.org BreadcrumbList
+const config = useRuntimeConfig();
+const breadcrumbSchema = computed(() =>
+  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
+);
+useSchemaOrg(breadcrumbSchema);
 </script>
 <style scoped>
 .treatments-page__title {

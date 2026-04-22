@@ -14,6 +14,7 @@ export function buildBlogPostingSchema(
   const pageUrl = `${ctx.publicUrl.replace(/\/+$/, "")}${ctx.path}`;
   const imageUrl = article.cover?.url;
   const datePublished = normalizeSchemaDateTime(article.displayDate);
+  const dateModified = normalizeSchemaDateTime(article.updatedAt ?? article.displayDate);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -25,6 +26,7 @@ export function buildBlogPostingSchema(
       "@id": pageUrl,
     },
     ...(datePublished && { datePublished }),
+    ...(dateModified && { dateModified }),
     ...(imageUrl && {
       image: {
         "@type": "ImageObject",

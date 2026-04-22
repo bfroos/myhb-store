@@ -2,8 +2,9 @@ import type {
   TreatmentPageDto,
   LocationDto,
 } from "~/lib/strapi/dto/collections";
+import { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { SchemaOrgContext } from "~/utils/schemaShared";
-import { toAbsoluteUrl } from "~/utils/schemaShared";
+import { toAbsoluteUrl, formatEuroFromCent, parseEuroCent } from "~/utils/schemaShared";
 
 type TreatmentSchemaContext = SchemaOrgContext & {
   brandName?: string;
@@ -25,12 +26,30 @@ export function buildMedicalProcedureSchema(
 
   const description = treatmentPage.hero?.text;
 
+  const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
+  const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
+
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "MedicalProcedure",
     name: treatmentPage.name,
     url: pageUrl,
     ...(description && { description }),
+    ...(procedureType && { procedureType }),
+    ...(ctx.brandName && {
+      performer: {
+        "@type": "Organization",
+        name: ctx.brandName,
+      },
+    }),
+    ...(priceInCent != null && {
+      offer: {
+        "@type": "Offer",
+        price: formatEuroFromCent(priceInCent),
+        priceCurrency: ctx.currency ?? "EUR",
+        availability: "https://schema.org/InStock",
+      },
+    }),
   };
 
   return schema;
@@ -46,8 +65,9 @@ export function buildGeneralMedicalProcedureSchema(
   if (!treatmentPage) return null;
 
   const pageUrl = toAbsoluteUrl(ctx.publicUrl, ctx.path);
-
   const description = treatmentPage.hero?.text;
+  const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
+  const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -55,7 +75,38 @@ export function buildGeneralMedicalProcedureSchema(
     name: treatmentPage.name,
     url: pageUrl,
     ...(description && { description }),
+    ...(procedureType && { procedureType }),
+    ...(ctx.brandName && {
+      performer: {
+        "@type": "Organization",
+        name: ctx.brandName,
+      },
+    }),
+    ...(priceInCent != null && {
+      offer: {
+        "@type": "Offer",
+        price: formatEuroFromCent(priceInCent),
+        priceCurrency: ctx.currency ?? "EUR",
+        availability: "https://schema.org/InStock",
+      },
+    }),
   };
 
   return schema;
+}
+
+/**
+ * Mapped TreatmentType Enum zu Schema.org procedureType.
+ */
+function mapTreatmentTypeToProcedureType(type?: string): string | undefined {
+  switch (type) {
+    case TreatmentType.MINIMALLY_INVASIVE:
+      return "https://schema.org/TherapeuticProcedure";
+    case TreatmentType.ABULLATORY:
+      return "https://schema.org/TherapeuticProcedure";
+    case TreatmentType.OPERATIONAL:
+      return "https://schema.org/SurgicalProcedure";
+    default:
+      return undefined;
+  }
 }

@@ -57,7 +57,6 @@ if (treatmentPageLoaded) {
 }
 
 // Schema.org MedicalProcedure
-
 const route = useRoute();
 const { brandName } = useBrand();
 
@@ -69,5 +68,18 @@ const medicalProcedureSchema = computed(() =>
   }),
 );
 
+// Schema.org BreadcrumbList
+const breadcrumbSchema = computed(() =>
+  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
+);
+
+// Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
+const faqSchema = computed(() => {
+  const faqs = fixedBlocks.value?.faq?.faqs ?? [];
+  return buildFaqPageSchema(faqs);
+});
+
 useSchemaOrg(medicalProcedureSchema);
+useSchemaOrg(breadcrumbSchema);
+useSchemaOrg(faqSchema);
 </script>
