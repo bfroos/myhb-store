@@ -90,6 +90,11 @@ export async function setPageSeo(
       ogImage:
         toOgImageValue(pageSeo?.openGraph?.ogImage) ??
         toOgImageValue(fallbackOgImage),
+      twitterCard: "summary_large_image",
+      twitterSite: "@myhealthbeauty",
+      twitterTitle: title,
+      twitterDescription: pageSeo?.metaDescription || globalsSeo?.defaultDescription,
+      twitterImage: toOgImageValue(pageSeo?.openGraph?.ogImage) ?? toOgImageValue(fallbackOgImage),
     });
   });
 }
