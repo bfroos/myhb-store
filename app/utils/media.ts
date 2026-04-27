@@ -197,11 +197,16 @@ export function buildVideoPosterUrl(
 
 export interface TransformedVideoOptions {
   audio?: boolean;
+  width?: number;
+  height?: number;
   fit?: "scale-down" | "contain" | "cover";
 }
 
-const DEFAULT_VIDEO_OPTIONS: Required<TransformedVideoOptions> = {
+const DEFAULT_VIDEO_OPTIONS: Required<
+  Pick<TransformedVideoOptions, "audio" | "width" | "fit">
+> = {
   audio: true,
+  width: 1024,
   fit: "scale-down",
 };
 
@@ -218,7 +223,10 @@ export function buildTransformedVideoUrl(
   const opts = { ...DEFAULT_VIDEO_OPTIONS, ...options };
   const encodedSource = encodeSourceForMediaTransform(sourceUrl);
 
-  const params = ["mode=video", `fit=${opts.fit}`, `audio=${opts.audio}`];
+  const params = ["mode=video", `audio=${opts.audio}`];
+  if (opts.width) params.push(`width=${opts.width}`);
+  if (opts.height) params.push(`height=${opts.height}`);
+  if (opts.fit) params.push(`fit=${opts.fit}`);
 
   return `${origin}/cdn-cgi/media/${params.join(",")}/${encodedSource}`;
 }
