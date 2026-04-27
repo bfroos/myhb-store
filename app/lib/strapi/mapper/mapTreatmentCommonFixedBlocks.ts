@@ -20,13 +20,15 @@ type PlaceholderContext = {
   cityPhrase?: string;
 };
 
+type TranslateFn = ReturnType<typeof useI18n>["t"];
+
 export function mapTreatmentCommonFixedBlocks(
   treatmentPage: TreatmentPageLikeDto,
   tableOfContents: SharedKeyValueDto[],
+  t: TranslateFn,
   location?: LocationDto,
   placeholderContext?: PlaceholderContext,
 ) {
-  const { t } = useI18n();
   const { isAdsMode } = useSiteModeFlags();
   const city = placeholderContext?.city ?? "";
   const cityPhrase = placeholderContext?.cityPhrase ?? "";

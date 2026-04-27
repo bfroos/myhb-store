@@ -88,7 +88,7 @@ export function useTreatmentPage() {
   }
 
   const fixedBlocks = computed(() =>
-    mapTreatmentPageFixedBlocks(treatmentPage.value),
+    mapTreatmentPageFixedBlocks(treatmentPage.value, t),
   );
 
   const seoWithFallback = computed(() => {

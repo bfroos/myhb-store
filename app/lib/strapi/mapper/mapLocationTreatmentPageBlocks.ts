@@ -13,26 +13,28 @@ import { DEFAULT_TIMEZONE } from "../config";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
 
+type TranslateFn = ReturnType<typeof useI18n>["t"];
+
 export function mapLocationTreatmentPageFixedBlocks(
   treatmentPage: TreatmentPageDto,
   location: LocationDto,
   locationOpenStatus: LocationOpenStatus,
+  t: TranslateFn,
+  localeCode: string,
+  localeIso?: string,
+  isAdsMode = false,
 ) {
   if (!treatmentPage || !location) {
     return;
   }
 
-  const { t, locale, localeProperties } = useI18n();
-  const { isAdsMode } = useSiteModeFlags();
-  const dateLocale = computed<string>(() => {
-    const iso = localeProperties.value?.iso as string | undefined;
-    return iso ?? locale.value;
-  });
+  const dateLocale = localeIso ?? localeCode;
 
   const tableOfContents: SharedKeyValueDto[] = [];
   const commonBlocks = mapTreatmentCommonFixedBlocks(
     treatmentPage,
     tableOfContents,
+    t,
     location,
     {
       city: location.city?.name ?? "",
@@ -104,7 +106,7 @@ export function mapLocationTreatmentPageFixedBlocks(
   }
 
   function buildAboutLocationBlockModel() {
-    if (isAdsMode.value || !location?.about) {
+    if (isAdsMode || !location?.about) {
       return;
     }
 
@@ -130,7 +132,7 @@ export function mapLocationTreatmentPageFixedBlocks(
     const replacements = [
       {
         placeholder: "{{ date }}",
-        replacement: formatDate(location?.newOpeningDate, dateLocale.value),
+        replacement: formatDate(location?.newOpeningDate, dateLocale),
       },
       {
         placeholder: "{{ city }}",

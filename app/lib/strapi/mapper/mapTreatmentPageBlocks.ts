@@ -3,16 +3,18 @@ import type { SharedKeyValueDto } from "../dto/components";
 import type { TreatmentPageDto } from "../dto/collections";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
 
+type TranslateFn = ReturnType<typeof useI18n>["t"];
+
 export function mapTreatmentPageFixedBlocks(
   treatmentPage: TreatmentPageDto = {} as TreatmentPageDto,
+  t: TranslateFn,
 ) {
-  const { t } = useI18n();
-
   const tableOfContents: SharedKeyValueDto[] = [];
 
   const commonBlocks = mapTreatmentCommonFixedBlocks(
     treatmentPage,
     tableOfContents,
+    t,
     undefined,
     {
       city: "",
