@@ -276,7 +276,7 @@ const getNodeChildren = (
 }
 
 .richText__link {
-  color: var(--color-black);
+  color: var(--color-text);
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: opacity 0.2s;
