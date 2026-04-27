@@ -473,7 +473,7 @@ export type SharedIconTextPairDto = {
 
 export type SharedImageHeadingTextDto = {
   heading?: string;
-  text?: StrapiRichText;
+  text?: string;
   image?: StrapiMedia;
 };
 

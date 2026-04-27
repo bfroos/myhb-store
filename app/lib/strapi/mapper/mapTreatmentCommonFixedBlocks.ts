@@ -10,7 +10,10 @@ import {
 import type { SharedButtonDto, SharedKeyValueDto } from "../dto/components";
 import type { LocationDto, TreatmentPageLikeDto } from "../dto/collections";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
-import { replacePlaceholderString } from "~/utils/placeholder";
+import {
+  replacePlaceholderRichtext,
+  replacePlaceholderString,
+} from "~/utils/placeholder";
 
 type PlaceholderContext = {
   city?: string;
@@ -29,6 +32,10 @@ export function mapTreatmentCommonFixedBlocks(
   const cityPhrase = placeholderContext?.cityPhrase ?? "";
   const replacements = [
     {
+      placeholder: "{{ city }}",
+      replacement: city,
+    },
+    {
       placeholder: "{{ cityPhrase }}",
       replacement: cityPhrase,
     },
@@ -38,8 +45,14 @@ export function mapTreatmentCommonFixedBlocks(
     },
   ];
 
-  function withPlaceholders(value: string | null | undefined): string | undefined {
+  function withPlaceholders(
+    value: string | null | undefined,
+  ): string | undefined {
     return replacePlaceholderString(value, replacements) ?? undefined;
+  }
+
+  function withPlaceholdersRichtext(value: any) {
+    return replacePlaceholderRichtext(value, replacements) ?? value;
   }
   const fixed = {
     tableOfContents: buildTableOfContentsBlockModel(),
@@ -71,8 +84,10 @@ export function mapTreatmentCommonFixedBlocks(
 
     return {
       headline: withPlaceholders(treatmentPage?.tableOfContents?.headline),
-      intro: treatmentPage?.tableOfContents?.intro,
-      content: treatmentPage?.tableOfContents?.content,
+      intro: withPlaceholders(treatmentPage?.tableOfContents?.intro),
+      content: withPlaceholdersRichtext(
+        treatmentPage?.tableOfContents?.content,
+      ),
       index: tableOfContents,
       links: [ctaLink],
       cardSettings: {
@@ -117,8 +132,8 @@ export function mapTreatmentCommonFixedBlocks(
 
     return {
       headline,
-      intro: treatmentPage?.about?.intro,
-      content: treatmentPage?.about?.content,
+      intro: withPlaceholders(treatmentPage?.about?.intro),
+      content: withPlaceholdersRichtext(treatmentPage?.about?.content),
       mediaItems: [treatmentPage?.about?.media],
       layout: MediaBentoLayout.MEDIA_LEFT,
       mediaItemAlignment: MediaBentoMediaItemAlignment.HORIZONTAL,
@@ -130,7 +145,9 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
-    const headline = withPlaceholders(treatmentPage?.treatmentDetails?.headline);
+    const headline = withPlaceholders(
+      treatmentPage?.treatmentDetails?.headline,
+    );
 
     tableOfContents.push({
       key: "treatment-details",
@@ -140,16 +157,26 @@ export function mapTreatmentCommonFixedBlocks(
     return {
       headline,
       priceInEuroCent: treatmentPage?.treatment?.priceInEuroCent,
-      price: treatmentPage?.treatmentDetails?.price,
-      duration: treatmentPage?.treatmentDetails?.duration,
-      effect: treatmentPage?.treatmentDetails?.effect,
-      initialResults: treatmentPage?.treatmentDetails?.initialResults,
-      finalResults: treatmentPage?.treatmentDetails?.finalResults,
-      effectDuration: treatmentPage?.treatmentDetails?.effectDuration,
-      anesthesia: treatmentPage?.treatmentDetails?.anesthesia,
-      medication: treatmentPage?.treatmentDetails?.medication,
-      aftercareSummary: treatmentPage?.treatmentDetails?.aftercareSummary,
-      followUpTreatments: treatmentPage?.treatmentDetails?.followUpTreatments,
+      price: withPlaceholders(treatmentPage?.treatmentDetails?.price),
+      duration: withPlaceholders(treatmentPage?.treatmentDetails?.duration),
+      effect: withPlaceholders(treatmentPage?.treatmentDetails?.effect),
+      initialResults: withPlaceholders(
+        treatmentPage?.treatmentDetails?.initialResults,
+      ),
+      finalResults: withPlaceholders(
+        treatmentPage?.treatmentDetails?.finalResults,
+      ),
+      effectDuration: withPlaceholders(
+        treatmentPage?.treatmentDetails?.effectDuration,
+      ),
+      anesthesia: withPlaceholders(treatmentPage?.treatmentDetails?.anesthesia),
+      medication: withPlaceholders(treatmentPage?.treatmentDetails?.medication),
+      aftercareSummary: withPlaceholders(
+        treatmentPage?.treatmentDetails?.aftercareSummary,
+      ),
+      followUpTreatments: withPlaceholders(
+        treatmentPage?.treatmentDetails?.followUpTreatments,
+      ),
       image: treatmentPage?.treatmentDetails?.image,
       treatment: treatmentPage?.treatment,
       cardSettings: {
@@ -172,7 +199,7 @@ export function mapTreatmentCommonFixedBlocks(
 
     return {
       headline,
-      content: treatmentPage?.treatmentPlan?.content,
+      content: withPlaceholdersRichtext(treatmentPage?.treatmentPlan?.content),
       additionalInfos: treatmentPage?.treatmentPlan?.additionalInfos,
       personaPhoto: treatmentPage?.treatmentPlan?.personaPhoto,
       personaAge: treatmentPage?.treatmentPlan?.personaAge,
@@ -195,7 +222,11 @@ export function mapTreatmentCommonFixedBlocks(
 
     return {
       headline,
-      items: treatmentPage?.benefits?.items,
+      items: treatmentPage?.benefits?.items?.map((item) => ({
+        ...item,
+        heading: withPlaceholders(item?.heading),
+        content: withPlaceholdersRichtext(item?.content),
+      })),
       media: treatmentPage?.benefits?.media,
       layout: OrganismMediaCardLayout.MEDIA_LEFT,
       cardSettings: {
@@ -234,15 +265,21 @@ export function mapTreatmentCommonFixedBlocks(
 
     const firstItem = treatmentPage?.suitability?.suitableFor
       ? {
-          ...treatmentPage.suitability.suitableFor,
-          heading: withPlaceholders(treatmentPage.suitability.suitableFor.heading),
+          heading: withPlaceholders(
+            treatmentPage.suitability.suitableFor.heading,
+          ),
+          content: withPlaceholdersRichtext(
+            treatmentPage.suitability.suitableFor.content,
+          ),
         }
       : undefined;
     const secondItem = treatmentPage?.suitability?.notSuitableFor
       ? {
-          ...treatmentPage.suitability.notSuitableFor,
           heading: withPlaceholders(
             treatmentPage.suitability.notSuitableFor.heading,
+          ),
+          content: withPlaceholdersRichtext(
+            treatmentPage.suitability.notSuitableFor.content,
           ),
         }
       : undefined;
@@ -268,7 +305,9 @@ export function mapTreatmentCommonFixedBlocks(
       singleType: SharedButtonSingleType.DOCTORS,
     };
 
-    const headline = withPlaceholders(treatmentPage?.medicalTeamHighlight?.headline);
+    const headline = withPlaceholders(
+      treatmentPage?.medicalTeamHighlight?.headline,
+    );
 
     tableOfContents.push({
       key: "employee",
@@ -282,8 +321,10 @@ export function mapTreatmentCommonFixedBlocks(
 
     return {
       headline,
-      intro: treatmentPage?.medicalTeamHighlight?.intro,
-      content: treatmentPage?.medicalTeamHighlight?.content,
+      intro: withPlaceholders(treatmentPage?.medicalTeamHighlight?.intro),
+      content: withPlaceholdersRichtext(
+        treatmentPage?.medicalTeamHighlight?.content,
+      ),
       employee,
       layout: OrganismMediaCardLayout.MEDIA_LEFT,
       links: isAdsMode.value ? [] : [link],
@@ -298,7 +339,9 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
-    const headline = withPlaceholders(treatmentPage?.treatmentProcess?.headline);
+    const headline = withPlaceholders(
+      treatmentPage?.treatmentProcess?.headline,
+    );
 
     tableOfContents.push({
       key: "treatment-process-steps",
@@ -307,8 +350,14 @@ export function mapTreatmentCommonFixedBlocks(
 
     return {
       headline,
-      content: treatmentPage?.treatmentProcess?.content,
-      steps: treatmentPage?.treatmentProcess?.steps,
+      content: withPlaceholdersRichtext(
+        treatmentPage?.treatmentProcess?.content,
+      ),
+      steps: treatmentPage?.treatmentProcess?.steps?.map((step) => ({
+        ...step,
+        heading: withPlaceholders(step?.heading),
+        text: withPlaceholders(step?.text),
+      })),
     };
   }
 
@@ -317,7 +366,9 @@ export function mapTreatmentCommonFixedBlocks(
       return;
     }
 
-    const headline = withPlaceholders(treatmentPage?.relatedTreatments?.headline);
+    const headline = withPlaceholders(
+      treatmentPage?.relatedTreatments?.headline,
+    );
 
     tableOfContents.push({
       key: "related-treatments",
