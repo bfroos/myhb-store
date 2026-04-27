@@ -6,6 +6,7 @@ import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 
 export function useTreatmentPage() {
   const { locale, fallbackLocale, t } = useI18n();
+  const { isAdsMode } = useSiteModeFlags();
   const route = useRoute();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const treatmentPage = ref<TreatmentPageDto>();
@@ -88,7 +89,7 @@ export function useTreatmentPage() {
   }
 
   const fixedBlocks = computed(() =>
-    mapTreatmentPageFixedBlocks(treatmentPage.value, t),
+    mapTreatmentPageFixedBlocks(treatmentPage.value, t, isAdsMode.value),
   );
 
   const seoWithFallback = computed(() => {

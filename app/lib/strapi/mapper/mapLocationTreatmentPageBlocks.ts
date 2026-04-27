@@ -35,6 +35,7 @@ export function mapLocationTreatmentPageFixedBlocks(
     treatmentPage,
     tableOfContents,
     t,
+    isAdsMode,
     location,
     {
       city: location.city?.name ?? "",

@@ -26,10 +26,10 @@ export function mapTreatmentCommonFixedBlocks(
   treatmentPage: TreatmentPageLikeDto,
   tableOfContents: SharedKeyValueDto[],
   t: TranslateFn,
+  isAdsMode = false,
   location?: LocationDto,
   placeholderContext?: PlaceholderContext,
 ) {
-  const { isAdsMode } = useSiteModeFlags();
   const city = placeholderContext?.city ?? "";
   const cityPhrase = placeholderContext?.cityPhrase ?? "";
   const replacements = [
@@ -329,7 +329,7 @@ export function mapTreatmentCommonFixedBlocks(
       ),
       employee,
       layout: OrganismMediaCardLayout.MEDIA_LEFT,
-      links: isAdsMode.value ? [] : [link],
+      links: isAdsMode ? [] : [link],
       cardSettings: {
         colorTheme: ColorTheme.NEUTRAL,
       },

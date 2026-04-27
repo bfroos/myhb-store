@@ -8,6 +8,7 @@ type TranslateFn = ReturnType<typeof useI18n>["t"];
 export function mapTreatmentPageFixedBlocks(
   treatmentPage: TreatmentPageDto = {} as TreatmentPageDto,
   t: TranslateFn,
+  isAdsMode = false,
 ) {
   const tableOfContents: SharedKeyValueDto[] = [];
 
@@ -15,6 +16,7 @@ export function mapTreatmentPageFixedBlocks(
     treatmentPage,
     tableOfContents,
     t,
+    isAdsMode,
     undefined,
     {
       city: "",
