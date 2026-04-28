@@ -1,7 +1,8 @@
 <template>
   <UiAtomBaseButton
+    v-if="button"
     :as="as"
-    :variant="button.variant"
+    :variant="button?.variant"
     :href="href"
     :to="to"
     :target="target"
@@ -9,7 +10,7 @@
     @click="handleClick"
     v-bind="buttonProps"
   >
-    {{ button.label }}
+    {{ button?.label }}
   </UiAtomBaseButton>
 </template>
 <script setup lang="ts">
@@ -21,15 +22,16 @@ import { SharedButtonAction } from "~/lib/strapi/dto/enums";
 import type { BaseButtonProps } from "~/lib/ui/types";
 
 const props = defineProps<{
-  button: SharedButtonDto;
+  button?: SharedButtonDto | null;
   buttonProps?: BaseButtonProps;
   data?: any;
 }>();
 
 const { t } = useI18n();
+const button = computed(() => props.button ?? null);
 
 const as = computed(() => {
-  switch (props.button.method) {
+  switch (button.value?.method) {
     case "external-link":
       return "a";
     case "internal-link":
@@ -44,43 +46,43 @@ const as = computed(() => {
  */
 const appendAnchor = (url: string | undefined): string | undefined => {
   if (!url) return undefined;
-  if (props.button.anchor) {
-    const hash = props.button.anchor.startsWith("#")
-      ? props.button.anchor
-      : `#${props.button.anchor}`;
+  if (button.value?.anchor) {
+    const hash = button.value.anchor.startsWith("#")
+      ? button.value.anchor
+      : `#${button.value.anchor}`;
     return `${url}${hash}`;
   }
   return url;
 };
 
 const href = computed(() => {
-  if (props.button.method !== "external-link") return undefined;
-  return appendAnchor(props.button.url);
+  if (button.value?.method !== "external-link") return undefined;
+  return appendAnchor(button.value.url);
 });
 
 const target = computed(() => {
-  if (props.button.method !== "external-link") return undefined;
-  return props.button.openInNewWindow ? "_blank" : undefined;
+  if (button.value?.method !== "external-link") return undefined;
+  return button.value.openInNewWindow ? "_blank" : undefined;
 });
 
 const rel = computed(() => {
-  if (props.button.method !== "external-link") return undefined;
+  if (button.value?.method !== "external-link") return undefined;
   const parts: string[] = [];
-  if (props.button.noFollow) parts.push("nofollow");
-  if (props.button.openInNewWindow) parts.push("noopener");
+  if (button.value.noFollow) parts.push("nofollow");
+  if (button.value.openInNewWindow) parts.push("noopener");
   return parts.length > 0 ? parts.join(" ") : undefined;
 });
 
 const to = computed(() => {
   if (
-    props.button.method === "external-link" ||
-    props.button.method === "action"
+    button.value?.method === "external-link" ||
+    button.value?.method === "action"
   ) {
     return undefined;
   }
 
-  if (props.button.method === "internal-link") {
-    const path = resolveInternalToFromSharedButton(props.button);
+  if (button.value?.method === "internal-link") {
+    const path = resolveInternalToFromSharedButton(button.value);
     return appendAnchor(path);
   }
 });
@@ -137,20 +139,20 @@ const dialog = useDialog();
 const { openCalendlyDialog } = useCalendlyDialog();
 
 const handleClick = () => {
-  if (props.button.method !== "action" || !props.button.action) return;
+  if (button.value?.method !== "action" || !button.value.action) return;
 
-  if (props.button.action === SharedButtonAction.APPOINTMENT_BOOKING) {
+  if (button.value.action === SharedButtonAction.APPOINTMENT_BOOKING) {
     openCalendlyDialogForButton();
   }
-  if (props.button.action === SharedButtonAction.NEWSLETTER_SIGN_UP) {
+  if (button.value.action === SharedButtonAction.NEWSLETTER_SIGN_UP) {
     openNewsletterSignUpDialog();
   }
 };
 
 function openCalendlyDialogForButton() {
-  const url = props.data?.calendlyUrl || props.button?.data?.calendlyUrl;
+  const url = props.data?.calendlyUrl || button.value?.data?.calendlyUrl;
   const treatmentType =
-    props.data?.treatmentType || props.button?.data?.treatmentType;
+    props.data?.treatmentType || button.value?.data?.treatmentType;
   openCalendlyDialog(url, treatmentType);
 }
 
