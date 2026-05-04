@@ -11758,5 +11758,10 @@
     "from": "/standorte/saarbruecken/europa-galerie/btx",
     "to": "/standorte/saarbruecken/europa-galerie/botox",
     "code": 301
+  },
+  {
+    "from": "/produkte/btx/btx",
+    "to": "/behandlungen/botox",
+    "code": 301
   }
 ]

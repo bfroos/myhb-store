@@ -459,6 +459,8 @@ export default defineCachedEventHandler(
         addUrl(groupKey, locale, toAbsoluteUrl(path), page.updatedAt);
       }
 
+      // City + Location pages only exist in German — skip other locales to avoid 404s in sitemap
+      if (locale === DEFAULT_LOCALE) {
       for (const city of cities) {
         if (!city.slug) continue;
         const groupId = getGroupId(city, city.slug);
@@ -484,8 +486,10 @@ export default defineCachedEventHandler(
         });
         addUrl(groupKey, locale, toAbsoluteUrl(path), location.updatedAt);
       }
+      } // end locale === DEFAULT_LOCALE for cities/locations
 
-      const locationTreatmentPages = await Promise.all(
+      // Location treatment pages only exist in German
+      const locationTreatmentPages = locale === DEFAULT_LOCALE ? await Promise.all(
         locations
           .filter((location) => location.slug && location.city?.slug)
           .map(async (location) => {
@@ -505,7 +509,7 @@ export default defineCachedEventHandler(
               return { location, treatments: [] };
             }
           }),
-      );
+      ) : [];
 
       for (const entry of locationTreatmentPages) {
         const location = entry.location;
