@@ -11238,5 +11238,1060 @@
     "from": "/standorte/koblenz/loehr-center/botox/zornesfalte",
     "to": "/standorte",
     "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/stirnfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen",
+    "to": "/standorte/leipzig/hoefeambruehl/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/full-face-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/anti-haarausfall",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/hyaluron/lippen-aufspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/blogs/news/prp-for-a-rejuvenated-and-radiant-complexion",
+    "to": "/blog/prp-for-a-rejuvenated-and-radiant-complexion",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/infusionen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/jawline",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/jawline",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/oberschenkelstraffung",
+    "to": "/standorte/leipzig/hoefeambruehl/schoenheitsoperationen/oberschenkelstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/infusionen/relax-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/skinbooster/mesotherapie-nctf-135-ha",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/baby-botox",
+    "to": "/standorte/leipzig/hoefeambruehl/botox/baby-botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/hyaluron/augenringe-unterspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/fettwegspritze/lemon-bottle-bauch",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/wangenaufbau",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/baby-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/infusionen/vitamin-c-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/polynukleotide-lachssperma",
+    "to": "/standorte/leipzig/hoefeambruehl/skinbooster/polynukleotide-lachssperma",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/fettwegspritze/lemon-bottle-doppelkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/skinbooster",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster",
+    "to": "/standorte/leipzig/hoefeambruehl/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/anti-haarausfall/kostenlose-haaranalyse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/fettwegspritze/lemon-bottle-backen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/bunny-lines",
+    "to": "/standorte/leipzig/hoefeambruehl/btx/bunny-lines",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-huefte",
+    "to": "/standorte/leipzig/hoefeambruehl/fettwegspritze/lemon-bottle-huefte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/zaehneknirschen-bruxismus",
+    "to": "/standorte/leipzig/hoefeambruehl/botox/zaehneknirschen-bruxismus",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/bunny-lines",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/augenringe-unterspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/skinbooster/lumi-eyes-polynukleotide",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/fettwegspritze/lemon-bottle-knie",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/skinbooster/mesotherapie-nctf-135-ha",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/infusionen/relax-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/hyaluron",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/fettwegspritze",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/skinbooster/vampir-lifting-prp",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/anti-haarausfall/kostenlose-haaranalyse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/baby-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/lachfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/anti-haarausfall/prp-haartherapie",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/barbie-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/erdbeerkinn",
+    "to": "/standorte/leipzig/hoefeambruehl/btx/erdbeerkinn",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/vampir-lifting-prp",
+    "to": "/standorte/leipzig/hoefeambruehl/skinbooster/vampir-lifting-prp",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/fettwegspritze",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/kraehenfuesse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/fettwegspritze/lemon-bottle-oberschenkel",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/leipzig/hoefeambruehl/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/fettwegspritze/lemon-bottle-doppelkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/infusionen/immun-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/migraenebehandlung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/fettwegspritze/lemon-bottle-doppelkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-backen",
+    "to": "/standorte/leipzig/hoefeambruehl/fettwegspritze/lemon-bottle-backen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/barbie-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/zornesfalte",
+    "to": "/standorte/leipzig/hoefeambruehl/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/skinbooster/vampir-lifting-prp",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/lippen-aufspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/pages/profhilo®-behandlung-in-oberhausen-ab-249-99",
+    "to": "/behandlungen/profhilo",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/skinbooster/vampir-lifting-prp",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/anti-haarausfall",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippenkorrektur",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/lippenkorrektur",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/skinbooster",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/kinnkorrektur",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl",
+    "to": "/standorte/leipzig/hoefeambruehl",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/masseter",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/kinnkorrektur",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/kinnkorrektur",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-doppelkinn",
+    "to": "/standorte/leipzig/hoefeambruehl/fettwegspritze/lemon-bottle-doppelkinn",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/full-face-botox",
+    "to": "/standorte/leipzig/hoefeambruehl/botox/full-face-botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze",
+    "to": "/standorte/leipzig/hoefeambruehl/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/leipzig/hoefeambruehl/btx/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/kraehenfuesse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/lippenkorrektur",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/nasolabialfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/infusionen/b-komplex-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/anti-haarausfall/kostenlose-haaranalyse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/botox/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/oberschenkelstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/dekolletee",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/wangenaufbau",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/infusionen/anti-aging-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/infusionen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/browlift",
+    "to": "/standorte/leipzig/hoefeambruehl/botox/browlift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/infusionen/regenerations-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/plisseefalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/fettwegspritze/lemon-bottle-bauch",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/erdbeerkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/barbie-btx",
+    "to": "/standorte/leipzig/hoefeambruehl/btx/barbie-btx",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/skinbooster/profhilo",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/oberschenkelstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/anti-haarausfall/kostenlose-haaranalyse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/botox/baby-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/nasolabialfalte",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/nasolabialfalte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/infusionen/anti-aging-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/mesotherapie-nctf-135-ha",
+    "to": "/standorte/leipzig/hoefeambruehl/skinbooster/mesotherapie-nctf-135-ha",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/browlift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippen-aufspritzen",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-knie",
+    "to": "/standorte/leipzig/hoefeambruehl/fettwegspritze/lemon-bottle-knie",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/power-infusion-glutathion",
+    "to": "/standorte/leipzig/hoefeambruehl/infusionen/power-infusion-glutathion",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/haende",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/infusionen/vitamin-c-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/botox/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/prp-haartherapie",
+    "to": "/standorte/leipzig/hoefeambruehl/anti-haarausfall/prp-haartherapie",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/haende",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/infusionen/vitamin-c-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/pages/profhilo®-behandlung-in-leipzig-ab-249-99-myh-b-leipzig",
+    "to": "/behandlungen/profhilo",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/erdbeerkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/b-komplex-infusion",
+    "to": "/standorte/leipzig/hoefeambruehl/infusionen/b-komplex-infusion",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/lippen-aufspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/hylase",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/wangenaufbau",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/wangenaufbau",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/hylase",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/hyaluron/nasolabialfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/migraenebehandlung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/skinbooster/profhilo",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/masseter",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/hyaluron/dekolletee",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/erdbeerkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/facelift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/fettwegspritze/lemon-bottle-doppelkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/skinbooster/polynukleotide-lachssperma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/hyaluron/wangenaufbau",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/fettwegspritze/lemon-bottle-oberarm",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/kostenlose-haaranalyse",
+    "to": "/standorte/leipzig/hoefeambruehl/anti-haarausfall/kostenlose-haaranalyse",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/bunny-lines",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/lumi-eyes-polynukleotide",
+    "to": "/standorte/leipzig/hoefeambruehl/skinbooster/lumi-eyes-polynukleotide",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/schoenheitsoperationen/facelift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/profhilo",
+    "to": "/standorte/leipzig/hoefeambruehl/skinbooster/profhilo",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/leipzig/hoefeambruehl/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/anti-haarausfall/prp-haartherapie",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/baby-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/haende",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/haende",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/mesotherapie-haare",
+    "to": "/standorte/leipzig/hoefeambruehl/anti-haarausfall/mesotherapie-haare",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/augenringe-unterspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/masseter",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/hyaluron/kinnkorrektur",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/barbie-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/browlift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/anti-haarausfall/prp-haartherapie",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/nasolabialfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/botox",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/leipzig/hoefeambruehl/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/infusionen/b-komplex-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/vitamin-c-infusion",
+    "to": "/standorte/leipzig/hoefeambruehl/infusionen/vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/browlift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/hylase",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/hylase",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-bauch",
+    "to": "/standorte/leipzig/hoefeambruehl/fettwegspritze/lemon-bottle-bauch",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/infusionen/vitamin-c-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/barbie-botox",
+    "to": "/standorte/leipzig/hoefeambruehl/botox/barbie-botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/hyaluron/kinnkorrektur",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/skinbooster",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/plisseefalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/botox/lachfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/immun-infusion",
+    "to": "/standorte/leipzig/hoefeambruehl/infusionen/immun-infusion",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/botox/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen",
+    "to": "/standorte/leipzig/hoefeambruehl/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/lachfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/zornesfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/lachfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/hyaluron/augenringe-unterspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/kinnkorrektur",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/augenringe-unterspritzen",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/augenringe-unterspritzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/jawline",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/full-face-hyaluron",
+    "to": "/standorte/leipzig/hoefeambruehl/hyaluron/full-face-hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/hyaluron/full-face-hyaluron",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/infusionen/anti-aging-infusion",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/full-face-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/botox/full-face-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/hyaluron/marionettenfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/zornesfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/hyaluron/dekolletee",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/leipzig/hoefeambruehl/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/anti-haarausfall",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/hyaluron/lippen-aufspritzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/full-face-btx",
+    "to": "/standorte",
+    "code": 301
   }
 ]
