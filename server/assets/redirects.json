@@ -1,7 +1,19 @@
 [
-  { "from": "/impressum", "to": "/p/impressum", "code": 301 },
-  { "from": "/datenschutz", "to": "/p/datenschutz", "code": 301 },
-  { "from": "/blogs/news", "to": "/blog", "code": 301 },
+  {
+    "from": "/impressum",
+    "to": "/p/impressum",
+    "code": 301
+  },
+  {
+    "from": "/datenschutz",
+    "to": "/p/datenschutz",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news",
+    "to": "/blog",
+    "code": 301
+  },
   {
     "from": "/blogs/news/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
     "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
@@ -8865,6 +8877,2366 @@
   {
     "from": "/tr/pages/kilo-denge-testi",
     "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/stirnfalte",
+    "to": "/behandlungen/botox/stirnfalte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/botox-hyaluron-randevusuz-i-myh-b-saarbrucken-avrupa-galerisi",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/migraine-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx",
+    "to": "/behandlungen/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-arms-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/bunny-lines-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/stirnfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/migraenebehandlung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/cheek-augmentation-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/migraenebehandlung",
+    "to": "/behandlungen/botox/migraenebehandlung",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/masseter-botox-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lumi-eyes",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/relax-infusion-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/full-face-btx",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lip-correction-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/dark-circles-hyaluron",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/masseter-botox-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/تكبير-الصدر-كولونيا",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/stirnfalte",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lemon-bottle-doppelkinn-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vitamin-b-complex-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/zornesfalte",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/erdbeerkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/lachfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/kraehenfuesse",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/masseter",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/nasolabial-fold-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/baby-btx",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/mezoterapi-sac-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/migren-tedavisi-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/zornesfalte-botox-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/bebek-botoks-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-knee-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/lachfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/hyperhidrosis-sweat-glands-botox-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/kraehenfuesse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/infusion-regeneration-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/full-face-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/hangover-infusion",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/browlift",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/barbie-btx",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/lipflip",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ذقن-الفراولة-بوتوكس",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/masseter-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/bunny-lines",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/barbie-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/stirnfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/full-face-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/baby-btx",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/mesotherapie-gesicht-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/barbie-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/erdbeerkinn",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/fettabsaugung-koln-1",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/barbie-botox-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/barbie-btx",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/zornesfalte",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/location-koln-arcaden",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/zaehneknirschen-bruxismus",
+    "to": "/behandlungen/botox/zaehneknirschen-bruxismus",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/browlift",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lippenkorrektur-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/kraehenfuesse",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/barbie-btx",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/zornesfalte",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/botox-hyaluron-ohne-termin-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/masseter",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ماسيتير-بوتوكس-كولن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/fett-weg-spritze",
+    "to": "/behandlungen/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/stirnfalte-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-abdomen-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/masseter-botox-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/baby-btx",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/plisseefalten-raucherfalten",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/lipflip",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/behandlungen/botox/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/zornesfalte",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/stirnfalte",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/baby-btx",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/halsfalten-platysma",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/halsfalten-platysma",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/erdbeerkinn",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/full-face-btx",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/halsfalten-platysma",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/browlift",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/cheek-augmentation-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/bunny-lines",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/migraenebehandlung",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-die-fett-weg-spritze-in-saarbrucken-ab-199-99",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/hands-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/lipflip",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/profhilo-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/cheek-enhancement-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/polynucleotide-skinbooster-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-hips-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/baby-btx",
+    "to": "/behandlungen/botox/baby-btx",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/kraehenfuesse",
+    "to": "/behandlungen/botox/kraehenfuesse",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/mesotherapy-face-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/face-lift-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/hyperhidrosis-sweat-glands-botox-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/fettabsaugung-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/zornesfalte",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/lachfalten",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/btx-ohne-termin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/polynukleotide-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/full-face-btx",
+    "to": "/behandlungen/botox/full-face-btx",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ليمون-بوتل-الذقن-المزدوج-لايبزيغ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/hylase-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/karin-germe-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/vitamin-b-kompleks-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/fett-weg-spritze-lemon-bottle-huefte",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/erdbeerkinn-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/kinnkorrektur-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/dudak-duzeltme-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/شد-البطن-كايزرسلاوترن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ليبفليب",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/تكبير-الثدي-مونشنغلادباخ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/oberarmstraffung-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/face-lift-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/profhilo-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/face-lift-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/baby-botox-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/btx-randevusuz",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/erdbeerkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-fett-weg-spritze-doppelkinn-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/anti-aging-infusion-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/nasolabialfalte-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/power-infusion-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/kraehenfuesse",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/bunny-lines",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/jawline-1",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/الهالات-لايبزيغ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/location-dusseldorf-arcaden",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/mediapark-klinik/btx/lachfalten",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/face-lift-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/migrane-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/stirnfalte",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/full-face-btx",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/zornesfalte",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/hyaluron/nasenkorrektur",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/browlift",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/erdbeerkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/barbie-btx",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/wangenaufbau-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/بناء-الخدود-لايبزيغ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/crows-feet-botox-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/lachfalten",
+    "to": "/behandlungen/botox/lachfalten",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/تجاعيد-العيون-بوتوكس-كولن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/kraehenfuesse",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/fett-weg-spritze-lemon-bottle-knie",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/lipflip",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lipflip-botox-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/anti-aging-infuzon-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lachfalten-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/vampirlifting-mit-prp-in-koblenz",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lippen-aufspritzen-und-russian-lips-in-saarbrucken-ab-199-99",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lemon-bottle-die-fett-weg-spritze-in-koblenz",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/full-face-behandlung-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/baby-botox-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/masseter-botox",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/browlift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/zornesfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/face-lift-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/bunny-lines",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/hands-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/vitamin-b-komplex-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/halsfalten-platysma",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/full-face-btx",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/erdbeerkinn",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/btx/masseter",
+    "to": "/standorte/duisburg/forum/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-arme-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/infusion-b-kompleks-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vitamin-c-infusion-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ليمون-زجاجة-الورك-كولونيا",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/zornesfalte-botox-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/fettabsaugung-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/bachdeckenstraffung-koln-1",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/halsfalten-platysma",
+    "to": "/behandlungen/botox/halsfalten-platysma",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/lipflip",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/hyperhidrose-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/baby-btx",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/dekollete-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/dekollete-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/liposuction-dusseldorf",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/شفط-الدهون-دوسلدورف",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/full-face-tedavi-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/power-infusion-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/yag-alma-ignesi-lemon-bottle-diz",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/jawline-und-kinnkorrektur-mit-hyaluron-in-saarbrucken-ab-149-99",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/regenerations-infusion",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/immun-infusion-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-wange-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/mesotherapy-hair-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/stirnfalte",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/vitamin-b-komplex-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/cilek-cene-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/masseter",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/شد-الجفن-العلوي-مونشنغلادباخ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/zornesfalte-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/full-face-hyaluron-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lemon-bottle-kalca-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/browlift-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/bruststraffung-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/zornesfalte",
+    "to": "/behandlungen/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/botox",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/masseter",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/migraenebehandlung",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/masseter",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/goz-alti-morluklari-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/oberlidstraffung-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/kraehenfuesse",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lippen-aufspritzen-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/barbie-btx",
+    "to": "/behandlungen/botox/barbie-btx",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/plise-cizgisi-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/vampirlifting-mit-prp-in-koblenz",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/relax-infusion-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/تجاعيد-الجبهة-كولونيا",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/infusion-regeneration-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/mesotherapie-gesicht-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/شد-الوجه-بالبلازما-في-ساربروكن-ابتداءً-من-299-99-يورو",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/vitamin-c-infusion-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/browlift",
+    "to": "/behandlungen/botox/browlift",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/brustvergrosserung-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/full-face-behandlung-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/kraehenfuesse",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/علاج-الشقيقة-ريككلينهاوزن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/breast-augmentation-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/botox",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-hips-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/full-face-treatment-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-huefte-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/stirnfalte",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/augenringe-entfernen-unterspritzung-hyaluron-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/fat-away-injection-lemon-bottle-arms",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/baby-botoks-monchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/full-face-btx",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lemon-bottle-arme-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/bruststraffung-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/breast-enlargement-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-hips-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lippenkorrektur-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/browlift",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lachfalten-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lemon-bottle-karin-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ليمون-بوتل-الفخذين-لايبزيغ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/kraehenfuesse",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lumi-goz-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/baby-btx",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/face-lift-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/zornesfalte",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/migraenebehandlung",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/chin-correction-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-thigh-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/jawline-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/شفط-الدهون-برلين",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-oberschenkel-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/استرخاء-التسريب-برلين",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/zornesfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/browlift-botox-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/barbie-botox-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/kraehenfuesse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/zornesfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/zornesfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-knee-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/fettabsaugung-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-fat-away-injection-double-chin-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/kraehenfuesse",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vitamin-c-infusion",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/bauchdeckenstraffung",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lumi-eyes-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/c-vitamini-infuzyon",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/browlift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/abdominoplasty",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/hylase-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/الايدي-لايبزيغ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/platysma-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/forehead-wrinkle-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/profhilo-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lip-flip-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/mesoterapi-sac-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-stomach-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/wangenaufbau",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/full-face-hyaluron-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/erdbeerkinn",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/infusion-regeneration-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/vitamin-c-infusion",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-huefte-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/bruxism-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/pages/profhilo®-behandlung-in-koblenz",
+    "to": "/behandlungen/profhilo",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/hande-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/قلب-الشفة-بوتوكس-ركلينغهاوزن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/liposuction-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte/duisburg/forum/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/الموقع-برلين-مركز-غيزوندبرونن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/رفع-مصاص-الدماء-ببلازما-الدم-الذاتي-في-مونشنغلادباخ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/masseter-botox-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/btx/bunny-lines",
+    "to": "/standorte/recklinghausen/palais-vest/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/erdbeerkinn",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/barbie-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/baby-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/stirnfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/masseter",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/btx/masseter",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/karin-germe-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/lipflip",
+    "to": "/behandlungen/botox/lipflip",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/stirnfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-arme-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/erdbeerkinn",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lumi-eyes-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/stirnfalte-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/erdbeerkinn-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/oberarmstraffung-dusseldorf",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/power-infusion",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lumi-eyes-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/lachfalten",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/barbie-btx",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/باربي-بوتوكس-مونشنغلادباخ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lachfalten-dusseldorf",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/upper-arm-lift-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/limon-sise-diz-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/بوتوكس-بلاتيسما-تجاعيد-الرقبة",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/location-monchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/vampirlifting-prp-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/marionettenfalten-mundfalten-glatten",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/ust-kol-germe-monchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/migren-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/jawline-and-chin-correction-with-hyaluronic-in-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/barbie-botox-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/تجاعيد-الدمى-كولن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-wangen-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/weight-balance-test",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/face-lift-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/pleated-wrinkles-smokers-wrinkles",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/infusion-regeneration-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/bauchdeckenstraffung-dusseldorf",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-double-chin-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/tummy-tuck-berlin-1",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/power-infusion",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/meso-hair",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/preise",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/kraehenfuesse",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/browlift",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/cene-dolgunlastirma-hyaluron-ile",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/decollete-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/btx/migraenebehandlung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/masseter-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/marionet-cizgileri-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/halsfalten-platysma",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ماسيتير-كايزرسلاوترن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/barbie-btx",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lemon-bottle-doppelkinn-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/power-infusion",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/augenringe-mit-hyaluron-unterspritzen-in-saarbrucken-ab-299-99",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lumi-eyes-cologne",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/location-cologne-arcaden",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/cheek-enhancement",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/wangenaufbau-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/preise",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ليمون-بوتل-ركبة-كايسرسلاوترن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/masseter",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/stirnfalte",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/bruststraffung",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/haartransplantation-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/oberlidstraffung-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/plisseefalte-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/barbie-btx",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/power-infusion-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/mezoterapi-sac-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/migraenebehandlung",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/halsfalten-platysma",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/browlift",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/fettabsaugung-koln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/masseter",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx/browlift",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/laugh-lines-dusseldorf",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/migraenebehandlung",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/chin-enhancement-with-hyaluronic",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/btx/masseter",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/browlift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-knee-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/mediapark-klinik/btx/zornesfalte",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/fett-weg-spritze-lemon-bottle-bauch",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ثنية-بليسيه-كايسرسلاوترن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/zornesfalte-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/immune-infusion-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/frown-lines-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/kaiserslautern/k-in-lautern/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/ليمون-بوتل-ركبة-لايبزيغ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/hiperhidroz-ter-bezleri-botox-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/yanak-yapilandirma-recklinghausen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/relax-infusion-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/btx/masseter",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/pages/jawline-1",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/masseter",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/masseter",
+    "to": "/behandlungen/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/btx/baby-btx",
+    "to": "/standorte/moenchengladbach/minto/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/btx",
+    "to": "/standorte/aachen/aquis-plaza/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/btx/baby-btx",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/btx/stirnfalte",
+    "to": "/standorte/leipzig/hoefeambruehl/botox",
+    "code": 301
+  },
+  {
+    "from": "/behandlungen/btx/bunny-lines",
+    "to": "/behandlungen/botox/bunny-lines",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/btx/migraenebehandlung",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lumi-gozler-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/بي-آر-بي-هار-تيرابي-إن-مونشنغلادباخ",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/haartransplantation-berlin",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vampire-lift-with-prp-in-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/zornesfalte-botox-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/تكبير-الشفاه-والشفاه-الروسية-في-كولونيا",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/hande-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/anti-aging-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vitamin-b-komplex-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/حقن-المناعة-ركلينغهاوزن",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/hiperhidroz-ter-bezleri-botox-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/mesotherapy-face-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/haartransplantation",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/doctor-page",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/browlift",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/botoks-hiperhidroz",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/marionettenfalten-mundfalten-glatten",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/marionettenfalte-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/power-infusion-aachen",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/profhilo-behandlung-in-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/face-lift-duesseldorf",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/plisseefalten-raucherfalten",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/augenringe-mit-hyaluron-entfernen-koeln",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/bruststraffung-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/vitamin-b-komplex",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/masseter-kaiserslautern",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/mesotherapie-gesicht-leipzig",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/mesotherapie-gesicht-moenchengladbach",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/halsfalten-platysma",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/stirnfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/migraenebehandlung",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/stirnfalte",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/collections/all/tr/products/power-drip-anti-hangover",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/bunny-lines",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/lipflip",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/hyaluron/nasenkorrektur",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/botox/barbie-botox",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/zaehneknirschen-bruxismus",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/ar/collections/all/ar/products/bluttest-leberwerte",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/botox/zornesfalte",
+    "to": "/standorte",
     "code": 301
   }
 ]
