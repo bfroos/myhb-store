@@ -18,6 +18,8 @@ export function mapStrapiLocaleToOpenGraphLocale(locale: string): string {
     en: "en_US",
     tr: "tr_TR",
     ar: "ar_SA",
+    fr: "fr_FR",
+    nl: "nl_NL",
   };
   return map[locale as keyof typeof map] || "de_DE";
 }

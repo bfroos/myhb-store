@@ -60,7 +60,7 @@ type UrlEntry = {
   groupKey: string;
 };
 
-const LOCALES = ["de", "en", "tr", "ar"] as const;
+const LOCALES = ["de", "en", "tr", "ar", "fr", "nl"] as const;
 const DEFAULT_LOCALE = "de";
 
 const ROUTE_MAP: Record<
@@ -70,7 +70,7 @@ const ROUTE_MAP: Record<
   home: { base: "/" },
   treatments: {
     base: "/behandlungen",
-    locales: { en: "/treatments", tr: "/tedaviler", ar: "/ilajat" },
+    locales: { en: "/treatments", tr: "/tedaviler", ar: "/ilajat", fr: "/traitements", nl: "/behandelingen" },
   },
   treatment: {
     base: "/behandlungen/[...slug]",
@@ -78,11 +78,13 @@ const ROUTE_MAP: Record<
       en: "/treatments/[...slug]",
       tr: "/tedaviler/[...slug]",
       ar: "/ilajat/[...slug]",
+      fr: "/traitements/[...slug]",
+      nl: "/behandelingen/[...slug]",
     },
   },
   locations: {
     base: "/standorte",
-    locales: { en: "/locations", tr: "/konumlar", ar: "/mawaqea" },
+    locales: { en: "/locations", tr: "/konumlar", ar: "/mawaqea", fr: "/lieux", nl: "/locaties" },
   },
   city: {
     base: "/standorte/[citySlug]",
@@ -90,6 +92,8 @@ const ROUTE_MAP: Record<
       en: "/locations/[citySlug]",
       tr: "/konumlar/[citySlug]",
       ar: "/konumlar/[citySlug]",
+      fr: "/lieux/[citySlug]",
+      nl: "/locaties/[citySlug]",
     },
   },
   location: {
@@ -98,6 +102,8 @@ const ROUTE_MAP: Record<
       en: "/locations/[citySlug]/[locationSlug]",
       tr: "/konumlar/[citySlug]/[locationSlug]",
       ar: "/konumlar/[citySlug]/[locationSlug]",
+      fr: "/lieux/[citySlug]/[locationSlug]",
+      nl: "/locaties/[citySlug]/[locationSlug]",
     },
   },
   locationTreatment: {
@@ -106,11 +112,13 @@ const ROUTE_MAP: Record<
       en: "/locations/[citySlug]/[locationSlug]/[...treatmentSlug]",
       tr: "/konumlar/[citySlug]/[locationSlug]/[...treatmentSlug]",
       ar: "/konumlar/[citySlug]/[locationSlug]/[...treatmentSlug]",
+      fr: "/lieux/[citySlug]/[locationSlug]/[...treatmentSlug]",
+      nl: "/locaties/[citySlug]/[locationSlug]/[...treatmentSlug]",
     },
   },
   blog: {
     base: "/blog",
-    locales: { en: "/blog", tr: "/blog", ar: "/mudawwana" },
+    locales: { en: "/blog", tr: "/blog", ar: "/mudawwana", fr: "/blog", nl: "/blog" },
   },
   blogArticle: {
     base: "/blog/[slug]",
@@ -118,6 +126,8 @@ const ROUTE_MAP: Record<
       en: "/blog/[slug]",
       tr: "/blog/[slug]",
       ar: "/mudawwana/[slug]",
+      fr: "/blog/[slug]",
+      nl: "/blog/[slug]",
     },
   },
   blogCategory: {
@@ -126,11 +136,13 @@ const ROUTE_MAP: Record<
       en: "/blog/c/[slug]",
       tr: "/blog/c/[slug]",
       ar: "/mudawwana/c/[slug]",
+      fr: "/blog/c/[slug]",
+      nl: "/blog/c/[slug]",
     },
   },
   career: {
     base: "/karriere",
-    locales: { en: "/careers", tr: "/kariyer", ar: "/masar-mihani" },
+    locales: { en: "/careers", tr: "/kariyer", ar: "/masar-mihani", fr: "/carrieres", nl: "/carriere" },
   },
   job: {
     base: "/karriere/jobs/[slug]",
@@ -138,19 +150,21 @@ const ROUTE_MAP: Record<
       en: "/careers/[slug]",
       tr: "/kariyer/[slug]",
       ar: "/masar-mihani/[slug]",
+      fr: "/carrieres/[slug]",
+      nl: "/carriere/[slug]",
     },
   },
   prices: {
     base: "/preise",
-    locales: { en: "/prices", tr: "/fiyatlar", ar: "/asaar" },
+    locales: { en: "/prices", tr: "/fiyatlar", ar: "/asaar", fr: "/prix", nl: "/prijzen" },
   },
   about: {
     base: "/ueber-uns",
-    locales: { en: "/about-us", tr: "/hakkimizda", ar: "/man-nahnu" },
+    locales: { en: "/about-us", tr: "/hakkimizda", ar: "/man-nahnu", fr: "/a-propos", nl: "/over-ons" },
   },
   doctors: {
     base: "/aerzte",
-    locales: { en: "/doctors", tr: "/doktorlar", ar: "/atibba" },
+    locales: { en: "/doctors", tr: "/doktorlar", ar: "/atibba", fr: "/medecins", nl: "/artsen" },
   },
   doctor: {
     base: "/aerzte/[slug]",
@@ -158,6 +172,8 @@ const ROUTE_MAP: Record<
       en: "/doctors/[slug]",
       tr: "/doktorlar/[slug]",
       ar: "/atibba/[slug]",
+      fr: "/medecins/[slug]",
+      nl: "/artsen/[slug]",
     },
   },
   product: {
@@ -166,6 +182,8 @@ const ROUTE_MAP: Record<
       en: "/products/[categorySlug]/[productSlug]",
       tr: "/urunler/[categorySlug]/[productSlug]",
       ar: "/muntajat/[categorySlug]/[productSlug]",
+      fr: "/produits/[categorySlug]/[productSlug]",
+      nl: "/producten/[categorySlug]/[productSlug]",
     },
   },
   general: { base: "/p/[slug]" },

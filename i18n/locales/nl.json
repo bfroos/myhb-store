@@ -1,0 +1,443 @@
+{
+  "common": {
+    "discount": "Rabatt",
+    "reviews": "Bewertungen",
+    "reviewsCount": "{count} Bewertungen",
+    "review": "Bewertung",
+    "rating": "Bewertung",
+    "reviewLinkLabel": "Zur Bewertung bei {source}",
+    "five-star": "5-Sterne",
+    "showLess": "Weniger anzeigen",
+    "showMore": "Mehr anzeigen",
+    "more": "Mehr",
+    "general": "allgemein",
+    "in": "in",
+    "distanceKilometersSuffix": "km",
+    "date": {
+      "fromDate": "ab {date}",
+      "today": "heute"
+    },
+    "week": {
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    },
+    "openingHours": {
+      "open": "Geöffnet",
+      "closed": "Geschlossen"
+    },
+    "federalState": {
+      "baden-wuerttemberg": "Baden-Württemberg",
+      "bavaria": "Bayern",
+      "berlin": "Berlin",
+      "brandenburg": "Brandenburg",
+      "bremen": "Bremen",
+      "hamburg": "Hamburg",
+      "hesse": "Hessen",
+      "mecklenburg-western-pomerania": "Mecklenburg-Vorpommern",
+      "lower-saxony": "Niedersachsen",
+      "north-rhine-westphalia": "Nordrhein-Westfalen",
+      "rhineland-palatinate": "Rheinland-Pfalz",
+      "saarland": "Saarland",
+      "saxony": "Sachsen",
+      "saxony-anhalt": "Sachsen-Anhalt",
+      "schleswig-holstein": "Schleswig-Holstein",
+      "thuringia": "Thüringen"
+    },
+    "price": {
+      "cheap": "günstig",
+      "startingPrefix": "ab",
+      "forPrefix": "für"
+    }
+  },
+  "navigation": {
+    "header": {
+      "languageSwitcher": "Sprache wechseln"
+    },
+    "secondary": {
+      "doctors": "Ärzte",
+      "locations": "Standorte",
+      "prices": "Preise",
+      "careers": "Karriere",
+      "blog": "Blog",
+      "aboutUs": "Über uns"
+    },
+    "footer": {
+      "treatments": "Behandlungen",
+      "company": "Unternehmen",
+      "prices": "Preise",
+      "careers": "Karriere",
+      "blog": "Blog",
+      "aboutUs": "Über uns"
+    },
+    "meta": {
+      "privacyPolicy": "Datenschutz",
+      "imprint": "Impressum",
+      "cookieSettings": "Cookies"
+    },
+    "treatmentTile": {
+      "goToTreatment": "Zur Behandlung"
+    }
+  },
+  "cta": {
+    "bookAppointment": "Termin buchen",
+    "bookAppointmentNotAvailable": "Nicht buchbar",
+    "learnMore": "Mehr erfahren",
+    "details": "Details",
+    "subscribe": "Abonnieren",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "joinMyClub": "Mitglied bei {brandNameShort} Club werden",
+    "shopGroupon": "Gutschein kaufen",
+    "openMenu": "Menü öffnen",
+    "goToHome": "Zur Startseite",
+    "watch": "Ansehen",
+    "share": {
+      "copy": "Link kopieren",
+      "copied": "Link kopiert",
+      "whatsapp": "Auf WhatsApp teilen",
+      "facebook": "Auf Facebook teilen"
+    }
+  },
+  "googleMaps": {
+    "consentRequired": "Karte nicht verfügbar",
+    "consentDescription": "Um die Karte anzuzeigen, benötigen wir deine Zustimmung für Google Maps. Bitte akzeptiere die Cookie-Einstellungen.",
+    "consentButton": "Cookie-Einstellungen öffnen"
+  },
+  "location": {
+    "comingSoon": "Coming soon",
+    "sinceToday": "Neueröffnung heute",
+    "error": {
+      "locationNotFound": "Standort nicht gefunden",
+      "locationNotFoundDescription": "Der angeforderte Standort existiert nicht."
+    },
+    "treatmentTeasers": {
+      "headline": {
+        "lounge": "Behandlungen in unserer Lounge in {city}",
+        "center": "Behandlungen in unserer Lounge in {city}",
+        "clinic": "Behandlungen in unserer Privatklinik in {city}",
+        "loungeFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
+        "centerFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
+        "clinicFuture": "Zukünftige Behandlungen in unserer Privatklinik in {city}"
+      }
+    },
+    "jobTeasers": {
+      "headline": "Stellenangebote in {city}"
+    }
+  },
+  "blog": {
+    "breadcrumbTitle": "Blog",
+    "headline": "Blog",
+    "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
+    "article": {
+      "share": {
+        "copy": "Link kopieren",
+        "copied": "Link kopiert",
+        "whatsapp": "Auf WhatsApp teilen",
+        "facebook": "Auf Facebook teilen"
+      }
+    },
+    "emptyState": {
+      "title": "Keine Artikel gefunden",
+      "description": "Leider sind keine Artikel für diese Kategorie in deiner ausgewählten Sprache verfügbar."
+    }
+  },
+  "career": {
+    "breadcrumbTitle": "Karriere",
+    "job": {
+      "apply": "Jetzt bewerben",
+      "description": {
+        "headline": "Über den Job",
+        "details": "Details",
+        "employmentType": "Anstellungsart",
+        "contractType": "Befristung",
+        "startDate": "Startdatum",
+        "asOfNow": "ab sofort",
+        "hourlyRate": "Stundenlohn",
+        "locations": "Verfügbare Arbeitsorte"
+      },
+      "employmentType": {
+        "full-time": "Vollzeit",
+        "part-time": "Teilzeit",
+        "full-time-or-part-time": "Vollzeit oder Teilzeit"
+      },
+      "contractType": {
+        "permanent": "Unbefristet",
+        "fixed-term": "Befristet",
+        "freelance": "Freiberuflich"
+      },
+      "seo": {
+        "title": "Jobangebot: {title} ({genderHint}) - {employmentType}",
+        "description": "Standorte: {locations}"
+      }
+    }
+  },
+  "locations": {
+    "headline": "Standorte",
+    "breadcrumbTitle": "Standorte",
+    "upcomingOpening": "Anstehende Neueröffnungen",
+    "plannedLocations": "Standorte in Planung",
+    "allLocations": "Alle Standorte",
+    "discoverLocations": "Entdecke unsere Standorte",
+    "location": {
+      "locationType": {
+        "lounge": "Lounge",
+        "center": "Center",
+        "clinic": "Privatklinik"
+      },
+      "seo": {
+        "title": "{brandNameShort} {locationName} {city} | Botox & Hyaluron",
+        "description": "{brandName} {locationName} {city} ✓ Botox & Hyaluron ✓ Zertifizierte Ärzte ✓ Jetzt Termin buchen"
+      },
+      "locationTreatment": {
+        "seo": {
+          "title": "{treatmentName} {city} | {brandNameShort} {locationName}",
+          "description": "{treatmentName} in {city} bei {brandName} {locationName} ✓ Zertifizierte Ärzte ✓ Termin online buchen"
+        }
+      },
+      "openingHoursOpenNewToday": "Neueröffnung heute",
+      "openingHoursOpenSoon": "ab {date}",
+      "openingHoursComingSoon": "Coming Soon",
+      "cityPhrase": "in {city}"
+    },
+    "city": {
+      "allLocations": "Alle Standorte in {city}",
+      "upcomingOpening": "Bald neu in {city}",
+      "plannedLocations": "Geplante Standorte in {city}",
+      "error": {
+        "noLocations": "Keine Standorte gefunden",
+        "noLocationsDescription": "Leider haben wir noch keinen Standort in {city} eröffnet."
+      }
+    }
+  },
+  "doctors": {
+    "headline": "Ärzte",
+    "breadcrumbTitle": "Ärzte",
+    "doctor": {
+      "breadcrumbTitle": "Ärzte",
+      "aboutMe": {
+        "headline": "Über mich"
+      },
+      "specializations": {
+        "headline": "Spezialgebiete"
+      },
+      "locations": {
+        "headline": {
+          "one": "Ich behandle in {city}",
+          "other": "Ich behandle an {count} Standorten"
+        }
+      },
+      "seo": {
+        "description": "{ role } bei { brandName } in { cities } – Informationen zu meiner Tätigkeit"
+      }
+    }
+  },
+  "treatments": {
+    "breadcrumbTitle": "Behandlungen",
+    "seo": {
+      "title": "Botox®, Hyaluron & Filler – Alle Behandlungen",
+      "description": "Entdecke unsere Behandlungen aus den Bereichen {categories} und finde die passende für dich."
+    },
+    "errors": {
+      "noTreatmentsGroups": {
+        "title": "Keine Behandlungen gefunden",
+        "description": "Leider haben wir noch keine Behandlungen in deiner ausgewählten Sprache erstellt."
+      }
+    },
+    "treatment": {
+      "allTreatments": "Behandlungen",
+      "locationTeasers": {
+        "headline": "{treatment} an unseren Standorten"
+      },
+      "error": {
+        "treatmentNotFound": "Behandlung nicht gefunden",
+        "treatmentNotFoundDescription": "Die angeforderte Behandlung existiert nicht."
+      }
+    },
+    "pageTitle": "Botox®, Hyaluron & ästhetische Behandlungen"
+  },
+  "treatment": {
+    "seo": {
+      "description": "{description} Erfahrene Ärzte, sichere Behandlung & individueller Plan. Jetzt Termin buchen!"
+    }
+  },
+  "productPage": {
+    "error": {
+      "productNotFound": "Produkt nicht gefunden",
+      "productNotFoundDescription": "Das angeforderte Produkt existiert nicht."
+    },
+    "productDescription": "Produktbeschreibung",
+    "metaDescription": "{name} von {manufacturer} in den Varianten {variants} ab {price} in deiner Nähe erhältlich"
+  },
+  "blocks": {
+    "jobTeasers": {
+      "headline": "Aktuelle Stellenangebote",
+      "andMore": "weitere",
+      "filter": {
+        "label": "Nach Standort filtern:",
+        "placeholder": "Alle Standorte",
+        "all": "Alle Standorte"
+      }
+    },
+    "treatmentTeasers": {
+      "filter": {
+        "all": "Alle"
+      }
+    },
+    "qualifications": {
+      "headline": "Qualifikationen",
+      "vita": "Werdegang"
+    },
+    "employeeList": {
+      "readMore": "Zum Profil",
+      "showProfile": "Zum Profil von {name}"
+    },
+    "treatmentDetails": {
+      "price": "Preis",
+      "duration": "Behandlungsdauer",
+      "effect": "Effekt",
+      "initialResults": "Erste Ergebnisse",
+      "finalResults": "Endgültige Ergebnisse",
+      "effectDuration": "Wirkungsdauer",
+      "anesthesia": "Anästhesie",
+      "medication": "Medikation",
+      "aftercareSummary": "Nachbehandlung",
+      "followUpTreatments": "Folgebehandlungen",
+      "noInformation": "Keine Informationen verfügbar",
+      "headline": "Details zur Behandlung"
+    },
+    "tableOfContents": {
+      "content": "Inhalt"
+    },
+    "treatmentPlan": {
+      "followUpPlanText": "Behandlung wiederholen",
+      "endOfPlanText": "Behandlung abgeschlossen",
+      "age": "Alter",
+      "treatmentGoal": "Ziel",
+      "week": "Woche",
+      "stepsAriaLabel": "Behandlungsplan Schritte"
+    },
+    "locationTeasers": {
+      "filter": {
+        "label": "Nach Bundesland filtern:",
+        "placeholder": "Alle Bundesländer",
+        "all": "Alle Bundesländer"
+      }
+    },
+    "directions": {
+      "walk": "Zu Fuß",
+      "publicTransport": "Mit dem Nahverkehr",
+      "car": "Mit dem Auto"
+    },
+    "reviews": {
+      "headline": "Das sagen unsere Kunden",
+      "cta": {
+        "bookAppointment": "Termin buchen"
+      }
+    },
+    "locationContact": {
+      "openingHours": "Öffnungszeiten",
+      "openingHoursDescription": "Jetzt geöffnet bis {hours} Uhr",
+      "openingHoursToday": "Heute geöffnet von {opens} bis {closes} Uhr",
+      "openingHoursNext": "Öffnet am {day} um {time} Uhr",
+      "openingHoursOpenSoon": "Neueröffnung am {date}. Das werden unsere Öffnungszeiten sein",
+      "openingHoursComingSoon": "Wir eröffnen bald. Das werden unsere Öffnungszeiten sein",
+      "map": {
+        "title": "Karte der Standortadresse"
+      },
+      "directions": "Wegbeschreibung",
+      "phone": "Telefon",
+      "whatsapp": "WhatsApp Chat",
+      "address": "Standortadresse"
+    },
+    "locationFinder": {
+      "mapLoading": "Karte wird geladen…",
+      "headline": "Standort finden",
+      "searchPlaceholder": "PLZ oder Ort",
+      "useMyLocation": "Mein Standort"
+    },
+    "locationMap": {
+      "footer": {
+        "customers_one": "Kunde",
+        "customers_other": "Kunden",
+        "lounges_one": "Lounge",
+        "lounges_other": "Lounges",
+        "doctors_one": "Arzt",
+        "doctors_other": "Ärzte",
+        "clinic_one": "Privatklinik",
+        "clinic_other": "Privatkliniken"
+      },
+      "map": {
+        "title": "Standortkarte",
+        "description": "Karte von Deutschland mit Markierungen für Standorte. Status: Geöffnet, Neueröffnung bald oder Coming Soon.",
+        "listLabel": "Standorte auf der Karte"
+      },
+      "status": {
+        "open": "Geöffnet",
+        "openSoon": "Neueröffnung bald",
+        "comingSoon": "Coming Soon"
+      },
+      "cta": "Medical Lounge finden"
+    },
+    "treatmentHero": {
+      "discountCta": "{pct}% Rabatt sichern",
+      "ctaActionLabel": "Termin buchen"
+    },
+    "productCategoryPriceOverview": {
+      "treatments": "Behandlungen",
+      "products": "Produkte",
+      "treatmentDetails": "Behandlungdetails",
+      "productDetails": "Produktdetails",
+      "noTreatments": "Aktuell haben wir keine Behandlungen in dieser Kategorie."
+    },
+    "productHero": {
+      "previousImage": "Vorheriges Bild",
+      "nextImage": "Nächstes Bild",
+      "selectImage": "Bild {index} auswählen",
+      "includesVat": "Inkl. MwSt.",
+      "bookAppointment": "Termin buchen",
+      "footerDescription": "Bitte beachte, dass unsere Produkte nicht einzeln verkauft werden. Sie kommen ausschließlich im Rahmen einer entsprechenden Behandlung zum Einsatz – nach einer ausführlichen ärztlichen Beratung. Buche einfach einen Termin in deiner Nähe und erfahre, welche Behandlungen mit diesem Produkt möglich sind.",
+      "treatmentsWith": "Behandlungen mit {manufacturer} {product}"
+    }
+  },
+  "error": {
+    "500": {
+      "statusMessage": "Hoppla! Etwas ist schiefgelaufen.",
+      "message": "Wir haben den Fehler gemeldet und arbeiten daran, ihn zu beheben.",
+      "button": "Zur Startseite"
+    },
+    "404": {
+      "statusMessage": "Seite leider nicht gefunden:",
+      "message": "Die angeforderte Seite existiert nicht oder ist in der ausgewählten Sprache nicht verfügbar.",
+      "button": "Zur Startseite"
+    }
+  },
+  "dialogs": {
+    "calendly": {
+      "header": "Buche deinen Termin jetzt über Calendly"
+    },
+    "newsletterSignUp": {
+      "header": "Newsletter abonnieren"
+    }
+  },
+  "newsletter": {
+    "marketingText": {
+      "headline": "Deals und News. Jetzt im Newsletter!",
+      "headlineDiscount": "Für alle Neukunden: Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
+      "exlusiveOffers": "Exklusive Angebote",
+      "treatmentNews": "News zu Behandlungen",
+      "eventInvitations": "Einladungen zu Events"
+    },
+    "success": "Willkommen bei {brandNameShort}! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
+    "emailPlaceholder": "Deine E-Mail-Adresse",
+    "emailLabel": "E-Mail-Adresse",
+    "errors": {
+      "invalid_email": "Bitte gib eine gültige E-Mail-Adresse an.",
+      "generic": "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+    }
+  }
+}
