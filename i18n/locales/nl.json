@@ -1,286 +1,286 @@
 {
   "common": {
-    "discount": "Rabatt",
-    "reviews": "Bewertungen",
-    "reviewsCount": "{count} Bewertungen",
-    "review": "Bewertung",
-    "rating": "Bewertung",
-    "reviewLinkLabel": "Zur Bewertung bei {source}",
-    "five-star": "5-Sterne",
-    "showLess": "Weniger anzeigen",
-    "showMore": "Mehr anzeigen",
-    "more": "Mehr",
-    "general": "allgemein",
+    "discount": "Korting",
+    "reviews": "Beoordelingen",
+    "reviewsCount": "{count} beoordelingen",
+    "review": "Beoordeling",
+    "rating": "Beoordeling",
+    "reviewLinkLabel": "Naar de beoordeling op {source}",
+    "five-star": "5-sterren",
+    "showLess": "Minder tonen",
+    "showMore": "Meer tonen",
+    "more": "Meer",
+    "general": "algemeen",
     "in": "in",
     "distanceKilometersSuffix": "km",
     "date": {
-      "fromDate": "ab {date}",
-      "today": "heute"
+      "fromDate": "vanaf {date}",
+      "today": "vandaag"
     },
     "week": {
-      "monday": "Montag",
-      "tuesday": "Dienstag",
-      "wednesday": "Mittwoch",
-      "thursday": "Donnerstag",
-      "friday": "Freitag",
-      "saturday": "Samstag",
-      "sunday": "Sonntag"
+      "monday": "Maandag",
+      "tuesday": "Dinsdag",
+      "wednesday": "Woensdag",
+      "thursday": "Donderdag",
+      "friday": "Vrijdag",
+      "saturday": "Zaterdag",
+      "sunday": "Zondag"
     },
     "openingHours": {
-      "open": "Geöffnet",
-      "closed": "Geschlossen"
+      "open": "Geopend",
+      "closed": "Gesloten"
     },
     "federalState": {
       "baden-wuerttemberg": "Baden-Württemberg",
-      "bavaria": "Bayern",
-      "berlin": "Berlin",
+      "bavaria": "Beieren",
+      "berlin": "Berlijn",
       "brandenburg": "Brandenburg",
       "bremen": "Bremen",
       "hamburg": "Hamburg",
       "hesse": "Hessen",
-      "mecklenburg-western-pomerania": "Mecklenburg-Vorpommern",
-      "lower-saxony": "Niedersachsen",
-      "north-rhine-westphalia": "Nordrhein-Westfalen",
-      "rhineland-palatinate": "Rheinland-Pfalz",
+      "mecklenburg-western-pomerania": "Mecklenburg-Voor-Pommeren",
+      "lower-saxony": "Nedersaksen",
+      "north-rhine-westphalia": "Noordrijn-Westfalen",
+      "rhineland-palatinate": "Rijnland-Palts",
       "saarland": "Saarland",
-      "saxony": "Sachsen",
-      "saxony-anhalt": "Sachsen-Anhalt",
-      "schleswig-holstein": "Schleswig-Holstein",
+      "saxony": "Saksen",
+      "saxony-anhalt": "Saksen-Anhalt",
+      "schleswig-holstein": "Sleeswijk-Holstein",
       "thuringia": "Thüringen"
     },
     "price": {
-      "cheap": "günstig",
-      "startingPrefix": "ab",
-      "forPrefix": "für"
+      "cheap": "voordelig",
+      "startingPrefix": "vanaf",
+      "forPrefix": "voor"
     }
   },
   "navigation": {
     "header": {
-      "languageSwitcher": "Sprache wechseln"
+      "languageSwitcher": "Taal wijzigen"
     },
     "secondary": {
-      "doctors": "Ärzte",
-      "locations": "Standorte",
-      "prices": "Preise",
-      "careers": "Karriere",
+      "doctors": "Artsen",
+      "locations": "Locaties",
+      "prices": "Prijzen",
+      "careers": "Carrière",
       "blog": "Blog",
-      "aboutUs": "Über uns"
+      "aboutUs": "Over ons"
     },
     "footer": {
-      "treatments": "Behandlungen",
-      "company": "Unternehmen",
-      "prices": "Preise",
-      "careers": "Karriere",
+      "treatments": "Behandelingen",
+      "company": "Bedrijf",
+      "prices": "Prijzen",
+      "careers": "Carrière",
       "blog": "Blog",
-      "aboutUs": "Über uns"
+      "aboutUs": "Over ons"
     },
     "meta": {
-      "privacyPolicy": "Datenschutz",
+      "privacyPolicy": "Privacy",
       "imprint": "Impressum",
       "cookieSettings": "Cookies"
     },
     "treatmentTile": {
-      "goToTreatment": "Zur Behandlung"
+      "goToTreatment": "Naar de behandeling"
     }
   },
   "cta": {
-    "bookAppointment": "Termin buchen",
-    "bookAppointmentNotAvailable": "Nicht buchbar",
-    "learnMore": "Mehr erfahren",
+    "bookAppointment": "Afspraak maken",
+    "bookAppointmentNotAvailable": "Niet boekbaar",
+    "learnMore": "Meer informatie",
     "details": "Details",
-    "subscribe": "Abonnieren",
-    "cancel": "Abbrechen",
-    "close": "Schließen",
-    "joinMyClub": "Mitglied bei {brandNameShort} Club werden",
-    "shopGroupon": "Gutschein kaufen",
-    "openMenu": "Menü öffnen",
-    "goToHome": "Zur Startseite",
-    "watch": "Ansehen",
+    "subscribe": "Abonneren",
+    "cancel": "Annuleren",
+    "close": "Sluiten",
+    "joinMyClub": "Lid worden van {brandNameShort} Club",
+    "shopGroupon": "Voucher kopen",
+    "openMenu": "Menu openen",
+    "goToHome": "Naar startpagina",
+    "watch": "Bekijken",
     "share": {
-      "copy": "Link kopieren",
-      "copied": "Link kopiert",
-      "whatsapp": "Auf WhatsApp teilen",
-      "facebook": "Auf Facebook teilen"
+      "copy": "Link kopiëren",
+      "copied": "Link gekopieerd",
+      "whatsapp": "Delen op WhatsApp",
+      "facebook": "Delen op Facebook"
     }
   },
   "googleMaps": {
-    "consentRequired": "Karte nicht verfügbar",
-    "consentDescription": "Um die Karte anzuzeigen, benötigen wir deine Zustimmung für Google Maps. Bitte akzeptiere die Cookie-Einstellungen.",
-    "consentButton": "Cookie-Einstellungen öffnen"
+    "consentRequired": "Kaart niet beschikbaar",
+    "consentDescription": "Om de kaart weer te geven, hebben we je toestemming nodig voor Google Maps. Accepteer de cookie-instellingen.",
+    "consentButton": "Cookie-instellingen openen"
   },
   "location": {
-    "comingSoon": "Coming soon",
-    "sinceToday": "Neueröffnung heute",
+    "comingSoon": "Binnenkort",
+    "sinceToday": "Vandaag nieuw geopend",
     "error": {
-      "locationNotFound": "Standort nicht gefunden",
-      "locationNotFoundDescription": "Der angeforderte Standort existiert nicht."
+      "locationNotFound": "Locatie niet gevonden",
+      "locationNotFoundDescription": "De aangevraagde locatie bestaat niet."
     },
     "treatmentTeasers": {
       "headline": {
-        "lounge": "Behandlungen in unserer Lounge in {city}",
-        "center": "Behandlungen in unserer Lounge in {city}",
-        "clinic": "Behandlungen in unserer Privatklinik in {city}",
-        "loungeFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
-        "centerFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
-        "clinicFuture": "Zukünftige Behandlungen in unserer Privatklinik in {city}"
+        "lounge": "Behandelingen in onze lounge in {city}",
+        "center": "Behandelingen in onze lounge in {city}",
+        "clinic": "Behandelingen in onze privékliniek in {city}",
+        "loungeFuture": "Toekomstige behandelingen in onze lounge in {city}",
+        "centerFuture": "Toekomstige behandelingen in onze lounge in {city}",
+        "clinicFuture": "Toekomstige behandelingen in onze privékliniek in {city}"
       }
     },
     "jobTeasers": {
-      "headline": "Stellenangebote in {city}"
+      "headline": "Vacatures in {city}"
     }
   },
   "blog": {
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
-    "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
+    "intro": "Interessante informatie, actueel nieuws en alles over gezondheid en schoonheid.",
     "article": {
       "share": {
-        "copy": "Link kopieren",
-        "copied": "Link kopiert",
-        "whatsapp": "Auf WhatsApp teilen",
-        "facebook": "Auf Facebook teilen"
+        "copy": "Link kopiëren",
+        "copied": "Link gekopieerd",
+        "whatsapp": "Delen op WhatsApp",
+        "facebook": "Delen op Facebook"
       }
     },
     "emptyState": {
-      "title": "Keine Artikel gefunden",
-      "description": "Leider sind keine Artikel für diese Kategorie in deiner ausgewählten Sprache verfügbar."
+      "title": "Geen artikelen gevonden",
+      "description": "Helaas zijn er geen artikelen beschikbaar voor deze categorie in je geselecteerde taal."
     }
   },
   "career": {
-    "breadcrumbTitle": "Karriere",
+    "breadcrumbTitle": "Carrière",
     "job": {
-      "apply": "Jetzt bewerben",
+      "apply": "Nu solliciteren",
       "description": {
-        "headline": "Über den Job",
+        "headline": "Over de baan",
         "details": "Details",
-        "employmentType": "Anstellungsart",
-        "contractType": "Befristung",
+        "employmentType": "Type dienstverband",
+        "contractType": "Type contract",
         "startDate": "Startdatum",
-        "asOfNow": "ab sofort",
-        "hourlyRate": "Stundenlohn",
-        "locations": "Verfügbare Arbeitsorte"
+        "asOfNow": "per direct",
+        "hourlyRate": "Uurloon",
+        "locations": "Beschikbare werklocaties"
       },
       "employmentType": {
-        "full-time": "Vollzeit",
-        "part-time": "Teilzeit",
-        "full-time-or-part-time": "Vollzeit oder Teilzeit"
+        "full-time": "Voltijd",
+        "part-time": "Deeltijd",
+        "full-time-or-part-time": "Voltijd of deeltijd"
       },
       "contractType": {
-        "permanent": "Unbefristet",
-        "fixed-term": "Befristet",
-        "freelance": "Freiberuflich"
+        "permanent": "Vast contract",
+        "fixed-term": "Tijdelijk contract",
+        "freelance": "Freelance"
       },
       "seo": {
-        "title": "Jobangebot: {title} ({genderHint}) - {employmentType}",
-        "description": "Standorte: {locations}"
+        "title": "Vacature: {title} ({genderHint}) - {employmentType}",
+        "description": "Locaties: {locations}"
       }
     }
   },
   "locations": {
-    "headline": "Standorte",
-    "breadcrumbTitle": "Standorte",
-    "upcomingOpening": "Anstehende Neueröffnungen",
-    "plannedLocations": "Standorte in Planung",
-    "allLocations": "Alle Standorte",
-    "discoverLocations": "Entdecke unsere Standorte",
+    "headline": "Locaties",
+    "breadcrumbTitle": "Locaties",
+    "upcomingOpening": "Aanstaande openingen",
+    "plannedLocations": "Geplande locaties",
+    "allLocations": "Alle locaties",
+    "discoverLocations": "Ontdek onze locaties",
     "location": {
       "locationType": {
         "lounge": "Lounge",
-        "center": "Center",
-        "clinic": "Privatklinik"
+        "center": "Centrum",
+        "clinic": "Privékliniek"
       },
       "seo": {
         "title": "{brandNameShort} {locationName} {city} | Botox & Hyaluron",
-        "description": "{brandName} {locationName} {city} ✓ Botox & Hyaluron ✓ Zertifizierte Ärzte ✓ Jetzt Termin buchen"
+        "description": "{brandName} {locationName} {city} ✓ Botox & Hyaluron ✓ Gecertificeerde artsen ✓ Nu afspraak maken"
       },
       "locationTreatment": {
         "seo": {
           "title": "{treatmentName} {city} | {brandNameShort} {locationName}",
-          "description": "{treatmentName} in {city} bei {brandName} {locationName} ✓ Zertifizierte Ärzte ✓ Termin online buchen"
+          "description": "{treatmentName} in {city} bij {brandName} {locationName} ✓ Gecertificeerde artsen ✓ Online afspraak maken"
         }
       },
-      "openingHoursOpenNewToday": "Neueröffnung heute",
-      "openingHoursOpenSoon": "ab {date}",
-      "openingHoursComingSoon": "Coming Soon",
+      "openingHoursOpenNewToday": "Vandaag nieuw geopend",
+      "openingHoursOpenSoon": "vanaf {date}",
+      "openingHoursComingSoon": "Binnenkort",
       "cityPhrase": "in {city}"
     },
     "city": {
-      "allLocations": "Alle Standorte in {city}",
-      "upcomingOpening": "Bald neu in {city}",
-      "plannedLocations": "Geplante Standorte in {city}",
+      "allLocations": "Alle locaties in {city}",
+      "upcomingOpening": "Binnenkort nieuw in {city}",
+      "plannedLocations": "Geplande locaties in {city}",
       "error": {
-        "noLocations": "Keine Standorte gefunden",
-        "noLocationsDescription": "Leider haben wir noch keinen Standort in {city} eröffnet."
+        "noLocations": "Geen locaties gevonden",
+        "noLocationsDescription": "Helaas hebben we nog geen locatie in {city} geopend."
       }
     }
   },
   "doctors": {
-    "headline": "Ärzte",
-    "breadcrumbTitle": "Ärzte",
+    "headline": "Artsen",
+    "breadcrumbTitle": "Artsen",
     "doctor": {
-      "breadcrumbTitle": "Ärzte",
+      "breadcrumbTitle": "Artsen",
       "aboutMe": {
-        "headline": "Über mich"
+        "headline": "Over mij"
       },
       "specializations": {
-        "headline": "Spezialgebiete"
+        "headline": "Specialisaties"
       },
       "locations": {
         "headline": {
-          "one": "Ich behandle in {city}",
-          "other": "Ich behandle an {count} Standorten"
+          "one": "Ik behandel in {city}",
+          "other": "Ik behandel op {count} locaties"
         }
       },
       "seo": {
-        "description": "{ role } bei { brandName } in { cities } – Informationen zu meiner Tätigkeit"
+        "description": "{ role } bij { brandName } in { cities } – Informatie over mijn werkzaamheden"
       }
     }
   },
   "treatments": {
-    "breadcrumbTitle": "Behandlungen",
+    "breadcrumbTitle": "Behandelingen",
     "seo": {
-      "title": "Botox®, Hyaluron & Filler – Alle Behandlungen",
-      "description": "Entdecke unsere Behandlungen aus den Bereichen {categories} und finde die passende für dich."
+      "title": "Botox®, Hyaluron & Fillers – Alle behandelingen",
+      "description": "Ontdek onze behandelingen uit de categorieën {categories} en vind de juiste voor jou."
     },
     "errors": {
       "noTreatmentsGroups": {
-        "title": "Keine Behandlungen gefunden",
-        "description": "Leider haben wir noch keine Behandlungen in deiner ausgewählten Sprache erstellt."
+        "title": "Geen behandelingen gevonden",
+        "description": "Helaas hebben we nog geen behandelingen in je geselecteerde taal aangemaakt."
       }
     },
     "treatment": {
-      "allTreatments": "Behandlungen",
+      "allTreatments": "Behandelingen",
       "locationTeasers": {
-        "headline": "{treatment} an unseren Standorten"
+        "headline": "{treatment} op onze locaties"
       },
       "error": {
-        "treatmentNotFound": "Behandlung nicht gefunden",
-        "treatmentNotFoundDescription": "Die angeforderte Behandlung existiert nicht."
+        "treatmentNotFound": "Behandeling niet gevonden",
+        "treatmentNotFoundDescription": "De aangevraagde behandeling bestaat niet."
       }
     },
-    "pageTitle": "Botox®, Hyaluron & ästhetische Behandlungen"
+    "pageTitle": "Botox®, Hyaluron & esthetische behandelingen"
   },
   "treatment": {
     "seo": {
-      "description": "{description} Erfahrene Ärzte, sichere Behandlung & individueller Plan. Jetzt Termin buchen!"
+      "description": "{description} Ervaren artsen, veilige behandeling & individueel plan. Nu afspraak maken!"
     }
   },
   "productPage": {
     "error": {
-      "productNotFound": "Produkt nicht gefunden",
-      "productNotFoundDescription": "Das angeforderte Produkt existiert nicht."
+      "productNotFound": "Product niet gevonden",
+      "productNotFoundDescription": "Het aangevraagde product bestaat niet."
     },
-    "productDescription": "Produktbeschreibung",
-    "metaDescription": "{name} von {manufacturer} in den Varianten {variants} ab {price} in deiner Nähe erhältlich"
+    "productDescription": "Productbeschrijving",
+    "metaDescription": "{name} van {manufacturer} in de varianten {variants} vanaf {price} beschikbaar bij jou in de buurt"
   },
   "blocks": {
     "jobTeasers": {
-      "headline": "Aktuelle Stellenangebote",
-      "andMore": "weitere",
+      "headline": "Actuele vacatures",
+      "andMore": "meer",
       "filter": {
-        "label": "Nach Standort filtern:",
-        "placeholder": "Alle Standorte",
-        "all": "Alle Standorte"
+        "label": "Filteren op locatie:",
+        "placeholder": "Alle locaties",
+        "all": "Alle locaties"
       }
     },
     "treatmentTeasers": {
@@ -289,155 +289,155 @@
       }
     },
     "qualifications": {
-      "headline": "Qualifikationen",
-      "vita": "Werdegang"
+      "headline": "Kwalificaties",
+      "vita": "Loopbaan"
     },
     "employeeList": {
-      "readMore": "Zum Profil",
-      "showProfile": "Zum Profil von {name}"
+      "readMore": "Naar profiel",
+      "showProfile": "Naar profiel van {name}"
     },
     "treatmentDetails": {
-      "price": "Preis",
-      "duration": "Behandlungsdauer",
-      "effect": "Effekt",
-      "initialResults": "Erste Ergebnisse",
-      "finalResults": "Endgültige Ergebnisse",
-      "effectDuration": "Wirkungsdauer",
-      "anesthesia": "Anästhesie",
-      "medication": "Medikation",
-      "aftercareSummary": "Nachbehandlung",
-      "followUpTreatments": "Folgebehandlungen",
-      "noInformation": "Keine Informationen verfügbar",
-      "headline": "Details zur Behandlung"
+      "price": "Prijs",
+      "duration": "Behandelduur",
+      "effect": "Effect",
+      "initialResults": "Eerste resultaten",
+      "finalResults": "Eindresultaten",
+      "effectDuration": "Werkingsduur",
+      "anesthesia": "Anesthesie",
+      "medication": "Medicatie",
+      "aftercareSummary": "Nazorg",
+      "followUpTreatments": "Vervolgbehandelingen",
+      "noInformation": "Geen informatie beschikbaar",
+      "headline": "Behandeldetails"
     },
     "tableOfContents": {
-      "content": "Inhalt"
+      "content": "Inhoud"
     },
     "treatmentPlan": {
-      "followUpPlanText": "Behandlung wiederholen",
-      "endOfPlanText": "Behandlung abgeschlossen",
-      "age": "Alter",
-      "treatmentGoal": "Ziel",
-      "week": "Woche",
-      "stepsAriaLabel": "Behandlungsplan Schritte"
+      "followUpPlanText": "Behandeling herhalen",
+      "endOfPlanText": "Behandeling voltooid",
+      "age": "Leeftijd",
+      "treatmentGoal": "Doel",
+      "week": "Week",
+      "stepsAriaLabel": "Behandelplan stappen"
     },
     "locationTeasers": {
       "filter": {
-        "label": "Nach Bundesland filtern:",
-        "placeholder": "Alle Bundesländer",
-        "all": "Alle Bundesländer"
+        "label": "Filteren op deelstaat:",
+        "placeholder": "Alle deelstaten",
+        "all": "Alle deelstaten"
       }
     },
     "directions": {
-      "walk": "Zu Fuß",
-      "publicTransport": "Mit dem Nahverkehr",
-      "car": "Mit dem Auto"
+      "walk": "Te voet",
+      "publicTransport": "Met het openbaar vervoer",
+      "car": "Met de auto"
     },
     "reviews": {
-      "headline": "Das sagen unsere Kunden",
+      "headline": "Dit zeggen onze klanten",
       "cta": {
-        "bookAppointment": "Termin buchen"
+        "bookAppointment": "Afspraak maken"
       }
     },
     "locationContact": {
-      "openingHours": "Öffnungszeiten",
-      "openingHoursDescription": "Jetzt geöffnet bis {hours} Uhr",
-      "openingHoursToday": "Heute geöffnet von {opens} bis {closes} Uhr",
-      "openingHoursNext": "Öffnet am {day} um {time} Uhr",
-      "openingHoursOpenSoon": "Neueröffnung am {date}. Das werden unsere Öffnungszeiten sein",
-      "openingHoursComingSoon": "Wir eröffnen bald. Das werden unsere Öffnungszeiten sein",
+      "openingHours": "Openingstijden",
+      "openingHoursDescription": "Nu geopend tot {hours} uur",
+      "openingHoursToday": "Vandaag geopend van {opens} tot {closes} uur",
+      "openingHoursNext": "Opent op {day} om {time} uur",
+      "openingHoursOpenSoon": "Opening op {date}. Dit worden onze openingstijden",
+      "openingHoursComingSoon": "We openen binnenkort. Dit worden onze openingstijden",
       "map": {
-        "title": "Karte der Standortadresse"
+        "title": "Kaart van het locatieadres"
       },
-      "directions": "Wegbeschreibung",
-      "phone": "Telefon",
+      "directions": "Routebeschrijving",
+      "phone": "Telefoon",
       "whatsapp": "WhatsApp Chat",
-      "address": "Standortadresse"
+      "address": "Locatieadres"
     },
     "locationFinder": {
-      "mapLoading": "Karte wird geladen…",
-      "headline": "Standort finden",
-      "searchPlaceholder": "PLZ oder Ort",
-      "useMyLocation": "Mein Standort"
+      "mapLoading": "Kaart wordt geladen…",
+      "headline": "Locatie zoeken",
+      "searchPlaceholder": "Postcode of plaats",
+      "useMyLocation": "Mijn locatie"
     },
     "locationMap": {
       "footer": {
-        "customers_one": "Kunde",
-        "customers_other": "Kunden",
+        "customers_one": "Klant",
+        "customers_other": "Klanten",
         "lounges_one": "Lounge",
         "lounges_other": "Lounges",
-        "doctors_one": "Arzt",
-        "doctors_other": "Ärzte",
-        "clinic_one": "Privatklinik",
-        "clinic_other": "Privatkliniken"
+        "doctors_one": "Arts",
+        "doctors_other": "Artsen",
+        "clinic_one": "Privékliniek",
+        "clinic_other": "Privéklinieken"
       },
       "map": {
-        "title": "Standortkarte",
-        "description": "Karte von Deutschland mit Markierungen für Standorte. Status: Geöffnet, Neueröffnung bald oder Coming Soon.",
-        "listLabel": "Standorte auf der Karte"
+        "title": "Locatiekaart",
+        "description": "Kaart van Duitsland met markeringen voor locaties. Status: Geopend, Binnenkort opening of Binnenkort.",
+        "listLabel": "Locaties op de kaart"
       },
       "status": {
-        "open": "Geöffnet",
-        "openSoon": "Neueröffnung bald",
-        "comingSoon": "Coming Soon"
+        "open": "Geopend",
+        "openSoon": "Binnenkort opening",
+        "comingSoon": "Binnenkort"
       },
-      "cta": "Medical Lounge finden"
+      "cta": "Medical Lounge zoeken"
     },
     "treatmentHero": {
-      "discountCta": "{pct}% Rabatt sichern",
-      "ctaActionLabel": "Termin buchen"
+      "discountCta": "{pct}% korting veiligstellen",
+      "ctaActionLabel": "Afspraak maken"
     },
     "productCategoryPriceOverview": {
-      "treatments": "Behandlungen",
-      "products": "Produkte",
-      "treatmentDetails": "Behandlungdetails",
-      "productDetails": "Produktdetails",
-      "noTreatments": "Aktuell haben wir keine Behandlungen in dieser Kategorie."
+      "treatments": "Behandelingen",
+      "products": "Producten",
+      "treatmentDetails": "Behandeldetails",
+      "productDetails": "Productdetails",
+      "noTreatments": "Momenteel hebben we geen behandelingen in deze categorie."
     },
     "productHero": {
-      "previousImage": "Vorheriges Bild",
-      "nextImage": "Nächstes Bild",
-      "selectImage": "Bild {index} auswählen",
-      "includesVat": "Inkl. MwSt.",
-      "bookAppointment": "Termin buchen",
-      "footerDescription": "Bitte beachte, dass unsere Produkte nicht einzeln verkauft werden. Sie kommen ausschließlich im Rahmen einer entsprechenden Behandlung zum Einsatz – nach einer ausführlichen ärztlichen Beratung. Buche einfach einen Termin in deiner Nähe und erfahre, welche Behandlungen mit diesem Produkt möglich sind.",
-      "treatmentsWith": "Behandlungen mit {manufacturer} {product}"
+      "previousImage": "Vorige afbeelding",
+      "nextImage": "Volgende afbeelding",
+      "selectImage": "Afbeelding {index} selecteren",
+      "includesVat": "Incl. btw",
+      "bookAppointment": "Afspraak maken",
+      "footerDescription": "Let op: onze producten worden niet afzonderlijk verkocht. Ze worden uitsluitend gebruikt in het kader van een passende behandeling – na een uitgebreid medisch consult. Maak gewoon een afspraak bij jou in de buurt en ontdek welke behandelingen met dit product mogelijk zijn.",
+      "treatmentsWith": "Behandelingen met {manufacturer} {product}"
     }
   },
   "error": {
     "500": {
-      "statusMessage": "Hoppla! Etwas ist schiefgelaufen.",
-      "message": "Wir haben den Fehler gemeldet und arbeiten daran, ihn zu beheben.",
-      "button": "Zur Startseite"
+      "statusMessage": "Oeps! Er is iets misgegaan.",
+      "message": "We hebben de fout gemeld en werken eraan om deze op te lossen.",
+      "button": "Naar startpagina"
     },
     "404": {
-      "statusMessage": "Seite leider nicht gefunden:",
-      "message": "Die angeforderte Seite existiert nicht oder ist in der ausgewählten Sprache nicht verfügbar.",
-      "button": "Zur Startseite"
+      "statusMessage": "Pagina helaas niet gevonden:",
+      "message": "De aangevraagde pagina bestaat niet of is niet beschikbaar in de geselecteerde taal.",
+      "button": "Naar startpagina"
     }
   },
   "dialogs": {
     "calendly": {
-      "header": "Buche deinen Termin jetzt über Calendly"
+      "header": "Maak nu je afspraak via Calendly"
     },
     "newsletterSignUp": {
-      "header": "Newsletter abonnieren"
+      "header": "Abonneren op nieuwsbrief"
     }
   },
   "newsletter": {
     "marketingText": {
-      "headline": "Deals und News. Jetzt im Newsletter!",
-      "headlineDiscount": "Für alle Neukunden: Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
-      "exlusiveOffers": "Exklusive Angebote",
-      "treatmentNews": "News zu Behandlungen",
-      "eventInvitations": "Einladungen zu Events"
+      "headline": "Deals en nieuws. Nu in de nieuwsbrief!",
+      "headlineDiscount": "Voor alle nieuwe klanten: krijg nu {newsletterDiscountPercentage}% korting!",
+      "exlusiveOffers": "Exclusieve aanbiedingen",
+      "treatmentNews": "Nieuws over behandelingen",
+      "eventInvitations": "Uitnodigingen voor evenementen"
     },
-    "success": "Willkommen bei {brandNameShort}! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
-    "emailPlaceholder": "Deine E-Mail-Adresse",
-    "emailLabel": "E-Mail-Adresse",
+    "success": "Welkom bij {brandNameShort}! Als het adres nog niet geregistreerd is, ontvang je binnenkort een bevestigingsmail. Als je al geregistreerd bent, gebeurt er niets.",
+    "emailPlaceholder": "Je e-mailadres",
+    "emailLabel": "E-mailadres",
     "errors": {
-      "invalid_email": "Bitte gib eine gültige E-Mail-Adresse an.",
-      "generic": "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+      "invalid_email": "Voer een geldig e-mailadres in.",
+      "generic": "Aanmelding mislukt. Probeer het later opnieuw."
     }
   }
 }

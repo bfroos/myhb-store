@@ -1,443 +1,443 @@
 {
   "common": {
-    "discount": "Rabatt",
-    "reviews": "Bewertungen",
-    "reviewsCount": "{count} Bewertungen",
-    "review": "Bewertung",
-    "rating": "Bewertung",
-    "reviewLinkLabel": "Zur Bewertung bei {source}",
-    "five-star": "5-Sterne",
-    "showLess": "Weniger anzeigen",
-    "showMore": "Mehr anzeigen",
-    "more": "Mehr",
-    "general": "allgemein",
-    "in": "in",
+    "discount": "Réduction",
+    "reviews": "Avis",
+    "reviewsCount": "{count} avis",
+    "review": "Avis",
+    "rating": "Évaluation",
+    "reviewLinkLabel": "Voir l'avis sur {source}",
+    "five-star": "5 étoiles",
+    "showLess": "Afficher moins",
+    "showMore": "Afficher plus",
+    "more": "Plus",
+    "general": "général",
+    "in": "à",
     "distanceKilometersSuffix": "km",
     "date": {
-      "fromDate": "ab {date}",
-      "today": "heute"
+      "fromDate": "à partir du {date}",
+      "today": "aujourd'hui"
     },
     "week": {
-      "monday": "Montag",
-      "tuesday": "Dienstag",
-      "wednesday": "Mittwoch",
-      "thursday": "Donnerstag",
-      "friday": "Freitag",
-      "saturday": "Samstag",
-      "sunday": "Sonntag"
+      "monday": "Lundi",
+      "tuesday": "Mardi",
+      "wednesday": "Mercredi",
+      "thursday": "Jeudi",
+      "friday": "Vendredi",
+      "saturday": "Samedi",
+      "sunday": "Dimanche"
     },
     "openingHours": {
-      "open": "Geöffnet",
-      "closed": "Geschlossen"
+      "open": "Ouvert",
+      "closed": "Fermé"
     },
     "federalState": {
-      "baden-wuerttemberg": "Baden-Württemberg",
-      "bavaria": "Bayern",
+      "baden-wuerttemberg": "Bade-Wurtemberg",
+      "bavaria": "Bavière",
       "berlin": "Berlin",
-      "brandenburg": "Brandenburg",
-      "bremen": "Bremen",
-      "hamburg": "Hamburg",
-      "hesse": "Hessen",
-      "mecklenburg-western-pomerania": "Mecklenburg-Vorpommern",
-      "lower-saxony": "Niedersachsen",
-      "north-rhine-westphalia": "Nordrhein-Westfalen",
-      "rhineland-palatinate": "Rheinland-Pfalz",
-      "saarland": "Saarland",
-      "saxony": "Sachsen",
-      "saxony-anhalt": "Sachsen-Anhalt",
+      "brandenburg": "Brandebourg",
+      "bremen": "Brême",
+      "hamburg": "Hambourg",
+      "hesse": "Hesse",
+      "mecklenburg-western-pomerania": "Mecklembourg-Poméranie-Occidentale",
+      "lower-saxony": "Basse-Saxe",
+      "north-rhine-westphalia": "Rhénanie-du-Nord-Westphalie",
+      "rhineland-palatinate": "Rhénanie-Palatinat",
+      "saarland": "Sarre",
+      "saxony": "Saxe",
+      "saxony-anhalt": "Saxe-Anhalt",
       "schleswig-holstein": "Schleswig-Holstein",
-      "thuringia": "Thüringen"
+      "thuringia": "Thuringe"
     },
     "price": {
-      "cheap": "günstig",
-      "startingPrefix": "ab",
-      "forPrefix": "für"
+      "cheap": "avantageux",
+      "startingPrefix": "à partir de",
+      "forPrefix": "pour"
     }
   },
   "navigation": {
     "header": {
-      "languageSwitcher": "Sprache wechseln"
+      "languageSwitcher": "Changer de langue"
     },
     "secondary": {
-      "doctors": "Ärzte",
-      "locations": "Standorte",
-      "prices": "Preise",
-      "careers": "Karriere",
+      "doctors": "Médecins",
+      "locations": "Lieux",
+      "prices": "Prix",
+      "careers": "Carrières",
       "blog": "Blog",
-      "aboutUs": "Über uns"
+      "aboutUs": "À propos"
     },
     "footer": {
-      "treatments": "Behandlungen",
-      "company": "Unternehmen",
-      "prices": "Preise",
-      "careers": "Karriere",
+      "treatments": "Traitements",
+      "company": "Entreprise",
+      "prices": "Prix",
+      "careers": "Carrières",
       "blog": "Blog",
-      "aboutUs": "Über uns"
+      "aboutUs": "À propos"
     },
     "meta": {
-      "privacyPolicy": "Datenschutz",
-      "imprint": "Impressum",
+      "privacyPolicy": "Protection des données",
+      "imprint": "Mentions légales",
       "cookieSettings": "Cookies"
     },
     "treatmentTile": {
-      "goToTreatment": "Zur Behandlung"
+      "goToTreatment": "Accéder au traitement"
     }
   },
   "cta": {
-    "bookAppointment": "Termin buchen",
-    "bookAppointmentNotAvailable": "Nicht buchbar",
-    "learnMore": "Mehr erfahren",
-    "details": "Details",
-    "subscribe": "Abonnieren",
-    "cancel": "Abbrechen",
-    "close": "Schließen",
-    "joinMyClub": "Mitglied bei {brandNameShort} Club werden",
-    "shopGroupon": "Gutschein kaufen",
-    "openMenu": "Menü öffnen",
-    "goToHome": "Zur Startseite",
-    "watch": "Ansehen",
+    "bookAppointment": "Prendre rendez-vous",
+    "bookAppointmentNotAvailable": "Non réservable",
+    "learnMore": "En savoir plus",
+    "details": "Détails",
+    "subscribe": "S'abonner",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "joinMyClub": "Devenir membre du {brandNameShort} Club",
+    "shopGroupon": "Acheter un bon",
+    "openMenu": "Ouvrir le menu",
+    "goToHome": "Accueil",
+    "watch": "Regarder",
     "share": {
-      "copy": "Link kopieren",
-      "copied": "Link kopiert",
-      "whatsapp": "Auf WhatsApp teilen",
-      "facebook": "Auf Facebook teilen"
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "whatsapp": "Partager sur WhatsApp",
+      "facebook": "Partager sur Facebook"
     }
   },
   "googleMaps": {
-    "consentRequired": "Karte nicht verfügbar",
-    "consentDescription": "Um die Karte anzuzeigen, benötigen wir deine Zustimmung für Google Maps. Bitte akzeptiere die Cookie-Einstellungen.",
-    "consentButton": "Cookie-Einstellungen öffnen"
+    "consentRequired": "Carte non disponible",
+    "consentDescription": "Pour afficher la carte, nous avons besoin de votre consentement pour Google Maps. Veuillez accepter les paramètres de cookies.",
+    "consentButton": "Ouvrir les paramètres de cookies"
   },
   "location": {
-    "comingSoon": "Coming soon",
-    "sinceToday": "Neueröffnung heute",
+    "comingSoon": "Prochainement",
+    "sinceToday": "Nouvelle ouverture aujourd'hui",
     "error": {
-      "locationNotFound": "Standort nicht gefunden",
-      "locationNotFoundDescription": "Der angeforderte Standort existiert nicht."
+      "locationNotFound": "Lieu non trouvé",
+      "locationNotFoundDescription": "Le lieu demandé n'existe pas."
     },
     "treatmentTeasers": {
       "headline": {
-        "lounge": "Behandlungen in unserer Lounge in {city}",
-        "center": "Behandlungen in unserer Lounge in {city}",
-        "clinic": "Behandlungen in unserer Privatklinik in {city}",
-        "loungeFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
-        "centerFuture": "Zukünftige Behandlungen in unserer Lounge in {city}",
-        "clinicFuture": "Zukünftige Behandlungen in unserer Privatklinik in {city}"
+        "lounge": "Traitements dans notre lounge à {city}",
+        "center": "Traitements dans notre lounge à {city}",
+        "clinic": "Traitements dans notre clinique privée à {city}",
+        "loungeFuture": "Traitements futurs dans notre lounge à {city}",
+        "centerFuture": "Traitements futurs dans notre lounge à {city}",
+        "clinicFuture": "Traitements futurs dans notre clinique privée à {city}"
       }
     },
     "jobTeasers": {
-      "headline": "Stellenangebote in {city}"
+      "headline": "Offres d'emploi à {city}"
     }
   },
   "blog": {
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
-    "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
+    "intro": "Informations utiles, actualités et tout sur la santé et la beauté.",
     "article": {
       "share": {
-        "copy": "Link kopieren",
-        "copied": "Link kopiert",
-        "whatsapp": "Auf WhatsApp teilen",
-        "facebook": "Auf Facebook teilen"
+        "copy": "Copier le lien",
+        "copied": "Lien copié",
+        "whatsapp": "Partager sur WhatsApp",
+        "facebook": "Partager sur Facebook"
       }
     },
     "emptyState": {
-      "title": "Keine Artikel gefunden",
-      "description": "Leider sind keine Artikel für diese Kategorie in deiner ausgewählten Sprache verfügbar."
+      "title": "Aucun article trouvé",
+      "description": "Malheureusement, aucun article n'est disponible pour cette catégorie dans votre langue sélectionnée."
     }
   },
   "career": {
-    "breadcrumbTitle": "Karriere",
+    "breadcrumbTitle": "Carrières",
     "job": {
-      "apply": "Jetzt bewerben",
+      "apply": "Postuler maintenant",
       "description": {
-        "headline": "Über den Job",
-        "details": "Details",
-        "employmentType": "Anstellungsart",
-        "contractType": "Befristung",
-        "startDate": "Startdatum",
-        "asOfNow": "ab sofort",
-        "hourlyRate": "Stundenlohn",
-        "locations": "Verfügbare Arbeitsorte"
+        "headline": "À propos du poste",
+        "details": "Détails",
+        "employmentType": "Type d'emploi",
+        "contractType": "Type de contrat",
+        "startDate": "Date de début",
+        "asOfNow": "dès maintenant",
+        "hourlyRate": "Salaire horaire",
+        "locations": "Lieux de travail disponibles"
       },
       "employmentType": {
-        "full-time": "Vollzeit",
-        "part-time": "Teilzeit",
-        "full-time-or-part-time": "Vollzeit oder Teilzeit"
+        "full-time": "Temps plein",
+        "part-time": "Temps partiel",
+        "full-time-or-part-time": "Temps plein ou temps partiel"
       },
       "contractType": {
-        "permanent": "Unbefristet",
-        "fixed-term": "Befristet",
-        "freelance": "Freiberuflich"
+        "permanent": "CDI",
+        "fixed-term": "CDD",
+        "freelance": "Freelance"
       },
       "seo": {
-        "title": "Jobangebot: {title} ({genderHint}) - {employmentType}",
-        "description": "Standorte: {locations}"
+        "title": "Offre d'emploi: {title} ({genderHint}) - {employmentType}",
+        "description": "Lieux: {locations}"
       }
     }
   },
   "locations": {
-    "headline": "Standorte",
-    "breadcrumbTitle": "Standorte",
-    "upcomingOpening": "Anstehende Neueröffnungen",
-    "plannedLocations": "Standorte in Planung",
-    "allLocations": "Alle Standorte",
-    "discoverLocations": "Entdecke unsere Standorte",
+    "headline": "Lieux",
+    "breadcrumbTitle": "Lieux",
+    "upcomingOpening": "Ouvertures prochaines",
+    "plannedLocations": "Lieux en projet",
+    "allLocations": "Tous les lieux",
+    "discoverLocations": "Découvrez nos lieux",
     "location": {
       "locationType": {
         "lounge": "Lounge",
-        "center": "Center",
-        "clinic": "Privatklinik"
+        "center": "Centre",
+        "clinic": "Clinique privée"
       },
       "seo": {
-        "title": "{brandNameShort} {locationName} {city} | Botox & Hyaluron",
-        "description": "{brandName} {locationName} {city} ✓ Botox & Hyaluron ✓ Zertifizierte Ärzte ✓ Jetzt Termin buchen"
+        "title": "{brandNameShort} {locationName} {city} | Botox & Acide hyaluronique",
+        "description": "{brandName} {locationName} {city} ✓ Botox & Acide hyaluronique ✓ Médecins certifiés ✓ Prendre rendez-vous maintenant"
       },
       "locationTreatment": {
         "seo": {
           "title": "{treatmentName} {city} | {brandNameShort} {locationName}",
-          "description": "{treatmentName} in {city} bei {brandName} {locationName} ✓ Zertifizierte Ärzte ✓ Termin online buchen"
+          "description": "{treatmentName} à {city} chez {brandName} {locationName} ✓ Médecins certifiés ✓ Prendre rendez-vous en ligne"
         }
       },
-      "openingHoursOpenNewToday": "Neueröffnung heute",
-      "openingHoursOpenSoon": "ab {date}",
-      "openingHoursComingSoon": "Coming Soon",
-      "cityPhrase": "in {city}"
+      "openingHoursOpenNewToday": "Nouvelle ouverture aujourd'hui",
+      "openingHoursOpenSoon": "dès le {date}",
+      "openingHoursComingSoon": "Prochainement",
+      "cityPhrase": "à {city}"
     },
     "city": {
-      "allLocations": "Alle Standorte in {city}",
-      "upcomingOpening": "Bald neu in {city}",
-      "plannedLocations": "Geplante Standorte in {city}",
+      "allLocations": "Tous les lieux à {city}",
+      "upcomingOpening": "Bientôt à {city}",
+      "plannedLocations": "Lieux prévus à {city}",
       "error": {
-        "noLocations": "Keine Standorte gefunden",
-        "noLocationsDescription": "Leider haben wir noch keinen Standort in {city} eröffnet."
+        "noLocations": "Aucun lieu trouvé",
+        "noLocationsDescription": "Malheureusement, nous n'avons pas encore ouvert de lieu à {city}."
       }
     }
   },
   "doctors": {
-    "headline": "Ärzte",
-    "breadcrumbTitle": "Ärzte",
+    "headline": "Médecins",
+    "breadcrumbTitle": "Médecins",
     "doctor": {
-      "breadcrumbTitle": "Ärzte",
+      "breadcrumbTitle": "Médecins",
       "aboutMe": {
-        "headline": "Über mich"
+        "headline": "À propos de moi"
       },
       "specializations": {
-        "headline": "Spezialgebiete"
+        "headline": "Spécialisations"
       },
       "locations": {
         "headline": {
-          "one": "Ich behandle in {city}",
-          "other": "Ich behandle an {count} Standorten"
+          "one": "Je consulte à {city}",
+          "other": "Je consulte dans {count} lieux"
         }
       },
       "seo": {
-        "description": "{ role } bei { brandName } in { cities } – Informationen zu meiner Tätigkeit"
+        "description": "{ role } chez { brandName } à { cities } – Informations sur mon activité"
       }
     }
   },
   "treatments": {
-    "breadcrumbTitle": "Behandlungen",
+    "breadcrumbTitle": "Traitements",
     "seo": {
-      "title": "Botox®, Hyaluron & Filler – Alle Behandlungen",
-      "description": "Entdecke unsere Behandlungen aus den Bereichen {categories} und finde die passende für dich."
+      "title": "Botox®, Acide hyaluronique & Fillers – Tous les traitements",
+      "description": "Découvrez nos traitements dans les domaines {categories} et trouvez celui qui vous convient."
     },
     "errors": {
       "noTreatmentsGroups": {
-        "title": "Keine Behandlungen gefunden",
-        "description": "Leider haben wir noch keine Behandlungen in deiner ausgewählten Sprache erstellt."
+        "title": "Aucun traitement trouvé",
+        "description": "Malheureusement, nous n'avons pas encore créé de traitements dans votre langue sélectionnée."
       }
     },
     "treatment": {
-      "allTreatments": "Behandlungen",
+      "allTreatments": "Traitements",
       "locationTeasers": {
-        "headline": "{treatment} an unseren Standorten"
+        "headline": "{treatment} dans nos lieux"
       },
       "error": {
-        "treatmentNotFound": "Behandlung nicht gefunden",
-        "treatmentNotFoundDescription": "Die angeforderte Behandlung existiert nicht."
+        "treatmentNotFound": "Traitement non trouvé",
+        "treatmentNotFoundDescription": "Le traitement demandé n'existe pas."
       }
     },
-    "pageTitle": "Botox®, Hyaluron & ästhetische Behandlungen"
+    "pageTitle": "Botox®, Acide hyaluronique & traitements esthétiques"
   },
   "treatment": {
     "seo": {
-      "description": "{description} Erfahrene Ärzte, sichere Behandlung & individueller Plan. Jetzt Termin buchen!"
+      "description": "{description} Médecins expérimentés, traitement sûr & plan personnalisé. Prendre rendez-vous maintenant!"
     }
   },
   "productPage": {
     "error": {
-      "productNotFound": "Produkt nicht gefunden",
-      "productNotFoundDescription": "Das angeforderte Produkt existiert nicht."
+      "productNotFound": "Produit non trouvé",
+      "productNotFoundDescription": "Le produit demandé n'existe pas."
     },
-    "productDescription": "Produktbeschreibung",
-    "metaDescription": "{name} von {manufacturer} in den Varianten {variants} ab {price} in deiner Nähe erhältlich"
+    "productDescription": "Description du produit",
+    "metaDescription": "{name} de {manufacturer} dans les variantes {variants} à partir de {price} disponible près de chez vous"
   },
   "blocks": {
     "jobTeasers": {
-      "headline": "Aktuelle Stellenangebote",
-      "andMore": "weitere",
+      "headline": "Offres d'emploi actuelles",
+      "andMore": "autres",
       "filter": {
-        "label": "Nach Standort filtern:",
-        "placeholder": "Alle Standorte",
-        "all": "Alle Standorte"
+        "label": "Filtrer par lieu:",
+        "placeholder": "Tous les lieux",
+        "all": "Tous les lieux"
       }
     },
     "treatmentTeasers": {
       "filter": {
-        "all": "Alle"
+        "all": "Tous"
       }
     },
     "qualifications": {
-      "headline": "Qualifikationen",
-      "vita": "Werdegang"
+      "headline": "Qualifications",
+      "vita": "Parcours"
     },
     "employeeList": {
-      "readMore": "Zum Profil",
-      "showProfile": "Zum Profil von {name}"
+      "readMore": "Vers le profil",
+      "showProfile": "Vers le profil de {name}"
     },
     "treatmentDetails": {
-      "price": "Preis",
-      "duration": "Behandlungsdauer",
-      "effect": "Effekt",
-      "initialResults": "Erste Ergebnisse",
-      "finalResults": "Endgültige Ergebnisse",
-      "effectDuration": "Wirkungsdauer",
-      "anesthesia": "Anästhesie",
-      "medication": "Medikation",
-      "aftercareSummary": "Nachbehandlung",
-      "followUpTreatments": "Folgebehandlungen",
-      "noInformation": "Keine Informationen verfügbar",
-      "headline": "Details zur Behandlung"
+      "price": "Prix",
+      "duration": "Durée du traitement",
+      "effect": "Effet",
+      "initialResults": "Premiers résultats",
+      "finalResults": "Résultats définitifs",
+      "effectDuration": "Durée de l'effet",
+      "anesthesia": "Anesthésie",
+      "medication": "Médication",
+      "aftercareSummary": "Suivi",
+      "followUpTreatments": "Traitements de suivi",
+      "noInformation": "Aucune information disponible",
+      "headline": "Détails du traitement"
     },
     "tableOfContents": {
-      "content": "Inhalt"
+      "content": "Contenu"
     },
     "treatmentPlan": {
-      "followUpPlanText": "Behandlung wiederholen",
-      "endOfPlanText": "Behandlung abgeschlossen",
-      "age": "Alter",
-      "treatmentGoal": "Ziel",
-      "week": "Woche",
-      "stepsAriaLabel": "Behandlungsplan Schritte"
+      "followUpPlanText": "Répéter le traitement",
+      "endOfPlanText": "Traitement terminé",
+      "age": "Âge",
+      "treatmentGoal": "Objectif",
+      "week": "Semaine",
+      "stepsAriaLabel": "Étapes du plan de traitement"
     },
     "locationTeasers": {
       "filter": {
-        "label": "Nach Bundesland filtern:",
-        "placeholder": "Alle Bundesländer",
-        "all": "Alle Bundesländer"
+        "label": "Filtrer par Land:",
+        "placeholder": "Tous les Länder",
+        "all": "Tous les Länder"
       }
     },
     "directions": {
-      "walk": "Zu Fuß",
-      "publicTransport": "Mit dem Nahverkehr",
-      "car": "Mit dem Auto"
+      "walk": "À pied",
+      "publicTransport": "En transports en commun",
+      "car": "En voiture"
     },
     "reviews": {
-      "headline": "Das sagen unsere Kunden",
+      "headline": "Ce que disent nos clients",
       "cta": {
-        "bookAppointment": "Termin buchen"
+        "bookAppointment": "Prendre rendez-vous"
       }
     },
     "locationContact": {
-      "openingHours": "Öffnungszeiten",
-      "openingHoursDescription": "Jetzt geöffnet bis {hours} Uhr",
-      "openingHoursToday": "Heute geöffnet von {opens} bis {closes} Uhr",
-      "openingHoursNext": "Öffnet am {day} um {time} Uhr",
-      "openingHoursOpenSoon": "Neueröffnung am {date}. Das werden unsere Öffnungszeiten sein",
-      "openingHoursComingSoon": "Wir eröffnen bald. Das werden unsere Öffnungszeiten sein",
+      "openingHours": "Heures d'ouverture",
+      "openingHoursDescription": "Ouvert maintenant jusqu'à {hours} h",
+      "openingHoursToday": "Ouvert aujourd'hui de {opens} à {closes} h",
+      "openingHoursNext": "Ouvre le {day} à {time} h",
+      "openingHoursOpenSoon": "Ouverture le {date}. Voici nos heures d'ouverture",
+      "openingHoursComingSoon": "Nous ouvrons bientôt. Voici nos heures d'ouverture",
       "map": {
-        "title": "Karte der Standortadresse"
+        "title": "Carte de l'adresse du lieu"
       },
-      "directions": "Wegbeschreibung",
-      "phone": "Telefon",
-      "whatsapp": "WhatsApp Chat",
-      "address": "Standortadresse"
+      "directions": "Itinéraire",
+      "phone": "Téléphone",
+      "whatsapp": "Chat WhatsApp",
+      "address": "Adresse du lieu"
     },
     "locationFinder": {
-      "mapLoading": "Karte wird geladen…",
-      "headline": "Standort finden",
-      "searchPlaceholder": "PLZ oder Ort",
-      "useMyLocation": "Mein Standort"
+      "mapLoading": "Chargement de la carte…",
+      "headline": "Trouver un lieu",
+      "searchPlaceholder": "Code postal ou ville",
+      "useMyLocation": "Ma position"
     },
     "locationMap": {
       "footer": {
-        "customers_one": "Kunde",
-        "customers_other": "Kunden",
+        "customers_one": "Client",
+        "customers_other": "Clients",
         "lounges_one": "Lounge",
         "lounges_other": "Lounges",
-        "doctors_one": "Arzt",
-        "doctors_other": "Ärzte",
-        "clinic_one": "Privatklinik",
-        "clinic_other": "Privatkliniken"
+        "doctors_one": "Médecin",
+        "doctors_other": "Médecins",
+        "clinic_one": "Clinique privée",
+        "clinic_other": "Cliniques privées"
       },
       "map": {
-        "title": "Standortkarte",
-        "description": "Karte von Deutschland mit Markierungen für Standorte. Status: Geöffnet, Neueröffnung bald oder Coming Soon.",
-        "listLabel": "Standorte auf der Karte"
+        "title": "Carte des lieux",
+        "description": "Carte de l'Allemagne avec marqueurs pour les lieux. Statut: Ouvert, Ouverture prochaine ou Prochainement.",
+        "listLabel": "Lieux sur la carte"
       },
       "status": {
-        "open": "Geöffnet",
-        "openSoon": "Neueröffnung bald",
-        "comingSoon": "Coming Soon"
+        "open": "Ouvert",
+        "openSoon": "Ouverture prochaine",
+        "comingSoon": "Prochainement"
       },
-      "cta": "Medical Lounge finden"
+      "cta": "Trouver un Medical Lounge"
     },
     "treatmentHero": {
-      "discountCta": "{pct}% Rabatt sichern",
-      "ctaActionLabel": "Termin buchen"
+      "discountCta": "Obtenir {pct}% de réduction",
+      "ctaActionLabel": "Prendre rendez-vous"
     },
     "productCategoryPriceOverview": {
-      "treatments": "Behandlungen",
-      "products": "Produkte",
-      "treatmentDetails": "Behandlungdetails",
-      "productDetails": "Produktdetails",
-      "noTreatments": "Aktuell haben wir keine Behandlungen in dieser Kategorie."
+      "treatments": "Traitements",
+      "products": "Produits",
+      "treatmentDetails": "Détails du traitement",
+      "productDetails": "Détails du produit",
+      "noTreatments": "Actuellement, nous n'avons pas de traitements dans cette catégorie."
     },
     "productHero": {
-      "previousImage": "Vorheriges Bild",
-      "nextImage": "Nächstes Bild",
-      "selectImage": "Bild {index} auswählen",
-      "includesVat": "Inkl. MwSt.",
-      "bookAppointment": "Termin buchen",
-      "footerDescription": "Bitte beachte, dass unsere Produkte nicht einzeln verkauft werden. Sie kommen ausschließlich im Rahmen einer entsprechenden Behandlung zum Einsatz – nach einer ausführlichen ärztlichen Beratung. Buche einfach einen Termin in deiner Nähe und erfahre, welche Behandlungen mit diesem Produkt möglich sind.",
-      "treatmentsWith": "Behandlungen mit {manufacturer} {product}"
+      "previousImage": "Image précédente",
+      "nextImage": "Image suivante",
+      "selectImage": "Sélectionner l'image {index}",
+      "includesVat": "TVA incluse",
+      "bookAppointment": "Prendre rendez-vous",
+      "footerDescription": "Veuillez noter que nos produits ne sont pas vendus séparément. Ils sont utilisés exclusivement dans le cadre d'un traitement approprié – après une consultation médicale approfondie. Prenez simplement rendez-vous près de chez vous et découvrez quels traitements sont possibles avec ce produit.",
+      "treatmentsWith": "Traitements avec {manufacturer} {product}"
     }
   },
   "error": {
     "500": {
-      "statusMessage": "Hoppla! Etwas ist schiefgelaufen.",
-      "message": "Wir haben den Fehler gemeldet und arbeiten daran, ihn zu beheben.",
-      "button": "Zur Startseite"
+      "statusMessage": "Oups! Quelque chose s'est mal passé.",
+      "message": "Nous avons signalé l'erreur et travaillons à sa résolution.",
+      "button": "Accueil"
     },
     "404": {
-      "statusMessage": "Seite leider nicht gefunden:",
-      "message": "Die angeforderte Seite existiert nicht oder ist in der ausgewählten Sprache nicht verfügbar.",
-      "button": "Zur Startseite"
+      "statusMessage": "Page introuvable:",
+      "message": "La page demandée n'existe pas ou n'est pas disponible dans la langue sélectionnée.",
+      "button": "Accueil"
     }
   },
   "dialogs": {
     "calendly": {
-      "header": "Buche deinen Termin jetzt über Calendly"
+      "header": "Prenez rendez-vous maintenant via Calendly"
     },
     "newsletterSignUp": {
-      "header": "Newsletter abonnieren"
+      "header": "S'abonner à la newsletter"
     }
   },
   "newsletter": {
     "marketingText": {
-      "headline": "Deals und News. Jetzt im Newsletter!",
-      "headlineDiscount": "Für alle Neukunden: Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
-      "exlusiveOffers": "Exklusive Angebote",
-      "treatmentNews": "News zu Behandlungen",
-      "eventInvitations": "Einladungen zu Events"
+      "headline": "Offres et actualités. Maintenant dans la newsletter!",
+      "headlineDiscount": "Pour tous les nouveaux clients: Obtenez maintenant {newsletterDiscountPercentage}% de réduction!",
+      "exlusiveOffers": "Offres exclusives",
+      "treatmentNews": "Actualités sur les traitements",
+      "eventInvitations": "Invitations aux événements"
     },
-    "success": "Willkommen bei {brandNameShort}! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
-    "emailPlaceholder": "Deine E-Mail-Adresse",
-    "emailLabel": "E-Mail-Adresse",
+    "success": "Bienvenue chez {brandNameShort}! Si l'adresse n'est pas encore enregistrée, vous recevrez sous peu un e-mail de confirmation. Si vous êtes déjà enregistré, rien ne se passera.",
+    "emailPlaceholder": "Votre adresse e-mail",
+    "emailLabel": "Adresse e-mail",
     "errors": {
-      "invalid_email": "Bitte gib eine gültige E-Mail-Adresse an.",
-      "generic": "Anmeldung fehlgeschlagen. Bitte später erneut versuchen."
+      "invalid_email": "Veuillez fournir une adresse e-mail valide.",
+      "generic": "L'inscription a échoué. Veuillez réessayer plus tard."
     }
   }
 }
