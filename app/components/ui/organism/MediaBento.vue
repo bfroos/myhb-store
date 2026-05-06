@@ -96,8 +96,16 @@ const hasContent = computed(() => {
   display: block;
   width: 100%;
   border-radius: var(--border-radius-card-figure);
-  object-fit: cover;
   object-position: center;
+}
+
+.mediaBento__media :deep(img) {
+  object-fit: cover;
+}
+
+.mediaBento__media :deep(video) {
+  object-fit: contain;
+  background: var(--color-black);
 }
 
 .mediaBento__body {

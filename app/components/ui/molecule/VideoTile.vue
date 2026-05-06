@@ -175,8 +175,24 @@ const playVideo = async () => {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   object-position: center;
+}
+
+.videoTile__poster {
+  object-fit: cover;
+}
+
+.videoTile__video {
+  object-fit: contain;
+  background: var(--color-black);
+}
+
+.videoTile__video:fullscreen,
+.videoTile__video:-webkit-full-screen,
+.videoTile__video:-moz-full-screen,
+.videoTile__video:-ms-fullscreen {
+  object-fit: contain;
+  background: var(--color-black);
 }
 
 .videoTile__overlay,

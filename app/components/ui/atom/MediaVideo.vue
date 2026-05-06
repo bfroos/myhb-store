@@ -1,5 +1,6 @@
 <template>
   <video
+    class="mediaVideo"
     :src="videoSrc"
     :poster="posterSrc"
     :playsinline="normalizedVideoSettings?.playsInline"
@@ -93,3 +94,17 @@ function maybeEnableMetadataPreload(event: Event) {
   el.preload = "metadata";
 }
 </script>
+<style scoped>
+.mediaVideo {
+  object-fit: contain;
+  background: var(--color-black);
+}
+
+.mediaVideo:fullscreen,
+.mediaVideo:-webkit-full-screen,
+.mediaVideo:-moz-full-screen,
+.mediaVideo:-ms-fullscreen {
+  object-fit: contain;
+  background: var(--color-black);
+}
+</style>

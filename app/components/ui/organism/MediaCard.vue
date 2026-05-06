@@ -117,9 +117,17 @@ const hasMedia = computed(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
   object-position: center;
   border-radius: var(--border-radius-card-figure);
+}
+
+.mediaCard__media__container :deep(img) {
+  object-fit: cover;
+}
+
+.mediaCard__media__container :deep(video) {
+  object-fit: contain;
+  background: var(--color-black);
 }
 
 .mediaCard__media__caption {
