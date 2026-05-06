@@ -450,7 +450,9 @@ export default defineNuxtConfig({
             // 5. Security & Performance Headers
             headers: {
               "x-content-type-options": "nosniff",
-              "x-frame-options": "SAMEORIGIN",
+              // x-frame-options intentionally omitted: CSP frame-ancestors in
+              // csp-headers.ts handles iframe embedding for Strapi Live Preview.
+              // SAMEORIGIN here would block the preview iframe in Strapi admin.
             },
           },
           "/api/**": {

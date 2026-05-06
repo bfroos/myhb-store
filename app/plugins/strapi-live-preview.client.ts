@@ -1,9 +1,9 @@
 /**
  * Strapi Live Preview Plugin (Growth/Enterprise)
  *
- * Protocol (from Strapi source):
- * 1. Frontend sends `previewReady` to parent window
- * 2. Strapi receives it, sends back `strapiScript` with the live-preview script
+ * Protocol (from Strapi docs):
+ * 1. Frontend sends `previewReady` to parent window (with '*' as targetOrigin)
+ * 2. Strapi receives it, sends back `previewScript` with the live-preview script
  * 3. Frontend injects the script → handles double-click-to-edit + field highlighting
  * 4. On field change, Strapi sends `strapiUpdate` → frontend refreshes data
  *
@@ -32,7 +32,7 @@ export default defineNuxtPlugin(() => {
       refreshTimeout = setTimeout(async () => {
         await refreshNuxtData();
       }, 300);
-    } else if (type === 'strapiScript' && payload?.script && !scriptInjected) {
+    } else if (type === 'previewScript' && payload?.script && !scriptInjected) {
       // Inject the script Strapi sends — handles double-click-to-edit
       const script = document.createElement('script');
       script.textContent = payload.script;
@@ -43,13 +43,8 @@ export default defineNuxtPlugin(() => {
 
   window.addEventListener('message', handleMessage);
 
-  // Notify Strapi we're ready — it will respond with strapiScript
-  // Must be sent to the Strapi admin origin, not '*'
-  for (const origin of STRAPI_ORIGINS) {
-    try {
-      window.parent.postMessage({ type: 'previewReady' }, origin);
-    } catch {
-      // Cross-origin restriction — try next
-    }
-  }
+  // Notify Strapi we're ready — it will respond with previewScript.
+  // Per Strapi docs, postMessage must use '*' as targetOrigin so the admin
+  // panel (which may be on a different subdomain) receives the message.
+  window.parent.postMessage({ type: 'previewReady' }, '*');
 });
