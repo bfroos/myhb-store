@@ -1,17 +1,19 @@
 /**
  * Strapi Live Preview Plugin (Growth/Enterprise)
  *
- * Implements the full Live Preview protocol:
- * 1. On mount: sends `previewReady` to Strapi → tells Strapi we're in the iframe
- * 2. Listens for `strapiScript` → injects the script Strapi sends into <head>
- *    This script handles: double-click-to-edit highlighting + popover
- * 3. Listens for `strapiUpdate` → refreshes Nuxt data on content save
+ * Protocol (from Strapi source):
+ * 1. Frontend sends `previewReady` to parent window
+ * 2. Strapi receives it, sends back `strapiScript` with the live-preview script
+ * 3. Frontend injects the script → handles double-click-to-edit + field highlighting
+ * 4. On field change, Strapi sends `strapiUpdate` → frontend refreshes data
  *
- * The double-click-to-edit feature works via Content Source Maps:
- * Strapi encodes field metadata as invisible chars in text fields (stega encoding).
- * The injected strapiScript decodes these and shows the edit popover on double-click.
+ * Only runs when embedded in Strapi's preview iframe (window !== window.parent).
  */
 export default defineNuxtPlugin(() => {
+  // Only activate when inside an iframe (Strapi preview)
+  if (typeof window === 'undefined') return;
+  if (window === window.parent) return; // Not in an iframe — skip
+
   const STRAPI_ORIGINS = [
     'https://striking-bear-e5a15ddc94.strapiapp.com',
     'http://localhost:1337',
@@ -21,20 +23,17 @@ export default defineNuxtPlugin(() => {
   let scriptInjected = false;
 
   const handleMessage = async (event: MessageEvent) => {
-    // Security: only accept messages from known Strapi origins
     if (!STRAPI_ORIGINS.includes(event.origin)) return;
 
     const { type, payload } = event.data ?? {};
 
     if (type === 'strapiUpdate') {
-      // Debounce: Strapi fires many events while typing
       if (refreshTimeout) clearTimeout(refreshTimeout);
       refreshTimeout = setTimeout(async () => {
         await refreshNuxtData();
       }, 300);
     } else if (type === 'strapiScript' && payload?.script && !scriptInjected) {
-      // Inject the Strapi Live Preview script into <head>
-      // This enables double-click-to-edit and field highlighting
+      // Inject the script Strapi sends — handles double-click-to-edit
       const script = document.createElement('script');
       script.textContent = payload.script;
       document.head.appendChild(script);
@@ -44,6 +43,13 @@ export default defineNuxtPlugin(() => {
 
   window.addEventListener('message', handleMessage);
 
-  // Tell Strapi we're ready — triggers it to send the strapiScript
-  window.parent?.postMessage({ type: 'previewReady' }, '*');
+  // Notify Strapi we're ready — it will respond with strapiScript
+  // Must be sent to the Strapi admin origin, not '*'
+  for (const origin of STRAPI_ORIGINS) {
+    try {
+      window.parent.postMessage({ type: 'previewReady' }, origin);
+    } catch {
+      // Cross-origin restriction — try next
+    }
+  }
 });
