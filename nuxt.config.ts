@@ -538,6 +538,13 @@ export default defineNuxtConfig({
           "/ar/p/*": { isr: 3600 },
           "/fr/p/*": { isr: 3600 },
           "/nl/p/*": { isr: 3600 },
+          // Landing Pages (Page Builder) 15 minutes
+          "/lp/**": { isr: 900 },
+          "/en/lp/**": { isr: 900 },
+          "/tr/lp/**": { isr: 900 },
+          "/ar/lp/**": { isr: 900 },
+          "/fr/lp/**": { isr: 900 },
+          "/nl/lp/**": { isr: 900 },
           // Prices 15 minutes
           "/preise": { isr: 900 },
           "/en/prices": { isr: 900 },
