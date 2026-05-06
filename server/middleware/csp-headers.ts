@@ -1,0 +1,22 @@
+/**
+ * CSP Headers Middleware for Strapi Preview
+ * Allows the frontend to be embedded in iframes from Strapi admin
+ */
+
+export default defineEventHandler((event) => {
+  // Get the Strapi backend URL from environment
+  const strapiUrl = process.env.NUXT_PUBLIC_STRAPI_URL || 'https://striking-bear-e5a15ddc94.strapiapp.com';
+
+  // Set CSP header to allow iframe embedding from Strapi admin
+  setHeader(event, 'Content-Security-Policy', `
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' ${strapiUrl};
+    style-src 'self' 'unsafe-inline';
+    img-src 'self' data: https:;
+    font-src 'self' data:;
+    connect-src 'self' https:;
+    frame-ancestors 'self' ${strapiUrl};
+    base-uri 'self';
+    form-action 'self';
+  `.replace(/\n/g, ' ').trim());
+});
