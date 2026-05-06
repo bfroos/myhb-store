@@ -1,11 +1,19 @@
 // Strapi proxy with server-side caching (1h fresh, 24h stale-while-revalidate).
 // Important: Cache key includes the ENTIRE query string (including locale),
 // so /about-us-page?locale=en and ?locale=de are cached separately.
+// Preview mode: bypasses cache and adds status=draft when __NUXT_PREVIEW cookie is set.
+
+function isPreviewRequest(event: any): boolean {
+  const cookie = getCookie(event, '__NUXT_PREVIEW');
+  return cookie === 'true';
+}
+
 export default defineCachedEventHandler(
   async (event) => {
     const config = useRuntimeConfig(event);
     const incoming = getRequestURL(event);
     const siteMode = config.siteMode || config.public.siteMode;
+    const preview = isPreviewRequest(event);
 
     setHeader(event, "X-MyHB-Strapi-Proxy", "1");
 
@@ -18,7 +26,14 @@ export default defineCachedEventHandler(
 
     const restPath = incoming.pathname.replace(/^\/api\/strapi/, "");
     const strapiBase = config.public.strapiUrl.replace(/\/+$/, "");
-    const strapiUrl = `${strapiBase}/api${restPath}${incoming.search}`;
+
+    // In preview mode, add status=draft so Strapi returns draft content
+    let search = incoming.search;
+    if (preview && !search.includes('status=')) {
+      search = search ? `${search}&status=draft` : '?status=draft';
+    }
+
+    const strapiUrl = `${strapiBase}/api${restPath}${search}`;
 
     try {
       return await $fetch(strapiUrl, {
@@ -48,7 +63,8 @@ export default defineCachedEventHandler(
       const siteMode = config.siteMode || config.public.siteMode || "default";
       return `strapi:${path}:${params.toString()}:${siteMode}`;
     },
-    shouldBypassCache: () => false,
+    // Bypass cache entirely when in preview mode
+    shouldBypassCache: (event) => isPreviewRequest(event),
     shouldInvalidateCache: (event) => false,
   },
 );
