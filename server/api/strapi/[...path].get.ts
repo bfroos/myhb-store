@@ -37,11 +37,12 @@ export default defineCachedEventHandler(
 
     try {
       return await $fetch(strapiUrl, {
-        headers: siteMode
-          ? {
-              "x-site-mode": siteMode,
-            }
-          : undefined,
+        headers: {
+          ...(siteMode ? { 'x-site-mode': siteMode } : {}),
+          // Enable content source maps in preview mode so Strapi
+          // encodes field metadata for double-click-to-edit
+          ...(preview ? { 'strapi-encode-source-maps': 'true' } : {}),
+        },
       });
     } catch (error: any) {
       throw createError({

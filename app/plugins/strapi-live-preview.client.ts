@@ -1,14 +1,15 @@
 /**
- * Strapi Live Preview Plugin
+ * Strapi Live Preview Plugin (Growth/Enterprise)
  *
- * Listens for postMessage events from the Strapi Admin panel (Growth/Enterprise).
- * When the editor changes a field, Strapi sends a message to the preview iframe.
- * We respond by refreshing all Nuxt data so the latest draft content is shown.
+ * Implements the full Live Preview protocol:
+ * 1. On mount: sends `previewReady` to Strapi → tells Strapi we're in the iframe
+ * 2. Listens for `strapiScript` → injects the script Strapi sends into <head>
+ *    This script handles: double-click-to-edit highlighting + popover
+ * 3. Listens for `strapiUpdate` → refreshes Nuxt data on content save
  *
- * Strapi message types:
- * - 'strapiUpdate': fired on every field change in the editor
- *
- * This is a client-only plugin (*.client.ts) — runs only in the browser.
+ * The double-click-to-edit feature works via Content Source Maps:
+ * Strapi encodes field metadata as invisible chars in text fields (stega encoding).
+ * The injected strapiScript decodes these and shows the edit popover on double-click.
  */
 export default defineNuxtPlugin(() => {
   const STRAPI_ORIGINS = [
@@ -17,20 +18,32 @@ export default defineNuxtPlugin(() => {
   ];
 
   let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
+  let scriptInjected = false;
 
   const handleMessage = async (event: MessageEvent) => {
     // Security: only accept messages from known Strapi origins
     if (!STRAPI_ORIGINS.includes(event.origin)) return;
 
-    const { type } = event.data ?? {};
-    if (type !== 'strapiUpdate') return;
+    const { type, payload } = event.data ?? {};
 
-    // Debounce: Strapi fires many events while typing — wait 300ms before refresh
-    if (refreshTimeout) clearTimeout(refreshTimeout);
-    refreshTimeout = setTimeout(async () => {
-      await refreshNuxtData();
-    }, 300);
+    if (type === 'strapiUpdate') {
+      // Debounce: Strapi fires many events while typing
+      if (refreshTimeout) clearTimeout(refreshTimeout);
+      refreshTimeout = setTimeout(async () => {
+        await refreshNuxtData();
+      }, 300);
+    } else if (type === 'strapiScript' && payload?.script && !scriptInjected) {
+      // Inject the Strapi Live Preview script into <head>
+      // This enables double-click-to-edit and field highlighting
+      const script = document.createElement('script');
+      script.textContent = payload.script;
+      document.head.appendChild(script);
+      scriptInjected = true;
+    }
   };
 
   window.addEventListener('message', handleMessage);
+
+  // Tell Strapi we're ready — triggers it to send the strapiScript
+  window.parent?.postMessage({ type: 'previewReady' }, '*');
 });
