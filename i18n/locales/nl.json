@@ -1,0 +1,443 @@
+{
+  "common": {
+    "discount": "Korting",
+    "reviews": "Beoordelingen",
+    "reviewsCount": "{count} beoordelingen",
+    "review": "Beoordeling",
+    "rating": "Beoordeling",
+    "reviewLinkLabel": "Naar de beoordeling op {source}",
+    "five-star": "5-sterren",
+    "showLess": "Minder tonen",
+    "showMore": "Meer tonen",
+    "more": "Meer",
+    "general": "algemeen",
+    "in": "in",
+    "distanceKilometersSuffix": "km",
+    "date": {
+      "fromDate": "vanaf {date}",
+      "today": "vandaag"
+    },
+    "week": {
+      "monday": "Maandag",
+      "tuesday": "Dinsdag",
+      "wednesday": "Woensdag",
+      "thursday": "Donderdag",
+      "friday": "Vrijdag",
+      "saturday": "Zaterdag",
+      "sunday": "Zondag"
+    },
+    "openingHours": {
+      "open": "Geopend",
+      "closed": "Gesloten"
+    },
+    "federalState": {
+      "baden-wuerttemberg": "Baden-Württemberg",
+      "bavaria": "Beieren",
+      "berlin": "Berlijn",
+      "brandenburg": "Brandenburg",
+      "bremen": "Bremen",
+      "hamburg": "Hamburg",
+      "hesse": "Hessen",
+      "mecklenburg-western-pomerania": "Mecklenburg-Voor-Pommeren",
+      "lower-saxony": "Nedersaksen",
+      "north-rhine-westphalia": "Noordrijn-Westfalen",
+      "rhineland-palatinate": "Rijnland-Palts",
+      "saarland": "Saarland",
+      "saxony": "Saksen",
+      "saxony-anhalt": "Saksen-Anhalt",
+      "schleswig-holstein": "Sleeswijk-Holstein",
+      "thuringia": "Thüringen"
+    },
+    "price": {
+      "cheap": "voordelig",
+      "startingPrefix": "vanaf",
+      "forPrefix": "voor"
+    }
+  },
+  "navigation": {
+    "header": {
+      "languageSwitcher": "Taal wijzigen"
+    },
+    "secondary": {
+      "doctors": "Artsen",
+      "locations": "Locaties",
+      "prices": "Prijzen",
+      "careers": "Carrière",
+      "blog": "Blog",
+      "aboutUs": "Over ons"
+    },
+    "footer": {
+      "treatments": "Behandelingen",
+      "company": "Bedrijf",
+      "prices": "Prijzen",
+      "careers": "Carrière",
+      "blog": "Blog",
+      "aboutUs": "Over ons"
+    },
+    "meta": {
+      "privacyPolicy": "Privacy",
+      "imprint": "Impressum",
+      "cookieSettings": "Cookies"
+    },
+    "treatmentTile": {
+      "goToTreatment": "Naar de behandeling"
+    }
+  },
+  "cta": {
+    "bookAppointment": "Afspraak maken",
+    "bookAppointmentNotAvailable": "Niet boekbaar",
+    "learnMore": "Meer informatie",
+    "details": "Details",
+    "subscribe": "Abonneren",
+    "cancel": "Annuleren",
+    "close": "Sluiten",
+    "joinMyClub": "Lid worden van {brandNameShort} Club",
+    "shopGroupon": "Voucher kopen",
+    "openMenu": "Menu openen",
+    "goToHome": "Naar startpagina",
+    "watch": "Bekijken",
+    "share": {
+      "copy": "Link kopiëren",
+      "copied": "Link gekopieerd",
+      "whatsapp": "Delen op WhatsApp",
+      "facebook": "Delen op Facebook"
+    }
+  },
+  "googleMaps": {
+    "consentRequired": "Kaart niet beschikbaar",
+    "consentDescription": "Om de kaart weer te geven, hebben we je toestemming nodig voor Google Maps. Accepteer de cookie-instellingen.",
+    "consentButton": "Cookie-instellingen openen"
+  },
+  "location": {
+    "comingSoon": "Binnenkort",
+    "sinceToday": "Vandaag nieuw geopend",
+    "error": {
+      "locationNotFound": "Locatie niet gevonden",
+      "locationNotFoundDescription": "De aangevraagde locatie bestaat niet."
+    },
+    "treatmentTeasers": {
+      "headline": {
+        "lounge": "Behandelingen in onze lounge in {city}",
+        "center": "Behandelingen in onze lounge in {city}",
+        "clinic": "Behandelingen in onze privékliniek in {city}",
+        "loungeFuture": "Toekomstige behandelingen in onze lounge in {city}",
+        "centerFuture": "Toekomstige behandelingen in onze lounge in {city}",
+        "clinicFuture": "Toekomstige behandelingen in onze privékliniek in {city}"
+      }
+    },
+    "jobTeasers": {
+      "headline": "Vacatures in {city}"
+    }
+  },
+  "blog": {
+    "breadcrumbTitle": "Blog",
+    "headline": "Blog",
+    "intro": "Interessante informatie, actueel nieuws en alles over gezondheid en schoonheid.",
+    "article": {
+      "share": {
+        "copy": "Link kopiëren",
+        "copied": "Link gekopieerd",
+        "whatsapp": "Delen op WhatsApp",
+        "facebook": "Delen op Facebook"
+      }
+    },
+    "emptyState": {
+      "title": "Geen artikelen gevonden",
+      "description": "Helaas zijn er geen artikelen beschikbaar voor deze categorie in je geselecteerde taal."
+    }
+  },
+  "career": {
+    "breadcrumbTitle": "Carrière",
+    "job": {
+      "apply": "Nu solliciteren",
+      "description": {
+        "headline": "Over de baan",
+        "details": "Details",
+        "employmentType": "Type dienstverband",
+        "contractType": "Type contract",
+        "startDate": "Startdatum",
+        "asOfNow": "per direct",
+        "hourlyRate": "Uurloon",
+        "locations": "Beschikbare werklocaties"
+      },
+      "employmentType": {
+        "full-time": "Voltijd",
+        "part-time": "Deeltijd",
+        "full-time-or-part-time": "Voltijd of deeltijd"
+      },
+      "contractType": {
+        "permanent": "Vast contract",
+        "fixed-term": "Tijdelijk contract",
+        "freelance": "Freelance"
+      },
+      "seo": {
+        "title": "Vacature: {title} ({genderHint}) - {employmentType}",
+        "description": "Locaties: {locations}"
+      }
+    }
+  },
+  "locations": {
+    "headline": "Locaties",
+    "breadcrumbTitle": "Locaties",
+    "upcomingOpening": "Aanstaande openingen",
+    "plannedLocations": "Geplande locaties",
+    "allLocations": "Alle locaties",
+    "discoverLocations": "Ontdek onze locaties",
+    "location": {
+      "locationType": {
+        "lounge": "Lounge",
+        "center": "Centrum",
+        "clinic": "Privékliniek"
+      },
+      "seo": {
+        "title": "{brandNameShort} {locationName} {city} | Botox & Hyaluron",
+        "description": "{brandName} {locationName} {city} ✓ Botox & Hyaluron ✓ Gecertificeerde artsen ✓ Nu afspraak maken"
+      },
+      "locationTreatment": {
+        "seo": {
+          "title": "{treatmentName} {city} | {brandNameShort} {locationName}",
+          "description": "{treatmentName} in {city} bij {brandName} {locationName} ✓ Gecertificeerde artsen ✓ Online afspraak maken"
+        }
+      },
+      "openingHoursOpenNewToday": "Vandaag nieuw geopend",
+      "openingHoursOpenSoon": "vanaf {date}",
+      "openingHoursComingSoon": "Binnenkort",
+      "cityPhrase": "in {city}"
+    },
+    "city": {
+      "allLocations": "Alle locaties in {city}",
+      "upcomingOpening": "Binnenkort nieuw in {city}",
+      "plannedLocations": "Geplande locaties in {city}",
+      "error": {
+        "noLocations": "Geen locaties gevonden",
+        "noLocationsDescription": "Helaas hebben we nog geen locatie in {city} geopend."
+      }
+    }
+  },
+  "doctors": {
+    "headline": "Artsen",
+    "breadcrumbTitle": "Artsen",
+    "doctor": {
+      "breadcrumbTitle": "Artsen",
+      "aboutMe": {
+        "headline": "Over mij"
+      },
+      "specializations": {
+        "headline": "Specialisaties"
+      },
+      "locations": {
+        "headline": {
+          "one": "Ik behandel in {city}",
+          "other": "Ik behandel op {count} locaties"
+        }
+      },
+      "seo": {
+        "description": "{ role } bij { brandName } in { cities } – Informatie over mijn werkzaamheden"
+      }
+    }
+  },
+  "treatments": {
+    "breadcrumbTitle": "Behandelingen",
+    "seo": {
+      "title": "Botox®, Hyaluron & Fillers – Alle behandelingen",
+      "description": "Ontdek onze behandelingen uit de categorieën {categories} en vind de juiste voor jou."
+    },
+    "errors": {
+      "noTreatmentsGroups": {
+        "title": "Geen behandelingen gevonden",
+        "description": "Helaas hebben we nog geen behandelingen in je geselecteerde taal aangemaakt."
+      }
+    },
+    "treatment": {
+      "allTreatments": "Behandelingen",
+      "locationTeasers": {
+        "headline": "{treatment} op onze locaties"
+      },
+      "error": {
+        "treatmentNotFound": "Behandeling niet gevonden",
+        "treatmentNotFoundDescription": "De aangevraagde behandeling bestaat niet."
+      }
+    },
+    "pageTitle": "Botox®, Hyaluron & esthetische behandelingen"
+  },
+  "treatment": {
+    "seo": {
+      "description": "{description} Ervaren artsen, veilige behandeling & individueel plan. Nu afspraak maken!"
+    }
+  },
+  "productPage": {
+    "error": {
+      "productNotFound": "Product niet gevonden",
+      "productNotFoundDescription": "Het aangevraagde product bestaat niet."
+    },
+    "productDescription": "Productbeschrijving",
+    "metaDescription": "{name} van {manufacturer} in de varianten {variants} vanaf {price} beschikbaar bij jou in de buurt"
+  },
+  "blocks": {
+    "jobTeasers": {
+      "headline": "Actuele vacatures",
+      "andMore": "meer",
+      "filter": {
+        "label": "Filteren op locatie:",
+        "placeholder": "Alle locaties",
+        "all": "Alle locaties"
+      }
+    },
+    "treatmentTeasers": {
+      "filter": {
+        "all": "Alle"
+      }
+    },
+    "qualifications": {
+      "headline": "Kwalificaties",
+      "vita": "Loopbaan"
+    },
+    "employeeList": {
+      "readMore": "Naar profiel",
+      "showProfile": "Naar profiel van {name}"
+    },
+    "treatmentDetails": {
+      "price": "Prijs",
+      "duration": "Behandelduur",
+      "effect": "Effect",
+      "initialResults": "Eerste resultaten",
+      "finalResults": "Eindresultaten",
+      "effectDuration": "Werkingsduur",
+      "anesthesia": "Anesthesie",
+      "medication": "Medicatie",
+      "aftercareSummary": "Nazorg",
+      "followUpTreatments": "Vervolgbehandelingen",
+      "noInformation": "Geen informatie beschikbaar",
+      "headline": "Behandeldetails"
+    },
+    "tableOfContents": {
+      "content": "Inhoud"
+    },
+    "treatmentPlan": {
+      "followUpPlanText": "Behandeling herhalen",
+      "endOfPlanText": "Behandeling voltooid",
+      "age": "Leeftijd",
+      "treatmentGoal": "Doel",
+      "week": "Week",
+      "stepsAriaLabel": "Behandelplan stappen"
+    },
+    "locationTeasers": {
+      "filter": {
+        "label": "Filteren op deelstaat:",
+        "placeholder": "Alle deelstaten",
+        "all": "Alle deelstaten"
+      }
+    },
+    "directions": {
+      "walk": "Te voet",
+      "publicTransport": "Met het openbaar vervoer",
+      "car": "Met de auto"
+    },
+    "reviews": {
+      "headline": "Dit zeggen onze klanten",
+      "cta": {
+        "bookAppointment": "Afspraak maken"
+      }
+    },
+    "locationContact": {
+      "openingHours": "Openingstijden",
+      "openingHoursDescription": "Nu geopend tot {hours} uur",
+      "openingHoursToday": "Vandaag geopend van {opens} tot {closes} uur",
+      "openingHoursNext": "Opent op {day} om {time} uur",
+      "openingHoursOpenSoon": "Opening op {date}. Dit worden onze openingstijden",
+      "openingHoursComingSoon": "We openen binnenkort. Dit worden onze openingstijden",
+      "map": {
+        "title": "Kaart van het locatieadres"
+      },
+      "directions": "Routebeschrijving",
+      "phone": "Telefoon",
+      "whatsapp": "WhatsApp Chat",
+      "address": "Locatieadres"
+    },
+    "locationFinder": {
+      "mapLoading": "Kaart wordt geladen…",
+      "headline": "Locatie zoeken",
+      "searchPlaceholder": "Postcode of plaats",
+      "useMyLocation": "Mijn locatie"
+    },
+    "locationMap": {
+      "footer": {
+        "customers_one": "Klant",
+        "customers_other": "Klanten",
+        "lounges_one": "Lounge",
+        "lounges_other": "Lounges",
+        "doctors_one": "Arts",
+        "doctors_other": "Artsen",
+        "clinic_one": "Privékliniek",
+        "clinic_other": "Privéklinieken"
+      },
+      "map": {
+        "title": "Locatiekaart",
+        "description": "Kaart van Duitsland met markeringen voor locaties. Status: Geopend, Binnenkort opening of Binnenkort.",
+        "listLabel": "Locaties op de kaart"
+      },
+      "status": {
+        "open": "Geopend",
+        "openSoon": "Binnenkort opening",
+        "comingSoon": "Binnenkort"
+      },
+      "cta": "Medical Lounge zoeken"
+    },
+    "treatmentHero": {
+      "discountCta": "{pct}% korting veiligstellen",
+      "ctaActionLabel": "Afspraak maken"
+    },
+    "productCategoryPriceOverview": {
+      "treatments": "Behandelingen",
+      "products": "Producten",
+      "treatmentDetails": "Behandeldetails",
+      "productDetails": "Productdetails",
+      "noTreatments": "Momenteel hebben we geen behandelingen in deze categorie."
+    },
+    "productHero": {
+      "previousImage": "Vorige afbeelding",
+      "nextImage": "Volgende afbeelding",
+      "selectImage": "Afbeelding {index} selecteren",
+      "includesVat": "Incl. btw",
+      "bookAppointment": "Afspraak maken",
+      "footerDescription": "Let op: onze producten worden niet afzonderlijk verkocht. Ze worden uitsluitend gebruikt in het kader van een passende behandeling – na een uitgebreid medisch consult. Maak gewoon een afspraak bij jou in de buurt en ontdek welke behandelingen met dit product mogelijk zijn.",
+      "treatmentsWith": "Behandelingen met {manufacturer} {product}"
+    }
+  },
+  "error": {
+    "500": {
+      "statusMessage": "Oeps! Er is iets misgegaan.",
+      "message": "We hebben de fout gemeld en werken eraan om deze op te lossen.",
+      "button": "Naar startpagina"
+    },
+    "404": {
+      "statusMessage": "Pagina helaas niet gevonden:",
+      "message": "De aangevraagde pagina bestaat niet of is niet beschikbaar in de geselecteerde taal.",
+      "button": "Naar startpagina"
+    }
+  },
+  "dialogs": {
+    "calendly": {
+      "header": "Maak nu je afspraak via Calendly"
+    },
+    "newsletterSignUp": {
+      "header": "Abonneren op nieuwsbrief"
+    }
+  },
+  "newsletter": {
+    "marketingText": {
+      "headline": "Deals en nieuws. Nu in de nieuwsbrief!",
+      "headlineDiscount": "Voor alle nieuwe klanten: krijg nu {newsletterDiscountPercentage}% korting!",
+      "exlusiveOffers": "Exclusieve aanbiedingen",
+      "treatmentNews": "Nieuws over behandelingen",
+      "eventInvitations": "Uitnodigingen voor evenementen"
+    },
+    "success": "Welkom bij {brandNameShort}! Als het adres nog niet geregistreerd is, ontvang je binnenkort een bevestigingsmail. Als je al geregistreerd bent, gebeurt er niets.",
+    "emailPlaceholder": "Je e-mailadres",
+    "emailLabel": "E-mailadres",
+    "errors": {
+      "invalid_email": "Voer een geldig e-mailadres in.",
+      "generic": "Aanmelding mislukt. Probeer het later opnieuw."
+    }
+  }
+}
