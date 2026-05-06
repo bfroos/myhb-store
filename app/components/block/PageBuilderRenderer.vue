@@ -3,10 +3,10 @@
  * Renders a Page Builder template (Puck JSON) using the existing Vue block components.
  *
  * The Puck data structure:
- * { content: [{ type: "FunnelHero", props: { headline: "…", … } }], root: {}, zones: {} }
+ * { content: [{ type: "PageHeader", props: { headline: "…", … } }], root: {}, zones: {} }
  *
  * We convert each item to the StrapiBlock shape the existing BlockRenderer expects:
- * { __component: "blocks.funnel-hero", id: <index>, …props }
+ * { __component: "blocks.page-header", id: <index>, …props }
  */
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
 
@@ -16,11 +16,6 @@ const props = defineProps<{
 
 // Map Puck component type → Strapi __component key used in BlockRenderer
 const TYPE_MAP: Record<string, string> = {
-  UrgencyBanner: "blocks.urgency-banner",
-  FunnelHero: "blocks.funnel-hero",
-  SocialProofTicker: "blocks.social-proof-ticker",
-  RiskReversal: "blocks.risk-reversal",
-  AppointmentAvailability: "blocks.appointment-availability",
   PageHeader: "blocks.page-header",
   TextContent: "blocks.text-content",
   BenefitsList: "blocks.benefits-list",

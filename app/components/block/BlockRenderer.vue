@@ -29,8 +29,12 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   "blocks.highlights-strip": defineAsyncComponent(
     () => import("./HighlightsStrip.vue"),
   ),
+  "blocks.job-teasers": defineAsyncComponent(() => import("./JobTeasers.vue")),
   "blocks.location-map": defineAsyncComponent(
     () => import("./LocationMap.vue"),
+  ),
+  "blocks.location-teasers": defineAsyncComponent(
+    () => import("./LocationTeasers.vue"),
   ),
   "blocks.media-bento": defineAsyncComponent(() => import("./MediaBento.vue")),
   "blocks.media-card": defineAsyncComponent(() => import("./MediaCard.vue")),
