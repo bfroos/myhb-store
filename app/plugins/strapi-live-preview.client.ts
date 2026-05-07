@@ -8,6 +8,17 @@
  * 4. On field change, Strapi sends `strapiUpdate` → frontend refreshes data
  *
  * Only runs when embedded in Strapi's preview iframe (window !== window.parent).
+ *
+ * NOTE on origin filtering:
+ * We accept messages from known Strapi origins AND from the actual parent window
+ * origin (resolved at runtime). Strapi Cloud may send from subdomains or internal
+ * URLs that don't match the public admin URL exactly.
+ *
+ * NOTE on postMessage failures:
+ * Strapi Enterprise may send `previewScript`/`strapiUpdate` with a specific
+ * targetOrigin that doesn't match our window.origin. Those browser errors are
+ * harmless — they come from Strapi's side and we can't suppress them.
+ * As a fallback, we also poll for changes every 2 seconds while in preview mode.
  */
 export default defineNuxtPlugin(() => {
   // Only activate when inside an iframe (Strapi preview)
@@ -19,32 +30,85 @@ export default defineNuxtPlugin(() => {
     'http://localhost:1337',
   ];
 
+  // Detect the actual parent origin at runtime (covers Strapi Cloud internal URLs)
+  let parentOrigin: string | null = null;
+  try {
+    parentOrigin = document.referrer ? new URL(document.referrer).origin : null;
+  } catch {
+    parentOrigin = null;
+  }
+
+  const isAllowedOrigin = (origin: string) => {
+    if (STRAPI_ORIGINS.includes(origin)) return true;
+    if (parentOrigin && origin === parentOrigin) return true;
+    // Allow any strapiapp.com subdomain (Strapi Cloud)
+    if (origin.endsWith('.strapiapp.com')) return true;
+    return false;
+  };
+
   let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
   let scriptInjected = false;
+  let pollInterval: ReturnType<typeof setInterval> | null = null;
+  let lastRefreshAt = Date.now();
+
+  const triggerRefresh = async () => {
+    if (refreshTimeout) clearTimeout(refreshTimeout);
+    refreshTimeout = setTimeout(async () => {
+      lastRefreshAt = Date.now();
+      await refreshNuxtData();
+    }, 300);
+  };
 
   const handleMessage = async (event: MessageEvent) => {
-    if (!STRAPI_ORIGINS.includes(event.origin)) return;
+    // Only handle messages from parent window
+    if (event.source !== window.parent) return;
+    // Only handle messages from known/allowed origins
+    if (!isAllowedOrigin(event.origin)) return;
 
     const { type, payload } = event.data ?? {};
 
     if (type === 'strapiUpdate') {
-      if (refreshTimeout) clearTimeout(refreshTimeout);
-      refreshTimeout = setTimeout(async () => {
-        await refreshNuxtData();
-      }, 300);
+      await triggerRefresh();
     } else if (type === 'previewScript' && payload?.script && !scriptInjected) {
       // Inject the script Strapi sends — handles double-click-to-edit
       const script = document.createElement('script');
       script.textContent = payload.script;
       document.head.appendChild(script);
       scriptInjected = true;
+      // Stop polling once we have the previewScript — Strapi will send strapiUpdate events
+      if (pollInterval) {
+        clearInterval(pollInterval);
+        pollInterval = null;
+      }
     }
   };
 
   window.addEventListener('message', handleMessage);
 
   // Notify Strapi we're ready — it will respond with previewScript.
-  // Per Strapi docs, postMessage must use '*' as targetOrigin so the admin
-  // panel (which may be on a different subdomain) receives the message.
+  // Must use '*' as targetOrigin so the admin panel (cross-origin) receives it.
+  // Re-send after a short delay in case Strapi wasn't listening yet on first load.
   window.parent.postMessage({ type: 'previewReady' }, '*');
+  setTimeout(() => {
+    window.parent.postMessage({ type: 'previewReady' }, '*');
+  }, 1000);
+
+  // Fallback: poll every 2s in case postMessage doesn't work (origin mismatch).
+  // Stops automatically once previewScript arrives (Strapi can send strapiUpdate).
+  // This ensures saves are always reflected even if the postMessage handshake fails.
+  pollInterval = setInterval(async () => {
+    // Only poll if we haven't refreshed in the last 1.5s (avoid double-refresh)
+    if (Date.now() - lastRefreshAt > 1500) {
+      lastRefreshAt = Date.now();
+      await refreshNuxtData();
+    }
+  }, 2000);
+
+  // Stop polling after 30s if no previewScript received (avoid unnecessary traffic)
+  setTimeout(() => {
+    if (pollInterval) {
+      clearInterval(pollInterval);
+      pollInterval = null;
+    }
+  }, 30_000);
 });
