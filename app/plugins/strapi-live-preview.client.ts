@@ -87,14 +87,23 @@ export default defineNuxtPlugin(() => {
 
   // Notify Strapi we're ready — it will respond with previewScript.
   // Must use '*' as targetOrigin so the admin panel (cross-origin) receives it.
-  // Re-send after a short delay in case Strapi wasn't listening yet on first load.
-  window.parent.postMessage({ type: 'previewReady' }, '*');
-  setTimeout(() => {
+  // Keep pinging until Strapi responds with previewScript (or for max 15s).
+  let readyPingCount = 0;
+  const maxReadyPings = 15;
+  const readyPingInterval = setInterval(() => {
+    if (scriptInjected || readyPingCount >= maxReadyPings) {
+      clearInterval(readyPingInterval);
+      return;
+    }
     window.parent.postMessage({ type: 'previewReady' }, '*');
+    readyPingCount++;
   }, 1000);
 
+  // Send immediately on load too
+  window.parent.postMessage({ type: 'previewReady' }, '*');
+
   // Fallback: poll every 2s in case postMessage doesn't work (origin mismatch).
-  // Stops automatically once previewScript arrives (Strapi can send strapiUpdate).
+  // Stops automatically once previewScript arrives (Strapi will send strapiUpdate).
   // This ensures saves are always reflected even if the postMessage handshake fails.
   pollInterval = setInterval(async () => {
     // Only poll if we haven't refreshed in the last 1.5s (avoid double-refresh)
