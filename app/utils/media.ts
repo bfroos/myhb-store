@@ -173,26 +173,15 @@ const DEFAULT_POSTER_OPTIONS: Required<VideoPosterOptions> = {
 
 /**
  * Builds a Cloudflare Media Transformation URL for a video poster frame.
+ *
+ * NOTE: Disabled until Cloudflare Media Transformations are activated.
  */
 export function buildVideoPosterUrl(
-  sourceUrl: string,
-  options: VideoPosterOptions = {},
+  _sourceUrl: string,
+  _options: VideoPosterOptions = {},
 ): string {
-  const origin = getMediaZoneOrigin(sourceUrl);
-  if (!origin || !sourceUrl) return "";
-
-  const opts = { ...DEFAULT_POSTER_OPTIONS, ...options };
-  const encodedSource = encodeSourceForMediaTransform(sourceUrl);
-
-  const params = [
-    "mode=frame",
-    `time=${opts.time}`,
-    `format=${opts.format}`,
-    `width=${opts.width}`,
-    `fit=${opts.fit}`,
-  ];
-
-  return `${origin}/cdn-cgi/media/${params.join(",")}/${encodedSource}`;
+  // Media Transformations not activated — no poster available.
+  return "";
 }
 
 export interface TransformedVideoOptions {
@@ -212,21 +201,15 @@ const DEFAULT_VIDEO_OPTIONS: Required<
 
 /**
  * Builds a Cloudflare Media Transformation URL for video delivery.
+ *
+ * NOTE: Cloudflare Media Transformations (/cdn-cgi/media/) require explicit
+ * activation in the Cloudflare dashboard (Stream or Media Transformations add-on).
+ * Until activated, we return the original URL directly to avoid broken video playback.
  */
 export function buildTransformedVideoUrl(
   sourceUrl: string,
-  options: TransformedVideoOptions = {},
+  _options: TransformedVideoOptions = {},
 ): string {
-  const origin = getMediaZoneOrigin(sourceUrl);
-  if (!origin || !sourceUrl) return sourceUrl;
-
-  const opts = { ...DEFAULT_VIDEO_OPTIONS, ...options };
-  const encodedSource = encodeSourceForMediaTransform(sourceUrl);
-
-  const params = ["mode=video", `audio=${opts.audio}`];
-  if (opts.width) params.push(`width=${opts.width}`);
-  if (opts.height) params.push(`height=${opts.height}`);
-  if (opts.fit) params.push(`fit=${opts.fit}`);
-
-  return `${origin}/cdn-cgi/media/${params.join(",")}/${encodedSource}`;
+  // Media Transformations not activated — serve original URL directly.
+  return sourceUrl || "";
 }
