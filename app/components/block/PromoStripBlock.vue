@@ -2,7 +2,7 @@
   <section class="block promo-strip">
     <PromoSticker
       class="promo-strip__stamp"
-      :src="stickerSrc"
+      :src="displayStickerSrc"
       size="sm"
       :rotate="-12"
       aria-label="20 % auf Deine erste Behandlung"
@@ -18,14 +18,18 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import PromoSticker from "../ui/atom/PromoSticker.vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaUrl } from "~/utils/landingBlockMedia";
 
 interface CtaProp { label: string; to?: string }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   headline?: string;
   text?: string;
   stickerSrc?: string;
+  stickerMedia?: StrapiMedia;
   cta?: CtaProp;
 }>(), {
   headline: "20 % Neukunden-Aktion",
@@ -35,6 +39,8 @@ withDefaults(defineProps<{
 });
 
 defineEmits<{ cta: [] }>();
+
+const displayStickerSrc = computed(() => mediaUrl(props.stickerMedia) ?? props.stickerSrc);
 </script>
 
 <style scoped>

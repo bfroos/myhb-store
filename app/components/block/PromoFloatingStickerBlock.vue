@@ -5,7 +5,7 @@
     :style="{ '--offset': `${offset}px` }"
   >
     <a :href="href" class="float__link" :aria-label="ariaLabel">
-      <PromoSticker :src="stickerSrc" :size="size" :rotate="rotate" :aria-label="ariaLabel" />
+      <PromoSticker :src="displayStickerSrc" :size="size" :rotate="rotate" :aria-label="ariaLabel" />
     </a>
     <button
       v-if="dismissible"
@@ -20,13 +20,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { IconX } from "@tabler/icons-vue";
 import PromoSticker from "../ui/atom/PromoSticker.vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaUrl } from "~/utils/landingBlockMedia";
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   href?: string;
   stickerSrc?: string;
+  stickerMedia?: StrapiMedia;
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left";
   size?: "sm" | "md" | "lg" | "xl";
   rotate?: number;
@@ -44,6 +47,7 @@ withDefaults(defineProps<{
 });
 
 const dismissed = ref(false);
+const displayStickerSrc = computed(() => mediaUrl(props.stickerMedia) ?? props.stickerSrc);
 </script>
 
 <style scoped>

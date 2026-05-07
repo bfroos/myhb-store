@@ -2,7 +2,7 @@
   <section class="block promo" :class="[themeClass, { 'block--elevated': elevated }]">
     <PromoSticker
       class="promo__stamp"
-      :src="stickerSrc"
+      :src="displayStickerSrc"
       :rotate="rotate"
       size="lg"
       aria-label="20 % auf Deine erste Behandlung"
@@ -31,12 +31,15 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { IconCircleCheck } from "@tabler/icons-vue";
 import PromoSticker from "../ui/atom/PromoSticker.vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaUrl } from "~/utils/landingBlockMedia";
 
 interface CtaProp { label: string; to?: string }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   eyebrow?: string;
   headline?: string;
   text?: string;
@@ -47,6 +50,7 @@ withDefaults(defineProps<{
 
   // sticker config
   stickerSrc?: string;
+  stickerMedia?: StrapiMedia;
   rotate?: number;
 
   elevated?: boolean;
@@ -66,6 +70,8 @@ withDefaults(defineProps<{
 });
 
 defineEmits<{ primary: []; secondary: [] }>();
+
+const displayStickerSrc = computed(() => mediaUrl(props.stickerMedia) ?? props.stickerSrc);
 </script>
 
 <style scoped>

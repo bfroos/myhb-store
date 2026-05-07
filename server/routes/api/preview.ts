@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
   const query = getQuery(event);
   const secret = query.secret as string;
   const url = query.url as string;
-  const status = query.status as string;
+  const status = query.status === 'published' ? 'published' : 'draft';
 
   // Validate the secret
   const previewSecret = process.env.PREVIEW_SECRET;
@@ -57,6 +57,12 @@ export default defineEventHandler(async (event) => {
     domain: '.myhealthandbeauty.com', // CRITICAL: With leading dot for all subdomains
   });
 
+  const redirectUrl = new URL(url, getRequestURL(event).origin);
+  redirectUrl.searchParams.set('_preview_refresh', Date.now().toString());
+
   // Redirect to the preview URL
-  return sendRedirect(event, url);
+  return sendRedirect(
+    event,
+    `${redirectUrl.pathname}${redirectUrl.search}${redirectUrl.hash}`,
+  );
 });

@@ -23,19 +23,22 @@
       </div>
     </div>
 
-    <figure v-if="image" class="hero__figure">
-      <img :src="image.src" :alt="image.alt ?? ''" loading="eager" />
+    <figure v-if="displayImage" class="hero__figure">
+      <img :src="displayImage.src" :alt="displayImage.alt ?? ''" loading="eager" />
     </figure>
   </section>
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { IconCircleCheck } from "@tabler/icons-vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaToLegacyImage } from "~/utils/landingBlockMedia";
 
 interface CtaProp { label: string; to?: string }
 interface ImageProp { src: string; alt?: string }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   eyebrow?: string;
   headline?: string;
   text?: string;
@@ -44,6 +47,7 @@ withDefaults(defineProps<{
   secondaryCta?: CtaProp;
   priceLabel?: string;
   image?: ImageProp;
+  imageMedia?: StrapiMedia;
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
@@ -52,6 +56,8 @@ withDefaults(defineProps<{
 });
 
 defineEmits<{ primary: []; secondary: [] }>();
+
+const displayImage = computed(() => mediaToLegacyImage(props.imageMedia) ?? props.image);
 </script>
 
 <style scoped>

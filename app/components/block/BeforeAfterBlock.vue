@@ -33,8 +33,8 @@
       </figure>
     </div>
 
-    <ol v-if="pairs.length > 1" class="ba__dots" role="tablist">
-      <li v-for="(_, i) in pairs" :key="i">
+    <ol v-if="displayPairs.length > 1" class="ba__dots" role="tablist">
+      <li v-for="(_, i) in displayPairs" :key="i">
         <button
           type="button"
           :class="['ba__dot', { 'ba__dot--active': i === index }]"
@@ -49,12 +49,21 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaToLegacyImage } from "~/utils/landingBlockMedia";
 
 interface Pair { beforeSrc: string; afterSrc: string; beforeAlt?: string; afterAlt?: string }
+interface MediaPair {
+  beforeImage?: StrapiMedia;
+  beforeAlt?: string;
+  afterImage?: StrapiMedia;
+  afterAlt?: string;
+}
 
 const props = withDefaults(defineProps<{
   headline?: string;
   pairs?: Pair[];
+  pairsMedia?: MediaPair[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
@@ -65,7 +74,25 @@ const props = withDefaults(defineProps<{
 
 const index = ref(0);
 const percent = ref(50);
-const current = computed(() => props.pairs[index.value] ?? { beforeSrc: "", afterSrc: "" });
+const displayPairs = computed<Pair[]>(() => {
+  const mediaPairs = (props.pairsMedia ?? [])
+    .map((pair) => {
+      const before = mediaToLegacyImage(pair.beforeImage);
+      const after = mediaToLegacyImage(pair.afterImage);
+      if (!before?.src || !after?.src) return null;
+
+      return {
+        beforeSrc: before.src,
+        beforeAlt: pair.beforeAlt ?? before.alt,
+        afterSrc: after.src,
+        afterAlt: pair.afterAlt ?? after.alt,
+      };
+    })
+    .filter((pair): pair is Pair => pair != null);
+
+  return mediaPairs.length > 0 ? mediaPairs : props.pairs;
+});
+const current = computed(() => displayPairs.value[index.value] ?? { beforeSrc: "", afterSrc: "" });
 
 let dragging = false;
 function onPointerDown(e: PointerEvent) { dragging = true; (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId); update(e); }

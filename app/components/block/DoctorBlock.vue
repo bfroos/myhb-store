@@ -4,8 +4,8 @@
     <h2 v-if="headline" class="doc__heading">{{ headline }}</h2>
     <p v-if="text" class="doc__text">{{ text }}</p>
 
-    <figure v-if="image" class="doc__figure">
-      <img :src="image.src" :alt="image.alt ?? 'Arzt'" loading="lazy" />
+    <figure v-if="displayImage" class="doc__figure">
+      <img :src="displayImage.src" :alt="displayImage.alt ?? 'Arzt'" loading="lazy" />
     </figure>
 
     <ul v-if="checks?.length" class="doc__checks" role="list">
@@ -22,16 +22,20 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import { IconCircleCheck } from "@tabler/icons-vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaToLegacyImage } from "~/utils/landingBlockMedia";
 
 interface ImageProp { src: string; alt?: string }
 interface CtaProp { label: string; to?: string }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   eyebrow?: string;
   headline?: string;
   text?: string;
   image?: ImageProp;
+  imageMedia?: StrapiMedia;
   checks?: string[];
   cta?: CtaProp;
   elevated?: boolean;
@@ -42,6 +46,8 @@ withDefaults(defineProps<{
 });
 
 defineEmits<{ cta: [] }>();
+
+const displayImage = computed(() => mediaToLegacyImage(props.imageMedia) ?? props.image);
 </script>
 
 <style scoped>

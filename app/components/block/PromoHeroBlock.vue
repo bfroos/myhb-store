@@ -1,10 +1,10 @@
 <template>
   <section class="block hero-promo" :class="[themeClass, { 'block--elevated': elevated }]">
     <div class="hero-promo__media">
-      <img v-if="image?.src" :src="image.src" :alt="image.alt ?? ''" />
+      <img v-if="displayImage?.src" :src="displayImage.src" :alt="displayImage.alt ?? ''" />
       <PromoSticker
         class="hero-promo__sticker"
-        :src="stickerSrc"
+        :src="displayStickerSrc"
         size="xl"
         :rotate="-10"
         aria-label="20 % auf Deine erste Behandlung"
@@ -23,19 +23,24 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
 import PromoSticker from "../ui/atom/PromoSticker.vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaToLegacyImage, mediaUrl } from "~/utils/landingBlockMedia";
 
 interface CtaProp { label: string; to?: string }
 interface ImageProp { src: string; alt?: string }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   eyebrow?: string;
   headline?: string;
   text?: string;
   image?: ImageProp;
+  imageMedia?: StrapiMedia;
   cta?: CtaProp;
   finePrint?: string;
   stickerSrc?: string;
+  stickerMedia?: StrapiMedia;
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
@@ -50,6 +55,9 @@ withDefaults(defineProps<{
 });
 
 defineEmits<{ cta: [] }>();
+
+const displayImage = computed(() => mediaToLegacyImage(props.imageMedia) ?? props.image);
+const displayStickerSrc = computed(() => mediaUrl(props.stickerMedia) ?? props.stickerSrc);
 </script>
 
 <style scoped>

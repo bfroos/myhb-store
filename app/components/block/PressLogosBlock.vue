@@ -2,19 +2,32 @@
   <section class="block press" :class="[themeClass, { 'block--elevated': elevated }]">
     <p v-if="eyebrow" class="press__eyebrow">{{ eyebrow }}</p>
     <ul class="press__list" role="list">
-      <li v-for="logo in logos" :key="logo.name" class="press__item">
-        <span class="press__name">{{ logo.name }}</span>
+      <li v-for="logo in displayLogos" :key="logo.name" class="press__item">
+        <img
+          v-if="logo.src"
+          class="press__logo"
+          :src="logo.src"
+          :alt="logo.alt ?? logo.name"
+          loading="lazy"
+        />
+        <span v-else class="press__name">{{ logo.name }}</span>
       </li>
     </ul>
   </section>
 </template>
 
 <script setup lang="ts">
-interface Logo { name: string }
+import { computed } from "vue";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { mediaUrl } from "~/utils/landingBlockMedia";
 
-withDefaults(defineProps<{
+interface Logo { name: string; src?: string; alt?: string }
+interface LogoItem { name: string; logo?: StrapiMedia }
+
+const props = withDefaults(defineProps<{
   eyebrow?: string;
   logos?: Logo[];
+  logoItems?: LogoItem[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
@@ -24,6 +37,16 @@ withDefaults(defineProps<{
   logos: () => [
     { name: "BILD" }, { name: "WDR" }, { name: "RTL" }, { name: "The Sun" }, { name: "Vogue" },
   ],
+});
+
+const displayLogos = computed<Logo[]>(() => {
+  const mediaLogos = (props.logoItems ?? []).map((item) => ({
+    name: item.name,
+    src: mediaUrl(item.logo),
+    alt: item.logo?.alternativeText ?? item.name,
+  }));
+
+  return mediaLogos.length > 0 ? mediaLogos : props.logos;
 });
 </script>
 
@@ -69,6 +92,14 @@ withDefaults(defineProps<{
   font-size: 22px;
   letter-spacing: 0.02em;
   color: var(--color-text-light);
+  filter: grayscale(1);
+  opacity: 0.85;
+}
+.press__logo {
+  display: block;
+  max-width: 130px;
+  max-height: 36px;
+  object-fit: contain;
   filter: grayscale(1);
   opacity: 0.85;
 }

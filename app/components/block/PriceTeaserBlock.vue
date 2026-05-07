@@ -54,6 +54,8 @@
 import { computed } from "vue";
 import { IconArrowRight } from "@tabler/icons-vue";
 
+type PriceTeaserSource = "manual" | "context";
+
 interface PriceItem {
   label: string;
   price: number | string; // 149.99 → "149,99 €", or pass a pre-formatted string
@@ -64,12 +66,25 @@ interface CtaProp {
   label: string;
   href?: string;
 }
+interface PriceTeaserContextResponse {
+  data?: {
+    items?: PriceItem[];
+  };
+}
+type PriceTeaserContextQuery = {
+  type?: "treatment-page" | "product";
+  locale?: string;
+  pathKey?: string;
+  productSlug?: string;
+  limit?: number;
+};
 
 const props = withDefaults(defineProps<{
   eyebrow?: string;
   headline?: string;
   subline?: string;
   items?: PriceItem[];
+  source?: PriceTeaserSource;
   /** Cap how many rows to show; rest is reachable via the CTA. */
   limit?: number;
   cta?: CtaProp;
@@ -94,14 +109,88 @@ const props = withDefaults(defineProps<{
     { label: "Baby Muskelrelaxans",          price: 149.99, from: true, href: "#" },
     { label: "Full Face",                    price: 499.99, from: true, href: "#" },
   ],
+  source: "manual",
   cta: () => ({ label: "Alle Preise ansehen", href: "/preise" }),
   footnote: "",
 });
 
 defineEmits<{ cta: [event: MouseEvent] }>();
 
+const route = useRoute();
+const { locale: i18nLocale } = useI18n();
+
+const routePathKey = computed(() => {
+  const treatmentSlug = route.params.treatmentSlug;
+  const slug = route.params.slug;
+  const value = treatmentSlug ?? slug;
+
+  if (Array.isArray(value)) return value.filter(Boolean).join("/");
+  return typeof value === "string" ? value : "";
+});
+
+const contextQuery = computed<PriceTeaserContextQuery>(() => {
+  if (props.source !== "context") return {};
+
+  if (route.path.startsWith("/behandlungen/") && routePathKey.value) {
+    return {
+      type: "treatment-page",
+      locale: i18nLocale.value,
+      pathKey: routePathKey.value,
+      limit: props.limit,
+    };
+  }
+
+  if (route.path.startsWith("/standorte/") && routePathKey.value) {
+    return {
+      type: "treatment-page",
+      locale: i18nLocale.value,
+      pathKey: routePathKey.value,
+      limit: props.limit,
+    };
+  }
+
+  const productSlug = route.params.productSlug;
+  if (route.path.startsWith("/produkte/") && typeof productSlug === "string") {
+    return {
+      type: "product",
+      locale: i18nLocale.value,
+      productSlug,
+      limit: props.limit,
+    };
+  }
+
+  return {};
+});
+
+const shouldFetchContext = computed(
+  () => props.source === "context" && Boolean(contextQuery.value.type),
+);
+
+const { data: contextData } = useStrapiFetch<PriceTeaserContextResponse>(
+  "/price-teasers/context",
+  {
+    query: contextQuery,
+    fetchOptions: {
+      immediate: shouldFetchContext.value,
+      key: computed(() => {
+        const query = contextQuery.value;
+        return `price-teaser:${query.type ?? "manual"}:${query.locale ?? ""}:${query.pathKey ?? query.productSlug ?? ""}:${query.limit ?? ""}`;
+      }),
+    },
+  },
+);
+
+const items = computed(() => {
+  const contextItems = contextData.value?.data?.items ?? [];
+  if (props.source === "context" && contextItems.length > 0) {
+    return contextItems;
+  }
+
+  return props.items;
+});
+
 const visibleItems = computed(() =>
-  typeof props.limit === "number" ? props.items.slice(0, props.limit) : props.items,
+  typeof props.limit === "number" ? items.value.slice(0, props.limit) : items.value,
 );
 
 function formatPrice(p: number | string) {

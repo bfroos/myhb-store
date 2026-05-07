@@ -1,13 +1,11 @@
 /**
  * Strapi Live Preview Plugin for Nuxt 3
  *
- * Hybrid Strategy:
- * 1. Listen for strapiUpdate events (instant when they work)
- * 2. Fall back to 5-second polling if strapiUpdate fails
- * 3. Inject strapiScript for double-click-to-edit (best effort, may be broken)
+ * Listens for strapiUpdate events from Strapi admin panel and refreshes
+ * the preview when content is saved. The preview mode is maintained via
+ * SameSite=none cookies set by /api/preview route.
  *
- * The polling is essential because Strapi's injected script often has bugs
- * (e.g. "ReferenceError: ve is not defined") that prevent strapiUpdate events.
+ * See: https://docs.strapi.io/cms/features/preview
  */
 
 export default defineNuxtPlugin(() => {
@@ -35,16 +33,14 @@ export default defineNuxtPlugin(() => {
   };
 
   let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
-  let lastRefreshAt = Date.now();
   let scriptInjected = false;
 
   const triggerRefresh = () => {
     if (refreshTimeout) clearTimeout(refreshTimeout);
-    
+
     refreshTimeout = setTimeout(() => {
-      lastRefreshAt = Date.now();
       console.log('[strapi-preview] → Refreshing preview...');
-      
+
       try {
         // URL-param reload (preserves cookies better than location.reload())
         const url = new URL(window.location.href);
@@ -71,7 +67,7 @@ export default defineNuxtPlugin(() => {
     const { type, payload } = event.data ?? {};
 
     if (type === 'strapiUpdate') {
-      console.log('[strapi-preview] → strapiUpdate received!');
+      console.log('[strapi-preview] → strapiUpdate received, reloading...');
       triggerRefresh();
     } else if ((type === 'previewScript' || type === 'strapiScript') && payload?.script && !scriptInjected) {
       // Strapi v5 docs say 'previewScript', but some versions send 'strapiScript'
@@ -81,7 +77,7 @@ export default defineNuxtPlugin(() => {
         script.textContent = payload.script;
         document.head.appendChild(script);
         scriptInjected = true;
-        console.log('[strapi-preview] ✓ Script injected (may have bugs, polling is the fallback)');
+        console.log('[strapi-preview] ✓ Script injected');
       } catch (e) {
         console.error('[strapi-preview] Script injection failed (non-fatal):', e);
       }
@@ -95,23 +91,9 @@ export default defineNuxtPlugin(() => {
   window.parent?.postMessage({ type: 'previewReady' }, '*');
   console.log('[strapi-preview] → Sent previewReady');
 
-  // Fallback polling: Check for updates every 5 seconds
-  // This is essential because Strapi's injected script is often broken
-  console.log('[strapi-preview] ✓ Starting 5s fallback poll');
-  
-  setInterval(() => {
-    const timeSinceLastRefresh = Date.now() - lastRefreshAt;
-    
-    // If no refresh in last 4.5 seconds, trigger one
-    // (This catches strapiUpdate events that never arrived)
-    if (timeSinceLastRefresh > 4500) {
-      console.log('[strapi-preview] → Poll: auto-reload (no recent activity)');
-      triggerRefresh();
-    }
-  }, 5000);
-
   // Cleanup
   return () => {
+    if (refreshTimeout) clearTimeout(refreshTimeout);
     window.removeEventListener('message', handleStrapiMessage);
   };
 });
