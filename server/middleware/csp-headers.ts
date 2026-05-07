@@ -7,17 +7,19 @@ export default defineEventHandler((event) => {
   // Get the Strapi backend URL from environment
   const strapiUrl = process.env.NUXT_PUBLIC_STRAPI_URL || 'https://striking-bear-e5a15ddc94.strapiapp.com';
 
-  // Set CSP header to allow iframe embedding from Strapi admin
+  // Set CSP header to allow iframe embedding from Strapi admin.
+  // script-src includes *.strapiapp.com so Strapi's Live Preview script
+  // (injected via previewScript postMessage) can load from any Strapi Cloud URL.
   setHeader(event, 'Content-Security-Policy', `
     default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' ${strapiUrl} https://engine.myhealthandbeauty.com https://assets.calendly.com;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' ${strapiUrl} https://*.strapiapp.com https://engine.myhealthandbeauty.com https://assets.calendly.com;
     style-src 'self' 'unsafe-inline' https://assets.calendly.com;
     img-src 'self' data: https:;
     font-src 'self' data: https:;
     connect-src 'self' https:;
     media-src 'self' https://media.myhealthandbeauty.app https:;
     frame-src 'self' https://calendly.com https://*.calendly.com;
-    frame-ancestors 'self' ${strapiUrl};
+    frame-ancestors 'self' ${strapiUrl} https://*.strapiapp.com;
     base-uri 'self';
     form-action 'self';
   `.replace(/\n/g, ' ').trim());

@@ -70,9 +70,17 @@ export default defineNuxtPlugin(() => {
     if (type === 'strapiUpdate') {
       await triggerRefresh();
     } else if (type === 'previewScript' && payload?.script && !scriptInjected) {
-      // Inject the script Strapi sends — handles double-click-to-edit
+      // Inject the script Strapi sends — handles double-click-to-edit.
+      // Strapi may send either inline JS code or a script URL.
       const script = document.createElement('script');
-      script.textContent = payload.script;
+      if (payload.script.startsWith('http') || payload.script.startsWith('//')) {
+        // External URL — set as src
+        script.src = payload.script;
+        script.crossOrigin = 'anonymous';
+      } else {
+        // Inline code
+        script.textContent = payload.script;
+      }
       document.head.appendChild(script);
       scriptInjected = true;
       // Stop polling once we have the previewScript — Strapi will send strapiUpdate events
