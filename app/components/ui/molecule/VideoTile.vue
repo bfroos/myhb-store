@@ -5,13 +5,15 @@
     ref="tileRef"
   >
     <video
-      v-if="isVideoLoaded"
+      v-if="isVideoLoaded || showVideoDirectly"
       class="videoTile__video"
       ref="videoRef"
       :src="videoUrl"
       :poster="lazyPosterUrl"
       :aria-label="`${title} - ${subtitle}`"
       :controls="isPlaying"
+      :muted="!isPlaying"
+      preload="metadata"
     />
     <img
       v-else-if="lazyPosterUrl"
@@ -42,7 +44,7 @@
 </template>
 <script setup lang="ts">
 import { IconPlayerPlay } from "@tabler/icons-vue";
-import { buildVideoPosterUrl } from "~/utils/media";
+// buildVideoPosterUrl removed — Cloudflare Media Transformations not active
 
 const props = defineProps<{
   title?: string;
@@ -65,14 +67,17 @@ const videoUrl = computed(() => props.video ?? "");
 
 const posterUrl = computed(() => {
   if (props.poster) return props.poster;
-  if (!props.video) return "";
-  return buildVideoPosterUrl(props.video);
+  // buildVideoPosterUrl returns "" when Cloudflare Media Transformations are disabled
+  return "";
 });
 
 // Lazy poster URL - only set when component enters viewport
 const lazyPosterUrl = computed(() =>
   isInViewport.value ? posterUrl.value : "",
 );
+
+// If no poster is available, show the video element directly (browser renders first frame)
+const showVideoDirectly = computed(() => !posterUrl.value && isInViewport.value && !isPlaying.value);
 
 const videoRef = ref<HTMLVideoElement | null>(null);
 const tileRef = ref<HTMLElement | null>(null);

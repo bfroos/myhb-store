@@ -77,21 +77,17 @@ function onVideoError() {
 
 const videoPreloadAttr = computed<"none" | "metadata" | "auto">(() => {
   const vs = normalizedVideoSettings.value;
-  const wantsPreload = vs?.preload === true;
 
-  if (vs?.autoplay) return wantsPreload ? "auto" : "metadata";
+  if (vs?.autoplay) return "auto";
 
-  return wantsPreload ? "metadata" : "none";
+  // Always load metadata so the browser shows the first frame as preview.
+  // Previously a Cloudflare poster frame was used, but Media Transformations
+  // are not activated — so metadata preload is the next best thing.
+  return "metadata";
 });
 
-function maybeEnableMetadataPreload(event: Event) {
-  const vs = normalizedVideoSettings.value;
-  if (vs?.autoplay) return;
-  if (vs?.preload !== false) return;
-
-  const el = event.target as HTMLVideoElement | null;
-  if (!el) return;
-  el.preload = "metadata";
+function maybeEnableMetadataPreload(_event: Event) {
+  // No-op: preload=metadata is always set now, nothing to do on hover.
 }
 </script>
 <style scoped>
