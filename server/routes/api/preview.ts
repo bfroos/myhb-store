@@ -1,11 +1,11 @@
 /**
- * Strapi Preview Route Handler for Nuxt
- *
- * CRITICAL: We use BOTH cookie AND URL query parameter for preview mode.
- * - Cookie: For initial page load from Strapi (SameSite=none works here)
- * - URL param: For soft-reloads within the iframe (cookies not sent cross-domain)
- *
- * The frontend plugin extracts ?__preview=1 from URL and adds it back when refreshing.
+ * Strapi Preview Route Handler
+ * 
+ * CRITICAL: This sets a SameSite=none cookie so that browsers will send it
+ * even in cross-domain iframe contexts. This is the ONLY way to maintain
+ * preview session across iframe-internal navigations.
+ * 
+ * See: https://docs.strapi.io/cms/features/preview
  */
 
 export default defineEventHandler(async (event) => {
@@ -31,28 +31,26 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Set preview mode cookie
-  // sameSite: 'none' + secure: true is required so the cookie is sent when the
-  // page is loaded inside Strapi's cross-origin preview iframe.
+  // Set preview mode cookie with SameSite=none
+  // This is CRITICAL for cross-domain iframe previews to work
+  // Without SameSite=none, browsers won't send the cookie in iframe requests
   setCookie(event, '__NUXT_PREVIEW', 'true', {
     maxAge: 60 * 60 * 24 * 7, // 7 days
-    httpOnly: false,
-    secure: true,
-    sameSite: 'none',
+    httpOnly: false, // Must be false so client JS can read it
+    secure: true,    // REQUIRED for SameSite=none to work
+    sameSite: 'none', // REQUIRED for cross-domain iframe contexts
+    path: '/',
   });
 
-  // Store the preview status (server-side only, httpOnly is fine)
+  // Also set the preview status (used for Strapi API queries)
   setCookie(event, '__NUXT_PREVIEW_STATUS', status || 'draft', {
-    maxAge: 60 * 60 * 24 * 7, // 7 days
+    maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
     secure: true,
     sameSite: 'none',
+    path: '/',
   });
 
-  // Add preview mode as URL query parameter so soft-reloads within iframe preserve it
-  const targetUrl = new URL(url, 'https://www.myhealthandbeauty.com');
-  targetUrl.searchParams.set('__preview', '1');
-  
-  // Redirect to the preview URL with query param
-  return sendRedirect(event, targetUrl.toString());
+  // Redirect to the preview URL
+  return sendRedirect(event, url);
 });
