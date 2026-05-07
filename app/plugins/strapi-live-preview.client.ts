@@ -48,8 +48,9 @@ export default defineNuxtPlugin(() => {
       console.log('[strapi-preview] → strapiUpdate received, reloading...');
       // Soft reload: preserves cookies because we're not changing domain
       window.location.reload();
-    } else if (type === 'strapiScript' && payload?.script) {
-      console.log('[strapi-preview] → strapiScript received, injecting...');
+    } else if ((type === 'previewScript' || type === 'strapiScript') && payload?.script) {
+      // Strapi v5 docs say 'previewScript', but some versions send 'strapiScript'
+      console.log(`[strapi-preview] → ${type} received, injecting...`);
       try {
         const script = document.createElement('script');
         script.textContent = payload.script;
