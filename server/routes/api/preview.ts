@@ -1,6 +1,11 @@
 /**
  * Strapi Preview Route Handler for Nuxt
- * Validates the preview secret and enables preview mode
+ *
+ * CRITICAL: We use BOTH cookie AND URL query parameter for preview mode.
+ * - Cookie: For initial page load from Strapi (SameSite=none works here)
+ * - URL param: For soft-reloads within the iframe (cookies not sent cross-domain)
+ *
+ * The frontend plugin extracts ?__preview=1 from URL and adds it back when refreshing.
  */
 
 export default defineEventHandler(async (event) => {
@@ -29,8 +34,6 @@ export default defineEventHandler(async (event) => {
   // Set preview mode cookie
   // sameSite: 'none' + secure: true is required so the cookie is sent when the
   // page is loaded inside Strapi's cross-origin preview iframe.
-  // httpOnly: false on the client-visible flag so the live-preview plugin can
-  // read it; the secret itself is validated server-side above.
   setCookie(event, '__NUXT_PREVIEW', 'true', {
     maxAge: 60 * 60 * 24 * 7, // 7 days
     httpOnly: false,
@@ -46,6 +49,10 @@ export default defineEventHandler(async (event) => {
     sameSite: 'none',
   });
 
-  // Redirect to the preview URL
-  return sendRedirect(event, url);
+  // Add preview mode as URL query parameter so soft-reloads within iframe preserve it
+  const targetUrl = new URL(url, 'https://www.myhealthandbeauty.com');
+  targetUrl.searchParams.set('__preview', '1');
+  
+  // Redirect to the preview URL with query param
+  return sendRedirect(event, targetUrl.toString());
 });

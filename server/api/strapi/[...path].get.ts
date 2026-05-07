@@ -1,10 +1,20 @@
 // Strapi proxy with server-side caching (1h fresh, 24h stale-while-revalidate).
-// CRITICAL for preview: cache is COMPLETELY BYPASSED when __NUXT_PREVIEW=true
+// CRITICAL for preview: cache is COMPLETELY BYPASSED when in preview mode.
 // This ensures live preview always gets fresh draft data, never stale cache.
+//
+// Preview detection: Check BOTH cookie (initial load) AND query param (soft-reloads)
+// because SameSite=none cookies aren't sent on iframe-internal navigations.
 
 function isPreviewRequest(event: any): boolean {
+  // Check cookie first (initial page load from Strapi)
   const cookie = getCookie(event, '__NUXT_PREVIEW');
-  return cookie === 'true';
+  if (cookie === 'true') return true;
+
+  // Check query parameter (soft-reloads within iframe)
+  const query = getQuery(event);
+  if (query.__preview === '1') return true;
+
+  return false;
 }
 
 export default defineCachedEventHandler(
@@ -59,8 +69,7 @@ export default defineCachedEventHandler(
       const path = url.pathname.replace(/^\/api\/strapi/, "");
       
       // CRITICAL: Include preview status in cache key
-      // If __NUXT_PREVIEW=true, the cache key should reflect that
-      const isPreview = getCookie(event, '__NUXT_PREVIEW') === 'true';
+      const isPreview = isPreviewRequest(event);
       const previewFlag = isPreview ? ':preview' : '';
       
       // Build query params (including status=draft if preview)

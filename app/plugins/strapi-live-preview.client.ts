@@ -1,8 +1,9 @@
 /**
  * Strapi Live Preview Plugin (Growth/Enterprise)
  *
- * Strategy: Listen to strapiUpdate events from Strapi, then soft-reload via URL-param.
- * The poll is now ONLY a long-term safety net (every 30s), not the primary mechanism.
+ * CRITICAL FIX: Use URL query parameter instead of relying on cookies.
+ * Cookies with SameSite=none are NOT sent on iframe-internal navigations in some browsers.
+ * Solution: Preserve __preview=1 query param through soft-reloads.
  */
 export default defineNuxtPlugin(() => {
   if (typeof window === 'undefined') return;
@@ -44,10 +45,16 @@ export default defineNuxtPlugin(() => {
       console.log('[strapi-live-preview] → Soft reload via URL-param (strapiUpdate event)');
       
       try {
-        // Use URL-parameter change to trigger a soft reload
         const url = new URL(window.location.href);
+        
+        // CRITICAL: Preserve __preview=1 query parameter
+        // This is needed because cookies aren't sent on iframe-internal navigations
+        url.searchParams.set('__preview', '1');
+        
+        // Add timestamp to bust cache
         const timestamp = Date.now();
         url.searchParams.set('_preview_refresh', timestamp.toString());
+        
         window.location.href = url.toString();
       } catch (e) {
         console.error('[strapi-live-preview] Refresh failed:', e);
@@ -108,16 +115,11 @@ export default defineNuxtPlugin(() => {
   window.parent.postMessage({ type: 'previewReady' }, '*');
 
   // Long-term safety net: every 30 seconds, check if Strapi update wasn't received
-  // This is a fallback only — the main trigger is strapiUpdate events
   console.log('[strapi-live-preview] ✓ Starting 30s safety-net poll');
   const longPoll = setInterval(async () => {
-    // If no strapiUpdate in last 25s, do a refresh
     if (Date.now() - lastStrapiUpdate > 25_000) {
       console.log('[strapi-live-preview] → Safety net: 30s without update, refreshing');
       await triggerRefresh();
     }
   }, 30_000);
-
-  // Note: We keep the long-poll running as a fallback, but the main mechanism
-  // is listening to strapiUpdate events from Strapi.
 });
