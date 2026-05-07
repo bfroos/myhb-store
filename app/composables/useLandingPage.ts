@@ -1,57 +1,43 @@
+import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
-
-type PuckContent = {
-  type: string;
-  props: Record<string, unknown>;
-};
-
-type PuckData = {
-  content: PuckContent[];
-  root?: unknown;
-  zones?: unknown;
-};
-
-type LandingPageTemplate = {
-  id: number;
-  json: PuckData | null;
-};
 
 export function useLandingPage() {
   const route = useRoute();
-  const { t } = useI18n();
-
+  const { locale, fallbackLocale, t } = useI18n();
+  const currentLocale = (locale.value || fallbackLocale.value) as string;
   const slug = route.params.slug as string;
   const seo = ref<SharedSeoDto | null>(null);
-  const templateJson = ref<PuckData | null>(null);
+  const blocks = ref<StrapiBlock[]>([]);
+  const localizations = ref<LocalizationDto[]>([]);
 
   async function fetchLandingPage(): Promise<boolean> {
-    const { data, error } = await useStrapiFetch<any>("/landing-pages", {
-      query: {
-        "filters[slug][$eq]": slug,
-        "populate[template]": "true",
-        "populate[seo][populate]": "openGraph",
+    const { data, error } = await useStrapiFetch<any>(
+      `/landing-pages/by-slug/${slug}`,
+      {
+        query: {
+          locale: currentLocale,
+        },
+        fetchOptions: {
+          key: `landing-page:${currentLocale}:${slug}`,
+        },
       },
-      fetchOptions: {
-        key: `landing-page:${slug}`,
-      },
-    });
+    );
 
     if (error.value) {
       throw handleFetchError(error.value, t);
     }
 
-    const page = data.value?.data?.[0];
+    const page = data.value?.data;
     if (!page) {
       throw handleNotFound(t);
     }
 
     seo.value = page.seo ?? null;
-
-    const template = page.template as LandingPageTemplate | null;
-    templateJson.value = template?.json ?? null;
+    blocks.value = page.blocks ?? [];
+    localizations.value = page.localizations ?? [];
 
     return true;
   }
 
-  return { fetchLandingPage, seo, templateJson };
+  return { fetchLandingPage, seo, blocks, localizations };
 }
