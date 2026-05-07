@@ -1,34 +1,18 @@
 /**
  * Strapi Live Preview Plugin (Growth/Enterprise)
  *
- * Protocol (from Strapi docs + Strapi 5 actual implementation):
- * 1. Frontend sends `previewReady` to parent window (with '*' as targetOrigin)
- * 2. Strapi receives it, sends back `strapiScript` (or `previewScript` in older versions)
- * 3. Frontend injects the script → handles double-click-to-edit + field highlighting
- * 4. On field change, Strapi sends `strapiUpdate` → frontend refreshes data
- *
- * Only runs when embedded in Strapi's preview iframe (window !== window.parent).
- *
- * NOTE: Strapi 5 uses `strapiScript` not `previewScript`, but both are supported.
- *
- * NOTE on origin filtering:
- * We accept messages from known Strapi origins AND from the actual parent window
- * origin (resolved at runtime). Strapi Cloud may send from subdomains or internal
- * URLs that don't match the public admin URL exactly.
- *
- * NOTE on postMessage failures:
- * Strapi Enterprise may send scripts with a specific targetOrigin that doesn't match
- * our window.origin. Those browser errors are harmless — they come from Strapi's side
- * and we can't suppress them. As a fallback, we also poll for changes every 2 seconds
- * while in preview mode.
+ * Critical for Live Preview to work:
+ * 1. When strapiUpdate is received, we must re-fetch page data with status=draft
+ * 2. The __NUXT_PREVIEW cookie is already set (by /api/preview redirect)
+ * 3. The Strapi proxy at /server/api/strapi/[...path].get.ts detects this and adds status=draft
+ * 4. So we just need to trigger a real data refresh
  */
 export default defineNuxtPlugin(() => {
   // Only activate when inside an iframe (Strapi preview)
   if (typeof window === 'undefined') return;
   if (window === window.parent) {
-    // Not in an iframe — skip
     if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-      console.log('[strapi-live-preview] Not in iframe (window === window.parent), plugin inactive');
+      console.log('[strapi-live-preview] Not in iframe, plugin inactive');
     }
     return;
   }
@@ -39,7 +23,6 @@ export default defineNuxtPlugin(() => {
     'http://localhost:1337',
   ];
 
-  // Detect the actual parent origin at runtime (covers Strapi Cloud internal URLs)
   let parentOrigin: string | null = null;
   try {
     parentOrigin = document.referrer ? new URL(document.referrer).origin : null;
@@ -50,7 +33,6 @@ export default defineNuxtPlugin(() => {
   const isAllowedOrigin = (origin: string) => {
     if (STRAPI_ORIGINS.includes(origin)) return true;
     if (parentOrigin && origin === parentOrigin) return true;
-    // Allow any strapiapp.com subdomain (Strapi Cloud)
     if (origin.endsWith('.strapiapp.com')) return true;
     return false;
   };
@@ -64,50 +46,51 @@ export default defineNuxtPlugin(() => {
     if (refreshTimeout) clearTimeout(refreshTimeout);
     refreshTimeout = setTimeout(async () => {
       lastRefreshAt = Date.now();
-      await refreshNuxtData();
-    }, 300);
+      console.log('[strapi-live-preview] → Triggering data refresh (200ms debounce)...');
+      
+      try {
+        // Approach 1: Clear the data cache by navigating and back
+        // This forces all useFetch hooks to re-evaluate their cache keys
+        console.log('[strapi-live-preview]   → Hard refresh via window.location.reload()');
+        window.location.reload();
+      } catch (e) {
+        console.error('[strapi-live-preview] Refresh failed:', e);
+      }
+    }, 200);
   };
 
   const handleMessage = async (event: MessageEvent) => {
-    // Only handle messages from parent window
     if (event.source !== window.parent) {
-      console.debug('[strapi-live-preview] Message from non-parent source, ignoring');
+      console.debug('[strapi-live-preview] Message from non-parent, ignoring');
       return;
     }
-    // Only handle messages from known/allowed origins
     if (!isAllowedOrigin(event.origin)) {
-      console.warn(`[strapi-live-preview] ⚠️ Message from blocked origin: ${event.origin}`);
+      console.warn(`[strapi-live-preview] ⚠️ Blocked origin: ${event.origin}`);
       return;
     }
 
     const { type, payload } = event.data ?? {};
-    console.log(`[strapi-live-preview] ✓ postMessage received: type="${type}"`, { origin: event.origin, payload });
+    console.log(`[strapi-live-preview] ✓ Event: type="${type}"`, { payload });
 
     if (type === 'strapiUpdate') {
-      console.log('[strapi-live-preview] → strapiUpdate: triggering data refresh');
+      console.log('[strapi-live-preview] → strapiUpdate: HARD RELOAD to get draft data');
       await triggerRefresh();
     } else if ((type === 'previewScript' || type === 'strapiScript') && payload?.script && !scriptInjected) {
-      // Support both Strapi 5 (`strapiScript`) and older versions (`previewScript`)
-      console.log(`[strapi-live-preview] ✓ ${type} received, injecting live-preview script`);
-      // Inject the script Strapi sends — handles double-click-to-edit.
-      // Strapi may send either inline JS code or a script URL.
+      console.log(`[strapi-live-preview] ✓ ${type} received, injecting script`);
       const script = document.createElement('script');
       if (payload.script.startsWith('http') || payload.script.startsWith('//')) {
-        // External URL — set as src
-        console.log(`[strapi-live-preview]   → External script URL: ${payload.script}`);
+        console.log(`[strapi-live-preview]   → External URL: ${payload.script}`);
         script.src = payload.script;
         script.crossOrigin = 'anonymous';
       } else {
-        // Inline code
-        console.log('[strapi-live-preview]   → Inline script code');
+        console.log('[strapi-live-preview]   → Inline code');
         script.textContent = payload.script;
       }
       document.head.appendChild(script);
       scriptInjected = true;
-      console.log('[strapi-live-preview]   ✓ Script injected successfully — double-click editing enabled!');
-      // Stop polling once we have the script — Strapi will send strapiUpdate events
+      console.log('[strapi-live-preview]   ✓ Script injected!');
       if (pollInterval) {
-        console.log('[strapi-live-preview]   → Stopping fallback poll (script received)');
+        console.log('[strapi-live-preview]   → Stopping poll');
         clearInterval(pollInterval);
         pollInterval = null;
       }
@@ -115,47 +98,37 @@ export default defineNuxtPlugin(() => {
   };
 
   window.addEventListener('message', handleMessage);
-  console.log('[strapi-live-preview] ✓ Message listener registered');
+  console.log('[strapi-live-preview] ✓ Message listener ready');
 
-  // Notify Strapi we're ready — it will respond with strapiScript/previewScript.
-  // Must use '*' as targetOrigin so the admin panel (cross-origin) receives it.
-  // Keep pinging until Strapi responds with the script (or for max 15s).
+  // Ping ready every 1s for 15s
   let readyPingCount = 0;
-  const maxReadyPings = 15;
   const readyPingInterval = setInterval(() => {
-    if (scriptInjected || readyPingCount >= maxReadyPings) {
+    if (scriptInjected || readyPingCount >= 15) {
       clearInterval(readyPingInterval);
-      if (readyPingCount >= maxReadyPings && !scriptInjected) {
-        console.warn('[strapi-live-preview] ⚠️ No script received after 15s, polling will continue as fallback');
-      }
       return;
     }
     window.parent.postMessage({ type: 'previewReady' }, '*');
-    console.debug(`[strapi-live-preview] → Ping ${readyPingCount + 1}/15: sent previewReady`);
+    console.debug(`[strapi-live-preview] → Ping ${readyPingCount + 1}/15`);
     readyPingCount++;
   }, 1000);
 
-  // Send immediately on load too
-  console.log('[strapi-live-preview] → Sending initial previewReady to parent');
+  console.log('[strapi-live-preview] → Sending initial previewReady');
   window.parent.postMessage({ type: 'previewReady' }, '*');
 
-  // Fallback: poll every 2s in case postMessage doesn't work (origin mismatch).
-  // Stops automatically once script arrives (Strapi will send strapiUpdate events).
-  // This ensures saves are always reflected even if the postMessage handshake fails.
-  console.log('[strapi-live-preview] ✓ Starting fallback poll (every 2s) — this will refresh data if postMessage handshake fails');
+  // Poll every 2s as fallback
+  console.log('[strapi-live-preview] ✓ Fallback poll started (every 2s)');
   pollInterval = setInterval(async () => {
-    // Only poll if we haven't refreshed in the last 1.5s (avoid double-refresh)
     if (Date.now() - lastRefreshAt > 1500) {
-      console.debug('[strapi-live-preview]   → Poll: refreshing Nuxt data');
+      console.debug('[strapi-live-preview] → Poll: refresh');
       lastRefreshAt = Date.now();
-      await refreshNuxtData();
+      await triggerRefresh();
     }
   }, 2000);
 
-  // Stop polling after 30s if no script received (avoid unnecessary traffic)
+  // Stop poll after 30s
   setTimeout(() => {
     if (pollInterval) {
-      console.warn('[strapi-live-preview] ⚠️ Still no script after 30s, stopping fallback poll to save bandwidth');
+      console.warn('[strapi-live-preview] ⚠️ Stopping poll after 30s');
       clearInterval(pollInterval);
       pollInterval = null;
     }
