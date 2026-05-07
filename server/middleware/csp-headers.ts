@@ -1,26 +1,22 @@
 /**
  * CSP Headers Middleware for Strapi Preview
- * Allows the frontend to be embedded in iframes from Strapi admin
+ *
+ * Only sets the frame-ancestors directive (to allow Strapi to embed the frontend
+ * in an iframe) without adding any other restrictive CSP rules that would block
+ * normal tracking scripts (Cookiebot, Facebook Pixel, TikTok, etc.).
+ *
+ * Full CSP hardening should be done in nuxt.config.ts routeRules if needed.
  */
 
 export default defineEventHandler((event) => {
-  // Get the Strapi backend URL from environment
   const strapiUrl = process.env.NUXT_PUBLIC_STRAPI_URL || 'https://striking-bear-e5a15ddc94.strapiapp.com';
 
-  // Set CSP header to allow iframe embedding from Strapi admin.
-  // script-src includes *.strapiapp.com so Strapi's Live Preview script
-  // (injected via previewScript postMessage) can load from any Strapi Cloud URL.
-  setHeader(event, 'Content-Security-Policy', `
-    default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' ${strapiUrl} https://*.strapiapp.com https://engine.myhealthandbeauty.com https://assets.calendly.com;
-    style-src 'self' 'unsafe-inline' https://assets.calendly.com;
-    img-src 'self' data: https:;
-    font-src 'self' data: https:;
-    connect-src 'self' https:;
-    media-src 'self' https://media.myhealthandbeauty.app https:;
-    frame-src 'self' https://calendly.com https://*.calendly.com;
-    frame-ancestors 'self' ${strapiUrl} https://*.strapiapp.com;
-    base-uri 'self';
-    form-action 'self';
-  `.replace(/\n/g, ' ').trim());
+  // Only set frame-ancestors — this is what allows Strapi to embed us in an iframe.
+  // Do NOT set a full CSP here; that would block all tracking/analytics scripts
+  // that are legitimately loaded on the frontend (Cookiebot, FB Pixel, etc.).
+  setHeader(
+    event,
+    'Content-Security-Policy',
+    `frame-ancestors 'self' ${strapiUrl} https://*.strapiapp.com`,
+  );
 });
