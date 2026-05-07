@@ -23,7 +23,14 @@
 export default defineNuxtPlugin(() => {
   // Only activate when inside an iframe (Strapi preview)
   if (typeof window === 'undefined') return;
-  if (window === window.parent) return; // Not in an iframe — skip
+  if (window === window.parent) {
+    // Not in an iframe — skip
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+      console.log('[strapi-live-preview] Not in iframe (window === window.parent), plugin inactive');
+    }
+    return;
+  }
+  console.log('[strapi-live-preview] ✓ In iframe, activating preview mode');
 
   const STRAPI_ORIGINS = [
     'https://striking-bear-e5a15ddc94.strapiapp.com',
@@ -61,30 +68,42 @@ export default defineNuxtPlugin(() => {
 
   const handleMessage = async (event: MessageEvent) => {
     // Only handle messages from parent window
-    if (event.source !== window.parent) return;
+    if (event.source !== window.parent) {
+      console.debug('[strapi-live-preview] Message from non-parent source, ignoring');
+      return;
+    }
     // Only handle messages from known/allowed origins
-    if (!isAllowedOrigin(event.origin)) return;
+    if (!isAllowedOrigin(event.origin)) {
+      console.warn(`[strapi-live-preview] ⚠️ Message from blocked origin: ${event.origin}`);
+      return;
+    }
 
     const { type, payload } = event.data ?? {};
+    console.log(`[strapi-live-preview] ✓ postMessage received: type="${type}"`, { origin: event.origin, payload });
 
     if (type === 'strapiUpdate') {
+      console.log('[strapi-live-preview] → strapiUpdate: triggering data refresh');
       await triggerRefresh();
     } else if (type === 'previewScript' && payload?.script && !scriptInjected) {
+      console.log('[strapi-live-preview] ✓ previewScript received, injecting live-preview script');
       // Inject the script Strapi sends — handles double-click-to-edit.
       // Strapi may send either inline JS code or a script URL.
       const script = document.createElement('script');
       if (payload.script.startsWith('http') || payload.script.startsWith('//')) {
         // External URL — set as src
+        console.log(`[strapi-live-preview]   → External script URL: ${payload.script}`);
         script.src = payload.script;
         script.crossOrigin = 'anonymous';
       } else {
         // Inline code
+        console.log('[strapi-live-preview]   → Inline script code');
         script.textContent = payload.script;
       }
       document.head.appendChild(script);
       scriptInjected = true;
       // Stop polling once we have the previewScript — Strapi will send strapiUpdate events
       if (pollInterval) {
+        console.log('[strapi-live-preview]   → Stopping fallback poll (previewScript received)');
         clearInterval(pollInterval);
         pollInterval = null;
       }
@@ -92,6 +111,7 @@ export default defineNuxtPlugin(() => {
   };
 
   window.addEventListener('message', handleMessage);
+  console.log('[strapi-live-preview] ✓ Message listener registered');
 
   // Notify Strapi we're ready — it will respond with previewScript.
   // Must use '*' as targetOrigin so the admin panel (cross-origin) receives it.
@@ -101,21 +121,28 @@ export default defineNuxtPlugin(() => {
   const readyPingInterval = setInterval(() => {
     if (scriptInjected || readyPingCount >= maxReadyPings) {
       clearInterval(readyPingInterval);
+      if (readyPingCount >= maxReadyPings && !scriptInjected) {
+        console.warn('[strapi-live-preview] ⚠️ No previewScript received after 15s, polling will continue as fallback');
+      }
       return;
     }
     window.parent.postMessage({ type: 'previewReady' }, '*');
+    console.debug(`[strapi-live-preview] → Ping ${readyPingCount + 1}/15: sent previewReady`);
     readyPingCount++;
   }, 1000);
 
   // Send immediately on load too
+  console.log('[strapi-live-preview] → Sending initial previewReady to parent');
   window.parent.postMessage({ type: 'previewReady' }, '*');
 
   // Fallback: poll every 2s in case postMessage doesn't work (origin mismatch).
   // Stops automatically once previewScript arrives (Strapi will send strapiUpdate).
   // This ensures saves are always reflected even if the postMessage handshake fails.
+  console.log('[strapi-live-preview] ✓ Starting fallback poll (every 2s) — this will refresh data if postMessage handshake fails');
   pollInterval = setInterval(async () => {
     // Only poll if we haven't refreshed in the last 1.5s (avoid double-refresh)
     if (Date.now() - lastRefreshAt > 1500) {
+      console.debug('[strapi-live-preview]   → Poll: refreshing Nuxt data');
       lastRefreshAt = Date.now();
       await refreshNuxtData();
     }
@@ -124,6 +151,7 @@ export default defineNuxtPlugin(() => {
   // Stop polling after 30s if no previewScript received (avoid unnecessary traffic)
   setTimeout(() => {
     if (pollInterval) {
+      console.warn('[strapi-live-preview] ⚠️ Still no previewScript after 30s, stopping fallback poll to save bandwidth');
       clearInterval(pollInterval);
       pollInterval = null;
     }
