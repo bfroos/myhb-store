@@ -1,25 +1,10 @@
 /**
  * Strapi Live Preview Plugin (Growth/Enterprise)
  *
- * CRITICAL: Keep the fallback poll running at all times, even if the Strapi
- * injected script succeeds or fails. The poll is the ultimate safety net for
- * ensuring preview data updates.
- *
- * Flow:
- * 1. Send previewReady to Strapi
- * 2. Strapi sends strapiScript (may be broken or throw errors)
- * 3. Try to inject it (best effort, errors are non-fatal)
- * 4. Fallback poll runs FOREVER every 2s to catch any missed updates
- * 5. When save happens, poll will refresh via URL-param change (soft reload)
- *
- * The poll is the most reliable mechanism — it doesn't depend on Strapi's
- * event system working perfectly.
- *
- * IMPORTANT: We use URL-param reload instead of window.location.reload()
- * to preserve the __NUXT_PREVIEW cookie across iframe boundaries.
+ * Strategy: Listen to strapiUpdate events from Strapi, then soft-reload via URL-param.
+ * The poll is now ONLY a long-term safety net (every 30s), not the primary mechanism.
  */
 export default defineNuxtPlugin(() => {
-  // Only activate when inside an iframe (Strapi preview)
   if (typeof window === 'undefined') return;
   if (window === window.parent) {
     if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
@@ -50,17 +35,16 @@ export default defineNuxtPlugin(() => {
 
   let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
   let scriptInjected = false;
-  let lastRefreshAt = Date.now();
+  let lastStrapiUpdate = 0;
 
   const triggerRefresh = async () => {
     if (refreshTimeout) clearTimeout(refreshTimeout);
     refreshTimeout = setTimeout(async () => {
-      lastRefreshAt = Date.now();
-      console.log('[strapi-live-preview] → Triggering soft reload via URL-param (preserves __NUXT_PREVIEW cookie)...');
+      lastStrapiUpdate = Date.now();
+      console.log('[strapi-live-preview] → Soft reload via URL-param (strapiUpdate event)');
       
       try {
-        // Use URL-parameter change to trigger a soft reload that preserves cookies
-        // This is safer than window.location.reload() which can lose cross-domain cookies
+        // Use URL-parameter change to trigger a soft reload
         const url = new URL(window.location.href);
         const timestamp = Date.now();
         url.searchParams.set('_preview_refresh', timestamp.toString());
@@ -72,10 +56,7 @@ export default defineNuxtPlugin(() => {
   };
 
   const handleMessage = async (event: MessageEvent) => {
-    if (event.source !== window.parent) {
-      console.debug('[strapi-live-preview] Message from non-parent, ignoring');
-      return;
-    }
+    if (event.source !== window.parent) return;
     if (!isAllowedOrigin(event.origin)) {
       console.warn(`[strapi-live-preview] ⚠️ Blocked origin: ${event.origin}`);
       return;
@@ -85,7 +66,7 @@ export default defineNuxtPlugin(() => {
     console.log(`[strapi-live-preview] ✓ Event: type="${type}"`);
 
     if (type === 'strapiUpdate') {
-      console.log('[strapi-live-preview] → strapiUpdate received, soft reload');
+      console.log('[strapi-live-preview] → strapiUpdate: triggering refresh');
       await triggerRefresh();
     } else if ((type === 'previewScript' || type === 'strapiScript') && payload?.script && !scriptInjected) {
       console.log(`[strapi-live-preview] ✓ ${type} received, attempting injection`);
@@ -101,10 +82,9 @@ export default defineNuxtPlugin(() => {
         }
         document.head.appendChild(script);
         scriptInjected = true;
-        console.log('[strapi-live-preview]   ✓ Script installed (may be broken, but poll will handle it)');
+        console.log('[strapi-live-preview]   ✓ Script installed');
       } catch (e) {
-        console.error('[strapi-live-preview] Script injection failed (non-fatal):', e);
-        // Don't set scriptInjected=true, keep trying via poll
+        console.error('[strapi-live-preview] Script injection failed:', e);
       }
     }
   };
@@ -117,9 +97,6 @@ export default defineNuxtPlugin(() => {
   const readyPingInterval = setInterval(() => {
     if (scriptInjected || readyPingCount >= 15) {
       clearInterval(readyPingInterval);
-      if (readyPingCount >= 15) {
-        console.warn('[strapi-live-preview] ⚠️ No script after 15s, but poll continues as fallback');
-      }
       return;
     }
     window.parent.postMessage({ type: 'previewReady' }, '*');
@@ -130,16 +107,17 @@ export default defineNuxtPlugin(() => {
   console.log('[strapi-live-preview] → Sending initial previewReady');
   window.parent.postMessage({ type: 'previewReady' }, '*');
 
-  // CRITICAL: Fallback poll runs FOREVER
-  // Every 2 seconds, if nothing refreshed recently, do a soft reload via URL-param.
-  console.log('[strapi-live-preview] ✓ Starting fallback poll (every 2s, runs forever)');
-  const pollInterval = setInterval(async () => {
-    if (Date.now() - lastRefreshAt > 1500) {
-      console.log('[strapi-live-preview] → Poll: auto-refresh (no recent activity)');
+  // Long-term safety net: every 30 seconds, check if Strapi update wasn't received
+  // This is a fallback only — the main trigger is strapiUpdate events
+  console.log('[strapi-live-preview] ✓ Starting 30s safety-net poll');
+  const longPoll = setInterval(async () => {
+    // If no strapiUpdate in last 25s, do a refresh
+    if (Date.now() - lastStrapiUpdate > 25_000) {
+      console.log('[strapi-live-preview] → Safety net: 30s without update, refreshing');
       await triggerRefresh();
     }
-  }, 2000);
+  }, 30_000);
 
-  // Note: We do NOT stop the poll. It runs forever as the ultimate safety net.
-  // This ensures that even if Strapi's event system fails, preview updates still work.
+  // Note: We keep the long-poll running as a fallback, but the main mechanism
+  // is listening to strapiUpdate events from Strapi.
 });
