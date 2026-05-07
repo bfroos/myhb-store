@@ -10,12 +10,13 @@ export default defineEventHandler((event) => {
   // Set CSP header to allow iframe embedding from Strapi admin
   setHeader(event, 'Content-Security-Policy', `
     default-src 'self';
-    script-src 'self' 'unsafe-inline' 'unsafe-eval' ${strapiUrl} https://engine.myhealthandbeauty.com;
-    style-src 'self' 'unsafe-inline';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' ${strapiUrl} https://engine.myhealthandbeauty.com https://assets.calendly.com;
+    style-src 'self' 'unsafe-inline' https://assets.calendly.com;
     img-src 'self' data: https:;
-    font-src 'self' data:;
+    font-src 'self' data: https:;
     connect-src 'self' https:;
     media-src 'self' https://media.myhealthandbeauty.app https:;
+    frame-src 'self' https://calendly.com https://*.calendly.com;
     frame-ancestors 'self' ${strapiUrl};
     base-uri 'self';
     form-action 'self';
