@@ -8,19 +8,19 @@
     v-bind="fixedBlocks.hero"
     show-floating-cta
   />
-  <BlockLocationContact
-    v-if="fixedBlocks?.locationContact"
-    v-bind="fixedBlocks.locationContact"
-  />
   <BlockMediaCard
     v-if="fixedBlocks?.aboutLocation"
     v-bind="fixedBlocks.aboutLocation"
+  />
+  <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
+  <BlockLocationContact
+    v-if="fixedBlocks?.locationContact"
+    v-bind="fixedBlocks.locationContact"
   />
   <BlockLocationDirections
     v-if="fixedBlocks?.locationDirections"
     v-bind="fixedBlocks.locationDirections"
   />
-  <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
 </template>
 <script setup lang="ts">
 const {
