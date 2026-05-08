@@ -71,40 +71,40 @@
       v-bind="fixedBlocks.medicalTeamHighlight"
       id="employee"
     />
-    <!-- 9. Map/Contact -->
-    <BlockLocationContact
-      v-if="fixedBlocks?.locationContact"
-      v-bind="fixedBlocks.locationContact"
-    />
-    <!-- 10. About Location -->
-    <BlockMediaCard
-      v-if="fixedBlocks?.aboutLocation"
-      v-bind="fixedBlocks.aboutLocation"
-    />
-    <!-- 11. Suitability (Comparison) -->
+    <!-- 9. Suitability (Comparison) -->
     <BlockComparisonBlock
       v-if="fixedBlocks?.suitability"
       v-bind="fixedBlocks.suitability"
       id="suitability"
     />
-    <!-- 12. Table of Contents (Inhaltsverzeichnis) -->
+    <!-- 10. Table of Contents (Inhaltsverzeichnis) -->
     <BlockTableOfContents
       v-if="fixedBlocks?.tableOfContents"
       v-bind="fixedBlocks.tableOfContents"
     />
-    <!-- Treatment Plan (if exists) -->
+    <!-- 11. Treatment Plan (if exists) -->
     <BlockTreatmentPlan
       v-if="fixedBlocks?.treatmentPlan"
       v-bind="fixedBlocks.treatmentPlan"
       id="treatment-plan"
     />
-    <!-- FAQ (if exists) -->
-    <BlockFaqBlock v-if="fixedBlocks?.faq" v-bind="fixedBlocks.faq" id="faq" />
-    <!-- Directions (if exists) -->
+    <!-- 12. Map/Contact -->
+    <BlockLocationContact
+      v-if="fixedBlocks?.locationContact"
+      v-bind="fixedBlocks.locationContact"
+    />
+    <!-- 13. About Location (Du findest unsere Lounge...) -->
+    <BlockMediaCard
+      v-if="fixedBlocks?.aboutLocation"
+      v-bind="fixedBlocks.aboutLocation"
+    />
+    <!-- 14. Directions (Wegbeschreibung) -->
     <BlockLocationDirections
       v-if="fixedBlocks?.locationDirections"
       v-bind="fixedBlocks.locationDirections"
     />
+    <!-- 15. FAQ (ganz am Ende) -->
+    <BlockFaqBlock v-if="fixedBlocks?.faq" v-bind="fixedBlocks.faq" id="faq" />
   </template>
 </template>
 <script setup lang="ts">
