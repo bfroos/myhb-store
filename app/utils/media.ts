@@ -40,6 +40,14 @@ export const IMAGE_SIZE_PRESETS: Record<
 
 type CloudflareImageOptions = (typeof IMAGE_SIZE_PRESETS)[ImageFormat];
 
+const STRAPI_SOURCE_MAP_MARKS =
+  /[\u034f\u061c\u17b4\u17b5\u180b-\u180f\u200b-\u200f\u202a-\u202e\u2060-\u206f\ufeff\ufe00-\ufe0f\u{e0100}-\u{e01ef}]/gu;
+
+export function cleanStrapiUrl(url?: string | null): string | undefined {
+  const cleanUrl = url?.replace(STRAPI_SOURCE_MAP_MARKS, "");
+  return cleanUrl || undefined;
+}
+
 /**
  * Builds a Cloudflare Image-Transform-URL (cdn-cgi/image) for on-the-fly resize/format.
  * Expects an absolute media URL (e.g. https://media.myhb.app/…) or a relative path.
@@ -49,9 +57,12 @@ export function buildCloudflareImageUrl(
   mediaUrl: string,
   options: CloudflareImageOptions,
 ): string {
+  const cleanMediaUrl = cleanStrapiUrl(mediaUrl);
+  if (!cleanMediaUrl) return mediaUrl;
+
   const config = useRuntimeConfig();
   const mediaBaseUrl = config.public.mediaUrl ?? "";
-  if (!mediaBaseUrl) return mediaUrl;
+  if (!mediaBaseUrl) return cleanMediaUrl;
 
   const parts: string[] = [];
   if (options.width) parts.push(`width=${options.width}`);
@@ -59,15 +70,15 @@ export function buildCloudflareImageUrl(
   if (options.quality != null) parts.push(`quality=${options.quality}`);
   if (options.fit) parts.push(`fit=${options.fit}`);
   const opts = parts.join(",");
-  if (!opts) return mediaUrl;
+  if (!opts) return cleanMediaUrl;
 
-  const isAbsolute = /^https?:\/\//i.test(mediaUrl);
-  const origin = isAbsolute ? new URL(mediaUrl).origin : mediaBaseUrl;
+  const isAbsolute = /^https?:\/\//i.test(cleanMediaUrl);
+  const origin = isAbsolute ? new URL(cleanMediaUrl).origin : mediaBaseUrl;
   const path = isAbsolute
-    ? new URL(mediaUrl).pathname
-    : mediaUrl.startsWith("/")
-    ? mediaUrl
-    : `/${mediaUrl}`;
+    ? new URL(cleanMediaUrl).pathname
+    : cleanMediaUrl.startsWith("/")
+    ? cleanMediaUrl
+    : `/${cleanMediaUrl}`;
 
   return `${origin}/cdn-cgi/image/${opts}${path}`;
 }
@@ -83,16 +94,17 @@ export function getMediaUrl(
   media: StrapiMedia,
   format: ImageFormat,
 ): string | undefined {
-  if (!media?.url) return undefined;
+  const url = cleanStrapiUrl(media?.url);
+  if (!url) return undefined;
 
   if (media?.mime?.startsWith("video/")) {
-    return media.url;
+    return url;
   }
 
   const preset = IMAGE_SIZE_PRESETS[format as ImageFormat];
-  if (!preset) return media.url;
+  if (!preset) return url;
 
-  return buildCloudflareImageUrl(media.url, preset);
+  return buildCloudflareImageUrl(url, preset);
 }
 
 export function isMediaImage(media: StrapiMedia): boolean {

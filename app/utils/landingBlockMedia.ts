@@ -1,4 +1,5 @@
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { cleanStrapiUrl } from "~/utils/media";
 
 export type LegacyImage = {
   src?: string;
@@ -8,14 +9,15 @@ export type LegacyImage = {
 export function mediaToLegacyImage(
   media?: StrapiMedia | null,
 ): LegacyImage | undefined {
-  if (!media?.url) return undefined;
+  const src = cleanStrapiUrl(media?.url);
+  if (!src) return undefined;
 
   return {
-    src: media.url,
+    src,
     alt: media.alternativeText ?? media.caption ?? undefined,
   };
 }
 
 export function mediaUrl(media?: StrapiMedia | null): string | undefined {
-  return media?.url || undefined;
+  return cleanStrapiUrl(media?.url);
 }
