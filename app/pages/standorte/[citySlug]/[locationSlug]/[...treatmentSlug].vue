@@ -8,19 +8,36 @@
     v-bind="fixedBlocks.hero"
     show-floating-cta
   />
+  <!-- SEO mode: location blocks early (original position) -->
+  <template v-if="!isAdsMode">
+    <BlockLocationContact
+      v-if="fixedBlocks?.locationContact"
+      v-bind="fixedBlocks.locationContact"
+    />
+  </template>
   <BlockMediaCard
     v-if="fixedBlocks?.aboutLocation"
     v-bind="fixedBlocks.aboutLocation"
   />
+  <!-- SEO mode: directions early (original position) -->
+  <template v-if="!isAdsMode">
+    <BlockLocationDirections
+      v-if="fixedBlocks?.locationDirections"
+      v-bind="fixedBlocks.locationDirections"
+    />
+  </template>
   <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
-  <BlockLocationContact
-    v-if="fixedBlocks?.locationContact && !isAdsMode"
-    v-bind="fixedBlocks.locationContact"
-  />
-  <BlockLocationDirections
-    v-if="fixedBlocks?.locationDirections && !isAdsMode"
-    v-bind="fixedBlocks.locationDirections"
-  />
+  <!-- Ads mode: location blocks at the end -->
+  <template v-if="isAdsMode">
+    <BlockLocationContact
+      v-if="fixedBlocks?.locationContact"
+      v-bind="fixedBlocks.locationContact"
+    />
+    <BlockLocationDirections
+      v-if="fixedBlocks?.locationDirections"
+      v-bind="fixedBlocks.locationDirections"
+    />
+  </template>
 </template>
 <script setup lang="ts">
 const {
