@@ -14,11 +14,11 @@
   />
   <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
   <BlockLocationContact
-    v-if="fixedBlocks?.locationContact"
+    v-if="fixedBlocks?.locationContact && !isAdsMode"
     v-bind="fixedBlocks.locationContact"
   />
   <BlockLocationDirections
-    v-if="fixedBlocks?.locationDirections"
+    v-if="fixedBlocks?.locationDirections && !isAdsMode"
     v-bind="fixedBlocks.locationDirections"
   />
 </template>
