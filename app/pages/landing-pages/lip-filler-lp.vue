@@ -201,6 +201,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue';
 
 // Personas with different messaging angles
 const personas = {

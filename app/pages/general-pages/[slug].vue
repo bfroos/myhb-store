@@ -171,6 +171,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue';
 const route = useRoute();
 const { isAdsMode } = useSiteModeFlags();
 

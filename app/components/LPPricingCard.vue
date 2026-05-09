@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref, computed, watch, onMounted, onUnmounted } from 'vue';
 defineProps({
   name: String,
   amount: String,
