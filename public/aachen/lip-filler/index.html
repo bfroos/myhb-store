@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Professionelle Lippenaufpolsterung mit natürlichen Ergebnissen. Board-zertifizierte Ärzte, transparente Preise, 30-Tage Garantie.">
+    <meta name="keywords" content="Lippenaufpolsterung, Lip Filler, Lippen vergrößern, Hyaluronsäure">
+    <meta property="og:title" content="Lippenaufpolsterung | Natürliche Ergebnisse | My Health & Beauty">
+    <meta property="og:description" content="Professionelle Lippenaufpolsterung mit natürlichen Ergebnissen. Board-zertifizierte Ärzte, transparente Preise, 30-Tage Garantie.">
+    <meta property="og:type" content="website">
+    <title>Lippenaufpolsterung | Natürliche Ergebnisse | My Health & Beauty</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: #2C2C2C;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #D4A574 0%, #8B6F47 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .hero .subline {
+            font-size: 20px;
+            margin-bottom: 16px;
+            opacity: 0.95;
+        }
+
+        .hero .text {
+            font-size: 16px;
+            margin-bottom: 32px;
+            opacity: 0.9;
+        }
+
+        .trust-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+            align-items: center;
+        }
+
+        .trust-badges span {
+            font-size: 14px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 16px 48px;
+            background: #E8424F;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #D63039;
+            box-shadow: 0 4px 12px rgba(232, 66, 79, 0.3);
+        }
+
+        /* Section Styling */
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        section h2 {
+            font-size: 36px;
+            margin-bottom: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #757575;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        /* Before/After */
+        .before-after {
+            background: #F5F1ED;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            text-align: center;
+        }
+
+        .before-after-placeholder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .before, .after {
+            padding: 60px 20px;
+            background: white;
+            border: 2px solid #ddd;
+            font-weight: bold;
+            color: #757575;
+        }
+
+        .before {
+            border-right: none;
+        }
+
+        .gallery-label {
+            font-size: 14px;
+            color: #8B6F47;
+            font-weight: 500;
+        }
+
+        /* Benefits */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .benefit-card {
+            background: white;
+            padding: 32px;
+            border-radius: 8px;
+            border-left: 4px solid #D4A574;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .benefit-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .benefit-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .benefit-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+            color: #2C2C2C;
+        }
+
+        .benefit-card p {
+            color: #757575;
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border-left: 4px solid #D4A574;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .stars {
+            margin-bottom: 12px;
+        }
+
+        .testimonial-text {
+            color: #2C2C2C;
+            font-size: 14px;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-size: 13px;
+            color: #8B6F47;
+        }
+
+        /* Pricing */
+        .pricing {
+            background: #F5F1ED;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .price-card {
+            background: white;
+            padding: 32px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .price-card.featured {
+            border-color: #D4A574;
+            box-shadow: 0 8px 24px rgba(212, 165, 116, 0.2);
+            transform: scale(1.05);
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #E8424F;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .price-card h3 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+
+        .volume {
+            font-size: 13px;
+            color: #757575;
+            margin-bottom: 8px;
+        }
+
+        .amount {
+            font-size: 32px;
+            color: #D4A574;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .description {
+            font-size: 13px;
+            color: #757575;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            list-style: none;
+            text-align: left;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #2C2C2C;
+            font-size: 13px;
+        }
+
+        /* FAQ */
+        .faq {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 16px 20px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            color: #2C2C2C;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #F5F1ED;
+        }
+
+        .faq-toggle {
+            font-size: 20px;
+            color: #D4A574;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item[open] .faq-question {
+            background: #F5F1ED;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .faq-item[open] .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 16px 20px;
+            color: #757575;
+        }
+
+        /* Guarantee */
+        .guarantee {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.1) 0%, rgba(139, 111, 71, 0.1) 100%);
+            text-align: center;
+        }
+
+        .guarantee-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .guarantee-icon {
+            font-size: 60px;
+            margin-bottom: 24px;
+        }
+
+        .guarantee-description {
+            color: #2C2C2C;
+            margin-bottom: 32px;
+            font-size: 16px;
+        }
+
+        .guarantee-list {
+            list-style: none;
+            text-align: left;
+        }
+
+        .guarantee-list li {
+            padding: 12px 0;
+            color: #2C2C2C;
+            font-size: 14px;
+        }
+
+        /* Booking */
+        .booking {
+            background: #F5F1ED;
+            text-align: center;
+        }
+
+        .booking-subtitle {
+            font-size: 18px;
+            color: #2C2C2C;
+            margin-bottom: 32px;
+        }
+
+        .booking-form {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2C2C2C;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #D4A574;
+            box-shadow: 0 0 0 3px rgba(212, 165, 116, 0.1);
+        }
+
+        .form-note {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #E8424F;
+            font-weight: bold;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            section h2 {
+                font-size: 24px;
+                margin-bottom: 24px;
+            }
+
+            .pricing-grid,
+            .benefits-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .price-card.featured {
+                transform: scale(1);
+            }
+
+            .booking-form {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 1. HERO Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Lippenaufpolsterung – Natürliche volle Lippen</h1>
+            <p class="subline">Board-zertifizierte Ärzte • Transparente Preise • 30-Tage Garantie</p>
+            <p class="text">Echte Patienten-Ergebnisse. Keine künstliche Optik. Ab €299.</p>
+            
+            <div class="trust-badges">
+                <span>✓ 1000+ zufriedene Patienten</span>
+                <span>✓ 30-Tage Zufriedenheitsgarantie</span>
+            </div>
+
+            <a href="#booking" class="btn">Kostenlose Beratung buchen</a>
+        </div>
+    </section>
+
+    <!-- 2. Before/After Gallery -->
+    <section class="before-after">
+        <div class="container">
+            <h2>Echte Ergebnisse von echten Patienten</h2>
+            <p class="subtitle">Natürliche Volumensteigerung in 15-30 Minuten</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <div class="before-after-placeholder">
+                        <div class="before">Vorher</div>
+                        <div class="after">Nachher</div>
+                    </div>
+                    <p class="gallery-label">Patient 1</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="before-after-placeholder">
+                        <div class="before">Vorher</div>
+                        <div class="after">Nachher</div>
+                    </div>
+                    <p class="gallery-label">Patient 2</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="before-after-placeholder">
+                        <div class="before">Vorher</div>
+                        <div class="after">Nachher</div>
+                    </div>
+                    <p class="gallery-label">Patient 3</p>
+                </div>
+                <div class="gallery-item">
+                    <div class="before-after-placeholder">
+                        <div class="before">Vorher</div>
+                        <div class="after">Nachher</div>
+                    </div>
+                    <p class="gallery-label">Patient 4</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Benefits Grid -->
+    <section>
+        <div class="container">
+            <h2>Warum professionelle Lippenaufpolsterung?</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="benefit-icon">💋</div>
+                    <h3>Volle, definierte Lippen</h3>
+                    <p>Natürliche Volumensteigerung für mehr Ausstrahlung und Jugendlichkeit.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h3>Schnell & unkompliziert</h3>
+                    <p>Nur 15-30 Minuten. Walk-in, walk-out. Sofort einsatzfähig.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>Natürliche Ergebnisse</h3>
+                    <p>Kein Fake-Look. Wir stärken deine Lippen genau richtig.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🛡️</div>
+                    <h3>Sicher & reversibel</h3>
+                    <p>Hyaluronsäure. Körperverträglich. Kann aufgelöst werden.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">💰</div>
+                    <h3>Flexible Finanzierung</h3>
+                    <p>Zahlungsplan ab €49/Monat. Keine versteckten Kosten.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">📞</div>
+                    <h3>Virtual Consultation</h3>
+                    <p>Online-Beratung mit Arzt. Kostenlos. Unverbindlich.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Testimonials -->
+    <section>
+        <div class="container">
+            <h2>Was unsere Patienten sagen</h2>
+            
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Meine Lippen sehen natürlich aus – nicht gemacht. Ich traue mich wieder zu lachen!"</p>
+                    <p class="testimonial-author"><strong>Claire S.</strong>, 32 Jahre</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Nach meiner Scheidung wollte ich mich wieder jung fühlen. Das ist nicht dramatisch, aber ich FÜHLE den Unterschied."</p>
+                    <p class="testimonial-author"><strong>Regina M.</strong>, 48 Jahre</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Definitionen sind alles! Meine Lippen sind jetzt ein echtes Statement."</p>
+                    <p class="testimonial-author"><strong>Bella L.</strong>, 26 Jahre</p>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <p class="testimonial-text">"Ich war skeptisch, aber die Beratung war sehr wissenschaftlich. Ich fühle mich jetzt authentischer."</p>
+                    <p class="testimonial-author"><strong>Teresa K.</strong>, 52 Jahre</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Pricing -->
+    <section class="pricing">
+        <div class="container">
+            <h2>Klare Preise – Keine Überraschungen</h2>
+            
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>Subtle Hydration</h3>
+                    <p class="volume">0.5 mL</p>
+                    <p class="amount">€299</p>
+                    <p class="description">Perfekt für erste Mal</p>
+                    <ul class="features">
+                        <li>✓ Hauch von Volumen</li>
+                        <li>✓ Natürlicher Look</li>
+                        <li>✓ Hält 3-4 Monate</li>
+                    </ul>
+                </div>
+                <div class="price-card featured">
+                    <div class="featured-badge">TOP SELLER</div>
+                    <h3>Full Volume</h3>
+                    <p class="volume">1 mL</p>
+                    <p class="amount">€499</p>
+                    <p class="description">Perfektes Gleichgewicht</p>
+                    <ul class="features">
+                        <li>✓ Sichtbares Volumen</li>
+                        <li>✓ Ausgewogene Form</li>
+                        <li>✓ Hält 3-4 Monate</li>
+                    </ul>
+                </div>
+                <div class="price-card">
+                    <h3>Ultimate Fuller</h3>
+                    <p class="volume">1.5 mL</p>
+                    <p class="amount">€699</p>
+                    <p class="description">Maximum Confidence</p>
+                    <ul class="features">
+                        <li>✓ Dramatisches Volumen</li>
+                        <li>✓ Luxe Lippen-Look</li>
+                        <li>✓ Hält 4-6 Monate</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. FAQ -->
+    <section>
+        <div class="container">
+            <h2>Häufig gestellte Fragen</h2>
+            
+            <div class="faq">
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Wird es schmerzhaft sein?
+                        <span class="faq-toggle">+</span>
+                    </summary>
+                    <p class="faq-answer">Nein. Wir verwenden topisches Anästhetikum + feine Kanüle. Die meisten Patienten berichten von minimalen Unbehagen – eher ein leichtes Druckgefühl.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Wie lange halten die Ergebnisse?
+                        <span class="faq-toggle">+</span>
+                    </summary>
+                    <p class="faq-answer">Typischerweise 3-4 Monate mit Hyaluronsäure. Bei regelmäßiger Wartung (2-3x pro Jahr) erhalten viele Patienten langfristige Ergebnisse.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Wird es Blutergüsse oder Schwellungen geben?
+                        <span class="faq-toggle">+</span>
+                    </summary>
+                    <p class="faq-answer">Minimal. Mit unserer Kanülen-Technik reduzieren wir Blutergüsse um ~80%. Kleine Schwellungen sind normal für 24-48 Stunden.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Was, wenn ich es nicht mag?
+                        <span class="faq-toggle">+</span>
+                    </summary>
+                    <p class="faq-answer">Das ist reversibel. Hyaluronsäure kann mit einem Enzym aufgelöst werden. Außerdem bieten wir kostenlose Anpassungen für 30 Tage an.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Können das Anfänger machen?
+                        <span class="faq-toggle">+</span>
+                    </summary>
+                    <p class="faq-answer">Absolut. Wir empfehlen oft mit 0.5mL (Subtle Hydration) anzufangen und nach 2 Wochen zu sehen, wie du dich fühlst.</p>
+                </details>
+                
+                <details class="faq-item">
+                    <summary class="faq-question">
+                        Ist Virtual Consultation wirklich kostenlos?
+                        <span class="faq-toggle">+</span>
+                    </summary>
+                    <p class="faq-answer">Ja, 100% kostenlos. Der Arzt wird deine Lippen online analysieren, Optionen besprechen und alle Fragen beantworten.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Guarantee -->
+    <section class="guarantee">
+        <div class="container">
+            <div class="guarantee-content">
+                <div class="guarantee-icon">🛡️</div>
+                <h2>Deine Zufriedenheit ist garantiert</h2>
+                <p class="guarantee-description">30-Tage Zufriedenheitsgarantie: Du bist nicht 100% begeistert? Kostenlose Überarbeitung oder Geld zurück.</p>
+                
+                <ul class="guarantee-list">
+                    <li>✓ Kostenlose Folge-Termine (bis du zufrieden bist)</li>
+                    <li>✓ Filler kann ohne Kosten aufgelöst werden</li>
+                    <li>✓ 24/7 Support für alle Fragen</li>
+                    <li>✓ Transparent: Was du zahlst, ist was du bekommst</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Booking CTA -->
+    <section id="booking" class="booking">
+        <div class="container">
+            <h2>Bereit für volle Lippen?</h2>
+            <p class="booking-subtitle">Kostenlose Beratung buchen</p>
+            
+            <div class="booking-form">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input id="name" type="text" placeholder="Dein Name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" placeholder="deine@email.de">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Telefon</label>
+                    <input id="phone" type="tel" placeholder="+49 ...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="volume">Gewünschte Menge</label>
+                    <select id="volume">
+                        <option value="">-- Wählen --</option>
+                        <option value="0.5">Subtle Hydration (0.5 mL)</option>
+                        <option value="1">Full Volume (1 mL)</option>
+                        <option value="1.5">Ultimate Fuller (1.5 mL)</option>
+                    </select>
+                </div>
+                
+                <button class="btn" onclick="submitForm()">Kostenlose Beratung buchen</button>
+                
+                <p class="form-note">Limitierte Verfügbarkeit: Nur 3 Plätze pro Monat</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function submitForm() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            
+            if (!name || !email) {
+                alert('Bitte fülle alle Felder aus');
+                return;
+            }
+            
+            alert('Danke! Wir kontaktieren dich in Kürze!');
+            // In production: send to backend/CRM
+        }
+    </script>
+</body>
+</html>
