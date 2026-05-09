@@ -201,9 +201,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  layout: 'default'
-});
 
 // Personas with different messaging angles
 const personas = {
@@ -339,30 +336,6 @@ const personasForForm = Object.entries(personas).map(([key, value]) => ({
 const availableSlots = ref(3);
 
 // SEO Meta Tags
-useHead({
-  title: 'Lippenaufpolsterung | Natürliche Ergebnisse | My Health & Beauty',
-  meta: [
-    {
-      name: 'description',
-      content: 'Professionelle Lippenaufpolsterung mit natürlichen Ergebnissen. Board-zertifizierte Ärzte, transparente Preise, Zufriedenheitsgarantie. Kostenlose Beratung.'
-    },
-    {
-      name: 'keywords',
-      content: 'Lippenaufpolsterung, Lip Filler, Lippen vergrößern, Hyaluronsäure, natürliche Lippen'
-    },
-    {
-      property: 'og:title',
-      content: 'Lippenaufpolsterung | Natürliche Ergebnisse | My Health & Beauty'
-    },
-    {
-      property: 'og:description',
-      content: 'Professionelle Lippenaufpolsterung. Schnell, sicher, reversibel. 30-Tage Zufriedenheitsgarantie.'
-    },
-    {
-      property: 'og:type',
-      content: 'website'
-    }
-  ]
 });
 
 // Schema.org structured data
@@ -383,16 +356,8 @@ const schema = {
   }
 };
 
-useSchemaOrg(schema);
 
 // Analytics Event Tracking
-const trackEvent = (eventName: string, props = {}) => {
-  gtag.event(eventName, {
-    treatment: 'Lippenaufpolsterung',
-    persona: currentPersona.value.calloutangle,
-    ...props
-  });
-};
 
 onMounted(() => {
   trackEvent('page_view', { page: 'lip-filler-lp' });

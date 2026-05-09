@@ -401,15 +401,6 @@ breadcrumbItems.value = [
 seo.value = page.value?.seo;
 
 // Set page meta
-useHead({
-  title: seo.value?.title,
-  meta: [
-    { name: 'description', content: seo.value?.description },
-    { name: 'keywords', content: seo.value?.keywords },
-    { property: 'og:title', content: seo.value?.title },
-    { property: 'og:description', content: seo.value?.description },
-    { property: 'og:type', content: 'website' }
-  ]
 });
 
 // Schema.org
@@ -427,18 +418,8 @@ const schema = {
   }
 };
 
-useSchemaOrg(schema);
 
 // Analytics
-const trackEvent = (eventName: string, props = {}) => {
-  if (typeof gtag !== 'undefined') {
-    gtag.event(eventName, {
-      page_type: 'general-page',
-      treatment: page.value?.treatment,
-      ...props
-    });
-  }
-};
 
 onMounted(() => {
   trackEvent('page_view', { page_slug: pageSlug });
