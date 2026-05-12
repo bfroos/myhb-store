@@ -36,6 +36,7 @@
                 aria-hidden="true"
               />
               <UiAtomBaseButton
+                :id="item.id"
                 variant="secondary"
                 size="sm"
                 as="a"
@@ -288,6 +289,7 @@ type ActionItem = {
   label: string;
   target?: string;
   rel?: string;
+  id?: string;
 };
 
 const actionItems = computed((): ActionItem[] => {
@@ -318,6 +320,7 @@ const actionItems = computed((): ActionItem[] => {
       target: "_blank",
       rel: "noopener noreferrer",
       label: t("blocks.locationContact.whatsapp"),
+      id: "barWhatsapp",
     });
   }
   return items;
@@ -340,6 +343,26 @@ function getDayHours(day: {
   }
   return t("common.openingHours.closed");
 }
+
+// Prevent JavaScript interception of WhatsApp button
+onMounted(() => {
+  const whatsappBtn = document.getElementById('barWhatsapp') as HTMLAnchorElement | null;
+  if (whatsappBtn) {
+    whatsappBtn.addEventListener('click', function(e: MouseEvent) {
+      // Get the href attribute
+      const href = this.getAttribute('href');
+      
+      // If href is correct wa.me URL, let browser handle naturally
+      if (href && href.startsWith('https://wa.me/')) {
+        return true;
+      }
+      
+      // Fallback: if href is wrong or missing, use correct URL
+      e.preventDefault();
+      window.location.href = 'https://wa.me/491628425037';
+    }, false);
+  }
+});
 </script>
 
 <style scoped>
