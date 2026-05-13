@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GA4 Event Testing Tool — Aachen LP</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        header {
+            background: #2d3748;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        header h1 { font-size: 24px; margin-bottom: 8px; }
+        header p { opacity: 0.8; font-size: 14px; }
+        .content { padding: 30px; }
+        .status {
+            background: #f0f4f8;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .status.success { border-left-color: #48bb78; background: #f0fff4; }
+        .status.error { border-left-color: #f56565; background: #fff5f5; }
+        .status.info { border-left-color: #4299e1; }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        button:active { transform: translateY(0); }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-primary:hover { background: #5568d3; }
+        .btn-success { background: #48bb78; color: white; }
+        .btn-success:hover { background: #38a169; }
+        .btn-warning { background: #ed8936; color: white; }
+        .btn-warning:hover { background: #dd6b20; }
+        .btn-info { background: #4299e1; color: white; }
+        .btn-info:hover { background: #3182ce; }
+        .section { margin-bottom: 30px; }
+        .section h2 { font-size: 18px; margin-bottom: 12px; color: #2d3748; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        .event-log {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 12px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+        }
+        .event-log-item {
+            padding: 8px;
+            margin-bottom: 6px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .event-log-item.success { border-left-color: #48bb78; }
+        .event-log-item.error { border-left-color: #f56565; }
+        .event-name { font-weight: 600; color: #2d3748; }
+        .event-time { color: #a0aec0; font-size: 11px; }
+        code {
+            background: #edf2f7;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 12px;
+        }
+        .info-box {
+            background: #edf2f7;
+            border-left: 4px solid #4299e1;
+            padding: 12px;
+            margin: 12px 0;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #2d3748;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 GA4 Event Testing Tool</h1>
+            <p>Aachen Landing Page — Real-time Event Verification</p>
+        </header>
+
+        <div class="content">
+            <!-- Status -->
+            <div id="status" class="status info">
+                ⏳ Initializing... Check that GA4 script is loaded and Measurement ID is configured.
+            </div>
+
+            <!-- GA4 Configuration -->
+            <div class="section">
+                <h2>📊 GA4 Configuration</h2>
+                <p><strong>Measurement ID:</strong> <code id="ga-id">Not configured</code></p>
+                <p><strong>GTTag Function:</strong> <code id="gtag-status">Not loaded</code></p>
+                <div class="info-box">
+                    ℹ️ If GA4 is not configured, add <code>NUXT_PUBLIC_GA_ID</code> to Vercel environment variables and redeploy.
+                </div>
+            </div>
+
+            <!-- CTA Events -->
+            <div class="section">
+                <h2>🔘 CTA Click Events</h2>
+                <div class="button-grid">
+                    <button class="btn-primary" onclick="trackCtaClick('hero')">Hero CTA</button>
+                    <button class="btn-primary" onclick="trackCtaClick('hero_secondary')">Hero Secondary</button>
+                    <button class="btn-primary" onclick="trackCtaClick('footer')">Footer CTA</button>
+                    <button class="btn-primary" onclick="trackCtaClick('footer_secondary')">Footer Secondary</button>
+                </div>
+            </div>
+
+            <!-- FAQ Events -->
+            <div class="section">
+                <h2>❓ FAQ Events</h2>
+                <div class="button-grid">
+                    <button class="btn-info" onclick="trackFaqOpen('Tut die Behandlung weh?')">FAQ: Schmerzen</button>
+                    <button class="btn-info" onclick="trackFaqOpen('Wie lange halten die Ergebnisse?')">FAQ: Haltbarkeit</button>
+                    <button class="btn-info" onclick="trackFaqOpen('Gibt es Ausfallzeiten?')">FAQ: Ausfallzeiten</button>
+                    <button class="btn-info" onclick="trackFaqOpen('Welche Materialien verwenden Sie?')">FAQ: Materialien</button>
+                </div>
+            </div>
+
+            <!-- Carousel Events -->
+            <div class="section">
+                <h2>🎠 Carousel Navigation</h2>
+                <div class="button-grid">
+                    <button class="btn-warning" onclick="trackCarouselNavigate('prev', 0)">Carousel Prev (0)</button>
+                    <button class="btn-warning" onclick="trackCarouselNavigate('next', 1)">Carousel Next (1)</button>
+                    <button class="btn-warning" onclick="trackCarouselNavigate('next', 2)">Carousel Next (2)</button>
+                </div>
+            </div>
+
+            <!-- Conversion Events -->
+            <div class="section">
+                <h2>✅ Conversion Events</h2>
+                <div class="button-grid">
+                    <button class="btn-success" onclick="trackPhoneClick('+49241123456')">Phone Click</button>
+                    <button class="btn-success" onclick="trackBookingClick()">Booking Click</button>
+                    <button class="btn-success" onclick="trackDiscountOfferClick()">Discount Offer</button>
+                </div>
+            </div>
+
+            <!-- Event Log -->
+            <div class="section">
+                <h2>📋 Event Log</h2>
+                <button class="btn-info" onclick="clearEventLog()" style="margin-bottom: 12px;">Clear Log</button>
+                <div id="event-log" class="event-log">
+                    <div style="color: #a0aec0; padding: 20px; text-align: center;">
+                        Events will appear here as you test...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions -->
+            <div class="section">
+                <h2>📖 How to Use</h2>
+                <ol style="margin-left: 20px; line-height: 1.8; color: #4a5568;">
+                    <li>Click event buttons above to simulate user interactions</li>
+                    <li>Events will be logged below in real-time</li>
+                    <li>Open GA4 Real-Time dashboard in new tab (link below)</li>
+                    <li>Events should appear in GA4 within 1-2 seconds</li>
+                    <li>If no events appear in GA4, check:
+                        <ul style="margin-left: 20px; margin-top: 8px;">
+                            <li>Measurement ID is correct (check <code>NUXT_PUBLIC_GA_ID</code> in Vercel)</li>
+                            <li>GA4 script loaded (check Network tab in DevTools)</li>
+                            <li>No console errors</li>
+                        </ul>
+                    </li>
+                </ol>
+                <div class="info-box" style="margin-top: 16px;">
+                    <strong>📊 Open GA4 Real-Time:</strong>
+                    <a href="https://analytics.google.com/" target="_blank" style="color: #4299e1; text-decoration: none;">
+                        Google Analytics → Real-Time → Events →
+                    </a>
+                    (You'll need to be logged in to your GA4 property)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const eventLog = [];
+
+        // Initialize
+        function init() {
+            const gaId = document.currentScript?.parentElement?.querySelector('[data-ga-id]')?.dataset.gaId
+                || window.__NUXT_GA_ID
+                || 'Not configured';
+
+            const gtacStatus = typeof window.gtag === 'function' ? '✅ Loaded' : '❌ Not loaded';
+
+            document.getElementById('ga-id').textContent = gaId;
+            document.getElementById('gtag-status').textContent = gtacStatus;
+
+            if (gtacStatus === '✅ Loaded') {
+                updateStatus('success', '✅ GA4 is configured and ready. Click events to test tracking.');
+            } else {
+                updateStatus('error', '❌ GA4 is not loaded. Check Measurement ID in Vercel environment.');
+            }
+        }
+
+        function updateStatus(type, message) {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.textContent = message;
+        }
+
+        function logEvent(eventName, params) {
+            const now = new Date().toLocaleTimeString('de-DE');
+            eventLog.unshift({ name: eventName, params, time: now });
+
+            // Keep only last 20 events
+            if (eventLog.length > 20) eventLog.pop();
+
+            // Update UI
+            const log = document.getElementById('event-log');
+            log.innerHTML = eventLog.map((e, i) => `
+                <div class="event-log-item success">
+                    <div>
+                        <div class="event-name">${e.name}</div>
+                        <div style="font-size: 11px; color: #718096; margin-top: 4px;">
+                            ${JSON.stringify(e.params).substring(0, 100)}${JSON.stringify(e.params).length > 100 ? '...' : ''}
+                        </div>
+                    </div>
+                    <div class="event-time">${e.time}</div>
+                </div>
+            `).join('');
+        }
+
+        function clearEventLog() {
+            eventLog.length = 0;
+            document.getElementById('event-log').innerHTML = `
+                <div style="color: #a0aec0; padding: 20px; text-align: center;">
+                    Log cleared. Events will appear here as you test...
+                </div>
+            `;
+        }
+
+        // Event tracking functions (match useGoogleAnalytics.ts)
+        function trackCtaClick(location) {
+            const params = { event_category: 'engagement', cta_location: location };
+            if (window.gtag) window.gtag('event', 'click_cta', params);
+            logEvent('click_cta', params);
+        }
+
+        function trackFaqOpen(question) {
+            const params = { event_category: 'engagement', question };
+            if (window.gtag) window.gtag('event', 'faq_open', params);
+            logEvent('faq_open', params);
+        }
+
+        function trackCarouselNavigate(direction, index) {
+            const params = { event_category: 'engagement', direction, current_index: index };
+            if (window.gtag) window.gtag('event', 'carousel_navigate', params);
+            logEvent('carousel_navigate', params);
+        }
+
+        function trackPhoneClick(phone) {
+            const params = { event_category: 'conversion', phone_number: phone };
+            if (window.gtag) window.gtag('event', 'click_phone', params);
+            logEvent('click_phone', params);
+        }
+
+        function trackBookingClick() {
+            const params = { event_category: 'conversion', booking_type: 'calendly' };
+            if (window.gtag) window.gtag('event', 'click_booking', params);
+            logEvent('click_booking', params);
+        }
+
+        function trackDiscountOfferClick() {
+            const params = { event_category: 'engagement', offer: '20_percent_rabatt' };
+            if (window.gtag) window.gtag('event', 'click_discount_offer', params);
+            logEvent('click_discount_offer', params);
+        }
+
+        // Initialize on load
+        window.addEventListener('load', init);
+        setTimeout(init, 500); // Also try immediately
+    </script>
+</body>
+</html>
