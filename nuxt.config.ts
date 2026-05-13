@@ -64,6 +64,17 @@ export default defineNuxtConfig({
     lazyLoad: true,
   },
 
+  // 🔍 Google Analytics 4 Setup
+  scripts: {
+    registry: {
+      googleAnalytics: {
+        load: true,
+        src: 'https://www.googletagmanager.com/gtag/js',
+        async: true,
+      },
+    },
+  },
+
   // 3. Font-Optimierung: nur benötigte Weights, display:swap
   fonts: {
     provider: "bunny",

@@ -1,10 +1,10 @@
 <template>
   <div class="sticky" :class="[themeClass]" role="region" aria-label="Schnellaktionen">
-    <a v-if="phone" :href="`tel:${phone}`" class="sticky__btn sticky__btn--quaternary">
+    <a v-if="phone" :href="`tel:${phone}`" class="sticky__btn sticky__btn--quaternary" @click="handlePhoneClick">
       <IconPhone :size="20" stroke="1.75" aria-hidden="true" />
       <span>{{ callLabel }}</span>
     </a>
-    <button type="button" class="sticky__btn sticky__btn--primary" @click="$emit('book')">
+    <button type="button" class="sticky__btn sticky__btn--primary" @click="handleBookClick">
       <IconCalendar :size="20" stroke="1.75" aria-hidden="true" />
       <span>{{ bookLabel }}</span>
     </button>
@@ -18,7 +18,7 @@
 <script setup lang="ts">
 import { IconPhone, IconCalendar, IconBrandWhatsapp } from "@tabler/icons-vue";
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   phone?: string;
   whatsapp?: string;
   callLabel?: string;
@@ -32,7 +32,18 @@ withDefaults(defineProps<{
   whatsappLabel: "WhatsApp",
 });
 
-defineEmits<{ book: [] }>();
+const emit = defineEmits<{ book: [] }>();
+
+const { trackPhoneClick, trackBookingClick } = useGoogleAnalytics();
+
+const handlePhoneClick = () => {
+  trackPhoneClick(props.phone);
+};
+
+const handleBookClick = () => {
+  trackBookingClick();
+  emit('book');
+};
 </script>
 
 <style scoped>

@@ -8,6 +8,7 @@
       :cta-link="heroData.ctaLink"
       :image="heroData.image"
       class="hero-section"
+      @primary="() => { trackCtaClick('hero'); navigateTo(heroData.ctaLink); }"
     />
 
     <!-- Before/After Carousel -->
@@ -85,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 interface HeroData {
   headline: string;
@@ -140,6 +141,7 @@ interface CTAData {
 }
 
 const { t } = useI18n();
+const { trackCtaClick, trackDiscountOfferClick, trackFaqOpen, trackCarouselNavigate, trackBookingClick, trackPhoneClick } = useGoogleAnalytics();
 
 // Hero Section Data (e.g., "Lippen aufspritzen Aachen")
 const heroData = ref<HeroData>({

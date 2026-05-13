@@ -5,7 +5,7 @@
     </header>
     <ul class="faq__list" role="list">
       <li v-for="item in items" :key="item.q">
-        <details class="faq__item">
+        <details class="faq__item" @toggle="(e) => e.newState === 'open' && trackFaqOpen(item.q)">
           <summary class="faq__summary">
             <span class="faq__q">{{ item.q }}</span>
             <IconChevronDown :size="22" stroke="1.5" class="faq__chev" aria-hidden="true" />
@@ -21,6 +21,8 @@
 import { IconChevronDown } from "@tabler/icons-vue";
 
 interface FaqItem { q: string; a: string }
+
+const { trackFaqOpen } = useGoogleAnalytics();
 
 withDefaults(defineProps<{
   headline?: string;

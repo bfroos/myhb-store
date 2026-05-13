@@ -39,7 +39,7 @@
           type="button"
           :class="['ba__dot', { 'ba__dot--active': i === index }]"
           :aria-label="`Beispiel ${i + 1}`"
-          @click="index = i"
+          @click="handleCarouselClick(i)"
         />
       </li>
     </ol>
@@ -74,6 +74,13 @@ const props = withDefaults(defineProps<{
 
 const index = ref(0);
 const percent = ref(50);
+const { trackCarouselNavigate } = useGoogleAnalytics();
+
+const handleCarouselClick = (i: number) => {
+  const direction = i > index.value ? 'next' : 'prev';
+  trackCarouselNavigate(direction, i);
+  index.value = i;
+};
 const displayPairs = computed<Pair[]>(() => {
   const mediaPairs = (props.pairsMedia ?? [])
     .map((pair) => {

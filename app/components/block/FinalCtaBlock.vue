@@ -3,10 +3,10 @@
     <h2 v-if="headline" class="final__heading">{{ headline }}</h2>
     <p v-if="text" class="final__text">{{ text }}</p>
     <div class="final__cta">
-      <button v-if="primaryCta" type="button" class="button button--primary button--lg button--fullWidth" @click="$emit('primary')">
+      <button v-if="primaryCta" type="button" class="button button--primary button--lg button--fullWidth" @click="handlePrimary">
         {{ primaryCta.label }}
       </button>
-      <button v-if="secondaryCta" type="button" class="button button--tertiary button--lg button--fullWidth" @click="$emit('secondary')">
+      <button v-if="secondaryCta" type="button" class="button button--tertiary button--lg button--fullWidth" @click="handleSecondary">
         {{ secondaryCta.label }}
       </button>
     </div>
@@ -32,7 +32,19 @@ withDefaults(defineProps<{
   secondaryCta: () => ({ label: "Kostenlose Beratung" }),
 });
 
-defineEmits<{ primary: []; secondary: [] }>();
+const emit = defineEmits<{ primary: []; secondary: [] }>();
+
+const { trackCtaClick } = useGoogleAnalytics();
+
+const handlePrimary = () => {
+  trackCtaClick('footer');
+  emit('primary');
+};
+
+const handleSecondary = () => {
+  trackCtaClick('footer_secondary');
+  emit('secondary');
+};
 </script>
 
 <style scoped>

@@ -13,10 +13,10 @@
       </ul>
 
       <div class="hero__cta">
-        <button v-if="primaryCta" type="button" class="button button--primary button--lg button--fullWidth" @click="$emit('primary')">
+        <button v-if="primaryCta" type="button" class="button button--primary button--lg button--fullWidth" @click="handlePrimaryCta">
           {{ primaryCta.label }}
         </button>
-        <button v-if="secondaryCta" type="button" class="button button--tertiary button--lg button--fullWidth" @click="$emit('secondary')">
+        <button v-if="secondaryCta" type="button" class="button button--tertiary button--lg button--fullWidth" @click="handleSecondaryCta">
           {{ secondaryCta.label }}
         </button>
         <p v-if="priceLabel" class="hero__price">{{ priceLabel }}</p>
@@ -55,7 +55,19 @@ const props = withDefaults(defineProps<{
   themeClass: "theme-light",
 });
 
-defineEmits<{ primary: []; secondary: [] }>();
+const emit = defineEmits<{ primary: []; secondary: [] }>();
+
+const { trackCtaClick } = useGoogleAnalytics();
+
+const handlePrimaryCta = () => {
+  trackCtaClick('hero');
+  emit('primary');
+};
+
+const handleSecondaryCta = () => {
+  trackCtaClick('hero_secondary');
+  emit('secondary');
+};
 
 const displayImage = computed(() => mediaToLegacyImage(props.imageMedia) ?? props.image);
 </script>
