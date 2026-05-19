@@ -91,7 +91,15 @@ const isVideoLoaded = ref(false);
 const isInViewport = ref(false);
 const generatedPoster = ref<string>("");
 
-const videoUrl = computed(() => props.video ?? "");
+const videoUrl = computed(() => {
+  const url = props.video ?? "";
+  // iOS Safari: Add #t=1 fragment to show frame at 1 second as poster
+  // This is a native browser feature that works without JavaScript
+  if (url && !url.includes('#t=')) {
+    return `${url}#t=1`;
+  }
+  return url;
+});
 
 const posterUrl = computed(() => {
   // Priority 1: Explicit poster prop
@@ -127,8 +135,12 @@ const generatePosterFromFirstFrame = () => {
   if (!video || generatedPoster.value || props.poster) return;
 
   try {
-    // Seek to 1 second to avoid black intro frames
-    video.currentTime = 1.0;
+    // iOS Safari: Use #t=1 fragment instead of currentTime for better compatibility
+    // Desktop/Android: Set currentTime to 1 second to avoid black intro frames
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (!isIOS) {
+      video.currentTime = 1.0;
+    }
     
     // Wait for seek to complete, then capture frame
     const captureFrame = () => {
@@ -152,15 +164,23 @@ const generatePosterFromFirstFrame = () => {
       // Manually set poster attribute on video element (for reactive update)
       video.poster = dataUrl;
       
-      // Reset to start for potential playback
-      video.currentTime = 0;
+      // Reset to start for potential playback (skip on iOS, #t=1 handles it)
+      if (!isIOS) {
+        video.currentTime = 0;
+      }
       
       // Remove event listener
       video.removeEventListener('seeked', captureFrame);
+      video.removeEventListener('loadeddata', captureFrame);
     };
     
-    // Capture frame after seek completes
-    video.addEventListener('seeked', captureFrame, { once: true });
+    // iOS Safari: Listen to loadeddata instead of seeked (since we use #t=1)
+    // Desktop/Android: Listen to seeked after currentTime change
+    if (isIOS) {
+      video.addEventListener('loadeddata', captureFrame, { once: true });
+    } else {
+      video.addEventListener('seeked', captureFrame, { once: true });
+    }
   } catch (error) {
     console.error('Failed to generate poster from video frame:', error);
   }
