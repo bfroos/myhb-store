@@ -46,6 +46,25 @@
 import { IconPlayerPlay } from "@tabler/icons-vue";
 // buildVideoPosterUrl removed — Cloudflare Media Transformations not active
 
+// Pre-generated poster mapping (loaded on demand)
+const videoPosterMapping = ref<Record<string, string>>({});
+const mappingLoaded = ref(false);
+
+// Load mapping file from public directory
+const loadPosterMapping = async () => {
+  if (mappingLoaded.value) return;
+  try {
+    const response = await fetch('/posters/video-poster-mapping.json');
+    if (response.ok) {
+      videoPosterMapping.value = await response.json();
+      mappingLoaded.value = true;
+    }
+  } catch (error) {
+    console.warn('Could not load video poster mapping:', error);
+    mappingLoaded.value = true; // Don't retry
+  }
+};
+
 const props = defineProps<{
   title?: string;
   subtitle?: string;
@@ -53,6 +72,14 @@ const props = defineProps<{
   poster?: string;
   isActive?: boolean;
 }>();
+
+// Helper to extract video ID from URL
+const getVideoIdFromUrl = (url: string): string | null => {
+  // Strapi media URLs typically have /uploads/filename_hash_id.ext
+  // or contain the file ID in the URL structure
+  const match = url.match(/\/(\d+)\//); // Match /123/ pattern
+  return match ? match[1] : null;
+};
 
 const emit = defineEmits<{
   play: [];
@@ -67,9 +94,18 @@ const generatedPoster = ref<string>("");
 const videoUrl = computed(() => props.video ?? "");
 
 const posterUrl = computed(() => {
+  // Priority 1: Explicit poster prop
   if (props.poster) return props.poster;
-  // If we generated a poster from first frame, use that
+  
+  // Priority 2: Pre-generated poster from build-time script
+  const videoId = getVideoIdFromUrl(props.video);
+  if (videoId && videoPosterMapping.value[videoId]) {
+    return videoPosterMapping.value[videoId];
+  }
+  
+  // Priority 3: Client-generated poster from first frame
   if (generatedPoster.value) return generatedPoster.value;
+  
   // buildVideoPosterUrl returns "" when Cloudflare Media Transformations are disabled
   return "";
 });
@@ -117,6 +153,9 @@ const generatePosterFromFirstFrame = () => {
 let observer: IntersectionObserver | null = null;
 
 onMounted(() => {
+  // Load poster mapping on mount
+  loadPosterMapping();
+  
   if (!tileRef.value) return;
 
   observer = new IntersectionObserver(

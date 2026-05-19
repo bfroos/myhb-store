@@ -12,7 +12,8 @@
     "clear:cache": "rm -rf .nuxt .output node_modules/.cache",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "generate:posters": "node scripts/generate-video-posters.js"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",
