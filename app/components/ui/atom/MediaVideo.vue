@@ -55,9 +55,19 @@ const canUseTransformations = computed(() => {
 const videoSrc = computed(() => {
   const src = originalVideoUrl.value;
   if (!src) return "";
-  if (!canUseTransformations.value) return src;
-
-  return buildTransformedVideoUrl(src, { audio: !hasAutoplay.value });
+  
+  let finalSrc = src;
+  if (canUseTransformations.value) {
+    finalSrc = buildTransformedVideoUrl(src, { audio: !hasAutoplay.value });
+  }
+  
+  // iOS Safari: Add #t=1 fragment to show frame at 1 second as poster fallback
+  // This is a native browser feature that works without JavaScript
+  if (finalSrc && !finalSrc.includes('#t=')) {
+    return `${finalSrc}#t=1`;
+  }
+  
+  return finalSrc;
 });
 
 const posterSrc = computed<string | undefined>(() => {
