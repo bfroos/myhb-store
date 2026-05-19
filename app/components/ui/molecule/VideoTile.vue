@@ -209,6 +209,12 @@ watch(videoRef, (newVideo, oldVideo) => {
     newVideo.addEventListener("pause", handlePause);
     // Generate poster when first frame is loaded
     newVideo.addEventListener("loadeddata", generatePosterFromFirstFrame);
+    
+    // If video already loaded before listener was attached, generate poster now
+    if (newVideo.readyState >= 2) {
+      // readyState 2 = HAVE_CURRENT_DATA (first frame available)
+      generatePosterFromFirstFrame();
+    }
   }
 });
 
