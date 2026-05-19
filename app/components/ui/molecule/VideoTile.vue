@@ -149,6 +149,9 @@ const generatePosterFromFirstFrame = () => {
       const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
       generatedPoster.value = dataUrl;
       
+      // Manually set poster attribute on video element (for reactive update)
+      video.poster = dataUrl;
+      
       // Reset to start for potential playback
       video.currentTime = 0;
       
