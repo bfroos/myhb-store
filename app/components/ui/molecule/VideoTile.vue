@@ -121,31 +121,45 @@ const showVideoDirectly = computed(() => !posterUrl.value && isInViewport.value 
 const videoRef = ref<HTMLVideoElement | null>(null);
 const tileRef = ref<HTMLElement | null>(null);
 
-// Generate poster from first frame using Canvas API
+// Generate poster from video frame using Canvas API
 const generatePosterFromFirstFrame = () => {
   const video = videoRef.value;
   if (!video || generatedPoster.value || props.poster) return;
 
   try {
-    // Pause to freeze the first frame
-    video.pause();
-
-    // Create canvas with video dimensions
-    const canvas = document.createElement('canvas');
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    // Draw first frame onto canvas
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    // Seek to 1 second to avoid black intro frames
+    video.currentTime = 1.0;
     
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Wait for seek to complete, then capture frame
+    const captureFrame = () => {
+      video.pause();
 
-    // Convert canvas to Data URL (base64 JPEG)
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
-    generatedPoster.value = dataUrl;
+      // Create canvas with video dimensions
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // Draw frame at 1 second onto canvas
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      // Convert canvas to Data URL (base64 JPEG)
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      generatedPoster.value = dataUrl;
+      
+      // Reset to start for potential playback
+      video.currentTime = 0;
+      
+      // Remove event listener
+      video.removeEventListener('seeked', captureFrame);
+    };
+    
+    // Capture frame after seek completes
+    video.addEventListener('seeked', captureFrame, { once: true });
   } catch (error) {
-    console.error('Failed to generate poster from first frame:', error);
+    console.error('Failed to generate poster from video frame:', error);
   }
 };
 
