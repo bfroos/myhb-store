@@ -62,11 +62,14 @@ const emit = defineEmits<{
 const isPlaying = ref(false);
 const isVideoLoaded = ref(false);
 const isInViewport = ref(false);
+const generatedPoster = ref<string>("");
 
 const videoUrl = computed(() => props.video ?? "");
 
 const posterUrl = computed(() => {
   if (props.poster) return props.poster;
+  // If we generated a poster from first frame, use that
+  if (generatedPoster.value) return generatedPoster.value;
   // buildVideoPosterUrl returns "" when Cloudflare Media Transformations are disabled
   return "";
 });
@@ -81,6 +84,34 @@ const showVideoDirectly = computed(() => !posterUrl.value && isInViewport.value 
 
 const videoRef = ref<HTMLVideoElement | null>(null);
 const tileRef = ref<HTMLElement | null>(null);
+
+// Generate poster from first frame using Canvas API
+const generatePosterFromFirstFrame = () => {
+  const video = videoRef.value;
+  if (!video || generatedPoster.value || props.poster) return;
+
+  try {
+    // Pause to freeze the first frame
+    video.pause();
+
+    // Create canvas with video dimensions
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    // Draw first frame onto canvas
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+    
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    // Convert canvas to Data URL (base64 JPEG)
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    generatedPoster.value = dataUrl;
+  } catch (error) {
+    console.error('Failed to generate poster from first frame:', error);
+  }
+};
 
 // Native IntersectionObserver for true lazy loading
 let observer: IntersectionObserver | null = null;
@@ -115,10 +146,13 @@ watch(videoRef, (newVideo, oldVideo) => {
   if (oldVideo) {
     oldVideo.removeEventListener("play", handlePlay);
     oldVideo.removeEventListener("pause", handlePause);
+    oldVideo.removeEventListener("loadeddata", generatePosterFromFirstFrame);
   }
   if (newVideo) {
     newVideo.addEventListener("play", handlePlay);
     newVideo.addEventListener("pause", handlePause);
+    // Generate poster when first frame is loaded
+    newVideo.addEventListener("loadeddata", generatePosterFromFirstFrame);
   }
 });
 
@@ -127,6 +161,7 @@ onUnmounted(() => {
   if (video) {
     video.removeEventListener("play", handlePlay);
     video.removeEventListener("pause", handlePause);
+    video.removeEventListener("loadeddata", generatePosterFromFirstFrame);
   }
   observer?.disconnect();
 });
