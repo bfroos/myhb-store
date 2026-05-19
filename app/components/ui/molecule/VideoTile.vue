@@ -202,7 +202,8 @@ onMounted(() => {
         observer?.disconnect();
       }
     },
-    { rootMargin: "200px" },
+    // Increased rootMargin for faster loading on mobile (load ~1 screen ahead)
+    { rootMargin: "800px" },
   );
 
   observer.observe(tileRef.value);

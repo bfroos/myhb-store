@@ -1,0 +1,25 @@
+<!-- Add to app.vue <head> section for GSC validation -->
+
+<script setup>
+useHead({
+  meta: [
+    // Google Search Console Domain Migration Support
+    {
+      name: 'google-site-verification',
+      content: 'PLACEHOLDER' // User needs to add their GSC verification code
+    }
+  ],
+  link: [
+    // Canonical pointing to .com (critical for migration)
+    {
+      rel: 'canonical',
+      href: 'https://www.myhealthandbeauty.com' + useRoute().fullPath
+    },
+    // Alternate for old domain (helps GSC understand relationship)
+    {
+      rel: 'alternate',
+      href: 'https://www.myhealthandbeauty.app' + useRoute().fullPath
+    }
+  ]
+});
+</script>

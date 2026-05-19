@@ -9,6 +9,7 @@
     :loop="!!normalizedVideoSettings?.autoplay"
     :controls="!normalizedVideoSettings?.autoplay"
     :preload="videoPreloadAttr"
+    fetchpriority="high"
     @mouseenter="maybeEnableMetadataPreload"
     @focus="maybeEnableMetadataPreload"
     @error="onVideoError"
