@@ -1,29 +1,11 @@
-# robots.txt - Optimized for Google Search Console Domain Migration
-# Last updated: 2026-05-13
+# robots.txt - SEO optimized for MY HEALTH & BEAUTY
+# Last updated: 2026-05-28
 
 User-agent: *
 Allow: /
-Disallow:
 
-# Google Search Console Validation Agents
-User-agent: Google-InspectionTool
-Allow: /
-
-User-agent: Google-Site-Verification
-Allow: /
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Googlebot-Image
-Allow: /
-
-User-agent: Googlebot-News
-Allow: /
-
-# Sitemaps
+# Sitemap
 Sitemap: https://www.myhealthandbeauty.com/sitemap.xml
-Sitemap: https://www.myhealthandbeauty.app/sitemap.xml
 
-# Host directive for old domain (helps Google understand canonical)
+# Host directive (canonical domain)
 Host: www.myhealthandbeauty.com
