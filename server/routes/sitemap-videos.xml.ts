@@ -172,11 +172,7 @@ export default defineEventHandler(async (event) => {
    */
   const treatmentPages = await fetchCollection<any>("treatment-pages", {
     locale: [DEFAULT_LOCALE],
-    populate: {
-      blocks: {
-        populate: ["media", "medias"],
-      },
-    },
+    populate: "deep",
   });
 
   for (const page of treatmentPages) {
@@ -193,13 +189,7 @@ export default defineEventHandler(async (event) => {
    */
   const locations = await fetchCollection<any>("locations", {
     locale: [DEFAULT_LOCALE],
-    populate: {
-      city: { populate: ["slug"] },
-      slug: true,
-      blocks: {
-        populate: ["media", "medias"],
-      },
-    },
+    populate: "deep",
   });
 
   for (const location of locations) {
@@ -219,12 +209,7 @@ export default defineEventHandler(async (event) => {
    */
   const blogArticles = await fetchCollection<any>("blog-articles", {
     locale: [DEFAULT_LOCALE],
-    populate: {
-      slug: true,
-      blocks: {
-        populate: ["media", "medias"],
-      },
-    },
+    populate: "deep",
   });
 
   for (const article of blogArticles) {
