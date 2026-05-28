@@ -16,15 +16,38 @@ const WEEKDAY_TO_SCHEMA: Record<string, string> = {
 };
 
 const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = {
-  "ChIJoesgRlglv0cRh0fAgCZ9MTk": { rating: "4.9", count: "404" },
-  "ChIJoct0O2RTqEcRZthU8Tn5dGs": { rating: "4.9", count: "214" },
-  "ChIJYyPheE7LuEcRAIgZkPAOJyU": { rating: "4.9", count: "149" },
-  "ChIJ_7Xx1HetuEcRUE0rtbPlvEQ": { rating: "4.9", count: "151" },
-  "ChIJr60IH9PjuEcRdVPR8YiTgSo": { rating: "4.9", count: "152" },
-  "ChIJf4C6OSkTlkcRpTMm00E5JLE": { rating: "4.9", count: "68" },
-  "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": { rating: "5", count: "124" },
-  "ChIJuVWkFmyZwEcRM9nuZ1SejT4": { rating: "5", count: "11" },
-  "ChIJiV6-12Z6hUcR3d5X8yL6b5Q": { rating: "4.9", count: "100" },
+  "ChIJoesgRlglv0cRh0fAgCZ9MTk": {
+    "rating": "4.9",
+    "count": "419"
+  },
+  "ChIJoct0O2RTqEcRZthU8Tn5dGs": {
+    "rating": "4.9",
+    "count": "219"
+  },
+  "ChIJYyPheE7LuEcRAIgZkPAOJyU": {
+    "rating": "4.8",
+    "count": "155"
+  },
+  "ChIJ_7Xx1HetuEcRUE0rtbPlvEQ": {
+    "rating": "4.9",
+    "count": "164"
+  },
+  "ChIJr60IH9PjuEcRdVPR8YiTgSo": {
+    "rating": "4.9",
+    "count": "159"
+  },
+  "ChIJf4C6OSkTlkcRpTMm00E5JLE": {
+    "rating": "4.9",
+    "count": "70"
+  },
+  "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": {
+    "rating": "5.0",
+    "count": "135"
+  },
+  "ChIJuVWkFmyZwEcRM9nuZ1SejT4": {
+    "rating": "5.0",
+    "count": "26"
+  }
 };
 
 /**

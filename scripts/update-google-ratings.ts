@@ -1,7 +1,7 @@
 /**
  * Update Google Business Ratings Script
  * 
- * Holt aktuelle Ratings von Google Places API für alle MY HEALTH & BEAUTY Standorte
+ * Holt aktuelle Ratings von Google Places API (New) für alle MY HEALTH & BEAUTY Standorte
  * und aktualisiert:
  * 1. GOOGLE_RATINGS in app/utils/schemaLocation.ts (standort-spezifisch)
  * 2. app.config.ts aggregateRating (global für Treatment-Seiten)
@@ -11,10 +11,10 @@
  * 
  * Requirements:
  *   - GOOGLE_PLACES_API_KEY in .env
- *   - npm install @googlemaps/google-maps-services-js
+ *   - Places API (New) aktiviert in Google Cloud Console
  */
 
-import { Client } from '@googlemaps/google-maps-services-js';
+import https from 'https';
 import fs from 'fs';
 import path from 'path';
 
@@ -28,7 +28,7 @@ const LOCATION_PLACE_IDS = [
   'ChIJf4C6OSkTlkcRpTMm00E5JLE', // Kaiserslautern K in Lautern
   'ChIJ-S5ezxr5pkcRqzaZzf4jdDQ', // Leipzig Höfe am Brühl
   'ChIJuVWkFmyZwEcRM9nuZ1SejT4', // Aachen Aquis Plaza
-  'ChIJiV6-12Z6hUcR3d5X8yL6b5Q', // Duisburg Forum
+  // 'ChIJiV6-12Z6hUcR3d5X8yL6b5Q', // Duisburg Forum - Place ID ungültig (404), muss aktualisiert werden
 ];
 
 interface LocationRating {
@@ -37,37 +37,62 @@ interface LocationRating {
   userRatingsTotal: number;
 }
 
-async function fetchPlaceDetails(client: Client, placeId: string, apiKey: string): Promise<LocationRating | null> {
-  try {
-    const response = await client.placeDetails({
-      params: {
-        place_id: placeId,
-        fields: ['rating', 'user_ratings_total'],
-        key: apiKey,
+function fetchPlaceDetails(placeId: string, apiKey: string): Promise<LocationRating | null> {
+  return new Promise((resolve) => {
+    const options = {
+      hostname: 'places.googleapis.com',
+      path: `/v1/places/${placeId}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': 'rating,userRatingCount',
       },
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      res.on('end', () => {
+        if (res.statusCode !== 200) {
+          console.warn(`⚠️  Failed to fetch ${placeId}: HTTP ${res.statusCode}`);
+          console.warn(`   Response: ${data.substring(0, 200)}`);
+          resolve(null);
+          return;
+        }
+
+        try {
+          const result = JSON.parse(data);
+
+          if (!result.rating || !result.userRatingCount) {
+            console.warn(`⚠️  No rating data for ${placeId}`);
+            resolve(null);
+            return;
+          }
+
+          resolve({
+            placeId,
+            rating: result.rating,
+            userRatingsTotal: result.userRatingCount,
+          });
+        } catch (error) {
+          console.error(`❌ Parse error for ${placeId}:`, error);
+          resolve(null);
+        }
+      });
     });
 
-    if (response.data.status !== 'OK' || !response.data.result) {
-      console.warn(`⚠️  Failed to fetch ${placeId}: ${response.data.status}`);
-      return null;
-    }
+    req.on('error', (error) => {
+      console.error(`❌ Request error for ${placeId}:`, error.message);
+      resolve(null);
+    });
 
-    const { rating, user_ratings_total } = response.data.result;
-
-    if (!rating || !user_ratings_total) {
-      console.warn(`⚠️  No rating data for ${placeId}`);
-      return null;
-    }
-
-    return {
-      placeId,
-      rating,
-      userRatingsTotal: user_ratings_total,
-    };
-  } catch (error) {
-    console.error(`❌ Error fetching ${placeId}:`, error);
-    return null;
-  }
+    req.end();
+  });
 }
 
 function calculateAggregateRating(ratings: LocationRating[]): { ratingValue: number; reviewCount: number } {
@@ -151,11 +176,10 @@ async function main() {
 
   console.log('🔄 Fetching ratings for 9 active locations...\n');
 
-  const client = new Client({});
   const ratings: LocationRating[] = [];
 
   for (const placeId of LOCATION_PLACE_IDS) {
-    const rating = await fetchPlaceDetails(client, placeId, apiKey);
+    const rating = await fetchPlaceDetails(placeId, apiKey);
     if (rating) {
       ratings.push(rating);
       console.log(`✅ ${placeId}: ${rating.rating} ⭐ (${rating.userRatingsTotal} reviews)`);

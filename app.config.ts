@@ -6,9 +6,9 @@ export default defineAppConfig({
      * TODO: Später via Google Business Profile API automatisch aktualisieren
      */
     aggregateRating: {
-      ratingValue: 5.0,
-      reviewCount: 2737,
-      source: "Google Business Profile",
+      ratingValue: 4.9,
+      reviewCount: 1347,
+      source: "Google Business Profile (aggregated)",
       lastUpdated: "2026-05-28",
     },
 
