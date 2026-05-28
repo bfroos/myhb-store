@@ -31,8 +31,10 @@ export function buildMedicalProcedureSchema(
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
 
-  // AggregateRating (hardcoded für jetzt - später aus Config/CMS)
-  const aggregateRating = buildAggregateRatingSchema(5.0, 2737);
+  // AggregateRating aus App Config
+  const appConfig = useAppConfig();
+  const { ratingValue, reviewCount } = appConfig.seo?.aggregateRating || {};
+  const aggregateRating = buildAggregateRatingSchema(ratingValue, reviewCount);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -77,8 +79,10 @@ export function buildGeneralMedicalProcedureSchema(
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
 
-  // AggregateRating (hardcoded für jetzt - später aus Config/CMS)
-  const aggregateRating = buildAggregateRatingSchema(5.0, 2737);
+  // AggregateRating aus App Config
+  const appConfig = useAppConfig();
+  const { ratingValue, reviewCount } = appConfig.seo?.aggregateRating || {};
+  const aggregateRating = buildAggregateRatingSchema(ratingValue, reviewCount);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",

@@ -1,0 +1,45 @@
+name: Update Google Ratings
+
+on:
+  schedule:
+    # Läuft am 1. jeden Monats um 02:00 UTC
+    - cron: '0 2 1 * *'
+  workflow_dispatch: # Manueller Trigger via GitHub UI
+
+jobs:
+  update-ratings:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Update Google Ratings
+        env:
+          GOOGLE_PLACES_API_KEY: ${{ secrets.GOOGLE_PLACES_API_KEY }}
+        run: npm run update:ratings
+
+      - name: Commit and Push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          
+          git add app/utils/schemaLocation.ts app.config.ts
+          git commit -m "chore(seo): auto-update Google ratings [skip ci]"
+          git push

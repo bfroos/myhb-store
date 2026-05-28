@@ -1,6 +1,6 @@
 import type { BlogArticleDto } from "~/lib/strapi/dto/collections";
 import type { SchemaOrgContext } from "~/utils/schemaShared";
-import { normalizeSchemaDateTime } from "~/utils/schemaShared";
+import { normalizeSchemaDateTime, toAbsoluteUrl } from "~/utils/schemaShared";
 
 /**
  * Schema.org BlogPosting for blog articles.
@@ -36,9 +36,21 @@ export function buildBlogPostingSchema(
   };
 
   if (ctx.brandName) {
+    // Logo aus App Config
+    const appConfig = useAppConfig();
+    const logoUrl = appConfig.seo?.organization?.logo?.url
+      ? toAbsoluteUrl(ctx.publicUrl, appConfig.seo.organization.logo.url)
+      : appConfig.seo?.organization?.logo?.fallback;
+
     schema.publisher = {
       "@type": "Organization",
       name: ctx.brandName,
+      ...(logoUrl && {
+        logo: {
+          "@type": "ImageObject",
+          url: logoUrl,
+        },
+      }),
     };
     schema.author = {
       "@type": "Organization",

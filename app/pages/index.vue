@@ -22,15 +22,20 @@ if (homepageLoaded) {
 
 // Schema.org WebSite + Organization (Homepage only)
 const config = useRuntimeConfig();
+const appConfig = useAppConfig();
 const { brandName } = useBrand();
 const globals = useGlobals();
+
+const logoUrl = appConfig.seo?.organization?.logo?.url
+  ? `${config.public.publicUrl}${appConfig.seo.organization.logo.url}`
+  : appConfig.seo?.organization?.logo?.fallback;
 
 const websiteSchema = computed(() =>
   buildWebSiteSchema({
     publicUrl: (config.public.publicUrl as string) || "",
     path: "/",
     brandName: brandName.value,
-    logoUrl: "https://www.myhealthandbeauty.com/favicon/favicon.svg",
+    logoUrl,
   }),
 );
 
@@ -39,7 +44,7 @@ const organizationSchema = computed(() =>
     publicUrl: (config.public.publicUrl as string) || "",
     path: "/",
     brandName: brandName.value,
-    logoUrl: "https://www.myhealthandbeauty.com/favicon/favicon.svg",
+    logoUrl,
     description: globals.value?.seo?.defaultDescription ?? undefined,
   }),
 );
