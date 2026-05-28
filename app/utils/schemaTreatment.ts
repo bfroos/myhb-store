@@ -5,6 +5,7 @@ import type {
 import { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { SchemaOrgContext } from "~/utils/schemaShared";
 import { toAbsoluteUrl, formatEuroFromCent, parseEuroCent } from "~/utils/schemaShared";
+import { buildAggregateRatingSchema } from "~/utils/schemaRating";
 
 type TreatmentSchemaContext = SchemaOrgContext & {
   brandName?: string;
@@ -25,9 +26,13 @@ export function buildMedicalProcedureSchema(
   const pageUrl = toAbsoluteUrl(ctx.publicUrl, ctx.path);
 
   const description = treatmentPage.hero?.text;
+  const image = treatmentPage.hero?.cover?.url;
 
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
+
+  // AggregateRating (hardcoded für jetzt - später aus Config/CMS)
+  const aggregateRating = buildAggregateRatingSchema(5.0, 2737);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -35,6 +40,7 @@ export function buildMedicalProcedureSchema(
     name: treatmentPage.name,
     url: pageUrl,
     ...(description && { description }),
+    ...(image && { image }),
     ...(procedureType && { procedureType }),
     ...(ctx.brandName && {
       performer: {
@@ -50,6 +56,7 @@ export function buildMedicalProcedureSchema(
         availability: "https://schema.org/InStock",
       },
     }),
+    ...(aggregateRating && { aggregateRating }),
   };
 
   return schema;
@@ -66,8 +73,12 @@ export function buildGeneralMedicalProcedureSchema(
 
   const pageUrl = toAbsoluteUrl(ctx.publicUrl, ctx.path);
   const description = treatmentPage.hero?.text;
+  const image = treatmentPage.hero?.cover?.url;
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
+
+  // AggregateRating (hardcoded für jetzt - später aus Config/CMS)
+  const aggregateRating = buildAggregateRatingSchema(5.0, 2737);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -75,6 +86,7 @@ export function buildGeneralMedicalProcedureSchema(
     name: treatmentPage.name,
     url: pageUrl,
     ...(description && { description }),
+    ...(image && { image }),
     ...(procedureType && { procedureType }),
     ...(ctx.brandName && {
       performer: {
@@ -90,6 +102,7 @@ export function buildGeneralMedicalProcedureSchema(
         availability: "https://schema.org/InStock",
       },
     }),
+    ...(aggregateRating && { aggregateRating }),
   };
 
   return schema;

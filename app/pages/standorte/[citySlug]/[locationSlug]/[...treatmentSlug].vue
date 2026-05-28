@@ -157,5 +157,23 @@ const medicalProcedureSchema = computed(() =>
   }),
 );
 
+// Schema.org BreadcrumbList
+const breadcrumbSchema = computed(() =>
+  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
+);
+
+// Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
+const faqSchema = computed(() => {
+  // Merge faqs from both direct faqs and faqSets
+  const directFaqs = fixedBlocks.value?.faq?.faqs ?? [];
+  const faqSetsItems = fixedBlocks.value?.faq?.faqSets?.flatMap(
+    (set: any) => set.faqs ?? [],
+  ) ?? [];
+  const allFaqs = [...directFaqs, ...faqSetsItems];
+  return buildFaqPageSchema(allFaqs);
+});
+
 useSchemaOrg(medicalProcedureSchema);
+useSchemaOrg(breadcrumbSchema);
+useSchemaOrg(faqSchema);
 </script>

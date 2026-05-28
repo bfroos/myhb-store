@@ -75,8 +75,13 @@ const breadcrumbSchema = computed(() =>
 
 // Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
 const faqSchema = computed(() => {
-  const faqs = fixedBlocks.value?.faq?.faqs ?? [];
-  return buildFaqPageSchema(faqs);
+  // Merge faqs from both direct faqs and faqSets
+  const directFaqs = fixedBlocks.value?.faq?.faqs ?? [];
+  const faqSetsItems = fixedBlocks.value?.faq?.faqSets?.flatMap(
+    (set: any) => set.faqs ?? [],
+  ) ?? [];
+  const allFaqs = [...directFaqs, ...faqSetsItems];
+  return buildFaqPageSchema(allFaqs);
 });
 
 useSchemaOrg(medicalProcedureSchema);
