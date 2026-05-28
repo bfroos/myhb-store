@@ -4,8 +4,9 @@
 User-agent: *
 Allow: /
 
-# Sitemap
+# Sitemaps
 Sitemap: https://www.myhealthandbeauty.com/sitemap.xml
+Sitemap: https://www.myhealthandbeauty.com/sitemap-videos.xml
 
 # Host directive (canonical domain)
 Host: www.myhealthandbeauty.com
