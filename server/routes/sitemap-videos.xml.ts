@@ -274,10 +274,13 @@ export default defineEventHandler(async (event) => {
    */
   const videoTags = videos
     .map((v) => {
+      // Use video URL as fallback if no thumbnail
+      const thumbnail = v.thumbnailUrl || v.videoUrl;
+      
       return `  <url>
     <loc>${escapeXml(v.pageUrl)}</loc>
     <video:video>
-      <video:thumbnail_loc>${escapeXml(v.thumbnailUrl)}</video:thumbnail_loc>
+      <video:thumbnail_loc>${escapeXml(thumbnail)}</video:thumbnail_loc>
       <video:title>${escapeXml(v.title)}</video:title>
       <video:description>${escapeXml(v.description)}</video:description>
       <video:content_loc>${escapeXml(v.videoUrl)}</video:content_loc>
