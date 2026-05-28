@@ -162,13 +162,59 @@ export default defineEventHandler(async (event) => {
           }
         }
       }
+
+      // Check for stories array (blocks.stories component)
+      if (block.stories && Array.isArray(block.stories)) {
+        for (const story of block.stories) {
+          const video = story.video;
+          if (video && video.mime && video.mime.startsWith("video/")) {
+            const videoUrl = video.url;
+            if (!videoUrl) continue;
+
+            const canUseTransformations = !!getMediaZoneOrigin(videoUrl);
+            const thumbnailUrl = canUseTransformations
+              ? buildVideoPosterUrl(videoUrl)
+              : videoUrl;
+
+            const title = story.title || `${pageName} - Story`;
+            const description = video.alternativeText || story.subtitle || `Story video from ${pageName}`;
+
+            foundVideos.push({
+              pageUrl,
+              videoUrl,
+              thumbnailUrl,
+              title: title.substring(0, 100),
+              description: description.substring(0, 2048),
+              uploadDate: video.createdAt || new Date().toISOString(),
+            });
+          }
+        }
+      }
     }
 
     return foundVideos;
   }
 
   /**
-   * 1. Treatment Pages
+   * 1. Homepage
+   */
+  try {
+    const homepageUrl = `${strapiUrl}/api/homepage?locale=${DEFAULT_LOCALE}&populate=deep`;
+    const homepageData = await $fetch<any>(homepageUrl);
+    const homepage = homepageData.data;
+    
+    if (homepage && homepage.blocks) {
+      const pageUrl = `${siteUrl}`;
+      const pageName = "MY HEALTH & BEAUTY";
+      const homeVideos = extractVideosFromBlocks(homepage.blocks, pageUrl, pageName);
+      videos.push(...homeVideos);
+    }
+  } catch (err) {
+    console.error("[video-sitemap] Failed to fetch homepage:", err);
+  }
+
+  /**
+   * 2. Treatment Pages
    */
   const treatmentPages = await fetchCollection<any>("treatment-pages", {
     locale: [DEFAULT_LOCALE],
@@ -185,7 +231,7 @@ export default defineEventHandler(async (event) => {
   }
 
   /**
-   * 2. Location Pages (locations collection)
+   * 3. Location Pages (locations collection)
    */
   const locations = await fetchCollection<any>("locations", {
     locale: [DEFAULT_LOCALE],
@@ -205,7 +251,7 @@ export default defineEventHandler(async (event) => {
   }
 
   /**
-   * 3. Blog Articles
+   * 4. Blog Articles
    */
   const blogArticles = await fetchCollection<any>("blog-articles", {
     locale: [DEFAULT_LOCALE],
