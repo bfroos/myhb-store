@@ -22,15 +22,21 @@ if (pageLoaded) {
 // Schema.org BlogPosting
 const config = useRuntimeConfig();
 const globals = useGlobals();
+const appConfig = useAppConfig();
 const route = useRoute();
 
-const blogPostingSchema = computed(() =>
-  buildBlogPostingSchema(article.value, {
+const blogPostingSchema = computed(() => {
+  const logoUrl = appConfig.seo?.organization?.logo?.url
+    ? `${config.public.publicUrl}${appConfig.seo.organization.logo.url}`.replace(/([^:]\/)\/+/g, "$1")
+    : appConfig.seo?.organization?.logo?.fallback;
+
+  return buildBlogPostingSchema(article.value, {
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
     brandName: globals.value?.brand?.name ?? "",
-  }),
-);
+    logoUrl,
+  });
+});
 
 useSchemaOrg(blogPostingSchema);
 </script>
