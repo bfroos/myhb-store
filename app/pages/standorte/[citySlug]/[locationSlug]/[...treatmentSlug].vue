@@ -164,11 +164,13 @@ const breadcrumbSchema = computed(() =>
 
 // Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
 const faqSchema = computed(() => {
+  if (!fixedBlocks.value?.faq) return null;
+  
   // Merge faqs from both direct faqs and faqSets
-  const directFaqs = fixedBlocks.value?.faq?.faqs ?? [];
-  const faqSetsItems = fixedBlocks.value?.faq?.faqSets?.flatMap(
+  const directFaqs = fixedBlocks.value.faq.faqs ?? [];
+  const faqSetsItems = (fixedBlocks.value.faq.faqSets ?? []).flatMap(
     (set: any) => set.faqs ?? [],
-  ) ?? [];
+  );
   const allFaqs = [...directFaqs, ...faqSetsItems];
   return buildFaqPageSchema(allFaqs);
 });
