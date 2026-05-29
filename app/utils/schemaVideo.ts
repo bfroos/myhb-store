@@ -1,5 +1,5 @@
 /**
- * VideoObject Schema for Google Video Indexing
+ * VideoObject Schema for Google Video Indexing (SSR-safe)
  *
  * Based on Schema.org VideoObject specification:
  * https://schema.org/VideoObject
@@ -18,7 +18,6 @@
  */
 
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
-import { buildVideoPosterUrl, getMediaZoneOrigin } from "~/utils/media";
 
 export interface VideoObjectInput {
   media: StrapiMedia;
@@ -37,12 +36,9 @@ export function buildVideoObjectSchema(input: VideoObjectInput) {
   }
 
   const videoUrl = media.url;
-  const canUseTransformations = !!getMediaZoneOrigin(videoUrl);
 
-  // Build thumbnail URL (poster frame)
-  const thumbnailUrl = canUseTransformations
-    ? buildVideoPosterUrl(videoUrl)
-    : undefined;
+  // Use video URL as thumbnail fallback (Google will extract a frame)
+  const thumbnailUrl = videoUrl;
 
   // Use createdAt as fallback for uploadDate
   const effectiveUploadDate =
@@ -53,7 +49,7 @@ export function buildVideoObjectSchema(input: VideoObjectInput) {
     "@type": "VideoObject",
     name,
     description,
-    thumbnailUrl: thumbnailUrl || videoUrl, // Fallback to video URL if no poster
+    thumbnailUrl,
     uploadDate: effectiveUploadDate,
     contentUrl: videoUrl,
   };
@@ -74,16 +70,4 @@ export function buildVideoObjectSchema(input: VideoObjectInput) {
   }
 
   return schema;
-}
-
-/**
- * Generates multiple VideoObject schemas for a list of videos
- * Useful for pages with multiple videos (e.g., treatment pages, location pages)
- */
-export function buildVideoObjectSchemas(
-  videos: Array<VideoObjectInput>,
-): Array<Record<string, any>> {
-  return videos
-    .map((video) => buildVideoObjectSchema(video))
-    .filter((schema): schema is Record<string, any> => schema !== null);
 }

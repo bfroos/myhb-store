@@ -108,6 +108,8 @@
   </template>
 </template>
 <script setup lang="ts">
+import { buildVideoObjectSchema } from "~/utils/schemaVideo";
+
 const {
   fetchPage,
   fixedBlocks,
@@ -178,7 +180,29 @@ const faqSchema = computed(() => {
   return buildFaqPageSchema(allFaqs);
 });
 
+// Schema.org VideoObject (from about block videos)
+const videoSchema = computed(() => {
+  const aboutMedia = fixedBlocks.value?.about?.media;
+  if (!aboutMedia) return null;
+
+  // Get first video from media
+  const video = Array.isArray(aboutMedia)
+    ? aboutMedia.find(m => m?.mime?.startsWith("video/"))
+    : aboutMedia.mime?.startsWith("video/")
+    ? aboutMedia
+    : null;
+
+  if (!video) return null;
+
+  return buildVideoObjectSchema({
+    media: video,
+    name: treatmentPage.value?.name ?? "Treatment Video",
+    description: treatmentPage.value?.hero?.text ?? treatmentPage.value?.name ?? "",
+  });
+});
+
 useSchemaOrg(medicalProcedureSchema);
 useSchemaOrg(breadcrumbSchema);
 useSchemaOrg(faqSchema);
+useSchemaOrg(videoSchema);
 </script>
