@@ -16,8 +16,6 @@
 </template>
 
 <script setup lang="ts">
-import { buildVideoObjectSchema } from "~/utils/schemaVideo";
-
 const {
   fetchProductPage,
   fixedBlocks,
@@ -73,37 +71,5 @@ const productSchema = computed(() =>
   }),
 );
 
-// Schema.org VideoObject (für Product Videos)
-const videoSchema = computed(() => {
-  const videos = product.value?.videos;
-  if (!videos || videos.length === 0) {
-    return null;
-  }
-
-  const builtVideos = videos.map((video: any) =>
-    buildVideoObjectSchema({
-      media: video,
-      name: video.name || `${product.value?.name || "Product"} Video`,
-      description: video.description || product.value?.description || "Product video",
-      uploadDate: video.uploadedAt || new Date().toISOString(),
-      duration: video.duration,
-      embedUrl: video.embedUrl,
-    }),
-  ).filter((v): v is Record<string, unknown> => v !== null);
-
-  if (builtVideos.length === 0) return null;
-  if (builtVideos.length === 1) return builtVideos[0];
-
-  // Multiple videos: wrap in WebPage collection
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name: `${product.value?.name || "Product"} Videos`,
-    url: route.path,
-    video: builtVideos,
-  };
-});
-
 useSchemaOrg(productSchema);
-useSchemaOrg(videoSchema);
 </script>
