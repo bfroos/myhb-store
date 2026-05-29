@@ -10,6 +10,8 @@ import { buildAggregateRatingSchema } from "~/utils/schemaRating";
 type TreatmentSchemaContext = SchemaOrgContext & {
   brandName?: string;
   currency?: string;
+  ratingValue?: number;
+  reviewCount?: number;
 };
 
 /**
@@ -31,10 +33,8 @@ export function buildMedicalProcedureSchema(
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
 
-  // AggregateRating aus App Config
-  const appConfig = useAppConfig();
-  const { ratingValue, reviewCount } = appConfig.seo?.aggregateRating || {};
-  const aggregateRating = buildAggregateRatingSchema(ratingValue, reviewCount);
+  // AggregateRating from context (passed from component)
+  const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -79,10 +79,8 @@ export function buildGeneralMedicalProcedureSchema(
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
 
-  // AggregateRating aus App Config
-  const appConfig = useAppConfig();
-  const { ratingValue, reviewCount } = appConfig.seo?.aggregateRating || {};
-  const aggregateRating = buildAggregateRatingSchema(ratingValue, reviewCount);
+  // AggregateRating from context (passed from component)
+  const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",

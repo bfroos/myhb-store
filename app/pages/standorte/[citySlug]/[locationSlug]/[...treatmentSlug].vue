@@ -148,12 +148,15 @@ if (pageLoaded) {
 const config = useRuntimeConfig();
 const route = useRoute();
 const { brandName } = useBrand();
+const appConfig = useAppConfig();
 
 const medicalProcedureSchema = computed(() =>
   buildMedicalProcedureSchema(treatmentPage.value, location.value, {
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
     brandName: brandName.value,
+    ratingValue: appConfig.seo?.aggregateRating?.ratingValue,
+    reviewCount: appConfig.seo?.aggregateRating?.reviewCount,
   }),
 );
 
