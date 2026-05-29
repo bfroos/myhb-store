@@ -108,6 +108,8 @@
   </template>
 </template>
 <script setup lang="ts">
+import { buildVideoObjectSchema } from "~/utils/schemaVideo";
+
 const {
   fetchPage,
   fixedBlocks,
@@ -173,7 +175,39 @@ const faqSchema = computed(() => {
   return buildFaqPageSchema(allFaqs);
 });
 
+// Schema.org VideoObject (für About/MediaBento Block Videos)
+const videoSchema = computed(() => {
+  const aboutBlock = fixedBlocks.value?.about;
+  if (!aboutBlock?.videos || aboutBlock.videos.length === 0) {
+    return null;
+  }
+
+  const videos = aboutBlock.videos.map((video: any) =>
+    buildVideoObjectSchema({
+      media: video,
+      name: video.name || `${treatmentPage.value?.name || "Treatment"} Video`,
+      description: video.description || treatmentPage.value?.hero?.text || "Treatment video",
+      uploadDate: video.uploadedAt || new Date().toISOString(),
+      duration: video.duration,
+      embedUrl: video.embedUrl,
+    }),
+  ).filter((v): v is Record<string, unknown> => v !== null);
+
+  if (videos.length === 0) return null;
+  if (videos.length === 1) return videos[0];
+
+  // Multiple videos: wrap in WebPage collection
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: `${treatmentPage.value?.name || "Treatment"} Videos`,
+    url: route.path,
+    video: videos,
+  };
+});
+
 useSchemaOrg(medicalProcedureSchema);
 useSchemaOrg(breadcrumbSchema);
 useSchemaOrg(faqSchema);
+useSchemaOrg(videoSchema);
 </script>
