@@ -56,37 +56,38 @@ if (treatmentPageLoaded) {
   await setPageSeo(seo.value);
 }
 
+// TEMPORARILY DISABLED FOR DEBUGGING 500 ERROR
 // Schema.org MedicalProcedure
-const route = useRoute();
-const { brandName } = useBrand();
+// const route = useRoute();
+// const { brandName } = useBrand();
 
-const medicalProcedureSchema = computed(() =>
-  buildGeneralMedicalProcedureSchema(treatmentPage.value, {
-    publicUrl: (config.public.publicUrl as string) || "",
-    path: route.path,
-    brandName: brandName.value,
-  }),
-);
+// const medicalProcedureSchema = computed(() =>
+//   buildGeneralMedicalProcedureSchema(treatmentPage.value, {
+//     publicUrl: (config.public.publicUrl as string) || "",
+//     path: route.path,
+//     brandName: brandName.value,
+//   }),
+// );
 
 // Schema.org BreadcrumbList
-const breadcrumbSchema = computed(() =>
-  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
-);
+// const breadcrumbSchema = computed(() =>
+//   buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
+// );
 
 // Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
-const faqSchema = computed(() => {
-  if (!fixedBlocks.value?.faq) return null;
-  
-  // Merge faqs from both direct faqs and faqSets
-  const directFaqs = fixedBlocks.value.faq.faqs ?? [];
-  const faqSetsItems = (fixedBlocks.value.faq.faqSets ?? []).flatMap(
-    (set: any) => set.faqs ?? [],
-  );
-  const allFaqs = [...directFaqs, ...faqSetsItems];
-  return buildFaqPageSchema(allFaqs);
-});
+// const faqSchema = computed(() => {
+//   if (!fixedBlocks.value?.faq) return null;
+//   
+//   // Merge faqs from both direct faqs and faqSets
+//   const directFaqs = fixedBlocks.value.faq.faqs ?? [];
+//   const faqSetsItems = (fixedBlocks.value.faq.faqSets ?? []).flatMap(
+//     (set: any) => set.faqs ?? [],
+//   );
+//   const allFaqs = [...directFaqs, ...faqSetsItems];
+//   return buildFaqPageSchema(allFaqs);
+// });
 
-useSchemaOrg(medicalProcedureSchema);
-useSchemaOrg(breadcrumbSchema);
-useSchemaOrg(faqSchema);
+// useSchemaOrg(medicalProcedureSchema);
+// useSchemaOrg(breadcrumbSchema);
+// useSchemaOrg(faqSchema);
 </script>
