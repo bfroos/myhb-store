@@ -16,13 +16,70 @@ export type CityResolved = {
   lng: number;
 };
 
-const DEBOUNCE_MS = 300;
+const DEBOUNCE_MS = 500; // Increased from 300ms to reduce API calls
 const MIN_QUERY_LEN = 2;
-const MAX_RESULTS = 8;
+const MAX_RESULTS = 5; // Reduced from 8 to optimize UX (still sufficient)
 const REGION = "DE";
+const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const CACHE_STORAGE_KEY = "myhb_google_places_cache";
 
 let placesLib: google.maps.PlacesLibrary | null = null;
 let sessionToken: google.maps.places.AutocompleteSessionToken | null = null;
+
+// In-memory cache for resolved places
+const placeCache = new Map<string, CityResolved>();
+
+interface CachedPlace {
+  data: CityResolved;
+  timestamp: number;
+}
+
+// Load cache from localStorage on init
+function loadCacheFromStorage() {
+  if (!import.meta.client) return;
+  
+  try {
+    const stored = localStorage.getItem(CACHE_STORAGE_KEY);
+    if (!stored) return;
+    
+    const cache: Record<string, CachedPlace> = JSON.parse(stored);
+    const now = Date.now();
+    
+    Object.entries(cache).forEach(([placeId, cached]) => {
+      if (now - cached.timestamp < CACHE_TTL_MS) {
+        placeCache.set(placeId, cached.data);
+      }
+    });
+  } catch (e) {
+    console.warn("[Places Cache] Failed to load cache:", e);
+  }
+}
+
+// Save cache to localStorage
+function saveCacheToStorage() {
+  if (!import.meta.client) return;
+  
+  try {
+    const cache: Record<string, CachedPlace> = {};
+    const now = Date.now();
+    
+    placeCache.forEach((data, placeId) => {
+      cache[placeId] = {
+        data,
+        timestamp: now,
+      };
+    });
+    
+    localStorage.setItem(CACHE_STORAGE_KEY, JSON.stringify(cache));
+  } catch (e) {
+    console.warn("[Places Cache] Failed to save cache:", e);
+  }
+}
+
+// Initialize cache
+if (import.meta.client) {
+  loadCacheFromStorage();
+}
 
 function getSessionToken(): google.maps.places.AutocompleteSessionToken {
   if (!placesLib) {
@@ -145,13 +202,18 @@ export function useGoogleCitySearch() {
   async function resolveSuggestion(
     s: CitySuggestion,
   ): Promise<CityResolved | null> {
+    // Check cache first (cost optimization: avoid expensive Place Details API call)
+    if (placeCache.has(s.placeId)) {
+      return placeCache.get(s.placeId)!;
+    }
+
     resolving.value = true;
     error.value = null;
 
     try {
       await ensurePlacesLib();
 
-      // Use the prediction’s toPlace() + fetchFields(), which also closes the session.
+      // Use the prediction's toPlace() + fetchFields(), which also closes the session.
       const place = s.placePrediction.toPlace();
       await place.fetchFields({
         fields: ["displayName", "formattedAddress", "location"],
@@ -162,7 +224,7 @@ export function useGoogleCitySearch() {
       const lat = place.location.lat();
       const lng = place.location.lng();
 
-      return {
+      const resolved: CityResolved = {
         label: s.label,
         placeId: s.placeId,
         formattedAddress:
@@ -171,6 +233,12 @@ export function useGoogleCitySearch() {
         lat,
         lng,
       };
+
+      // Cache result to avoid duplicate API calls
+      placeCache.set(s.placeId, resolved);
+      saveCacheToStorage();
+
+      return resolved;
     } catch (e) {
       error.value = e instanceof Error ? e.message : "Auflösen fehlgeschlagen.";
       return null;
