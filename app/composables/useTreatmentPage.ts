@@ -92,38 +92,25 @@ export function useTreatmentPage() {
     mapTreatmentPageFixedBlocks(treatmentPage.value, t, isAdsMode.value),
   );
 
+  const { brandName } = useBrand();
+  
   const seoWithFallback = computed(() => {
+    const treatmentName = treatmentPage.value?.name ?? "";
     const price = treatmentPage.value?.treatment?.priceInEuroCent;
-
-    const treatmentLabel =
-      (fixedBlocks.value?.hero?.headline || treatmentPage.value?.name) ?? "";
-
-    let priceLabel: string | null = null;
-
-    if (fixedBlocks.value?.hero?.showPrice && price != null) {
-      if (treatmentPage.value?.treatment?.isStartingPrice) {
-        priceLabel =
-          t("common.price.startingPrefix") + " " + formatPriceInEuro(price);
-      } else {
-        priceLabel = formatPriceInEuro(price);
-      }
-    }
-
-    const titleParts = [treatmentLabel, priceLabel].filter(
-      (x): x is string => x != null && x !== "",
-    );
-    const metaTitle =
-      titleParts.length > 0
-        ? titleParts.join(" ")
-        : treatmentLabel || undefined;
-
-    const metaDescription = t("treatment.seo.description", {
-      description: fixedBlocks.value?.hero?.text ?? "",
-    });
-
+    
+    // Format price for SEO (convert cents to EUR)
+    const startPrice = price ? Math.floor(price / 100) : 149; // Fallback
+    const priceTag = `ab ${startPrice}€`;
+    
     return {
-      metaTitle,
-      metaDescription,
+      metaTitle: t("treatment.seo.title", {
+        treatmentName,
+        priceTag,
+        brandName: brandName.value,
+      }),
+      metaDescription: t("treatment.seo.description", {
+        treatmentName,
+      }),
     };
   });
 

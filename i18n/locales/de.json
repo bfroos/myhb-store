@@ -262,7 +262,8 @@
   },
   "treatment": {
     "seo": {
-      "description": "{description} Erfahrene Ärzte, sichere Behandlung & individueller Plan. Jetzt Termin buchen!"
+      "title": "{treatmentName} ab {priceTag} ✓ {brandName}",
+      "description": "{treatmentName}: Zertifizierte Ärzte ✓ 10 Standorte deutschlandweit ✓ Kostenlose Beratung ✓ Natürliche Ergebnisse ✓ Jetzt Termin buchen!"
     }
   },
   "productPage": {
