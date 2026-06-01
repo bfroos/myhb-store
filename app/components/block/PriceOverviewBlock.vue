@@ -1,115 +1,215 @@
 <template>
-  <section class="block price" :class="[themeClass, { 'block--elevated': elevated }]">
-    <header v-if="headline" class="price__header">
-      <h2 class="price__heading">{{ headline }}</h2>
-    </header>
-    <ul class="price__grid" role="list">
-      <li v-for="item in items" :key="item.label" class="price__cell">
-        <span class="price__label">{{ item.label }}</span>
-        <strong class="price__value">{{ priceFormat(item) }}</strong>
-      </li>
-    </ul>
-    <button v-if="cta" type="button" class="button button--tertiary button--lg button--fullWidth" @click="$emit('cta')">
-      {{ cta.label }}
-    </button>
-  </section>
+  <UiLayoutSectionBlock v-if="hasContent" :elevated="elevated" :theme-class="themeClass">
+    <!-- Product Category View (complex layout with products + treatments) -->
+    <div v-if="showProductCategories" class="overview">
+      <section
+        v-for="category in productCategories"
+        :key="category.id"
+        :id="category.slug"
+        class="overview__item"
+      >
+        <UiLayoutCardSurface>
+          <UiOrganismProductCategoryPriceOverviewCard
+            :product-category="category"
+          />
+        </UiLayoutCardSurface>
+      </section>
+    </div>
+
+    <!-- Simple Treatments List View -->
+    <article v-else-if="showTreatments" class="price-overview">
+      <header v-if="headline" class="price-overview__header">
+        <h2 class="price-overview__title">{{ headline }}</h2>
+      </header>
+
+      <!-- Treatments List -->
+      <section class="price-overview__section">
+        <ul class="price-overview__list" role="list">
+          <li
+            v-for="treatment in treatments"
+            :key="treatment.id"
+            class="price-overview__row"
+            :class="{ 'price-overview__row--link': treatment.treatmentPage }"
+          >
+            <NuxtLinkLocale
+              v-if="treatment.treatmentPage"
+              :to="getTreatmentPath(treatment)"
+              class="price-overview__link"
+              :aria-label="$t('blocks.priceOverview.treatmentDetails', { name: treatment.name })"
+            >
+              <span class="price-overview__label">{{ treatment.name }}</span>
+              <span class="price-overview__price">
+                <template v-if="treatment.priceInEuroCent">
+                  <span v-if="treatment.isStartingPrice" class="price-overview__prefix">
+                    {{ $t("common.price.startingPrefix") }}
+                  </span>
+                  {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+                </template>
+              </span>
+              <IconArrowRight class="price-overview__icon" aria-hidden="true" />
+            </NuxtLinkLocale>
+            <template v-else>
+              <span class="price-overview__label">{{ treatment.name }}</span>
+              <span class="price-overview__price">
+                <template v-if="treatment.priceInEuroCent">
+                  <span v-if="treatment.isStartingPrice" class="price-overview__prefix">
+                    {{ $t("common.price.startingPrefix") }}
+                  </span>
+                  {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+                </template>
+              </span>
+            </template>
+          </li>
+        </ul>
+      </section>
+
+      <!-- CTA Button -->
+      <footer v-if="cta" class="price-overview__footer">
+        <SharedButton :button="cta" />
+      </footer>
+    </article>
+  </UiLayoutSectionBlock>
 </template>
 
 <script setup lang="ts">
-interface PriceItem { label: string; price: string; from?: boolean }
-interface CtaProp { label: string; to?: string }
+import type { BlockPriceOverviewDto } from "~/lib/strapi/dto/components";
+import { IconArrowRight } from "@tabler/icons-vue";
 
-withDefaults(defineProps<{
-  headline?: string;
-  items?: PriceItem[];
-  cta?: CtaProp;
-  elevated?: boolean;
-  themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
-}>(), {
-  elevated: true,
-  themeClass: "theme-light",
-  headline: "Botox Preise in Berlin",
-  items: () => [
-    { label: "Zornesfalte",  price: "199 €", from: true },
-    { label: "Stirnfalten",  price: "249 €", from: true },
-    { label: "Krähenfüße",   price: "199 €", from: true },
-    { label: "Baby Botox",   price: "249 €", from: true },
-  ],
-  cta: () => ({ label: "Alle Preise ansehen", to: "/preise" }),
-});
+const props = defineProps<BlockPriceOverviewDto>();
 
-function priceFormat(p: PriceItem) { return p.from ? `ab ${p.price}` : p.price; }
+const showProductCategories = computed(
+  () => (props.productCategories?.length ?? 0) > 0,
+);
+
+const showTreatments = computed(
+  () => !showProductCategories.value && (props.treatments?.length ?? 0) > 0,
+);
+
+const hasContent = computed(
+  () => showProductCategories.value || showTreatments.value,
+);
+
+function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
+  return `/behandlungen/${treatment.treatmentPage?.pathKey ?? ""}`;
+}
 </script>
 
 <style scoped>
-.block {
-  background: var(--card-color-bg);
-  color: var(--color-text);
-  border-radius: var(--border-radius-card);
-  padding: var(--space-card-pad);
+.overview {
   display: flex;
   flex-direction: column;
-  gap: var(--space-500);
+  gap: var(--space-600);
+  width: 100%;
 }
-.block--elevated { box-shadow: var(--shadow-1); }
-.price__header { text-align: center; }
-.price__heading {
+
+.overview__item {
+  scroll-margin-top: var(--space-600);
+}
+
+.price-overview {
+  --overview-pad: var(--space-card-pad);
+  --overview-pad-sm: var(--space-card-pad-xs);
+  --overview-gap: var(--space-400);
+  --overview-row-cols: 1fr max-content max-content;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.price-overview__header {
+  padding-block: var(--overview-pad) var(--overview-pad-sm);
+  padding-inline: var(--overview-pad);
+}
+
+.price-overview__title {
+  font-size: var(--font-3xl);
+  line-height: var(--line-3xl);
+  font-weight: var(--font-semibold);
   margin: 0;
-  font-size: var(--font-2xl);
-  line-height: var(--line-2xl);
-  font-weight: var(--font-bold);
 }
-.price__grid {
+
+.price-overview__section {
+  border-block-start: 1px solid var(--color-border-mute);
+  padding-block: calc(var(--overview-pad) + 0.25em) var(--overview-pad-sm);
+  padding-inline: var(--overview-pad);
+}
+
+.price-overview__list {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
   margin: 0;
   padding: 0;
-  list-style: none;
+}
+
+.price-overview__row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: var(--space-300);
-}
-.price__cell {
-  display: flex;
-  flex-direction: column;
+  grid-template-columns: var(--overview-row-cols);
   align-items: center;
-  text-align: center;
-  gap: var(--space-200);
-  padding: var(--space-500) var(--space-300);
-  border: 1px solid var(--color-border-mute);
-  border-radius: var(--border-radius-card-sm);
+  gap: var(--overview-gap);
+  padding-block: var(--overview-gap);
+  font-size: var(--font-base);
+  line-height: var(--line-base);
 }
-.price__label {
-  font-size: var(--font-sm);
+
+.price-overview__row:not(:last-child) {
+  border-block-end: 1px solid var(--color-border-mute);
+}
+
+.price-overview__row--link {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin: 0 calc(var(--overview-gap) * -1);
+  padding-inline: var(--overview-gap);
+  border-radius: var(--border-radius-200);
+}
+
+.price-overview__row--link:hover {
+  background-color: var(--color-gray-100);
+}
+
+.price-overview__link {
+  display: contents;
+  text-decoration: none;
+  color: inherit;
+}
+
+.price-overview__label {
+  min-inline-size: 0;
+  font-weight: var(--font-medium);
+}
+
+.price-overview__price {
+  font-weight: var(--font-semibold);
+  color: var(--color-primary);
+}
+
+.price-overview__prefix {
+  font-size: var(--font-xs);
+  line-height: var(--line-xs);
+  font-weight: var(--font-regular);
+}
+
+.price-overview__icon {
+  justify-self: end;
   color: var(--color-text-light);
 }
-.price__value {
-  font-size: var(--font-md);
-  font-weight: var(--font-bold);
-}
-.button {
-  height: var(--control-height-lg);
-  display: inline-flex;
-  align-items: center;
+
+.price-overview__footer {
+  border-block-start: 1px solid var(--color-border-mute);
+  padding-block: var(--overview-pad);
+  padding-inline: var(--overview-pad);
+  display: flex;
   justify-content: center;
-  padding: 0 calc(var(--control-height-lg) / 2);
-  border-radius: 999px;
-  border: 2px solid var(--button-tertiary-color-border, #000);
-  font: inherit;
-  font-size: var(--font-sm);
-  font-weight: var(--font-bold);
-  line-height: 1;
-  cursor: pointer;
-  background: transparent;
-  color: var(--button-tertiary-color-text, #000);
-  transition: all 0.15s linear;
 }
-.button--fullWidth { width: 100%; }
-.button:hover { background: rgba(0,0,0,0.04); }
-.button:active { transform: scale(0.97); }
-@media (min-width: 900px) {
-  .block { padding: var(--space-card-pad-lg, 32px); }
-  .price__heading { font-size: var(--font-3xl); line-height: var(--line-3xl); }
-  .price__grid { grid-template-columns: repeat(4, 1fr); gap: var(--space-400); }
-  .price__cell { padding: var(--space-600) var(--space-400); }
-  .button { width: auto; align-self: center; padding: 0 var(--space-700); }
+
+@media (max-width: 640px) {
+  .price-overview__row {
+    grid-template-columns: 1fr max-content;
+  }
+  
+  .price-overview__icon {
+    display: none;
+  }
 }
 </style>
