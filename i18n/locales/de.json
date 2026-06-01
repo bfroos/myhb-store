@@ -195,8 +195,8 @@
       },
       "locationTreatment": {
         "seo": {
-          "title": "{treatmentName} {city} | {brandNameShort} {locationName}",
-          "description": "{treatmentName} in {city} bei {brandName} {locationName} ✓ Zertifizierte Ärzte ✓ Termin online buchen"
+          "title": "{treatmentName} {city} {priceTag} ✓ {brandName}",
+          "description": "{treatmentName} {city}: Zertifizierte Ärzte ✓ Termin in 24h ✓ Premium-Lounge {locationName} ✓ Natürliche Ergebnisse ✓ Jetzt online buchen!"
         }
       },
       "openingHoursOpenNewToday": "Neueröffnung heute",

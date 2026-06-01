@@ -119,8 +119,7 @@ export function buildLocalBusinessSchema(
     }),
     // Medical specialty for MedicalClinic type
     medicalSpecialty: "PlasticSurgery",
-    // Price range indicator (€€ = mid-range)
-    priceRange: "€€",
+    // Note: priceRange removed - we use concrete prices per treatment in MedicalProcedure schema
     // Currencies and payment
     currenciesAccepted: "EUR",
     paymentAccepted: "Cash, Credit Card, Debit Card",

@@ -109,9 +109,11 @@
 </template>
 <script setup lang="ts">
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
+import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
 
 const {
   fetchPage,
+  fetchTreatmentPrice,
   fixedBlocks,
   breadcrumbItems,
   seo,
@@ -120,12 +122,15 @@ const {
   treatmentPageLocalizations,
   treatmentPage,
   location,
+  treatmentPrice, // Expose for schema
 } = useLocationTreatmentPage();
 
 const { isAdsMode } = useSiteModeFlags();
 const pageLoaded = await fetchPage();
 
 if (pageLoaded) {
+  // Fetch price fallback from general treatment page
+  await fetchTreatmentPrice();
   usePageI18nParamsFromSources([
     {
       localizations: locationLocalizations.value ?? [],
@@ -159,6 +164,7 @@ const medicalProcedureSchema = computed(() =>
     brandName: brandName.value,
     ratingValue: appConfig.seo?.aggregateRating?.ratingValue,
     reviewCount: appConfig.seo?.aggregateRating?.reviewCount,
+    priceInEuroCent: treatmentPrice?.value, // Pass fetched price to schema
   }),
 );
 
@@ -201,8 +207,18 @@ const videoSchema = computed(() => {
   });
 });
 
+// Schema.org LocalBusiness (for address + stars in SERPs)
+const localBusinessSchema = computed(() =>
+  buildLocalBusinessSchema(location.value, {
+    publicUrl: (config.public.publicUrl as string) || "",
+    path: route.path,
+    brandName: brandName.value,
+  }),
+);
+
 useSchemaOrg(medicalProcedureSchema);
 useSchemaOrg(breadcrumbSchema);
 useSchemaOrg(faqSchema);
 useSchemaOrg(videoSchema);
+useSchemaOrg(localBusinessSchema); // NEW: Address + Stars in SERPs
 </script>

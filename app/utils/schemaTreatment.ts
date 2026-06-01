@@ -12,6 +12,7 @@ type TreatmentSchemaContext = SchemaOrgContext & {
   currency?: string;
   ratingValue?: number;
   reviewCount?: number;
+  priceInEuroCent?: number | null; // Optional external price override
 };
 
 /**
@@ -31,7 +32,10 @@ export function buildMedicalProcedureSchema(
   const image = treatmentPage.hero?.cover?.url;
 
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
-  const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
+  // Use external price override if provided, otherwise fallback to treatment price
+  const priceInCent = parseEuroCent(
+    ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent
+  );
 
   // AggregateRating from context (passed from component)
   const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);
@@ -77,7 +81,10 @@ export function buildGeneralMedicalProcedureSchema(
   const description = treatmentPage.hero?.text;
   const image = treatmentPage.hero?.cover?.url;
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
-  const priceInCent = parseEuroCent(treatmentPage.treatment?.priceInEuroCent);
+  // Use external price override if provided, otherwise fallback to treatment price
+  const priceInCent = parseEuroCent(
+    ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent
+  );
 
   // AggregateRating from context (passed from component)
   const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);

@@ -9,6 +9,34 @@ const { locale, fallbackLocale } = useI18n();
 const currentLocale = computed(
   () => (locale.value || fallbackLocale.value) as string,
 );
+
+// Global Organization Schema for Brand Knowledge Panel
+const config = useRuntimeConfig();
+const { brandName } = useBrand();
+
+const organizationSchema = computed(() => ({
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: brandName.value,
+  url: config.public.publicUrl,
+  logo: {
+    "@type": "ImageObject",
+    url: `${config.public.publicUrl}/favicon/favicon.svg`,
+    width: 512,
+    height: 512,
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    telephone: "+49-221-94899428",
+    contactType: "customer service",
+    availableLanguage: ["de", "en"],
+    areaServed: "DE",
+  },
+  description: "Ästhetische Medizin mit Botox®, Hyaluron und PRP-Therapie an 10 Standorten in Deutschland.",
+}));
+
+useSchemaOrg(organizationSchema);
+
 useHead({
   htmlAttrs: {
     lang: currentLocale.value,
