@@ -266,6 +266,7 @@ export type BlockTreatmentHeroDto = {
   text?: string;
   showPrice?: boolean;
   showGlobalDiscount?: boolean;
+  showBookingButton?: boolean;
   showReviews?: boolean;
   showCompanyLogos?: boolean;
   cover?: StrapiMedia;
