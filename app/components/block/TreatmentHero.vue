@@ -172,6 +172,7 @@
                 size: 'md',
                 variant: 'primary',
               }"
+              :class="{ 'floating-cta__button--ads-mode': isAdsMode }"
             />
           </div>
         </div>
@@ -191,6 +192,8 @@ import {
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import { IconAsterisk } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
+
+const { isAdsMode } = useSiteModeFlags();
 
 const props = withDefaults(
   defineProps<BlockTreatmentHeroDto & { showFloatingCta?: boolean }>(),
@@ -577,6 +580,17 @@ const discountLabel = computed(() => {
 
 .theme-strong .floating-cta {
   background: var(--color-gray-900);
+}
+
+/* Ads Mode: Red button only */
+.floating-cta__button--ads-mode :deep(button) {
+  background-color: #dc2626 !important; /* red-600 */
+  border-color: #dc2626 !important;
+}
+
+.floating-cta__button--ads-mode :deep(button:hover) {
+  background-color: #b91c1c !important; /* red-700 */
+  border-color: #b91c1c !important;
 }
 
 .floating-cta__content {
