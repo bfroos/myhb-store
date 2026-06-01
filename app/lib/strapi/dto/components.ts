@@ -190,15 +190,6 @@ export type BlockProductCategoryPriceOverviewDto = {
   productCategories?: ProductCategoryDto[];
 };
 
-export type BlockPriceOverviewDto = {
-  headline?: string;
-  treatments?: TreatmentDto[];
-  product_categories?: ProductCategoryDto[];
-  elevated?: boolean;
-  themeClass?: ColorTheme;
-  cta?: SharedButtonDto;
-};
-
 export type BlockProductHeroDto = {
   manufacturerName: string;
   productName: string;
