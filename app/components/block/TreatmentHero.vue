@@ -131,7 +131,7 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong v-if="priceLabel" class="floating-cta__price">
@@ -583,12 +583,14 @@ const discountLabel = computed(() => {
 }
 
 /* Ads Mode: Red button only */
-.floating-cta__button--ads-mode :deep(button) {
+.floating-cta--ads-mode .floating-cta__actions :deep(button),
+.floating-cta--ads-mode .floating-cta__actions :deep(a) {
   background-color: #dc2626 !important; /* red-600 */
   border-color: #dc2626 !important;
 }
 
-.floating-cta__button--ads-mode :deep(button:hover) {
+.floating-cta--ads-mode .floating-cta__actions :deep(button:hover),
+.floating-cta--ads-mode .floating-cta__actions :deep(a:hover) {
   background-color: #b91c1c !important; /* red-700 */
   border-color: #b91c1c !important;
 }
