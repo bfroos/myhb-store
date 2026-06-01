@@ -85,20 +85,25 @@ export async function setPageSeo(
     });
 
 
-    const title = [
-      pageSeo?.metaTitle || globalsSeo?.defaultTitle,
-      globalsSeo?.titleSeparator,
-      globalsSeo?.titleSuffix,
-    ]
-      .filter(Boolean)
-      .join(" ");
+    // Only append titleSuffix if it's not already in the metaTitle
+    const metaTitle = pageSeo?.metaTitle || globalsSeo?.defaultTitle || "";
+    const titleSuffix = globalsSeo?.titleSuffix || "";
+    const titleSeparator = globalsSeo?.titleSeparator || "";
+    
+    const title = metaTitle.includes(titleSuffix)
+      ? metaTitle // Already contains brand name, don't append
+      : [metaTitle, titleSeparator, titleSuffix]
+          .filter(Boolean)
+          .join(" ");
 
     const ogTitle = pageSeo?.openGraph?.ogTitle
       ? pageSeo.openGraph.ogTitle
+      : metaTitle.includes(titleSuffix)
+      ? metaTitle // Already contains brand name, don't append
       : [
-          pageSeo?.metaTitle || globalsSeo?.defaultTitle,
-          globalsSeo?.titleSeparator,
-          globalsSeo?.titleSuffix,
+          metaTitle,
+          titleSeparator,
+          titleSuffix,
         ]
           .filter(Boolean)
           .join(" ");
