@@ -106,7 +106,8 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
 /* Standard Pricing Table Design */
 .price-grid {
   width: 100%;
-  max-width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .price-grid__header {
@@ -118,9 +119,6 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   margin: 0;
   font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 700;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
 }
 
 .price-grid__list {
@@ -128,13 +126,13 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   padding: 0;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
   width: 100%;
 }
 
 .price-grid__item {
-  min-width: 0;
+  width: 100%;
 }
 
 .price-grid__link,
@@ -146,13 +144,15 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   text-align: center;
   gap: 0.75rem;
   padding: 2rem 1rem;
-  min-height: 140px;
+  min-height: 120px;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   text-decoration: none;
   color: inherit;
   background: transparent;
   transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .price-grid__link:hover {
@@ -166,9 +166,6 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   font-size: 0.875rem;
   line-height: 1.25rem;
   color: #6b7280;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  max-width: 100%;
 }
 
 .price-grid__price {
