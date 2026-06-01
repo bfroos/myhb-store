@@ -404,6 +404,9 @@
       "productDetails": "Produktdetails",
       "noTreatments": "Aktuell haben wir keine Behandlungen in dieser Kategorie."
     },
+    "priceOverview": {
+      "treatmentDetails": "Details zu {name}"
+    },
     "productHero": {
       "previousImage": "Vorheriges Bild",
       "nextImage": "Nächstes Bild",
