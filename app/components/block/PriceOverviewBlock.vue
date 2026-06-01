@@ -16,55 +16,50 @@
       </section>
     </div>
 
-    <!-- Simple Treatments List View -->
-    <article v-else-if="showTreatments" class="price-overview">
-      <header v-if="headline" class="price-overview__header">
-        <h2 class="price-overview__title">{{ headline }}</h2>
+    <!-- Simple Treatments Grid View (Original Design) -->
+    <article v-else-if="showTreatments" class="price-grid">
+      <header v-if="headline" class="price-grid__header">
+        <h2 class="price-grid__title">{{ headline }}</h2>
       </header>
 
-      <!-- Treatments List -->
-      <section class="price-overview__section">
-        <ul class="price-overview__list" role="list">
-          <li
-            v-for="treatment in treatments"
-            :key="treatment.id"
-            class="price-overview__row"
-            :class="{ 'price-overview__row--link': treatment.treatmentPage }"
+      <!-- Treatments Grid -->
+      <ul class="price-grid__list" role="list">
+        <li
+          v-for="treatment in treatments"
+          :key="treatment.id"
+          class="price-grid__item"
+        >
+          <NuxtLinkLocale
+            v-if="treatment.treatmentPage"
+            :to="getTreatmentPath(treatment)"
+            class="price-grid__link"
           >
-            <NuxtLinkLocale
-              v-if="treatment.treatmentPage"
-              :to="getTreatmentPath(treatment)"
-              class="price-overview__link"
-              :aria-label="$t('blocks.priceOverview.treatmentDetails', { name: treatment.name })"
-            >
-              <span class="price-overview__label">{{ treatment.name }}</span>
-              <span class="price-overview__price">
-                <template v-if="treatment.priceInEuroCent">
-                  <span v-if="treatment.isStartingPrice" class="price-overview__prefix">
-                    {{ $t("common.price.startingPrefix") }}
-                  </span>
-                  {{ formatPriceInEuro(treatment.priceInEuroCent) }}
-                </template>
-              </span>
-              <IconArrowRight class="price-overview__icon" aria-hidden="true" />
-            </NuxtLinkLocale>
-            <template v-else>
-              <span class="price-overview__label">{{ treatment.name }}</span>
-              <span class="price-overview__price">
-                <template v-if="treatment.priceInEuroCent">
-                  <span v-if="treatment.isStartingPrice" class="price-overview__prefix">
-                    {{ $t("common.price.startingPrefix") }}
-                  </span>
-                  {{ formatPriceInEuro(treatment.priceInEuroCent) }}
-                </template>
-              </span>
-            </template>
-          </li>
-        </ul>
-      </section>
+            <span class="price-grid__label">{{ treatment.name }}</span>
+            <strong class="price-grid__price">
+              <template v-if="treatment.priceInEuroCent">
+                <span v-if="treatment.isStartingPrice" class="price-grid__prefix">
+                  {{ $t("common.price.startingPrefix") }}
+                </span>
+                {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+              </template>
+            </strong>
+          </NuxtLinkLocale>
+          <div v-else class="price-grid__content">
+            <span class="price-grid__label">{{ treatment.name }}</span>
+            <strong class="price-grid__price">
+              <template v-if="treatment.priceInEuroCent">
+                <span v-if="treatment.isStartingPrice" class="price-grid__prefix">
+                  {{ $t("common.price.startingPrefix") }}
+                </span>
+                {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+              </template>
+            </strong>
+          </div>
+        </li>
+      </ul>
 
       <!-- CTA Button -->
-      <footer v-if="cta" class="price-overview__footer">
+      <footer v-if="cta" class="price-grid__footer">
         <SharedButton :button="cta" />
       </footer>
     </article>
@@ -106,110 +101,96 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   scroll-margin-top: var(--space-600);
 }
 
-.price-overview {
-  --overview-pad: var(--space-card-pad);
-  --overview-pad-sm: var(--space-card-pad-xs);
-  --overview-gap: var(--space-400);
-  --overview-row-cols: 1fr max-content max-content;
-
+/* Original Grid Design for Treatments */
+.price-grid {
   display: flex;
   flex-direction: column;
+  gap: var(--space-500);
 }
 
-.price-overview__header {
-  padding-block: var(--overview-pad) var(--overview-pad-sm);
-  padding-inline: var(--overview-pad);
+.price-grid__header {
+  text-align: center;
 }
 
-.price-overview__title {
-  font-size: var(--font-3xl);
-  line-height: var(--line-3xl);
-  font-weight: var(--font-semibold);
+.price-grid__title {
   margin: 0;
+  font-size: var(--font-2xl);
+  line-height: var(--line-2xl);
+  font-weight: var(--font-bold);
 }
 
-.price-overview__section {
-  border-block-start: 1px solid var(--color-border-mute);
-  padding-block: calc(var(--overview-pad) + 0.25em) var(--overview-pad-sm);
-  padding-inline: var(--overview-pad);
-}
-
-.price-overview__list {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
+.price-grid__list {
   margin: 0;
   padding: 0;
-}
-
-.price-overview__row {
+  list-style: none;
   display: grid;
-  grid-template-columns: var(--overview-row-cols);
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--space-300);
+}
+
+.price-grid__item {
+  display: flex;
+  flex-direction: column;
+}
+
+.price-grid__link,
+.price-grid__content {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: var(--overview-gap);
-  padding-block: var(--overview-gap);
-  font-size: var(--font-base);
-  line-height: var(--line-base);
-}
-
-.price-overview__row:not(:last-child) {
-  border-block-end: 1px solid var(--color-border-mute);
-}
-
-.price-overview__row--link {
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  margin: 0 calc(var(--overview-gap) * -1);
-  padding-inline: var(--overview-gap);
-  border-radius: var(--border-radius-200);
-}
-
-.price-overview__row--link:hover {
-  background-color: var(--color-gray-100);
-}
-
-.price-overview__link {
-  display: contents;
+  text-align: center;
+  gap: var(--space-200);
+  padding: var(--space-500) var(--space-300);
+  border: 1px solid var(--color-border-mute);
+  border-radius: var(--border-radius-card-sm);
   text-decoration: none;
   color: inherit;
+  height: 100%;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
-.price-overview__label {
-  min-inline-size: 0;
-  font-weight: var(--font-medium);
+.price-grid__link:hover {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-primary);
 }
 
-.price-overview__price {
-  font-weight: var(--font-semibold);
-  color: var(--color-primary);
-}
-
-.price-overview__prefix {
-  font-size: var(--font-xs);
-  line-height: var(--line-xs);
-  font-weight: var(--font-regular);
-}
-
-.price-overview__icon {
-  justify-self: end;
+.price-grid__label {
+  font-size: var(--font-sm);
   color: var(--color-text-light);
 }
 
-.price-overview__footer {
-  border-block-start: 1px solid var(--color-border-mute);
-  padding-block: var(--overview-pad);
-  padding-inline: var(--overview-pad);
-  display: flex;
-  justify-content: center;
+.price-grid__price {
+  font-size: var(--font-md);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
 }
 
-@media (max-width: 640px) {
-  .price-overview__row {
-    grid-template-columns: 1fr max-content;
+.price-grid__prefix {
+  font-size: var(--font-xs);
+  font-weight: var(--font-regular);
+  margin-right: var(--space-100);
+}
+
+.price-grid__footer {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-400);
+}
+
+@media (min-width: 900px) {
+  .price-grid__title {
+    font-size: var(--font-3xl);
+    line-height: var(--line-3xl);
   }
   
-  .price-overview__icon {
-    display: none;
+  .price-grid__list {
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-400);
+  }
+  
+  .price-grid__link,
+  .price-grid__content {
+    padding: var(--space-600) var(--space-400);
   }
 }
 </style>
