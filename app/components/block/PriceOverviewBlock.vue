@@ -103,24 +103,24 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   scroll-margin-top: var(--space-600);
 }
 
-/* Original Grid Design for Treatments */
+/* Standard Pricing Table Design */
 .price-grid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-700);
-  padding: var(--space-600);
+  width: 100%;
+  max-width: 100%;
 }
 
 .price-grid__header {
   text-align: center;
-  margin-bottom: var(--space-400);
+  margin-bottom: var(--space-600);
 }
 
 .price-grid__title {
   margin: 0;
-  font-size: var(--font-3xl);
-  line-height: var(--line-3xl);
-  font-weight: var(--font-bold);
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 .price-grid__list {
@@ -128,13 +128,13 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   padding: 0;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: var(--space-500);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: 1rem;
+  width: 100%;
 }
 
 .price-grid__item {
-  display: flex;
-  flex-direction: column;
+  min-width: 0;
 }
 
 .price-grid__link,
@@ -142,75 +142,87 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  gap: var(--space-300);
-  padding: var(--space-700) var(--space-500);
-  border: 1px solid var(--color-border-mute);
-  border-radius: var(--border-radius-card);
+  gap: 0.75rem;
+  padding: 2rem 1rem;
+  min-height: 140px;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
   text-decoration: none;
   color: inherit;
-  height: 100%;
-  transition: background-color 0.2s ease, border-color 0.2s ease;
+  background: transparent;
+  transition: all 0.2s ease;
 }
 
 .price-grid__link:hover {
-  background-color: var(--color-gray-50);
-  border-color: var(--color-primary);
+  background-color: #f9fafb;
+  border-color: currentColor;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .price-grid__label {
-  font-size: var(--font-base);
-  line-height: var(--line-base);
-  color: var(--color-text-light);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #6b7280;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .price-grid__price {
-  font-size: var(--font-xl);
-  line-height: var(--line-xl);
-  font-weight: var(--font-bold);
-  color: var(--color-text);
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  white-space: nowrap;
 }
 
 .price-grid__prefix {
-  font-size: var(--font-sm);
-  font-weight: var(--font-regular);
-  margin-right: var(--space-100);
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-right: 0.25rem;
 }
 
 .price-grid__footer {
-  display: flex;
-  justify-content: center;
-  margin-top: var(--space-500);
+  margin-top: 2rem;
+  text-align: center;
 }
 
-@media (min-width: 900px) {
-  .price-grid {
-    padding: var(--space-800);
-  }
-  
-  .price-grid__title {
-    font-size: var(--font-4xl);
-    line-height: var(--line-4xl);
-  }
-  
+@media (min-width: 640px) {
   .price-grid__list {
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-600);
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
   
   .price-grid__link,
   .price-grid__content {
-    padding: var(--space-800) var(--space-600);
+    padding: 2.5rem 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .price-grid__title {
+    font-size: 2.25rem;
+  }
+  
+  .price-grid__list {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+  
+  .price-grid__link,
+  .price-grid__content {
+    padding: 3rem 2rem;
   }
   
   .price-grid__label {
-    font-size: var(--font-lg);
-    line-height: var(--line-lg);
+    font-size: 1rem;
   }
   
   .price-grid__price {
-    font-size: var(--font-2xl);
-    line-height: var(--line-2xl);
+    font-size: 1.5rem;
   }
 }
 </style>
