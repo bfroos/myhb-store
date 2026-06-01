@@ -3,7 +3,7 @@
     <!-- Product Category View (complex layout with products + treatments) -->
     <div v-if="showProductCategories" class="overview">
       <section
-        v-for="category in productCategories"
+        v-for="category in product_categories"
         :key="category.id"
         :id="category.slug"
         class="overview__item"
@@ -78,7 +78,7 @@ import { IconArrowRight } from "@tabler/icons-vue";
 const props = defineProps<BlockPriceOverviewDto>();
 
 const showProductCategories = computed(
-  () => (props.productCategories?.length ?? 0) > 0,
+  () => (props.product_categories?.length ?? 0) > 0,
 );
 
 const showTreatments = computed(
