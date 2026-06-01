@@ -107,17 +107,19 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
 .price-grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-500);
+  gap: var(--space-700);
+  padding: var(--space-600);
 }
 
 .price-grid__header {
   text-align: center;
+  margin-bottom: var(--space-400);
 }
 
 .price-grid__title {
   margin: 0;
-  font-size: var(--font-2xl);
-  line-height: var(--line-2xl);
+  font-size: var(--font-3xl);
+  line-height: var(--line-3xl);
   font-weight: var(--font-bold);
 }
 
@@ -126,8 +128,8 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   padding: 0;
   list-style: none;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: var(--space-300);
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--space-500);
 }
 
 .price-grid__item {
@@ -141,10 +143,10 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: var(--space-200);
-  padding: var(--space-500) var(--space-300);
+  gap: var(--space-300);
+  padding: var(--space-700) var(--space-500);
   border: 1px solid var(--color-border-mute);
-  border-radius: var(--border-radius-card-sm);
+  border-radius: var(--border-radius-card);
   text-decoration: none;
   color: inherit;
   height: 100%;
@@ -157,18 +159,20 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
 }
 
 .price-grid__label {
-  font-size: var(--font-sm);
+  font-size: var(--font-base);
+  line-height: var(--line-base);
   color: var(--color-text-light);
 }
 
 .price-grid__price {
-  font-size: var(--font-md);
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
   font-weight: var(--font-bold);
   color: var(--color-text);
 }
 
 .price-grid__prefix {
-  font-size: var(--font-xs);
+  font-size: var(--font-sm);
   font-weight: var(--font-regular);
   margin-right: var(--space-100);
 }
@@ -176,23 +180,37 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
 .price-grid__footer {
   display: flex;
   justify-content: center;
-  margin-top: var(--space-400);
+  margin-top: var(--space-500);
 }
 
 @media (min-width: 900px) {
+  .price-grid {
+    padding: var(--space-800);
+  }
+  
   .price-grid__title {
-    font-size: var(--font-3xl);
-    line-height: var(--line-3xl);
+    font-size: var(--font-4xl);
+    line-height: var(--line-4xl);
   }
   
   .price-grid__list {
     grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-400);
+    gap: var(--space-600);
   }
   
   .price-grid__link,
   .price-grid__content {
-    padding: var(--space-600) var(--space-400);
+    padding: var(--space-800) var(--space-600);
+  }
+  
+  .price-grid__label {
+    font-size: var(--font-lg);
+    line-height: var(--line-lg);
+  }
+  
+  .price-grid__price {
+    font-size: var(--font-2xl);
+    line-height: var(--line-2xl);
   }
 }
 </style>
