@@ -17,52 +17,54 @@
     </div>
 
     <!-- Simple Treatments Grid View (Original Design) -->
-    <article v-else-if="showTreatments" class="price-grid">
-      <header v-if="headline" class="price-grid__header">
-        <h2 class="price-grid__title">{{ headline }}</h2>
-      </header>
+    <UiLayoutSectionBlock v-else-if="showTreatments" :elevated="elevated" :theme-class="themeClass">
+      <article class="price-grid">
+        <header v-if="headline" class="price-grid__header">
+          <h2 class="price-grid__title">{{ headline }}</h2>
+        </header>
 
-      <!-- Treatments Grid -->
-      <ul class="price-grid__list" role="list">
-        <li
-          v-for="treatment in treatments"
-          :key="treatment.id"
-          class="price-grid__item"
-        >
-          <NuxtLinkLocale
-            v-if="treatment.treatmentPage"
-            :to="getTreatmentPath(treatment)"
-            class="price-grid__link"
+        <!-- Treatments Grid -->
+        <ul class="price-grid__list" role="list">
+          <li
+            v-for="treatment in treatments"
+            :key="treatment.id"
+            class="price-grid__item"
           >
-            <span class="price-grid__label">{{ treatment.name }}</span>
-            <strong class="price-grid__price">
-              <template v-if="treatment.priceInEuroCent">
-                <span v-if="treatment.isStartingPrice" class="price-grid__prefix">
-                  {{ $t("common.price.startingPrefix") }}
-                </span>
-                {{ formatPriceInEuro(treatment.priceInEuroCent) }}
-              </template>
-            </strong>
-          </NuxtLinkLocale>
-          <div v-else class="price-grid__content">
-            <span class="price-grid__label">{{ treatment.name }}</span>
-            <strong class="price-grid__price">
-              <template v-if="treatment.priceInEuroCent">
-                <span v-if="treatment.isStartingPrice" class="price-grid__prefix">
-                  {{ $t("common.price.startingPrefix") }}
-                </span>
-                {{ formatPriceInEuro(treatment.priceInEuroCent) }}
-              </template>
-            </strong>
-          </div>
-        </li>
-      </ul>
+            <NuxtLinkLocale
+              v-if="treatment.treatmentPage"
+              :to="getTreatmentPath(treatment)"
+              class="price-grid__link"
+            >
+              <span class="price-grid__label">{{ treatment.name }}</span>
+              <strong class="price-grid__price">
+                <template v-if="treatment.priceInEuroCent">
+                  <span v-if="treatment.isStartingPrice" class="price-grid__prefix">
+                    {{ $t("common.price.startingPrefix") }}
+                  </span>
+                  {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+                </template>
+              </strong>
+            </NuxtLinkLocale>
+            <div v-else class="price-grid__content">
+              <span class="price-grid__label">{{ treatment.name }}</span>
+              <strong class="price-grid__price">
+                <template v-if="treatment.priceInEuroCent">
+                  <span v-if="treatment.isStartingPrice" class="price-grid__prefix">
+                    {{ $t("common.price.startingPrefix") }}
+                  </span>
+                  {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+                </template>
+              </strong>
+            </div>
+          </li>
+        </ul>
 
-      <!-- CTA Button -->
-      <footer v-if="cta" class="price-grid__footer">
-        <SharedButton :button="cta" />
-      </footer>
-    </article>
+        <!-- CTA Button -->
+        <footer v-if="cta" class="price-grid__footer">
+          <SharedButton :button="cta" />
+        </footer>
+      </article>
+    </UiLayoutSectionBlock>
   </UiLayoutSectionBlock>
 </template>
 
