@@ -134,6 +134,10 @@
     "headline": "Blog",
     "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
     "article": {
+      "seo": {
+        "title": "{articleTitle} | {brandName}",
+        "description": "{intro}"
+      },
       "share": {
         "copy": "Link kopieren",
         "copied": "Link kopiert",
@@ -232,7 +236,8 @@
         }
       },
       "seo": {
-        "description": "{ role } bei { brandName } in { cities } – Informationen zu meiner Tätigkeit"
+        "title": "{doctorName} - {role} | {brandName}",
+        "description": "{doctorName}, {role} bei {brandName} ✓ {specialties} ✓ Zertifiziert & erfahren ✓ Standorte: {cities}"
       }
     }
   },
@@ -267,6 +272,10 @@
     }
   },
   "productPage": {
+    "seo": {
+      "title": "{productName} ab {priceTag} | {brandName}",
+      "description": "{productName} von {manufacturer}: Hochwertige Qualität ✓ 10 Standorte deutschlandweit ✓ Professionelle Beratung ✓ Jetzt Termin buchen!"
+    },
     "error": {
       "productNotFound": "Produkt nicht gefunden",
       "productNotFoundDescription": "Das angeforderte Produkt existiert nicht."

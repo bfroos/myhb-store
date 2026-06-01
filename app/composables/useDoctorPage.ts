@@ -6,6 +6,7 @@ export function useDoctorPage(brandName: string = "") {
   const page = ref<any | null>(null);
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const localizations = ref<LocalizationDto[]>([]);
+  const { brandName: globalBrandName } = useBrand();
 
   const breadcrumbItems = computed(() => [
     {
@@ -49,20 +50,39 @@ export function useDoctorPage(brandName: string = "") {
 
   const fixedBlocks = computed(() => mapDoctorPageBlocks(page.value));
 
-  const seo = computed(() => ({
-    metaTitle: fixedBlocks.value?.hero?.headline,
-    metaDescription: t("doctors.doctor.seo.description", {
-      role: fixedBlocks.value?.hero?.intro,
-      brandName: brandName,
-      cities: [
-        ...new Set(
-          page.value?.locations
-            ?.map((location: any) => location.city?.name)
-            ?.filter(Boolean) ?? [],
-        ),
-      ].join(", "),
-    }),
-  }));
+  const seo = computed(() => {
+    const doctorName = fixedBlocks.value?.hero?.headline ?? "";
+    const role = fixedBlocks.value?.hero?.intro ?? "Arzt";
+    const cities = [
+      ...new Set(
+        page.value?.locations
+          ?.map((location: any) => location.city?.name)
+          ?.filter(Boolean) ?? [],
+      ),
+    ].join(", ");
+    
+    // Get specialties from treatment specialties
+    const specialties = (
+      page.value?.treatmentSpecialties?.slice(0, 3) ?? []
+    )
+      .map((t: any) => t.name)
+      .join(", ") || "Ästhetische Medizin";
+    
+    return {
+      metaTitle: t("doctors.doctor.seo.title", {
+        doctorName,
+        role,
+        brandName: globalBrandName.value,
+      }),
+      metaDescription: t("doctors.doctor.seo.description", {
+        doctorName,
+        role,
+        brandName: globalBrandName.value,
+        specialties,
+        cities: cities || "Deutschland",
+      }),
+    };
+  });
 
   return {
     fetchPage,

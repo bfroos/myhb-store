@@ -13,6 +13,7 @@ export function useProductPage() {
   const productPage = ref<any | null>(null);
   const blocks = ref<StrapiBlock[]>([]);
   const cheapestVariantPrice = ref<number>(0);
+  const { brandName } = useBrand();
 
   const breadcrumbItems = computed<BreadcrumbItem[]>(() => [
     {
@@ -65,35 +66,24 @@ export function useProductPage() {
     return true;
   }
 
-  const metaTitle = computed(
-    () =>
-      `${product.value?.manufacturer?.name} ${product.value?.name} ${t(
-        "common.price.startingPrefix",
-      )} ${formatPriceInEuro(cheapestVariantPrice.value ?? 0)}`,
-  );
-
-  const metaDescription = computed(() => {
-    const variants = (product.value?.variants ?? [])
-      .map((variant: any) =>
-        variant?.volume
-          ? `${variant.volume.quantity} ${variant.volume.unit}`
-          : variant?.label ?? "",
-      )
-      .filter(Boolean)
-      .join(", ");
-
-    return `${t("productPage.metaDescription", {
-      name: product.value?.name,
-      manufacturer: product.value?.manufacturer?.name,
-      variants,
-      price: formatPriceInEuro(cheapestVariantPrice.value ?? 0),
-    })}`;
+  const seo = computed(() => {
+    const productName = product.value?.name ?? "";
+    const manufacturer = product.value?.manufacturer?.name ?? "";
+    const price = cheapestVariantPrice.value ?? 0;
+    const priceTag = `ab ${formatPriceInEuro(price)}`;
+    
+    return {
+      metaTitle: t("productPage.seo.title", {
+        productName: `${manufacturer} ${productName}`,
+        priceTag,
+        brandName: brandName.value,
+      }),
+      metaDescription: t("productPage.seo.description", {
+        productName: `${manufacturer} ${productName}`,
+        manufacturer,
+      }),
+    };
   });
-
-  const seo = computed(() => ({
-    metaTitle: metaTitle.value,
-    metaDescription: metaDescription.value,
-  }));
 
   const fixedBlocks = computed(() => mapProductPageBlocks(product.value));
 

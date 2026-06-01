@@ -7,6 +7,7 @@ export function useBlogArticlePage() {
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const seo = ref<SharedSeoDto | null>(null);
   const article = ref<BlogArticleDto | null>(null);
+  const { brandName } = useBrand();
 
   const breadcrumbItems = computed<BreadcrumbItem[]>(() => {
     const headline = article.value?.headline || "";
@@ -65,9 +66,25 @@ export function useBlogArticlePage() {
     return true;
   }
 
+  // SEO with fallback for articles without custom SEO
+  const seoWithFallback = computed(() => {
+    if (seo.value?.metaTitle && seo.value?.metaDescription) {
+      return seo.value; // Use Strapi SEO if complete
+    }
+    
+    // Fallback: Generate from article data
+    return {
+      metaTitle: t("blog.article.seo.title", {
+        articleTitle: article.value?.headline ?? "",
+        brandName: brandName.value,
+      }),
+      metaDescription: article.value?.intro ?? "",
+    } as SharedSeoDto;
+  });
+
   return {
     fetchPage,
-    seo,
+    seo: seoWithFallback,
     article,
     breadcrumbItems,
   };
