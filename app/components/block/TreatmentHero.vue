@@ -66,8 +66,12 @@
                 >
                   <strong v-if="priceLabel">{{ priceLabel }}</strong>
                   <SharedButton
-                    v-if="cta && showBookingButton !== false"
-                    :button="cta"
+                    v-if="showBookingButton !== false"
+                    :button="cta || {
+                      label: 'Termin buchen',
+                      method: SharedButtonMethod.ACTION,
+                      action: SharedButtonAction.TREATMENT_BOOKING,
+                    }"
                     :data="{
                       calendlyUrl: calendlyUrl,
                       treatmentType: treatment?.type,
@@ -162,8 +166,12 @@
               />
             </template>
             <SharedButton
-              v-if="cta && showBookingButton !== false"
-              :button="cta"
+              v-if="showBookingButton !== false"
+              :button="cta || {
+                label: 'Termin buchen',
+                method: SharedButtonMethod.ACTION,
+                action: SharedButtonAction.TREATMENT_BOOKING,
+              }"
               :data="{
                 calendlyUrl: calendlyUrl,
                 treatmentType: treatment?.type,
