@@ -67,11 +67,7 @@
                   <strong v-if="priceLabel">{{ priceLabel }}</strong>
                   <SharedButton
                     v-if="showBookingButton !== false"
-                    :button="cta || {
-                      label: 'Termin buchen',
-                      method: SharedButtonMethod.ACTION,
-                      action: SharedButtonAction.TREATMENT_BOOKING,
-                    }"
+                    :button="cta || defaultCta"
                     :data="{
                       calendlyUrl: calendlyUrl,
                       treatmentType: treatment?.type,
@@ -167,11 +163,7 @@
             </template>
             <SharedButton
               v-if="showBookingButton !== false"
-              :button="cta || {
-                label: 'Termin buchen',
-                method: SharedButtonMethod.ACTION,
-                action: SharedButtonAction.TREATMENT_BOOKING,
-              }"
+              :button="cta || defaultCta"
               :data="{
                 calendlyUrl: calendlyUrl,
                 treatmentType: treatment?.type,
@@ -211,6 +203,13 @@ const props = withDefaults(
 );
 const { t } = useI18n();
 const globals = useGlobals();
+
+// Default CTA when none provided in Strapi
+const defaultCta = computed(() => ({
+  label: 'Termin buchen',
+  method: SharedButtonMethod.ACTION,
+  action: SharedButtonAction.TREATMENT_BOOKING,
+}));
 
 // Floating CTA logic
 const heroCardRef = ref<HTMLElement | null>(null);
