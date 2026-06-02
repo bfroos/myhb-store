@@ -557,8 +557,6 @@ export type TreatmentPageHeroDto = {
   cover?: StrapiMedia;
   showDiscount?: boolean;
   showPrice?: boolean;
-  introductionText?: string;
-  showBookingButton?: boolean;
 };
 
 export type TreatmentPageMedicalTeamHighlightDto = {
