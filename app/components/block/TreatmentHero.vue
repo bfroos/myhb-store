@@ -66,6 +66,7 @@
                 >
                   <strong v-if="priceLabel">{{ priceLabel }}</strong>
                   <SharedButton
+                    v-if="showBookingButton !== false"
                     :button="cta || defaultCta"
                     :data="{
                       calendlyUrl: calendlyUrl,
