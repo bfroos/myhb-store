@@ -73,6 +73,7 @@ export function mapLocationTreatmentPageFixedBlocks(
       text: treatmentPage.hero?.text,
       showPrice: treatmentPage.hero?.showPrice,
       showGlobalDiscount: treatmentPage.hero?.showDiscount,
+      showBookingButton: treatmentPage.hero?.showBookingButton,
       showCompanyLogos: true,
       showReviews: true,
       treatment: treatmentPage.treatment,
