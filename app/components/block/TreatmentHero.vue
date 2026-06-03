@@ -199,6 +199,7 @@ const props = withDefaults(
   defineProps<BlockTreatmentHeroDto & { showFloatingCta?: boolean }>(),
   {
     showFloatingCta: false,
+    showBookingButton: true,
   },
 );
 const { t } = useI18n();
