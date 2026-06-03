@@ -66,7 +66,7 @@
                 >
                   <strong v-if="priceLabel">{{ priceLabel }}</strong>
                   <SharedButton
-                    v-if="cta"
+                    v-if="cta && (showBookingButton ?? true)"
                     :button="cta"
                     :data="{
                       calendlyUrl: calendlyUrl,
@@ -162,7 +162,7 @@
               />
             </template>
             <SharedButton
-              v-if="cta"
+              v-if="cta && (showBookingButton ?? true)"
               :button="cta"
               :data="{
                 calendlyUrl: calendlyUrl,

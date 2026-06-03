@@ -45,6 +45,7 @@ export function mapTreatmentPageFixedBlocks(
       cta: link,
       showPrice: treatmentPage?.hero?.showPrice,
       showGlobalDiscount: treatmentPage?.hero?.showDiscount,
+      showBookingButton: treatmentPage?.hero?.showBookingButton,
       treatment: treatmentPage?.treatment,
       showCompanyLogos: true,
       showReviews: true,
