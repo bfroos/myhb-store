@@ -74,7 +74,6 @@ export function mapLocationFixedBlocks(
       text: location?.description,
       cta,
       showGlobalDiscount: location?.showDiscount,
-      showBookingButton: location?.showBookingButton,
       showCompanyLogos: true,
       showReviews: true,
       calendlyUrl: location?.calendlyUrl,
