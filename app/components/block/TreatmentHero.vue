@@ -583,15 +583,22 @@ const discountLabel = computed(() => {
   background: var(--color-gray-900);
 }
 
-/* Ads Mode: Red button only */
-.floating-cta--ads-mode .floating-cta__actions :deep(button),
-.floating-cta--ads-mode .floating-cta__actions :deep(a) {
+/* Ads Mode: Red booking button only.
+   Scope to the booking button itself (floating-cta__button--ads-mode), NOT to
+   every button/a inside .floating-cta__actions — the Google ReviewsBadge renders
+   as an <a> when it links to Google Maps and was wrongly getting a red background. */
+.floating-cta--ads-mode .floating-cta__button--ads-mode :deep(button),
+.floating-cta--ads-mode .floating-cta__button--ads-mode :deep(a),
+.floating-cta--ads-mode :deep(button.floating-cta__button--ads-mode),
+.floating-cta--ads-mode :deep(a.floating-cta__button--ads-mode) {
   background-color: #dc2626 !important; /* red-600 */
   border-color: #dc2626 !important;
 }
 
-.floating-cta--ads-mode .floating-cta__actions :deep(button:hover),
-.floating-cta--ads-mode .floating-cta__actions :deep(a:hover) {
+.floating-cta--ads-mode .floating-cta__button--ads-mode :deep(button:hover),
+.floating-cta--ads-mode .floating-cta__button--ads-mode :deep(a:hover),
+.floating-cta--ads-mode :deep(button.floating-cta__button--ads-mode:hover),
+.floating-cta--ads-mode :deep(a.floating-cta__button--ads-mode:hover) {
   background-color: #b91c1c !important; /* red-700 */
   border-color: #b91c1c !important;
 }
