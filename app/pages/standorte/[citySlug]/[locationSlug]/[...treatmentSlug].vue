@@ -213,6 +213,11 @@ const localBusinessSchema = computed(() =>
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
     brandName: brandName.value,
+    // Ads mode: only advertise this page's own treatment in the offer catalog
+    // (no generic Botox/Hyaluron/PRP/... leaking into a go.* landing page).
+    isAdsMode: isAdsMode.value,
+    offerCatalogTreatmentName:
+      treatmentPage.value?.treatment?.name ?? treatmentPage.value?.name ?? null,
   }),
 );
 

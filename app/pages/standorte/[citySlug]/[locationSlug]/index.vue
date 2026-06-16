@@ -60,6 +60,9 @@ const localBusinessSchema = computed(() =>
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
     brandName: brandName.value,
+    // Ads mode: location overview has no single treatment focus, so drop the
+    // generic offer catalog entirely (no Botox/Hyaluron/PRP/... in go.* HTML).
+    isAdsMode: isAdsMode.value,
   }),
 );
 

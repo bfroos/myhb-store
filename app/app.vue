@@ -13,6 +13,7 @@ const currentLocale = computed(
 // Global Organization Schema for Brand Knowledge Panel
 const config = useRuntimeConfig();
 const { brandName } = useBrand();
+const { isAdsMode } = useSiteModeFlags();
 
 const organizationSchema = computed(() => ({
   "@context": "https://schema.org",
@@ -32,7 +33,12 @@ const organizationSchema = computed(() => ({
     availableLanguage: ["de", "en"],
     areaServed: "DE",
   },
-  description: "Ästhetische Medizin mit Botox®, Hyaluron und PRP-Therapie an 10 Standorten in Deutschland.",
+  // Ads landing pages (go.*) must not leak treatment names like "Botox®" into
+  // the global Organization JSON-LD. Keep the rich, keyword-bearing description
+  // for SEO mode (www.) where it drives brand/treatment relevance.
+  description: isAdsMode.value
+    ? "Ästhetische Medizin & Behandlungen an mehreren Standorten in Deutschland."
+    : "Ästhetische Medizin mit Botox®, Hyaluron und PRP-Therapie an 10 Standorten in Deutschland.",
 }));
 
 useSchemaOrg(organizationSchema);

@@ -3,7 +3,15 @@ import type { SchemaOrgContext } from "~/utils/schemaShared";
 import { toAbsoluteUrl } from "~/utils/schemaShared";
 import type { SharedOpeningHoursDayDto } from "~/lib/strapi/dto/components";
 
-type LocalBusinessSchemaContext = SchemaOrgContext & { brandName?: string };
+type LocalBusinessSchemaContext = SchemaOrgContext & {
+  brandName?: string;
+  // Ads mode (go.*): suppress the generic offer catalog (Botox/Hyaluron/PRP/...)
+  // so an Ads landing page only advertises its own treatment in the HTML/JSON-LD.
+  isAdsMode?: boolean;
+  // When provided in ads mode, the offer catalog lists only this treatment.
+  // When omitted in ads mode, the offer catalog is dropped entirely.
+  offerCatalogTreatmentName?: string | null;
+};
 
 const WEEKDAY_TO_SCHEMA: Record<string, string> = {
   monday: "Mo",
@@ -69,7 +77,6 @@ export function buildLocalBusinessSchema(
   if (!location) return null;
 
   const pageUrl = toAbsoluteUrl(ctx.publicUrl, ctx.path);
-  const baseUrl = ctx.publicUrl?.replace(/\/+$/, "") ?? "";
 
   const address = buildPostalAddress(location);
   const openingHours = buildOpeningHours(location.openingHours?.week);
@@ -136,6 +143,48 @@ export function buildLocalBusinessSchema(
       },
     }),
     // Offer Catalog mit Hauptleistungen
+    ...buildOfferCatalog(ctx),
+  };
+
+  appendParentOrganization(schema, ctx);
+
+  return schema;
+}
+
+/**
+ * Offer catalog for the LocalBusiness schema.
+ * - SEO mode (www.): generic catalog with the lounge's main treatments
+ *   (Botox®, Hyaluron, PRP, Fettwegspritze) — strong relevance signal.
+ * - Ads mode (go.*): only the page's own treatment, or no catalog at all,
+ *   so generic treatment names never leak into an Ads landing page's HTML.
+ */
+function buildOfferCatalog(
+  ctx: LocalBusinessSchemaContext,
+): Record<string, unknown> {
+  if (ctx.isAdsMode) {
+    const name = ctx.offerCatalogTreatmentName?.trim();
+    if (!name) {
+      // No specific treatment — omit the offer catalog entirely.
+      return {};
+    }
+    return {
+      hasOfferCatalog: {
+        "@type": "OfferCatalog",
+        name: "Ästhetische Behandlungen",
+        itemListElement: [
+          {
+            "@type": "Offer",
+            itemOffered: {
+              "@type": "MedicalProcedure",
+              name,
+            },
+          },
+        ],
+      },
+    };
+  }
+
+  return {
     hasOfferCatalog: {
       "@type": "OfferCatalog",
       name: "Ästhetische Behandlungen",
@@ -171,8 +220,14 @@ export function buildLocalBusinessSchema(
       ],
     },
   };
+}
 
+function appendParentOrganization(
+  schema: Record<string, unknown>,
+  ctx: LocalBusinessSchemaContext,
+): void {
   if (ctx.brandName) {
+    const baseUrl = ctx.publicUrl?.replace(/\/+$/, "") ?? "";
     schema.parentOrganization = {
       "@type": "Organization",
       name: ctx.brandName,
@@ -183,8 +238,6 @@ export function buildLocalBusinessSchema(
       },
     };
   }
-
-  return schema;
 }
 
 function buildPostalAddress(

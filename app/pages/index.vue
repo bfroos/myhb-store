@@ -25,6 +25,7 @@ const config = useRuntimeConfig();
 const appConfig = useAppConfig();
 const { brandName } = useBrand();
 const globals = useGlobals();
+const { isAdsMode } = useSiteModeFlags();
 
 const logoUrl = appConfig.seo?.organization?.logo?.url
   ? `${config.public.publicUrl}${appConfig.seo.organization.logo.url}`
@@ -45,7 +46,11 @@ const organizationSchema = computed(() =>
     path: "/",
     brandName: brandName.value,
     logoUrl,
-    description: globals.value?.seo?.defaultDescription ?? undefined,
+    // Ads mode (go.*): force a neutral Organization description so generic
+    // treatment names (Botox®, ...) never appear in the homepage JSON-LD.
+    description: isAdsMode.value
+      ? "Ästhetische Medizin & Behandlungen an mehreren Standorten in Deutschland."
+      : (globals.value?.seo?.defaultDescription ?? undefined),
   }),
 );
 
