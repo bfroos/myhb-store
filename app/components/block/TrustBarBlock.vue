@@ -1,35 +1,40 @@
 <template>
-  <section class="block trust" :class="[themeClass, { 'block--elevated': elevated }]">
+  <section
+    v-if="hasContent"
+    class="block trust"
+    :class="[themeClass, { 'block--elevated': elevated }]"
+  >
     <ul class="trust__grid" role="list">
-      <li v-for="item in items" :key="item.label" class="trust__cell">
-        <component :is="item.icon ?? IconUsers" :size="36" stroke="1.5" aria-hidden="true" class="trust__icon" />
-        <strong class="trust__value">{{ item.value }}</strong>
-        <span class="trust__label">{{ item.label }}</span>
+      <li v-for="(item, index) in items" :key="item.heading ?? index" class="trust__cell">
+        <UiLayoutIconWrapper
+          v-if="item.icon?.iconData"
+          :size="36"
+          :icon="item.icon"
+          class="trust__icon"
+        >
+          <g v-html="item.icon.iconData" />
+        </UiLayoutIconWrapper>
+        <strong class="trust__value">{{ item.heading }}</strong>
+        <span class="trust__label">{{ item.text }}</span>
       </li>
     </ul>
   </section>
 </template>
 
 <script setup lang="ts">
-import { IconUsers, IconStar, IconStethoscope, IconShieldCheck } from "@tabler/icons-vue";
-import type { Component } from "vue";
+import type { SharedIconHeadingTextDto } from "~/lib/strapi/dto/components";
 
-interface TrustItem { value: string; label: string; icon?: Component }
-
-withDefaults(defineProps<{
-  items?: TrustItem[];
+const props = withDefaults(defineProps<{
+  items?: SharedIconHeadingTextDto[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
   elevated: true,
   themeClass: "theme-light",
-  items: () => [
-    { value: "40.000+", label: "Behandlungen", icon: IconUsers },
-    { value: "2.700+",  label: "5-Sterne Bewertungen", icon: IconStar },
-    { value: "Ärzte",   label: "mit Spezialisierung", icon: IconStethoscope },
-    { value: "20+ Jahre", label: "Erfahrung", icon: IconShieldCheck },
-  ],
+  items: () => [],
 });
+
+const hasContent = computed(() => (props.items?.length ?? 0) > 0);
 </script>
 
 <style scoped>
