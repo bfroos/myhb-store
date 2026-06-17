@@ -1,7 +1,7 @@
 <template>
   <section v-if="hasContent" class="block guarantees" :class="[themeClass, { 'block--elevated': elevated }]">
     <ul class="guar__list" role="list">
-      <li v-for="(g, index) in items" :key="g.heading ?? index" class="guar__item">
+      <li v-for="(g, index) in items" :key="g.heading ?? index" class="guar__item" :class="{ 'guar__item--noicon': !g.icon?.iconData }">
         <span v-if="g.icon?.iconData" class="guar__icon">
           <UiLayoutIconWrapper :size="22" :icon="g.icon">
             <g v-html="g.icon.iconData" />
@@ -53,6 +53,9 @@ const hasContent = computed(() => (props.items?.length ?? 0) > 0);
   grid-template-columns: 36px 1fr;
   gap: var(--space-300);
   align-items: start;
+}
+.guar__item--noicon {
+  grid-template-columns: 1fr;
 }
 .guar__icon {
   width: 36px;
