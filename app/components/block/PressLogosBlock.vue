@@ -1,16 +1,33 @@
 <template>
-  <section class="block press" :class="[themeClass, { 'block--elevated': elevated }]">
+  <section v-if="hasContent" class="block press" :class="[themeClass, { 'block--elevated': elevated }]">
     <p v-if="eyebrow" class="press__eyebrow">{{ eyebrow }}</p>
     <ul class="press__list" role="list">
       <li v-for="logo in displayLogos" :key="logo.name" class="press__item">
-        <img
-          v-if="logo.src"
-          class="press__logo"
-          :src="logo.src"
-          :alt="logo.alt ?? logo.name"
-          loading="lazy"
-        />
-        <span v-else class="press__name">{{ logo.name }}</span>
+        <component
+          :is="logo.link ? 'a' : 'span'"
+          class="press__link"
+          v-bind="logo.link
+            ? {
+                href: logo.link,
+                target: logo.openInNewWindow ? '_blank' : undefined,
+                rel: [
+                  logo.openInNewWindow ? 'noopener' : '',
+                  logo.noFollow ? 'nofollow' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ') || undefined,
+              }
+            : {}"
+        >
+          <img
+            v-if="logo.src"
+            class="press__logo"
+            :src="logo.src"
+            :alt="logo.alt ?? logo.name"
+            loading="lazy"
+          />
+          <span v-else class="press__name">{{ logo.name }}</span>
+        </component>
       </li>
     </ul>
   </section>
@@ -21,33 +38,31 @@ import { computed } from "vue";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { mediaUrl } from "~/utils/landingBlockMedia";
 
-interface Logo { name: string; src?: string; alt?: string }
-interface LogoItem { name: string; logo?: StrapiMedia }
+interface Logo { name: string; src?: string; alt?: string; link?: string; openInNewWindow?: boolean; noFollow?: boolean }
+interface LogoItem { name: string; logo?: StrapiMedia; link?: string; openInNewWindow?: boolean; noFollow?: boolean }
 
 const props = withDefaults(defineProps<{
   eyebrow?: string;
-  logos?: Logo[];
   logoItems?: LogoItem[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
   elevated: true,
   themeClass: "theme-light",
-  eyebrow: "Bekannt aus",
-  logos: () => [
-    { name: "BILD" }, { name: "WDR" }, { name: "RTL" }, { name: "The Sun" }, { name: "Vogue" },
-  ],
 });
 
-const displayLogos = computed<Logo[]>(() => {
-  const mediaLogos = (props.logoItems ?? []).map((item) => ({
+const displayLogos = computed<Logo[]>(() =>
+  (props.logoItems ?? []).map((item) => ({
     name: item.name,
     src: mediaUrl(item.logo),
     alt: item.logo?.alternativeText ?? item.name,
-  }));
+    link: item.link || undefined,
+    openInNewWindow: item.openInNewWindow,
+    noFollow: item.noFollow,
+  })),
+);
 
-  return mediaLogos.length > 0 ? mediaLogos : props.logos;
-});
+const hasContent = computed(() => displayLogos.value.length > 0);
 </script>
 
 <style scoped>
@@ -84,6 +99,20 @@ const displayLogos = computed<Logo[]>(() => {
 .press__item {
   display: inline-flex;
   align-items: center;
+}
+.press__link {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+a.press__link:hover {
+  opacity: 1;
+}
+a.press__link:hover .press__logo,
+a.press__link:hover .press__name {
+  filter: grayscale(0);
+  opacity: 1;
 }
 .press__name {
   font-family: "Times New Roman", "Times", serif;
