@@ -1,8 +1,15 @@
 <template>
-  <section class="block bg-grid" :class="[themeClass]">
+  <section v-if="hasContent" class="block bg-grid" :class="[themeClass]">
     <ul class="bg__list" role="list">
-      <li v-for="item in items" :key="item.heading" class="bg__cell">
-        <component :is="item.icon ?? IconClock" :size="40" stroke="1.5" aria-hidden="true" class="bg__icon" />
+      <li v-for="(item, index) in items" :key="item.heading ?? index" class="bg__cell">
+        <UiLayoutIconWrapper
+          v-if="item.icon?.iconData"
+          :size="40"
+          :icon="item.icon"
+          class="bg__icon"
+        >
+          <g v-html="item.icon.iconData" />
+        </UiLayoutIconWrapper>
         <strong class="bg__h">{{ item.heading }}</strong>
         <p class="bg__t">{{ item.text }}</p>
       </li>
@@ -11,23 +18,17 @@
 </template>
 
 <script setup lang="ts">
-import { IconClock, IconMoodSmile, IconShield, IconCalendar } from "@tabler/icons-vue";
-import type { Component } from "vue";
+import type { SharedIconHeadingTextDto } from "~/lib/strapi/dto/components";
 
-interface BenefitItem { heading: string; text: string; icon?: Component }
-
-withDefaults(defineProps<{
-  items?: BenefitItem[];
+const props = withDefaults(defineProps<{
+  items?: SharedIconHeadingTextDto[];
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
   themeClass: "theme-light",
-  items: () => [
-    { heading: "Schnelle Behandlung", text: "In nur 10–20 Minuten erledigt.", icon: IconClock },
-    { heading: "Natürliches Ergebnis", text: "Keine Frozen-Face-Optik, natürlich & harmonisch.", icon: IconMoodSmile },
-    { heading: "Keine Ausfallzeit", text: "Direkt danach wieder alltagsfähig.", icon: IconShield },
-    { heading: "Lang anhaltend", text: "Ergebnisse halten i. d. R. 3–6 Monate.", icon: IconCalendar },
-  ],
+  items: () => [],
 });
+
+const hasContent = computed(() => (props.items?.length ?? 0) > 0);
 </script>
 
 <style scoped>
