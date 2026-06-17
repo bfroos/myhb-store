@@ -1,50 +1,49 @@
 <template>
-  <section class="block final" :class="[themeClass, { 'block--elevated': elevated }]">
+  <section
+    v-if="hasContent"
+    class="block final"
+    :class="[themeClass, { 'block--elevated': elevated }]"
+  >
     <h2 v-if="headline" class="final__heading">{{ headline }}</h2>
     <p v-if="text" class="final__text">{{ text }}</p>
-    <div class="final__cta">
-      <button v-if="primaryCta" type="button" class="button button--primary button--lg button--fullWidth" @click="handlePrimary">
-        {{ primaryCta.label }}
-      </button>
-      <button v-if="secondaryCta" type="button" class="button button--tertiary button--lg button--fullWidth" @click="handleSecondary">
-        {{ secondaryCta.label }}
-      </button>
-    </div>
+    <UiMoleculeButtonGroup v-if="primaryCta || secondaryCta" class="final__cta">
+      <SharedButton
+        v-if="primaryCta"
+        :button="primaryCta"
+        :button-props="{ size: 'lg', fullWidth: true }"
+        @click="trackCtaClick('footer')"
+      />
+      <SharedButton
+        v-if="secondaryCta"
+        :button="secondaryCta"
+        :button-props="{ size: 'lg', fullWidth: true }"
+        @click="trackCtaClick('footer_secondary')"
+      />
+    </UiMoleculeButtonGroup>
   </section>
 </template>
 
 <script setup lang="ts">
-interface CtaProp { label: string; to?: string }
+import { computed } from "vue";
+import type { SharedButtonDto } from "~/lib/strapi/dto/components";
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   headline?: string;
   text?: string;
-  primaryCta?: CtaProp;
-  secondaryCta?: CtaProp;
+  primaryCta?: SharedButtonDto | null;
+  secondaryCta?: SharedButtonDto | null;
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
   elevated: true,
   themeClass: "theme-light",
-  headline: "Bereit für ein frisches, natürliches Aussehen?",
-  text: "Sichere Dir jetzt Deinen Termin – wir freuen uns auf Dich.",
-  primaryCta: () => ({ label: "Jetzt Termin buchen" }),
-  secondaryCta: () => ({ label: "Kostenlose Beratung" }),
 });
 
-const emit = defineEmits<{ primary: []; secondary: [] }>();
+const hasContent = computed(
+  () => !!props.headline || !!props.text || !!props.primaryCta || !!props.secondaryCta,
+);
 
 const { trackCtaClick } = useGoogleAnalytics();
-
-const handlePrimary = () => {
-  trackCtaClick('footer');
-  emit('primary');
-};
-
-const handleSecondary = () => {
-  trackCtaClick('footer_secondary');
-  emit('secondary');
-};
 </script>
 
 <style scoped>
@@ -77,42 +76,10 @@ const handleSecondary = () => {
 }
 .final__cta {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-400);
 }
-.button {
-  height: var(--control-height-lg);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 calc(var(--control-height-lg) / 2);
-  border-radius: 999px;
-  border: 2px solid transparent;
-  font: inherit;
-  font-size: var(--font-sm);
-  font-weight: var(--font-bold);
-  line-height: 1;
-  cursor: pointer;
-  transition: all 0.15s linear;
-}
-.button--fullWidth { width: 100%; }
-.button--primary {
-  background: var(--button-primary-color-bg, #000);
-  color: var(--button-primary-color-text, #fff);
-}
-.button--primary:hover { background: var(--button-primary-color-bg-hover, #292a2c); }
-.button--tertiary {
-  background: transparent;
-  color: var(--button-tertiary-color-text, #000);
-  border-color: var(--button-tertiary-color-border, #000);
-}
-.button--tertiary:hover { background: rgba(0,0,0,0.04); }
-.button:active { transform: scale(0.97); }
 @media (min-width: 900px) {
   .block { padding: var(--space-800) var(--space-card-pad); }
   .final__heading { font-size: var(--font-5xl); line-height: var(--line-5xl); max-width: 28ch; }
-  .final__cta { flex-direction: row; justify-content: center; width: auto; }
-  .final__cta .button { width: auto; padding: 0 var(--space-700); }
+  .final__cta { width: auto; }
 }
 </style>
