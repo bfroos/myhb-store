@@ -1,40 +1,37 @@
 <template>
-  <section class="block qi" :class="[themeClass, { 'block--elevated': elevated }]">
+  <section v-if="hasContent" class="block qi" :class="[themeClass, { 'block--elevated': elevated }]">
     <header v-if="headline" class="qi__header">
       <h2 class="qi__heading">{{ headline }}</h2>
     </header>
     <ul class="qi__grid" role="list">
-      <li v-for="item in items" :key="item.question" class="qi__cell">
-        <span class="qi__bubble">
-          <component :is="item.icon ?? IconHelpCircle" :size="24" stroke="1.5" aria-hidden="true" />
+      <li v-for="(item, index) in items" :key="item.heading ?? index" class="qi__cell">
+        <span v-if="item.icon?.iconData" class="qi__bubble">
+          <UiLayoutIconWrapper :size="24" :icon="item.icon">
+            <g v-html="item.icon.iconData" />
+          </UiLayoutIconWrapper>
         </span>
-        <strong class="qi__q">{{ item.question }}</strong>
-        <p class="qi__a">{{ item.answer }}</p>
+        <strong class="qi__q">{{ item.heading }}</strong>
+        <p v-if="item.text" class="qi__a">{{ item.text }}</p>
       </li>
     </ul>
   </section>
 </template>
 
 <script setup lang="ts">
-import { IconHelpCircle, IconDroplet, IconCalendar } from "@tabler/icons-vue";
-import type { Component } from "vue";
+import type { SharedIconHeadingTextDto } from "~/lib/strapi/dto/components";
 
-interface QiItem { question: string; answer: string; icon?: Component }
-
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   headline?: string;
-  items?: QiItem[];
+  items?: SharedIconHeadingTextDto[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
   elevated: true,
   themeClass: "theme-light",
-  items: () => [
-    { question: "Was ist Botox?",         answer: "Botox entspannt gezielt mimische Muskeln und glättet Falten.", icon: IconHelpCircle },
-    { question: "Wie wirkt es?",          answer: "Die Muskulatur wird sanft entspannt – für ein frisches Aussehen.", icon: IconDroplet },
-    { question: "Wie lange hält es?",     answer: "Die Wirkung hält in der Regel 3–6 Monate an.", icon: IconCalendar },
-  ],
+  items: () => [],
 });
+
+const hasContent = computed(() => (props.items?.length ?? 0) > 0);
 </script>
 
 <style scoped>
