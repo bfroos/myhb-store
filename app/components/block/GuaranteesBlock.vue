@@ -1,12 +1,14 @@
 <template>
-  <section class="block guarantees" :class="[themeClass, { 'block--elevated': elevated }]">
+  <section v-if="hasContent" class="block guarantees" :class="[themeClass, { 'block--elevated': elevated }]">
     <ul class="guar__list" role="list">
-      <li v-for="g in items" :key="g.label" class="guar__item">
-        <span class="guar__icon">
-          <component :is="g.icon ?? IconShieldCheck" :size="22" stroke="1.5" aria-hidden="true" />
+      <li v-for="(g, index) in items" :key="g.heading ?? index" class="guar__item">
+        <span v-if="g.icon?.iconData" class="guar__icon">
+          <UiLayoutIconWrapper :size="22" :icon="g.icon">
+            <g v-html="g.icon.iconData" />
+          </UiLayoutIconWrapper>
         </span>
         <div class="guar__body">
-          <strong class="guar__label">{{ g.label }}</strong>
+          <strong class="guar__label">{{ g.heading }}</strong>
           <span v-if="g.text" class="guar__text">{{ g.text }}</span>
         </div>
       </li>
@@ -15,25 +17,19 @@
 </template>
 
 <script setup lang="ts">
-import { IconShieldCheck, IconCertificate, IconLock, IconRefresh } from "@tabler/icons-vue";
-import type { Component } from "vue";
+import type { SharedIconHeadingTextDto } from "~/lib/strapi/dto/components";
 
-interface Guarantee { label: string; text?: string; icon?: Component }
-
-withDefaults(defineProps<{
-  items?: Guarantee[];
+const props = withDefaults(defineProps<{
+  items?: SharedIconHeadingTextDto[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
   elevated: true,
   themeClass: "theme-light",
-  items: () => [
-    { label: "Zertifizierte Ärzte", text: "Approbation & Spezialisierung", icon: IconCertificate },
-    { label: "100 % diskret",        text: "Datenschutz nach DSGVO",      icon: IconLock },
-    { label: "Geld-zurück-Garantie", text: "Bei berechtigter Reklamation", icon: IconRefresh },
-    { label: "Sichere Buchung",      text: "SSL-verschlüsselt",           icon: IconShieldCheck },
-  ],
+  items: () => [],
 });
+
+const hasContent = computed(() => (props.items?.length ?? 0) > 0);
 </script>
 
 <style scoped>
