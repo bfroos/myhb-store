@@ -1,5 +1,5 @@
 <template>
-  <section class="block ba" :class="[themeClass, { 'block--elevated': elevated }]">
+  <section v-if="hasContent" class="block ba" :class="[themeClass, { 'block--elevated': elevated }]">
     <header v-if="headline" class="ba__header">
       <h2 class="ba__heading">{{ headline }}</h2>
     </header>
@@ -62,14 +62,12 @@ interface MediaPair {
 
 const props = withDefaults(defineProps<{
   headline?: string;
-  pairs?: Pair[];
   pairsMedia?: MediaPair[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
   elevated: true,
   themeClass: "theme-light",
-  pairs: () => [],
 });
 
 const index = ref(0);
@@ -82,7 +80,7 @@ const handleCarouselClick = (i: number) => {
   index.value = i;
 };
 const displayPairs = computed<Pair[]>(() => {
-  const mediaPairs = (props.pairsMedia ?? [])
+  return (props.pairsMedia ?? [])
     .map((pair) => {
       const before = mediaToLegacyImage(pair.beforeImage);
       const after = mediaToLegacyImage(pair.afterImage);
@@ -96,9 +94,8 @@ const displayPairs = computed<Pair[]>(() => {
       };
     })
     .filter((pair): pair is Pair => pair != null);
-
-  return mediaPairs.length > 0 ? mediaPairs : props.pairs;
 });
+const hasContent = computed(() => displayPairs.value.length > 0);
 const current = computed(() => displayPairs.value[index.value] ?? { beforeSrc: "", afterSrc: "" });
 
 let dragging = false;
