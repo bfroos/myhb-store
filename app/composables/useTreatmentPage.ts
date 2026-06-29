@@ -5,7 +5,7 @@ import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 
 export function useTreatmentPage() {
-  const { locale, fallbackLocale, t } = useI18n();
+  const { locale, fallbackLocale, locales, t } = useI18n();
   const { isAdsMode } = useSiteModeFlags();
   const route = useRoute();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
@@ -13,6 +13,49 @@ export function useTreatmentPage() {
   const localizations = ref<LocalizationDto[]>([]);
   const seo = ref<SharedSeoDto>();
   const blocks = ref<StrapiBlock[]>([]);
+
+  /**
+   * Resolves the treatment pathKey (e.g. "botox/3-zonen-botox-preise") from the
+   * current route.
+   *
+   * The catch-all param (`route.params.slug`) is reliable on client-side
+   * navigation, but for the i18n-translated catch-all routes
+   * (e.g. /en/treatments/[...slug]) it is NOT reliably populated during
+   * server-side rendering. That caused localized detail pages to 404 on direct
+   * load / ISR while working after client navigation.
+   *
+   * To be robust in both SSR and client we derive the pathKey from the URL path:
+   * strip the leading locale prefix (e.g. "/en") and the localized section
+   * segment (treatments / traitements / tedaviler / ilajat / behandelingen /
+   * behandlungen), the remaining segments form the pathKey.
+   */
+  function resolveTreatmentPathKey(): string {
+    const localeCodes = (locales.value as Array<string | { code: string }>).map(
+      (l) => (typeof l === "string" ? l : l.code),
+    );
+
+    const segments = (route.path || "")
+      .split("/")
+      .filter(Boolean)
+      .map((s) => decodeURIComponent(s));
+
+    // Drop the locale prefix for non-default locales (e.g. /en, /fr, ...)
+    if (segments.length > 0 && localeCodes.includes(segments[0] as string)) {
+      segments.shift();
+    }
+
+    // Drop the (localized) section segment (treatments / behandlungen / ...)
+    segments.shift();
+
+    const fromPath = segments.filter(Boolean).join("/");
+    if (fromPath) return fromPath;
+
+    // Fallback: catch-all param (covers any edge case the path parsing misses)
+    const slugParam = route.params.slug;
+    return (Array.isArray(slugParam) ? slugParam : slugParam ? [slugParam] : [])
+      .filter(Boolean)
+      .join("/");
+  }
 
   const treatmentBreadcrumbItems = computed<BreadcrumbItem[]>(() => {
     const items: BreadcrumbItem[] = [];
@@ -55,9 +98,7 @@ export function useTreatmentPage() {
   ]);
 
   async function fetchTreatment(): Promise<boolean> {
-    const treatmentPathKey = (route.params.slug as string[])
-      .filter(Boolean)
-      .join("/");
+    const treatmentPathKey = resolveTreatmentPathKey();
 
     const { data, error, status } = await useStrapiFetch<any>(
       `/treatment-pages/by-path/${treatmentPathKey}`,
@@ -93,15 +134,15 @@ export function useTreatmentPage() {
   );
 
   const { brandName } = useBrand();
-  
+
   const seoWithFallback = computed(() => {
     const treatmentName = treatmentPage.value?.name ?? "";
     const price = treatmentPage.value?.treatment?.priceInEuroCent;
-    
+
     // Format price for SEO (convert cents to EUR)
     const startPrice = price ? Math.floor(price / 100) : 149; // Fallback
     const priceTag = `ab ${startPrice}€`;
-    
+
     return {
       metaTitle: t("treatment.seo.title", {
         treatmentName,
