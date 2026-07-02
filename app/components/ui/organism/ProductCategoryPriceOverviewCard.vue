@@ -108,6 +108,7 @@
               >
                 <span class="price-card__label">{{ variant.label }}</span>
                 <span class="price-card__price">
+                  <span class="price-card__prefix">{{ $t("common.price.startingPrefix") }}</span>
                   {{ formatPriceInEuro(variant.priceInEuroCent) }}
                 </span>
                 <IconArrowRight class="price-card__icon" aria-hidden="true" />
