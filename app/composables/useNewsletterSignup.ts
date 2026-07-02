@@ -19,8 +19,7 @@ export function useNewsletterSignup(
 
   function trackSignup() {
     if (import.meta.client && typeof (window as any).gtag === "function") {
-      (window as any).gtag("event", "sign_up", {
-        method: "newsletter",
+      (window as any).gtag("event", "newsletter_subscribe", {
         signup_source: source,
       });
     }
