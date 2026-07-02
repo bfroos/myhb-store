@@ -59,6 +59,8 @@
           </li>
         </ul>
 
+        <p v-if="priceNote" class="price-grid__note">{{ priceNote }}</p>
+
         <!-- CTA Button -->
         <footer v-if="cta" class="price-grid__footer">
           <SharedButton :button="cta" />
@@ -222,4 +224,11 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
     font-size: 1.5rem;
   }
 }
+.price-grid__note {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
 </style>
