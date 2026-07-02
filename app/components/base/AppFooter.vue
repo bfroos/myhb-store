@@ -60,6 +60,11 @@
                       {{ $t("navigation.secondary.blog") }}
                     </NuxtLinkLocale>
                   </li>
+                  <li v-if="locale === 'de'">
+                    <NuxtLinkLocale to="/p/kunden-erfahrungen">
+                      Kunden Erfahrungen
+                    </NuxtLinkLocale>
+                  </li>
                 </ul>
               </nav>
               <nav
@@ -203,6 +208,7 @@ import {
 } from "@tabler/icons-vue";
 
 const { isAdsMode } = useSiteModeFlags();
+const { locale } = useI18n();
 const { treatmentPages, productCategories } = useMenu(() =>
   isAdsMode.value ? "treatment-pages" : "treatment-pages,product-categories",
 );
