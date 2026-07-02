@@ -46,6 +46,12 @@ import {
   IconMoodSmileBeam,
   IconRosetteDiscountCheck,
 } from "@tabler/icons-vue";
+import type { NewsletterSignupSource } from "~/composables/useNewsletterSignup";
+
+const props = withDefaults(
+  defineProps<{ source?: NewsletterSignupSource }>(),
+  { source: "newsletter_footer" },
+);
 
 const route = useRoute();
 const { brandNameShort } = useBrand();
@@ -55,7 +61,7 @@ const {
   success,
   error,
   submit: submitNewsletter,
-} = useNewsletterSignup();
+} = useNewsletterSignup(props.source);
 
 async function submit(event: SubmitEvent) {
   event.preventDefault();
