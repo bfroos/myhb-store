@@ -46,6 +46,7 @@ export async function setPageSeo(
   const canonicalUrl = `${config.public.publicUrl}${route.path}`;
 
   const robots = computed(() => {
+    if (pageSeo?.metaRobots) return pageSeo.metaRobots;
     const { isAdsMode } = useSiteModeFlags();
     return isAdsMode.value ? "noindex, nofollow" : "index, follow";
   });
