@@ -2,12 +2,20 @@
 
 import mailchimp from "@mailchimp/mailchimp_marketing";
 
+const ALLOWED_SOURCES = new Set([
+  "newsletter_footer",
+  "discount_cta_20",
+  "blog_newsletter_block",
+]);
+
 export default defineEventHandler(async (event) => {
   const { mailchimpApiKey, mailchimpServerPrefix, mailchimpAudienceId } =
     useRuntimeConfig(event);
 
-  const body = await readBody<{ email?: string }>(event);
+  const body = await readBody<{ email?: string; source?: string }>(event);
   const email = (body.email || "").trim().toLowerCase();
+  const rawSource = (body.source || "").trim();
+  const source = ALLOWED_SOURCES.has(rawSource) ? rawSource : null;
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw createError({
@@ -34,6 +42,7 @@ export default defineEventHandler(async (event) => {
     const res = await mailchimp.lists.addListMember(mailchimpAudienceId, {
       email_address: email,
       status: "subscribed",
+      ...(source ? { tags: [`source:${source}`] } : {}),
     });
 
     return { ok: true, response: res };
