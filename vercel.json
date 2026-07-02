@@ -36,6 +36,17 @@
       ]
     }
   ],
-  "rewrites": [],
+  "rewrites": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "magazin.myhealthandbeauty.com"
+        }
+      ],
+      "destination": "/p/magazin-lippen-aufspritzen"
+    }
+  ],
   "redirects": []
 }
