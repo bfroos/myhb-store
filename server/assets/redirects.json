@@ -155,33 +155,8 @@
     "code": 301
   },
   {
-    "from": "/pages/contact",
-    "to": "/p/contact",
-    "code": 410
-  },
-  {
-    "from": "/pages/gdpr-compliance",
-    "to": "/p/gdpr-compliance",
-    "code": 410
-  },
-  {
-    "from": "/pages/ccpa-compliance",
-    "to": "/p/ccpa-compliance",
-    "code": 410
-  },
-  {
-    "from": "/pages/appi-compliance",
-    "to": "/p/appi-compliance",
-    "code": 410
-  },
-  {
     "from": "/pages/pipeda-compliance",
     "to": "/p/pipeda-compliance",
-    "code": 410
-  },
-  {
-    "from": "/pages/ohh-de-cologne",
-    "to": "/p/ohh-de-cologne",
     "code": 410
   },
   {
@@ -200,11 +175,6 @@
     "code": 301
   },
   {
-    "from": "/pages/customer-service",
-    "to": "/p/customer-service",
-    "code": 410
-  },
-  {
     "from": "/pages/our-story",
     "to": "/ueber-uns",
     "code": 301
@@ -215,11 +185,6 @@
     "code": 410
   },
   {
-    "from": "/pages/gluecksrad",
-    "to": "/p/gluecksrad",
-    "code": 301
-  },
-  {
     "from": "/pages/eigenblut-haarbehandlung",
     "to": "/behandlungen/anti-haarausfall/prp-haartherapie",
     "code": 301
@@ -227,11 +192,6 @@
   {
     "from": "/pages/sozial-media-veroffentlichung-myh-b",
     "to": "/sozial-media-veroffentlichung-myh-b",
-    "code": 410
-  },
-  {
-    "from": "/pages/termin-buchen",
-    "to": "/p/termin-buchen",
     "code": 410
   },
   {
@@ -247,11 +207,6 @@
   {
     "from": "/pages/vitamin-c-infusion",
     "to": "/behandlungen/infusionen/vitamin-c-infusion",
-    "code": 301
-  },
-  {
-    "from": "/pages/btx-ohne-termin",
-    "to": "/behandlungen/botox/btx-ohne-termin",
     "code": 301
   },
   {
@@ -290,13 +245,8 @@
     "code": 301
   },
   {
-    "from": "/pages/lebensmittelunvertraglichkeits-test",
-    "to": "/behandlungen/lebensmittelunvertraglichkeits-test",
-    "code": 410
-  },
-  {
     "from": "/pages/weight-balance-test",
-    "to": "/behandlungen/weight-balance-test",
+    "to": "/behandlungen/infusionen",
     "code": 410
   },
   {
@@ -310,13 +260,8 @@
     "code": 301
   },
   {
-    "from": "/pages/bluttests",
-    "to": "/behandlungen/bluttests",
-    "code": 410
-  },
-  {
     "from": "/pages/botox-koeln",
-    "to": "/standorte/koeln/botox",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
     "code": 301
   },
   {
@@ -337,11 +282,6 @@
   {
     "from": "/pages/location-dusseldorf-arcaden",
     "to": "/standorte/duesseldorf/duesseldorf-arcaden",
-    "code": 301
-  },
-  {
-    "from": "/pages/fett-weg-spritze",
-    "to": "/behandlungen/fett-weg-spritze",
     "code": 301
   },
   {
@@ -830,11 +770,6 @@
     "code": 301
   },
   {
-    "from": "/pages/botox-ohne-termin-saarbrucken",
-    "to": "/standorte/saarbruecken/europa-galerie/botox",
-    "code": 301
-  },
-  {
     "from": "/pages/lippen-aufspritzen-und-russian-lips-in-leipzig-ab-199-99",
     "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippen-aufspritzen",
     "code": 301
@@ -886,7 +821,7 @@
   },
   {
     "from": "/pages/kraehenfuesse-botox-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox/kraehenfuesse-augenfaeltchen",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox/kraehenfuesse",
     "code": 301
   },
   {
@@ -1010,11 +945,6 @@
     "code": 301
   },
   {
-    "from": "/pages/masseter-botox-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/botox/masseter",
-    "code": 301
-  },
-  {
     "from": "/pages/masseter-botox-recklinghausen",
     "to": "/standorte/recklinghausen/palais-vest/botox/masseter",
     "code": 301
@@ -1075,11 +1005,6 @@
     "code": 301
   },
   {
-    "from": "/pages/masseter-botox-behandlung-in-oberhausen-ab-349-99-i-myh-b-oberhausen",
-    "to": "/standorte/oberhausen/centro/botox/masseter",
-    "code": 301
-  },
-  {
     "from": "/pages/hyperhidrose-schweissdrusenbehandlung-in-oberhausen-mit-botox-ab-499-99-i-myh-b-oberhausen",
     "to": "/standorte/oberhausen/centro/botox/hyperhidrose-starkes-schwitzen",
     "code": 301
@@ -1115,11 +1040,6 @@
     "code": 301
   },
   {
-    "from": "/pages/masseter-botox-behandlung-koblenz",
-    "to": "/standorte/koblenz/loehr-center/botox/masseter",
-    "code": 301
-  },
-  {
     "from": "/pages/lipflip-botox-koblenz",
     "to": "/standorte/koblenz/loehr-center/botox/lipflip",
     "code": 301
@@ -1127,11 +1047,6 @@
   {
     "from": "/pages/browlift-botox-koblenz",
     "to": "/standorte/koblenz/loehr-center/botox/browlift",
-    "code": 301
-  },
-  {
-    "from": "/pages/hyperhidrose-schweissdruesen-botox-koblenz",
-    "to": "/standorte/koblenz/loehr-center/botox/hyperhidrose-starkes-schwitzen",
     "code": 301
   },
   {
@@ -1322,11 +1237,6 @@
   {
     "from": "/pages/fett-weg-spritze-lemon-bottle-huefte",
     "to": "/behandlungen/fettwegspritze/lemon-bottle-huefte",
-    "code": 301
-  },
-  {
-    "from": "/pages/bruxismus-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus",
     "code": 301
   },
   {
@@ -2165,11 +2075,6 @@
     "code": 301
   },
   {
-    "from": "/pages/myh-b-club-treueprogramm",
-    "to": "/myh-b-club-treueprogramm",
-    "code": 301
-  },
-  {
     "from": "/pages/lippenkorrektur-recklinghausen",
     "to": "/standorte/recklinghausen/palais-vest/hyaluron/lippenkorrektur",
     "code": 301
@@ -2585,11 +2490,6 @@
     "code": 301
   },
   {
-    "from": "/pages/influencer-werbeseite",
-    "to": "/p/influencer-werbeseite",
-    "code": 301
-  },
-  {
     "from": "/pages/skinbooster",
     "to": "/behandlungen/skinbooster",
     "code": 301
@@ -2806,212 +2706,212 @@
   },
   {
     "from": "/pages/brustvergrosserung-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
     "from": "/pages/brustvergroesserung-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
     "from": "/pages/brustvergroesserung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
     "from": "/pages/brustvergroesserung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
     "from": "/pages/brustvergroesserung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
     "from": "/pages/brustvergroesserung-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
     "from": "/pages/brustvergroesserung-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
     "from": "/pages/bachdeckenstraffung-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
     "from": "/pages/fettabsaugung-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
     "from": "/pages/oberlidstraffung-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberarmstraffung",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/bauchdeckenstraffung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberarmstraffung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberlidstraffung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/pages/fettabsaugung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
     "from": "/pages/fettabsaugung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
     "from": "/pages/oberlidstraffung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberarmstraffung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/bauchdeckenstraffung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
     "from": "/pages/haartransplantation-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/pages/haartransplantation-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/pages/haartransplantation-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/pages/haartransplantation-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/pages/haartransplantation-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/pages/haartransplantation-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/pages/haartransplantation-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/pages/bauchdeckenstraffung-berlin-1",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
     "from": "/pages/fettabsaugung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
     "from": "/pages/oberlidstraffung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberarmstraffung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberarmstraffung-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberlidstraffung-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/pages/bauchdeckenstraffung-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
     "from": "/pages/fettabsaugung-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
     "from": "/pages/fettabsaugung-monchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
     "from": "/pages/oberlidstraffung-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberarmstraffung-monchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/bauchdeckenstraffung-monchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberarmstraffung-dusseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/oberlidstraffung-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/pages/bauchdeckenstraffung-dusseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
     "from": "/pages/fettabsaugung-dusseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
@@ -3025,33 +2925,18 @@
     "code": 301
   },
   {
-    "from": "/pages/2-jahre-jubilaeums-gewinnspiel",
-    "to": "/p/2-jahre-jubilaeums-gewinnspiel",
-    "code": 410
-  },
-  {
-    "from": "/pages/botox-vistabel-ab-99-je-zone",
-    "to": "/produkte/botox/botox-vistabel-ab-99-je-zone",
-    "code": 410
-  },
-  {
-    "from": "/pages/social-media-landingpage",
-    "to": "/p/social-media-landingpage",
-    "code": 410
-  },
-  {
     "from": "/pages/oberarmstraffung-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/pages/bruststraffung-koln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
     "from": "/pages/face-lift-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
@@ -3336,32 +3221,32 @@
   },
   {
     "from": "/pages/bruststraffung-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
     "from": "/pages/bruststraffung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
     "from": "/pages/bruststraffung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
     "from": "/pages/bruststraffung-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
     "from": "/pages/bruststraffung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
     "from": "/pages/bruststraffung-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
@@ -3371,32 +3256,32 @@
   },
   {
     "from": "/pages/face-lift-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
     "from": "/pages/face-lift-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
     "from": "/pages/face-lift-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
     "from": "/pages/face-lift-monchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
     "from": "/pages/face-lift-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
     "from": "/pages/face-lift-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
@@ -3435,11 +3320,6 @@
     "code": 301
   },
   {
-    "from": "/pages/glucksrad-promo",
-    "to": "/p/glucksrad-promo",
-    "code": 410
-  },
-  {
     "from": "/products/vitamin-c-infusion",
     "to": "/produkte/infusionen/vitamin-c-infusion",
     "code": 301
@@ -3466,7 +3346,7 @@
   },
   {
     "from": "/products/weight-balance-test",
-    "to": "/products/weight-balance-test",
+    "to": "/behandlungen/infusionen",
     "code": 410
   },
   {
@@ -3521,7 +3401,7 @@
   },
   {
     "from": "/products/fett-weg-spritze",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle",
+    "to": "/produkte/fettwegspritze/lemon-bottle",
     "code": 301
   },
   {
@@ -3540,11 +3420,6 @@
     "code": 301
   },
   {
-    "from": "/products/teoxane-rha-3-i-1-0-ml-filler-behandlung",
-    "to": "/produkte/hyaluron-und-filler/product?v=1-0-ml",
-    "code": 301
-  },
-  {
     "from": "/products/teoxane-ultra-deep-1-2-ml-filler-behandlung",
     "to": "/produkte/hyaluron-und-filler/teoxane-ultra-deep-1-2-ml?v=1-2-ml",
     "code": 301
@@ -3556,37 +3431,37 @@
   },
   {
     "from": "/products/lemon-bottle-doppelkinn",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=doppelkinn",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=doppelkinn",
     "code": 301
   },
   {
     "from": "/products/lemon-bottle-oberarm",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=oberarm",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=oberarm",
     "code": 301
   },
   {
     "from": "/products/lemon-bottle-backen-wangen",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=wangen",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=wangen",
     "code": 301
   },
   {
     "from": "/products/lemon-bottle-huefte",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=huefte",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=huefte",
     "code": 301
   },
   {
     "from": "/products/lemon-bottle-bauch",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=bauch",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=bauch",
     "code": 301
   },
   {
     "from": "/products/lemon-bottle-oberschenkel",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=oberschenkel",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=oberschenkel",
     "code": 301
   },
   {
     "from": "/products/lemon-bottle-knie",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=knie",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=knie",
     "code": 301
   },
   {
@@ -3598,11 +3473,6 @@
     "from": "/products/relax-infusion-vitamin-b-komplex",
     "to": "/produkte/infusionen/vitamin-b-komplex-infusion?v=infusionssitzung",
     "code": 301
-  },
-  {
-    "from": "/products/kostenlose-nachbehandlung",
-    "to": "/kostenlose-nachbehandlung",
-    "code": 410
   },
   {
     "from": "/products/relax-infusion",
@@ -3620,43 +3490,13 @@
     "code": 301
   },
   {
-    "from": "/products/bluttest-cholesterin-ldl-hdl",
-    "to": "/produkte/bluttest/cholesterin-ldl-hdl",
-    "code": 410
-  },
-  {
-    "from": "/products/bluttest-schilddruesen-test",
-    "to": "/produkte/bluttest/schilddruesen-test",
-    "code": 410
-  },
-  {
     "from": "/products/bluttest-leberwerte",
     "to": "/produkte/bluttest/leberwerte",
     "code": 410
   },
   {
-    "from": "/products/bluttest-vegetarierer-veganer",
-    "to": "/produkte/bluttest/vegetarierer-veganer",
-    "code": 410
-  },
-  {
-    "from": "/products/bluttest-fitness-check",
-    "to": "/produkte/bluttest/fitness-check",
-    "code": 410
-  },
-  {
-    "from": "/products/bluttest-calcium-test",
-    "to": "/produkte/bluttest/calcium-test",
-    "code": 410
-  },
-  {
     "from": "/products/bluttest-ferritin-eisenmangel",
     "to": "/produkte/bluttest/ferritin-eisenmangel",
-    "code": 410
-  },
-  {
-    "from": "/products/bluttest-hba1c-langzeitblutzucker",
-    "to": "/produkte/bluttest/hba1c-langzeitblutzucker",
     "code": 410
   },
   {
@@ -3675,18 +3515,8 @@
     "code": 410
   },
   {
-    "from": "/products/bluttest-vitamin-b12-holotranscobalmin-aktiv",
-    "to": "/produkte/bluttest/vitamin-b12-holotranscobalmin-aktiv",
-    "code": 410
-  },
-  {
     "from": "/products/bluttest-vitamin-b9-folsaure",
     "to": "/produkte/bluttest/vitamin-b9-folsaure",
-    "code": 410
-  },
-  {
-    "from": "/products/bluttest-vitamin-d",
-    "to": "/produkte/bluttest/vitamin-d",
     "code": 410
   },
   {
@@ -3920,11 +3750,6 @@
     "code": 301
   },
   {
-    "from": "/pages/location-koln-arcaden",
-    "to": "/standorte/koeln/koeln-arcaden",
-    "code": 301
-  },
-  {
     "from": "/tr/pages/lemon-bottle-huefte-leipzig",
     "to": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-huefte",
     "code": 301
@@ -4091,7 +3916,7 @@
   },
   {
     "from": "/products/botox®-3-zonen",
-    "to": "/produkte/btx/btx?v=3-zonen",
+    "to": "/produkte/botox/botox?v=3-zonen",
     "code": 301
   },
   {
@@ -4201,7 +4026,7 @@
   },
   {
     "from": "/en/pages/hair-transplant-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
@@ -4306,7 +4131,7 @@
   },
   {
     "from": "/ar/pages/oberlidstraffung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
@@ -4691,7 +4516,7 @@
   },
   {
     "from": "/en/pages/botox-cologne",
-    "to": "/standorte/koeln/botox",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
     "code": 301
   },
   {
@@ -4865,11 +4690,6 @@
     "code": 301
   },
   {
-    "from": "/pages/botox-ohne-termin-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/skinbooster",
-    "code": 301
-  },
-  {
     "from": "/ar/collections/all?page=4",
     "to": null,
     "code": 410
@@ -4896,12 +4716,7 @@
   },
   {
     "from": "/products/original-botox®-3-zonen",
-    "to": "/produkte/btx/btx?v=3-zonen",
-    "code": 301
-  },
-  {
-    "from": "/collections/vendors/products/teoxane-ultra-deep-1-2-ml-filler-behandlung",
-    "to": "/produkte/hyaluron-und-filler/teoxane-ultra-deep-1-2-ml?v=1-2-ml",
+    "to": "/produkte/botox/botox?v=3-zonen",
     "code": 301
   },
   {
@@ -4916,12 +4731,7 @@
   },
   {
     "from": "/pages/fett-weg-spritze",
-    "to": "/behandlungen/fett-weg-spritze",
-    "code": 301
-  },
-  {
-    "from": "/collections/vendors/products/regenerations-infusion",
-    "to": "/produkte/infusionen/regenerations-infusion?v=infusionssitzung",
+    "to": "/behandlungen/fettwegspritze",
     "code": 301
   },
   {
@@ -4962,11 +4772,6 @@
   {
     "from": "/en/pages/power-infusion-duesseldorf",
     "to": "/standorte/duesseldorf/duesseldorf-arcaden/infusionen/power-infusion-glutathion",
-    "code": 301
-  },
-  {
-    "from": "/pages/lippen-aufspritzen-und-russian-lips-in-recklinghausen-ab-199-99",
-    "to": "/standorte/recklinghausen/palais-vest/hyaluron/lippen-aufspritzen",
     "code": 301
   },
   {
@@ -5051,7 +4856,7 @@
   },
   {
     "from": "/tr/pages/oberarmstraffung-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
@@ -5291,7 +5096,7 @@
   },
   {
     "from": "/en/pages/fettabsaugung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
@@ -5415,11 +5220,6 @@
     "code": 301
   },
   {
-    "from": "/pages/botox-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/botox",
-    "code": 301
-  },
-  {
     "from": "/ar/pages/فامبيرليفتينغ-مع-بي-آر-بي-في-لايبزيغ-ابتداءً-من-299-99-يورو-ماي-اتش-بي-لايبزيغ",
     "to": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/vampir-lifting-prp",
     "code": 301
@@ -5471,7 +5271,7 @@
   },
   {
     "from": "/ar/products/ليمون-بوتل-ركبة",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=knie",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=knie",
     "code": 301
   },
   {
@@ -5620,11 +5420,6 @@
     "code": 301
   },
   {
-    "from": "/collections/vendors/products/profhilo®-behandlung",
-    "to": "/behandlungen/skinbooster/profhilo",
-    "code": 301
-  },
-  {
     "from": "/en/pages/laugh-lines-cologne",
     "to": "/standorte/koeln/koeln-arcaden/botox/lachfalten",
     "code": 301
@@ -5721,12 +5516,12 @@
   },
   {
     "from": "/en/pages/oberlidstraffung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
     "from": "/tr/products/botox®-5-bolge-1",
-    "to": "/produkte/btx/btx?v=5-zonen",
+    "to": "/produkte/botox/botox?v=5-zonen",
     "code": 301
   },
   {
@@ -5841,7 +5636,7 @@
   },
   {
     "from": "/ar/pages/oberarmstraffung-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
@@ -5986,7 +5781,7 @@
   },
   {
     "from": "/ar/pages/face-lift-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
@@ -6061,7 +5856,7 @@
   },
   {
     "from": "/tr/pages/sac-ekimi-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
@@ -6296,7 +6091,7 @@
   },
   {
     "from": "/collections/all/products/lemon-bottle-huefte",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=huefte",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=huefte",
     "code": 301
   },
   {
@@ -6451,7 +6246,7 @@
   },
   {
     "from": "/ar/pages/haartransplantation-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
@@ -6466,7 +6261,7 @@
   },
   {
     "from": "/en/products/botox®-6-zones-1",
-    "to": "/produkte/btx/btx?v=6-zonen",
+    "to": "/produkte/botox/botox?v=6-zonen",
     "code": 301
   },
   {
@@ -6521,12 +6316,12 @@
   },
   {
     "from": "/ar/pages/oberarmstraffung-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
     "from": "/ar/pages/oberarmstraffung-monchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
     "code": 301
   },
   {
@@ -6896,7 +6691,7 @@
   },
   {
     "from": "/tr/products/lemon-bottle-karin",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=bauch",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=bauch",
     "code": 301
   },
   {
@@ -6951,7 +6746,7 @@
   },
   {
     "from": "/products/botox®-4-zonen?pr_prod_strat=collection_fallback&pr_rec_id=e2dbf3490&pr_rec_pid=8621405372763&pr_ref_pid=8716887490907&pr_seq=uniform",
-    "to": "/produkte/btx/btx?v=4-zonen",
+    "to": "/produkte/botox/botox?v=4-zonen",
     "code": 301
   },
   {
@@ -7061,7 +6856,7 @@
   },
   {
     "from": "/ar/pages/fettabsaugung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
@@ -7111,7 +6906,7 @@
   },
   {
     "from": "/ar/pages/face-lift-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
     "code": 301
   },
   {
@@ -7211,7 +7006,7 @@
   },
   {
     "from": "/tr/pages/bauchdeckenstraffung-monchengladbach",
-    "to": "/standorte/moenchengladbach/minto/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
@@ -7321,7 +7116,7 @@
   },
   {
     "from": "/en/products/botox®-2-areas-1",
-    "to": "/produkte/btx/btx?v=2-zonen",
+    "to": "/produkte/botox/botox?v=2-zonen",
     "code": 301
   },
   {
@@ -7391,7 +7186,7 @@
   },
   {
     "from": "/en/products/botox®-4-zones-1",
-    "to": "/produkte/btx/btx?v=4-zonen",
+    "to": "/produkte/botox/botox?v=4-zonen",
     "code": 301
   },
   {
@@ -7436,7 +7231,7 @@
   },
   {
     "from": "/tr/pages/yag-aldirma-dusseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
@@ -7580,11 +7375,6 @@
     "code": 301
   },
   {
-    "from": "/products/power-drip-anti-aiging-infusion",
-    "to": "/produkte/infusionen/anti-aging-infusion?v=infusionssitzung",
-    "code": 301
-  },
-  {
     "from": "/tr/products/limon-sise-diz",
     "to": "/behandlungen/fettwegspritze/lemon-bottle-knie",
     "code": 301
@@ -7696,7 +7486,7 @@
   },
   {
     "from": "/ar/pages/bruststraffung-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
@@ -7751,7 +7541,7 @@
   },
   {
     "from": "/products/original-botox®-1-zone",
-    "to": "/produkte/btx/btx?v=1-zone",
+    "to": "/produkte/botox/botox?v=1-zone",
     "code": 301
   },
   {
@@ -7791,7 +7581,7 @@
   },
   {
     "from": "/collections/all/products/lemon-bottle-bauch",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=bauch",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=bauch",
     "code": 301
   },
   {
@@ -7881,7 +7671,7 @@
   },
   {
     "from": "/ar/products/lemon-bottle-doppelkinn",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=doppelkinn",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=doppelkinn",
     "code": 301
   },
   {
@@ -7916,7 +7706,7 @@
   },
   {
     "from": "/products/botoks®-2-bolge-1",
-    "to": "/produkte/btx/btx?v=2-zonen",
+    "to": "/produkte/botox/botox?v=2-zonen",
     "code": 301
   },
   {
@@ -7976,7 +7766,7 @@
   },
   {
     "from": "/collections/all/products/lemon-bottle-backen-wangen",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=wangen",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=wangen",
     "code": 301
   },
   {
@@ -8046,7 +7836,7 @@
   },
   {
     "from": "/ar/pages/oberlidstraffung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
     "code": 301
   },
   {
@@ -8155,11 +7945,6 @@
     "code": 301
   },
   {
-    "from": "/pages/leipzig-hofe-am-bruhl",
-    "to": "/standorte/leipzig/hoefe-am-bruehl",
-    "code": 301
-  },
-  {
     "from": "/en/blogs/news/vitamin-c-infusion-the-booster-for-your-immune-system",
     "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
     "code": 301
@@ -8196,7 +7981,7 @@
   },
   {
     "from": "/ar/products/lemon-bottle-oberschenkel",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=oberschenkel",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=oberschenkel",
     "code": 301
   },
   {
@@ -8251,7 +8036,7 @@
   },
   {
     "from": "/tr/collections/all/products/botox®-4-zonen",
-    "to": "/produkte/btx/btx?v=4-zonen",
+    "to": "/produkte/botox/botox?v=4-zonen",
     "code": 301
   },
   {
@@ -8291,7 +8076,7 @@
   },
   {
     "from": "/products/botox®-6-zonen?pr_prod_strat=collection_fallback&pr_rec_id=a841b2df2&pr_rec_pid=8621407240539&pr_ref_pid=8640225149275&pr_seq=uniform",
-    "to": "/produkte/btx/btx?v=6-zonen",
+    "to": "/produkte/botox/botox?v=6-zonen",
     "code": 301
   },
   {
@@ -8406,12 +8191,12 @@
   },
   {
     "from": "/tr/pages/haartransplantation-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/en/pages/bruststraffung-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
     "code": 301
   },
   {
@@ -8726,7 +8511,7 @@
   },
   {
     "from": "/products/botox®-5-zonen",
-    "to": "/produkte/btx/btx?v=5-zonen",
+    "to": "/produkte/botox/botox?v=5-zonen",
     "code": 301
   },
   {
@@ -8746,7 +8531,7 @@
   },
   {
     "from": "/collections/vendors/products/lemon-bottle-knie",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=knie",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=knie",
     "code": 301
   },
   {
@@ -8856,12 +8641,12 @@
   },
   {
     "from": "/pages/lebensmittelunvertraglichkeits-test",
-    "to": "/behandlungen/lebensmittelunvertraglichkeits-test",
+    "to": "/behandlungen/infusionen",
     "code": 301
   },
   {
     "from": "/collections/all/products/lemon-bottle-knie",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=knie",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=knie",
     "code": 301
   },
   {
@@ -8871,7 +8656,7 @@
   },
   {
     "from": "/en/products/lemon-bottle-cheeks",
-    "to": "/produkte/fett-weg-spritze/lemon-bottle?v=wangen",
+    "to": "/produkte/fettwegspritze/lemon-bottle?v=wangen",
     "code": 301
   },
   {
@@ -9336,7 +9121,7 @@
   },
   {
     "from": "/behandlungen/btx/baby-btx",
-    "to": "/behandlungen/botox/baby-btx",
+    "to": "/behandlungen/botox/baby-botox",
     "code": 301
   },
   {
@@ -9386,7 +9171,7 @@
   },
   {
     "from": "/behandlungen/btx/full-face-btx",
-    "to": "/behandlungen/botox/full-face-btx",
+    "to": "/behandlungen/botox/full-face-botox",
     "code": 301
   },
   {
@@ -9911,7 +9696,7 @@
   },
   {
     "from": "/behandlungen/btx/barbie-btx",
-    "to": "/behandlungen/botox/barbie-btx",
+    "to": "/behandlungen/botox/barbie-botox",
     "code": 301
   },
   {
@@ -10266,7 +10051,7 @@
   },
   {
     "from": "/pages/profhilo®-behandlung-in-koblenz",
-    "to": "/behandlungen/profhilo",
+    "to": "/behandlungen/skinbooster/profhilo",
     "code": 301
   },
   {
@@ -10926,7 +10711,7 @@
   },
   {
     "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
     "code": 301
   },
   {
@@ -10935,253 +10720,58 @@
     "code": 301
   },
   {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/jawline",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/jawline",
-    "code": 301
-  },
-  {
     "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/oberschenkelstraffung",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/oberschenkelstraffung",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/baby-botox",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/baby-botox",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/polynukleotide-lachssperma",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/polynukleotide-lachssperma",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/skinbooster",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberschenkelstraffung",
     "code": 301
   },
   {
     "from": "/standorte/leipzig/hoefe-am-bruehl/btx/bunny-lines",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/btx/bunny-lines",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-huefte",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-huefte",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/zaehneknirschen-bruxismus",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/zaehneknirschen-bruxismus",
+    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/bunny-lines",
     "code": 301
   },
   {
     "from": "/standorte/leipzig/hoefe-am-bruehl/btx/erdbeerkinn",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/btx/erdbeerkinn",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/vampir-lifting-prp",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/vampir-lifting-prp",
+    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/erdbeerkinn",
     "code": 301
   },
   {
     "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/fettabsaugung",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/fettabsaugung",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-backen",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-backen",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/zornesfalte",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/zornesfalte",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
     "code": 301
   },
   {
     "from": "/pages/profhilo®-behandlung-in-oberhausen-ab-249-99",
-    "to": "/behandlungen/profhilo",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippenkorrektur",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippenkorrektur",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl",
-    "to": "/standorte/leipzig/hoefe-am-bruehl",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/kinnkorrektur",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/kinnkorrektur",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-doppelkinn",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-doppelkinn",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/full-face-botox",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/full-face-botox",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze",
+    "to": "/behandlungen/skinbooster/profhilo",
     "code": 301
   },
   {
     "from": "/standorte/leipzig/hoefe-am-bruehl/btx/hyperhidrose-starkes-schwitzen",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/btx/hyperhidrose-starkes-schwitzen",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/browlift",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/browlift",
+    "to": "/standorte/leipzig/hoefe-am-bruehl/botox/hyperhidrose-starkes-schwitzen",
     "code": 301
   },
   {
     "from": "/standorte/leipzig/hoefe-am-bruehl/btx/barbie-btx",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/btx/barbie-btx",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/nasolabialfalte",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/nasolabialfalte",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/mesotherapie-nctf-135-ha",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/mesotherapie-nctf-135-ha",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippen-aufspritzen",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippen-aufspritzen",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-knie",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-knie",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/power-infusion-glutathion",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/infusionen/power-infusion-glutathion",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/prp-haartherapie",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/prp-haartherapie",
-    "code": 301
-  },
-  {
-    "from": "/pages/profhilo®-behandlung-in-leipzig-ab-249-99-myh-b-leipzig",
-    "to": "/behandlungen/profhilo",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/b-komplex-infusion",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/infusionen/b-komplex-infusion",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/wangenaufbau",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/wangenaufbau",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/kostenlose-haaranalyse",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/kostenlose-haaranalyse",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/lumi-eyes-polynukleotide",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/lumi-eyes-polynukleotide",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/profhilo",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/skinbooster/profhilo",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/brustvergroesserung",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/brustvergroesserung",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/haende",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/haende",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/mesotherapie-haare",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/anti-haarausfall/mesotherapie-haare",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/botox",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/botox",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/haartransplantation",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/haartransplantation",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/vitamin-c-infusion",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/infusionen/vitamin-c-infusion",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/hylase",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/hylase",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-bauch",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/fettwegspritze/lemon-bottle-bauch",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/botox/barbie-botox",
     "to": "/standorte/leipzig/hoefe-am-bruehl/botox/barbie-botox",
     "code": 301
   },
   {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen/immun-infusion",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/infusionen/immun-infusion",
+    "from": "/pages/profhilo®-behandlung-in-leipzig-ab-249-99-myh-b-leipzig",
+    "to": "/behandlungen/skinbooster/profhilo",
     "code": 301
   },
   {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/infusionen",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/infusionen",
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
     "code": 301
   },
   {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/augenringe-unterspritzen",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/augenringe-unterspritzen",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/full-face-hyaluron",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/full-face-hyaluron",
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
     "code": 301
   },
   {
     "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/bauchdeckenstraffung",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
     "code": 301
   },
   {
@@ -11231,7 +10821,7 @@
   },
   {
     "from": "/standorte/koblenz/loehr-center/btx/full-face-btx",
-    "to": "/standorte/koblenz/loehr-center/botox/full-face-btx",
+    "to": "/standorte/koblenz/loehr-center/botox/full-face-botox",
     "code": 301
   },
   {
@@ -11241,7 +10831,7 @@
   },
   {
     "from": "/standorte/saarbruecken/europa-galerie/btx/barbie-btx",
-    "to": "/standorte/saarbruecken/europa-galerie/botox/barbie-btx",
+    "to": "/standorte/saarbruecken/europa-galerie/botox/barbie-botox",
     "code": 301
   },
   {
@@ -11261,12 +10851,12 @@
   },
   {
     "from": "/standorte/oberhausen/centro/btx/full-face-btx",
-    "to": "/standorte/oberhausen/centro/botox/full-face-btx",
+    "to": "/standorte/oberhausen/centro/botox/full-face-botox",
     "code": 301
   },
   {
     "from": "/standorte/koblenz/loehr-center/btx/barbie-btx",
-    "to": "/standorte/koblenz/loehr-center/botox/barbie-btx",
+    "to": "/standorte/koblenz/loehr-center/botox/barbie-botox",
     "code": 301
   },
   {
@@ -11361,12 +10951,12 @@
   },
   {
     "from": "/standorte/bielefeld/loom/btx/barbie-btx",
-    "to": "/standorte/bielefeld/loom/botox/barbie-btx",
+    "to": "/standorte/bielefeld/loom/botox/barbie-botox",
     "code": 301
   },
   {
     "from": "/standorte/bielefeld/loom/btx/baby-btx",
-    "to": "/standorte/bielefeld/loom/botox/baby-btx",
+    "to": "/standorte/bielefeld/loom/botox/baby-botox",
     "code": 301
   },
   {
@@ -11426,7 +11016,7 @@
   },
   {
     "from": "/standorte/saarbruecken/europa-galerie/btx/baby-btx",
-    "to": "/standorte/saarbruecken/europa-galerie/botox/baby-btx",
+    "to": "/standorte/saarbruecken/europa-galerie/botox/baby-botox",
     "code": 301
   },
   {
@@ -11716,7 +11306,7 @@
   },
   {
     "from": "/standorte/koblenz/loehr-center/btx/baby-btx",
-    "to": "/standorte/koblenz/loehr-center/botox/baby-btx",
+    "to": "/standorte/koblenz/loehr-center/botox/baby-botox",
     "code": 301
   },
   {
@@ -11726,7 +11316,7 @@
   },
   {
     "from": "/standorte/oberhausen/centro/btx/barbie-btx",
-    "to": "/standorte/oberhausen/centro/botox/barbie-btx",
+    "to": "/standorte/oberhausen/centro/botox/barbie-botox",
     "code": 301
   },
   {
@@ -11746,7 +11336,7 @@
   },
   {
     "from": "/standorte/saarbruecken/europa-galerie/btx/full-face-btx",
-    "to": "/standorte/saarbruecken/europa-galerie/botox/full-face-btx",
+    "to": "/standorte/saarbruecken/europa-galerie/botox/full-face-botox",
     "code": 301
   },
   {
