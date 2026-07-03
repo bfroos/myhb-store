@@ -36,7 +36,8 @@
       ]
     }
   ],
-  "rewrites": [
+  "rewrites": [],
+  "redirects": [
     {
       "source": "/",
       "has": [
@@ -45,8 +46,8 @@
           "value": "magazin.myhealthandbeauty.com"
         }
       ],
-      "destination": "/p/magazin-lippen-aufspritzen"
+      "destination": "/p/magazin-lippen-aufspritzen",
+      "statusCode": 307
     }
-  ],
-  "redirects": []
+  ]
 }
