@@ -326,7 +326,7 @@
   },
   {
     "from": "/pages/nasolabialfalte",
-    "to": "/behandlungen/hyaluron",
+    "to": "/behandlungen/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -976,22 +976,22 @@
   },
   {
     "from": "/pages/nasolabialfalte-mit-hyaluron-unterspritzen-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
     "from": "/pages/nasolabialfalte-mit-hyaluron-unterspritzen-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/hyaluron",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
     "from": "/pages/nasolabialfalte-mit-hyaluron-unterspritzen-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron",
+    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
     "from": "/pages/nasolabialfalte-mit-hyaluron-unterspritzen-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/hyaluron",
+    "to": "/standorte/moenchengladbach/minto/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -1051,7 +1051,7 @@
   },
   {
     "from": "/pages/nasolabialfalte-mit-hyaluron-unterspritzen-koblenz",
-    "to": "/standorte/koblenz/loehr-center/hyaluron",
+    "to": "/standorte/koblenz/loehr-center/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -1211,7 +1211,7 @@
   },
   {
     "from": "/pages/wangenaufbau",
-    "to": "/behandlungen/hyaluron",
+    "to": "/behandlungen/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -1266,7 +1266,7 @@
   },
   {
     "from": "/pages/wangenaufbau-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/hyaluron",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -1416,7 +1416,7 @@
   },
   {
     "from": "/pages/nasolabialfalte-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron",
+    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -1506,7 +1506,7 @@
   },
   {
     "from": "/pages/wangenaufbau-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron",
+    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -1686,7 +1686,7 @@
   },
   {
     "from": "/pages/wangenaufbau-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/hyaluron",
+    "to": "/standorte/moenchengladbach/minto/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -1841,7 +1841,7 @@
   },
   {
     "from": "/pages/wangenaufbau-duesseldorf",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -2001,7 +2001,7 @@
   },
   {
     "from": "/pages/wangenaufbau-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron",
+    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -2091,7 +2091,7 @@
   },
   {
     "from": "/pages/nasolabialfalte-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/hyaluron",
+    "to": "/standorte/recklinghausen/palais-vest/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -2146,7 +2146,7 @@
   },
   {
     "from": "/pages/wangenaufbau-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/hyaluron",
+    "to": "/standorte/recklinghausen/palais-vest/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -2291,7 +2291,7 @@
   },
   {
     "from": "/pages/nasolabialfalte-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
+    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -2381,7 +2381,7 @@
   },
   {
     "from": "/pages/wangenaufbau-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
+    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -2991,7 +2991,7 @@
   },
   {
     "from": "/pages/nasolabialfalte-aachen",
-    "to": "/standorte/aachen/aquis-plaza/hyaluron",
+    "to": "/standorte/aachen/aquis-plaza/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -3106,7 +3106,7 @@
   },
   {
     "from": "/pages/wangenaufbau-aachen",
-    "to": "/standorte/aachen/aquis-plaza/hyaluron",
+    "to": "/standorte/aachen/aquis-plaza/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -4226,7 +4226,7 @@
   },
   {
     "from": "/tr/pages/nazolabial-cizgi-leipzig",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
+    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -4236,7 +4236,7 @@
   },
   {
     "from": "/ar/pages/wangenaufbau-koeln",
-    "to": "/standorte/koeln/koeln-arcaden/hyaluron",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -4251,7 +4251,7 @@
   },
   {
     "from": "/ar/pages/طية-الأنف-الشفوية-كايسرسلاوترن",
-    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron",
+    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -4461,7 +4461,7 @@
   },
   {
     "from": "/en/pages/nasolabial-fold-with-hyaluronic-injection-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron",
+    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -4491,7 +4491,7 @@
   },
   {
     "from": "/tr/pages/wangenaufbau",
-    "to": "/behandlungen/hyaluron",
+    "to": "/behandlungen/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -4801,7 +4801,7 @@
   },
   {
     "from": "/tr/pages/yanak-yapilandirma-kaiserslautern",
-    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron",
+    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -5001,7 +5001,7 @@
   },
   {
     "from": "/tr/pages/nasolabialfalte-aachen",
-    "to": "/standorte/aachen/aquis-plaza/hyaluron",
+    "to": "/standorte/aachen/aquis-plaza/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -5366,7 +5366,7 @@
   },
   {
     "from": "/en/pages/cheek-enhancement-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/hyaluron",
+    "to": "/standorte/recklinghausen/palais-vest/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -5431,7 +5431,7 @@
   },
   {
     "from": "/tr/pages/nasolabialfalte",
-    "to": "/behandlungen/hyaluron",
+    "to": "/behandlungen/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -5931,7 +5931,7 @@
   },
   {
     "from": "/tr/pages/nazolabial-cizgi-hyaluron-ile-doldurma-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron",
+    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -5951,12 +5951,12 @@
   },
   {
     "from": "/ar/pages/nasolabialfalte-mit-hyaluron-unterspritzen-koblenz",
-    "to": "/standorte/koblenz/loehr-center/hyaluron",
+    "to": "/standorte/koblenz/loehr-center/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
     "from": "/ar/pages/تجاعيد-الضحك",
-    "to": "/behandlungen/hyaluron",
+    "to": "/behandlungen/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -6256,7 +6256,7 @@
   },
   {
     "from": "/en/pages/cheek-enhancement-berlin",
-    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron",
+    "to": "/standorte/berlin/gesundbrunnencenter/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -6781,7 +6781,7 @@
   },
   {
     "from": "/ar/pages/حقن-خط-الطيات-الأنفية-الشفوية-بحمض-الهيالورونيك-كولونيا",
-    "to": "/standorte/koeln/koeln-arcaden/hyaluron",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -7366,7 +7366,7 @@
   },
   {
     "from": "/tr/pages/nasolabialfalte-recklinghausen",
-    "to": "/standorte/recklinghausen/palais-vest/hyaluron",
+    "to": "/standorte/recklinghausen/palais-vest/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -7546,7 +7546,7 @@
   },
   {
     "from": "/ar/pages/nasolabialfalte",
-    "to": "/behandlungen/hyaluron",
+    "to": "/behandlungen/hyaluron/nasolabialfalte",
     "code": 301
   },
   {
@@ -7801,7 +7801,7 @@
   },
   {
     "from": "/ar/pages/بناء-الخدود-دوسلدورف",
-    "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -8246,7 +8246,7 @@
   },
   {
     "from": "/ar/pages/بناء-الخدود-كايزرسلاوترن",
-    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron",
+    "to": "/standorte/kaiserslautern/k-in-lautern/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -8396,7 +8396,7 @@
   },
   {
     "from": "/ar/pages/wangenaufbau-moenchengladbach",
-    "to": "/standorte/moenchengladbach/minto/hyaluron",
+    "to": "/standorte/moenchengladbach/minto/hyaluron/wangenaufbau",
     "code": 301
   },
   {
@@ -10755,18 +10755,8 @@
     "code": 301
   },
   {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/nasolabialfalte",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
-    "code": 301
-  },
-  {
     "from": "/pages/profhilo®-behandlung-in-leipzig-ab-249-99-myh-b-leipzig",
     "to": "/behandlungen/skinbooster/profhilo",
-    "code": 301
-  },
-  {
-    "from": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/wangenaufbau",
-    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron",
     "code": 301
   },
   {
