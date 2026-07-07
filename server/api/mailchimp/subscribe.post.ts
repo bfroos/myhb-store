@@ -12,10 +12,17 @@ export default defineEventHandler(async (event) => {
   const { mailchimpApiKey, mailchimpServerPrefix, mailchimpAudienceId } =
     useRuntimeConfig(event);
 
-  const body = await readBody<{ email?: string; source?: string }>(event);
+  // Optionaler n8n-Webhook (z. B. WhatsApp-Welcome via Superchat).
+  // Wird nur genutzt, wenn gesetzt; blockiert die Anmeldung nie.
+  const n8nNewsletterWebhookUrl = process.env.N8N_NEWSLETTER_WEBHOOK_URL;
+
+  const body = await readBody<{ email?: string; source?: string; phone?: string }>(
+    event,
+  );
   const email = (body.email || "").trim().toLowerCase();
   const rawSource = (body.source || "").trim();
   const source = ALLOWED_SOURCES.has(rawSource) ? rawSource : null;
+  const phone = (body.phone || "").trim();
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw createError({
@@ -33,6 +40,24 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  // Fire-and-forget: n8n benachrichtigen (E-Mail + optionale Handynummer).
+  // Fehler hier duerfen die Newsletter-Anmeldung NIE fehlschlagen lassen.
+  const notifyN8n = async () => {
+    if (!n8nNewsletterWebhookUrl) return;
+    try {
+      await $fetch(n8nNewsletterWebhookUrl, {
+        method: "POST",
+        body: {
+          email,
+          phone: phone || null,
+          source: source || "newsletter_dialog",
+        },
+      });
+    } catch (err) {
+      console.error("[newsletter] n8n webhook notification failed", err);
+    }
+  };
+
   mailchimp.setConfig({
     apiKey: mailchimpApiKey,
     server: mailchimpServerPrefix,
@@ -44,6 +69,8 @@ export default defineEventHandler(async (event) => {
       status: "subscribed",
       ...(source ? { tags: [`source:${source}`] } : {}),
     });
+
+    await notifyN8n();
 
     return { ok: true, response: res };
   } catch (err: any) {
@@ -64,6 +91,7 @@ export default defineEventHandler(async (event) => {
         hasMemberExistsCode);
 
     if (isMemberExists) {
+      await notifyN8n();
       return { ok: true };
     }
 
