@@ -1,5 +1,6 @@
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { BlogArticleDto } from "~/lib/strapi/dto/collections";
+import type { LocalizationDto } from "~/lib/strapi/dto/types";
 import type { BreadcrumbItem } from "~/lib/ui/types";
 
 export function useBlogArticlePage() {
@@ -7,6 +8,7 @@ export function useBlogArticlePage() {
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const seo = ref<SharedSeoDto | null>(null);
   const article = ref<BlogArticleDto | null>(null);
+  const localizations = ref<LocalizationDto[]>([]);
   const { brandName } = useBrand();
 
   const breadcrumbItems = computed<BreadcrumbItem[]>(() => {
@@ -62,6 +64,7 @@ export function useBlogArticlePage() {
 
     seo.value = data.value.data.seo;
     article.value = data.value.data;
+    localizations.value = data.value.data.localizations ?? [];
 
     return true;
   }
@@ -71,7 +74,7 @@ export function useBlogArticlePage() {
     if (seo.value?.metaTitle && seo.value?.metaDescription) {
       return seo.value; // Use Strapi SEO if complete
     }
-    
+
     // Fallback: Generate from article data
     return {
       metaTitle: t("blog.article.seo.title", {
@@ -87,5 +90,6 @@ export function useBlogArticlePage() {
     seo: seoWithFallback,
     article,
     breadcrumbItems,
+    localizations,
   };
 }
