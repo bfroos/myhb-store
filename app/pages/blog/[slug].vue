@@ -11,12 +11,13 @@
 </template>
 
 <script setup lang="ts">
-const { fetchPage, seo, article, breadcrumbItems } = useBlogArticlePage();
+const { fetchPage, seo, article, breadcrumbItems, localizations } = useBlogArticlePage();
 
 const pageLoaded = await fetchPage();
 
 if (pageLoaded) {
   await setPageSeo(seo.value, article.value?.cover);
+  usePageI18nParams(localizations.value, "slug");
 }
 
 // Schema.org BlogPosting
