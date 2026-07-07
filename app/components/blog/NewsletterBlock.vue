@@ -1,7 +1,7 @@
 <template>
   <div class="newsletterBlock">
     <h2>{{ formattedHeadline }}</h2>
-    <UiMoleculeNewsletterSubscriptionForm />
+    <UiMoleculeNewsletterSubscriptionForm source="blog_newsletter_block" />
   </div>
 </template>
 <script setup lang="ts">

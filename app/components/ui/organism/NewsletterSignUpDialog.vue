@@ -88,7 +88,7 @@ const {
   error,
   success,
   submit: submitNewsletter,
-} = useNewsletterSignup();
+} = useNewsletterSignup("discount_cta_20");
 
 const handleClose = () => {
   if (dialogRef) {
