@@ -2,6 +2,7 @@ export function useNewsletterSignup() {
   const { t, te } = useI18n();
 
   const email = ref("");
+  const phone = ref("");
   const loading = ref(false);
   const success = ref<string | null>(null);
   const error = ref<string | null>(null);
@@ -21,9 +22,14 @@ export function useNewsletterSignup() {
     try {
       await $fetch("/api/mailchimp/subscribe", {
         method: "POST",
-        body: { email: emailToUse.trim() },
+        body: {
+          email: emailToUse.trim(),
+          // Handynummer ist optional; nur mitsenden, wenn ausgefuellt.
+          phone: phone.value?.trim() || undefined,
+        },
       });
       email.value = "";
+      phone.value = "";
       success.value = "ok";
       return true;
     } catch (e: any) {
@@ -38,6 +44,7 @@ export function useNewsletterSignup() {
 
   return {
     email,
+    phone,
     loading,
     success,
     error,
