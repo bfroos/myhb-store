@@ -57,6 +57,21 @@
         autocomplete="email"
         required
       />
+      <label
+        for="newsletter-dialog-phone"
+        class="newsletterSignUpDialog__label"
+      >
+        {{ phoneLabel }}
+      </label>
+      <InputText
+        id="newsletter-dialog-phone"
+        v-model="phone"
+        type="tel"
+        inputmode="tel"
+        :placeholder="phonePlaceholder"
+        class="newsletterSignUpDialog__input"
+        autocomplete="tel"
+      />
       <div class="newsletterSignUpDialog__actions">
         <UiAtomBaseButton variant="secondary" @click="handleClose">
           {{ $t("cta.cancel") }}
@@ -79,16 +94,43 @@ import InputText from "primevue/inputtext";
 
 const globals = useGlobals();
 const { brandNameShort } = useBrand();
+const { locale } = useI18n();
 
 const dialogRef = inject("dialogRef") as any;
 
 const {
   email,
+  phone,
   loading,
   error,
   success,
   submit: submitNewsletter,
 } = useNewsletterSignup();
+
+// Phone-Feld-Labels werden bewusst inline gehalten (nicht in den locale-JSONs),
+// damit diese Aenderung in sich geschlossen bleibt. Fallback = Deutsch.
+const phoneLabelByLocale: Record<string, string> = {
+  de: "Handynummer (optional)",
+  en: "Phone number (optional)",
+  tr: "Telefon numarası (isteğe bağlı)",
+  ar: "رقم الهاتف (اختياري)",
+  fr: "Numéro de téléphone (facultatif)",
+  nl: "Telefoonnummer (optioneel)",
+};
+const phonePlaceholderByLocale: Record<string, string> = {
+  de: "+49 …",
+  en: "+49 …",
+  tr: "+90 …",
+  ar: "+49 …",
+  fr: "+33 …",
+  nl: "+31 …",
+};
+const phoneLabel = computed(
+  () => phoneLabelByLocale[locale.value] ?? phoneLabelByLocale.de,
+);
+const phonePlaceholder = computed(
+  () => phonePlaceholderByLocale[locale.value] ?? phonePlaceholderByLocale.de,
+);
 
 const handleClose = () => {
   if (dialogRef) {
