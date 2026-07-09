@@ -8,6 +8,51 @@ import { useDialog } from "primevue/usedialog";
 export const APP_BOOKING_URL =
   "https://app.myhealthandbeauty.com/book-appointment";
 
+/**
+ * Collects Google Ads click identifiers so the in-app booking flow (rendered
+ * in an iframe on the app.* subdomain) can attribute the conversion to the
+ * originating ad click. Reads from the current URL first, then falls back to
+ * the _gcl_aw cookie (set by Google auto-tagging on the store domain).
+ */
+function collectClickIds(): Record<string, string> {
+  const ids: Record<string, string> = {};
+  if (typeof window === "undefined") return ids;
+
+  const params = new URLSearchParams(window.location.search);
+  for (const key of ["gclid", "gbraid", "wbraid", "gclsrc"]) {
+    const val = params.get(key);
+    if (val) ids[key] = val;
+  }
+
+  // Fallback: extract gclid from the _gcl_aw cookie ("GCL.<timestamp>.<gclid>")
+  if (!ids.gclid && !ids.gbraid && !ids.wbraid) {
+    const match = document.cookie.match(/(?:^|;\s*)_gcl_aw=([^;]+)/);
+    if (match) {
+      const parts = decodeURIComponent(match[1]).split(".");
+      const gclid = parts[parts.length - 1];
+      if (gclid && parts.length >= 3) ids.gclid = gclid;
+    }
+  }
+
+  return ids;
+}
+
+/**
+ * Appends any available click identifiers to the booking URL as query params.
+ */
+function buildBookingUrl(base: string): string {
+  const ids = collectClickIds();
+  const keys = Object.keys(ids);
+  if (!keys.length) return base;
+  try {
+    const url = new URL(base);
+    for (const key of keys) url.searchParams.set(key, ids[key]);
+    return url.toString();
+  } catch {
+    return base;
+  }
+}
+
 export function useAppBookingDialog() {
   const dialog = useDialog();
 
@@ -17,7 +62,7 @@ export function useAppBookingDialog() {
         () => import("~/components/ui/organism/AppBookingDialog.vue"),
       ),
       {
-        data: { url },
+        data: { url: buildBookingUrl(url) },
         props: {
           modal: true,
           draggable: false,
