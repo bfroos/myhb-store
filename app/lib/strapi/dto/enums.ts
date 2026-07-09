@@ -114,6 +114,7 @@ export enum SharedButtonMethod {
   ACTION = "action",
   EXTERNAL_LINK = "external-link",
   INTERNAL_LINK = "internal-link",
+  APP_BOOKING = "app-booking",
 }
 
 export enum SharedButtonTargetType {
