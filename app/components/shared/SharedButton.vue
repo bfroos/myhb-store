@@ -18,6 +18,7 @@ import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import type { SharedButtonDto } from "~/lib/strapi/dto/components";
 import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
+import { useAppBookingDialog } from "~/composables/useAppBookingDialog";
 import { SharedButtonAction } from "~/lib/strapi/dto/enums";
 import type { BaseButtonProps } from "~/lib/ui/types";
 
@@ -76,7 +77,8 @@ const rel = computed(() => {
 const to = computed(() => {
   if (
     button.value?.method === "external-link" ||
-    button.value?.method === "action"
+    button.value?.method === "action" ||
+    button.value?.method === "app-booking"
   ) {
     return undefined;
   }
@@ -137,8 +139,15 @@ function resolveInternalToFromSharedButton(
 
 const dialog = useDialog();
 const { openCalendlyDialog } = useCalendlyDialog();
+const { openAppBookingDialog } = useAppBookingDialog();
 
 const handleClick = () => {
+  // New in-app booking iframe method (limited rollout, e.g. Neukundenrabatt page)
+  if (button.value?.method === "app-booking") {
+    openAppBookingDialog(button.value?.label);
+    return;
+  }
+
   if (button.value?.method !== "action" || !button.value.action) return;
 
   if (button.value.action === SharedButtonAction.APPOINTMENT_BOOKING) {
