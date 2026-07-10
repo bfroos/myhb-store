@@ -16,7 +16,7 @@ export default defineAppConfig({
      * Organization Schema Konfiguration
      */
     organization: {
-      name: "MY HEALTH & BEAUTY",
+      name: "My Health & Beauty",
       logo: {
         // TODO: Ersetzen durch echtes Markenlogo (mind. 112x112px, ideal 600x60px PNG)
         url: "/favicon/favicon.svg",

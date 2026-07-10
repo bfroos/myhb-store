@@ -137,8 +137,8 @@
             <strong v-if="priceLabel" class="floating-cta__price">
               {{ priceLabel }}
             </strong>
-            <span v-if="eyebrow || headline" class="floating-cta__title">
-              {{ eyebrow || headline }}
+            <span v-if="headline || eyebrow" class="floating-cta__title">
+              {{ headline || eyebrow }}
             </span>
           </div>
           <div class="floating-cta__actions">

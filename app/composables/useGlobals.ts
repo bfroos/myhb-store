@@ -1,4 +1,4 @@
-const DEFAULT_BRAND_NAME = "MY HEALTH AND BEAUTY";
+const DEFAULT_BRAND_NAME = "My Health & Beauty";
 const DEFAULT_BRAND_NAME_SHORT = "MY";
 
 /**
