@@ -11,6 +11,7 @@ import type {
 import type { LocationDto, TreatmentPageDto } from "../dto/collections";
 import { DEFAULT_TIMEZONE } from "../config";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
+import { withAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
 
 type TranslateFn = ReturnType<typeof useI18n>["t"];
@@ -90,7 +91,14 @@ export function mapLocationTreatmentPageFixedBlocks(
       showReviews: true,
       treatment: treatmentPage.treatment,
       cta: link,
-      calendlyUrl: location?.calendlyUrl ?? undefined,
+      // Deeplink: hängt treatment=<appTreatmentSlug> an die App-Buchungs-URL
+      // des Standorts, damit die passende Behandlung in der App vorausgewählt
+      // ist. Bei Calendly-URLs oder ohne Slug bleibt die URL unverändert.
+      calendlyUrl:
+        withAppTreatmentSlug(
+          location?.calendlyUrl,
+          treatmentPage.appTreatmentSlug,
+        ) ?? undefined,
       googlePlaceId: location?.googlePlaceId ?? undefined,
     };
   }
