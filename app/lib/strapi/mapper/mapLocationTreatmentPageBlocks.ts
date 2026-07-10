@@ -62,12 +62,24 @@ export function mapLocationTreatmentPageFixedBlocks(
       action: SharedButtonAction.APPOINTMENT_BOOKING,
     };
 
-    const fullLocationName = `${location.city?.name ?? ""} · ${location.name}`;
+    const city = location.city?.name ?? "";
+    const fullLocationName = `${city} · ${location.name}`;
+
+    // SEO: Die <h1> wird bewusst auf "Haupt-Keyword + Stadt" reduziert
+    // (z.B. "Botox® Köln"), damit sie mit dem Meta-Titel übereinstimmt und
+    // Google den SERP-Titel nicht durch die H1 ersetzt. Der konkrete Standort
+    // ("Köln · Köln Arcaden") bleibt als eyebrow-Zeile ÜBER der H1 sichtbar,
+    // steht aber nicht mehr im <h1>-Element.
+    // treatmentPage.name ist dasselbe Keyword wie im Meta-Titel (treatmentName).
+    const treatmentKeyword =
+      treatmentPage.name ?? treatmentPage.hero?.headline ?? "";
+    const heroHeadline = city
+      ? `${treatmentKeyword} ${city}`
+      : treatmentKeyword;
 
     return {
-      headlinePrefix: fullLocationName,
-      headline: treatmentPage.hero?.headline ?? treatmentPage.name,
-      headlineSuffix: treatmentPage.hero?.headlineSuffix,
+      eyebrow: fullLocationName,
+      headline: heroHeadline,
       subline: treatmentPage.hero?.subline,
       cover: treatmentPage.hero?.cover ?? location.buildingImage,
       text: treatmentPage.hero?.text,
