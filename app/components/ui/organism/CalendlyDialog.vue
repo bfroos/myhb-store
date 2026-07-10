@@ -51,16 +51,28 @@
 import { IconLoader, IconSearch } from "@tabler/icons-vue";
 import AutoComplete from "primevue/autocomplete";
 import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
+import {
+  isAppBookingUrl,
+  useAppBookingDialog,
+} from "~/composables/useAppBookingDialog";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 
 const { t } = useI18n();
 const dialogRef = inject("dialogRef") as any;
 const params = ref<any>({});
+const { openAppBookingDialog } = useAppBookingDialog();
 
 function handleLocationBook(location: { calendlyUrl?: string }) {
-  if (location.calendlyUrl) {
-    params.value = { ...params.value, url: location.calendlyUrl };
+  if (!location.calendlyUrl) return;
+  // If the picked location already uses the in-app booking flow, close this
+  // Calendly dialog and open the in-app iframe dialog instead. Calendly
+  // locations keep rendering the inline widget in place as before.
+  if (isAppBookingUrl(location.calendlyUrl)) {
+    dialogRef.value.close();
+    openAppBookingDialog(t("cta.bookAppointment"), location.calendlyUrl);
+    return;
   }
+  params.value = { ...params.value, url: location.calendlyUrl };
 }
 
 function handleLocationNavigate() {
