@@ -36,9 +36,19 @@ export function mapTreatmentPageFixedBlocks(
       action: SharedButtonAction.APPOINTMENT_BOOKING,
     };
 
+    // SEO: Die <h1> nutzt das Haupt-Keyword der Behandlung
+    // (treatmentPage.name, z.B. "Zornesfalte", "Lippenaufpolsterung") statt der
+    // längeren hero.headline. So ist die H1 deckungsgleich mit dem Meta-Titel-
+    // Keyword und Google zeigt dieses Keyword als Suchergebnis-Titel an.
+    // (Einige Namen haben führende/abschließende Leerzeichen -> trim.)
+    const treatmentKeyword = (
+      treatmentPage?.name ??
+      treatmentPage?.hero?.headline ??
+      ""
+    ).trim();
+
     return {
-      headline: treatmentPage?.hero?.headline ?? treatmentPage?.name,
-      headlineSuffix: treatmentPage?.hero?.headlineSuffix,
+      headline: treatmentKeyword,
       subline: treatmentPage?.hero?.subline,
       text: treatmentPage?.hero?.text,
       cover: treatmentPage?.hero?.cover,
