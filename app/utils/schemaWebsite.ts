@@ -20,7 +20,10 @@ export function buildWebSiteSchema(
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${homeUrl}#website`,
-    name: ctx.brandName ?? "MY HEALTH & BEAUTY",
+    name: ctx.brandName ?? "My Health & Beauty",
+    // Backup für Googles Site-Name-System: die Domain (klein) als
+    // alternativer Name, falls der bevorzugte Name nicht gewählt wird.
+    alternateName: "myhealthandbeauty.com",
     url: homeUrl,
     inLanguage: "de-DE",
     potentialAction: {
@@ -46,7 +49,7 @@ export function buildOrganizationSchema(
     "@context": "https://schema.org",
     "@type": "Organization",
     "@id": `${homeUrl}#organization`,
-    name: ctx.brandName ?? "MY HEALTH & BEAUTY",
+    name: ctx.brandName ?? "My Health & Beauty",
     url: homeUrl,
     logo: ctx.logoUrl
       ? {
