@@ -43,6 +43,7 @@ export async function setPageSeo(
   const config = useRuntimeConfig();
   const globals = useGlobals();
   const globalsSeo = globals.value?.seo;
+  const { brandName } = useBrand();
   const canonicalUrl = `${config.public.publicUrl}${route.path}`;
 
   const robots = computed(() => {
@@ -116,6 +117,7 @@ export async function setPageSeo(
       ogType: "website",
       ogLocale: mapStrapiLocaleToOpenGraphLocale(currentLocale),
       ogUrl: canonicalUrl,
+      ogSiteName: brandName.value,
       ogTitle,
       ogDescription:
         pageSeo?.openGraph?.ogDescription ||
