@@ -7,9 +7,9 @@
         <p v-if="subline" class="teaser__subline">{{ subline }}</p>
       </header>
 
-      <ul class="teaser__list" role="list">
+      <ul v-if="items.length > 0" class="teaser__list" role="list">
         <li
-          v-for="item in visibleItems"
+          v-for="item in items"
           :key="item.label"
           class="teaser__row"
         >
@@ -35,16 +35,12 @@
       </ul>
     </div>
 
-    <footer class="teaser__footer">
-      <a
+    <footer v-if="cta || footnote" class="teaser__footer">
+      <SharedButton
         v-if="cta"
-        :href="cta.href ?? '#'"
-        class="button button--tertiary button--lg button--fullWidth"
-        @click="$emit('cta', $event)"
-      >
-        <span>{{ cta.label }}</span>
-        <IconArrowRight :size="18" stroke="1.75" aria-hidden="true" />
-      </a>
+        :button="cta"
+        :button-props="{ variant: 'tertiary', size: 'lg', fullWidth: true }"
+      />
       <p v-if="footnote" class="teaser__footnote">{{ footnote }}</p>
     </footer>
   </section>
@@ -53,14 +49,13 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { IconArrowRight } from "@tabler/icons-vue";
-
-type PriceTeaserSource = "manual" | "context";
+import type { SharedButtonDto } from "~/lib/strapi/dto/components";
 
 interface PriceItem {
   label: string;
-  price: number | string; // 149.99 → "149,99 €", or pass a pre-formatted string
-  from?: boolean;         // prefix "ab"
-  href?: string;          // turns row into an <a>
+  price: number;
+  from?: boolean; // Präfix "ab"
+  href?: string;  // macht die Zeile zu einem <a>
 }
 interface TreatmentRef {
   id?: number | string;
@@ -69,120 +64,27 @@ interface TreatmentRef {
   isStartingPrice?: boolean;
   treatmentPage?: { pathKey?: string } | null;
 }
-interface CtaProp {
-  label: string;
-  href?: string;
-}
-interface PriceTeaserContextResponse {
-  data?: {
-    items?: PriceItem[];
-  };
-}
-type PriceTeaserContextQuery = {
-  type?: "treatment-page" | "product";
-  locale?: string;
-  pathKey?: string;
-  productSlug?: string;
-  limit?: number;
-};
 
 const props = withDefaults(defineProps<{
   eyebrow?: string;
   headline?: string;
   subline?: string;
-  /** Treatments aus der Strapi-Relation (Vorrang vor context/manual). */
+  /** In Strapi ausgewählte Behandlungen (Preisquelle). */
   treatments?: TreatmentRef[];
-  items?: PriceItem[];
-  source?: PriceTeaserSource;
-  /** Cap how many rows to show; rest is reachable via the CTA. */
-  limit?: number;
-  cta?: CtaProp;
+  cta?: SharedButtonDto | null;
   footnote?: string;
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
-  currency?: string;
-  locale?: string;
 }>(), {
   elevated: true,
   themeClass: "theme-light",
-  limit: 5,
-  currency: "EUR",
-  locale: "de-DE",
   treatments: () => [],
-  items: () => [],
-  source: "manual",
-  cta: () => ({ label: "Alle Preise ansehen", href: "/preise" }),
+  cta: null,
   footnote: "",
 });
 
-defineEmits<{ cta: [event: MouseEvent] }>();
-
-const route = useRoute();
-const { locale: i18nLocale } = useI18n();
-
-const routePathKey = computed(() => {
-  const treatmentSlug = route.params.treatmentSlug;
-  const slug = route.params.slug;
-  const value = treatmentSlug ?? slug;
-
-  if (Array.isArray(value)) return value.filter(Boolean).join("/");
-  return typeof value === "string" ? value : "";
-});
-
-const contextQuery = computed<PriceTeaserContextQuery>(() => {
-  if (props.source !== "context") return {};
-
-  if (route.path.startsWith("/behandlungen/") && routePathKey.value) {
-    return {
-      type: "treatment-page",
-      locale: i18nLocale.value,
-      pathKey: routePathKey.value,
-      limit: props.limit,
-    };
-  }
-
-  if (route.path.startsWith("/standorte/") && routePathKey.value) {
-    return {
-      type: "treatment-page",
-      locale: i18nLocale.value,
-      pathKey: routePathKey.value,
-      limit: props.limit,
-    };
-  }
-
-  const productSlug = route.params.productSlug;
-  if (route.path.startsWith("/produkte/") && typeof productSlug === "string") {
-    return {
-      type: "product",
-      locale: i18nLocale.value,
-      productSlug,
-      limit: props.limit,
-    };
-  }
-
-  return {};
-});
-
-const shouldFetchContext = computed(
-  () => props.source === "context" && Boolean(contextQuery.value.type),
-);
-
-const { data: contextData } = useStrapiFetch<PriceTeaserContextResponse>(
-  "/price-teasers/context",
-  {
-    query: contextQuery,
-    fetchOptions: {
-      immediate: shouldFetchContext.value,
-      key: computed(() => {
-        const query = contextQuery.value;
-        return `price-teaser:${query.type ?? "manual"}:${query.locale ?? ""}:${query.pathKey ?? query.productSlug ?? ""}:${query.limit ?? ""}`;
-      }),
-    },
-  },
-);
-
-// Aus der Strapi-Relation ausgewählte Behandlungen → Preiszeilen
-const treatmentItems = computed<PriceItem[]>(() =>
+// Ausgewählte Behandlungen → Preiszeilen
+const items = computed<PriceItem[]>(() =>
   (props.treatments ?? [])
     .filter((t): t is TreatmentRef => Boolean(t && t.name))
     .map((t) => ({
@@ -195,29 +97,10 @@ const treatmentItems = computed<PriceItem[]>(() =>
     })),
 );
 
-const items = computed<PriceItem[]>(() => {
-  // 1) In Strapi ausgewählte Behandlungen haben Vorrang
-  if (treatmentItems.value.length > 0) return treatmentItems.value;
-
-  // 2) Kontext-Quelle (Behandlungs-/Produktseite)
-  const contextItems = contextData.value?.data?.items ?? [];
-  if (props.source === "context" && contextItems.length > 0) {
-    return contextItems;
-  }
-
-  // 3) Manuell gepflegte Items
-  return props.items;
-});
-
-const visibleItems = computed(() =>
-  typeof props.limit === "number" ? items.value.slice(0, props.limit) : items.value,
-);
-
-function formatPrice(p: number | string) {
-  if (typeof p === "string") return p;
-  return new Intl.NumberFormat(props.locale, {
+function formatPrice(p: number) {
+  return new Intl.NumberFormat("de-DE", {
     style: "currency",
-    currency: props.currency,
+    currency: "EUR",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(p);
@@ -336,30 +219,6 @@ a.teaser__rowInner:hover .teaser__label { color: var(--color-text); }
   font-size: var(--font-xs);
   color: var(--color-text-light);
 }
-
-/* Compatible pill-button rules — match BaseButton when used standalone */
-.button {
-  height: var(--control-height-lg);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-200);
-  padding: 0 calc(var(--control-height-lg) / 2);
-  border-radius: 999px;
-  border: 2px solid var(--button-tertiary-color-border, #000);
-  font: inherit;
-  font-size: var(--font-sm);
-  font-weight: var(--font-bold);
-  line-height: 1;
-  text-decoration: none;
-  cursor: pointer;
-  background: transparent;
-  color: var(--button-tertiary-color-text, #000);
-  transition: all 0.15s linear;
-}
-.button--fullWidth { width: 100%; }
-.button:hover { background: rgba(0,0,0,0.04); }
-.button:active { transform: scale(0.97); }
 
 /* Two-column layout on wider viewports — like the screenshot */
 @media (min-width: 720px) {
