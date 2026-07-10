@@ -70,8 +70,11 @@ export function useProductPage() {
     const productName = product.value?.name ?? "";
     const manufacturer = product.value?.manufacturer?.name ?? "";
     const price = cheapestVariantPrice.value ?? 0;
-    const priceTag = `ab ${formatPriceInEuro(price)}`;
-    
+    // NOTE: The "ab"/"from" prefix comes from the i18n title template
+    // ("{productName} ab {priceTag} …"), so priceTag must NOT include it,
+    // otherwise the title renders "ab ab 149,99 €".
+    const priceTag = formatPriceInEuro(price);
+
     return {
       metaTitle: t("productPage.seo.title", {
         productName: `${manufacturer} ${productName}`,
