@@ -85,6 +85,10 @@ const isMobileMenuOpen = ref(false);
 
 const secondaryNavItems = computed(() => [
   {
+    name: t("navigation.secondary.blog"),
+    slug: "blog",
+  },
+  {
     name: t("navigation.secondary.doctors"),
     slug: "aerzte",
   },
