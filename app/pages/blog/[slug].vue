@@ -40,4 +40,42 @@ const blogPostingSchema = computed(() => {
 });
 
 useSchemaOrg(blogPostingSchema);
+
+// Schema.org FAQPage (nur wenn FAQ-Block im Artikel vorhanden)
+const faqSchema = computed(() => {
+  const components = (article.value?.components ?? []) as any[];
+
+  const items = components.flatMap((block) => {
+    // blocks.faq — relationsbasiert (faqs + faqSets)
+    if (block?.__component === "blocks.faq") {
+      const directFaqs = block.faqs ?? [];
+      const faqSetsItems = (block.faqSets ?? []).flatMap(
+        (set: any) => set.faqs ?? [],
+      );
+      return [...directFaqs, ...faqSetsItems].map((faq: any) => ({
+        question: faq.question,
+        answer: faq.answer,
+      }));
+    }
+
+    // blocks.faq-accordion — self-contained { q, a }
+    if (block?.__component === "blocks.faq-accordion") {
+      return (block.items ?? []).map((item: any) => ({
+        question: item.q,
+        answer: [
+          {
+            type: "paragraph",
+            children: [{ type: "text", text: item.a ?? "" }],
+          },
+        ],
+      }));
+    }
+
+    return [];
+  });
+
+  return buildFaqPageSchema(items as any);
+});
+
+useSchemaOrg(faqSchema);
 </script>
