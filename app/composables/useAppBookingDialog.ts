@@ -9,6 +9,24 @@ export const APP_BOOKING_URL =
   "https://app.myhealthandbeauty.com/book-appointment";
 
 /**
+ * Returns true when the given URL points at the in-app booking flow
+ * (app.myhealthandbeauty.com). Used to route the booking CTA to the in-app
+ * iframe dialog instead of the Calendly widget, so locations can be migrated
+ * from Calendly to the app one at a time simply by changing the
+ * "Calendly URL" field in Strapi. Calendly URLs (calendly.com/...) return
+ * false and keep using the Calendly widget.
+ */
+export function isAppBookingUrl(url?: string | null): boolean {
+  if (!url) return false;
+  try {
+    const appHost = new URL(APP_BOOKING_URL).hostname;
+    return new URL(url).hostname === appHost;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Collects Google Ads click identifiers so the in-app booking flow (rendered
  * in an iframe on the app.* subdomain) can attribute the conversion to the
  * originating ad click. Reads from the current URL first, then falls back to
