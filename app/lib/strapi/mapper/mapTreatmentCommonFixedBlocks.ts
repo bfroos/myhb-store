@@ -10,6 +10,7 @@ import {
 import type { SharedButtonDto, SharedKeyValueDto } from "../dto/components";
 import type { LocationDto, TreatmentPageLikeDto } from "../dto/collections";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
+import { withAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 import {
   replacePlaceholderRichtext,
   replacePlaceholderString,
@@ -80,7 +81,13 @@ export function mapTreatmentCommonFixedBlocks(
       method: SharedButtonMethod.ACTION,
       action: SharedButtonAction.APPOINTMENT_BOOKING,
       data: {
-        calendlyUrl: location?.calendlyUrl,
+        // Deeplink: bei App-Buchungs-URLs wird treatment=<appTreatmentSlug>
+        // angehängt (Behandlung in der App vorausgewählt); Calendly-URLs und
+        // Standorte ohne Slug bleiben unverändert.
+        calendlyUrl: withAppTreatmentSlug(
+          location?.calendlyUrl,
+          treatmentPage?.appTreatmentSlug,
+        ),
       },
     };
 
