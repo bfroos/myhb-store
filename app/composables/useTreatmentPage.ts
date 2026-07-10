@@ -139,9 +139,12 @@ export function useTreatmentPage() {
     const treatmentName = treatmentPage.value?.name ?? "";
     const price = treatmentPage.value?.treatment?.priceInEuroCent;
 
-    // Format price for SEO (convert cents to EUR)
+    // Format price for SEO (convert cents to EUR).
+    // NOTE: The "ab"/"from" prefix comes from the i18n title template
+    // ("{treatmentName} ab {priceTag} …"), so priceTag must NOT include it,
+    // otherwise the title renders "ab ab 149€".
     const startPrice = price ? Math.floor(price / 100) : 149; // Fallback
-    const priceTag = `ab ${startPrice}€`;
+    const priceTag = `${startPrice}€`;
 
     return {
       metaTitle: t("treatment.seo.title", {
