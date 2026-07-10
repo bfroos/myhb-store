@@ -62,6 +62,13 @@ interface PriceItem {
   from?: boolean;         // prefix "ab"
   href?: string;          // turns row into an <a>
 }
+interface TreatmentRef {
+  id?: number | string;
+  name: string;
+  priceInEuroCent?: number;
+  isStartingPrice?: boolean;
+  treatmentPage?: { pathKey?: string } | null;
+}
 interface CtaProp {
   label: string;
   href?: string;
@@ -83,6 +90,8 @@ const props = withDefaults(defineProps<{
   eyebrow?: string;
   headline?: string;
   subline?: string;
+  /** Treatments aus der Strapi-Relation (Vorrang vor context/manual). */
+  treatments?: TreatmentRef[];
   items?: PriceItem[];
   source?: PriceTeaserSource;
   /** Cap how many rows to show; rest is reachable via the CTA. */
@@ -99,16 +108,8 @@ const props = withDefaults(defineProps<{
   limit: 5,
   currency: "EUR",
   locale: "de-DE",
-  eyebrow: "Preise",
-  headline: "Faltenbehandlung (BTX)",
-  subline: "Transparente Preise — keine versteckten Kosten.",
-  items: () => [
-    { label: "Zornesfalte glätten",          price: 149.99, from: true, href: "#" },
-    { label: "Stirnfalte",                   price: 149.99, from: true, href: "#" },
-    { label: "Krähenfüße & Augenfältchen",   price: 149.99, from: true, href: "#" },
-    { label: "Baby Muskelrelaxans",          price: 149.99, from: true, href: "#" },
-    { label: "Full Face",                    price: 499.99, from: true, href: "#" },
-  ],
+  treatments: () => [],
+  items: () => [],
   source: "manual",
   cta: () => ({ label: "Alle Preise ansehen", href: "/preise" }),
   footnote: "",
@@ -180,12 +181,31 @@ const { data: contextData } = useStrapiFetch<PriceTeaserContextResponse>(
   },
 );
 
-const items = computed(() => {
+// Aus der Strapi-Relation ausgewählte Behandlungen → Preiszeilen
+const treatmentItems = computed<PriceItem[]>(() =>
+  (props.treatments ?? [])
+    .filter((t): t is TreatmentRef => Boolean(t && t.name))
+    .map((t) => ({
+      label: t.name,
+      price: (t.priceInEuroCent ?? 0) / 100,
+      from: t.isStartingPrice ?? false,
+      href: t.treatmentPage?.pathKey
+        ? `/behandlungen/${t.treatmentPage.pathKey}`
+        : undefined,
+    })),
+);
+
+const items = computed<PriceItem[]>(() => {
+  // 1) In Strapi ausgewählte Behandlungen haben Vorrang
+  if (treatmentItems.value.length > 0) return treatmentItems.value;
+
+  // 2) Kontext-Quelle (Behandlungs-/Produktseite)
   const contextItems = contextData.value?.data?.items ?? [];
   if (props.source === "context" && contextItems.length > 0) {
     return contextItems;
   }
 
+  // 3) Manuell gepflegte Items
   return props.items;
 });
 
