@@ -402,11 +402,12 @@ export default defineCachedEventHandler(
             id?: number;
             slug?: string;
             updatedAt?: string;
+            newOpeningDate?: string | null;
             city?: { slug?: string };
             localizations?: Array<{ id?: number }>;
           }>("locations", {
             locale,
-            fields: ["slug", "updatedAt"],
+            fields: ["slug", "updatedAt", "newOpeningDate"],
             populate: {
               city: {
                 fields: ["slug"],
@@ -461,8 +462,17 @@ export default defineCachedEventHandler(
 
       // City + Location pages only exist in German — skip other locales to avoid 404s in sitemap
       if (locale === DEFAULT_LOCALE) {
+      // SEO guard: only emit cities that have ≥1 opened location — prevents
+      // sitemap entries for cities whose only locations are still coming soon.
+      const citySlugsWithOpenLocations = new Set(
+        locations
+          .filter((location) => location.newOpeningDate)
+          .map((location) => location.city?.slug)
+          .filter((slug): slug is string => Boolean(slug)),
+      );
       for (const city of cities) {
         if (!city.slug) continue;
+        if (!citySlugsWithOpenLocations.has(city.slug)) continue;
         const groupId = getGroupId(city, city.slug);
         if (!groupId) continue;
         const groupKey = buildGroupKey("city", groupId);
@@ -474,6 +484,9 @@ export default defineCachedEventHandler(
 
       for (const location of locations) {
         if (!location.slug || !location.city?.slug) continue;
+        // SEO: coming-soon locations (no opening date yet) stay out of the
+        // sitemap until they open — avoids thin/doorway-style pages in the index.
+        if (!location.newOpeningDate) continue;
         const groupId = getGroupId(
           location,
           `${location.city.slug}/${location.slug}`,
@@ -491,7 +504,7 @@ export default defineCachedEventHandler(
       // Location treatment pages only exist in German
       const locationTreatmentPages = locale === DEFAULT_LOCALE ? await Promise.all(
         locations
-          .filter((location) => location.slug && location.city?.slug)
+          .filter((location) => location.slug && location.city?.slug && location.newOpeningDate)
           .map(async (location) => {
             try {
               const data = await $fetch<{
