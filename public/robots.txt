@@ -1,12 +1,28 @@
 # robots.txt - SEO optimized for MY HEALTH & BEAUTY
-# Last updated: 2026-05-28
+# Last updated: 2026-07-12
 
 User-agent: *
+Allow: /
+
+# AI crawlers welcome (GEO)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
 Allow: /
 
 # Sitemaps
 Sitemap: https://www.myhealthandbeauty.com/sitemap.xml
 Sitemap: https://www.myhealthandbeauty.com/sitemap-videos.xml
+
+# LLM summary
+# https://www.myhealthandbeauty.com/llms.txt
 
 # Host directive (canonical domain)
 Host: www.myhealthandbeauty.com
