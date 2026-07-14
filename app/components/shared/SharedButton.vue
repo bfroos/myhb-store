@@ -171,6 +171,9 @@ const openNewsletterSignUpDialog = () => {
       () => import("~/components/ui/organism/NewsletterSignUpDialog.vue"),
     ),
     {
+      // Buchungsdaten (calendlyUrl/treatmentType) durchreichen, damit der
+      // Dialog nach der Anmeldung den passenden Buchungs-Dialog oeffnen kann.
+      data: props.data,
       props: {
         modal: true,
         draggable: false,

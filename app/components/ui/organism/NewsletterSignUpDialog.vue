@@ -71,6 +71,7 @@
         :placeholder="phonePlaceholder"
         class="newsletterSignUpDialog__input"
         autocomplete="tel"
+        required
       />
       <div class="newsletterSignUpDialog__actions">
         <UiAtomBaseButton variant="secondary" @click="handleClose">
@@ -91,12 +92,15 @@ import {
 } from "@tabler/icons-vue";
 import { inject } from "vue";
 import InputText from "primevue/inputtext";
+import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
+import type { TreatmentType } from "~/lib/strapi/dto/enums";
 
 const globals = useGlobals();
 const { brandNameShort } = useBrand();
 const { locale } = useI18n();
 
 const dialogRef = inject("dialogRef") as any;
+const { openCalendlyDialog } = useCalendlyDialog();
 
 const {
   email,
@@ -109,13 +113,14 @@ const {
 
 // Phone-Feld-Labels inline gehalten (nicht in den locale-JSONs), damit diese
 // Aenderung in sich geschlossen bleibt. Fallback = Deutsch.
+// Handynummer ist in diesem Dialog Pflicht -> kein "(optional)" mehr.
 const phoneLabelByLocale: Record<string, string> = {
-  de: "Handynummer (optional)",
-  en: "Phone number (optional)",
-  tr: "Telefon numarası (isteğe bağlı)",
-  ar: "رقم الهاتف (اختياري)",
-  fr: "Numéro de téléphone (facultatif)",
-  nl: "Telefoonnummer (optioneel)",
+  de: "Handynummer",
+  en: "Phone number",
+  tr: "Telefon numarası",
+  ar: "رقم الهاتف",
+  fr: "Numéro de téléphone",
+  nl: "Telefoonnummer",
 };
 const phonePlaceholderByLocale: Record<string, string> = {
   de: "+49 …",
@@ -125,11 +130,22 @@ const phonePlaceholderByLocale: Record<string, string> = {
   fr: "+33 …",
   nl: "+31 …",
 };
+const phoneErrorByLocale: Record<string, string> = {
+  de: "Bitte gib deine Handynummer ein.",
+  en: "Please enter your phone number.",
+  tr: "Lütfen telefon numaranızı girin.",
+  ar: "الرجاء إدخال رقم هاتفك.",
+  fr: "Veuillez saisir votre numéro de téléphone.",
+  nl: "Voer je telefoonnummer in.",
+};
 const phoneLabel = computed(
   () => phoneLabelByLocale[locale.value] ?? phoneLabelByLocale.de,
 );
 const phonePlaceholder = computed(
   () => phonePlaceholderByLocale[locale.value] ?? phonePlaceholderByLocale.de,
+);
+const phoneError = computed(
+  () => phoneErrorByLocale[locale.value] ?? phoneErrorByLocale.de,
 );
 
 const handleClose = () => {
@@ -139,7 +155,27 @@ const handleClose = () => {
 };
 
 async function handleSubmit() {
-  await submitNewsletter();
+  // Handynummer ist jetzt Pflicht (nur in diesem Dialog, nicht im
+  // Footer-Formular, das dasselbe Composable ohne Telefonfeld nutzt).
+  if (!phone.value?.trim()) {
+    error.value = phoneError.value;
+    return;
+  }
+
+  const ok = await submitNewsletter();
+  if (!ok) return;
+
+  // Nach erfolgreicher Anmeldung direkt den Terminbuchungs-Dialog oeffnen –
+  // denselben, den der "Termin buchen"-Button der Seite verwendet. Die
+  // Buchungsdaten (calendlyUrl/treatmentType) werden ueber die Dialog-Daten
+  // durchgereicht (siehe SharedButton.openNewsletterSignUpDialog).
+  const booking = dialogRef?.value?.data as
+    | { calendlyUrl?: string; treatmentType?: TreatmentType }
+    | undefined;
+  if (booking && (booking.calendlyUrl || booking.treatmentType)) {
+    if (dialogRef) dialogRef.value.close();
+    openCalendlyDialog(booking.calendlyUrl, booking.treatmentType);
+  }
 }
 </script>
 <style scoped>
