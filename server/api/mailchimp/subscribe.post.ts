@@ -1,5 +1,6 @@
 // https://mailchimp.com/developer/marketing/api/list-members/add-member-to-list/
 
+import { createHash } from "node:crypto";
 import mailchimp from "@mailchimp/mailchimp_marketing";
 
 const ALLOWED_SOURCES = new Set([
@@ -7,6 +8,20 @@ const ALLOWED_SOURCES = new Set([
   "discount_cta_20",
   "blog_newsletter_block",
 ]);
+
+/**
+ * Bringt eine vom Nutzer eingegebene Nummer in ein E.164-nahes Format.
+ * Deutschland-zentriert (fuehrende 0 -> +49), da das die Hauptzielgruppe ist.
+ * Rein defensiv – schlaegt nie fehl, gibt im Zweifel die bereinigte Eingabe zurueck.
+ */
+function normalizePhone(raw: string): string {
+  const cleaned = raw.replace(/[\s()/.-]/g, "");
+  if (!cleaned) return "";
+  if (cleaned.startsWith("+")) return cleaned;
+  if (cleaned.startsWith("00")) return `+${cleaned.slice(2)}`;
+  if (cleaned.startsWith("0")) return `+49${cleaned.slice(1)}`;
+  return `+${cleaned}`;
+}
 
 export default defineEventHandler(async (event) => {
   const { mailchimpApiKey, mailchimpServerPrefix, mailchimpAudienceId } =
@@ -58,6 +73,23 @@ export default defineEventHandler(async (event) => {
     }
   };
 
+  // Best-effort: Handynummer am Mailchimp-Kontakt speichern (Merge-Feld WHATSAPP).
+  // Laeuft NACH dem erfolgreichen Subscribe und ist bewusst fehlertolerant –
+  // ein fehlgeschlagenes Merge-Update darf die Anmeldung nie beeintraechtigen.
+  const storePhoneInMailchimp = async () => {
+    if (!phone) return;
+    try {
+      const subscriberHash = createHash("md5").update(email).digest("hex");
+      await mailchimp.lists.setListMember(mailchimpAudienceId, subscriberHash, {
+        email_address: email,
+        status_if_new: "subscribed",
+        merge_fields: { WHATSAPP: normalizePhone(phone) },
+      });
+    } catch (err) {
+      console.error("[newsletter] mailchimp phone merge update failed", err);
+    }
+  };
+
   mailchimp.setConfig({
     apiKey: mailchimpApiKey,
     server: mailchimpServerPrefix,
@@ -70,6 +102,7 @@ export default defineEventHandler(async (event) => {
       ...(source ? { tags: [`source:${source}`] } : {}),
     });
 
+    await storePhoneInMailchimp();
     await notifyN8n();
 
     return { ok: true, response: res };
@@ -91,6 +124,7 @@ export default defineEventHandler(async (event) => {
         hasMemberExistsCode);
 
     if (isMemberExists) {
+      await storePhoneInMailchimp();
       await notifyN8n();
       return { ok: true };
     }
