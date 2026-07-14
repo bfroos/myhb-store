@@ -86,6 +86,10 @@
                     method: SharedButtonMethod.ACTION,
                     action: SharedButtonAction.NEWSLETTER_SIGN_UP,
                   }"
+                  :data="{
+                    calendlyUrl: calendlyUrl,
+                    treatmentType: treatment?.type,
+                  }"
                   :button-props="{ size: 'lg', variant: 'secondary' }"
                 />
               </div>
