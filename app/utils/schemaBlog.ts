@@ -4,6 +4,7 @@ import { normalizeSchemaDateTime, toAbsoluteUrl } from "~/utils/schemaShared";
 
 type BlogSchemaContext = SchemaOrgContext & {
   logoUrl?: string;
+  author?: Record<string, unknown>;
 };
 
 /**
@@ -50,7 +51,7 @@ export function buildBlogPostingSchema(
         },
       }),
     };
-    schema.author = {
+    schema.author = ctx.author ?? {
       "@type": "Organization",
       name: ctx.brandName,
     };
