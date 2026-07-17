@@ -41,6 +41,15 @@ const blogPostingSchema = computed(() => {
 
 useSchemaOrg(blogPostingSchema);
 
+// Schema.org BreadcrumbList (Blog > Kategorie > Artikel)
+const breadcrumbSchema = computed(() =>
+  buildBreadcrumbSchema(
+    breadcrumbItems.value,
+    (config.public.publicUrl as string) || "",
+  ),
+);
+useSchemaOrg(breadcrumbSchema);
+
 // Schema.org FAQPage (nur wenn FAQ-Block im Artikel vorhanden)
 const faqSchema = computed(() => {
   const components = (article.value?.components ?? []) as any[];
