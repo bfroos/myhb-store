@@ -1,5 +1,9 @@
 <template>
   <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
+  <UiMoleculeMedicalReviewerSignature
+    :reviewer="reviewer"
+    :date="article?.displayDate"
+  />
   <PagesBlogArticleBlock
     :headline="article?.headline"
     :intro="article?.intro"
@@ -26,16 +30,23 @@ const globals = useGlobals();
 const appConfig = useAppConfig();
 const route = useRoute();
 
+const reviewer = DEFAULT_MEDICAL_REVIEWER;
+
 const blogPostingSchema = computed(() => {
   const logoUrl = appConfig.seo?.organization?.logo?.url
     ? `${config.public.publicUrl}${appConfig.seo.organization.logo.url}`.replace(/([^:]\/)\/+/g, "$1")
     : appConfig.seo?.organization?.logo?.fallback;
 
+  const publicUrl = (config.public.publicUrl as string) || "";
+  const brandName = globals.value?.brand?.name ?? "";
+
   return buildBlogPostingSchema(article.value, {
-    publicUrl: (config.public.publicUrl as string) || "",
+    publicUrl,
     path: route.path,
-    brandName: globals.value?.brand?.name ?? "",
+    brandName,
     logoUrl,
+    author:
+      buildReviewerPersonSchema(reviewer, publicUrl, brandName) ?? undefined,
   });
 });
 
