@@ -5,6 +5,11 @@
     v-bind="fixedBlocks.hero"
     show-floating-cta
   />
+  <UiMoleculeMedicalReviewerSignature
+    v-if="!isAdsMode"
+    :reviewer="reviewer"
+    :date="treatmentUpdatedAt"
+  />
   <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
   <BlockLocationTeasers
     v-if="hasTreatmentLocations"
@@ -61,6 +66,11 @@ const route = useRoute();
 const { brandName } = useBrand();
 const appConfig = useAppConfig();
 
+const reviewer = DEFAULT_MEDICAL_REVIEWER;
+const treatmentUpdatedAt = computed(
+  () => (treatmentPage.value as any)?.updatedAt ?? null,
+);
+
 const medicalProcedureSchema = computed(() =>
   buildGeneralMedicalProcedureSchema(treatmentPage.value, {
     publicUrl: (config.public.publicUrl as string) || "",
@@ -89,7 +99,19 @@ const faqSchema = computed(() => {
   return buildFaqPageSchema(allFaqs);
 });
 
+// Schema.org MedicalWebPage (medizinisch geprueft von / lastReviewed)
+const medicalWebPageSchema = computed(() =>
+  buildMedicalWebPageSchema({
+    publicUrl: (config.public.publicUrl as string) || "",
+    path: route.path,
+    reviewer,
+    lastReviewed: treatmentUpdatedAt.value,
+    brandName: brandName.value,
+  }),
+);
+
 useSchemaOrg(medicalProcedureSchema);
 useSchemaOrg(breadcrumbSchema);
 useSchemaOrg(faqSchema);
+useSchemaOrg(medicalWebPageSchema);
 </script>
