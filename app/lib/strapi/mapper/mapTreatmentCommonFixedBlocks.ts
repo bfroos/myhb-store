@@ -202,11 +202,23 @@ export function mapTreatmentCommonFixedBlocks(
     return {
       headline,
       content: withPlaceholdersRichtext(treatmentPage?.treatmentPlan?.content),
-      additionalInfos: treatmentPage?.treatmentPlan?.additionalInfos,
+      additionalInfos: withPlaceholdersRichtext(
+        treatmentPage?.treatmentPlan?.additionalInfos,
+      ),
       personaPhoto: treatmentPage?.treatmentPlan?.personaPhoto,
       personaAge: treatmentPage?.treatmentPlan?.personaAge,
       personaTreatmentGoal: treatmentPage?.treatmentPlan?.personaTreatmentGoal,
-      steps: treatmentPage?.treatmentPlan?.steps,
+      // Plan steps carry placeholders (e.g. "{{ cityPhrase }}") in their text
+      // fields too; run them through the same replacement as every other block
+      // so tokens never leak into the rendered page.
+      steps: treatmentPage?.treatmentPlan?.steps?.map((step: any) => ({
+        ...step,
+        description: withPlaceholders(step?.description) ?? step?.description,
+        followUpPlanText:
+          withPlaceholders(step?.followUpPlanText) ?? step?.followUpPlanText,
+        endOfPlanText:
+          withPlaceholders(step?.endOfPlanText) ?? step?.endOfPlanText,
+      })),
     };
   }
 

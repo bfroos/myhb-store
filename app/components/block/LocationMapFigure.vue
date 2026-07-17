@@ -18,7 +18,6 @@
       <g v-html="locationMapPaths"></g>
       <g id="locations" aria-hidden="true">
         <g v-for="p in locationPoints" :key="p.id">
-          <title>{{ p.name }} — {{ $t(p.statusLabelKey) }}</title>
           <circle
             v-if="p.status === 'open'"
             :cx="p.x"

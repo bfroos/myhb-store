@@ -146,15 +146,26 @@ export function useTreatmentPage() {
     const startPrice = price ? Math.floor(price / 100) : 149; // Fallback
     const priceTag = `${startPrice}€`;
 
+    // Prefer the editor-managed SEO from Strapi; only fall back to the
+    // generated "{treatmentName} ab {priceTag}" template when no metaTitle /
+    // metaDescription is set in the CMS. (Previously the template ALWAYS won,
+    // so custom titles like the Schoenheits-OP price range were ignored.)
+    const strapiSeo = seo.value;
+
     return {
-      metaTitle: t("treatment.seo.title", {
-        treatmentName,
-        priceTag,
-        brandName: brandName.value,
-      }),
-      metaDescription: t("treatment.seo.description", {
-        treatmentName,
-      }),
+      ...(strapiSeo ?? {}),
+      metaTitle:
+        strapiSeo?.metaTitle ||
+        t("treatment.seo.title", {
+          treatmentName,
+          priceTag,
+          brandName: brandName.value,
+        }),
+      metaDescription:
+        strapiSeo?.metaDescription ||
+        t("treatment.seo.description", {
+          treatmentName,
+        }),
     };
   });
 
