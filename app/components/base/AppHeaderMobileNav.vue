@@ -83,6 +83,17 @@
                 {{ item.name }}
               </NuxtLinkLocale>
             </li>
+            <li v-if="clubUrl">
+              <a
+                :href="clubUrl"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mobileMenu__link"
+                @click="closeMobileMenu"
+              >
+                MY Club (Treueprogramm)
+              </a>
+            </li>
           </ul>
         </nav>
       </div>
@@ -94,6 +105,8 @@
 import { IconChevronDown, IconChevronUp, IconX } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { isAdsMode } = useSiteModeFlags();
+const globals = useGlobals();
+const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 const emit = defineEmits<{
   (e: "closeMobileMenu"): void;
 }>();
