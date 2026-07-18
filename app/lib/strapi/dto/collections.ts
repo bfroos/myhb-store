@@ -217,6 +217,7 @@ export type TreatmentDto = {
 export type TreatmentPageDto = {
   id: number | string;
   slug: string;
+  appTreatmentSlug?: string;
   ancestorSlugs: string[];
   ancestors: { slug: string; name: string }[];
   topCategory?: { slug: string; name: string };
@@ -244,6 +245,7 @@ export type TreatmentPageDto = {
 export type TreatmentAdsPageDto = {
   id: number | string;
   slug: string;
+  appTreatmentSlug?: string;
   ancestorSlugs: string[];
   ancestors: { slug: string; name: string }[];
   topCategory?: { slug: string; name: string };
