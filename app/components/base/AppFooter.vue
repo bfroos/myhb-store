@@ -60,6 +60,15 @@
                       {{ $t("navigation.secondary.blog") }}
                     </NuxtLinkLocale>
                   </li>
+                  <li v-if="clubUrl">
+                    <a
+                      :href="clubUrl"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      MY Club (Treueprogramm)
+                    </a>
+                  </li>
                   <li v-if="locale === 'de'">
                     <NuxtLinkLocale to="/p/kunden-erfahrungen">
                       Kunden Erfahrungen
@@ -213,6 +222,8 @@ const { treatmentPages, productCategories } = useMenu(() =>
   isAdsMode.value ? "treatment-pages" : "treatment-pages,product-categories",
 );
 const { openCookieSettings } = useCookiebot();
+const globals = useGlobals();
+const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 </script>
 <style scoped>
 .appFooter a:not(.button) {

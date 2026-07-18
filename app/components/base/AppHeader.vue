@@ -8,6 +8,16 @@
               {{ item.name }}
             </NuxtLinkLocale>
           </li>
+          <li v-if="clubUrl">
+            <a
+              :href="clubUrl"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-link"
+            >
+              MY Club (Treueprogramm)
+            </a>
+          </li>
           <li>
             <UiMoleculeLanguageSwitcher />
           </li>
@@ -80,6 +90,8 @@ import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
 const { treatmentPages } = useMenu("treatment-pages");
+const globals = useGlobals();
+const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 
 const isMobileMenuOpen = ref(false);
 
