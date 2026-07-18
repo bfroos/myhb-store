@@ -1,6 +1,15 @@
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 
+/**
+ * Fallback share image (Open Graph / Twitter) used when a page has neither a
+ * page-level ogImage (Strapi) nor a content image (e.g. article cover).
+ * Prevents pages like the homepage, category, doctors and blog index from
+ * shipping without a social preview image. Landscape JPEG (~1100x643).
+ */
+const DEFAULT_OG_IMAGE =
+  "https://media.myhb.app/MY_Mediapark_Klinik_ab8eb15667.jpg";
+
 function toOgImageValue(
   media: StrapiMedia | null | undefined,
 ): string | undefined {
@@ -110,6 +119,11 @@ export async function setPageSeo(
           .filter(Boolean)
           .join(" ");
 
+    const ogImage =
+      toOgImageValue(pageSeo?.openGraph?.ogImage) ??
+      toOgImageValue(fallbackOgImage) ??
+      DEFAULT_OG_IMAGE;
+
     useSeoMeta({
       title,
       description: pageSeo?.metaDescription || globalsSeo?.defaultDescription,
@@ -123,14 +137,12 @@ export async function setPageSeo(
         pageSeo?.openGraph?.ogDescription ||
         pageSeo?.metaDescription ||
         globalsSeo?.defaultDescription,
-      ogImage:
-        toOgImageValue(pageSeo?.openGraph?.ogImage) ??
-        toOgImageValue(fallbackOgImage),
+      ogImage,
       twitterCard: "summary_large_image",
       twitterSite: "@myhealthbeauty",
       twitterTitle: title,
       twitterDescription: pageSeo?.metaDescription || globalsSeo?.defaultDescription,
-      twitterImage: toOgImageValue(pageSeo?.openGraph?.ogImage) ?? toOgImageValue(fallbackOgImage),
+      twitterImage: ogImage,
     });
   });
 }
