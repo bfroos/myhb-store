@@ -27,6 +27,31 @@ export function isAppBookingUrl(url?: string | null): boolean {
 }
 
 /**
+ * Adds a `treatment=<slug>` query param to an in-app booking URL so the app
+ * pre-selects the matching treatment (deeplink). The venue (`location=`) is
+ * already part of the URL configured per location in Strapi, so we only inject
+ * the treatment here.
+ *
+ * No-ops (returns the URL unchanged) when there is no URL, no treatment slug,
+ * or the URL is not an in-app booking URL (e.g. a calendly.com URL) — so
+ * Calendly locations and locations without a treatment slug keep working.
+ */
+export function withAppTreatmentSlug(
+  url?: string | null,
+  treatmentSlug?: string | null,
+): string | undefined {
+  if (!url) return undefined;
+  if (!treatmentSlug || !isAppBookingUrl(url)) return url;
+  try {
+    const u = new URL(url);
+    u.searchParams.set("treatment", treatmentSlug);
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
+/**
  * Collects Google Ads click identifiers so the in-app booking flow (rendered
  * in an iframe on the app.* subdomain) can attribute the conversion to the
  * originating ad click. Reads from the current URL first, then falls back to
