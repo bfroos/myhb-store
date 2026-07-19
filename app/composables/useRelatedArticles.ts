@@ -2,7 +2,8 @@ import type { BlogArticleDto } from "~/lib/strapi/dto/collections";
 
 /**
  * Maps a treatment's top-level category slug (from pathKey, e.g. "botox") to the
- * matching blog category slug. Most match 1:1; two need remapping.
+ * matching blog category slug. Most match 1:1; anti-haarausfall maps to the
+ * "haare" blog category.
  */
 const TREATMENT_TO_BLOG_CATEGORY: Record<string, string> = {
   botox: "botox",
@@ -10,10 +11,8 @@ const TREATMENT_TO_BLOG_CATEGORY: Record<string, string> = {
   infusionen: "infusionen",
   fettwegspritze: "fettwegspritze",
   schoenheitsoperationen: "schoenheitsoperationen",
+  skinbooster: "skinbooster",
   "anti-haarausfall": "haare",
-  // TODO: Der Skinbooster-Blog-Kategorie-Slug ist aktuell "blog-category" (Bug);
-  // nach Umbenennung der Kategorie hier auf "skinbooster" anpassen.
-  skinbooster: "blog-category",
 };
 
 /**
