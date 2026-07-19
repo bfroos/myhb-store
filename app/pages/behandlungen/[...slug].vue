@@ -11,6 +11,10 @@
     :date="treatmentUpdatedAt"
   />
   <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
+  <PagesTreatmentRelatedArticles
+    v-if="!isAdsMode && relatedArticles.length"
+    :articles="relatedArticles"
+  />
   <BlockLocationTeasers
     v-if="hasTreatmentLocations"
     :headline="treatmentLocationTeasersHeadline"
@@ -36,6 +40,8 @@ const {
   treatmentPage,
 } = useTreatmentPage();
 const { locations: treatmentLocations, fetchLocations } = useLocationFinder();
+const { articles: relatedArticles, fetchRelated: fetchRelatedArticles } =
+  useRelatedArticles();
 
 const treatmentType = computed<TreatmentType | undefined>(
   () => treatmentPage.value?.treatment?.type,
@@ -59,6 +65,7 @@ if (treatmentPageLoaded) {
   }
   usePageI18nParams(localizations.value, "pathKey");
   await setPageSeo(seo.value);
+  await fetchRelatedArticles(treatmentPage.value?.pathKey?.split("/")[0]);
 }
 
 // Schema.org MedicalProcedure
