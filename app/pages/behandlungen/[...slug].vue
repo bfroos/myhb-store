@@ -43,9 +43,23 @@ const { locations: treatmentLocations, fetchLocations } = useLocationFinder();
 const { articles: relatedArticles, fetchRelated: fetchRelatedArticles } =
   useRelatedArticles();
 
-const treatmentType = computed<TreatmentType | undefined>(
-  () => treatmentPage.value?.treatment?.type,
-);
+const treatmentType = computed<TreatmentType | undefined>(() => {
+  // Blatt-Seiten (z.B. /behandlungen/botox/stirnfalte) haben ein eigenes
+  // treatment mit type.
+  const own = treatmentPage.value?.treatment?.type;
+  if (own) return own;
+  // Kategorieseiten (z.B. /behandlungen/botox) haben KEIN eigenes treatment
+  // (treatment == null). Den Behandlungstyp aus der ersten verknüpften
+  // Unterbehandlung ableiten, damit der Standorte-Block die buchbaren
+  // Standorte korrekt nach Typ filtern kann (minimally-invasive vs. operational
+  // etc.). Setzt voraus, dass die by-path-Antwort "type" bei
+  // relatedTreatments.treatmentPages[].treatment mitliefert (siehe myhb-cms).
+  const relatedPages = (treatmentPage.value as any)?.relatedTreatments
+    ?.treatmentPages as
+    | Array<{ treatment?: { type?: TreatmentType } }>
+    | undefined;
+  return relatedPages?.find((p) => p?.treatment?.type)?.treatment?.type;
+});
 
 const hasTreatmentLocations = computed(
   () => (treatmentLocations.value?.length ?? 0) > 0,
