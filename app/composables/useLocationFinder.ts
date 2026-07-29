@@ -6,12 +6,23 @@ import type {
 import { getLocationDistance } from "~/utils/locations";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 
-const locationsCache = ref<LocationDto[]>([]);
-const locationsCacheKey = ref<string | null>(null);
-
 export function useLocationFinder() {
   const { locale, fallbackLocale, t } = useI18n();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
+
+  // Request-isolierter State: modul-globale refs wären bei SSR über alle
+  // gleichzeitigen Requests eines Server-Prozesses geteilt und würden sich
+  // gegenseitig überschreiben (leere/fremde Standorte, die dann per ISR
+  // eingefroren werden). useState kapselt den State pro Request und behält
+  // client-seitig weiterhin das Caching über Navigationen bei.
+  const locationsCache = useState<LocationDto[]>(
+    "locationFinder:bookableLocations",
+    () => [],
+  );
+  const locationsCacheKey = useState<string | null>(
+    "locationFinder:bookableLocationsKey",
+    () => null,
+  );
 
   const {
     suggestions: citySuggestions,
@@ -109,15 +120,28 @@ export function useLocationFinder() {
     if (!options?.force && locationsCacheKey.value === cacheKey && locationsCache.value.length > 0) {
       return;
     }
-    const response = await strapiFetch<{ data: LocationDto[] }>(
-      "/locations/bookable",
-      {
-        query: { locale: currentLocale, treatmentType: options?.treatmentType },
-      },
-    );
-    const data = response?.data ?? [];
-    locations.value = data;
-    locationsCacheKey.value = cacheKey;
+    try {
+      const response = await strapiFetch<{ data: LocationDto[] }>(
+        "/locations/bookable",
+        {
+          query: { locale: currentLocale, treatmentType: options?.treatmentType },
+        },
+      );
+      const data = response?.data ?? [];
+      // Erfolgreicher Response ist autoritativ (auch wenn leer). Nur ein
+      // geworfener Fehler (siehe catch) darf den letzten guten Stand behalten,
+      // damit ein transienter API-Ausfall keinen leeren Standorte-Block
+      // erzeugt, der dann per ISR eingefroren wird.
+      locations.value = data;
+      locationsCacheKey.value = cacheKey;
+    } catch (error) {
+      // Fetch-Fehler dürfen weder den (SSR-)Render abbrechen noch einen bereits
+      // gefüllten Stand auf [] kippen. Block bleibt mit letztem gültigen Stand.
+      console.error(
+        "[useLocationFinder] fetchLocations fehlgeschlagen, behalte letzten Stand:",
+        error,
+      );
+    }
   }
 
   return {
