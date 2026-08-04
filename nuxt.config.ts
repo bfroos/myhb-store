@@ -75,16 +75,28 @@ export default defineNuxtConfig({
     },
   },
 
-  // 3. Font-Optimierung: nur benötigte Weights, display:swap
+  // 3. Font-Optimierung: Weights + metrisch angepasster Fallback gegen CLS
   fonts: {
     provider: "bunny",
+    // WICHTIG gegen Feld-CLS (0,21 auf Mobil): Die Schriftfamilie wird nur über
+    // die CSS-Variable --font-family-base referenziert. Ohne processCSSVariables
+    // schreibt @nuxt/fonts den metrisch angepassten Fallback NICHT in die
+    // Variable → beim Fallback→Inter-Swap verschiebt sich das Layout (v.a. die
+    // Hero-H1). Mit true wird der Fallback berücksichtigt und der Swap ist
+    // layout-neutral.
+    experimental: {
+      processCSSVariables: true,
+    },
     families: [
       {
         name: "Inter",
-        weights: [400, 500],
+        // 600/700 ergänzt: einige Blöcke nutzen font-weight 600/700 (statt des
+        // Tokens --font-bold=500). Ohne echtes Glyph gab es Fake-Bold + Swap.
+        weights: [400, 500, 600, 700],
         styles: ["normal"],
         subsets: ["latin"],
-        display: "swap",  // verhindert FOIT (Flash of Invisible Text)
+        display: "swap", // verhindert FOIT; dank Fallback-Metriken CLS-neutral
+        fallbacks: ["system-ui", "Arial"],
       },
     ],
   },
@@ -480,6 +492,12 @@ export default defineNuxtConfig({
             },
           },
           "/_nuxt/**": {
+            headers: {
+              "cache-control": "public, max-age=31536000, immutable",
+            },
+          },
+          // Self-hosted Fonts (@nuxt/fonts) langfristig cachen (gehashte Dateinamen)
+          "/_fonts/**": {
             headers: {
               "cache-control": "public, max-age=31536000, immutable",
             },
