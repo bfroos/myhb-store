@@ -23,7 +23,7 @@ const WEEKDAY_TO_SCHEMA: Record<string, string> = {
   sunday: "Su",
 };
 
-const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = {
+export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = {
   "ChIJoesgRlglv0cRh0fAgCZ9MTk": {
     "rating": "4.9",
     "count": "419"
@@ -57,6 +57,33 @@ const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = {
     "count": "26"
   }
 };
+
+/**
+ * Liefert die statisch hinterlegten Google-Rating-Daten für einen Standort.
+ *
+ * Diese Werte werden täglich per GitHub Action ("Update Google Ratings")
+ * über scripts/update-google-ratings.ts aktualisiert (≈ 9 API-Aufrufe/Tag).
+ * Dadurch muss die Website die (teure) Google Places "Place Details"-API
+ * NICHT mehr pro Seitenaufruf abfragen – die Anzeige nutzt diese Werte direkt.
+ *
+ * Gibt null zurück, wenn für die placeId keine Daten vorliegen. Der Aufrufer
+ * fällt in dem Fall auf die generischen Marken-Reviews zurück.
+ */
+export function getGoogleReviewForPlace(
+  placeId: string | null | undefined,
+): { rating: number; userRatingsTotal: number; placeUrl: string } | null {
+  if (!placeId) return null;
+  const entry = GOOGLE_RATINGS[placeId];
+  if (!entry) return null;
+  const rating = Number(entry.rating);
+  if (!Number.isFinite(rating)) return null;
+  const userRatingsTotal = Number(entry.count);
+  return {
+    rating,
+    userRatingsTotal: Number.isFinite(userRatingsTotal) ? userRatingsTotal : 0,
+    placeUrl: `https://www.google.com/maps/place/?q=place_id:${placeId}`,
+  };
+}
 
 /**
  * Schema.org LocalBusiness for location pages.
