@@ -2,7 +2,7 @@ name: Update Google Ratings
 
 on:
   schedule:
-    # Läuft am 1. jeden Monats um 02:00 UTC
+    # Läuft am 1. jeden Tag um 02:00 UTC
     - cron: '0 2 * * *'
   workflow_dispatch: # Manueller Trigger via GitHub UI
 
