@@ -226,8 +226,49 @@ async function initMap() {
   }
 }
 
-onMounted(initMap);
-watch(() => [props.googleMapsApiKey, props.lat, props.lng], initMap);
+/* ---------- Lazy-Load: Karte erst laden, wenn sie in Sichtweite kommt ----------
+ * Vorher wurde beim Mount jeder Standort-Karte sofort eine dynamische Google-Karte
+ * geladen ("Dynamic Maps"-Kosten) – auch wenn der Nutzer sie nie zu Gesicht bekam.
+ * Jetzt startet das Laden erst, wenn der Karten-Container ~300px vor dem Viewport
+ * ist. Bis dahin bleibt der bereits vorhandene, gestylte Platzhalter sichtbar.
+ */
+const hasStartedMapLoad = ref(false);
+
+function startMapLoad() {
+  if (hasStartedMapLoad.value) return;
+  hasStartedMapLoad.value = true;
+  void initMap();
+}
+
+onMounted(() => {
+  if (!props.googleMapsApiKey) return;
+
+  // Fallback: ohne IntersectionObserver-Support direkt laden.
+  if (typeof IntersectionObserver === "undefined" || !mapRoot.value) {
+    startMapLoad();
+    return;
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries.some((entry) => entry.isIntersecting)) {
+        observer.disconnect();
+        startMapLoad();
+      }
+    },
+    { rootMargin: "300px" },
+  );
+  observer.observe(mapRoot.value);
+});
+
+// Reagiert auf spätere Prop-Änderungen, aber nur wenn die Karte bereits
+// initialisiert wurde (sonst übernimmt der IntersectionObserver das Laden).
+watch(
+  () => [props.googleMapsApiKey, props.lat, props.lng],
+  () => {
+    if (hasStartedMapLoad.value) void initMap();
+  },
+);
 </script>
 
 <style scoped>
