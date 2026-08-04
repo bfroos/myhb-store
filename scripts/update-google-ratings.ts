@@ -125,10 +125,10 @@ function updateSchemaLocationFile(ratings: LocationRating[]) {
     return acc;
   }, {} as Record<string, { rating: string; count: string }>);
 
-  const ratingsCode = `const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = ${JSON.stringify(ratingsObject, null, 2)};`;
+  const ratingsCode = `export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = ${JSON.stringify(ratingsObject, null, 2)};`;
 
-  // Replace GOOGLE_RATINGS block
-  const regex = /const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = \{[\s\S]*?\};/;
+  // Replace GOOGLE_RATINGS block (mit oder ohne fuehrendes `export`)
+  const regex = /(?:export )?const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = \{[\s\S]*?\};/;
   
   if (regex.test(content)) {
     content = content.replace(regex, ratingsCode);
