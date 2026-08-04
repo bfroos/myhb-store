@@ -96,14 +96,7 @@ import {
   IconMessageCircle,
 } from "@tabler/icons-vue";
 import { ReviewSource } from "~/lib/strapi/dto/enums";
-
-type GoogleReviewsResponse = {
-  placeId: string;
-  placeName: string | null;
-  placeUrl: string | null;
-  rating: number | null;
-  userRatingsTotal: number | null;
-};
+import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
 
 type StarDistribution = {
   full: number;
@@ -136,87 +129,19 @@ const globals = useGlobals();
 
 const isLocationVariant = computed(() => !!props.googlePlaceId);
 
-const reviewsCache = useState<Record<string, GoogleReviewsResponse | null>>(
-  "google-reviews-cache",
-  () => ({}),
-);
-const reviewsInflight = useState<
-  Record<string, Promise<GoogleReviewsResponse | null> | null>
->("google-reviews-inflight", () => ({}));
+// Standort-Ratings kommen aus statischen, täglich per GitHub Action
+// ("Update Google Ratings") aktualisierten Werten – siehe
+// getGoogleReviewForPlace() in app/utils/schemaLocation.ts.
+//
+// Früher wurde hier bei JEDEM SSR-Render pro Standort /api/google-reviews
+// aufgerufen, was die teure Google Places "Place Details (Enterprise)"-API
+// getriggert hat (Hauptkostentreiber). Da die Werte sich praktisch nie
+// innerhalb eines Tages ändern, greifen wir jetzt direkt auf die statischen
+// Werte zu → 0 Google-API-Aufrufe pro Seitenaufruf.
+const locationData = computed(() => getGoogleReviewForPlace(props.googlePlaceId));
 
-const cacheKey = computed(() => {
-  if (!props.googlePlaceId) return null;
-  return `google-reviews:${props.googlePlaceId}`;
-});
-
-const locationFetchData = computed<GoogleReviewsResponse | null>(() => {
-  const key = cacheKey.value;
-  if (!key) return null;
-  return reviewsCache.value[key] ?? null;
-});
-
-const hasResolvedLocalDecision = computed(() => {
-  const key = cacheKey.value;
-  if (!key) return true;
-  return key in reviewsCache.value;
-});
-
-const isResolvingLocalDecision = computed(
-  () => isLocationVariant.value && !hasResolvedLocalDecision.value,
-);
-
-async function ensureGoogleReviewsLoaded(): Promise<void> {
-  const key = cacheKey.value;
-  const placeId = props.googlePlaceId;
-  if (!key || !placeId) return;
-
-  if (key in reviewsCache.value) return;
-
-  const pending = reviewsInflight.value[key];
-  if (pending) {
-    await pending;
-    return;
-  }
-
-  const p = (async () => {
-    try {
-      return await $fetch<GoogleReviewsResponse>("/api/google-reviews", {
-        query: {
-          placeId,
-        },
-      });
-    } catch {
-      return null;
-    }
-  })();
-
-  reviewsInflight.value[key] = p;
-  const res = await p;
-  reviewsCache.value[key] = res;
-  reviewsInflight.value[key] = null;
-}
-
-if (import.meta.server) {
-  await ensureGoogleReviewsLoaded();
-}
-
-watch(
-  () => cacheKey.value,
-  () => {
-    void ensureGoogleReviewsLoaded();
-  },
-  { immediate: true },
-);
-
-const locationData = computed(() => {
-  const data = locationFetchData.value;
-  if (!data) return null;
-  return {
-    rating: data.rating,
-    userRatingsTotal: data.userRatingsTotal,
-    placeUrl: data.placeUrl,
-  };
-});
+// Es gibt keinen asynchronen Ladezustand mehr – Werte sind sofort verfügbar.
+const isResolvingLocalDecision = computed(() => false);
 
 const shouldUseLocalRating = computed(() => {
   if (!isLocationVariant.value) return false;
