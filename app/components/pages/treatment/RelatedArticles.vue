@@ -1,31 +1,33 @@
 <template>
   <UiLayoutSectionBlock v-if="articles && articles.length">
-    <section class="relatedArticles" aria-labelledby="related-articles-heading">
-      <h2 id="related-articles-heading" class="relatedArticles__headline">
-        {{ headline }}
-      </h2>
-      <ul class="relatedArticles__grid">
-        <li
-          v-for="article in articles"
-          :key="article.slug"
-          class="relatedArticles__item"
-        >
-          <NuxtLinkLocale
-            :to="`/blog/${article.slug}`"
-            class="relatedArticles__link"
+    <UiLayoutCardSurface>
+      <section class="relatedArticles" aria-labelledby="related-articles-heading">
+        <h2 id="related-articles-heading" class="relatedArticles__headline">
+          {{ headline }}
+        </h2>
+        <ul class="relatedArticles__grid">
+          <li
+            v-for="article in articles"
+            :key="article.slug"
+            class="relatedArticles__item"
           >
-            <img
-              v-if="article.cover?.url"
-              :src="article.cover.url"
-              :alt="article.cover?.alternativeText || article.headline"
-              class="relatedArticles__img"
-              loading="lazy"
-            />
-            <span class="relatedArticles__title">{{ article.headline }}</span>
-          </NuxtLinkLocale>
-        </li>
-      </ul>
-    </section>
+            <NuxtLinkLocale
+              :to="`/blog/${article.slug}`"
+              class="relatedArticles__link"
+            >
+              <img
+                v-if="article.cover?.url"
+                :src="article.cover.url"
+                :alt="article.cover?.alternativeText || article.headline"
+                class="relatedArticles__img"
+                loading="lazy"
+              />
+              <span class="relatedArticles__title">{{ article.headline }}</span>
+            </NuxtLinkLocale>
+          </li>
+        </ul>
+      </section>
+    </UiLayoutCardSurface>
   </UiLayoutSectionBlock>
 </template>
 
@@ -44,15 +46,18 @@ withDefaults(
 </script>
 
 <style scoped>
+.relatedArticles {
+  padding: var(--space-card-pad);
+}
+
 .relatedArticles__headline {
   margin: 0 0 var(--space-500, 1.5rem);
-  font-size: var(--font-xl, 1.5rem);
   color: var(--color-black, #111);
 }
 
 .relatedArticles__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr));
   gap: var(--space-400, 1rem);
   margin: 0;
   padding: 0;
