@@ -403,9 +403,13 @@ export function mapTreatmentCommonFixedBlocks(
       showShortDescriptions: true,
       showPrices: true,
       showDescriptions: true,
-      locationPathKey: location
-        ? `${location.city?.slug}/${location.slug}`
-        : undefined,
+      // SEO-Fix (404-Vermeidung): Auf Standort-Behandlungsseiten baute der
+      // "Weitere Behandlungen"-Teaser bisher /standorte/{ort}/{pathKey} fuer JEDE
+      // verwandte Behandlung - auch fuer solche, die es am Standort gar nicht gibt.
+      // Google folgte diesen internen Links und bekam 404 (GSC: 1.742 "Nicht gefunden").
+      // Verwandte Behandlungen verlinken jetzt immer auf die ueberregionale
+      // /behandlungen/{pathKey}-Seite (existiert stets), daher kein locationPathKey.
+      locationPathKey: undefined,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,
       },
