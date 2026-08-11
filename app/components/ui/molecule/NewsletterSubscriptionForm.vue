@@ -21,6 +21,16 @@
       <Message v-if="error" severity="error">
         {{ error }}
       </Message>
+      <Message v-if="suggestion" severity="warn">
+        {{ suggestionPrefix }}
+        <button
+          type="button"
+          class="newsletterSubscriptionForm__suggestion"
+          @click="applySuggestion"
+        >
+          {{ suggestion }}
+        </button>?
+      </Message>
       <label for="newsletter-footer-email" class="sr-only">
         {{ $t("newsletter.emailLabel") }}
       </label>
@@ -55,13 +65,31 @@ const props = withDefaults(
 
 const route = useRoute();
 const { brandNameShort } = useBrand();
+const { locale } = useI18n();
 const {
   email,
   loading,
   success,
   error,
+  suggestion,
+  applySuggestion,
   submit: submitNewsletter,
 } = useNewsletterSignup(props.source);
+
+// Inline gehalten wie die Phone-Labels im NewsletterSignUpDialog, damit die
+// Aenderung in sich geschlossen bleibt und keine sechs locale-JSONs
+// angefasst werden muessen. Fallback = Deutsch.
+const suggestionPrefixByLocale: Record<string, string> = {
+  de: "Meintest du",
+  en: "Did you mean",
+  tr: "Şunu mu demek istediniz:",
+  ar: "هل تقصد",
+  fr: "Vouliez-vous dire",
+  nl: "Bedoelde je",
+};
+const suggestionPrefix = computed(
+  () => suggestionPrefixByLocale[locale.value] ?? suggestionPrefixByLocale.de,
+);
 
 async function submit(event: SubmitEvent) {
   event.preventDefault();
@@ -77,6 +105,7 @@ async function submit(event: SubmitEvent) {
 function resetFormState() {
   success.value = null;
   error.value = null;
+  suggestion.value = null;
   email.value = "";
 }
 
@@ -117,6 +146,16 @@ watch(
   display: flex;
   flex-direction: column;
   gap: var(--space-400);
+}
+
+.newsletterSubscriptionForm__suggestion {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 @media screen and (min-width: 900px) {

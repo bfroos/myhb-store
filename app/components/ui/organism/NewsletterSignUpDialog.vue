@@ -42,6 +42,16 @@
       <Message v-if="error" severity="error">
         {{ error }}
       </Message>
+      <Message v-if="suggestion" severity="warn">
+        {{ suggestionPrefix }}
+        <button
+          type="button"
+          class="newsletterSignUpDialog__suggestion"
+          @click="applySuggestion"
+        >
+          {{ suggestion }}
+        </button>?
+      </Message>
       <label
         for="newsletter-dialog-email"
         class="newsletterSignUpDialog__label"
@@ -108,6 +118,8 @@ const {
   loading,
   error,
   success,
+  suggestion,
+  applySuggestion,
   submit: submitNewsletter,
 } = useNewsletterSignup("discount_cta_20");
 
@@ -138,6 +150,15 @@ const phoneErrorByLocale: Record<string, string> = {
   fr: "Veuillez saisir votre numéro de téléphone.",
   nl: "Voer je telefoonnummer in.",
 };
+// Gleiches Muster fuer den Tippfehler-Vorschlag der E-Mail-Validierung.
+const suggestionPrefixByLocale: Record<string, string> = {
+  de: "Meintest du",
+  en: "Did you mean",
+  tr: "Şunu mu demek istediniz:",
+  ar: "هل تقصد",
+  fr: "Vouliez-vous dire",
+  nl: "Bedoelde je",
+};
 const phoneLabel = computed(
   () => phoneLabelByLocale[locale.value] ?? phoneLabelByLocale.de,
 );
@@ -146,6 +167,9 @@ const phonePlaceholder = computed(
 );
 const phoneError = computed(
   () => phoneErrorByLocale[locale.value] ?? phoneErrorByLocale.de,
+);
+const suggestionPrefix = computed(
+  () => suggestionPrefixByLocale[locale.value] ?? suggestionPrefixByLocale.de,
 );
 
 const handleClose = () => {
@@ -205,6 +229,16 @@ async function handleSubmit() {
 
 .newsletterSignUpDialog__input {
   width: 100%;
+}
+
+.newsletterSignUpDialog__suggestion {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 .newsletterSignUpDialog__benefits {
