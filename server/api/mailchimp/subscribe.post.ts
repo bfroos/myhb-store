@@ -8,6 +8,29 @@ const ALLOWED_SOURCES = new Set([
   "blog_newsletter_block",
 ]);
 
+// Zentrale Adresspruefung (Syntax, Tippfehler, MX-Eintrag). Dient hier als
+// Sicherheitsnetz fuer alles, was am Frontend vorbeikommt: Bots, Clients
+// ohne JavaScript, direkte API-Aufrufe.
+const EMAIL_VALIDATION_URL =
+  process.env.N8N_EMAIL_VALIDATION_URL ||
+  "https://n8n.myhealthandbeauty.com/webhook/validate-email";
+const EMAIL_VALIDATION_TIMEOUT_MS = 4000;
+
+async function isEmailDeliverable(email: string): Promise<boolean> {
+  try {
+    const res = await $fetch<{ valid?: boolean }>(EMAIL_VALIDATION_URL, {
+      method: "POST",
+      body: { email },
+      timeout: EMAIL_VALIDATION_TIMEOUT_MS,
+    });
+    // Fail-open: nur ein ausdrueckliches false blockiert.
+    return res?.valid !== false;
+  } catch (err) {
+    console.error("[newsletter] email validation unavailable", err);
+    return true;
+  }
+}
+
 export default defineEventHandler(async (event) => {
   const { mailchimpApiKey, mailchimpServerPrefix, mailchimpAudienceId } =
     useRuntimeConfig(event);
@@ -25,6 +48,14 @@ export default defineEventHandler(async (event) => {
   const phone = (body.phone || "").trim();
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "invalid_email",
+      data: { errorCode: "invalid_email" },
+    });
+  }
+
+  if (!(await isEmailDeliverable(email))) {
     throw createError({
       statusCode: 400,
       statusMessage: "invalid_email",
