@@ -1,56 +1,56 @@
-&lt;template&gt;
-  &lt;div class="newsletterSubscriptionForm theme-strong"&gt;
-    &lt;ul class="newsletterSubscriptionForm__benefits"&gt;
-      &lt;li&gt;
-        &lt;IconRosetteDiscount size="32" stroke="1.25" /&gt;
+<template>
+  <div class="newsletterSubscriptionForm theme-strong">
+    <ul class="newsletterSubscriptionForm__benefits">
+      <li>
+        <IconRosetteDiscount size="32" stroke="1.25" />
         {{ $t("newsletter.marketingText.exlusiveOffers") }}
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;IconMoodSmileBeam size="32" stroke="1.25" /&gt;
+      </li>
+      <li>
+        <IconMoodSmileBeam size="32" stroke="1.25" />
         {{ $t("newsletter.marketingText.treatmentNews") }}
-      &lt;/li&gt;
-      &lt;li&gt;
-        &lt;IconRosetteDiscountCheck size="32" stroke="1.25" /&gt;
+      </li>
+      <li>
+        <IconRosetteDiscountCheck size="32" stroke="1.25" />
         {{ $t("newsletter.marketingText.eventInvitations") }}
-      &lt;/li&gt;
-    &lt;/ul&gt;
-    &lt;Message v-if="success" severity="success"&gt;
+      </li>
+    </ul>
+    <Message v-if="success" severity="success">
       {{ $t("newsletter.success", { brandNameShort }) }}
-    &lt;/Message&gt;
-    &lt;form v-else class="newsletterSubscriptionForm__form" @submit="submit"&gt;
-      &lt;Message v-if="error" severity="error"&gt;
+    </Message>
+    <form v-else class="newsletterSubscriptionForm__form" @submit="submit">
+      <Message v-if="error" severity="error">
         {{ error }}
-      &lt;/Message&gt;
-      &lt;Message v-if="suggestion" severity="warn"&gt;
+      </Message>
+      <Message v-if="suggestion" severity="warn">
         {{ suggestionPrefix }}
-        &lt;button
+        <button
           type="button"
           class="newsletterSubscriptionForm__suggestion"
           @click="applySuggestion"
-        &gt;
+        >
           {{ suggestion }}
-        &lt;/button&gt;?
-      &lt;/Message&gt;
-      &lt;label for="newsletter-footer-email" class="sr-only"&gt;
+        </button>?
+      </Message>
+      <label for="newsletter-footer-email" class="sr-only">
         {{ $t("newsletter.emailLabel") }}
-      &lt;/label&gt;
-      &lt;div class="newsletterSubscriptionForm__form__controls"&gt;
-        &lt;InputText
+      </label>
+      <div class="newsletterSubscriptionForm__form__controls">
+        <InputText
           id="newsletter-footer-email"
           v-model="email"
           type="email"
           autocomplete="email"
           :placeholder="$t('newsletter.emailPlaceholder')"
           required
-        /&gt;
-        &lt;UiAtomBaseButton :disabled="loading" type="submit"&gt;
+        />
+        <UiAtomBaseButton :disabled="loading" type="submit">
           {{ $t("cta.subscribe") }}
-        &lt;/UiAtomBaseButton&gt;
-      &lt;/div&gt;
-    &lt;/form&gt;
-  &lt;/div&gt;
-&lt;/template&gt;
-&lt;script setup lang="ts"&gt;
+        </UiAtomBaseButton>
+      </div>
+    </form>
+  </div>
+</template>
+<script setup lang="ts">
 import {
   IconRosetteDiscount,
   IconMoodSmileBeam,
@@ -59,7 +59,7 @@ import {
 import type { NewsletterSignupSource } from "~/composables/useNewsletterSignup";
 
 const props = withDefaults(
-  defineProps&lt;{ source?: NewsletterSignupSource }&gt;(),
+  defineProps<{ source?: NewsletterSignupSource }>(),
   { source: "newsletter_footer" },
 );
 
@@ -79,7 +79,7 @@ const {
 // Inline gehalten wie die Phone-Labels im NewsletterSignUpDialog, damit die
 // Aenderung in sich geschlossen bleibt und keine sechs locale-JSONs
 // angefasst werden muessen. Fallback = Deutsch.
-const suggestionPrefixByLocale: Record&lt;string, string&gt; = {
+const suggestionPrefixByLocale: Record<string, string> = {
   de: "Meintest du",
   en: "Did you mean",
   tr: "Şunu mu demek istediniz:",
@@ -88,14 +88,14 @@ const suggestionPrefixByLocale: Record&lt;string, string&gt; = {
   nl: "Bedoelde je",
 };
 const suggestionPrefix = computed(
-  () =&gt; suggestionPrefixByLocale[locale.value] ?? suggestionPrefixByLocale.de,
+  () => suggestionPrefixByLocale[locale.value] ?? suggestionPrefixByLocale.de,
 );
 
 async function submit(event: SubmitEvent) {
   event.preventDefault();
 
   const form = event.currentTarget as HTMLFormElement | null;
-  if (form &amp;&amp; !form.reportValidity()) {
+  if (form && !form.reportValidity()) {
     return;
   }
 
@@ -110,13 +110,13 @@ function resetFormState() {
 }
 
 watch(
-  () =&gt; route.fullPath,
-  () =&gt; {
+  () => route.fullPath,
+  () => {
     resetFormState();
   },
 );
-&lt;/script&gt;
-&lt;style scoped&gt;
+</script>
+<style scoped>
 .newsletterSubscriptionForm {
   display: flex;
   flex-direction: column;
@@ -130,7 +130,7 @@ watch(
   margin: 0 0 var(--space-400);
 }
 
-.newsletterSubscriptionForm__benefits &gt; li {
+.newsletterSubscriptionForm__benefits > li {
   display: flex;
   align-items: center;
   gap: var(--space-200);
@@ -168,8 +168,8 @@ watch(
   .newsletterSubscriptionForm__form__controls {
     flex-direction: row;
   }
-  .newsletterSubscriptionForm__form__controls &gt; input {
+  .newsletterSubscriptionForm__form__controls > input {
     max-width: 40ch;
   }
 }
-&lt;/style&gt;
+</style>
