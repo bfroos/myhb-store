@@ -8,7 +8,14 @@
             <p v-if="intro">{{ intro }}</p>
           </div>
           <div v-if="cover" class="blogArticle__header__image">
-            <UiAtomMediaPicture :media="cover" />
+            <UiAtomMediaPicture
+              :media="cover"
+              :default-format="ImageFormat.MEDIUM"
+              :sources="{
+                [ImageBreakpoint.MEDIUM]: ImageFormat.LARGE,
+                [ImageBreakpoint.SMALL]: ImageFormat.MEDIUM,
+              }"
+            />
           </div>
         </header>
         <aside class="blogArticle__aside">
@@ -37,6 +44,7 @@
   </UiLayoutSectionBlock>
 </template>
 <script setup lang="ts">
+import { ImageFormat, ImageBreakpoint } from "~/lib/strapi/dto/enums";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import type { StrapiBlock, StrapiRichText } from "~/lib/strapi/dto/types";
 
@@ -76,13 +84,13 @@ defineProps<{
 
 .blogArticle__header__text > h1 {
   margin: 0 0 var(--space-600);
-  font-size: var(--font-5xl);
+  font-size: calc(var(--font-5xl) * 0.9);
   line-height: var(--line-5xl);
 }
 
 .blogArticle__header__text > p {
   margin: 0 0 var(--space-600);
-  font-size: var(--font-lg);
+  font-size: calc(var(--font-lg) * 0.9);
   line-height: var(--line-lg);
   color: var(--color-text-light);
 }
@@ -94,7 +102,7 @@ defineProps<{
 .blogArticle__header__image picture {
   position: relative;
   display: block;
-  height: 400px;
+  aspect-ratio: 16 / 9;
 }
 
 .blogArticle__header__image :deep(img) {
@@ -156,7 +164,8 @@ defineProps<{
 
   .blogArticle__header__image {
     flex: 1 0 50%;
-    padding: var(--space-card-pad) 0 0 0;
+    align-self: center;
+    padding: 0;
   }
 
   .blogArticle__header__image :deep(img) {
@@ -199,8 +208,7 @@ defineProps<{
   }
 
   .blogArticle__header__image picture {
-    height: 100%;
-    min-height: 480px;
+    height: auto;
   }
 }
 
