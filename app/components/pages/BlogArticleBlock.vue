@@ -13,7 +13,6 @@
               :default-format="ImageFormat.MEDIUM"
               :sources="{
                 [ImageBreakpoint.MEDIUM]: ImageFormat.LARGE,
-                [ImageBreakpoint.SMALL]: ImageFormat.MEDIUM,
               }"
             />
           </div>
@@ -205,10 +204,6 @@ defineProps<{
     justify-content: center;
     padding: calc(var(--space-card-pad) * 1.5) calc(var(--space-card-pad) * 2)
       calc(var(--space-card-pad) * 1.5) var(--space-card-pad);
-  }
-
-  .blogArticle__header__image picture {
-    height: auto;
   }
 }
 
