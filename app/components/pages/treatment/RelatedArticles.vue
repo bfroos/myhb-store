@@ -15,12 +15,12 @@
               :to="`/blog/${article.slug}`"
               class="relatedArticles__link"
             >
-              <img
+              <UiAtomMediaPicture
                 v-if="article.cover?.url"
-                :src="article.cover.url"
+                :media="article.cover"
+                :default-format="ImageFormat.SMALL"
                 :alt="article.cover?.alternativeText || article.headline"
-                class="relatedArticles__img"
-                loading="lazy"
+                class="relatedArticles__picture"
               />
               <span class="relatedArticles__title">{{ article.headline }}</span>
             </NuxtLinkLocale>
@@ -32,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import { ImageFormat } from "~/lib/strapi/dto/enums";
 import type { BlogArticleDto } from "~/lib/strapi/dto/collections";
 
 withDefaults(
@@ -72,7 +73,12 @@ withDefaults(
   text-decoration: none;
 }
 
-.relatedArticles__img {
+.relatedArticles__picture {
+  display: block;
+  width: 100%;
+}
+
+.relatedArticles__picture :deep(img) {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
