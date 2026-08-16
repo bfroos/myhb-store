@@ -110,7 +110,9 @@ defineProps<{
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* Covers carry burnt-in text and logos and range from 0.67 to 1.78 in ratio,
+     so contain rather than cover: never crop, letterbox against the header. */
+  object-fit: contain;
   border-radius: var(--border-radius-card-figure);
 }
 
@@ -163,12 +165,20 @@ defineProps<{
 
   .blogArticle__header__image {
     flex: 1 0 50%;
-    align-self: center;
-    padding: 0;
+    align-self: stretch;
+    /* The main card is pulled up over the header by one card-pad; reserving it
+       here lands the cover's bottom edge exactly on the card. */
+    padding: 0 0 var(--space-card-pad);
+  }
+
+  .blogArticle__header__image picture {
+    aspect-ratio: auto;
+    height: 100%;
   }
 
   .blogArticle__header__image :deep(img) {
-    border-radius: var(--border-radius-card-sm) 0 0 0;
+    object-fit: cover;
+    border-radius: 0 var(--border-radius-card-sm) 0 0;
   }
 
   .blogArticle__aside {
