@@ -1,111 +1,10 @@
 <template>
-  <UiOrganismBaseBreadcrumb
-    v-if="!isAdsMode"
-    :items="breadcrumbItems"
+  <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
+  <PagesTreatmentOrderedBlocks
+    :fixed-blocks="fixedBlocks"
+    :dynamic-blocks="treatmentPage?.blocks"
+    :order="blockOrder"
   />
-  <!-- 1. Hero -->
-  <BlockTreatmentHero
-    v-if="fixedBlocks?.hero"
-    v-bind="fixedBlocks.hero"
-    show-floating-cta
-  />
-
-  <!-- SEO mode: original order with location blocks early -->
-  <template v-if="!isAdsMode">
-    <BlockLocationContact
-      v-if="fixedBlocks?.locationContact"
-      v-bind="fixedBlocks.locationContact"
-    />
-    <BlockMediaCard
-      v-if="fixedBlocks?.aboutLocation"
-      v-bind="fixedBlocks.aboutLocation"
-    />
-    <BlockLocationDirections
-      v-if="fixedBlocks?.locationDirections"
-      v-bind="fixedBlocks.locationDirections"
-    />
-    <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
-  </template>
-
-  <!-- Ads mode: custom order (2→3→4→5→6→7→8→9→10→11→12) -->
-  <template v-if="isAdsMode">
-    <!-- 2. About (Video) -->
-    <BlockMediaBento
-      v-if="fixedBlocks?.about"
-      v-bind="fixedBlocks.about"
-      id="how-it-works"
-    />
-    <!-- 3. Reviews -->
-    <BlockReviewsBlock
-      v-if="fixedBlocks?.reviews"
-      v-bind="fixedBlocks.reviews"
-      id="reviews"
-    />
-    <!-- 4. Treatment Details -->
-    <BlockTreatmentDetails
-      v-if="fixedBlocks?.treatmentDetails"
-      v-bind="fixedBlocks.treatmentDetails"
-      id="treatment-details"
-    />
-    <!-- 5. Related Treatments -->
-    <BlockTreatmentTeasers
-      v-if="fixedBlocks?.relatedTreatments"
-      v-bind="fixedBlocks.relatedTreatments"
-      id="related-treatments"
-    />
-    <!-- 6. Treatment Process Steps -->
-    <BlockProcessSteps
-      v-if="fixedBlocks?.treatmentProcess"
-      v-bind="fixedBlocks.treatmentProcess"
-      id="treatment-process-steps"
-    />
-    <!-- 7. Benefits -->
-    <BlockBenefitsList
-      v-if="fixedBlocks?.benefits"
-      v-bind="fixedBlocks.benefits"
-      id="benefits"
-    />
-    <!-- 8. Medical Team -->
-    <BlockEmployeeBlock
-      v-if="fixedBlocks?.medicalTeamHighlight"
-      v-bind="fixedBlocks.medicalTeamHighlight"
-      id="employee"
-    />
-    <!-- 9. Suitability (Comparison) -->
-    <BlockComparisonBlock
-      v-if="fixedBlocks?.suitability"
-      v-bind="fixedBlocks.suitability"
-      id="suitability"
-    />
-    <!-- 10. Table of Contents (Inhaltsverzeichnis) -->
-    <BlockTableOfContents
-      v-if="fixedBlocks?.tableOfContents"
-      v-bind="fixedBlocks.tableOfContents"
-    />
-    <!-- 11. Treatment Plan (if exists) -->
-    <BlockTreatmentPlan
-      v-if="fixedBlocks?.treatmentPlan"
-      v-bind="fixedBlocks.treatmentPlan"
-      id="treatment-plan"
-    />
-    <!-- 12. Map/Contact -->
-    <BlockLocationContact
-      v-if="fixedBlocks?.locationContact"
-      v-bind="fixedBlocks.locationContact"
-    />
-    <!-- 13. About Location (Du findest unsere Lounge...) -->
-    <BlockMediaCard
-      v-if="fixedBlocks?.aboutLocation"
-      v-bind="fixedBlocks.aboutLocation"
-    />
-    <!-- 14. Directions (Wegbeschreibung) -->
-    <BlockLocationDirections
-      v-if="fixedBlocks?.locationDirections"
-      v-bind="fixedBlocks.locationDirections"
-    />
-    <!-- 15. FAQ (ganz am Ende) -->
-    <BlockFaqBlock v-if="fixedBlocks?.faq" v-bind="fixedBlocks.faq" id="faq" />
-  </template>
 </template>
 <script setup lang="ts">
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
@@ -127,6 +26,48 @@ const {
 
 const { isAdsMode } = useSiteModeFlags();
 const pageLoaded = await fetchPage();
+
+const SEO_BLOCK_ORDER = [
+  "hero",
+  "locationContact",
+  "aboutLocation",
+  "locationDirections",
+  "tableOfContents",
+  "about",
+  "reviews",
+  "treatmentDetails",
+  "treatmentPlan",
+  "benefits",
+  "suitability",
+  "medicalTeamHighlight",
+  "treatmentProcess",
+  "relatedTreatments",
+  "faq",
+];
+
+const ADS_BLOCK_ORDER = [
+  "hero",
+  "about",
+  "reviews",
+  "treatmentDetails",
+  "relatedTreatments",
+  "treatmentProcess",
+  "benefits",
+  "medicalTeamHighlight",
+  "suitability",
+  "tableOfContents",
+  "treatmentPlan",
+  "locationContact",
+  "aboutLocation",
+  "locationDirections",
+  "faq",
+];
+
+const blockOrder = computed<string[]>(
+  () =>
+    (treatmentPage.value as any)?.blockOrder ??
+    (isAdsMode.value ? ADS_BLOCK_ORDER : SEO_BLOCK_ORDER),
+);
 
 if (pageLoaded) {
   // Fetch price fallback from general treatment page
