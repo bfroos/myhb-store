@@ -76,6 +76,7 @@ export function useProductPage() {
     const priceTag = formatPriceInEuro(price);
 
     return {
+      metaRobots: "noindex, follow",
       metaTitle: t("productPage.seo.title", {
         productName: `${manufacturer} ${productName}`,
         priceTag,
