@@ -2,14 +2,19 @@
 
 /**
  * Generate Video Posters Script (Simplified Version)
- * 
+ *
  * Fetches all videos from Strapi and creates a mapping file.
  * For now, this just prepares the infrastructure - actual poster generation
  * will be added in a follow-up with proper video processing tools.
- * 
+ *
+ * Required environment variables:
+ *   STRAPI_API_TOKEN        Content API token with read access to the upload
+ *                           plugin. Never hardcode this - see .env.example.
+ *   NUXT_PUBLIC_STRAPI_URL  Optional, defaults to the production Strapi instance.
+ *
  * Usage:
- *   node scripts/generate-video-posters.js
- *   npm run generate:posters
+ *   STRAPI_API_TOKEN=... node scripts/generate-video-posters.js
+ *   STRAPI_API_TOKEN=... npm run generate:posters
  */
 
 import fs from 'fs/promises';
@@ -20,7 +25,20 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const STRAPI_URL = process.env.NUXT_PUBLIC_STRAPI_URL || 'https://striking-bear-e5a15ddc94.strapiapp.com';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN || 'e181d9dd55da8f81fe4c7ac3e97241dd690e7f32a1b84bb5f54d0ab55e09c1ffc9c3978ac6ffb5e08882c2c92d19edecf5ef9ea487cbaac0471bbea05aafc785d83423d13c3443af0593b7a270e5a60fb96931f5f1b3eee7df3eabf3067676acc318e129ce20959e42ad2a00d528fd23452c44ba5aa9583808e1d5c1252190b5';
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
+
+if (!STRAPI_TOKEN) {
+  console.error('❌ STRAPI_API_TOKEN is not set.');
+  console.error('');
+  console.error('   This script needs a Strapi Content API token with read access');
+  console.error('   to the upload plugin. Create one in Strapi under');
+  console.error('   Settings → API Tokens, then run:');
+  console.error('');
+  console.error('     STRAPI_API_TOKEN="<token>" npm run generate:posters');
+  console.error('');
+  console.error('   Never hardcode the token in this file.');
+  process.exit(1);
+}
 
 const OUTPUT_DIR = path.join(__dirname, '../public/posters');
 const MAPPING_FILE = path.join(OUTPUT_DIR, 'video-poster-mapping.json');
@@ -30,7 +48,7 @@ const MAPPING_FILE = path.join(OUTPUT_DIR, 'video-poster-mapping.json');
  */
 async function fetchVideosFromStrapi() {
   console.log('🔍 Fetching videos from Strapi...');
-  
+
   try {
     const response = await fetch(`${STRAPI_URL}/api/upload/files?filters[mime][$startsWith]=video`, {
       headers: {
@@ -72,13 +90,13 @@ async function main() {
 
   // Create mapping (for now just log the videos, poster generation comes next)
   const mapping = {};
-  
+
   console.log('\n📹 Videos found:');
   for (const video of videos) {
     console.log(`   - ID ${video.id}: ${video.name || video.url}`);
     console.log(`     URL: ${video.url}`);
     console.log(`     Size: ${(video.size / 1024 / 1024).toFixed(2)} MB`);
-    
+
     // For now, no poster URL (will be generated in follow-up)
     // mapping[video.id] = `/posters/video-${video.id}-poster.jpg`;
   }
