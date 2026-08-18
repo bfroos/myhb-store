@@ -7,8 +7,11 @@
     <component
       v-else-if="BLOCK_MAP[key] && fixedBlocks?.[key]"
       :is="BLOCK_MAP[key]!.is"
-      v-bind="{ ...fixedBlocks[key], ...(BLOCK_MAP[key]!.props ?? {}) }"
-      :id="BLOCK_MAP[key]!.id"
+      v-bind="{
+        ...fixedBlocks[key],
+        ...(BLOCK_MAP[key]!.props ?? {}),
+        ...(BLOCK_MAP[key]!.id ? { id: BLOCK_MAP[key]!.id } : {}),
+      }"
     />
   </template>
 </template>

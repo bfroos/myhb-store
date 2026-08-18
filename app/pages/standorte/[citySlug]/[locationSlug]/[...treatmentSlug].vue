@@ -10,6 +10,10 @@
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
 import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
+import {
+  LOCATION_ADS_BLOCK_ORDER,
+  LOCATION_SEO_BLOCK_ORDER,
+} from "~/lib/blocks/treatmentBlockOrder";
 
 const {
   fetchPage,
@@ -28,53 +32,13 @@ const {
 const { isAdsMode } = useSiteModeFlags();
 const pageLoaded = await fetchPage();
 
-// "blocks" (Dynamic Zone) steht am Ende: ohne Eintrag in der Default-
-// Reihenfolge wuerde ein am Standort gepflegter Zusatzblock nie gerendert.
-const SEO_BLOCK_ORDER = [
-  "hero",
-  "locationContact",
-  "aboutLocation",
-  "locationDirections",
-  "tableOfContents",
-  "about",
-  "reviews",
-  "treatmentDetails",
-  "treatmentPlan",
-  "benefits",
-  "suitability",
-  "medicalTeamHighlight",
-  "treatmentProcess",
-  "relatedTreatments",
-  "faq",
-  "blocks",
-];
-
-const ADS_BLOCK_ORDER = [
-  "hero",
-  "about",
-  "reviews",
-  "treatmentDetails",
-  "relatedTreatments",
-  "treatmentProcess",
-  "benefits",
-  "medicalTeamHighlight",
-  "suitability",
-  "tableOfContents",
-  "treatmentPlan",
-  "locationContact",
-  "aboutLocation",
-  "locationDirections",
-  "faq",
-  "blocks",
-];
-
 // blockOrder sortiert nur; nicht gelistete Bloecke werden in Default-
 // Reihenfolge angehaengt. Ausgeblendet wird ausschliesslich ueber
 // hiddenBlocks. Details: lib/blocks/mergeBlockOrder.ts
 const blockOrder = computed<string[]>(() =>
   mergeBlockOrder(
     (treatmentPage.value as any)?.blockOrder,
-    isAdsMode.value ? ADS_BLOCK_ORDER : SEO_BLOCK_ORDER,
+    isAdsMode.value ? LOCATION_ADS_BLOCK_ORDER : LOCATION_SEO_BLOCK_ORDER,
     (treatmentPage.value as any)?.hiddenBlocks,
   ),
 );

@@ -10,7 +10,10 @@
     :reviewer="reviewer"
     :date="treatmentUpdatedAt"
   />
-  <PagesTreatmentCommonBlocks :fixed-blocks="fixedBlocks" />
+  <PagesTreatmentOrderedBlocks
+    :fixed-blocks="fixedBlocks"
+    :order="COMMON_TREATMENT_BLOCK_ORDER"
+  />
   <PagesTreatmentRelatedArticles
     v-if="!isAdsMode && relatedArticles.length"
     :articles="relatedArticles"
@@ -26,6 +29,7 @@
 </template>
 <script setup lang="ts">
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
+import { COMMON_TREATMENT_BLOCK_ORDER } from "~/lib/blocks/treatmentBlockOrder";
 
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
