@@ -62,8 +62,11 @@
               <UiAtomBaseButton
                 v-if="applyTarget === JobApplyTarget.URL"
                 size="lg"
+                as="a"
                 fullWidth
                 :href="url"
+                target="_blank"
+                rel="noopener noreferrer"
               >
                 {{ $t("career.job.apply") }}
               </UiAtomBaseButton>
