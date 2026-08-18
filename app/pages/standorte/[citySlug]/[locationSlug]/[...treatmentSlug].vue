@@ -9,6 +9,7 @@
 <script setup lang="ts">
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
+import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
 
 const {
   fetchPage,
@@ -27,6 +28,8 @@ const {
 const { isAdsMode } = useSiteModeFlags();
 const pageLoaded = await fetchPage();
 
+// "blocks" (Dynamic Zone) steht am Ende: ohne Eintrag in der Default-
+// Reihenfolge wuerde ein am Standort gepflegter Zusatzblock nie gerendert.
 const SEO_BLOCK_ORDER = [
   "hero",
   "locationContact",
@@ -43,6 +46,7 @@ const SEO_BLOCK_ORDER = [
   "treatmentProcess",
   "relatedTreatments",
   "faq",
+  "blocks",
 ];
 
 const ADS_BLOCK_ORDER = [
@@ -61,12 +65,18 @@ const ADS_BLOCK_ORDER = [
   "aboutLocation",
   "locationDirections",
   "faq",
+  "blocks",
 ];
 
-const blockOrder = computed<string[]>(
-  () =>
-    (treatmentPage.value as any)?.blockOrder ??
-    (isAdsMode.value ? ADS_BLOCK_ORDER : SEO_BLOCK_ORDER),
+// blockOrder sortiert nur; nicht gelistete Bloecke werden in Default-
+// Reihenfolge angehaengt. Ausgeblendet wird ausschliesslich ueber
+// hiddenBlocks. Details: lib/blocks/mergeBlockOrder.ts
+const blockOrder = computed<string[]>(() =>
+  mergeBlockOrder(
+    (treatmentPage.value as any)?.blockOrder,
+    isAdsMode.value ? ADS_BLOCK_ORDER : SEO_BLOCK_ORDER,
+    (treatmentPage.value as any)?.hiddenBlocks,
+  ),
 );
 
 if (pageLoaded) {
@@ -114,10 +124,13 @@ const breadcrumbSchema = computed(() =>
   buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
 );
 
-// Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
+// Schema.org FAQPage (nur wenn FAQ-Block sichtbar ist)
 const faqSchema = computed(() => {
   if (!fixedBlocks.value?.faq) return null;
-  
+  // Ausgeblendete Bloecke duerfen nicht im strukturierten Datensatz landen -
+  // sonst bewirbt Google FAQs, die auf der Seite nicht existieren.
+  if (!blockOrder.value.includes("faq")) return null;
+
   // Merge faqs from both direct faqs and faqSets
   const directFaqs = fixedBlocks.value.faq.faqs ?? [];
   const faqSetsItems = (fixedBlocks.value.faq.faqSets ?? []).flatMap(
@@ -129,6 +142,8 @@ const faqSchema = computed(() => {
 
 // Schema.org VideoObject (from about block videos)
 const videoSchema = computed(() => {
+  if (!blockOrder.value.includes("about")) return null;
+
   const aboutMedia = fixedBlocks.value?.about?.media;
   if (!aboutMedia) return null;
 
