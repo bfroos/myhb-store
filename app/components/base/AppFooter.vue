@@ -85,7 +85,7 @@
                 </h2>
                 <ul>
                   <li v-for="category in productCategories" :key="category.id">
-                    <NuxtLinkLocale :to="`/preise#${category.slug}`">
+                    <NuxtLinkLocale :to="priceCategoryLink(category)">
                       {{ category.name }}
                     </NuxtLinkLocale>
                   </li>
@@ -224,6 +224,17 @@ const { treatmentPages, productCategories } = useMenu(() =>
 const { openCookieSettings } = useCookiebot();
 const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
+
+// Overrides for specific price categories that should link to a dedicated
+// page instead of the default /preise#<slug> anchor.
+const PRICE_LINK_OVERRIDES: Record<string, string> = {
+  botox: "/p/botox-kosten",
+  skinbooster: "/p/skinbooster-preise",
+};
+
+function priceCategoryLink(category: { slug: string }) {
+  return PRICE_LINK_OVERRIDES[category.slug] ?? `/preise#${category.slug}`;
+}
 </script>
 <style scoped>
 .appFooter a:not(.button) {
