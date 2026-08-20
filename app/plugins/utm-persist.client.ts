@@ -1,16 +1,20 @@
 /**
- * MYH&B UTM-Persistenz
+ * MYH&B UTM-Persistenz v1.1
  *
- * Problem: Nur ~1 % der Calendly-Buchungen tragen UTM-Parameter, weil die
- * Parameter beim Navigieren Landingpage -> Behandlungsseite -> Calendly
- * verloren gehen. Dieses Plugin speichert Marketing-Parameter beim
- * Erstbesuch (First Touch) und hängt sie automatisch an alle Calendly-URLs
- * (Links, Inline-Embeds, Popups) sowie an Cross-Domain-Links zwischen
- * myhealthandbeauty.com und myhealthandbeauty.app.
+ * v1.0: Speichert utm_*, gclid, fbclid, ttclid beim Erstbesuch (First Touch)
+ * und dekoriert automatisch alle Calendly-URLs (Links, Embeds, Popups) sowie
+ * Cross-Domain-Links zwischen myhealthandbeauty.com und .app.
  *
- * Consent: Mit Cookiebot-Marketing-Consent wird 90 Tage persistiert
- * (First-Party-Cookie + localStorage), ohne Consent nur für die laufende
- * Session (sessionStorage). Bei nachträglichem Accept wird hochgestuft.
+ * v1.1 (Ideen aus utm-tracking.js von Kevin Kirch):
+ * - Referrer-Fallback: ohne UTM/Click-ID wird die Quelle aus document.referrer
+ *   abgeleitet (google -> organic, instagram -> social_organic, sonst referral,
+ *   kein Referrer -> direct). Jede Buchung traegt damit eine Quelle.
+ * - First-/Last-Touch getrennt: First wird nie ueberschrieben, Last bei jedem
+ *   neuen externen Signal aktualisiert. Dekoration nutzt Last (Fallback First).
+ *
+ * Consent: Mit Cookiebot-Marketing-Consent 90 Tage persistent (First-Party-
+ * Cookie + localStorage), ohne Consent nur sessionStorage. Bei nachtraeglichem
+ * Accept wird hochgestuft.
  */
 export default defineNuxtPlugin(() => {
   if (import.meta.server) return;
@@ -28,21 +32,21 @@ export default defineNuxtPlugin(() => {
   const KEY = "myhb_attribution";
   const TTL_DAYS = 90;
 
-  // Registrierbare Domain (funktioniert für .com und .app inkl. Subdomains)
   const COOKIE_DOMAIN = (() => {
     const parts = window.location.hostname.split(".");
     return parts.length >= 2 ? "." + parts.slice(-2).join(".") : window.location.hostname;
   })();
 
-  type AttributionData = Partial<Record<(typeof PARAMS)[number], string>> & {
+  type Touch = Partial<Record<(typeof PARAMS)[number], string>> & {
     _ts?: string;
     _lp?: string;
+    _ref?: string;
   };
+  type Store = { first?: Touch; last?: Touch };
 
   // ---------- Consent ----------
   function hasMarketingConsent(): boolean {
     const cb = (window as any).Cookiebot;
-    // Cookiebot nicht (mehr) vorhanden -> nicht blockieren
     if (!cb || !cb.consent) return true;
     return !!cb.consent.marketing;
   }
@@ -59,8 +63,8 @@ export default defineNuxtPlugin(() => {
     const m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
     return m ? decodeURIComponent(m.pop() as string) : null;
   }
-  function save(data: AttributionData) {
-    const payload = JSON.stringify(data);
+  function save(store: Store) {
+    const payload = JSON.stringify(store);
     try {
       sessionStorage.setItem(KEY, payload);
     } catch {}
@@ -71,23 +75,63 @@ export default defineNuxtPlugin(() => {
       setCookie(KEY, payload, TTL_DAYS);
     }
   }
-  function load(): AttributionData | null {
+  function load(): Store | null {
     let raw: string | null = null;
     try {
       raw = sessionStorage.getItem(KEY) || localStorage.getItem(KEY);
     } catch {}
     if (!raw) raw = getCookie(KEY);
+    if (!raw) return null;
     try {
-      return raw ? (JSON.parse(raw) as AttributionData) : null;
+      const parsed = JSON.parse(raw);
+      // Migration vom flachen v1.0-Format
+      if (parsed && !parsed.first && !parsed.last && (parsed.utm_source || parsed._ts)) {
+        return { first: parsed as Touch, last: parsed as Touch };
+      }
+      return parsed as Store;
     } catch {
       return null;
     }
   }
 
-  // ---------- 1) Parameter einsammeln (First Touch, Paid überschreibt nie Paid) ----------
+  // ---------- Referrer-Klassifikation ----------
+  function deriveFromReferrer(): Touch | null {
+    const here = COOKIE_DOMAIN.replace(/^\./, "");
+    let host = "";
+    try {
+      if (document.referrer) {
+        const u = new URL(document.referrer);
+        if (u.hostname === window.location.hostname || u.hostname.endsWith(here)) return null; // interne Navigation
+        host = u.hostname.replace(/^www\./, "");
+      }
+    } catch {
+      return null;
+    }
+    if (!host) return { utm_source: "direct", utm_medium: "none" };
+    const rules: Array<[RegExp, string, string]> = [
+      [/(^|\.)google\./, "google", "organic"],
+      [/(^|\.)bing\./, "bing", "organic"],
+      [/duckduckgo\.com$/, "duckduckgo", "organic"],
+      [/ecosia\.org$/, "ecosia", "organic"],
+      [/(^|\.)yahoo\./, "yahoo", "organic"],
+      [/instagram\.com$/, "instagram", "social_organic"],
+      [/(facebook\.com|fb\.com|m\.facebook\.com)$/, "facebook", "social_organic"],
+      [/tiktok\.com$/, "tiktok", "social_organic"],
+      [/linkedin\.com$/, "linkedin", "social_organic"],
+      [/pinterest\./, "pinterest", "social_organic"],
+      [/(youtube\.com|youtu\.be)$/, "youtube", "social_organic"],
+      [/(twitter\.com|x\.com|t\.co)$/, "x", "social_organic"],
+    ];
+    for (const [re, source, medium] of rules) {
+      if (re.test(host)) return { utm_source: source, utm_medium: medium, _ref: host };
+    }
+    return { utm_source: host, utm_medium: "referral", _ref: host };
+  }
+
+  // ---------- 1) Parameter/Quelle einsammeln ----------
   function capture() {
     const qs = new URLSearchParams(window.location.search);
-    const found: AttributionData = {};
+    const found: Touch = {};
     let hasAny = false;
     for (const p of PARAMS) {
       const v = qs.get(p);
@@ -108,20 +152,35 @@ export default defineNuxtPlugin(() => {
         found.utm_medium = found.utm_medium || "paid_social";
       }
     }
-    if (!hasAny) return;
 
-    const existing = load();
-    // Vorhandene Attribution mit Quelle nicht durch parameterlose Besuche
-    // verwässern; neue Quelle (neuer Klick) gewinnt.
-    if (existing?.utm_source && !found.utm_source) return;
-    found._ts = new Date().toISOString();
-    found._lp = window.location.pathname;
-    save(found);
+    const store = load() || {};
+    let touch: Touch | null = hasAny ? found : null;
+    if (!touch) {
+      // Referrer-Fallback nur, wenn ein externes Signal vorliegt oder noch
+      // gar keine Attribution existiert (direct-Erstbesuch).
+      const derived = deriveFromReferrer();
+      if (derived && (derived._ref || !store.first)) touch = derived;
+    }
+    if (!touch) return;
+
+    touch._ts = new Date().toISOString();
+    touch._lp = window.location.pathname;
+
+    if (!store.first) store.first = touch;
+    store.last = touch;
+    save(store);
   }
 
   // ---------- 2) Calendly-URLs dekorieren ----------
+  function pickTouch(): Touch | null {
+    const store = load();
+    if (!store) return null;
+    if (store.last && store.last.utm_source) return store.last;
+    return store.first || null;
+  }
+
   function decorate(url: string): string {
-    const data = load();
+    const data = pickTouch();
     if (!data) return url;
     try {
       const u = new URL(url, window.location.origin);
@@ -136,22 +195,18 @@ export default defineNuxtPlugin(() => {
   }
 
   function decorateAll() {
-    const data = load();
+    const data = pickTouch();
     if (!data) return;
-    // a) Links
     document.querySelectorAll<HTMLAnchorElement>('a[href*="calendly.com"]').forEach((a) => {
       a.href = decorate(a.href);
     });
-    // b) Inline-Embeds (data-url)
     document.querySelectorAll('[data-url*="calendly.com"]').forEach((el) => {
       el.setAttribute("data-url", decorate(el.getAttribute("data-url") as string));
     });
-    // c) Calendly-iframes (nuxt-calendly InlineWidget)
     document.querySelectorAll<HTMLIFrameElement>('iframe[src*="calendly.com"]').forEach((f) => {
       const dec = decorate(f.src);
       if (dec !== f.src) f.src = dec;
     });
-    // d) Cross-Domain-Links .com <-> .app (Cookies gelten nur je Domain)
     document.querySelectorAll<HTMLAnchorElement>('a[href*="myhealthandbeauty."]').forEach((a) => {
       try {
         const u = new URL(a.href, window.location.origin);
@@ -193,12 +248,10 @@ export default defineNuxtPlugin(() => {
   } else {
     run();
   }
-  // SPA-Navigation + lazy geladene Widgets
   new MutationObserver(run).observe(document.documentElement, {
     childList: true,
     subtree: true,
   });
-  // Nachträglicher Consent -> Persistenz hochstufen
   window.addEventListener("CookiebotOnAccept", () => {
     const data = load();
     if (data) save(data);
