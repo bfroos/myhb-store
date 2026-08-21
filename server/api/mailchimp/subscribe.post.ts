@@ -153,15 +153,16 @@ export default defineEventHandler(async (event) => {
   };
 
   // T6 Set B (#13): Merge-Felder erst senden, wenn sie in der Audience
-  // existieren (sonst 400 von Mailchimp). Nach dem Anlegen von
-  // UTMSRC/UTMMED/UTMCMP/CLICKID/SRC das Env-Flag auf "1" setzen.
+  // existieren (sonst 400 von Mailchimp). Felder: UTMSOURCE, UTMMED,
+  // UTMCAMP, CLICKID, SRC (UTMSRC/UTMCMP sind durch frueher geloeschte
+  // Felder blockiert). Nach dem Anlegen das Env-Flag auf "1" setzen.
   const mergeFieldsReady = process.env.MAILCHIMP_ATTR_MERGE_READY === "1";
   const stampTouch = attribution?.last ?? attribution?.first;
   const mergeFields: Record<string, string> = {};
   if (mergeFieldsReady && stampTouch) {
-    if (stampTouch.utm_source) mergeFields.UTMSRC = stampTouch.utm_source;
+    if (stampTouch.utm_source) mergeFields.UTMSOURCE = stampTouch.utm_source;
     if (stampTouch.utm_medium) mergeFields.UTMMED = stampTouch.utm_medium;
-    if (stampTouch.utm_campaign) mergeFields.UTMCMP = stampTouch.utm_campaign;
+    if (stampTouch.utm_campaign) mergeFields.UTMCAMP = stampTouch.utm_campaign;
     if (stampTouch.click_id) mergeFields.CLICKID = stampTouch.click_id;
     const derived = deriveSrc(stampTouch);
     if (derived) mergeFields.SRC = derived;
