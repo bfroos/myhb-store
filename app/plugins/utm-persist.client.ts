@@ -1,5 +1,5 @@
 /**
- * MYH&B UTM-Persistenz v1.1
+ * MYH&B UTM-Persistenz v1.2
  *
  * v1.0: Speichert utm_*, gclid, fbclid, ttclid beim Erstbesuch (First Touch)
  * und dekoriert automatisch alle Calendly-URLs (Links, Embeds, Popups) sowie
@@ -11,6 +11,12 @@
  *   kein Referrer -> direct). Jede Buchung traegt damit eine Quelle.
  * - First-/Last-Touch getrennt: First wird nie ueberschrieben, Last bei jedem
  *   neuen externen Signal aktualisiert. Dekoration nutzt Last (Fallback First).
+ *
+ * v1.2 (T6 Set B, #24): Klick-ID zusaetzlich als salesforce_uuid an
+ * Calendly-URLs. Calendly reicht im Webhook (invitee.created -> tracking.*)
+ * nur utm_* und salesforce_uuid zurueck — gclid/fbclid/ttclid als nackte
+ * Query-Parameter gehen dort verloren. Format "gclid:..." | "fbclid:..." |
+ * "ttclid:..." wie touchpoints.click_id.
  *
  * Consent: Mit Cookiebot-Marketing-Consent 90 Tage persistent (First-Party-
  * Cookie + localStorage), ohne Consent nur sessionStorage. Bei nachtraeglichem
@@ -187,6 +193,19 @@ export default defineNuxtPlugin(() => {
       if (!u.hostname.includes("calendly.com")) return url;
       for (const p of PARAMS) {
         if (data[p] && !u.searchParams.get(p)) u.searchParams.set(p, data[p] as string);
+      }
+      // v1.2 (T6 #24): Klick-ID via salesforce_uuid — einziger freier
+      // Passthrough, den Calendly im Webhook (tracking.salesforce_uuid)
+      // zurueckgibt. Salesforce ist bei uns nicht im Einsatz.
+      const cid = data.gclid
+        ? `gclid:${data.gclid}`
+        : data.fbclid
+          ? `fbclid:${data.fbclid}`
+          : data.ttclid
+            ? `ttclid:${data.ttclid}`
+            : null;
+      if (cid && !u.searchParams.get("salesforce_uuid")) {
+        u.searchParams.set("salesforce_uuid", cid);
       }
       return u.toString();
     } catch {
