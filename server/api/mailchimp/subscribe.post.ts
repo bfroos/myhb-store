@@ -16,6 +16,62 @@ const EMAIL_VALIDATION_URL =
   "https://n8n.myhealthandbeauty.com/webhook/validate-email";
 const EMAIL_VALIDATION_TIMEOUT_MS = 4000;
 
+// ---- T6 Set B (#13): Quellenstempel -----------------------------------
+// Wire-Format siehe app/lib/attribution.ts. Alles hier ist rein additiv
+// und darf die Anmeldung NIE fehlschlagen lassen.
+
+const WIRE_TOUCH_KEYS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+  "click_id",
+  "ts",
+  "landing_page",
+  "referrer",
+] as const;
+
+type WireTouch = Partial<Record<(typeof WIRE_TOUCH_KEYS)[number], string>>;
+type WireAttribution = { first?: WireTouch; last?: WireTouch };
+
+function sanitizeTouch(input: unknown): WireTouch | undefined {
+  if (!input || typeof input !== "object") return undefined;
+  const out: WireTouch = {};
+  for (const k of WIRE_TOUCH_KEYS) {
+    const v = (input as Record<string, unknown>)[k];
+    if (typeof v === "string" && v.trim()) out[k] = v.trim().slice(0, 500);
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
+function sanitizeAttribution(input: unknown): WireAttribution | null {
+  if (!input || typeof input !== "object") return null;
+  const first = sanitizeTouch((input as any).first);
+  const last = sanitizeTouch((input as any).last);
+  if (!first && !last) return null;
+  return { ...(first ? { first } : {}), ...(last ? { last } : {}) };
+}
+
+// Ableitung auf die touchpoints-source-Taxonomie (nur eindeutige Faelle;
+// das endgueltige Mapping macht der n8n-Intake).
+function deriveSrc(t: WireTouch | undefined): string | null {
+  if (!t) return null;
+  const cid = t.click_id || "";
+  const src = (t.utm_source || "").toLowerCase();
+  const med = (t.utm_medium || "").toLowerCase();
+  if (cid.startsWith("gclid:")) return "google_ads";
+  if (cid.startsWith("ttclid:")) return "tiktok_ads";
+  if (cid.startsWith("fbclid:")) return "meta_ads";
+  if (src === "google" && (med === "cpc" || med.includes("paid"))) return "google_ads";
+  if (src === "tiktok" && med.includes("paid")) return "tiktok_ads";
+  if ((src === "facebook" || src === "instagram") && med.includes("paid")) return "meta_ads";
+  if (med === "organic" || med === "social_organic") return "organic";
+  if (med === "referral") return "referral";
+  if (src === "direct") return "direct";
+  return null;
+}
+
 async function isEmailDeliverable(email: string): Promise<boolean> {
   try {
     const res = await $fetch<{ valid?: boolean }>(EMAIL_VALIDATION_URL, {
@@ -39,13 +95,17 @@ export default defineEventHandler(async (event) => {
   // Wird nur genutzt, wenn gesetzt; blockiert die Anmeldung nie.
   const n8nNewsletterWebhookUrl = process.env.N8N_NEWSLETTER_WEBHOOK_URL;
 
-  const body = await readBody<{ email?: string; source?: string; phone?: string }>(
-    event,
-  );
+  const body = await readBody<{
+    email?: string;
+    source?: string;
+    phone?: string;
+    attribution?: unknown;
+  }>(event);
   const email = (body.email || "").trim().toLowerCase();
   const rawSource = (body.source || "").trim();
   const source = ALLOWED_SOURCES.has(rawSource) ? rawSource : null;
   const phone = (body.phone || "").trim();
+  const attribution = sanitizeAttribution(body.attribution);
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw createError({
@@ -71,8 +131,9 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Fire-and-forget: n8n benachrichtigen (E-Mail + optionale Handynummer).
-  // Fehler hier duerfen die Newsletter-Anmeldung NIE fehlschlagen lassen.
+  // Fire-and-forget: n8n benachrichtigen (E-Mail + optionale Handynummer
+  // + Quellenstempel). Fehler hier duerfen die Newsletter-Anmeldung NIE
+  // fehlschlagen lassen.
   const notifyN8n = async () => {
     if (!n8nNewsletterWebhookUrl) return;
     try {
@@ -82,12 +143,29 @@ export default defineEventHandler(async (event) => {
           email,
           phone: phone || null,
           source: source || "newsletter_dialog",
+          // T6 Set B (#13): first/last-Touch fuer touchpoints/identities.
+          attribution: attribution || null,
         },
       });
     } catch (err) {
       console.error("[newsletter] n8n webhook notification failed", err);
     }
   };
+
+  // T6 Set B (#13): Merge-Felder erst senden, wenn sie in der Audience
+  // existieren (sonst 400 von Mailchimp). Nach dem Anlegen von
+  // UTMSRC/UTMMED/UTMCMP/CLICKID/SRC das Env-Flag auf "1" setzen.
+  const mergeFieldsReady = process.env.MAILCHIMP_ATTR_MERGE_READY === "1";
+  const stampTouch = attribution?.last ?? attribution?.first;
+  const mergeFields: Record<string, string> = {};
+  if (mergeFieldsReady && stampTouch) {
+    if (stampTouch.utm_source) mergeFields.UTMSRC = stampTouch.utm_source;
+    if (stampTouch.utm_medium) mergeFields.UTMMED = stampTouch.utm_medium;
+    if (stampTouch.utm_campaign) mergeFields.UTMCMP = stampTouch.utm_campaign;
+    if (stampTouch.click_id) mergeFields.CLICKID = stampTouch.click_id;
+    const derived = deriveSrc(stampTouch);
+    if (derived) mergeFields.SRC = derived;
+  }
 
   mailchimp.setConfig({
     apiKey: mailchimpApiKey,
@@ -99,6 +177,7 @@ export default defineEventHandler(async (event) => {
       email_address: email,
       status: "subscribed",
       ...(source ? { tags: [`source:${source}`] } : {}),
+      ...(Object.keys(mergeFields).length ? { merge_fields: mergeFields } : {}),
     });
 
     await notifyN8n();
@@ -122,6 +201,9 @@ export default defineEventHandler(async (event) => {
         hasMemberExistsCode);
 
     if (isMemberExists) {
+      // Merge-Felder werden bei Bestandsmitgliedern bewusst NICHT
+      // ueberschrieben (First-Stempel bleibt stehen); der n8n-Intake
+      // entscheidet dort anhand von identities.
       await notifyN8n();
       return { ok: true };
     }
