@@ -173,6 +173,7 @@ export function mapLocationFixedBlocks(
       intro,
       content,
       mediaItems: aboutItem?.media ? [aboutItem.media] : [],
+      poster: aboutItem?.poster,
       mediaItemAlignment: MediaBentoMediaItemAlignment.HORIZONTAL,
       links: [link],
       layout: MediaBentoLayout.MEDIA_LEFT,

@@ -21,6 +21,7 @@ import type { StrapiMedia } from "~/lib/strapi/dto/types";
 
 export interface VideoObjectInput {
   media: StrapiMedia;
+  poster?: StrapiMedia | null;
   name: string;
   description: string;
   uploadDate?: string;
@@ -28,21 +29,27 @@ export interface VideoObjectInput {
   embedUrl?: string;
 }
 
+function resolveThumbnailUrl(poster?: StrapiMedia | null): string | null {
+  const url = poster?.url;
+  if (!url) return null;
+  if (poster?.mime && !poster.mime.startsWith("image/")) return null;
+  return url;
+}
+
 export function buildVideoObjectSchema(input: VideoObjectInput) {
-  const { media, name, description, uploadDate, duration, embedUrl } = input;
+  const { media, poster, name, description, uploadDate, duration, embedUrl } =
+    input;
 
-  if (!media?.url) {
-    return null;
-  }
+  if (!media?.url) return null;
+  if (media.mime && !media.mime.startsWith("video/")) return null;
 
-  const videoUrl = media.url;
+  const thumbnailUrl = resolveThumbnailUrl(poster);
+  if (!thumbnailUrl) return null;
 
-  // Use video URL as thumbnail fallback (Google will extract a frame)
-  const thumbnailUrl = videoUrl;
+  if (!name || !description) return null;
 
-  // Use createdAt as fallback for uploadDate
-  const effectiveUploadDate =
-    uploadDate || media.createdAt || new Date().toISOString();
+  const effectiveUploadDate = uploadDate || media.createdAt;
+  if (!effectiveUploadDate) return null;
 
   const schema: Record<string, any> = {
     "@context": "https://schema.org",
@@ -51,7 +58,7 @@ export function buildVideoObjectSchema(input: VideoObjectInput) {
     description,
     thumbnailUrl,
     uploadDate: effectiveUploadDate,
-    contentUrl: videoUrl,
+    contentUrl: media.url,
   };
 
   // Optional fields

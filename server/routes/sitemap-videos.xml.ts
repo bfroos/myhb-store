@@ -1,25 +1,13 @@
 /**
  * Video Sitemap for Google Video Search Indexing
- * 
- * Based on Google Video Sitemap specification:
  * https://developers.google.com/search/docs/crawling-indexing/sitemaps/video-sitemaps
- * 
- * This generates a sitemap with <video:video> tags for all videos across:
- * - Treatment pages (blocks with video media)
- * - Location pages (blocks with video media)
- * - Blog articles (blocks with video media)
- * 
- * Each video entry includes:
- * - video:thumbnail_loc (poster/thumbnail URL)
- * - video:title (video title from block or fallback)
- * - video:description (video description from block or fallback)
- * - video:content_loc (direct video URL)
- * - video:player_loc (page URL where video is embedded)
- * - video:upload_date (ISO 8601 date)
+ *
+ * Story clips are excluded on purpose: Google requires the video to be the
+ * page's primary content, and they are tiles repeated across many pages.
+ * Videos without a poster image are skipped rather than emitted invalid.
  */
 
 import qs from "qs";
-import { buildVideoPosterUrl, getMediaZoneOrigin } from "~/utils/media";
 
 type StrapiPagination = {
   page: number;
@@ -35,6 +23,19 @@ type StrapiListResponse<T> = {
   };
 };
 
+type StrapiMediaLike = {
+  url?: string;
+  mime?: string;
+  createdAt?: string;
+};
+
+type AboutLike = {
+  headline?: string;
+  intro?: string;
+  media?: StrapiMediaLike | null;
+  poster?: StrapiMediaLike | null;
+};
+
 type VideoEntry = {
   pageUrl: string;
   videoUrl: string;
@@ -44,13 +45,19 @@ type VideoEntry = {
   uploadDate: string;
 };
 
-const LOCALES = ["de", "en", "tr", "ar", "fr", "nl"] as const;
 const DEFAULT_LOCALE = "de";
+
+/**
+ * `populate=deep` is Strapi 4 and 400s on Strapi 5. `*` is used rather than
+ * naming `poster`, because naming a field that is not deployed yet also 400s —
+ * so this query works both before and after the CMS schema ships.
+ */
+const ABOUT_ITEM_POPULATE = { populate: "*" };
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const strapiUrl = config.public.strapiUrl;
-  
+
   if (!strapiUrl) {
     throw createError({
       statusCode: 500,
@@ -59,13 +66,11 @@ export default defineEventHandler(async (event) => {
   }
 
   const requestUrl = getRequestURL(event);
-  const siteUrl = config.public.publicUrl || `${requestUrl.protocol}//${requestUrl.host}`;
+  const siteUrl =
+    config.public.publicUrl || `${requestUrl.protocol}//${requestUrl.host}`;
 
   const videos: VideoEntry[] = [];
 
-  /**
-   * Helper: Fetch from Strapi with pagination
-   */
   async function fetchCollection<T>(
     endpoint: string,
     query: Record<string, any>,
@@ -80,215 +85,112 @@ export default defineEventHandler(async (event) => {
         pagination: { page, pageSize: 100 },
       });
 
-      const url = `${strapiUrl}/api/${endpoint}?${params}`;
-      
       try {
-        const response = await $fetch<StrapiListResponse<T>>(url);
-        const items = response.data || [];
-        result.push(...items);
+        const response = await $fetch<StrapiListResponse<T>>(
+          `${strapiUrl}/api/${endpoint}?${params}`,
+        );
+        result.push(...(response.data || []));
 
         const pagination = response.meta?.pagination;
         hasMore = pagination ? page < pagination.pageCount : false;
         page++;
       } catch (err) {
         console.error(`[video-sitemap] Failed to fetch ${endpoint}:`, err);
-        hasMore = false;
+        return [];
       }
     }
 
     return result;
   }
 
-  /**
-   * Helper: Extract videos from blocks
-   */
-  function extractVideosFromBlocks(
-    blocks: any[] | undefined,
+  function toEntry(
+    about: AboutLike | null | undefined,
     pageUrl: string,
-    pageName: string,
-  ): VideoEntry[] {
-    if (!blocks || !Array.isArray(blocks)) return [];
+    fallbackTitle: string,
+  ): VideoEntry | null {
+    const media = about?.media;
+    if (!media?.url || !media.mime?.startsWith("video/")) return null;
 
-    const foundVideos: VideoEntry[] = [];
+    const poster = about?.poster;
+    if (!poster?.url) return null;
+    if (poster.mime && !poster.mime.startsWith("image/")) return null;
 
-    for (const block of blocks) {
-      // Check for media field (most common)
-      const media = block.media;
-      
-      if (media && media.mime && media.mime.startsWith("video/")) {
-        const videoUrl = media.url;
-        if (!videoUrl) continue;
+    const uploadDate = media.createdAt;
+    if (!uploadDate) return null;
 
-        const canUseTransformations = !!getMediaZoneOrigin(videoUrl);
-        const thumbnailUrl = canUseTransformations
-          ? buildVideoPosterUrl(videoUrl)
-          : videoUrl; // Fallback to video URL
+    const title = stripPlaceholders(about?.headline || fallbackTitle || "");
+    const description = stripPlaceholders(about?.intro || about?.headline || "");
+    if (!title || !description) return null;
 
-        const title = block.heading || block.title || block.headline || `${pageName} - Video`;
-        const description = block.content?.map((c: any) => c.children?.map((ch: any) => ch.text).join(" ")).join(" ") 
-          || block.text 
-          || `Video from ${pageName}`;
-
-        foundVideos.push({
-          pageUrl,
-          videoUrl,
-          thumbnailUrl,
-          title: title.substring(0, 100), // Max 100 chars for title
-          description: description.substring(0, 2048), // Max 2048 chars for description
-          uploadDate: media.createdAt || new Date().toISOString(),
-        });
-      }
-
-      // Check for medias array (MediaBento, galleries, etc.)
-      if (block.medias && Array.isArray(block.medias)) {
-        for (const mediaItem of block.medias) {
-          if (mediaItem.mime && mediaItem.mime.startsWith("video/")) {
-            const videoUrl = mediaItem.url;
-            if (!videoUrl) continue;
-
-            const canUseTransformations = !!getMediaZoneOrigin(videoUrl);
-            const thumbnailUrl = canUseTransformations
-              ? buildVideoPosterUrl(videoUrl)
-              : videoUrl;
-
-            foundVideos.push({
-              pageUrl,
-              videoUrl,
-              thumbnailUrl,
-              title: `${pageName} - Video`.substring(0, 100),
-              description: `Video from ${pageName}`.substring(0, 2048),
-              uploadDate: mediaItem.createdAt || new Date().toISOString(),
-            });
-          }
-        }
-      }
-
-      // Check for stories array (blocks.stories component)
-      if (block.stories && Array.isArray(block.stories)) {
-        for (const story of block.stories) {
-          const video = story.video;
-          if (video && video.mime && video.mime.startsWith("video/")) {
-            const videoUrl = video.url;
-            if (!videoUrl) continue;
-
-            const canUseTransformations = !!getMediaZoneOrigin(videoUrl);
-            const thumbnailUrl = canUseTransformations
-              ? buildVideoPosterUrl(videoUrl)
-              : videoUrl;
-
-            const title = story.title || `${pageName} - Story`;
-            const description = video.alternativeText || story.subtitle || `Story video from ${pageName}`;
-
-            foundVideos.push({
-              pageUrl,
-              videoUrl,
-              thumbnailUrl,
-              title: title.substring(0, 100),
-              description: description.substring(0, 2048),
-              uploadDate: video.createdAt || new Date().toISOString(),
-            });
-          }
-        }
-      }
-    }
-
-    return foundVideos;
+    return {
+      pageUrl,
+      videoUrl: media.url,
+      thumbnailUrl: poster.url,
+      title: title.substring(0, 100),
+      description: description.substring(0, 2048),
+      uploadDate,
+    };
   }
 
-  /**
-   * 1. Homepage
-   */
-  try {
-    const homepageUrl = `${strapiUrl}/api/homepage?locale=${DEFAULT_LOCALE}&populate=deep`;
-    const homepageData = await $fetch<any>(homepageUrl);
-    const homepage = homepageData.data;
-    
-    if (homepage && homepage.blocks) {
-      const pageUrl = `${siteUrl}`;
-      const pageName = "MY HEALTH & BEAUTY";
-      const homeVideos = extractVideosFromBlocks(homepage.blocks, pageUrl, pageName);
-      videos.push(...homeVideos);
-    }
-  } catch (err) {
-    console.error("[video-sitemap] Failed to fetch homepage:", err);
-  }
-
-  /**
-   * 2. Treatment Pages
-   */
   const treatmentPages = await fetchCollection<any>("treatment-pages", {
-    locale: [DEFAULT_LOCALE],
-    populate: "deep",
+    locale: DEFAULT_LOCALE,
+    fields: ["name", "pathKey"],
+    populate: { about: ABOUT_ITEM_POPULATE },
   });
 
   for (const page of treatmentPages) {
-    const slugPath = page.slug?.map((s: any) => s.value).join("/") || "";
-    const pageUrl = `${siteUrl}/behandlungen/${slugPath}`;
-    const pageName = page.name || "Treatment";
-
-    const pageVideos = extractVideosFromBlocks(page.blocks, pageUrl, pageName);
-    videos.push(...pageVideos);
+    if (!page.pathKey) continue;
+    const entry = toEntry(
+      page.about,
+      `${siteUrl}/behandlungen/${page.pathKey}`,
+      page.name,
+    );
+    if (entry) videos.push(entry);
   }
 
-  /**
-   * 3. Location Pages (locations collection)
-   */
   const locations = await fetchCollection<any>("locations", {
-    locale: [DEFAULT_LOCALE],
-    populate: "deep",
+    locale: DEFAULT_LOCALE,
+    fields: ["name", "slug"],
+    populate: {
+      city: { fields: ["slug"] },
+      about: {
+        populate: {
+          open: ABOUT_ITEM_POPULATE,
+          openSoon: ABOUT_ITEM_POPULATE,
+          comingSoon: ABOUT_ITEM_POPULATE,
+        },
+      },
+    },
   });
 
   for (const location of locations) {
-    const citySlug = location.city?.slug?.value || "";
-    const locationSlug = location.slug?.value || "";
+    const citySlug = location.city?.slug;
+    const locationSlug = location.slug;
     if (!citySlug || !locationSlug) continue;
 
     const pageUrl = `${siteUrl}/standorte/${citySlug}/${locationSlug}`;
-    const pageName = location.name || "Location";
-
-    const pageVideos = extractVideosFromBlocks(location.blocks, pageUrl, pageName);
-    videos.push(...pageVideos);
+    const about = location.about;
+    const entry =
+      toEntry(about?.open, pageUrl, location.name) ??
+      toEntry(about?.openSoon, pageUrl, location.name) ??
+      toEntry(about?.comingSoon, pageUrl, location.name);
+    if (entry) videos.push(entry);
   }
 
-  /**
-   * 4. Blog Articles
-   */
-  const blogArticles = await fetchCollection<any>("blog-articles", {
-    locale: [DEFAULT_LOCALE],
-    populate: "deep",
-  });
-
-  for (const article of blogArticles) {
-    const slug = article.slug?.value || "";
-    if (!slug) continue;
-
-    const pageUrl = `${siteUrl}/blog/${slug}`;
-    const pageName = article.title || "Blog Article";
-
-    const pageVideos = extractVideosFromBlocks(article.blocks, pageUrl, pageName);
-    videos.push(...pageVideos);
-  }
-
-  /**
-   * Generate XML
-   */
   const videoTags = videos
-    .map((v) => {
-      // Use video URL as fallback if no thumbnail
-      const thumbnail = v.thumbnailUrl || v.videoUrl;
-      
-      return `  <url>
+    .map(
+      (v) => `  <url>
     <loc>${escapeXml(v.pageUrl)}</loc>
     <video:video>
-      <video:thumbnail_loc>${escapeXml(thumbnail)}</video:thumbnail_loc>
+      <video:thumbnail_loc>${escapeXml(v.thumbnailUrl)}</video:thumbnail_loc>
       <video:title>${escapeXml(v.title)}</video:title>
       <video:description>${escapeXml(v.description)}</video:description>
       <video:content_loc>${escapeXml(v.videoUrl)}</video:content_loc>
       <video:player_loc>${escapeXml(v.pageUrl)}</video:player_loc>
-      <video:upload_date>${v.uploadDate}</video:upload_date>
+      <video:upload_date>${escapeXml(v.uploadDate)}</video:upload_date>
     </video:video>
-  </url>`;
-    })
+  </url>`,
+    )
     .join("\n");
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -302,6 +204,13 @@ ${videoTags}
 
   return xml;
 });
+
+function stripPlaceholders(text: string): string {
+  return text
+    .replace(/\{\{[^}]*\}\}/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
 
 function escapeXml(unsafe: string): string {
   return unsafe

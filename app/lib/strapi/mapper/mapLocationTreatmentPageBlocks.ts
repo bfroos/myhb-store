@@ -177,6 +177,7 @@ export function mapLocationTreatmentPageFixedBlocks(
       intro,
       content,
       media: aboutItem?.media,
+      poster: aboutItem?.poster,
       links: [link],
       layout: OrganismMediaCardLayout.MEDIA_LEFT,
     };

@@ -30,6 +30,7 @@
 <script setup lang="ts">
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import { COMMON_TREATMENT_BLOCK_ORDER } from "~/lib/blocks/treatmentBlockOrder";
+import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
@@ -124,6 +125,17 @@ const faqSchema = computed(() => {
   return buildFaqPageSchema(allFaqs);
 });
 
+// Schema.org VideoObject
+const videoSchema = computed(() => {
+  const about = fixedBlocks.value?.about as any;
+  return buildVideoObjectSchema({
+    media: about?.mediaItems?.[0],
+    poster: about?.poster,
+    name: about?.headline || treatmentPage.value?.name || "",
+    description: about?.intro || about?.headline || "",
+  });
+});
+
 // Schema.org MedicalWebPage (medizinisch geprueft von / lastReviewed)
 const medicalWebPageSchema = computed(() =>
   buildMedicalWebPageSchema({
@@ -138,5 +150,6 @@ const medicalWebPageSchema = computed(() =>
 useSchemaOrg(medicalProcedureSchema);
 useSchemaOrg(breadcrumbSchema);
 useSchemaOrg(faqSchema);
+useSchemaOrg(videoSchema);
 useSchemaOrg(medicalWebPageSchema);
 </script>
