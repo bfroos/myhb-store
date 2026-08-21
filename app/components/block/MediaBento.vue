@@ -15,6 +15,7 @@
         <UiAtomMediaVideo
           v-else-if="isMediaVideo(firstMedia)"
           :media="firstMedia"
+          :poster="poster"
           :video-settings="videoSettings"
         />
       </template>
@@ -52,6 +53,7 @@
         <UiAtomMediaVideo
           v-else-if="isMediaVideo(secondMedia)"
           :media="secondMedia"
+          :poster="poster"
           :video-settings="videoSettings"
         />
       </template>

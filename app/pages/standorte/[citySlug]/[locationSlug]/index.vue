@@ -21,6 +21,7 @@
   />
 </template>
 <script setup lang="ts">
+import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 const { isAdsMode } = useSiteModeFlags();
 const {
   fetchWithTreatments,
@@ -66,5 +67,17 @@ const localBusinessSchema = computed(() =>
   }),
 );
 
+// Schema.org VideoObject
+const videoSchema = computed(() => {
+  const about = fixedBlocks.value?.about as any;
+  return buildVideoObjectSchema({
+    media: about?.mediaItems?.[0],
+    poster: about?.poster,
+    name: about?.headline || location.value?.name || "",
+    description: about?.intro || about?.headline || "",
+  });
+});
+
+useSchemaOrg(videoSchema);
 useSchemaOrg(localBusinessSchema);
 </script>

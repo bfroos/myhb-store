@@ -144,6 +144,7 @@ export function mapTreatmentCommonFixedBlocks(
       intro: withPlaceholders(treatmentPage?.about?.intro),
       content: withPlaceholdersRichtext(treatmentPage?.about?.content),
       mediaItems: [treatmentPage?.about?.media],
+      poster: treatmentPage?.about?.poster,
       layout: MediaBentoLayout.MEDIA_LEFT,
       mediaItemAlignment: MediaBentoMediaItemAlignment.HORIZONTAL,
     };

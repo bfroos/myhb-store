@@ -32,6 +32,7 @@
         <UiAtomMediaVideo
           v-else-if="hasVideo"
           :media="media!"
+          :poster="poster"
           :video-settings="videoSettings"
         />
       </template>

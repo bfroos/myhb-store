@@ -108,22 +108,13 @@ const faqSchema = computed(() => {
 const videoSchema = computed(() => {
   if (!blockOrder.value.includes("about")) return null;
 
-  const aboutMedia = fixedBlocks.value?.about?.media;
-  if (!aboutMedia) return null;
-
-  // Get first video from media
-  const video = Array.isArray(aboutMedia)
-    ? aboutMedia.find(m => m?.mime?.startsWith("video/"))
-    : aboutMedia.mime?.startsWith("video/")
-    ? aboutMedia
-    : null;
-
-  if (!video) return null;
+  const about = fixedBlocks.value?.about as any;
 
   return buildVideoObjectSchema({
-    media: video,
-    name: treatmentPage.value?.name ?? "Treatment Video",
-    description: treatmentPage.value?.hero?.text ?? treatmentPage.value?.name ?? "",
+    media: about?.mediaItems?.[0],
+    poster: about?.poster,
+    name: about?.headline || treatmentPage.value?.name || "",
+    description: about?.intro || about?.headline || "",
   });
 });
 

@@ -26,6 +26,7 @@ import {
 
 const props = defineProps<{
   media: StrapiMedia;
+  poster?: StrapiMedia;
   videoSettings?: SharedVideoSettingsDto;
 }>();
 
@@ -64,7 +65,7 @@ const videoSrc = computed(() => {
   
   // iOS Safari: Add #t=1 fragment to show frame at 1 second as poster fallback
   // This is a native browser feature that works without JavaScript
-  if (finalSrc && !finalSrc.includes('#t=')) {
+  if (finalSrc && !props.poster?.url && !finalSrc.includes('#t=')) {
     return `${finalSrc}#t=1`;
   }
   
@@ -72,11 +73,13 @@ const videoSrc = computed(() => {
 });
 
 const posterSrc = computed<string | undefined>(() => {
+  if (props.poster?.url) return props.poster.url;
+
   const src = originalVideoUrl.value;
   if (!src) return undefined;
   if (!canUseTransformations.value) return undefined;
 
-  return buildVideoPosterUrl(src);
+  return buildVideoPosterUrl(src) || undefined;
 });
 
 function onVideoError() {
@@ -91,9 +94,8 @@ const videoPreloadAttr = computed<"none" | "metadata" | "auto">(() => {
 
   if (vs?.autoplay) return "auto";
 
-  // Always load metadata so the browser shows the first frame as preview.
-  // Previously a Cloudflare poster frame was used, but Media Transformations
-  // are not activated — so metadata preload is the next best thing.
+  if (posterSrc.value) return "none";
+
   return "metadata";
 });
 

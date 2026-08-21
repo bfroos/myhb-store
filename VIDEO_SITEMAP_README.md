@@ -1,169 +1,81 @@
-# Video Sitemap - Google Video Indexing
+# Video Sitemap & VideoObject — Google Video Indexing
 
-**Status:** ✅ Implemented (2026-05-28)
+**Status:** Reworked 2026-08-20. Requires a `poster` image per video (see "Prerequisite").
 
 ## Problem
 
-Videos were rendered as `<video>` tags on the site, but Google Search Console reported: **"Videos not indexed"**.
+Google Search Console reported **"Video isn't on a watch page"** and no videos were indexed.
 
-**Root Cause:** Missing VideoObject Schema.org markup and no video sitemap.
+A first implementation (2026-05-28) added `/sitemap-videos.xml`, but it never worked. Verified
+against production on 2026-08-20:
 
----
+| Symptom | Cause |
+|---|---|
+| 22 sitemap entries, all `<loc>` = homepage | Story clips are carousel tiles; no page is "the" page for them |
+| 22/22 `<video:thumbnail_loc>` pointed at an `.mp4` | `buildVideoPosterUrl()` is a stub returning `""`, so the code fell back to the video URL |
+| All entries shared one `upload_date` = request time | `media.createdAt` was not populated, so `new Date()` was used |
+| 0 treatment/location videos in the sitemap | `populate=deep` is Strapi **4** syntax and returns **HTTP 400** on Strapi 5; the error was swallowed |
+| Homepage HTML contained no `<video>` at all | `VideoTile` gated rendering on an `IntersectionObserver` in `onMounted` (client-only) |
 
-## Solution
+Net effect: the sitemap advertised only the videos that could never qualify, and none of the ones
+that could.
 
-### Semi-Automatic Video Sitemap Generation
+## Prerequisite — a poster image
 
-**Route:** `/sitemap-videos.xml`
+Google requires `thumbnail_loc` / `VideoObject.thumbnailUrl` to be an **image**. Nothing in the
+system produced one (Cloudflare Media Transformations are not activated, the poster-mapping JSON is
+empty, and the Canvas fallback produced client-only base64 data URLs).
 
-This sitemap automatically extracts videos from Strapi and generates a Google Video Sitemap-compliant XML file.
+So a `poster` media field (images only, optional) was added in `myhb-cms`:
 
-### Sources
+- `api::story.story`
+- `treatment-page.about` (used by treatment-page, treatment-ads-page, location-treatment-page)
+- `location.about-item`
 
-Videos are extracted from:
-1. **Treatment Pages** (`treatment-pages` collection)
-2. **Location Pages** (`locations` collection)
-3. **Blog Articles** (`blog-articles` collection)
+**Without a poster, a video is deliberately skipped** — no sitemap entry, no `VideoObject`. An empty
+sitemap is better than one Google rejects wholesale.
 
-### Video Data per Entry
+## What is indexed
 
-Each video in the sitemap includes:
+Only videos that can pass Google's "watch page" rule — the video must be the primary content of the
+page `player_loc` points at.
 
-- `<video:thumbnail_loc>` - Poster frame (via Cloudflare media transformations)
-- `<video:title>` - From block `heading`, `title`, or `headline`
-- `<video:description>` - From block `content` (rich text)
-- `<video:content_loc>` - Direct `.mp4` URL
-- `<video:player_loc>` - Page URL where video is embedded
-- `<video:upload_date>` - ISO 8601 date from `media.createdAt`
+| Source | In sitemap? | Why |
+|---|---|---|
+| `treatment-page.about` media | yes | one video, one topically-matched page |
+| `location.about-item` media | yes | same |
+| `blocks.stories` clips | **no** | carousel tiles repeated across pages; no dedicated page |
 
-### Example Output
+Story videos still render (and take a poster for UX), they are simply not advertised as indexable.
 
-```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-  <url>
-    <loc>https://www.myhealthandbeauty.com/behandlungen/botox/kraehenfuesse</loc>
-    <video:video>
-      <video:thumbnail_loc>https://media.myhb.app/.../poster.jpg</video:thumbnail_loc>
-      <video:title>Krähenfüße Behandlung - Ablauf</video:title>
-      <video:description>So läuft die Botox-Behandlung gegen Krähenfüße ab...</video:description>
-      <video:content_loc>https://media.myhb.app/.../video.mp4</video:content_loc>
-      <video:player_loc>https://www.myhealthandbeauty.com/behandlungen/botox/kraehenfuesse</video:player_loc>
-      <video:upload_date>2026-05-15T10:30:00.000Z</video:upload_date>
-    </video:video>
-  </url>
-</urlset>
-```
+## Where things live
 
----
+- `server/routes/sitemap-videos.xml.ts` — one `<url>` per page, poster required, real `upload_date`
+- `app/utils/schemaVideo.ts` — `buildVideoObjectSchema()`, returns `null` unless media is a video
+  **and** a poster image exists **and** a stable date is available
+- `app/components/ui/atom/MediaVideo.vue` / `ui/molecule/VideoTile.vue` — render `<video>`
+  server-side with a real `poster`; `preload="none"` when a poster exists
+- CMS populate: `src/utils/queries/treatmentPagePopulate.ts`, `locationPopulate.ts`
+  (`mediaWithDatePopulate` supplies `createdAt` for `uploadDate`)
 
-## How It Works
+## Gotchas
 
-### 1. Route: `server/routes/sitemap-videos.xml.ts`
+- **Never name `poster` in a frontend populate query** before the CMS schema is deployed — Strapi
+  returns 400 for unknown fields. The sitemap uses `populate=*` so it works before *and* after.
+- `populate=deep` does not exist in Strapi 5. Do not reintroduce it.
+- The sitemap mixes two media hosts (`media.myhb.app`, `media.myhealthandbeauty.app`). Google needs
+  one canonical host — unresolved.
 
-- Fetches all Treatment Pages, Location Pages, Blog Articles from Strapi
-- Populates `blocks.media` and `blocks.medias`
-- Filters blocks where `media.mime` starts with `video/`
-- Generates XML with `<video:video>` tags
+## Verifying
 
-### 2. Extraction Logic
-
-```typescript
-function extractVideosFromBlocks(blocks, pageUrl, pageName) {
-  // Check blocks[].media for video MIME type
-  // Check blocks[].medias[] for multiple videos
-  // Build VideoEntry with:
-  //   - pageUrl (where video is embedded)
-  //   - videoUrl (direct .mp4)
-  //   - thumbnailUrl (poster via Cloudflare)
-  //   - title (from block heading)
-  //   - description (from block content)
-  //   - uploadDate (from media.createdAt)
-}
-```
-
-### 3. Cloudflare Poster Generation
-
-Uses `buildVideoPosterUrl()` from `app/utils/media.ts`:
-- Generates poster frame at 1 second (`#t=1`)
-- Falls back to video URL if transformations unavailable
-
----
-
-## Integration
-
-### robots.txt
-
-```txt
-Sitemap: https://www.myhealthandbeauty.com/sitemap.xml
-Sitemap: https://www.myhealthandbeauty.com/sitemap-videos.xml
-```
-
-### Google Search Console
-
-1. Go to [Search Console](https://search.google.com/search-console)
-2. Select `www.myhealthandbeauty.com` property
-3. Navigate to **Sitemaps** (left sidebar)
-4. Add new sitemap: `https://www.myhealthandbeauty.com/sitemap-videos.xml`
-5. Submit
-
-**Expected:** Google will crawl and index videos within 1-2 weeks.
-
----
-
-## Caching
-
-- **Cache-Control:** `public, max-age=3600, s-maxage=3600`
-- Sitemap refreshes every 1 hour
-- Videos update automatically when Strapi content changes
-
----
-
-## Monitoring
-
-### Check Video Indexing Status
-
-1. **Google Search Console** → Video Enhancement Report
-2. **Rich Results Test:** https://search.google.com/test/rich-results
-3. **Manual search:** `site:myhealthandbeauty.com inurl:video`
-
-### Debugging
-
-Test the sitemap locally:
-```bash
-curl https://www.myhealthandbeauty.com/sitemap-videos.xml
-```
-
-Check video count:
 ```bash
 curl -s https://www.myhealthandbeauty.com/sitemap-videos.xml | grep -c "<video:video>"
 ```
 
----
+Then Search Console → Video indexing report, and the Rich Results Test on a page with a video.
+Expect weeks, not days.
 
-## Future Improvements (Optional)
+## Dead code
 
-### Option 3: Per-Page VideoObject Schema
-
-For even better SEO, add VideoObject schema to individual pages:
-
-1. Use `app/utils/schemaVideo.ts` utility (already created)
-2. Extract videos in `useTreatmentPage()`, `useLocationPage()`, etc.
-3. Call `useSchemaOrg(videoSchema)` on each page
-
-**Benefit:** More granular control, better indexing  
-**Effort:** Medium (requires changes to multiple page composables)
-
----
-
-## References
-
-- [Google Video Sitemap Spec](https://developers.google.com/search/docs/crawling-indexing/sitemaps/video-sitemaps)
-- [Schema.org VideoObject](https://schema.org/VideoObject)
-- [Google Video SEO Best Practices](https://developers.google.com/search/docs/appearance/video)
-
----
-
-**Last Updated:** 2026-05-28  
-**Commit:** `c8c3658` - "feat(seo): add video sitemap for Google video indexing"
+`scripts/generate-video-posters.js` and `public/posters/video-poster-mapping.json` belonged to the
+abandoned auto-poster approach. `VideoTile` no longer reads the mapping. Left in place, not wired up.
