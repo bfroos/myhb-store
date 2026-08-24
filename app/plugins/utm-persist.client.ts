@@ -1,5 +1,5 @@
 /**
- * MYH&B UTM-Persistenz v1.2
+ * MYH&B UTM-Persistenz v1.3
  *
  * v1.0: Speichert utm_*, gclid, fbclid, ttclid beim Erstbesuch (First Touch)
  * und dekoriert automatisch alle Calendly-URLs (Links, Embeds, Popups) sowie
@@ -17,6 +17,19 @@
  * nur utm_* und salesforce_uuid zurueck — gclid/fbclid/ttclid als nackte
  * Query-Parameter gehen dort verloren. Format "gclid:..." | "fbclid:..." |
  * "ttclid:..." wie touchpoints.click_id.
+ *
+ * v1.3 (ATTR-12 / dashboard#32): Der First Touch ging auf dem Calendly-Pfad
+ * verloren. pickTouch() liefert den Last Touch, sobald der ein utm_source hat —
+ * wer ueber eine Anzeige kam, spaeter organisch zurueckkehrte und dann buchte,
+ * verlor die Klick-ID, und der bezahlte Kanal wurde systematisch unterbewertet.
+ * Der Newsletter-Pfad hatte das Problem nie, weil dort attribution.first UND
+ * attribution.last an n8n gehen.
+ * - salesforce_uuid: Klick-ID des Last Touch, Fallback auf die des First Touch.
+ *   Wirkt sofort, der Calendly-Sub liest tracking.salesforce_uuid bereits.
+ * - utm_term / utm_content tragen zusaetzlich den First Touch (Quelle/Medium
+ *   bzw. Klick-ID) mit ft_-Praefix, und nur wenn das Feld sonst leer bliebe.
+ *   Echte Kampagnenwerte haben Vorrang. Wirkt erst, wenn der Calendly-Sub die
+ *   beiden Felder auswertet.
  *
  * Consent: Mit Cookiebot-Marketing-Consent 90 Tage persistent (First-Party-
  * Cookie + localStorage), ohne Consent nur sessionStorage. Bei nachtraeglichem
@@ -185,7 +198,20 @@ export default defineNuxtPlugin(() => {
     return store.first || null;
   }
 
+  // Klick-ID im Format von touchpoints.click_id, oder null.
+  function clickIdOf(t: Touch | null | undefined): string | null {
+    if (!t) return null;
+    return t.gclid
+      ? `gclid:${t.gclid}`
+      : t.fbclid
+        ? `fbclid:${t.fbclid}`
+        : t.ttclid
+          ? `ttclid:${t.ttclid}`
+          : null;
+  }
+
   function decorate(url: string): string {
+    const store = load();
     const data = pickTouch();
     if (!data) return url;
     try {
@@ -197,15 +223,25 @@ export default defineNuxtPlugin(() => {
       // v1.2 (T6 #24): Klick-ID via salesforce_uuid — einziger freier
       // Passthrough, den Calendly im Webhook (tracking.salesforce_uuid)
       // zurueckgibt. Salesforce ist bei uns nicht im Einsatz.
-      const cid = data.gclid
-        ? `gclid:${data.gclid}`
-        : data.fbclid
-          ? `fbclid:${data.fbclid}`
-          : data.ttclid
-            ? `ttclid:${data.ttclid}`
-            : null;
+      // v1.3: Fallback auf den First Touch. Ein bezahlter Klick darf nicht
+      // verloren gehen, nur weil die Person spaeter organisch zurueckkam.
+      const first = store && store.first ? store.first : null;
+      const cid = clickIdOf(data) || clickIdOf(first);
       if (cid && !u.searchParams.get("salesforce_uuid")) {
         u.searchParams.set("salesforce_uuid", cid);
+      }
+      // v1.3: First Touch zusaetzlich mitgeben, wenn er ein anderer Besuch war
+      // als der Last Touch. utm_term/utm_content werden nur belegt, wenn sie
+      // sonst leer blieben — echte Kampagnenwerte haben Vorrang. Das ft_-Praefix
+      // macht die Herkunft im Webhook eindeutig unterscheidbar.
+      if (first && first._ts && first._ts !== data._ts && first.utm_source) {
+        if (!u.searchParams.get("utm_term")) {
+          u.searchParams.set("utm_term", `ft_src:${first.utm_source}|${first.utm_medium || "none"}`);
+        }
+        const fcid = clickIdOf(first);
+        if (fcid && !u.searchParams.get("utm_content")) {
+          u.searchParams.set("utm_content", `ft_cid:${fcid}`);
+        }
       }
       return u.toString();
     } catch {
