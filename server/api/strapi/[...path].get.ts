@@ -59,15 +59,41 @@ const SKIP_MERGE_KEYS = new Set([
   'localizations',
 ]);
 
+function isPlainObject(value: any): boolean {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
+}
+
+/**
+ * True when two array items look like the same slot: for dynamic-zone entries
+ * that means the same component; for plain repeatable components there is
+ * nothing to compare, so any two objects are considered alignable.
+ */
+function sameSlot(a: any, b: any): boolean {
+  if (!isPlainObject(a) || !isPlainObject(b)) return false;
+  if ('__component' in a && '__component' in b) {
+    return a.__component === b.__component;
+  }
+  return true;
+}
+
 /**
  * Fills gaps in `target` (the requested locale's data) using `fallback` (the
  * German data). Anything present and non-empty in `target` is kept as-is;
- * only null/empty/missing values are replaced. Arrays (dynamic-zone blocks,
- * repeatable components) are merged item-by-item when both sides have the
- * same length, so a block that's fully translated keeps its translation
- * while a sibling block that's untranslated still renders (in German)
- * instead of the whole zone silently emptying out. A length mismatch means
- * we can't safely align items, so the target array is left untouched.
+ * only null/empty/missing values are replaced.
+ *
+ * Arrays (dynamic-zone blocks, repeatable components) are handled by length:
+ *
+ *   - Equal length: merged item by item, so a translated block keeps its
+ *     translation while an untranslated sibling still renders in German
+ *     instead of the whole zone emptying out.
+ *   - Target shorter: the locale was only partially filled in, which is what
+ *     made pages render with sections missing (e.g. 8 sections in German, 1
+ *     in Arabic). The German array becomes the skeleton and the locale's
+ *     items are overlaid onto it, matched greedily on component type, so
+ *     translated sections keep their translation and the untranslated ones
+ *     appear in German rather than vanishing.
+ *   - Target longer: the locale has extra content of its own. Left untouched
+ *     -- we must not drop locale-specific entries.
  */
 function mergeFallback(target: any, fallback: any): any {
   if (isEmptyValue(target)) {
@@ -77,22 +103,42 @@ function mergeFallback(target: any, fallback: any): any {
 
   if (Array.isArray(target)) {
     if (!Array.isArray(fallback) || fallback.length === 0) return target;
-    if (target.length !== fallback.length) return target;
-    return target.map((item: any, i: number) => {
-      const fb = fallback[i];
-      if (
-        item &&
-        fb &&
-        typeof item === 'object' &&
-        typeof fb === 'object' &&
-        '__component' in item &&
-        '__component' in fb &&
-        item.__component !== fb.__component
-      ) {
-        return item; // structural mismatch at this index, don't touch
+
+    if (target.length === fallback.length) {
+      return target.map((item: any, i: number) => {
+        const fb = fallback[i];
+        if (
+          isPlainObject(item) &&
+          isPlainObject(fb) &&
+          '__component' in item &&
+          '__component' in fb &&
+          item.__component !== fb.__component
+        ) {
+          return item; // structural mismatch at this index, don't touch
+        }
+        return mergeFallback(item, fb);
+      });
+    }
+
+    if (target.length < fallback.length) {
+      // Only rebuild structures we can reason about. Arrays of primitives
+      // (ids, slugs, plain strings) carry no slot identity, so a shorter
+      // target there is taken at face value.
+      if (!fallback.every(isPlainObject) || !target.every(isPlainObject)) {
+        return target;
       }
-      return mergeFallback(item, fb);
-    });
+      let cursor = 0;
+      return fallback.map((fb: any) => {
+        const candidate = target[cursor];
+        if (candidate !== undefined && sameSlot(candidate, fb)) {
+          cursor += 1;
+          return mergeFallback(candidate, fb);
+        }
+        return fb;
+      });
+    }
+
+    return target; // target longer: locale-specific extras, keep them
   }
 
   if (typeof target === 'object') {
