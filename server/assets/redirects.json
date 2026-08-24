@@ -6885,11 +6885,6 @@
     "code": 301
   },
   {
-    "from": "/ar",
-    "to": "/",
-    "code": 301
-  },
-  {
     "from": "/ar/blogs/أخبار/فيتامين-سي-تسريب-المعزز-لنظامك-المناعي",
     "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
     "code": 301
