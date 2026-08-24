@@ -1,6 +1,18 @@
 // Strapi proxy with server-side caching.
 // CRITICAL: When __NUXT_PREVIEW cookie is set (via /api/preview route),
 // all requests include status=draft and cache is bypassed.
+//
+// German fallback: content is translated unevenly across locales (some
+// entries don't exist yet in a locale at all, others exist but are missing
+// individual fields or media). For any request with a non-German locale, we
+// also fetch the German counterpart and use it to fill gaps, so a page never
+// renders half-empty or loses its structure just because a translation is
+// incomplete. This only applies to single-entity responses (`data` is an
+// object, not an array) — list/collection endpoints are left untouched,
+// since pulling German-only entries into a locale's listing could link to
+// pages whose own detail view wouldn't otherwise resolve in that locale.
+
+const FALLBACK_LOCALE = 'de';
 
 function isPreviewRequest(event: any): boolean {
   const cookie = getCookie(event, '__NUXT_PREVIEW');
@@ -11,6 +23,90 @@ function getPreviewStatus(event: any): 'draft' | 'published' {
   return getCookie(event, '__NUXT_PREVIEW_STATUS') === 'published'
     ? 'published'
     : 'draft';
+}
+
+function withLocale(params: URLSearchParams, locale: string): URLSearchParams {
+  const clone = new URLSearchParams(params);
+  clone.set('locale', locale);
+  return clone;
+}
+
+function isEmptyValue(value: unknown): boolean {
+  if (value === null || value === undefined) return true;
+  if (typeof value === 'string') return value.trim() === '';
+  if (Array.isArray(value)) return value.length === 0;
+  return false;
+}
+
+function looksLikeMedia(value: any): boolean {
+  return (
+    value &&
+    typeof value === 'object' &&
+    typeof value.url === 'string' &&
+    typeof value.mime === 'string'
+  );
+}
+
+// Entity metadata that must always come from the requested locale's own row,
+// never borrowed from the German fallback.
+const SKIP_MERGE_KEYS = new Set([
+  'id',
+  'documentId',
+  'createdAt',
+  'updatedAt',
+  'publishedAt',
+  'locale',
+  'localizations',
+]);
+
+/**
+ * Fills gaps in `target` (the requested locale's data) using `fallback` (the
+ * German data). Anything present and non-empty in `target` is kept as-is;
+ * only null/empty/missing values are replaced. Arrays (dynamic-zone blocks,
+ * repeatable components) are merged item-by-item when both sides have the
+ * same length, so a block that's fully translated keeps its translation
+ * while a sibling block that's untranslated still renders (in German)
+ * instead of the whole zone silently emptying out. A length mismatch means
+ * we can't safely align items, so the target array is left untouched.
+ */
+function mergeFallback(target: any, fallback: any): any {
+  if (isEmptyValue(target)) {
+    return fallback !== undefined ? fallback : target;
+  }
+  if (fallback === undefined || fallback === null) return target;
+
+  if (Array.isArray(target)) {
+    if (!Array.isArray(fallback) || fallback.length === 0) return target;
+    if (target.length !== fallback.length) return target;
+    return target.map((item: any, i: number) => {
+      const fb = fallback[i];
+      if (
+        item &&
+        fb &&
+        typeof item === 'object' &&
+        typeof fb === 'object' &&
+        '__component' in item &&
+        '__component' in fb &&
+        item.__component !== fb.__component
+      ) {
+        return item; // structural mismatch at this index, don't touch
+      }
+      return mergeFallback(item, fb);
+    });
+  }
+
+  if (typeof target === 'object') {
+    if (looksLikeMedia(target)) return target; // media present, keep as-is
+    if (typeof fallback !== 'object' || Array.isArray(fallback)) return target;
+    const result: Record<string, any> = { ...target };
+    for (const key of Object.keys(fallback)) {
+      if (SKIP_MERGE_KEYS.has(key)) continue;
+      result[key] = mergeFallback(target[key], fallback[key]);
+    }
+    return result;
+  }
+
+  return target; // non-empty primitive: a real translated value, keep it
 }
 
 export default defineCachedEventHandler(
@@ -42,21 +138,59 @@ export default defineCachedEventHandler(
     if (preview) {
       params.set('status', previewStatus);
     }
-    const search = params.toString() ? `?${params.toString()}` : '';
 
-    const strapiUrl = `${strapiBase}/api${restPath}${search}`;
+    const fetchHeaders = {
+      ...(siteMode ? { 'x-site-mode': siteMode } : {}),
+      ...(preview ? { 'strapi-encode-source-maps': 'true' } : {}),
+    };
+
+    const fetchStrapi = (searchParams: URLSearchParams) => {
+      const search = searchParams.toString() ? `?${searchParams.toString()}` : '';
+      return $fetch(`${strapiBase}/api${restPath}${search}`, {
+        headers: fetchHeaders,
+      });
+    };
+
+    const requestedLocale = params.get('locale');
+    const wantsFallback =
+      !!requestedLocale && requestedLocale !== FALLBACK_LOCALE;
 
     try {
-      return await $fetch(strapiUrl, {
-        headers: {
-          ...(siteMode ? { 'x-site-mode': siteMode } : {}),
-          // Enable content source maps in preview mode for double-click-to-edit
-          ...(preview ? { 'strapi-encode-source-maps': 'true' } : {}),
-        },
-      });
+      const primary: any = await fetchStrapi(params);
+      if (!wantsFallback) return primary;
+
+      const data = primary?.data;
+      if (Array.isArray(data)) return primary; // collections: out of scope
+
+      let deResult: any;
+      try {
+        deResult = await fetchStrapi(withLocale(params, FALLBACK_LOCALE));
+      } catch {
+        return primary; // German fetch failed too; fail open with what we have
+      }
+
+      if (data == null) {
+        // Whole entity missing in the requested locale — use German wholesale.
+        return deResult;
+      }
+
+      return { ...primary, data: mergeFallback(data, deResult?.data) };
     } catch (error: any) {
+      const statusCode = error?.statusCode || error?.status || 500;
+
+      // The requested locale's entity doesn't exist at all (e.g. a custom
+      // by-path controller returning 404 rather than {data: null}). Retry
+      // once against German before giving up, so the page still resolves.
+      if (wantsFallback && statusCode === 404) {
+        try {
+          return await fetchStrapi(withLocale(params, FALLBACK_LOCALE));
+        } catch {
+          // fall through to the original error below
+        }
+      }
+
       throw createError({
-        statusCode: error?.statusCode || error?.status || 500,
+        statusCode,
         statusMessage:
           error?.statusMessage || error?.message || 'Strapi API error',
       });
