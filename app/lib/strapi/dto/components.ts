@@ -131,6 +131,7 @@ export type BlockMediaBentoDto = {
   intro?: string;
   content?: StrapiRichText;
   mediaItems?: StrapiMedia[];
+  poster?: StrapiMedia;
   layout: MediaBentoLayout;
   mediaItemAlignment: MediaBentoMediaItemAlignment;
   links?: SharedButtonDto[];
@@ -141,6 +142,7 @@ export type BlockMediaBentoDto = {
 
 export type BlockMediaCardDto = {
   headline?: string;
+  poster?: StrapiMedia;
   intro?: string;
   content?: StrapiRichText;
   media?: StrapiMedia;
@@ -362,6 +364,7 @@ export type LocationAboutItemDto = {
   intro?: string;
   content?: StrapiRichText;
   media?: StrapiMedia;
+  poster?: StrapiMedia;
 };
 
 export type LocationContactDto = {
@@ -542,6 +545,7 @@ export type TreatmentPageAboutDto = {
   intro?: string;
   content?: StrapiRichText;
   media?: StrapiMedia;
+  poster?: StrapiMedia;
 };
 
 export type TreatmentPageFaqDto = {

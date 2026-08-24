@@ -12,6 +12,7 @@
           :title="story.title"
           :subtitle="story.subtitle"
           :video="getVideoUrl(story)"
+          :poster="getPosterUrl(story)"
           :is-active="activeVideoId === story.id"
           @play="handleVideoPlay(story.id)"
         />
@@ -37,6 +38,10 @@ const validStories = computed(() =>
 
 function getVideoUrl(story: StoryDto): string {
   return story.video?.url ?? "";
+}
+
+function getPosterUrl(story: StoryDto): string | undefined {
+  return story.poster?.url;
 }
 
 function setVideoRef(storyId: string | number, el: unknown): void {

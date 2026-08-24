@@ -199,6 +199,7 @@ export type StoryDto = {
   title?: string;
   subtitle?: string;
   video: StrapiMedia;
+  poster?: StrapiMedia;
 };
 
 export type TreatmentDto = {

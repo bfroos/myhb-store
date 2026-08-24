@@ -5,21 +5,15 @@
     ref="tileRef"
   >
     <video
-      v-if="isVideoLoaded || showVideoDirectly"
       class="videoTile__video"
       ref="videoRef"
       :src="videoUrl"
-      :poster="lazyPosterUrl"
+      :poster="posterUrl || undefined"
       :aria-label="`${title} - ${subtitle}`"
       :controls="isPlaying"
       :muted="!isPlaying"
-      preload="metadata"
-    />
-    <img
-      v-else-if="lazyPosterUrl"
-      class="videoTile__poster"
-      :src="lazyPosterUrl"
-      :alt="`${title} - ${subtitle}`"
+      :preload="preloadAttr"
+      playsinline
     />
     <div
       v-if="!isPlaying"
@@ -44,7 +38,6 @@
 </template>
 <script setup lang="ts">
 import { IconPlayerPlay } from "@tabler/icons-vue";
-// buildVideoPosterUrl removed — Cloudflare Media Transformations not active
 
 // Pre-generated poster mapping (loaded on demand)
 const videoPosterMapping = ref<Record<string, string>>({});
@@ -65,14 +58,6 @@ const loadPosterMapping = async () => {
   }
 };
 
-const props = defineProps<{
-  title?: string;
-  subtitle?: string;
-  video: string;
-  poster?: string;
-  isActive?: boolean;
-}>();
-
 // Helper to extract video ID from URL
 const getVideoIdFromUrl = (url: string): string | null => {
   // Strapi media URLs typically have /uploads/filename_hash_id.ext
@@ -81,101 +66,92 @@ const getVideoIdFromUrl = (url: string): string | null => {
   return match ? match[1] : null;
 };
 
+const props = defineProps<{
+  title?: string;
+  subtitle?: string;
+  video: string;
+  poster?: string;
+  isActive?: boolean;
+}>();
+
 const emit = defineEmits<{
   play: [];
   pause: [];
 }>();
 
 const isPlaying = ref(false);
-const isVideoLoaded = ref(false);
-const isInViewport = ref(false);
+
 const generatedPoster = ref<string>("");
 
-const videoUrl = computed(() => {
-  const url = props.video ?? "";
-  // iOS Safari: Add #t=1 fragment to show frame at 1 second as poster
-  // This is a native browser feature that works without JavaScript
-  if (url && !url.includes('#t=')) {
-    return `${url}#t=1`;
-  }
-  return url;
-});
-
 const posterUrl = computed(() => {
-  // Priority 1: Explicit poster prop
+  // Priority 1: Strapi poster
   if (props.poster) return props.poster;
-  
+
   // Priority 2: Pre-generated poster from build-time script
   const videoId = getVideoIdFromUrl(props.video);
   if (videoId && videoPosterMapping.value[videoId]) {
     return videoPosterMapping.value[videoId];
   }
-  
+
   // Priority 3: Client-generated poster from first frame
   if (generatedPoster.value) return generatedPoster.value;
-  
-  // buildVideoPosterUrl returns "" when Cloudflare Media Transformations are disabled
+
   return "";
 });
 
-// Lazy poster URL - only set when component enters viewport
-const lazyPosterUrl = computed(() =>
-  isInViewport.value ? posterUrl.value : "",
-);
+const videoUrl = computed(() => {
+  const url = props.video ?? "";
+  if (!url) return "";
+  if (!props.poster && !url.includes("#t=")) {
+    return `${url}#t=1`;
+  }
+  return url;
+});
 
-// If no poster is available, show the video element directly (browser renders first frame)
-const showVideoDirectly = computed(() => !posterUrl.value && isInViewport.value && !isPlaying.value);
+const preloadAttr = computed<"none" | "metadata">(() => {
+  if (props.poster) return "none";
+  return isInViewport.value ? "metadata" : "none";
+});
 
 const videoRef = ref<HTMLVideoElement | null>(null);
 const tileRef = ref<HTMLElement | null>(null);
+const isInViewport = ref(false);
+let observer: IntersectionObserver | null = null;
 
-// Generate poster from video frame using Canvas API
 const generatePosterFromFirstFrame = () => {
   const video = videoRef.value;
   if (!video || generatedPoster.value || props.poster) return;
 
   try {
-    // iOS Safari: Use #t=1 fragment instead of currentTime for better compatibility
-    // Desktop/Android: Set currentTime to 1 second to avoid black intro frames
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     if (!isIOS) {
       video.currentTime = 1.0;
     }
-    
-    // Wait for seek to complete, then capture frame
+
     const captureFrame = () => {
       video.pause();
 
-      // Create canvas with video dimensions
       const canvas = document.createElement('canvas');
       canvas.width = video.videoWidth;
       canvas.height = video.videoHeight;
 
-      // Draw frame at 1 second onto canvas
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      
+
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      // Convert canvas to Data URL (base64 JPEG)
       const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
       generatedPoster.value = dataUrl;
-      
-      // Manually set poster attribute on video element (for reactive update)
       video.poster = dataUrl;
-      
-      // Reset to start for potential playback (skip on iOS, #t=1 handles it)
+
       if (!isIOS) {
         video.currentTime = 0;
       }
-      
-      // Remove event listener
+
       video.removeEventListener('seeked', captureFrame);
       video.removeEventListener('loadeddata', captureFrame);
     };
-    
-    // iOS Safari: Listen to loadeddata instead of seeked (since we use #t=1)
-    // Desktop/Android: Listen to seeked after currentTime change
+
     if (isIOS) {
       video.addEventListener('loadeddata', captureFrame, { once: true });
     } else {
@@ -186,13 +162,9 @@ const generatePosterFromFirstFrame = () => {
   }
 };
 
-// Native IntersectionObserver for true lazy loading
-let observer: IntersectionObserver | null = null;
-
 onMounted(() => {
-  // Load poster mapping on mount
   loadPosterMapping();
-  
+
   if (!tileRef.value) return;
 
   observer = new IntersectionObserver(
@@ -202,7 +174,6 @@ onMounted(() => {
         observer?.disconnect();
       }
     },
-    // Increased rootMargin for faster loading on mobile (load ~1 screen ahead)
     { rootMargin: "800px" },
   );
 
@@ -230,7 +201,7 @@ watch(videoRef, (newVideo, oldVideo) => {
     newVideo.addEventListener("pause", handlePause);
     // Generate poster when first frame is loaded
     newVideo.addEventListener("loadeddata", generatePosterFromFirstFrame);
-    
+
     // If video already loaded before listener was attached, generate poster now
     if (newVideo.readyState >= 2) {
       // readyState 2 = HAVE_CURRENT_DATA (first frame available)
@@ -267,17 +238,11 @@ watch(
 );
 
 const playVideo = async () => {
-  if (!isVideoLoaded.value) {
-    isVideoLoaded.value = true;
-    await nextTick();
-  }
-
-  if (videoRef.value) {
-    try {
-      await videoRef.value.play();
-    } catch (error) {
-      console.error("Fehler beim Abspielen des Videos:", error);
-    }
+  if (!videoRef.value) return;
+  try {
+    await videoRef.value.play();
+  } catch (error) {
+    console.error("Fehler beim Abspielen des Videos:", error);
   }
 };
 </script>
