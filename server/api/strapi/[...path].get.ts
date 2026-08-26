@@ -16,11 +16,18 @@ const FALLBACK_LOCALE = 'de';
 
 function isPreviewRequest(event: any): boolean {
   const cookie = getCookie(event, '__NUXT_PREVIEW');
-  return cookie === 'true';
+  if (cookie === 'true') return true;
+  // Nitro's cached handler can expose the raw header even when getCookie has
+  // not parsed it yet. Keep preview drafts visible in that case too.
+  const raw = getRequestHeader(event, 'cookie') || '';
+  return /(?:^|;\s*)__NUXT_PREVIEW=true(?:;|$)/.test(raw);
 }
 
 function getPreviewStatus(event: any): 'draft' | 'published' {
-  return getCookie(event, '__NUXT_PREVIEW_STATUS') === 'published'
+  const raw = getRequestHeader(event, 'cookie') || '';
+  const status = getCookie(event, '__NUXT_PREVIEW_STATUS') ||
+    (/(?:^|;\s*)__NUXT_PREVIEW_STATUS=([^;]+)/.exec(raw)?.[1]);
+  return status === 'published'
     ? 'published'
     : 'draft';
 }
@@ -198,8 +205,11 @@ export default defineCachedEventHandler(
     };
 
     const requestedLocale = params.get('locale');
+    // Preview must show the requested locale exactly as it is stored in
+    // Strapi. Otherwise German fallback text/blocks hide incomplete drafts
+    // from the copywriter and content manager during review.
     const wantsFallback =
-      !!requestedLocale && requestedLocale !== FALLBACK_LOCALE;
+      !preview && !!requestedLocale && requestedLocale !== FALLBACK_LOCALE;
 
     try {
       const primary: any = await fetchStrapi(params);
@@ -243,6 +253,7 @@ export default defineCachedEventHandler(
     }
   },
   {
+    varies: ['cookie'],
     maxAge: process.env.NODE_ENV === 'production' ? 60 : 0,
     staleMaxAge: process.env.NODE_ENV === 'production' ? 240 : 0,
     getKey: (event) => {
