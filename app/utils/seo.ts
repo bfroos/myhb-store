@@ -62,12 +62,21 @@ export async function setPageSeo(
   });
 
   nuxtApp.runWithContext(() => {
-    // Hreflang für multilinguale SEO
+    // Hreflang für multilinguale SEO.
+    // x-default muss auf allen Sprachversionen einer Seite dieselbe URL
+    // nennen – die der Standardsprache. Vorher stand hier canonicalUrl, womit
+    // die englische Seite sich selbst als x-default auswies und Google pro
+    // Seite widersprüchliche Signale bekam.
+    const defaultLocalePath = switchLocalePath(
+      fallbackLocale.value as string,
+    );
     const hreflangLinks = [
       {
         rel: "alternate",
         hreflang: "x-default",
-        href: canonicalUrl,
+        href: defaultLocalePath
+          ? `${config.public.publicUrl}${defaultLocalePath}`
+          : canonicalUrl,
       },
     ];
 

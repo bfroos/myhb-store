@@ -11348,5 +11348,1615 @@
     "from": "/produkte/btx/btx",
     "to": "/behandlungen/botox",
     "code": 301
+  },
+  {
+    "from": "/ar",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/ar/asaar",
+    "to": "/preise",
+    "code": 301
+  },
+  {
+    "from": "/ar/atibba",
+    "to": "/aerzte",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/anti-haarausfall",
+    "to": "/behandlungen/anti-haarausfall",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox",
+    "to": "/behandlungen/botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/3-zonen-botox-arabisch",
+    "to": "/behandlungen/botox/3-zonen-botox-preise",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/baby-botox",
+    "to": "/behandlungen/botox/baby-botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/barbie-botox",
+    "to": "/behandlungen/botox/barbie-botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/bunny-lines",
+    "to": "/behandlungen/botox/bunny-lines",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/erdbeerkinn",
+    "to": "/behandlungen/botox/erdbeerkinn",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/fart-altaarraq-alzaaed",
+    "to": "/behandlungen/botox/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/khutut-al-abus",
+    "to": "/behandlungen/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/masseter",
+    "to": "/behandlungen/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/migraenebehandlung",
+    "to": "/behandlungen/botox/migraenebehandlung",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/stirnfalte",
+    "to": "/behandlungen/botox/stirnfalte",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/botox/tajaeid-alraqaba-albalatisma",
+    "to": "/behandlungen/botox/halsfalten-platysma",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/fettwegspritze",
+    "to": "/behandlungen/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/hair-boost-infusion4",
+    "to": "/behandlungen/anti-haarausfall/hair-boost-infusion4",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/hyaluron",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/hyaluron/al-aydi",
+    "to": "/behandlungen/hyaluron/haende",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/hyaluron/hialuron-al-wajh-bi-al-kamil",
+    "to": "/behandlungen/hyaluron/full-face-hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/hyaluron/russian-lips",
+    "to": "/behandlungen/hyaluron/russian-lips",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/infusionen",
+    "to": "/behandlungen/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/infusionen/immun-infusion",
+    "to": "/behandlungen/infusionen/immun-infusion",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/schoenheitsoperationen",
+    "to": "/behandlungen/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/schoenheitsoperationen/shad-al-batn",
+    "to": "/behandlungen/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/schoenheitsoperationen/shad-alfakhdayn",
+    "to": "/behandlungen/schoenheitsoperationen/oberschenkelstraffung",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/schoenheitsoperationen/ziraeat-alshaear",
+    "to": "/behandlungen/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/skinbooster",
+    "to": "/behandlungen/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/ar/ilajat/skinbooster/mesotherapie-nctf-135-ha",
+    "to": "/behandlungen/skinbooster/mesotherapie-nctf-135-ha",
+    "code": 301
+  },
+  {
+    "from": "/ar/man-nahnu",
+    "to": "/ueber-uns",
+    "code": 301
+  },
+  {
+    "from": "/ar/masar-mihani",
+    "to": "/karriere",
+    "code": 301
+  },
+  {
+    "from": "/ar/mawaqea",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/ar/mudawwana",
+    "to": "/blog",
+    "code": 301
+  },
+  {
+    "from": "/ar/mudawwana/c/blog-category",
+    "to": "/blog/c/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/ar/mudawwana/c/infusionen",
+    "to": "/blog/c/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/ar/p/botox_meta",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/fr",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/fr/a-propos",
+    "to": "/ueber-uns",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog",
+    "to": "/blog",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/augenlider-straffen-ohne-op",
+    "to": "/blog/augenlider-straffen-ohne-op",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "to": "/blog/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/botox-stirn-glatte-haut",
+    "to": "/blog/botox-stirn-glatte-haut",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/botox-vs-hyaluron-was-unterscheidet-und-eint-die-beiden-wundermittel",
+    "to": "/blog/botox-vs-hyaluron-was-unterscheidet-und-eint-die-beiden-wundermittel",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/acide-hyaluronique",
+    "to": "/blog/c/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/blog-category",
+    "to": "/blog/c/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/botox",
+    "to": "/blog/c/botox",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/cheveux",
+    "to": "/blog/c/haare",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/chirurgie-esthetique",
+    "to": "/blog/c/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/infusionen",
+    "to": "/blog/c/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/injection-lipolytique",
+    "to": "/blog/c/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/c/my",
+    "to": "/blog/c/my",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/carboxy-therapie-gas-in-die-haut",
+    "to": "/blog/carboxy-therapie-gas-in-die-haut",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/deutsche-kliniken-im-vergleich-was-bieten-sie-im-bereich-haartransplantation",
+    "to": "/blog/deutsche-kliniken-im-vergleich-was-bieten-sie-im-bereich-haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/die-turkei-als-mekka-der-haartransplantation-warum-reisen-so-viele-deutsche-dorthin",
+    "to": "/blog/die-turkei-als-mekka-der-haartransplantation-warum-reisen-so-viele-deutsche-dorthin",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/geglucktes-opening-in-berlin",
+    "to": "/blog/geglucktes-opening-in-berlin",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/gesundheitliche-wundertute-botox-viel-mehr-als-nur-ein-schonmacher",
+    "to": "/blog/gesundheitliche-wundertute-botox-viel-mehr-als-nur-ein-schonmacher",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/glow-gesicht-zum-strahlen-bringen",
+    "to": "/blog/glow-gesicht-zum-strahlen-bringen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/gute-hautpflege-routine-aufbauen",
+    "to": "/blog/gute-hautpflege-routine-aufbauen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/haarausfall-stoppen",
+    "to": "/blog/haarausfall-stoppen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/haartransplantation-im-ausland-worauf-mussen-patienten-achten",
+    "to": "/blog/haartransplantation-im-ausland-worauf-mussen-patienten-achten",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "to": "/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/heuschnupfen-nein-danke",
+    "to": "/blog/heuschnupfen-nein-danke",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/kundenreferenz-vitamin-c-infusion",
+    "to": "/blog/kundenreferenz-vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "to": "/blog/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/lippen-aufspritzen-hyaluron-guide",
+    "to": "/blog/lippen-aufspritzen-hyaluron-guide",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/meso-therapie-vitamine-fur-deine-haut",
+    "to": "/blog/meso-therapie-vitamine-fur-deine-haut",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/muttertagsgeschenk-schoenheitsbehandlung",
+    "to": "/blog",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/prp-fur-ein-verjungtes-und-strahlendes-hautbild",
+    "to": "/blog/prp-fur-ein-verjungtes-und-strahlendes-hautbild",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/schone-haut-bekommen",
+    "to": "/blog/schone-haut-bekommen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/schonheitsoperationen-im-ausland-schnappchen-oder-risiko",
+    "to": "/blog/schonheitsoperationen-im-ausland-schnappchen-oder-risiko",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/skinbooster-strahlende-haut-von-innen",
+    "to": "/blog/skinbooster-strahlende-haut-von-innen",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/sorge-vor-overdone-so-behalt-man-seine-naturlichkeit-mit-botox",
+    "to": "/blog/sorge-vor-overdone-so-behalt-man-seine-naturlichkeit-mit-botox",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/straffere-haut-die-besten-tipps",
+    "to": "/blog/straffere-haut-die-besten-tipps",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/urlaub-und-haartransplantation-warum-kombi-reisen-so-beliebt-sind",
+    "to": "/blog/urlaub-und-haartransplantation-warum-kombi-reisen-so-beliebt-sind",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/valentinstagsspecial-mit-verena-kerth-und-marc-terenzi",
+    "to": "/blog/valentinstagsspecial-mit-verena-kerth-und-marc-terenzi",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/vampir-lifting-vorher-nacher",
+    "to": "/blog/vampir-lifting-vorher-nacher",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "to": "/blog/vitamin-c-infusion-wirkung",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/vitamin-c-infusion-wirkung-fuer-wen-sie-wirklich-sinnvoll-ist",
+    "to": "/blog/vitamin-c-infusion-wirkung-fuer-wen-sie-wirklich-sinnvoll-ist",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/warum-haut-ab-30-anders-wird",
+    "to": "/blog/warum-haut-ab-30-anders-wird",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/warum-lippen-mehr-sind-optik",
+    "to": "/blog/warum-lippen-mehr-sind-optik",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/was-hilft-gegen-falten",
+    "to": "/blog/was-hilft-gegen-falten",
+    "code": 301
+  },
+  {
+    "from": "/fr/blog/was-hilft-gegen-haarausfall",
+    "to": "/blog/was-hilft-gegen-haarausfall",
+    "code": 301
+  },
+  {
+    "from": "/fr/carrieres",
+    "to": "/karriere",
+    "code": 301
+  },
+  {
+    "from": "/fr/lieux",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/fr/medecins",
+    "to": "/aerzte",
+    "code": 301
+  },
+  {
+    "from": "/fr/medecins/dr-gero-ruppert",
+    "to": "/aerzte/dr-gero-ruppert",
+    "code": 301
+  },
+  {
+    "from": "/fr/medecins/katharina-makhlin",
+    "to": "/aerzte/dr-katharina",
+    "code": 301
+  },
+  {
+    "from": "/fr/p/botox_meta",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/fr/prix",
+    "to": "/preise",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/anti-chute-cheveux",
+    "to": "/behandlungen/anti-haarausfall",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/anti-chute-cheveux/therapie-capillaire-prp",
+    "to": "/behandlungen/anti-haarausfall/prp-haartherapie",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/anti-haarausfall/kostenlose-haaranalyse",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox",
+    "to": "/behandlungen/botox",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/baby-botox",
+    "to": "/behandlungen/botox/baby-botox",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/barbie-botox",
+    "to": "/behandlungen/botox/barbie-botox",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/botox-3-zones-prix",
+    "to": "/behandlungen/botox/3-zonen-botox-preise",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/browlift",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/bunny-lines",
+    "to": "/behandlungen/botox/bunny-lines",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/erdbeerkinn",
+    "to": "/behandlungen/botox/erdbeerkinn",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/full-face-botox",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/hyperhidrose-transpiration-excessive",
+    "to": "/behandlungen/botox/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/kraehenfuesse",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/lip-flip",
+    "to": "/behandlungen/botox/lipflip",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/masseter",
+    "to": "/behandlungen/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/migraenebehandlung",
+    "to": "/behandlungen/botox/migraenebehandlung",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/ride-du-lion",
+    "to": "/behandlungen/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/rides-du-cou-platysma",
+    "to": "/behandlungen/botox/halsfalten-platysma",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/stirnfalte",
+    "to": "/behandlungen/botox/stirnfalte",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/botox/zaehneknirschen-bruxismus",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hair-boost-infusion4",
+    "to": "/behandlungen/anti-haarausfall/hair-boost-infusion4",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/augmentation-des-levres",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/augmentation-des-pommettes",
+    "to": "/behandlungen/hyaluron/wangenaufbau",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/correction-des-levres",
+    "to": "/behandlungen/hyaluron/lippenkorrektur",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/correction-du-menton",
+    "to": "/behandlungen/hyaluron/kinnkorrektur",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/dekolletee",
+    "to": "/behandlungen/hyaluron/dekolletee",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/haende",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/hyaluron-visage-complet",
+    "to": "/behandlungen/hyaluron/full-face-hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/hylase",
+    "to": "/behandlungen/hyaluron/hylase",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/jawline",
+    "to": "/behandlungen/hyaluron/jawline",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/pli-nasogenien",
+    "to": "/behandlungen/hyaluron/nasolabialfalte",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/plis-d-amertume",
+    "to": "/behandlungen/hyaluron/marionettenfalten",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/plisseefalten",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/russian-lips",
+    "to": "/behandlungen/hyaluron/russian-lips",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/hyaluron/traitement-des-cernes",
+    "to": "/behandlungen/hyaluron/augenringe-unterspritzen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/infusionen/immun-infusion",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique",
+    "to": "/behandlungen/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique/lemon-bottle-backen",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-backen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique/lemon-bottle-cuisses",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-oberschenkel",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique/lemon-bottle-double-menton",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-doppelkinn",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique/lemon-bottle-genou",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-knie",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique/lemon-bottle-hanche",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-huefte",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique/lemon-bottle-oberarm",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-oberarm",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/injection-lipolytique/lemon-bottle-ventre",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-bauch",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions",
+    "to": "/behandlungen/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions/anti-aging-infusion",
+    "to": "/behandlungen/infusionen/anti-aging-infusion",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions/immun-infusion",
+    "to": "/behandlungen/infusionen/immun-infusion",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions/infusion-complexe-b",
+    "to": "/behandlungen/infusionen/b-komplex-infusion",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions/infusion-detente",
+    "to": "/behandlungen/infusionen/relax-infusion",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions/perfusion-energisante-glutathion",
+    "to": "/behandlungen/infusionen/power-infusion-glutathion",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions/regenerations-infusion",
+    "to": "/behandlungen/infusionen/regenerations-infusion",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/perfusions/vitamin-c-infusion",
+    "to": "/behandlungen/infusionen/vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen",
+    "to": "/behandlungen/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/abdominoplastie",
+    "to": "/behandlungen/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/blepharoplastie-superieure",
+    "to": "/behandlungen/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/bruststraffung",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/brustvergroesserung",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/greffe-de-cheveux",
+    "to": "/behandlungen/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/lifting-des-bras",
+    "to": "/behandlungen/schoenheitsoperationen/oberarmstraffung",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/lifting-des-cuisses",
+    "to": "/behandlungen/schoenheitsoperationen/oberschenkelstraffung",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/schoenheitsoperationen/lifting-du-visage",
+    "to": "/behandlungen/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/skinbooster",
+    "to": "/behandlungen/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/skinbooster/lumi-eyes-polynucleotides",
+    "to": "/behandlungen/skinbooster/lumi-eyes-polynukleotide",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/skinbooster/mesotherapie-nctf-135-ha",
+    "to": "/behandlungen/skinbooster/mesotherapie-nctf-135-ha",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/skinbooster/polynucleotides-sperme-de-saumon",
+    "to": "/behandlungen/skinbooster/polynukleotide-lachssperma",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/skinbooster/profhilo",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/fr/traitements/skinbooster/vampir-lifting-prp",
+    "to": "/behandlungen/skinbooster/vampir-lifting-prp",
+    "code": 301
+  },
+  {
+    "from": "/nl",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/nl/artsen",
+    "to": "/aerzte",
+    "code": 301
+  },
+  {
+    "from": "/nl/artsen/dr-gero-ruppert",
+    "to": "/aerzte/dr-gero-ruppert",
+    "code": 301
+  },
+  {
+    "from": "/nl/artsen/katharina-makhlin",
+    "to": "/aerzte/dr-katharina",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/anti-haaruitval",
+    "to": "/behandlungen/anti-haarausfall",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/anti-haaruitval/prp-haartherapie",
+    "to": "/behandlungen/anti-haarausfall/prp-haartherapie",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/borstlift",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/borstvergroting",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox",
+    "to": "/behandlungen/botox",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/3-zones-botox-prijzen",
+    "to": "/behandlungen/botox/3-zonen-botox-preise",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/baby-botox",
+    "to": "/behandlungen/botox/baby-botox",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/barbie-botox",
+    "to": "/behandlungen/botox/barbie-botox",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/bunny-lines",
+    "to": "/behandlungen/botox/bunny-lines",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/erdbeerkinn",
+    "to": "/behandlungen/botox/erdbeerkinn",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/fronsrimpel",
+    "to": "/behandlungen/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/hyperhidrose-overmatig-zweten",
+    "to": "/behandlungen/botox/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/lip-flip",
+    "to": "/behandlungen/botox/lipflip",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/masseter",
+    "to": "/behandlungen/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/migraenebehandeling",
+    "to": "/behandlungen/botox/migraenebehandlung",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/nekrimpels-platysma",
+    "to": "/behandlungen/botox/halsfalten-platysma",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/botox/stirnfalte",
+    "to": "/behandlungen/botox/stirnfalte",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/browlift",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/gratis-haaranalyse",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hair-boost-infusion4",
+    "to": "/behandlungen/anti-haarausfall/hair-boost-infusion4",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/handen",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/decollete",
+    "to": "/behandlungen/hyaluron/dekolletee",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/donkere-kringen-onder-de-ogen-behandelen",
+    "to": "/behandlungen/hyaluron/augenringe-unterspritzen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/hylase",
+    "to": "/behandlungen/hyaluron/hylase",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/jawline",
+    "to": "/behandlungen/hyaluron/jawline",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/kinvergroting",
+    "to": "/behandlungen/hyaluron/kinnkorrektur",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/lipcorrectie",
+    "to": "/behandlungen/hyaluron/lippenkorrektur",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/lippen-aufspritzen",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/marionetlijnen",
+    "to": "/behandlungen/hyaluron/marionettenfalten",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/neus-lippenplooi",
+    "to": "/behandlungen/hyaluron/nasolabialfalte",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/russian-lips",
+    "to": "/behandlungen/hyaluron/russian-lips",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/volledig-gezicht-hyaluron",
+    "to": "/behandlungen/hyaluron/full-face-hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/hyaluron/wangopbouw",
+    "to": "/behandlungen/hyaluron/wangenaufbau",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/immun-infusion",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies",
+    "to": "/behandlungen/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies/anti-aging-infusion",
+    "to": "/behandlungen/infusionen/anti-aging-infusion",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies/b-complex-infusie",
+    "to": "/behandlungen/infusionen/b-komplex-infusion",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies/immun-infusion",
+    "to": "/behandlungen/infusionen/immun-infusion",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies/power-infusie-glutathion",
+    "to": "/behandlungen/infusionen/power-infusion-glutathion",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies/regeneratie-infusie",
+    "to": "/behandlungen/infusionen/regenerations-infusion",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies/relax-infusie",
+    "to": "/behandlungen/infusionen/relax-infusion",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/infusies/vitamine-c-infusie",
+    "to": "/behandlungen/infusionen/vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/kraaienpootjes",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/plisseefalten",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/profhilo",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/schoonheidsoperaties",
+    "to": "/behandlungen/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/schoonheidsoperaties/bovenarmlift",
+    "to": "/behandlungen/schoenheitsoperationen/oberarmstraffung",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/schoonheidsoperaties/bovenooglidcorrectie",
+    "to": "/behandlungen/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/schoonheidsoperaties/buikwandcorrectie",
+    "to": "/behandlungen/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/schoonheidsoperaties/dijbeenlift",
+    "to": "/behandlungen/schoenheitsoperationen/oberschenkelstraffung",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/schoonheidsoperaties/facelift",
+    "to": "/behandlungen/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/schoonheidsoperaties/haartransplantatie",
+    "to": "/behandlungen/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/skinbooster",
+    "to": "/behandlungen/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/skinbooster/lumi-eyes-polynucleotiden",
+    "to": "/behandlungen/skinbooster/lumi-eyes-polynukleotide",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/skinbooster/mesotherapie-nctf-135-ha",
+    "to": "/behandlungen/skinbooster/mesotherapie-nctf-135-ha",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/skinbooster/polynucleotiden-zalmsperma",
+    "to": "/behandlungen/skinbooster/polynukleotide-lachssperma",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/skinbooster/vampir-lifting-prp",
+    "to": "/behandlungen/skinbooster/vampir-lifting-prp",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie",
+    "to": "/behandlungen/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie/lemon-bottle-backen",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-backen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie/lemon-bottle-bovenbenen",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-oberschenkel",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie/lemon-bottle-buik",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-bauch",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie/lemon-bottle-dubbele-kin",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-doppelkinn",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie/lemon-bottle-heup",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-huefte",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie/lemon-bottle-knie",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-knie",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/vetoplossende-injectie/lemon-bottle-oberarm",
+    "to": "/behandlungen/fettwegspritze/lemon-bottle-oberarm",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/volledig-gezicht-botox",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/behandelingen/zaehneknirschen-bruxismus",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog",
+    "to": "/blog",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/augenlider-straffen-ohne-op",
+    "to": "/blog/augenlider-straffen-ohne-op",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "to": "/blog/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/botox-stirn-glatte-haut",
+    "to": "/blog/botox-stirn-glatte-haut",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/botox-vs-hyaluron-was-unterscheidet-und-eint-die-beiden-wundermittel",
+    "to": "/blog/botox-vs-hyaluron-was-unterscheidet-und-eint-die-beiden-wundermittel",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/blog-category",
+    "to": "/blog/c/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/botox",
+    "to": "/blog/c/botox",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/haar",
+    "to": "/blog/c/haare",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/hyaluron",
+    "to": "/blog/c/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/infusionen",
+    "to": "/blog/c/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/my",
+    "to": "/blog/c/my",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/schoonheidsoperaties",
+    "to": "/blog/c/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/c/vetinjectie",
+    "to": "/blog/c/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/carboxy-therapie-gas-in-die-haut",
+    "to": "/blog/carboxy-therapie-gas-in-die-haut",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/deutsche-kliniken-im-vergleich-was-bieten-sie-im-bereich-haartransplantation",
+    "to": "/blog/deutsche-kliniken-im-vergleich-was-bieten-sie-im-bereich-haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/die-turkei-als-mekka-der-haartransplantation-warum-reisen-so-viele-deutsche-dorthin",
+    "to": "/blog/die-turkei-als-mekka-der-haartransplantation-warum-reisen-so-viele-deutsche-dorthin",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/geglucktes-opening-in-berlin",
+    "to": "/blog/geglucktes-opening-in-berlin",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/gesundheitliche-wundertute-botox-viel-mehr-als-nur-ein-schonmacher",
+    "to": "/blog/gesundheitliche-wundertute-botox-viel-mehr-als-nur-ein-schonmacher",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/glow-gesicht-zum-strahlen-bringen",
+    "to": "/blog/glow-gesicht-zum-strahlen-bringen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/gute-hautpflege-routine-aufbauen",
+    "to": "/blog/gute-hautpflege-routine-aufbauen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/haarausfall-stoppen",
+    "to": "/blog/haarausfall-stoppen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/haartransplantation-im-ausland-worauf-mussen-patienten-achten",
+    "to": "/blog/haartransplantation-im-ausland-worauf-mussen-patienten-achten",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "to": "/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/heuschnupfen-nein-danke",
+    "to": "/blog/heuschnupfen-nein-danke",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/kundenreferenz-vitamin-c-infusion",
+    "to": "/blog/kundenreferenz-vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "to": "/blog/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/lippen-aufspritzen-hyaluron-guide",
+    "to": "/blog/lippen-aufspritzen-hyaluron-guide",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/meso-therapie-vitamine-fur-deine-haut",
+    "to": "/blog/meso-therapie-vitamine-fur-deine-haut",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/muttertagsgeschenk-schoenheitsbehandlung",
+    "to": "/blog",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/prp-fur-ein-verjungtes-und-strahlendes-hautbild",
+    "to": "/blog/prp-fur-ein-verjungtes-und-strahlendes-hautbild",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/schone-haut-bekommen",
+    "to": "/blog/schone-haut-bekommen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/schonheitsoperationen-im-ausland-schnappchen-oder-risiko",
+    "to": "/blog/schonheitsoperationen-im-ausland-schnappchen-oder-risiko",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/skinbooster-strahlende-haut-von-innen",
+    "to": "/blog/skinbooster-strahlende-haut-von-innen",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/sorge-vor-overdone-so-behalt-man-seine-naturlichkeit-mit-botox",
+    "to": "/blog/sorge-vor-overdone-so-behalt-man-seine-naturlichkeit-mit-botox",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/straffere-haut-die-besten-tipps",
+    "to": "/blog/straffere-haut-die-besten-tipps",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/urlaub-und-haartransplantation-warum-kombi-reisen-so-beliebt-sind",
+    "to": "/blog/urlaub-und-haartransplantation-warum-kombi-reisen-so-beliebt-sind",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/valentinstagsspecial-mit-verena-kerth-und-marc-terenzi",
+    "to": "/blog/valentinstagsspecial-mit-verena-kerth-und-marc-terenzi",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/vampir-lifting-vorher-nacher",
+    "to": "/blog/vampir-lifting-vorher-nacher",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "to": "/blog/vitamin-c-infusion-wirkung",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/vitamin-c-infusion-wirkung-fuer-wen-sie-wirklich-sinnvoll-ist",
+    "to": "/blog/vitamin-c-infusion-wirkung-fuer-wen-sie-wirklich-sinnvoll-ist",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/warum-haut-ab-30-anders-wird",
+    "to": "/blog/warum-haut-ab-30-anders-wird",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/warum-lippen-mehr-sind-optik",
+    "to": "/blog/warum-lippen-mehr-sind-optik",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/was-hilft-gegen-falten",
+    "to": "/blog/was-hilft-gegen-falten",
+    "code": 301
+  },
+  {
+    "from": "/nl/blog/was-hilft-gegen-haarausfall",
+    "to": "/blog/was-hilft-gegen-haarausfall",
+    "code": 301
+  },
+  {
+    "from": "/nl/carriere",
+    "to": "/karriere",
+    "code": 301
+  },
+  {
+    "from": "/nl/locaties",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/nl/over-ons",
+    "to": "/ueber-uns",
+    "code": 301
+  },
+  {
+    "from": "/nl/p/botox_meta",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/nl/prijzen",
+    "to": "/preise",
+    "code": 301
+  },
+  {
+    "from": "/tr",
+    "to": "/",
+    "code": 301
+  },
+  {
+    "from": "/tr/blog",
+    "to": "/blog",
+    "code": 301
+  },
+  {
+    "from": "/tr/blog/c/blog-category",
+    "to": "/blog/c/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/tr/blog/c/infusionen",
+    "to": "/blog/c/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/tr/doktorlar",
+    "to": "/aerzte",
+    "code": 301
+  },
+  {
+    "from": "/tr/fiyatlar",
+    "to": "/preise",
+    "code": 301
+  },
+  {
+    "from": "/tr/hakkimizda",
+    "to": "/ueber-uns",
+    "code": 301
+  },
+  {
+    "from": "/tr/kariyer",
+    "to": "/karriere",
+    "code": 301
+  },
+  {
+    "from": "/tr/konumlar",
+    "to": "/standorte",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/anti-haarausfall",
+    "to": "/behandlungen/anti-haarausfall",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/b-kompleks-infuzyonu",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox",
+    "to": "/behandlungen/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/3-bolge-botox-fiyatlari",
+    "to": "/behandlungen/botox/3-zonen-botox-preise",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/baby-botox",
+    "to": "/behandlungen/botox/baby-botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/barbie-botox",
+    "to": "/behandlungen/botox/barbie-botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/boyun-kirisikliklari-platysma",
+    "to": "/behandlungen/botox/halsfalten-platysma",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/bunny-lines",
+    "to": "/behandlungen/botox/bunny-lines",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/erdbeerkinn",
+    "to": "/behandlungen/botox/erdbeerkinn",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/hiperhidroz-asiri-terleme",
+    "to": "/behandlungen/botox/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/kas-catma-cizgisi",
+    "to": "/behandlungen/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/masseter",
+    "to": "/behandlungen/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/migraenebehandlung",
+    "to": "/behandlungen/botox/migraenebehandlung",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/botox/stirnfalte",
+    "to": "/behandlungen/botox/stirnfalte",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/fettwegspritze",
+    "to": "/behandlungen/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/hair-boost-infusion4",
+    "to": "/behandlungen/anti-haarausfall/hair-boost-infusion4",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/hyaluron",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/hyaluron/eller",
+    "to": "/behandlungen/hyaluron/haende",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/hyaluron/goz-alti-morluklari-tedavisi",
+    "to": "/behandlungen/hyaluron/augenringe-unterspritzen",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/hyaluron/russian-lips",
+    "to": "/behandlungen/hyaluron/russian-lips",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/hyaluron/tam-yuz-hiyaluron",
+    "to": "/behandlungen/hyaluron/full-face-hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/infusionen",
+    "to": "/behandlungen/infusionen",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/infusionen/anti-aging-infusion",
+    "to": "/behandlungen/infusionen/anti-aging-infusion",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/infusionen/immun-infusion",
+    "to": "/behandlungen/infusionen/immun-infusion",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/schoenheitsoperationen",
+    "to": "/behandlungen/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/schoenheitsoperationen/karin-germe",
+    "to": "/behandlungen/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/schoenheitsoperationen/sac-ekimi",
+    "to": "/behandlungen/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/schoenheitsoperationen/uyluk-germe",
+    "to": "/behandlungen/schoenheitsoperationen/oberschenkelstraffung",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/skinbooster",
+    "to": "/behandlungen/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/tr/tedaviler/skinbooster/mezoterapi-nctf-135-ha",
+    "to": "/behandlungen/skinbooster/mesotherapie-nctf-135-ha",
+    "code": 301
   }
 ]
