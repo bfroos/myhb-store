@@ -106,6 +106,12 @@
     }
   },
 
+  "googleMaps": {
+    "consentRequired": "Map not available",
+    "consentDescription": "To display the map we need your consent for Google Maps. Please accept the cookie settings.",
+    "consentButton": "Open cookie settings"
+  },
+
   "location": {
     "comingSoon": "Coming Soon",
     "sinceToday": "New opening today",
@@ -133,6 +139,10 @@
     "headline": "Blog",
     "intro": "Knowledge, news and everything about health and beauty.",
     "article": {
+      "seo": {
+        "title": "{articleTitle} | {brandName}",
+        "description": "{intro}"
+      },
       "share": {
         "copy": "Copy link",
         "copied": "Link copied",
@@ -234,6 +244,7 @@
         }
       },
       "seo": {
+        "title": "{doctorName} - {role} | {brandName}",
         "description": "{ role } at { brandName } in { cities } – Information about my work"
       }
     }
@@ -260,10 +271,28 @@
         "treatmentNotFound": "Treatment not found",
         "treatmentNotFoundDescription": "The requested treatment does not exist."
       }
+    },
+    "pageTitle": "Botox®, hyaluron & aesthetic treatments"
+  },
+
+  "treatment": {
+    "seo": {
+      "title": "{treatmentName} from {priceTag} ✓ {brandName}"
+    },
+    "relatedArticles": {
+      "headline": "From our guide"
+    },
+    "medicalReviewer": {
+      "ariaLabel": "Medical review",
+      "label": "Medically reviewed by",
+      "lastUpdated": "Last updated {date}"
     }
   },
 
   "productPage": {
+    "seo": {
+      "title": "{productName} from {priceTag} | {brandName}"
+    },
     "error": {
       "productNotFound": "Product not found",
       "productNotFoundDescription": "The requested product does not exist."
@@ -392,6 +421,9 @@
       "treatmentDetails": "Treatment details",
       "productDetails": "Product details",
       "noTreatments": "Currently, we have no treatments in this category."
+    },
+    "priceOverview": {
+      "treatmentDetails": "Details for {name}"
     },
     "productHero": {
       "previousImage": "Previous image",

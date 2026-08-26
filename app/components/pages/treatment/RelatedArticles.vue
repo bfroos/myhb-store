@@ -3,7 +3,7 @@
     <UiLayoutCardSurface>
       <section class="relatedArticles" aria-labelledby="related-articles-heading">
         <h2 id="related-articles-heading" class="relatedArticles__headline">
-          {{ headline }}
+          {{ headline ?? $t("treatment.relatedArticles.headline") }}
         </h2>
         <ul class="relatedArticles__grid">
           <li
@@ -35,15 +35,11 @@
 import { ImageFormat } from "~/lib/strapi/dto/enums";
 import type { BlogArticleDto } from "~/lib/strapi/dto/collections";
 
-withDefaults(
-  defineProps<{
-    articles: BlogArticleDto[];
-    headline?: string;
-  }>(),
-  {
-    headline: "Aus unserem Ratgeber",
-  },
-);
+defineProps<{
+  articles: BlogArticleDto[];
+  // Falls back to the localised default headline when the caller passes none.
+  headline?: string;
+}>();
 </script>
 
 <style scoped>

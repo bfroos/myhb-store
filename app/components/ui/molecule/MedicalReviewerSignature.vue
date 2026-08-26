@@ -1,5 +1,5 @@
 <template>
-  <aside class="medReviewer" aria-label="Medizinische Prüfung">
+  <aside class="medReviewer" :aria-label="$t('treatment.medicalReviewer.ariaLabel')">
     <img
       v-if="reviewer.photoUrl"
       :src="reviewer.photoUrl"
@@ -10,13 +10,13 @@
       loading="lazy"
     />
     <p class="medReviewer__text">
-      <span class="medReviewer__label">Medizinisch geprüft von </span>
+      <span class="medReviewer__label">{{ $t("treatment.medicalReviewer.label") }} </span>
       <NuxtLinkLocale
         :to="`/aerzte/${reviewer.slug}`"
         class="medReviewer__name"
       >{{ reviewer.name }}<template v-if="reviewer.jobTitle">, {{ reviewer.jobTitle }}</template></NuxtLinkLocale>
       <span v-if="formattedDate" class="medReviewer__date">
-        · Zuletzt aktualisiert am {{ formattedDate }}
+        · {{ $t("treatment.medicalReviewer.lastUpdated", { date: formattedDate }) }}
       </span>
     </p>
   </aside>
@@ -30,11 +30,16 @@ const props = defineProps<{
   date?: string | null;
 }>();
 
+const { locale, localeProperties } = useI18n();
+const dateLocale = computed(
+  () => (localeProperties.value?.iso as string | undefined) ?? locale.value,
+);
+
 const formattedDate = computed(() => {
   if (!props.date) return "";
   const d = new Date(props.date);
   if (isNaN(d.getTime())) return "";
-  return d.toLocaleDateString("de-DE", {
+  return d.toLocaleDateString(dateLocale.value, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

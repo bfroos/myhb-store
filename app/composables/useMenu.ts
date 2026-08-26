@@ -25,12 +25,12 @@ export function useMenu(
 ) {
   const { locale, fallbackLocale } = useI18n();
 
-  // Strapi only supports 'de' locale for menu data — always request 'de'
-  const SUPPORTED_MENU_LOCALES = ["de"];
-  const menuLocale = computed(() => {
-    const l = locale.value || fallbackLocale.value || "de";
-    return SUPPORTED_MENU_LOCALES.includes(l) ? l : "de";
-  });
+  // The /menu controller resolves whichever locale it is given and returns only
+  // the entries that exist in it, so a locale never links to a page that would
+  // 404. Requesting 'de' unconditionally put a German nav on every page.
+  const menuLocale = computed(
+    () => locale.value || fallbackLocale.value || "de",
+  );
 
   const query = computed(() => ({
     locale: menuLocale.value,
