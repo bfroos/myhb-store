@@ -66,7 +66,7 @@
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      MY Club (Treueprogramm)
+                      {{ $t("navigation.secondary.myClub") }}
                     </a>
                   </li>
                   <li v-if="locale === 'de'">

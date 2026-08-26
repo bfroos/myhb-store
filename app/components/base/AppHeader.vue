@@ -15,7 +15,7 @@
               rel="noopener noreferrer"
               class="text-link"
             >
-              MY Club (Treueprogramm)
+              {{ $t("navigation.secondary.myClub") }}
             </a>
           </li>
           <li>
