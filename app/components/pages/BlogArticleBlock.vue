@@ -177,7 +177,11 @@ defineProps<{
   }
 
   .blogArticle__header__image :deep(img) {
-    object-fit: cover;
+    /* Same reason as the base rule: the covers carry burnt-in headlines, so the
+       stretched column must never crop them. The column height is set by the
+       headline next to it, not by the cover, so `cover` was cutting up to 45%
+       off the sides. Letterbox against the header instead. */
+    object-fit: contain;
     border-radius: 0 var(--border-radius-card-sm) 0 0;
   }
 
