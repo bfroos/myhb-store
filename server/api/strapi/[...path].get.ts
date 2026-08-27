@@ -14,6 +14,11 @@
 
 const FALLBACK_LOCALE = 'de';
 
+// Endpoints that must never be merged with German. These return an index of
+// what exists in a locale rather than a page's content, so filling gaps from
+// German invents entries instead of completing one.
+const NO_FALLBACK_PATHS = [/^\/menu(?:\/|$)/];
+
 function isPreviewRequest(event: any): boolean {
   const cookie = getCookie(event, '__NUXT_PREVIEW');
   if (cookie === 'true') return true;
@@ -208,8 +213,21 @@ export default defineCachedEventHandler(
     // Preview must show the requested locale exactly as it is stored in
     // Strapi. Otherwise German fallback text/blocks hide incomplete drafts
     // from the copywriter and content manager during review.
+    //
+    // Navigation indexes are excluded as well. Their payload is
+    // `{ data: { "treatment-pages": [...] } }` — an object, so it slips past
+    // the array guard below and gets merged like page content. That is wrong
+    // for a menu: it lists what EXISTS in a locale, and an entry with no
+    // published translation should be absent, not shown in German linking to
+    // a German page. Because the merge pads a shorter array from the German
+    // skeleton, a single unpublished page put 17 German labels into the
+    // Arabic navigation.
+    const isNavigationIndex = NO_FALLBACK_PATHS.some((re) => re.test(restPath));
     const wantsFallback =
-      !preview && !!requestedLocale && requestedLocale !== FALLBACK_LOCALE;
+      !preview &&
+      !isNavigationIndex &&
+      !!requestedLocale &&
+      requestedLocale !== FALLBACK_LOCALE;
 
     try {
       const primary: any = await fetchStrapi(params);
