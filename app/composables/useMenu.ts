@@ -25,9 +25,6 @@ export function useMenu(
 ) {
   const { locale, fallbackLocale } = useI18n();
 
-  // The /menu controller resolves whichever locale it is given and returns only
-  // the entries that exist in it, so a locale never links to a page that would
-  // 404. Requesting 'de' unconditionally put a German nav on every page.
   const menuLocale = computed(
     () => locale.value || fallbackLocale.value || "de",
   );

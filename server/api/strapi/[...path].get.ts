@@ -1,29 +1,14 @@
 // Strapi proxy with server-side caching.
 // CRITICAL: When __NUXT_PREVIEW cookie is set (via /api/preview route),
 // all requests include status=draft and cache is bypassed.
-//
-// German fallback: content is translated unevenly across locales (some
-// entries don't exist yet in a locale at all, others exist but are missing
-// individual fields or media). For any request with a non-German locale, we
-// also fetch the German counterpart and use it to fill gaps, so a page never
-// renders half-empty or loses its structure just because a translation is
-// incomplete. This only applies to single-entity responses (`data` is an
-// object, not an array) — list/collection endpoints are left untouched,
-// since pulling German-only entries into a locale's listing could link to
-// pages whose own detail view wouldn't otherwise resolve in that locale.
 
 const FALLBACK_LOCALE = 'de';
 
-// Endpoints that must never be merged with German. These return an index of
-// what exists in a locale rather than a page's content, so filling gaps from
-// German invents entries instead of completing one.
 const NO_FALLBACK_PATHS = [/^\/menu(?:\/|$)/];
 
 function isPreviewRequest(event: any): boolean {
   const cookie = getCookie(event, '__NUXT_PREVIEW');
   if (cookie === 'true') return true;
-  // Nitro's cached handler can expose the raw header even when getCookie has
-  // not parsed it yet. Keep preview drafts visible in that case too.
   const raw = getRequestHeader(event, 'cookie') || '';
   return /(?:^|;\s*)__NUXT_PREVIEW=true(?:;|$)/.test(raw);
 }
@@ -59,8 +44,6 @@ function looksLikeMedia(value: any): boolean {
   );
 }
 
-// Entity metadata that must always come from the requested locale's own row,
-// never borrowed from the German fallback.
 const SKIP_MERGE_KEYS = new Set([
   'id',
   'documentId',
@@ -75,11 +58,6 @@ function isPlainObject(value: any): boolean {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
-/**
- * True when two array items look like the same slot: for dynamic-zone entries
- * that means the same component; for plain repeatable components there is
- * nothing to compare, so any two objects are considered alignable.
- */
 function sameSlot(a: any, b: any): boolean {
   if (!isPlainObject(a) || !isPlainObject(b)) return false;
   if ('__component' in a && '__component' in b) {
@@ -88,25 +66,6 @@ function sameSlot(a: any, b: any): boolean {
   return true;
 }
 
-/**
- * Fills gaps in `target` (the requested locale's data) using `fallback` (the
- * German data). Anything present and non-empty in `target` is kept as-is;
- * only null/empty/missing values are replaced.
- *
- * Arrays (dynamic-zone blocks, repeatable components) are handled by length:
- *
- *   - Equal length: merged item by item, so a translated block keeps its
- *     translation while an untranslated sibling still renders in German
- *     instead of the whole zone emptying out.
- *   - Target shorter: the locale was only partially filled in, which is what
- *     made pages render with sections missing (e.g. 8 sections in German, 1
- *     in Arabic). The German array becomes the skeleton and the locale's
- *     items are overlaid onto it, matched greedily on component type, so
- *     translated sections keep their translation and the untranslated ones
- *     appear in German rather than vanishing.
- *   - Target longer: the locale has extra content of its own. Left untouched
- *     -- we must not drop locale-specific entries.
- */
 function mergeFallback(target: any, fallback: any): any {
   if (isEmptyValue(target)) {
     return fallback !== undefined ? fallback : target;
@@ -133,9 +92,6 @@ function mergeFallback(target: any, fallback: any): any {
     }
 
     if (target.length < fallback.length) {
-      // Only rebuild structures we can reason about. Arrays of primitives
-      // (ids, slugs, plain strings) carry no slot identity, so a shorter
-      // target there is taken at face value.
       if (!fallback.every(isPlainObject) || !target.every(isPlainObject)) {
         return target;
       }
@@ -210,18 +166,7 @@ export default defineCachedEventHandler(
     };
 
     const requestedLocale = params.get('locale');
-    // Preview must show the requested locale exactly as it is stored in
-    // Strapi. Otherwise German fallback text/blocks hide incomplete drafts
-    // from the copywriter and content manager during review.
-    //
-    // Navigation indexes are excluded as well. Their payload is
-    // `{ data: { "treatment-pages": [...] } }` — an object, so it slips past
-    // the array guard below and gets merged like page content. That is wrong
-    // for a menu: it lists what EXISTS in a locale, and an entry with no
-    // published translation should be absent, not shown in German linking to
-    // a German page. Because the merge pads a shorter array from the German
-    // skeleton, a single unpublished page put 17 German labels into the
-    // Arabic navigation.
+    // A menu lists what exists in a locale, so German must never pad it.
     const isNavigationIndex = NO_FALLBACK_PATHS.some((re) => re.test(restPath));
     const wantsFallback =
       !preview &&
@@ -244,7 +189,6 @@ export default defineCachedEventHandler(
       }
 
       if (data == null) {
-        // Whole entity missing in the requested locale — use German wholesale.
         return deResult;
       }
 
@@ -252,14 +196,10 @@ export default defineCachedEventHandler(
     } catch (error: any) {
       const statusCode = error?.statusCode || error?.status || 500;
 
-      // The requested locale's entity doesn't exist at all (e.g. a custom
-      // by-path controller returning 404 rather than {data: null}). Retry
-      // once against German before giving up, so the page still resolves.
       if (wantsFallback && statusCode === 404) {
         try {
           return await fetchStrapi(withLocale(params, FALLBACK_LOCALE));
         } catch {
-          // fall through to the original error below
         }
       }
 

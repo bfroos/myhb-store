@@ -37,7 +37,6 @@ import type { BlogArticleDto } from "~/lib/strapi/dto/collections";
 
 defineProps<{
   articles: BlogArticleDto[];
-  // Falls back to the localised default headline when the caller passes none.
   headline?: string;
 }>();
 </script>
