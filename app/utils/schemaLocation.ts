@@ -34,23 +34,23 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJYyPheE7LuEcRAIgZkPAOJyU": {
     "rating": "4.9",
-    "count": "181"
+    "count": "183"
   },
   "ChIJ_7Xx1HetuEcRUE0rtbPlvEQ": {
     "rating": "4.9",
-    "count": "179"
+    "count": "180"
   },
   "ChIJr60IH9PjuEcRdVPR8YiTgSo": {
     "rating": "4.9",
     "count": "175"
   },
   "ChIJf4C6OSkTlkcRpTMm00E5JLE": {
-    "rating": "4.8",
-    "count": "88"
+    "rating": "4.7",
+    "count": "89"
   },
   "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": {
     "rating": "5.0",
-    "count": "157"
+    "count": "156"
   },
   "ChIJuVWkFmyZwEcRM9nuZ1SejT4": {
     "rating": "4.9",
