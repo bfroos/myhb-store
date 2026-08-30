@@ -119,6 +119,17 @@ function mergeFallback(target: any, fallback: any): any {
   }
 
   if (typeof target === 'object') {
+    // Same-length arrays are merged by position, so two entries of the same
+    // shape can line up while being different entities. documentId is the only
+    // reliable identity here, and it is deliberately not merged, so check it
+    // before combining anything.
+    if (
+      target.documentId &&
+      fallback.documentId &&
+      target.documentId !== fallback.documentId
+    ) {
+      return target;
+    }
     if (looksLikeMedia(target)) return target; // media present, keep as-is
     if (typeof fallback !== 'object' || Array.isArray(fallback)) return target;
     const result: Record<string, any> = { ...target };
