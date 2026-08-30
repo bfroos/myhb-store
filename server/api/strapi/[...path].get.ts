@@ -58,17 +58,36 @@ function isPlainObject(value: any): boolean {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
-function sameSlot(a: any, b: any): boolean {
-  if (!isPlainObject(a) || !isPlainObject(b)) return false;
-  if ('__component' in a && '__component' in b) {
-    return a.__component === b.__component;
+// Fields that identify an entity or address it in a specific locale. When a
+// German value is substituted wholesale these must not travel with it, or a
+// translated page ends up carrying German documentIds and German URLs.
+const LOCALE_BOUND_KEYS = new Set([
+  'id',
+  'documentId',
+  'createdAt',
+  'updatedAt',
+  'publishedAt',
+  'locale',
+  'localizations',
+  'slug',
+  'pathKey',
+  'ancestorSlugs',
+]);
+
+function stripLocaleBound(value: any): any {
+  if (Array.isArray(value)) return value.map(stripLocaleBound);
+  if (!isPlainObject(value)) return value;
+  const out: Record<string, any> = {};
+  for (const [key, item] of Object.entries(value)) {
+    if (LOCALE_BOUND_KEYS.has(key)) continue;
+    out[key] = stripLocaleBound(item);
   }
-  return true;
+  return out;
 }
 
 function mergeFallback(target: any, fallback: any): any {
   if (isEmptyValue(target)) {
-    return fallback !== undefined ? fallback : target;
+    return fallback !== undefined ? stripLocaleBound(fallback) : target;
   }
   if (fallback === undefined || fallback === null) return target;
 
@@ -91,22 +110,12 @@ function mergeFallback(target: any, fallback: any): any {
       });
     }
 
-    if (target.length < fallback.length) {
-      if (!fallback.every(isPlainObject) || !target.every(isPlainObject)) {
-        return target;
-      }
-      let cursor = 0;
-      return fallback.map((fb: any) => {
-        const candidate = target[cursor];
-        if (candidate !== undefined && sameSlot(candidate, fb)) {
-          cursor += 1;
-          return mergeFallback(candidate, fb);
-        }
-        return fb;
-      });
-    }
-
-    return target; // target longer: locale-specific extras, keep them
+    // Different lengths mean there is no reliable way to tell which German
+    // item a translated item corresponds to. Component type is not an identity:
+    // a zone may legitimately hold the same component twice, and pairing the
+    // wrong two produces a block with one page's heading and another's body.
+    // Keep what the locale actually has rather than inventing an alignment.
+    return target;
   }
 
   if (typeof target === 'object') {
@@ -192,7 +201,17 @@ export default defineCachedEventHandler(
         return deResult;
       }
 
-      return { ...primary, data: mergeFallback(data, deResult?.data) };
+      // The German lookup replays a locale-specific identifier, so confirm it
+      // came back with the same document before merging anything into it.
+      const deData = deResult?.data;
+      const sameDocument =
+        deData &&
+        (!data.documentId ||
+          !deData.documentId ||
+          data.documentId === deData.documentId);
+      if (!sameDocument) return primary;
+
+      return { ...primary, data: mergeFallback(data, deData) };
     } catch (error: any) {
       const statusCode = error?.statusCode || error?.status || 500;
 
@@ -211,7 +230,6 @@ export default defineCachedEventHandler(
     }
   },
   {
-    varies: ['cookie'],
     maxAge: process.env.NODE_ENV === 'production' ? 60 : 0,
     staleMaxAge: process.env.NODE_ENV === 'production' ? 240 : 0,
     getKey: (event) => {
