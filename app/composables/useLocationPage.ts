@@ -8,10 +8,13 @@ import type { LocalizationDto } from "~/lib/strapi/dto/types";
 import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 
 export function useLocationPage() {
-  const { locale, fallbackLocale, t } = useI18n();
+  const { locale, fallbackLocale, localeProperties, t } = useI18n();
   const { isAdsMode } = useSiteModeFlags();
   const route = useRoute();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
+  const dateLocale = computed(
+    () => (localeProperties.value?.iso as string | undefined) ?? currentLocale,
+  );
   const location = ref<LocationDto | null>(null);
   const citySlug = route.params.citySlug as string;
   const locationSlug = route.params.locationSlug as string;
@@ -76,6 +79,10 @@ export function useLocationPage() {
       locationOpenStatus.value as LocationOpenStatus,
       brandName.value,
       treatmentPages.value,
+      t,
+      dateLocale.value,
+      currentLocale,
+      isAdsMode.value,
     ),
   );
 

@@ -64,7 +64,8 @@
       "prices": "Preise",
       "careers": "Karriere",
       "blog": "Blog",
-      "aboutUs": "Über uns"
+      "aboutUs": "Über uns",
+      "myClub": "MY Club (Treueprogramm)"
     },
     "footer": {
       "treatments": "Behandlungen",
@@ -266,6 +267,14 @@
     "pageTitle": "Botox®, Hyaluron & ästhetische Behandlungen"
   },
   "treatment": {
+    "relatedArticles": {
+      "headline": "Aus unserem Ratgeber"
+    },
+    "medicalReviewer": {
+      "ariaLabel": "Medizinische Prüfung",
+      "label": "Medizinisch geprüft von",
+      "lastUpdated": "Zuletzt aktualisiert am {date}"
+    },
     "seo": {
       "title": "{treatmentName} ab {priceTag} ✓ {brandName}",
       "description": "{treatmentName}: Zertifizierte Ärzte ✓ 10 Standorte deutschlandweit ✓ Kostenlose Beratung ✓ Natürliche Ergebnisse ✓ Jetzt Termin buchen!"

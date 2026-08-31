@@ -65,7 +65,8 @@
       "prices": "Fiyatlar",
       "careers": "İş ilanları",
       "blog": "Blog",
-      "aboutUs": "Hakkımızda"
+      "aboutUs": "Hakkımızda",
+      "myClub": "MY Club (Sadakat Programı)"
     },
     "footer": {
       "treatments": "Tedaviler",
@@ -79,6 +80,9 @@
       "privacyPolicy": "Gizlilik Politikası",
       "imprint": "İmza",
       "cookieSettings": "Çerezler"
+    },
+    "treatmentTile": {
+      "goToTreatment": "Tedavi hakkında"
     }
   },
 
@@ -135,6 +139,10 @@
         "copied": "Bağlantı kopyalandı",
         "whatsapp": "WhatsApp'ta paylaş",
         "facebook": "Facebook'ta paylaş"
+      },
+      "seo": {
+        "title": "{articleTitle} | {brandName}",
+        "description": "{intro}"
       }
     },
     "emptyState": {
@@ -231,7 +239,8 @@
         }
       },
       "seo": {
-        "description": "{ role } { brandName }'de { cities } – Çalışma hakkında bilgiler"
+        "description": "{ role } { brandName }'de { cities } – Çalışma hakkında bilgiler",
+        "title": "{doctorName} - {role} | {brandName}"
       }
     }
   },
@@ -257,7 +266,8 @@
         "treatmentNotFound": "Tedavi bulunamadı",
         "treatmentNotFoundDescription": "İstenen tedavi bulunamadı."
       }
-    }
+    },
+    "pageTitle": "Botox®, Hyaluron ve estetik tedaviler"
   },
 
   "productPage": {
@@ -266,7 +276,10 @@
       "productNotFoundDescription": "İstenen ürün bulunamadı."
     },
     "productDescription": "Ürün açıklaması",
-    "metaDescription": "{manufacturer} markasından {name} ürünü {variants} varyantlarında {price} fiyatından itibaren yakınınızda mevcut"
+    "metaDescription": "{manufacturer} markasından {name} ürünü {variants} varyantlarında {price} fiyatından itibaren yakınınızda mevcut",
+    "seo": {
+      "title": "{productName} başlangıç {priceTag} | {brandName}"
+    }
   },
 
   "blocks": {
@@ -398,6 +411,9 @@
       "bookAppointment": "Randevu al",
       "footerDescription": "Lütfen ürünlerimizin tek başına satılmadığını unutmayın. Bu ürünler yalnızca ilgili tedavi kapsamında kullanılır – kapsamlı bir tıbbi danışmanlık sonrasında. Sadece yakınınızda bir randevu alın ve bu ürünle hangi tedavilerin mümkün olduğunu öğrenin.",
       "treatmentsWith": "{manufacturer} {product} ile tedaviler"
+    },
+    "priceOverview": {
+      "treatmentDetails": "{name} ile ilgili ayrıntılar"
     }
   },
 
@@ -437,6 +453,24 @@
     "errors": {
       "invalid_email": "Lütfen geçerli bir e-posta adresi girin.",
       "generic": "Kayıt başarısız. Lütfen daha sonra tekrar deneyin."
+    }
+  },
+  "googleMaps": {
+    "consentRequired": "Harita mevcut değil",
+    "consentDescription": "Haritayı görüntülemek için Google Maps'e izin vermen gerekiyor. Lütfen çerez ayarlarını kabul et.",
+    "consentButton": "Çerez ayarlarını aç"
+  },
+  "treatment": {
+    "relatedArticles": {
+      "headline": "Rehberimizden"
+    },
+    "medicalReviewer": {
+      "ariaLabel": "Tıbbi muayene",
+      "label": "Tıbbi olarak onaylanmıştır:",
+      "lastUpdated": "En son {date} tarihinde güncellenmiştir"
+    },
+    "seo": {
+      "title": "{treatmentName} başlangıç {priceTag} ✓ {brandName}"
     }
   }
 }

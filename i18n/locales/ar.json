@@ -65,7 +65,8 @@
       "prices": "الأسعار",
       "careers": "الوظائف",
       "blog": "المدونة",
-      "aboutUs": "عن الشركة"
+      "aboutUs": "عن الشركة",
+      "myClub": "MY Club (برنامج الولاء)"
     },
     "footer": {
       "treatments": "العلاجات",
@@ -138,6 +139,10 @@
         "copied": "تم نسخ الرابط",
         "whatsapp": "مشاركة على واتساب",
         "facebook": "مشاركة على فيسبوك"
+      },
+      "seo": {
+        "title": "{articleTitle} | {brandName}",
+        "description": "{intro}"
       }
     },
     "emptyState": {
@@ -234,7 +239,8 @@
         }
       },
       "seo": {
-        "description": "{ role } في { brandName } في { cities } – معلومات عن عملي"
+        "description": "{ role } في { brandName } في { cities } – معلومات عن عملي",
+        "title": "{doctorName} - {role} | {brandName}"
       }
     }
   },
@@ -260,7 +266,8 @@
         "treatmentNotFound": "العلاج غير موجود",
         "treatmentNotFoundDescription": "العلاج المطلوب غير موجود."
       }
-    }
+    },
+    "pageTitle": "البوتوكس®، الهيالورون والعلاجات التجميلية"
   },
 
   "productPage": {
@@ -268,7 +275,11 @@
       "productNotFound": "المنتج غير موجود",
       "productNotFoundDescription": "المنتج المطلوب غير موجود."
     },
-    "metaDescription": "{name} من {manufacturer} في المتغيرات {variants} متاح من {price} بالقرب منك"
+    "metaDescription": "{name} من {manufacturer} في المتغيرات {variants} متاح من {price} بالقرب منك",
+    "seo": {
+      "title": "{productName} من {priceTag} | {brandName}"
+    },
+    "productDescription": "وصف المنتج"
   },
 
   "blocks": {
@@ -400,6 +411,9 @@
       "bookAppointment": "احجز موعدًا",
       "footerDescription": "يرجى ملاحظة أن منتجاتنا لا تباع بشكل منفصل. يتم استخدامها فقط في سياق العلاج المقابل – بعد استشارة طبية شاملة. ببساطة احجز موعدًا بالقرب منك واكتشف أي علاجات ممكنة مع هذا المنتج.",
       "treatmentsWith": "العلاجات مع {manufacturer} {product}"
+    },
+    "priceOverview": {
+      "treatmentDetails": "تفاصيل حول {name}"
     }
   },
 
@@ -439,6 +453,24 @@
     "errors": {
       "invalid_email": "يرجى إدخال عنوان بريد إلكتروني صالح.",
       "generic": "فشل الاشتراك. يرجى المحاولة مرة أخرى لاحقًا."
+    }
+  },
+  "googleMaps": {
+    "consentRequired": "الخريطة غير متوفرة",
+    "consentDescription": "لعرض الخريطة، نحتاج إلى موافقتك على استخدام خدمة «خرائط جوجل». يرجى قبول إعدادات ملفات تعريف الارتباط.",
+    "consentButton": "فتح إعدادات ملفات تعريف الارتباط"
+  },
+  "treatment": {
+    "relatedArticles": {
+      "headline": "من دليلنا الإرشادي"
+    },
+    "medicalReviewer": {
+      "ariaLabel": "الفحص الطبي",
+      "label": "تمت مراجعته طبياً من قبل",
+      "lastUpdated": "تم التحديث آخر مرة في {date}"
+    },
+    "seo": {
+      "title": "{treatmentName} من {priceTag} ✓ {brandName}"
     }
   }
 }

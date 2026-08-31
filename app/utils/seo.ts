@@ -62,12 +62,16 @@ export async function setPageSeo(
   });
 
   nuxtApp.runWithContext(() => {
-    // Hreflang für multilinguale SEO
+    const defaultLocalePath = switchLocalePath(
+      fallbackLocale.value as string,
+    );
     const hreflangLinks = [
       {
         rel: "alternate",
         hreflang: "x-default",
-        href: canonicalUrl,
+        href: defaultLocalePath
+          ? `${config.public.publicUrl}${defaultLocalePath}`
+          : canonicalUrl,
       },
     ];
 
@@ -94,7 +98,6 @@ export async function setPageSeo(
         ...hreflangLinks,
       ],
     });
-
 
     // Only append titleSuffix if it's not already in the metaTitle
     const metaTitle = pageSeo?.metaTitle || globalsSeo?.defaultTitle || "";

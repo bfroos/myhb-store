@@ -64,7 +64,8 @@
       "prices": "Prix",
       "careers": "Carrières",
       "blog": "Blog",
-      "aboutUs": "À propos"
+      "aboutUs": "À propos",
+      "myClub": "MY Club (programme de fidélité)"
     },
     "footer": {
       "treatments": "Traitements",
@@ -139,6 +140,10 @@
         "copied": "Lien copié",
         "whatsapp": "Partager sur WhatsApp",
         "facebook": "Partager sur Facebook"
+      },
+      "seo": {
+        "title": "{articleTitle} | {brandName}",
+        "description": "{intro}"
       }
     },
     "emptyState": {
@@ -232,7 +237,8 @@
         }
       },
       "seo": {
-        "description": "{ role } chez { brandName } à { cities } – Informations sur mon activité"
+        "description": "{ role } chez { brandName } à { cities } – Informations sur mon activité",
+        "title": "{doctorName} - {role} | {brandName}"
       }
     }
   },
@@ -262,7 +268,16 @@
   },
   "treatment": {
     "seo": {
-      "description": "{description} Médecins expérimentés, traitement sûr & plan personnalisé. Prendre rendez-vous maintenant!"
+      "description": "{description} Médecins expérimentés, traitement sûr & plan personnalisé. Prendre rendez-vous maintenant!",
+      "title": "{treatmentName} à partir de {priceTag} ✓ {brandName}"
+    },
+    "relatedArticles": {
+      "headline": "Extrait de notre guide pratique"
+    },
+    "medicalReviewer": {
+      "ariaLabel": "Examen médical",
+      "label": "Vérifié sur le plan médical par",
+      "lastUpdated": "Dernière mise à jour le {date}"
     }
   },
   "productPage": {
@@ -271,7 +286,10 @@
       "productNotFoundDescription": "Le produit demandé n'existe pas."
     },
     "productDescription": "Description du produit",
-    "metaDescription": "{name} de {manufacturer} dans les variantes {variants} à partir de {price} disponible près de chez vous"
+    "metaDescription": "{name} de {manufacturer} dans les variantes {variants} à partir de {price} disponible près de chez vous",
+    "seo": {
+      "title": "{productName} à partir de {priceTag} | {brandName}"
+    }
   },
   "blocks": {
     "jobTeasers": {
@@ -402,6 +420,9 @@
       "bookAppointment": "Prendre rendez-vous",
       "footerDescription": "Veuillez noter que nos produits ne sont pas vendus séparément. Ils sont utilisés exclusivement dans le cadre d'un traitement approprié – après une consultation médicale approfondie. Prenez simplement rendez-vous près de chez vous et découvrez quels traitements sont possibles avec ce produit.",
       "treatmentsWith": "Traitements avec {manufacturer} {product}"
+    },
+    "priceOverview": {
+      "treatmentDetails": "Détails sur {name}"
     }
   },
   "error": {

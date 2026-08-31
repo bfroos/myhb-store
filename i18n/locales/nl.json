@@ -64,7 +64,8 @@
       "prices": "Prijzen",
       "careers": "Carrière",
       "blog": "Blog",
-      "aboutUs": "Over ons"
+      "aboutUs": "Over ons",
+      "myClub": "MY Club (loyaliteitsprogramma)"
     },
     "footer": {
       "treatments": "Behandelingen",
@@ -139,6 +140,10 @@
         "copied": "Link gekopieerd",
         "whatsapp": "Delen op WhatsApp",
         "facebook": "Delen op Facebook"
+      },
+      "seo": {
+        "title": "{articleTitle} | {brandName}",
+        "description": "{intro}"
       }
     },
     "emptyState": {
@@ -232,7 +237,8 @@
         }
       },
       "seo": {
-        "description": "{ role } bij { brandName } in { cities } – Informatie over mijn werkzaamheden"
+        "description": "{ role } bij { brandName } in { cities } – Informatie over mijn werkzaamheden",
+        "title": "{doctorName} - {role} | {brandName}"
       }
     }
   },
@@ -262,7 +268,16 @@
   },
   "treatment": {
     "seo": {
-      "description": "{description} Ervaren artsen, veilige behandeling & individueel plan. Nu afspraak maken!"
+      "description": "{description} Ervaren artsen, veilige behandeling & individueel plan. Nu afspraak maken!",
+      "title": "{treatmentName} vanaf {priceTag} ✓ {brandName}"
+    },
+    "relatedArticles": {
+      "headline": "Uit onze gids"
+    },
+    "medicalReviewer": {
+      "ariaLabel": "Medisch onderzoek",
+      "label": "Medisch gecontroleerd door",
+      "lastUpdated": "Laatst bijgewerkt op {date}"
     }
   },
   "productPage": {
@@ -271,7 +286,10 @@
       "productNotFoundDescription": "Het aangevraagde product bestaat niet."
     },
     "productDescription": "Productbeschrijving",
-    "metaDescription": "{name} van {manufacturer} in de varianten {variants} vanaf {price} beschikbaar bij jou in de buurt"
+    "metaDescription": "{name} van {manufacturer} in de varianten {variants} vanaf {price} beschikbaar bij jou in de buurt",
+    "seo": {
+      "title": "{productName} vanaf {priceTag} | {brandName}"
+    }
   },
   "blocks": {
     "jobTeasers": {
@@ -402,6 +420,9 @@
       "bookAppointment": "Afspraak maken",
       "footerDescription": "Let op: onze producten worden niet afzonderlijk verkocht. Ze worden uitsluitend gebruikt in het kader van een passende behandeling – na een uitgebreid medisch consult. Maak gewoon een afspraak bij jou in de buurt en ontdek welke behandelingen met dit product mogelijk zijn.",
       "treatmentsWith": "Behandelingen met {manufacturer} {product}"
+    },
+    "priceOverview": {
+      "treatmentDetails": "Details over {name}"
     }
   },
   "error": {

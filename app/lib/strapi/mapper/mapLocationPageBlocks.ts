@@ -21,13 +21,11 @@ export function mapLocationFixedBlocks(
   locationOpenStatus: LocationOpenStatus,
   brandName: string,
   treatmentPages: TreatmentPageDto[] = [],
+  t: ReturnType<typeof useI18n>["t"],
+  dateLocale: string,
+  sortLocale: string,
+  isAdsMode = false,
 ) {
-  const { t, locale, localeProperties } = useI18n();
-  const dateLocale = computed<string>(() => {
-    const iso = localeProperties.value?.iso as string | undefined;
-    return iso ?? locale.value;
-  });
-  const { isAdsMode } = useSiteModeFlags();
   const fixed = {
     hero: buildTreatmentHeroBlockModel(),
     reviews: buildReviewsBlockModel(),
@@ -55,13 +53,13 @@ export function mapLocationFixedBlocks(
       [LocationOpenStatus.OPEN_SOON]: t(
         "locations.location.openingHoursOpenSoon",
         {
-          date: formatDate(location?.newOpeningDate, dateLocale.value),
+          date: formatDate(location?.newOpeningDate, dateLocale),
         },
       ),
       [LocationOpenStatus.COMING_SOON]: t(
         "locations.location.openingHoursComingSoon",
         {
-          date: formatDate(location?.newOpeningDate, dateLocale.value),
+          date: formatDate(location?.newOpeningDate, dateLocale),
         },
       ),
     };
@@ -84,7 +82,7 @@ export function mapLocationFixedBlocks(
 
   function buildReviewsBlockModel() {
     if (
-      isAdsMode.value ||
+      isAdsMode ||
       !location?.reviews ||
       location?.reviews?.length === 0
     ) {
@@ -124,7 +122,7 @@ export function mapLocationFixedBlocks(
   }
 
   function buildAboutBlockModel() {
-    if (isAdsMode.value || !location?.about) {
+    if (isAdsMode || !location?.about) {
       return;
     }
 
@@ -150,7 +148,7 @@ export function mapLocationFixedBlocks(
     const replacements = [
       {
         placeholder: "{{ date }}",
-        replacement: formatDate(location?.newOpeningDate, dateLocale.value),
+        replacement: formatDate(location?.newOpeningDate, dateLocale),
       },
       {
         placeholder: "{{ city }}",
@@ -183,7 +181,7 @@ export function mapLocationFixedBlocks(
 
   function buildJobTeasersBlockModel() {
     if (
-      isAdsMode.value ||
+      isAdsMode ||
       !location?.jobs ||
       location?.jobs?.length === 0
     ) {
@@ -206,7 +204,7 @@ export function mapLocationFixedBlocks(
 
   function buildTreatmentTeasersBlockModel() {
     if (
-      isAdsMode.value ||
+      isAdsMode ||
       !treatmentPages ||
       treatmentPages.length === 0
     ) {
@@ -236,7 +234,7 @@ export function mapLocationFixedBlocks(
 
     const headline = headlines[location?.type as LocationType];
 
-    const collator = new Intl.Collator(locale.value);
+    const collator = new Intl.Collator(sortLocale);
     const sortedTreatmentPages = [...treatmentPages].sort((a, b) => {
       const aTopCategory =
         a.topCategory?.name ??
