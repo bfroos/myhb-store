@@ -75,8 +75,13 @@ export function useProductPage() {
     // otherwise the title renders "ab ab 149,99 €".
     const priceTag = formatPriceInEuro(price);
 
+    // NOTE: Deliberately no metaRobots here. setPageSeo() then falls back to
+    // "index, follow" in normal mode and "noindex, nofollow" in ads mode.
+    // Product pages are meant to be indexed: they rank for manufacturer and
+    // product names (e.g. "Teosyal RHA Kiss") that the treatment pages do not
+    // cover, they are listed in the sitemap, and the 301s from the retired
+    // Shopify subdomain point here.
     return {
-      metaRobots: "noindex, follow",
       metaTitle: t("productPage.seo.title", {
         productName: `${manufacturer} ${productName}`,
         priceTag,
