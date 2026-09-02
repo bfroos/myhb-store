@@ -121,6 +121,17 @@ function getTopCategoryLabel(page: TreatmentItem, fallbackKey: string): string {
   return page.topCategory?.name ?? page.name ?? fallbackKey;
 }
 
+// Link to the location only if that location offers the treatment.
+function getTilePath(page: TreatmentPageDto | TreatmentAdsPageDto): string {
+  const isAvailableAtLocation =
+    !props.locationTreatmentPathKeys ||
+    props.locationTreatmentPathKeys.includes(page.pathKey ?? "");
+
+  return props.locationPathKey && isAvailableAtLocation
+    ? `/standorte/${props.locationPathKey}/${page.pathKey}`
+    : `/behandlungen/${page.pathKey}`;
+}
+
 function getTileProps(
   page: TreatmentPageDto | TreatmentAdsPageDto,
 ): MoleculeTreatmentTile {
@@ -131,9 +142,7 @@ function getTileProps(
       : undefined,
     description: props.showDescriptions ? page.teaser?.description : undefined,
     image: page.teaser?.image ?? page.hero?.cover,
-    path: props.locationPathKey
-      ? `/standorte/${props.locationPathKey}/${page.pathKey}`
-      : `/behandlungen/${page.pathKey}`,
+    path: getTilePath(page),
     priceInEuroCent: props.showPrices
       ? page.treatment?.priceInEuroCent ?? 0
       : undefined,
