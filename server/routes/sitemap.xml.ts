@@ -371,6 +371,7 @@ export default defineCachedEventHandler(
             id?: number;
             pathKey?: string;
             updatedAt?: string;
+            seo?: { excludeFromSitemap?: boolean };
             localizations?: Array<{ id?: number }>;
           }>("treatment-pages", {
             locale,
@@ -379,6 +380,7 @@ export default defineCachedEventHandler(
               pathKey: { $notNull: true },
             },
             populate: {
+              seo: { fields: ["excludeFromSitemap"] },
               localizations: {
                 fields: ["id"],
               },
@@ -453,6 +455,12 @@ export default defineCachedEventHandler(
         const groupId = getGroupId(page, page.pathKey);
         if (!groupId) continue;
         treatmentGroupIdByPathKey.set(page.pathKey, groupId);
+        // Respect the editor-managed flag, same as for general pages below.
+        // Ad landing pages such as /behandlungen/lippen-aufspritzen-rabatt are
+        // noindex and have excludeFromSitemap set — they must not be listed.
+        // Note: the group id above is still registered so that location
+        // treatment URLs keep their hreflang grouping unchanged.
+        if (page.seo?.excludeFromSitemap) continue;
         const groupKey = buildGroupKey("treatment", groupId);
         const path = getLocalizedPath("treatment", locale, {
           slugPath: page.pathKey,
