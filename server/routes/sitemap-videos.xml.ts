@@ -42,7 +42,7 @@ type VideoEntry = {
   thumbnailUrl: string;
   title: string;
   description: string;
-  uploadDate: string;
+  publicationDate: string;
 };
 
 const DEFAULT_LOCALE = "de";
@@ -115,8 +115,10 @@ export default defineEventHandler(async (event) => {
     if (!poster?.url) return null;
     if (poster.mime && !poster.mime.startsWith("image/")) return null;
 
-    const uploadDate = media.createdAt;
-    if (!uploadDate) return null;
+    const createdAt = media.createdAt;
+    if (!createdAt) return null;
+    // W3C datetime, seconds precision: 2026-05-04T18:50:32Z
+    const publicationDate = createdAt.replace(/\.\d+Z$/, "Z");
 
     const title = stripPlaceholders(about?.headline || fallbackTitle || "");
     const description = stripPlaceholders(about?.intro || about?.headline || "");
@@ -128,7 +130,7 @@ export default defineEventHandler(async (event) => {
       thumbnailUrl: poster.url,
       title: title.substring(0, 100),
       description: description.substring(0, 2048),
-      uploadDate,
+      publicationDate,
     };
   }
 
@@ -186,8 +188,7 @@ export default defineEventHandler(async (event) => {
       <video:title>${escapeXml(v.title)}</video:title>
       <video:description>${escapeXml(v.description)}</video:description>
       <video:content_loc>${escapeXml(v.videoUrl)}</video:content_loc>
-      <video:player_loc>${escapeXml(v.pageUrl)}</video:player_loc>
-      <video:upload_date>${escapeXml(v.uploadDate)}</video:upload_date>
+      <video:publication_date>${escapeXml(v.publicationDate)}</video:publication_date>
     </video:video>
   </url>`,
     )
