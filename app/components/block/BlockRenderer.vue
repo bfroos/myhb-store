@@ -97,6 +97,9 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   "blocks.text-content": defineAsyncComponent(
     () => import("./TextContent.vue"),
   ),
+  "blocks.youtube-video": defineAsyncComponent(
+    () => import("./YouTubeVideoBlock.vue"),
+  ),
   "blocks.treatment-details": defineAsyncComponent(
     () => import("./TreatmentDetails.vue"),
   ),

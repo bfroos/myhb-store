@@ -104,6 +104,11 @@
       "facebook": "Delen op Facebook"
     }
   },
+  "youtube": {
+    "consentRequired": "Video niet beschikbaar",
+    "consentDescription": "Om deze YouTube-video weer te geven, hebben we je toestemming nodig voor marketingcookies. Accepteer de cookie-instellingen.",
+    "consentButton": "Cookie-instellingen openen"
+  },
   "googleMaps": {
     "consentRequired": "Kaart niet beschikbaar",
     "consentDescription": "Om de kaart weer te geven, hebben we je toestemming nodig voor Google Maps. Accepteer de cookie-instellingen.",

@@ -104,6 +104,11 @@
       "facebook": "Partager sur Facebook"
     }
   },
+  "youtube": {
+    "consentRequired": "Vidéo non disponible",
+    "consentDescription": "Pour afficher cette vidéo YouTube, nous avons besoin de votre consentement pour les cookies marketing. Veuillez accepter les paramètres de cookies.",
+    "consentButton": "Ouvrir les paramètres de cookies"
+  },
   "googleMaps": {
     "consentRequired": "Carte non disponible",
     "consentDescription": "Pour afficher la carte, nous avons besoin de votre consentement pour Google Maps. Veuillez accepter les paramètres de cookies.",

@@ -455,6 +455,11 @@
       "generic": "Kayıt başarısız. Lütfen daha sonra tekrar deneyin."
     }
   },
+  "youtube": {
+    "consentRequired": "Video mevcut değil",
+    "consentDescription": "Bu YouTube videosunu görüntülemek için pazarlama çerezlerine izin vermen gerekiyor. Lütfen çerez ayarlarını kabul et.",
+    "consentButton": "Çerez ayarlarını aç"
+  },
   "googleMaps": {
     "consentRequired": "Harita mevcut değil",
     "consentDescription": "Haritayı görüntülemek için Google Maps'e izin vermen gerekiyor. Lütfen çerez ayarlarını kabul et.",
