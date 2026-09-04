@@ -292,6 +292,8 @@ export type BlockTreatmentPlanDto = {
   cardSettings?: CardSettingsDto;
 };
 
+export type RelatedTreatmentsLinkTarget = "auto" | "overregional";
+
 export type BlockTreatmentTeasersDto = {
   headline?: string;
   showShortDescriptions: boolean;
@@ -301,6 +303,7 @@ export type BlockTreatmentTeasersDto = {
   treatmentPages?: TreatmentPageDto[];
   treatmentAdsPages?: TreatmentAdsPageDto[];
   locationPathKey?: string;
+  locationTreatmentPathKeys?: string[];
   cardSettings?: CardSettingsDto;
 };
 
@@ -573,6 +576,7 @@ export type TreatmentPageMedicalTeamHighlightDto = {
 
 export type TreatmentPageRelatedTreatmentsDto = {
   headline?: string;
+  linkTarget?: RelatedTreatmentsLinkTarget;
   treatmentPages?: TreatmentPageDto[];
   treatmentAdsPages?: TreatmentAdsPageDto[];
 };
