@@ -25,15 +25,11 @@ import type { FaqDto } from "~/lib/strapi/dto/collections";
 
 const props = defineProps<BlockFaqBlockDto>();
 
-const hasContent = computed(
-  () =>
-    (!!props.headline && (props.faqs?.length ?? 0) > 0) ||
-    (props.faqSets?.length ?? 0) > 0,
-);
-
 const hasItems = computed(
   () => (props.faqs?.length ?? 0) > 0 || (props.faqSets?.length ?? 0) > 0,
 );
+
+const hasContent = hasItems;
 
 const allFaqs = computed((): FaqDto[] => {
   const idsInFaqSets = new Set<number | string>();
