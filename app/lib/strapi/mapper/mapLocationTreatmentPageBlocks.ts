@@ -24,6 +24,7 @@ export function mapLocationTreatmentPageFixedBlocks(
   localeCode: string,
   localeIso?: string,
   isAdsMode = false,
+  availableTreatmentPathKeys?: string[],
 ) {
   if (!treatmentPage || !location) {
     return;
@@ -46,6 +47,7 @@ export function mapLocationTreatmentPageFixedBlocks(
           })
         : "",
     },
+    availableTreatmentPathKeys,
   );
 
   const fixed = {

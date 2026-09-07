@@ -30,6 +30,7 @@ export function mapTreatmentCommonFixedBlocks(
   isAdsMode = false,
   location?: LocationDto,
   placeholderContext?: PlaceholderContext,
+  locationTreatmentPathKeys?: string[],
 ) {
   const city = placeholderContext?.city ?? "";
   const cityPhrase = placeholderContext?.cityPhrase ?? "";
@@ -397,6 +398,11 @@ export function mapTreatmentCommonFixedBlocks(
       value: headline ?? "",
     });
 
+    const useLocationLinks =
+      treatmentPage?.relatedTreatments?.linkTarget !== "overregional" &&
+      !!location &&
+      !!locationTreatmentPathKeys;
+
     return {
       headline,
       treatmentPages: treatmentPage?.relatedTreatments?.treatmentPages,
@@ -410,7 +416,13 @@ export function mapTreatmentCommonFixedBlocks(
       // Google folgte diesen internen Links und bekam 404 (GSC: 1.742 "Nicht gefunden").
       // Verwandte Behandlungen verlinken jetzt immer auf die ueberregionale
       // /behandlungen/{pathKey}-Seite (existiert stets), daher kein locationPathKey.
-      locationPathKey: undefined,
+      // Reverted: location link again, but only where the treatment exists.
+      locationPathKey: useLocationLinks
+        ? `${location?.city?.slug}/${location?.slug}`
+        : undefined,
+      locationTreatmentPathKeys: useLocationLinks
+        ? locationTreatmentPathKeys
+        : undefined,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,
       },

@@ -20,6 +20,7 @@ export function useLocationTreatmentPage() {
   const cityLocalizations = ref<LocalizationDto[]>([]);
   const treatmentPageLocalizations = ref<LocalizationDto[]>([]);
   const locationOpenStatus = ref<LocationOpenStatus>();
+  const availableTreatmentPathKeys = ref<string[] | undefined>();
 
   const treatmentPathKey = (route.params.treatmentSlug as string[])
     .filter(Boolean)
@@ -102,6 +103,8 @@ export function useLocationTreatmentPage() {
     treatmentPageLocalizations.value =
       data.value.data.treatmentPage?.localizations ?? [];
     locationOpenStatus.value = data.value.data.locationOpenStatus;
+    availableTreatmentPathKeys.value =
+      data.value.data.availableTreatmentPathKeys ?? undefined;
 
     return true;
   }
@@ -115,6 +118,7 @@ export function useLocationTreatmentPage() {
       (locale.value || fallbackLocale.value) as string,
       localeProperties.value?.iso as string | undefined,
       isAdsMode.value,
+      availableTreatmentPathKeys.value,
     ),
   );
 
