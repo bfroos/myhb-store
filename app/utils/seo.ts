@@ -37,6 +37,10 @@ export function mapStrapiLocaleToOpenGraphLocale(locale: string): string {
  * Apply SEO metadata for the current route.
  * Uses page-level SEO when provided and falls back to global defaults.
  * Also sets canonical URL, favicon, html lang, and Open Graph tags.
+ *
+ * Muss NACH usePageI18nParams* aufgerufen werden: nur dann weiss der
+ * hreflang-Block, welche Sprachen fuer diese Seite echte Route-Params haben.
+ * Ohne diese Info werden (wie bisher) alle Sprachen ausgegeben.
  * @param pageSeo - SEO data from the page
  * @param fallbackOgImage - Fallback image (e.g. article.cover) when ogImage is not set
  */
@@ -53,6 +57,7 @@ export async function setPageSeo(
   const globals = useGlobals();
   const globalsSeo = globals.value?.seo;
   const { brandName } = useBrand();
+  const coverage = usePageI18nCoverage();
   const canonicalUrl = `${config.public.publicUrl}${route.path}`;
 
   const robots = computed(() => {
@@ -62,9 +67,30 @@ export async function setPageSeo(
   });
 
   nuxtApp.runWithContext(() => {
-    const defaultLocalePath = switchLocalePath(
-      fallbackLocale.value as string,
-    );
+    // Alternates nur fuer Sprachen, in denen es die Seite wirklich gibt.
+    // usePageI18nParams* meldet pro Seite, welche Sprachen einen vollstaendigen
+    // Satz Route-Params haben. Fehlt ein Param, ersetzt switchLocalePath() ihn
+    // stillschweigend durch den Wert der aktuellen Sprache - die Alternate
+    // zeigt dann auf eine Mischform, die nicht existiert (404). Meldet keine
+    // Seite eine Abdeckung (statische Route ohne dynamische Params), bleiben
+    // alle Sprachen erlaubt.
+    const localesList = Array.isArray(locales.value) ? locales.value : [];
+    const localeCodes = localesList
+      .map((loc: any) => (typeof loc === "string" ? loc : loc.code))
+      .filter(Boolean) as string[];
+    const coveredLocales =
+      coverage.value?.path === route.path ? coverage.value.locales : null;
+    const alternateLocales = coveredLocales
+      ? localeCodes.filter(
+          (code) => code === currentLocale || coveredLocales.includes(code),
+        )
+      : localeCodes;
+
+    const defaultLocale = fallbackLocale.value as string;
+    const defaultLocalePath = alternateLocales.includes(defaultLocale)
+      ? switchLocalePath(defaultLocale)
+      : undefined;
+
     const hreflangLinks = [
       {
         rel: "alternate",
@@ -75,10 +101,8 @@ export async function setPageSeo(
       },
     ];
 
-    // Füge hreflang für alle verfügbaren Sprachen hinzu
-    const localesList = Array.isArray(locales.value) ? locales.value : [];
-    localesList.forEach((loc: any) => {
-      const localeCode = typeof loc === "string" ? loc : loc.code;
+    // Füge hreflang für alle Sprachen hinzu, die diese Seite wirklich hat
+    alternateLocales.forEach((localeCode) => {
       const localePath = switchLocalePath(localeCode);
       if (localePath) {
         hreflangLinks.push({
