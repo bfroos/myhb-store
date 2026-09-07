@@ -2,7 +2,11 @@ export type TreatmentPageMenuItem = {
   id: number;
   name: string;
   slug: string;
-  pathKey: string;
+  /**
+   * Voller Pfad inkl. Ancestors ("hyaluron/lippen-aufspritzen").
+   * Optional, weil der /menu-Endpoint das Feld erst ab myhb-cms#25 mitliefert.
+   */
+  pathKey?: string;
   children: TreatmentPageMenuItem[];
 };
 
