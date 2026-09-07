@@ -298,6 +298,14 @@
     "metaDescription": "{name} von {manufacturer} in den Varianten {variants} ab {price} in deiner Nähe erhältlich"
   },
   "blocks": {
+    "gallery": {
+      "openImage": "Bild {index} in voller Größe öffnen",
+      "lightboxLabel": "Bildergalerie",
+      "counter": "Bild {current} von {total}",
+      "close": "Schließen",
+      "previousImage": "Vorheriges Bild",
+      "nextImage": "Nächstes Bild"
+    },
     "jobTeasers": {
       "headline": "Aktuelle Stellenangebote",
       "andMore": "weitere",

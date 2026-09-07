@@ -96,6 +96,16 @@ export type BlockFaqBlockDto = {
   cardSettings?: CardSettingsDto;
 };
 
+export type BlockGalleryDto = {
+  headline?: string;
+  intro?: string;
+  images?: StrapiMedia[];
+  columns: "2" | "3" | "4";
+  aspectRatio: "1-1" | "4-3" | "3-4" | "16-9" | "original";
+  showCaptions: boolean;
+  cardSettings?: CardSettingsDto;
+};
+
 export type BlockHighlightsStripDto = {
   headline?: string;
   type: BlockHighlightsStripType;

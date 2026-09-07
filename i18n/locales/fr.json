@@ -297,6 +297,14 @@
     }
   },
   "blocks": {
+    "gallery": {
+      "openImage": "Ouvrir l'image {index} en grand",
+      "lightboxLabel": "Galerie d'images",
+      "counter": "Image {current} sur {total}",
+      "close": "Fermer",
+      "previousImage": "Image précédente",
+      "nextImage": "Image suivante"
+    },
     "jobTeasers": {
       "headline": "Offres d'emploi actuelles",
       "andMore": "autres",

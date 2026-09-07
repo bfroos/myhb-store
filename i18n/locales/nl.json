@@ -297,6 +297,14 @@
     }
   },
   "blocks": {
+    "gallery": {
+      "openImage": "Afbeelding {index} op volledig formaat openen",
+      "lightboxLabel": "Afbeeldingengalerij",
+      "counter": "Afbeelding {current} van {total}",
+      "close": "Sluiten",
+      "previousImage": "Vorige afbeelding",
+      "nextImage": "Volgende afbeelding"
+    },
     "jobTeasers": {
       "headline": "Actuele vacatures",
       "andMore": "meer",

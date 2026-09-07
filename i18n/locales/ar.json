@@ -283,6 +283,14 @@
   },
 
   "blocks": {
+    "gallery": {
+      "openImage": "فتح الصورة {index} بالحجم الكامل",
+      "lightboxLabel": "معرض الصور",
+      "counter": "الصورة {current} من {total}",
+      "close": "إغلاق",
+      "previousImage": "الصورة السابقة",
+      "nextImage": "الصورة التالية"
+    },
     "jobTeasers": {
       "headline": "الوظائف الشاغرة الحالية",
       "andMore": "المزيد",

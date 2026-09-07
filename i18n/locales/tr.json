@@ -283,6 +283,14 @@
   },
 
   "blocks": {
+    "gallery": {
+      "openImage": "{index}. görseli tam boyutta aç",
+      "lightboxLabel": "Görsel galerisi",
+      "counter": "{total} görselden {current}.",
+      "close": "Kapat",
+      "previousImage": "Önceki görsel",
+      "nextImage": "Sonraki görsel"
+    },
     "jobTeasers": {
       "headline": "Mevcut iş ilanları",
       "andMore": "daha fazla",
