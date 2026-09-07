@@ -153,6 +153,7 @@ import {
 
 const props = defineProps<BlockTreatmentPlanDto>();
 const { t } = useI18n();
+const { isAdsMode } = useSiteModeFlags();
 
 const hasContent = computed(() => (props.content?.length ?? 0) > 0);
 
@@ -189,11 +190,17 @@ function hasTreatments(step: TreatmentPlanStepDto): boolean {
   return (step.treatments?.length ?? 0) > 0;
 }
 
+// Nur der pathKey des aktiven Baums loest auf: im SEO-Modus die
+// treatment-page, im Ads-Modus die treatment-ads-page. Vorher gewann immer
+// die Ads-Seite, sofern gesetzt - im SEO-Modus zeigte der Link damit auf
+// /behandlungen/{ads-pathKey} und lief in einen 404. Ohne passende Seite im
+// aktiven Baum bleibt der Schritt unverlinkter Text.
 function getTreatmentLinkPath(
   treatment: NonNullable<TreatmentPlanStepDto["treatments"]>[number],
 ): string | undefined {
-  const pathKey =
-    treatment.treatmentAdsPage?.pathKey ?? treatment.treatmentPage?.pathKey;
+  const pathKey = isAdsMode.value
+    ? treatment.treatmentAdsPage?.pathKey
+    : treatment.treatmentPage?.pathKey;
 
   return pathKey ? `/behandlungen/${pathKey}` : undefined;
 }
