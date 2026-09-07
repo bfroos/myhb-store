@@ -74,12 +74,37 @@ export const useGoogleAnalytics = () => {
   };
 
   /**
-   * Track booking/Calendly click
+   * Track booking click (Calendly widget or in-app booking flow).
+   *
+   * `bookingType` names the system that actually opens: 'app' for the
+   * app.myhealthandbeauty.com iframe, 'calendly' for the Calendly widget,
+   * 'location_search' when the location picker opens first (the concrete
+   * system is then tracked via trackBookingLocationSelected()).
    */
-  const trackBookingClick = () => {
+  const trackBookingClick = (
+    bookingType: 'calendly' | 'app' | 'location_search' = 'calendly',
+    extra?: { location_slug?: string; treatment_type?: string; cta_location?: string },
+  ) => {
     trackEvent('click_booking', {
       event_category: 'conversion',
-      booking_type: 'calendly',
+      booking_type: bookingType,
+      ...(extra ?? {}),
+    });
+  };
+
+  /**
+   * Track the location picked inside the booking dialog. Fires with the
+   * system that opens for that location so the funnel can be split by
+   * Calendly vs. app per lounge.
+   */
+  const trackBookingLocationSelected = (
+    bookingType: 'calendly' | 'app',
+    locationSlug?: string,
+  ) => {
+    trackEvent('booking_location_selected', {
+      event_category: 'conversion',
+      booking_type: bookingType,
+      location_slug: locationSlug,
     });
   };
 
@@ -111,6 +136,7 @@ export const useGoogleAnalytics = () => {
     trackFaqOpen,
     trackCarouselNavigate,
     trackBookingClick,
+    trackBookingLocationSelected,
     trackPhoneClick,
     trackFormSubmission,
   };

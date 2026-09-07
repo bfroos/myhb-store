@@ -150,6 +150,9 @@ const displayImage = computed(() => mediaToLegacyImage(props.imageMedia) ?? prop
   width: 100%;
   height: auto;
   aspect-ratio: 4 / 3;
+  /* Conversion-Audit #79: Hero-Bild begrenzen, damit H1 + CTA + Google-Badge
+     auf Mobile/Tablet im ersten Viewport bleiben. */
+  max-height: 40svh;
   object-fit: cover;
   display: block;
   border-radius: var(--border-radius-card-figure);
@@ -198,7 +201,7 @@ const displayImage = computed(() => mediaToLegacyImage(props.imageMedia) ?? prop
   .block { display: flex; flex-direction: row-reverse; align-items: stretch; }
   .hero__body { flex: 1 0 50%; padding: var(--space-card-pad); justify-content: center; }
   .hero__figure { flex: 1 0 50%; padding: var(--space-card-figure-pad); padding-right: 0; }
-  .hero__figure img { height: 100%; aspect-ratio: auto; min-height: 480px; }
+  .hero__figure img { height: 100%; aspect-ratio: auto; min-height: 480px; max-height: none; }
   .hero__cta { flex-direction: row; flex-wrap: wrap; }
   .hero__cta .button { width: auto; flex: 0 1 auto; }
   .hero__price { flex-basis: 100%; text-align: left; }

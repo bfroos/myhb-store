@@ -99,7 +99,10 @@ const hasMedia = computed(() => {
   display: flex;
   flex-direction: column;
   aspect-ratio: 1/ 1;
-  max-height: 40vh;
+  /* Conversion-Audit #79/#86: auf Tablet (820 px) wurde das Hero-Bild ~470 px
+     hoch und schob den CTA aus dem ersten Viewport. Absolute Obergrenze
+     zusätzlich zur relativen. */
+  max-height: min(40svh, 320px);
   flex: 1;
   width: 100%;
   padding: var(--space-card-figure-pad) var(--space-card-figure-pad) 0;

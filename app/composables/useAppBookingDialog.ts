@@ -1,5 +1,6 @@
 import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
+import { readWireAttribution } from "~/lib/attribution";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -71,7 +72,7 @@ function collectClickIds(): Record<string, string> {
   if (!ids.gclid && !ids.gbraid && !ids.wbraid) {
     const match = document.cookie.match(/(?:^|;\s*)_gcl_aw=([^;]+)/);
     if (match) {
-      const parts = decodeURIComponent(match[1]).split(".");
+      const parts = decodeURIComponent(match[1] ?? "").split(".");
       const gclid = parts[parts.length - 1];
       if (gclid && parts.length >= 3) ids.gclid = gclid;
     }
@@ -80,16 +81,125 @@ function collectClickIds(): Record<string, string> {
   return ids;
 }
 
+const UTM_PARAMS = [
+  "utm_source",
+  "utm_medium",
+  "utm_campaign",
+  "utm_term",
+  "utm_content",
+] as const;
+
 /**
- * Appends any available click identifiers to the booking URL as query params.
+ * Splits the touchpoints click_id format ("gclid:abc" | "fbclid:abc" |
+ * "ttclid:abc") back into a query parameter name + value.
  */
-function buildBookingUrl(base: string): string {
-  const ids = collectClickIds();
-  const keys = Object.keys(ids);
-  if (!keys.length) return base;
+function splitClickId(
+  clickId?: string,
+): { key: "gclid" | "fbclid" | "ttclid"; value: string } | null {
+  if (!clickId) return null;
+  const idx = clickId.indexOf(":");
+  if (idx <= 0) return null;
+  const key = clickId.slice(0, idx);
+  const value = clickId.slice(idx + 1);
+  if (!value) return null;
+  if (key === "gclid" || key === "fbclid" || key === "ttclid") {
+    return { key, value };
+  }
+  return null;
+}
+
+/**
+ * Conversion-Audit #67: Der Calendly-Pfad bekommt utm_* und Klick-IDs ueber
+ * das utm-persist-Plugin dekoriert, der App-Pfad bekam bisher nur gclid/
+ * gbraid/wbraid. Damit die App (app.* Subdomain, eigener Storage) dieselbe
+ * Quelle sieht wie Newsletter und Calendly, haengen wir hier den
+ * Attributionsspeicher (First/Last Touch) als Query-Parameter an:
+ *
+ *   utm_source, utm_medium, utm_campaign, utm_term, utm_content  (Last Touch,
+ *                                                                 Fallback First)
+ *   gclid | fbclid | ttclid                                       (Last, Fallback First)
+ *   ft_source, ft_medium, ft_campaign, ft_click_id                (First Touch, nur
+ *                                                                 wenn abweichend)
+ *   ref_path                                                      (Seite, von der
+ *                                                                 gebucht wurde)
+ *
+ * Werte aus der aktuellen URL (frischer Klick) haben Vorrang vor dem Speicher.
+ */
+export function collectAttributionParams(): Record<string, string> {
+  const params: Record<string, string> = {};
+  if (typeof window === "undefined") return params;
+
+  const current = new URLSearchParams(window.location.search);
+  for (const key of UTM_PARAMS) {
+    const val = current.get(key);
+    if (val) params[key] = val;
+  }
+  for (const key of ["gclid", "fbclid", "ttclid"] as const) {
+    const val = current.get(key);
+    if (val) params[key] = val;
+  }
+
+  const stored = readWireAttribution();
+  const last = stored?.last ?? stored?.first;
+  const first = stored?.first;
+
+  if (last) {
+    for (const key of UTM_PARAMS) {
+      if (!params[key] && last[key]) params[key] = last[key] as string;
+    }
+    const cid = splitClickId(last.click_id) ?? splitClickId(first?.click_id);
+    if (cid && !params.gclid && !params.fbclid && !params.ttclid) {
+      params[cid.key] = cid.value;
+    }
+  }
+
+  if (first && first !== last) {
+    if (first.utm_source && first.utm_source !== params.utm_source) {
+      params.ft_source = first.utm_source;
+    }
+    if (first.utm_medium && first.utm_medium !== params.utm_medium) {
+      params.ft_medium = first.utm_medium;
+    }
+    if (first.utm_campaign && first.utm_campaign !== params.utm_campaign) {
+      params.ft_campaign = first.utm_campaign;
+    }
+    const firstCid = splitClickId(first.click_id);
+    if (firstCid && params[firstCid.key] !== firstCid.value) {
+      params.ft_click_id = first.click_id as string;
+    }
+  }
+
+  const refPath = window.location.pathname;
+  if (refPath) params.ref_path = refPath;
+
+  return params;
+}
+
+export type AppBookingUrlOptions = {
+  /** Rabattcode (z. B. Neukundenrabatt nach Newsletter-Anmeldung, #82/#74). */
+  promo?: string | null;
+};
+
+/**
+ * Appends click identifiers, UTM/attribution params and an optional promo
+ * code to the booking URL as query params. Existing params on the URL
+ * (e.g. venue/treatment deeplink) are kept; attribution never overrides them.
+ */
+export function buildBookingUrl(
+  base: string,
+  options?: AppBookingUrlOptions,
+): string {
   try {
     const url = new URL(base);
-    for (const key of keys) url.searchParams.set(key, ids[key]);
+    for (const [key, value] of Object.entries(collectClickIds())) {
+      if (!url.searchParams.has(key)) url.searchParams.set(key, value);
+    }
+    for (const [key, value] of Object.entries(collectAttributionParams())) {
+      if (!url.searchParams.has(key)) url.searchParams.set(key, value);
+    }
+    if (options?.promo && !url.searchParams.has("promo")) {
+      url.searchParams.set("promo", options.promo);
+    }
     return url.toString();
   } catch {
     return base;
@@ -99,13 +209,17 @@ function buildBookingUrl(base: string): string {
 export function useAppBookingDialog() {
   const dialog = useDialog();
 
-  function openAppBookingDialog(header?: string, url: string = APP_BOOKING_URL) {
+  function openAppBookingDialog(
+    header?: string,
+    url: string = APP_BOOKING_URL,
+    options?: AppBookingUrlOptions,
+  ) {
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/AppBookingDialog.vue"),
       ),
       {
-        data: { url: buildBookingUrl(url) },
+        data: { url: buildBookingUrl(url, options) },
         props: {
           modal: true,
           draggable: false,

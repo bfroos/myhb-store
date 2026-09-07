@@ -184,3 +184,20 @@ Legende: **P0** = Bugs/Recht/Datenverlust, sofort · **P1** = größte Conversio
 - Sticky/Floating CTA: `app/components/block/MobileStickyCtaBlock.vue`, `app/components/block/TreatmentHero.vue`
 - Rabatt-Dialog: `app/components/ui/organism/NewsletterSignUpDialog.vue` (Handynummer Pflicht)
 - Texte: `i18n/locales/de.json` (`dialogs.calendly.header`, `cta.bookAppointmentNotAvailable`)
+
+---
+
+## 6. Umsetzungsstand (07.09.2026)
+
+Alle Aufgaben sind als GitHub-Issues angelegt: Epic [#60](https://github.com/bfroos/myhb-store/issues/60) mit den Sub-Issues #61–#88 (Labels `P0`/`P1`/`P2`, `area:store`/`area:app`/`area:cms`/`area:tracking`). App-Issues (`area:app`) betreffen das Repo `elanagency/myhb-os` und liegen hier nur zur Nachverfolgung.
+
+Im Store-Frontend auf diesem Branch umgesetzt:
+
+| Issue | Änderung |
+|-------|----------|
+| #67 Tracking | `trackBookingClick(type)` mit `calendly` / `app` / `location_search`; neues Event `booking_location_selected` (System + Standort-Slug) im Dialog; App-URL bekommt `utm_*`, `gclid|fbclid|ttclid`, First-Touch (`ft_source`, `ft_medium`, `ft_campaign`, `ft_click_id`), `ref_path` und optional `promo` (`collectAttributionParams`, `buildBookingUrl`) |
+| #78 Buchungsdialog | Header „Wähle deine Lounge“ (6 Locales); „Mein Standort“-Button mit Nähe-Sortierung, automatisch bei bereits erteilter Berechtigung, Hinweis bei Ablehnung; Google-Note je Standort und Telefon/WhatsApp-Fallback statt „Nicht buchbar“ in `LocationItem` (wird aktiv, sobald `/locations/bookable` in Strapi `googlePlaceId` und `contact` ausliefert) |
+| #79 / #86 Above-the-fold | Hero-Bild in `TreatmentHero` und `MediaCard` auf `min(38–40svh, 320px)` begrenzt (Tablet: 444 → 316 px), `LandingHeroBlock` auf 40svh |
+| #80 Social Proof | Globaler Bewertungs-Badge zeigt die gewichtete Google-Durchschnittsnote (`getGoogleReviewAggregate`, aktuell 4,9) neben „1.538+ 5-Sterne“ |
+
+Offen im Store (CMS/Design-Entscheidungen): Sticky-CTA-Block auf Start- und Standortseiten (Strapi), H1-Länge/Schriftgröße mobil (CTA auf 667-px-Geräten noch unter der Fold), Ads-Mode-Blockreihenfolge, Newsletter-Handynummer-Test, Calendly-URL-Umstellung je Standort.

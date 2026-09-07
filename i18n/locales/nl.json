@@ -87,6 +87,7 @@
   "cta": {
     "bookAppointment": "Afspraak maken",
     "bookAppointmentNotAvailable": "Niet boekbaar",
+    "call": "Bellen",
     "learnMore": "Meer informatie",
     "details": "Details",
     "subscribe": "Abonneren",
@@ -439,7 +440,9 @@
   },
   "dialogs": {
     "calendly": {
-      "header": "Maak nu je afspraak via Calendly"
+      "header": "Kies je lounge",
+      "sortedByDistance": "Gesorteerd op afstand",
+      "locationDenied": "Locatie niet beschikbaar. Voer een postcode of plaats in."
     },
     "newsletterSignUp": {
       "header": "Abonneren op nieuwsbrief"
