@@ -20,8 +20,10 @@ const { fetchPage, seo, article, breadcrumbItems, localizations } = useBlogArtic
 const pageLoaded = await fetchPage();
 
 if (pageLoaded) {
-  await setPageSeo(seo.value, article.value?.cover);
+  // Reihenfolge zaehlt: setPageSeo liest die von usePageI18nParams gemeldete
+  // Sprachabdeckung, um nur existierende hreflang-Alternates auszugeben.
   usePageI18nParams(localizations.value, "slug");
+  await setPageSeo(seo.value, article.value?.cover);
 }
 
 // Schema.org BlogPosting
