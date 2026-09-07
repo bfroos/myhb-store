@@ -201,3 +201,27 @@ Im Store-Frontend auf diesem Branch umgesetzt:
 | #80 Social Proof | Globaler Bewertungs-Badge zeigt die gewichtete Google-Durchschnittsnote (`getGoogleReviewAggregate`, aktuell 4,9) neben „1.538+ 5-Sterne“ |
 
 Offen im Store (CMS/Design-Entscheidungen): Sticky-CTA-Block auf Start- und Standortseiten (Strapi), H1-Länge/Schriftgröße mobil (CTA auf 667-px-Geräten noch unter der Fold), Ads-Mode-Blockreihenfolge, Newsletter-Handynummer-Test, Calendly-URL-Umstellung je Standort.
+
+
+### 6.1 App-Umsetzung (elanagency/myhb-os, 08.09.2026)
+
+PR [elanagency/myhb-os#54](https://github.com/elanagency/myhb-os/pull/54), Branch `feat/funnel-p0-conversion-audit`, ein Commit je Issue. Screenshot-Nachweise vorher/nachher in 390/820/1440 px (teils 320 px) unter `docs/screenshots/funnel-p0/`, Deeplink-Schema unter `docs/DEEPLINKS.md` (Kopie hier im Store-Repo), DB-/Settings-Vorschläge nicht angewendet unter `docs/sql/2026-09-08-funnel-attribution-proposal.sql`.
+
+| Issue | Änderung in der App |
+|-------|----------------------|
+| #62 Mobile-Overflow | Dialog `calc(100% - 2rem)` mit innerem Scroll, Telefonfeld `min-w-0`, Login-Seite ohne horizontalen Scroll (320–430 px); Modal bei 390 px jetzt 358 px breit mit Rand |
+| #61 Rechtslinks | Footer Impressum · Datenschutz in jedem Schritt (auch im iFrame), `/impressum` und `/datenschutz` statt 404 (verlinken auf `/p/impressum`, `/p/datenschutz`), Datenschutzhinweis unter „Konto erstellen“. Offen: AGB-Seite auf der Website fehlt |
+| #64 „Ablehnen“ | → „Abbrechen“ mit Rückfrage; Ziel Website (iFrame: `postMessage` `myhb:booking-cancelled` + Top-Navigation), Dashboard für eingeloggte Nutzer |
+| #63 Lokalisierung | `formatters.ts` mit Intl (`Di, 08.09.2026 · 10:00–10:15 Uhr · 149,99 €`), ein Preis-Formatter, deutscher Kalender inkl. Aria-Labels, Du-Form im Buchungsfluss, `lang="de"`. Offen: Sie-Form außerhalb des Buchungsflusses, SMS-Vorlage (DB) |
+| #65 Meta/OG | Titel je Route, Description, eigenes OG-Bild `app.myhealthandbeauty.com/og-image.png`, Lovable-Reste entfernt, Website-Favicons, volle Wortmarke im Header → www. |
+| #67 Tracking (App) | Liest `utm_*`, `gclid|fbclid|ttclid`, `ft_*`, `ref_path`, `promo` und hält sie über den Flow; First/Last Touch an `appointment_attribution`, First Touch ans Profil; GA4-Events `booking_start`, `location_selected`, `treatment_selected`, `slot_selected`, `summary_view`, `otp_sent`, `otp_verified`, `booking_confirmed`, `questionnaire_started`, `questionnaire_completed`; Linker www. ↔ app. **GTM-Trigger und Cross-Domain-Liste müssen nachgezogen werden** |
+| #66 Deeplinks | `docs/DEEPLINKS.md`; Alias-Tabelle Website-Slug → App-Slug (nur 3 von 63 Slugs stimmten überein), Kategorie-Fallback, kein rotes Banner mehr, `scripts/check-deeplink-slugs.mjs`. Vorschlag: Strapi-Feld `appTreatmentSlug` bzw. `treatments.website_slugs` |
+| #68 Stepper | „1 Standort · 2 Behandlung · 3 Termin · 4 Bestätigung“, mobil kompakt, „Dauert etwa 2 Minuten“ |
+| #72 Zusammenfassung | „So geht es weiter“, Storno-/Vorkasse-Zeile (`app_settings.booking_cancellation_hours`, Default 24), „Weiter zur Bestätigung“ für Gäste, Lage im Center, Anfahrt, „Ab“-Preis erklärt |
+| #73 Registrierung | Titel „Konto erstellen“ mit Nutzen, Pflichtfelder Name + Handy, E-Mail optional, Inline-Validierung, DE/AT/CH/NL/TR zuerst, Marketing-Opt-in (Auth-Metadaten, Double-Opt-in offen) |
+| #71 Terminwahl | „Nächster freier Termin“, Slot-Gruppen Vormittag/Nachmittag/Abend, Ladehinweis, heute ohne Slots ausgegraut, Sticky-Auswahl mobil |
+| #69 Standortwahl | Standort-Freigabe mit Erklärung statt Prompt beim Laden, PLZ/Ort-Suche, Nähe-Sortierung, kompakte Liste (alle 9 Standorte auf einem Desktop-Screen), keine abgeschnittenen Namen |
+| #70 Trust-Leiste | Google-Note aus `venues.google_rating` (Override per `app_settings`), Ärzte, kostenlose Beratung, Storno-Frist – unter dem Header auf allen Schritten |
+| #75 Fragebogen | Nur Code-Review (kein Test-Konto): Antworten werden je Frage gespeichert, Events vorhanden; offen: Erfolgsdialog ohne Ausstieg, Sie-Form in `medicalForms.json`, kein Footer auf `/q/:token`, keine E-Mail |
+
+Nach dem Merge (außerhalb des Codes): GTM-Trigger umstellen, SQL-Vorschlag prüfen und ausführen, Store-Seite (Strapi-Feld, `myhb:booking-cancelled`-Listener, AGB-Seite), Lovable-Publish.
