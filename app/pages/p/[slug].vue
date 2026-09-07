@@ -8,7 +8,9 @@ const { fetchGeneralPage, seo, blocks, localizations } = useGeneralPage();
 const pageLoaded = await fetchGeneralPage();
 
 if (pageLoaded) {
-  await setPageSeo(seo.value);
+  // Reihenfolge zaehlt: setPageSeo liest die von usePageI18nParams gemeldete
+  // Sprachabdeckung, um nur existierende hreflang-Alternates auszugeben.
   usePageI18nParams(localizations.value, "slug");
+  await setPageSeo(seo.value);
 }
 </script>
