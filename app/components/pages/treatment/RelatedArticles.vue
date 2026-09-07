@@ -76,7 +76,7 @@ defineProps<{
 .relatedArticles__picture :deep(img) {
   width: 100%;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: var(--space-200, 0.5rem);
 }
 

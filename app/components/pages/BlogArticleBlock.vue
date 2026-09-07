@@ -165,19 +165,13 @@ defineProps<{
 
   .blogArticle__header__image {
     flex: 1 0 50%;
-    align-self: stretch;
+    align-self: flex-end;
     /* The main card is pulled up over the header by one card-pad; reserving it
        here lands the cover's bottom edge exactly on the card. */
     padding: 0 0 var(--space-card-pad);
   }
 
-  .blogArticle__header__image picture {
-    aspect-ratio: auto;
-    height: 100%;
-  }
-
   .blogArticle__header__image :deep(img) {
-    object-fit: cover;
     border-radius: 0 var(--border-radius-card-sm) 0 0;
   }
 
