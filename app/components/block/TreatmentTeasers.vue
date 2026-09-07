@@ -32,11 +32,21 @@ import type { MoleculeTreatmentTile } from "~/lib/ui/types";
 
 const props = defineProps<BlockTreatmentTeasersDto>();
 const { t, locale } = useI18n();
+const { isAdsMode } = useSiteModeFlags();
 const selectedTopCategoryKey = ref<string | null>(null);
 const teasersRoot = ref<HTMLElement | null>(null);
 
+// Ads- und SEO-Baum sind getrennt: Im SEO-Modus loest nur ein
+// treatment-page-pathKey auf, im Ads-Modus nur ein treatment-ads-page-pathKey
+// (das CMS schaltet ueber den x-site-mode-Header um). Vorher gewann
+// treatmentAdsPages sobald die Relation gefuellt war - auch im SEO-Modus -,
+// und die Tiles verlinkten pathKeys, die es dort nicht gibt: beide Zweige von
+// getTilePath() liefern dann 404 (u.a. .../botox-rabatt, GSC: 1.742 "Nicht
+// gefunden"). Ist die Relation des aktiven Baums leer, bleibt der Block leer -
+// besser als ein kaputter interner Link.
 const treatmentItems = computed<Array<TreatmentPageDto | TreatmentAdsPageDto>>(
-  () => props.treatmentAdsPages ?? props.treatmentPages ?? [],
+  () =>
+    (isAdsMode.value ? props.treatmentAdsPages : props.treatmentPages) ?? [],
 );
 
 const hasItems = computed(() => treatmentItems.value.length > 0);
