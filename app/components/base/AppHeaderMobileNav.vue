@@ -36,7 +36,7 @@
               </button>
               <NuxtLinkLocale
                 v-else
-                :to="`/behandlungen/${item.slug}`"
+                :to="treatmentPagePath(item.pathKey, item.slug)"
                 class="mobileMenu__link mobileMenu__link--parent"
                 @click="closeMobileMenu"
               >
@@ -52,7 +52,7 @@
               >
                 <li>
                   <NuxtLinkLocale
-                    :to="`/behandlungen/${item.slug}`"
+                    :to="treatmentPagePath(item.pathKey, item.slug)"
                     class="mobileMenu__link"
                     @click="closeMobileMenu"
                   >
@@ -61,7 +61,9 @@
                 </li>
                 <li v-for="child in item.children" :key="child.slug">
                   <NuxtLinkLocale
-                    :to="`/behandlungen/${item.slug}/${child.slug}`"
+                    :to="
+                      treatmentPagePath(child.pathKey, item.slug, child.slug)
+                    "
                     class="mobileMenu__link"
                     @click="closeMobileMenu"
                   >
@@ -104,7 +106,8 @@ const props = defineProps<{
     mainNavItems: {
       name: string;
       slug: string;
-      children: { name: string; slug: string }[];
+      pathKey?: string;
+      children: { name: string; slug: string; pathKey?: string }[];
     }[];
   };
 }>();
