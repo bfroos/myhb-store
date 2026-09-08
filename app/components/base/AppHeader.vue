@@ -125,7 +125,7 @@ const priorityNavItems = computed(() =>
   treatmentPages.value.map((page) => ({
     id: page.id,
     label: page.name,
-    href: `/behandlungen/${page.slug}`,
+    href: treatmentPagePath(page.pathKey, page.slug),
   })),
 );
 
@@ -140,7 +140,13 @@ const subnavItems = computed(() =>
   (currentMainNav.value?.children ?? []).map((child) => ({
     id: child.id,
     label: child.name,
-    href: `/behandlungen/${currentMainNav.value?.slug}/${child.slug}`,
+    // pathKey statt parent-slug + child-slug: der zusammengesetzte Pfad
+    // stimmt nur bei genau zwei Ebenen.
+    href: treatmentPagePath(
+      child.pathKey,
+      currentMainNav.value?.slug,
+      child.slug,
+    ),
   })),
 );
 
