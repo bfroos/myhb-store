@@ -32,6 +32,7 @@ import {
   ProductVolumeUnit,
   MediaBentoLayout,
   MediaBentoMediaItemAlignment,
+  BlockYoutubeVideoAspectRatio,
 } from "./enums";
 import {
   OrganismMediaCardContentAlignment,
@@ -92,6 +93,16 @@ export type BlockFaqBlockDto = {
   headline?: string;
   faqs?: FaqDto[];
   faqSets?: FaqSetDto[];
+  cardSettings?: CardSettingsDto;
+};
+
+export type BlockGalleryDto = {
+  headline?: string;
+  intro?: string;
+  images?: StrapiMedia[];
+  columns: "2" | "3" | "4";
+  aspectRatio: "1-1" | "4-3" | "3-4" | "16-9" | "original";
+  showCaptions: boolean;
   cardSettings?: CardSettingsDto;
 };
 
@@ -239,6 +250,15 @@ export type BlockTextContentDto = {
   content?: StrapiRichText;
   columnCount?: 1 | 2;
   links?: SharedButtonDto[];
+  cardSettings?: CardSettingsDto;
+};
+
+export type BlockYoutubeVideoDto = {
+  headline?: string;
+  intro?: string;
+  videoUrl?: string;
+  poster?: StrapiMedia;
+  aspectRatio?: BlockYoutubeVideoAspectRatio;
   cardSettings?: CardSettingsDto;
 };
 

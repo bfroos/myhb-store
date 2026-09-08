@@ -69,6 +69,7 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
     () => import("./EmployeeList.vue"),
   ),
   "blocks.faq": defineAsyncComponent(() => import("./FaqBlock.vue")),
+  "blocks.gallery": defineAsyncComponent(() => import("./GalleryBlock.vue")),
   "blocks.highlights-strip": defineAsyncComponent(
     () => import("./HighlightsStrip.vue"),
   ),
@@ -96,6 +97,9 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   ),
   "blocks.text-content": defineAsyncComponent(
     () => import("./TextContent.vue"),
+  ),
+  "blocks.youtube-video": defineAsyncComponent(
+    () => import("./YouTubeVideoBlock.vue"),
   ),
   "blocks.treatment-details": defineAsyncComponent(
     () => import("./TreatmentDetails.vue"),

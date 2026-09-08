@@ -193,6 +193,13 @@ export enum BlockPageHeaderLayout {
   COMPACT = "compact",
 }
 
+export enum BlockYoutubeVideoAspectRatio {
+  LANDSCAPE = "16-9",
+  PORTRAIT = "9-16",
+  CLASSIC = "4-3",
+  SQUARE = "1-1",
+}
+
 export enum ProductVolumeUnit {
   ML = "ml",
   IE = "ie",

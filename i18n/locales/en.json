@@ -107,6 +107,12 @@
     }
   },
 
+  "youtube": {
+    "consentRequired": "Video not available",
+    "consentDescription": "To display this YouTube video we need your consent for marketing cookies. Please accept the cookie settings.",
+    "consentButton": "Open cookie settings"
+  },
+
   "googleMaps": {
     "consentRequired": "Map not available",
     "consentDescription": "To display the map we need your consent for Google Maps. Please accept the cookie settings.",
@@ -303,6 +309,14 @@
   },
 
   "blocks": {
+    "gallery": {
+      "openImage": "Open image {index} full size",
+      "lightboxLabel": "Image gallery",
+      "counter": "Image {current} of {total}",
+      "close": "Close",
+      "previousImage": "Previous image",
+      "nextImage": "Next image"
+    },
     "jobTeasers": {
       "headline": "Current job openings",
       "andMore": "more",

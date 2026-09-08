@@ -283,6 +283,14 @@
   },
 
   "blocks": {
+    "gallery": {
+      "openImage": "{index}. görseli tam boyutta aç",
+      "lightboxLabel": "Görsel galerisi",
+      "counter": "{total} görselden {current}.",
+      "close": "Kapat",
+      "previousImage": "Önceki görsel",
+      "nextImage": "Sonraki görsel"
+    },
     "jobTeasers": {
       "headline": "Mevcut iş ilanları",
       "andMore": "daha fazla",
@@ -454,6 +462,11 @@
       "invalid_email": "Lütfen geçerli bir e-posta adresi girin.",
       "generic": "Kayıt başarısız. Lütfen daha sonra tekrar deneyin."
     }
+  },
+  "youtube": {
+    "consentRequired": "Video mevcut değil",
+    "consentDescription": "Bu YouTube videosunu görüntülemek için pazarlama çerezlerine izin vermen gerekiyor. Lütfen çerez ayarlarını kabul et.",
+    "consentButton": "Çerez ayarlarını aç"
   },
   "googleMaps": {
     "consentRequired": "Harita mevcut değil",
