@@ -4,6 +4,7 @@ import type {
   TreatmentPageDto,
 } from "~/lib/strapi/dto/collections";
 import type { BreadcrumbItem } from "~/lib/ui/types";
+import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
 
@@ -21,6 +22,7 @@ export function useLocationTreatmentPage() {
   const treatmentPageLocalizations = ref<LocalizationDto[]>([]);
   const locationOpenStatus = ref<LocationOpenStatus>();
   const availableTreatmentPathKeys = ref<string[] | undefined>();
+  const strapiSeo = ref<SharedSeoDto | null>(null);
 
   const treatmentPathKey = (route.params.treatmentSlug as string[])
     .filter(Boolean)
@@ -105,6 +107,7 @@ export function useLocationTreatmentPage() {
     locationOpenStatus.value = data.value.data.locationOpenStatus;
     availableTreatmentPathKeys.value =
       data.value.data.availableTreatmentPathKeys ?? undefined;
+    strapiSeo.value = (data.value.data.seo ?? null) as SharedSeoDto | null;
 
     return true;
   }
@@ -155,7 +158,7 @@ export function useLocationTreatmentPage() {
     treatmentPrice.value = price;
   }
   
-  const seo = computed(() => {
+  const generatedSeo = computed(() => {
     const loc = location.value;
     const treatmentName = treatmentPage.value?.name ?? "";
     
@@ -205,6 +208,14 @@ export function useLocationTreatmentPage() {
     };
   });
 
+  // Gepflegtes CMS-SEO gewinnt feldweise, sonst bleibt es beim generierten Text.
+  const seoWithFallback = computed(() => ({
+    ...(strapiSeo.value ?? {}),
+    metaTitle: strapiSeo.value?.metaTitle || generatedSeo.value.metaTitle,
+    metaDescription:
+      strapiSeo.value?.metaDescription || generatedSeo.value.metaDescription,
+  }));
+
   return {
     fetchPage,
     fetchTreatmentPrice,
@@ -215,7 +226,7 @@ export function useLocationTreatmentPage() {
     treatmentPageLocalizations,
     treatmentPage,
     location,
-    seo,
+    seo: seoWithFallback,
     treatmentPrice, // Expose for schema
   };
 }
