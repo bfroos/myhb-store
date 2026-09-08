@@ -89,6 +89,7 @@
   "cta": {
     "bookAppointment": "Book appointment",
     "bookAppointmentNotAvailable": "Booking not available",
+    "call": "Call",
     "learnMore": "Learn more",
     "details": "Details",
     "subscribe": "Subscribe",
@@ -466,7 +467,9 @@
 
   "dialogs": {
     "calendly": {
-      "header": "Book your appointment via Calendly"
+      "header": "Choose your lounge",
+      "sortedByDistance": "Sorted by distance",
+      "locationDenied": "Location unavailable. Please enter a postcode or city."
     },
     "newsletterSignUp": {
       "header": "Subscribe to our newsletter"

@@ -87,6 +87,7 @@
   "cta": {
     "bookAppointment": "Termin buchen",
     "bookAppointmentNotAvailable": "Nicht buchbar",
+    "call": "Anrufen",
     "learnMore": "Mehr erfahren",
     "details": "Details",
     "subscribe": "Abonnieren",
@@ -453,7 +454,9 @@
   },
   "dialogs": {
     "calendly": {
-      "header": "Buche deinen Termin jetzt über Calendly"
+      "header": "Wähle deine Lounge",
+      "sortedByDistance": "Nach Entfernung sortiert",
+      "locationDenied": "Standort nicht verfügbar. Bitte PLZ oder Ort eingeben."
     },
     "newsletterSignUp": {
       "header": "Newsletter abonnieren"

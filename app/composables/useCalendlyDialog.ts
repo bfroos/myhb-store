@@ -10,8 +10,18 @@ export function useCalendlyDialog() {
   const dialog = useDialog();
   const { t } = useI18n();
   const { openAppBookingDialog } = useAppBookingDialog();
+  const { trackBookingClick } = useGoogleAnalytics();
 
   function openCalendlyDialog(url?: string, treatmentType?: TreatmentType) {
+    // Conversion-Audit #67: booking_type war fest "calendly". Jetzt wird das
+    // System getrackt, das tatsaechlich oeffnet. Ohne URL oeffnet zuerst die
+    // Standortsuche; der konkrete Standort wird dann im Dialog getrackt
+    // (trackBookingLocationSelected).
+    trackBookingClick(
+      isAppBookingUrl(url) ? "app" : url ? "calendly" : "location_search",
+      { treatment_type: treatmentType },
+    );
+
     // Migration path: if the location's booking URL points at the MY app,
     // open the in-app booking iframe instead of the Calendly widget. This lets
     // us switch locations from Calendly to the app one at a time simply by

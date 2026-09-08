@@ -140,10 +140,12 @@ function resolveInternalToFromSharedButton(
 const dialog = useDialog();
 const { openCalendlyDialog } = useCalendlyDialog();
 const { openAppBookingDialog } = useAppBookingDialog();
+const { trackBookingClick } = useGoogleAnalytics();
 
 const handleClick = () => {
   // New in-app booking iframe method (limited rollout, e.g. Neukundenrabatt page)
   if (button.value?.method === "app-booking") {
+    trackBookingClick("app");
     openAppBookingDialog(button.value?.label);
     return;
   }

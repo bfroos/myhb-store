@@ -59,6 +59,40 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
 };
 
 /**
+ * Gewichtete Durchschnittsnote über alle Standorte mit Google-Daten
+ * (Conversion-Audit #80). Grundlage für den globalen Bewertungs-Badge:
+ * "4,9" neben "1.538+ 5-Sterne" statt einer Sterne-Behauptung ohne Note.
+ *
+ * Gewichtung nach Anzahl der Bewertungen, eine Nachkommastelle. Gibt null
+ * zurück, wenn keine Standortdaten vorliegen.
+ */
+export function getGoogleReviewAggregate(): {
+  rating: number;
+  userRatingsTotal: number;
+  locations: number;
+} | null {
+  let weighted = 0;
+  let total = 0;
+  let locations = 0;
+  for (const entry of Object.values(GOOGLE_RATINGS)) {
+    const rating = Number(entry.rating);
+    const count = Number(entry.count);
+    if (!Number.isFinite(rating) || !Number.isFinite(count) || count <= 0) {
+      continue;
+    }
+    weighted += rating * count;
+    total += count;
+    locations += 1;
+  }
+  if (total === 0) return null;
+  return {
+    rating: Math.round((weighted / total) * 10) / 10,
+    userRatingsTotal: total,
+    locations,
+  };
+}
+
+/**
  * Liefert die statisch hinterlegten Google-Rating-Daten für einen Standort.
  *
  * Diese Werte werden täglich per GitHub Action ("Update Google Ratings")

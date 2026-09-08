@@ -89,6 +89,7 @@
   "cta": {
     "bookAppointment": "احجز موعدًا",
     "bookAppointmentNotAvailable": "احجز موعدًا غير متاح",
+    "call": "اتصل",
     "learnMore": "اعرف المزيد",
     "details": "التفاصيل",
     "subscribe": "اشترك",
@@ -440,7 +441,9 @@
 
   "dialogs": {
     "calendly": {
-      "header": "احجز موعدك الآن عبر Calendly"
+      "header": "اختر صالونك",
+      "sortedByDistance": "مرتبة حسب المسافة",
+      "locationDenied": "الموقع غير متاح. يرجى إدخال الرمز البريدي أو المدينة."
     },
     "newsletterSignUp": {
       "header": "اشترك في النشرة الإخبارية"

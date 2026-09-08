@@ -92,6 +92,10 @@ export type MoleculeLocationItem = {
   distanceInKilometers?: number;
   calendlyUrl?: string;
   coordinates?: SharedCoordinatesDto;
+  /** Google Place ID fuer die statische Bewertungsanzeige (GOOGLE_RATINGS). */
+  googlePlaceId?: string;
+  /** Kontaktweg als Fallback, wenn keine Online-Buchung hinterlegt ist. */
+  contact?: { phoneNumber?: string | null; whatsAppNumber?: string | null };
 };
 
 export type LocationItem = {

@@ -96,7 +96,10 @@ import {
   IconMessageCircle,
 } from "@tabler/icons-vue";
 import { ReviewSource } from "~/lib/strapi/dto/enums";
-import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
+import {
+  getGoogleReviewAggregate,
+  getGoogleReviewForPlace,
+} from "~/utils/schemaLocation";
 
 type StarDistribution = {
   full: number;
@@ -156,10 +159,20 @@ const shouldUseLocalRating = computed(() => {
   );
 });
 
+// Conversion-Audit #80: Der globale Badge zeigte nur "1.538+ 5-Sterne" ohne
+// Note. Die gewichtete Durchschnittsnote aller Standorte (Google, täglich
+// aktualisiert) ist belegbar und wird im globalen Fall als Note angezeigt.
+const aggregateData = computed(() =>
+  isLocationVariant.value || props.source !== ReviewSource.GOOGLE
+    ? null
+    : getGoogleReviewAggregate(),
+);
+
 const effectiveRating = computed(() => {
   if (shouldUseLocalRating.value && locationData.value?.rating != null) {
     return locationData.value.rating;
   }
+  if (aggregateData.value) return aggregateData.value.rating;
   return props.rating ?? 0;
 });
 
@@ -197,7 +210,9 @@ const ratingDisplay = computed(() => {
 });
 
 const showRatingCircle = computed(
-  () => shouldUseLocalRating.value && locationData.value != null,
+  () =>
+    (shouldUseLocalRating.value && locationData.value != null) ||
+    (!props.singleReview && aggregateData.value != null),
 );
 
 const reviewCountText = computed(() => {

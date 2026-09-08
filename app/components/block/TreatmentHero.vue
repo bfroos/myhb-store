@@ -313,6 +313,9 @@ const discountLabel = computed(() => {
 
 .hero__media {
   aspect-ratio: 5 / 3;
+  /* Conversion-Audit #79: Bildhöhe auf Mobile/Tablet begrenzen, damit
+     H1, Preis-CTA und Google-Badge im ersten Viewport bleiben. */
+  max-height: min(38svh, 320px);
   flex: 1 1 50%;
   padding-top: var(--space-card-figure-pad);
   padding-left: var(--space-card-figure-pad);
@@ -544,6 +547,7 @@ const discountLabel = computed(() => {
 
   .hero__media {
     order: 2;
+    max-height: none;
     padding: var(--space-card-figure-pad) var(--space-card-figure-pad)
       var(--space-card-figure-pad) 0;
   }

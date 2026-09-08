@@ -87,6 +87,7 @@
   "cta": {
     "bookAppointment": "Prendre rendez-vous",
     "bookAppointmentNotAvailable": "Non réservable",
+    "call": "Appeler",
     "learnMore": "En savoir plus",
     "details": "Détails",
     "subscribe": "S'abonner",
@@ -452,7 +453,9 @@
   },
   "dialogs": {
     "calendly": {
-      "header": "Prenez rendez-vous maintenant via Calendly"
+      "header": "Choisis ton lounge",
+      "sortedByDistance": "Trié par distance",
+      "locationDenied": "Position indisponible. Saisis un code postal ou une ville."
     },
     "newsletterSignUp": {
       "header": "S'abonner à la newsletter"

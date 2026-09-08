@@ -89,6 +89,7 @@
   "cta": {
     "bookAppointment": "Randevu al",
     "bookAppointmentNotAvailable": "Randevu alınamaz",
+    "call": "Ara",
     "learnMore": "Daha fazla bilgi",
     "details": "Detaylar",
     "subscribe": "Abone ol",
@@ -440,7 +441,9 @@
 
   "dialogs": {
     "calendly": {
-      "header": "Calendly üzerinden şimdi randevu al"
+      "header": "Salonunu seç",
+      "sortedByDistance": "Mesafeye göre sıralandı",
+      "locationDenied": "Konum kullanılamıyor. Lütfen posta kodu veya şehir gir."
     },
     "newsletterSignUp": {
       "header": "Bültenimize abone ol"
