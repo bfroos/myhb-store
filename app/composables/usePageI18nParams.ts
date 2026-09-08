@@ -19,6 +19,31 @@ export type I18nParamSource = {
 };
 
 /**
+ * Sprachen, für die die aktuelle Seite einen VOLLSTÄNDIGEN Satz Route-Params
+ * hat - also für jeden dynamischen Param eine eigene Übersetzung. Nur diese
+ * Sprachen dürfen als hreflang-Alternate ausgegeben werden: fehlt ein Param,
+ * setzt switchLocalePath() stillschweigend den Wert der aktuellen Sprache ein
+ * und baut eine Mischform (z.B. /ar/konumlar/kuluniya/... mit deutschem
+ * pathKey), die es nicht gibt - Google bekommt 404.
+ *
+ * Der Pfad wird mitgespeichert, damit ein Wert aus der vorher besuchten Seite
+ * (Client-Navigation) nicht fälschlich für die aktuelle gilt.
+ */
+export type PageI18nCoverage = {
+  path: string;
+  locales: string[];
+};
+
+const PAGE_I18N_COVERAGE_STATE = "page-i18n-coverage";
+
+export function usePageI18nCoverage() {
+  return useState<PageI18nCoverage | null>(
+    PAGE_I18N_COVERAGE_STATE,
+    () => null,
+  );
+}
+
+/**
  *
  * @param localizations - The localizations to process
  * @param key - The key to use for the localizations (e.g. 'slug' or 'pathKey')
@@ -39,6 +64,8 @@ export function usePageI18nParams(
  */
 export function usePageI18nParamsFromSources(sources: I18nParamSource[]): void {
   const setI18nParams = useSetI18nParams();
+  const route = useRoute();
+  const coverage = usePageI18nCoverage();
 
   const params = sources.reduce<Record<string, Record<string, string>>>(
     (acc, source) => {
@@ -53,4 +80,14 @@ export function usePageI18nParamsFromSources(sources: I18nParamSource[]): void {
   );
 
   setI18nParams(params);
+
+  // Vollständig ist eine Sprache nur, wenn JEDER Param einen nicht-leeren Wert
+  // hat. Die Params selbst bleiben unverändert (der Sprachumschalter soll sich
+  // weiter wie bisher verhalten) - gefiltert wird nur der hreflang-Block.
+  const paramNames = Array.from(new Set(sources.map((s) => s.paramName)));
+  const completeLocales = Object.keys(params).filter((locale) =>
+    paramNames.every((paramName) => !!params[locale]?.[paramName])
+  );
+
+  coverage.value = { path: route.path, locales: completeLocales };
 }
