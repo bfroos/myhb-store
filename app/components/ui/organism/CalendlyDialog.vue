@@ -86,7 +86,74 @@ const { t } = useI18n();
 const dialogRef = inject("dialogRef") as any;
 const params = ref<any>({});
 const { openAppBookingDialog } = useAppBookingDialog();
-const { trackBookingLocationSelected } = useGoogleAnalytics();
+const {
+  trackBookingLocationSelected,
+  trackCalendlyDateTimeSelected,
+  trackCalendlyBookingConfirmed,
+} = useGoogleAnalytics();
+
+/** Standort, den der Nutzer im Dialog gewaehlt hat (falls er hier waehlt). */
+const bookedLocationSlug = ref<string | undefined>(undefined);
+
+/**
+ * Calendly-Nutzername aus der Buchungs-URL, z. B.
+ * "https://calendly.com/aquis-plaza-aachen" -> "aquis-plaza-aachen". Dient als
+ * Standort-Kennung, wenn der Dialog schon mit einer URL geoeffnet wurde (also
+ * von einer Standortseite) und es hier keine Auswahl gab.
+ */
+function calendlyUserFromUrl(url?: string): string | undefined {
+  if (!url) return undefined;
+  try {
+    return new URL(url).pathname.split("/").filter(Boolean)[0];
+  } catch {
+    return undefined;
+  }
+}
+
+function trackingContext() {
+  return {
+    location_slug: bookedLocationSlug.value ?? calendlyUserFromUrl(params.value?.url),
+    treatment_type: params.value?.treatmentType,
+  };
+}
+
+// Conversion-Messung fuer Calendly (#67). Bis hierher wurde nur getrackt, dass
+// das Widget *aufgeht* – nicht, dass jemand bucht. Ohne diesen Zaehler laesst
+// sich die Conversion Rate von Calendly nicht gegen die der App stellen.
+//
+// Die Message kommt aus dem Calendly-iFrame; `embed_domain` setzt nuxt-calendly
+// selbst, sonst kaeme sie gar nicht an. Der Origin-Check gehoert dazu, weil der
+// Listener der Library auf `window` haengt und jede Seite `event`-Nachrichten
+// schicken koennte – sonst liessen sich Conversions faken.
+const CALENDLY_ORIGIN = "https://calendly.com";
+const seenScheduledIds = new Set<string>();
+
+function isFromCalendly(e: MessageEvent) {
+  return e.origin === CALENDLY_ORIGIN;
+}
+
+useCalendlyEventListener({
+  onDateAndTimeSelected: (e: MessageEvent) => {
+    if (!isFromCalendly(e)) return;
+    trackCalendlyDateTimeSelected(trackingContext());
+  },
+  onEventScheduled: (e: MessageEvent) => {
+    if (!isFromCalendly(e)) return;
+    // Die Invitee-URI identifiziert die Buchung eindeutig; das Widget schickt
+    // die Nachricht gelegentlich doppelt.
+    const inviteeUri = (e.data as any)?.payload?.invitee?.uri as
+      | string
+      | undefined;
+    if (inviteeUri) {
+      if (seenScheduledIds.has(inviteeUri)) return;
+      seenScheduledIds.add(inviteeUri);
+    }
+    trackCalendlyBookingConfirmed({
+      ...trackingContext(),
+      event_id: inviteeUri,
+    });
+  },
+});
 
 function handleLocationBook(location: { calendlyUrl?: string; slug?: string }) {
   if (!location.calendlyUrl) return;
@@ -102,6 +169,7 @@ function handleLocationBook(location: { calendlyUrl?: string; slug?: string }) {
   // Conversion-Audit #67: Standortwahl im Dialog tracken, aufgeteilt nach
   // Buchungssystem (Calendly vs. App), damit die Migration messbar ist.
   trackBookingLocationSelected(isApp ? "app" : "calendly", location.slug);
+  bookedLocationSlug.value = location.slug;
   // If the picked location already uses the in-app booking flow, close this
   // Calendly dialog and open the in-app iframe dialog instead. Calendly
   // locations keep rendering the inline widget in place as before.

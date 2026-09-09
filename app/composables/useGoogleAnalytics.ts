@@ -2,6 +2,7 @@
  * Composable for Google Analytics 4 Event Tracking
  * Provides gtag() interface for tracking custom events
  */
+import { readGaAttributionParams } from "~/lib/attribution";
 
 export const useGoogleAnalytics = () => {
   /**
@@ -14,7 +15,17 @@ export const useGoogleAnalytics = () => {
     eventParams?: Record<string, any>
   ) => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', eventName, eventParams || {});
+      // Conversion-Events tragen die Kampagnenwerte selbst mit. GA4 kennt die
+      // Sitzungsquelle ohnehin, aber nur so lassen sich Calendly- und
+      // App-Buchungen im selben Funnel nach Kanal aufteilen — die App schickt
+      // dieselben Feldnamen mit `booking_confirmed`. Explizite Parameter des
+      // Aufrufers gewinnen.
+      const params = eventParams || {};
+      const withAttribution =
+        params.event_category === 'conversion'
+          ? { ...(readGaAttributionParams() ?? {}), ...params }
+          : params;
+      (window as any).gtag('event', eventName, withAttribution);
     }
   };
 
@@ -109,6 +120,48 @@ export const useGoogleAnalytics = () => {
   };
 
   /**
+   * Track that the visitor picked a slot in the Calendly widget — the step
+   * between opening the widget and confirming. Mirrors the app's
+   * `summary_view` so both systems can be compared at the same funnel stage.
+   */
+  const trackCalendlyDateTimeSelected = (extra?: {
+    location_slug?: string;
+    treatment_type?: string;
+  }) => {
+    trackEvent('booking_datetime_selected', {
+      event_category: 'conversion',
+      booking_type: 'calendly',
+      ...(extra ?? {}),
+    });
+  };
+
+  /**
+   * Track a COMPLETED Calendly booking (`calendly.event_scheduled`).
+   *
+   * Deliberately the same event name the app pushes on a confirmed booking
+   * (`booking_confirmed`, see src/lib/analytics.ts in elanagency/myhb-os), so
+   * the conversion rate of both systems is comparable in one GA4 funnel:
+   * `click_booking` → `booking_confirmed`, split by `booking_type`.
+   *
+   * Until this existed we only tracked that Calendly *opened*, never that
+   * somebody booked — Calendly had a denominator but no numerator.
+   *
+   * `event_id` carries the Calendly invitee URI so a booking counts once even
+   * if the widget fires the message twice.
+   */
+  const trackCalendlyBookingConfirmed = (extra?: {
+    location_slug?: string;
+    treatment_type?: string;
+    event_id?: string;
+  }) => {
+    trackEvent('booking_confirmed', {
+      event_category: 'conversion',
+      booking_type: 'calendly',
+      ...(extra ?? {}),
+    });
+  };
+
+  /**
    * Track phone click
    */
   const trackPhoneClick = (phoneNumber?: string) => {
@@ -137,6 +190,8 @@ export const useGoogleAnalytics = () => {
     trackCarouselNavigate,
     trackBookingClick,
     trackBookingLocationSelected,
+    trackCalendlyDateTimeSelected,
+    trackCalendlyBookingConfirmed,
     trackPhoneClick,
     trackFormSubmission,
   };
