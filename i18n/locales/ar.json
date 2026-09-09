@@ -78,7 +78,8 @@
     },
     "meta": {
       "privacyPolicy": "سياسة الخصوصية",
-      "imprint": "الشروط والأحكام",
+      "terms": "الشروط والأحكام",
+      "imprint": "بيانات الناشر",
       "cookieSettings": "الكوكيز"
     },
     "treatmentTile": {

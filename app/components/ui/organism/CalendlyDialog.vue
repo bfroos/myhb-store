@@ -78,6 +78,7 @@ import type { CitySuggestion } from "~/composables/useGoogleCitySearch";
 import {
   isAppBookingUrl,
   useAppBookingDialog,
+  withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 
@@ -89,7 +90,15 @@ const { trackBookingLocationSelected } = useGoogleAnalytics();
 
 function handleLocationBook(location: { calendlyUrl?: string; slug?: string }) {
   if (!location.calendlyUrl) return;
-  const isApp = isAppBookingUrl(location.calendlyUrl);
+  // Deeplink #66: Wurde der Dialog von einer Behandlungsseite geoeffnet, haengt
+  // der Behandlungs-Slug auch an der App-URL des erst hier gewaehlten
+  // Standorts, damit die Behandlung in der App vorausgewaehlt ist.
+  const bookingUrl =
+    withAppTreatmentSlug(
+      location.calendlyUrl,
+      params.value?.appTreatmentSlug,
+    ) ?? location.calendlyUrl;
+  const isApp = isAppBookingUrl(bookingUrl);
   // Conversion-Audit #67: Standortwahl im Dialog tracken, aufgeteilt nach
   // Buchungssystem (Calendly vs. App), damit die Migration messbar ist.
   trackBookingLocationSelected(isApp ? "app" : "calendly", location.slug);
@@ -98,10 +107,10 @@ function handleLocationBook(location: { calendlyUrl?: string; slug?: string }) {
   // locations keep rendering the inline widget in place as before.
   if (isApp) {
     dialogRef.value.close();
-    openAppBookingDialog(t("cta.bookAppointment"), location.calendlyUrl);
+    openAppBookingDialog(t("cta.bookAppointment"), bookingUrl);
     return;
   }
-  params.value = { ...params.value, url: location.calendlyUrl };
+  params.value = { ...params.value, url: bookingUrl };
 }
 
 function handleLocationNavigate() {

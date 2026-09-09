@@ -4,6 +4,7 @@ import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import {
   isAppBookingUrl,
   useAppBookingDialog,
+  withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
 
 export function useCalendlyDialog() {
@@ -12,13 +13,28 @@ export function useCalendlyDialog() {
   const { openAppBookingDialog } = useAppBookingDialog();
   const { trackBookingClick } = useGoogleAnalytics();
 
-  function openCalendlyDialog(url?: string, treatmentType?: TreatmentType) {
+  /**
+   * @param appTreatmentSlug Behandlungs-Slug fuer den App-Deeplink
+   *   (`?treatment=`). Wird an die App-Buchungs-URL gehaengt – auch an die des
+   *   Standorts, den der Nutzer erst im Standort-Dialog auswaehlt. Bei
+   *   Calendly-URLs bleibt er ohne Wirkung.
+   */
+  function openCalendlyDialog(
+    url?: string,
+    treatmentType?: TreatmentType,
+    appTreatmentSlug?: string,
+  ) {
+    const bookingUrl = withAppTreatmentSlug(url, appTreatmentSlug) ?? url;
     // Conversion-Audit #67: booking_type war fest "calendly". Jetzt wird das
     // System getrackt, das tatsaechlich oeffnet. Ohne URL oeffnet zuerst die
     // Standortsuche; der konkrete Standort wird dann im Dialog getrackt
     // (trackBookingLocationSelected).
     trackBookingClick(
-      isAppBookingUrl(url) ? "app" : url ? "calendly" : "location_search",
+      isAppBookingUrl(bookingUrl)
+        ? "app"
+        : bookingUrl
+          ? "calendly"
+          : "location_search",
       { treatment_type: treatmentType },
     );
 
@@ -27,8 +43,8 @@ export function useCalendlyDialog() {
     // us switch locations from Calendly to the app one at a time simply by
     // changing the "Calendly URL" field in Strapi. Everything else (a
     // calendly.com URL, or no URL -> location search) keeps working as before.
-    if (isAppBookingUrl(url)) {
-      openAppBookingDialog(t("cta.bookAppointment"), url);
+    if (isAppBookingUrl(bookingUrl)) {
+      openAppBookingDialog(t("cta.bookAppointment"), bookingUrl);
       return;
     }
 
@@ -37,7 +53,7 @@ export function useCalendlyDialog() {
         () => import("~/components/ui/organism/CalendlyDialog.vue"),
       ),
       {
-        data: { url, treatmentType },
+        data: { url: bookingUrl, treatmentType, appTreatmentSlug },
         props: {
           modal: true,
           draggable: false,

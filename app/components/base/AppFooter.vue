@@ -110,6 +110,11 @@
             </NuxtLinkLocale>
           </li>
           <li>
+            <NuxtLinkLocale to="/p/agb">
+              {{ $t("navigation.meta.terms") }}
+            </NuxtLinkLocale>
+          </li>
+          <li>
             <UiAtomBaseButton
               type="button"
               variant="text"
