@@ -111,3 +111,39 @@ export function readWireAttribution(): WireAttribution | null {
   if (last) out.last = last;
   return out.first || out.last ? out : null;
 }
+
+/**
+ * Flache Attributionsparameter fuer GA4/GTM — Feldnamen identisch zu
+ * getFunnelContext() in elanagency/myhb-os (src/lib/attributionCapture.ts),
+ * damit ein GTM-Variablensatz beide Flaechen bedient.
+ *
+ * Hintergrund: Der Container GTM-5KCNWFWS liest Kampagnenwerte ueber
+ * Datenschichtvariablen. Die lasen bis 09.09.2026 die Keys
+ * "myhb_lastVisitUtmSource...", die diese Website nirgends mehr pusht — die
+ * UTM-Parameter am Conversion-Tag "GA4 - Termin gebucht Conversion" waren
+ * deshalb dauerhaft leer. Statt den alten Vertrag wiederzubeleben, liefern wir
+ * die Namen, die die App schon benutzt.
+ *
+ * Last Touch fuehrt, First Touch kommt mit ft_-Praefix mit.
+ */
+export function readGaAttributionParams(): Record<string, string> | null {
+  const a = readWireAttribution();
+  if (!a) return null;
+  const candidates: Record<string, string | undefined> = {
+    utm_source: a.last?.utm_source,
+    utm_medium: a.last?.utm_medium,
+    utm_campaign: a.last?.utm_campaign,
+    utm_term: a.last?.utm_term,
+    utm_content: a.last?.utm_content,
+    click_id: a.last?.click_id,
+    ft_source: a.first?.utm_source,
+    ft_medium: a.first?.utm_medium,
+    ft_campaign: a.first?.utm_campaign,
+    ft_click_id: a.first?.click_id,
+    ref_path: a.last?.landing_page ?? a.first?.landing_page,
+  };
+  const out = Object.fromEntries(
+    Object.entries(candidates).filter(([, v]) => !!v),
+  ) as Record<string, string>;
+  return Object.keys(out).length ? out : null;
+}

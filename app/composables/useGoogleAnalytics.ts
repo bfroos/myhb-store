@@ -2,6 +2,7 @@
  * Composable for Google Analytics 4 Event Tracking
  * Provides gtag() interface for tracking custom events
  */
+import { readGaAttributionParams } from "~/lib/attribution";
 
 export const useGoogleAnalytics = () => {
   /**
@@ -14,7 +15,17 @@ export const useGoogleAnalytics = () => {
     eventParams?: Record<string, any>
   ) => {
     if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', eventName, eventParams || {});
+      // Conversion-Events tragen die Kampagnenwerte selbst mit. GA4 kennt die
+      // Sitzungsquelle ohnehin, aber nur so lassen sich Calendly- und
+      // App-Buchungen im selben Funnel nach Kanal aufteilen — die App schickt
+      // dieselben Feldnamen mit `booking_confirmed`. Explizite Parameter des
+      // Aufrufers gewinnen.
+      const params = eventParams || {};
+      const withAttribution =
+        params.event_category === 'conversion'
+          ? { ...(readGaAttributionParams() ?? {}), ...params }
+          : params;
+      (window as any).gtag('event', eventName, withAttribution);
     }
   };
 
