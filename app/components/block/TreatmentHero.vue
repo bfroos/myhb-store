@@ -70,6 +70,7 @@
                     :button="cta"
                     :data="{
                       calendlyUrl: calendlyUrl,
+                      appTreatmentSlug: appTreatmentSlug,
                       treatmentType: treatment?.type,
                     }"
                     :button-props="{
@@ -88,6 +89,7 @@
                   }"
                   :data="{
                     calendlyUrl: calendlyUrl,
+                    appTreatmentSlug: appTreatmentSlug,
                     treatmentType: treatment?.type,
                   }"
                   :button-props="{ size: 'lg', variant: 'secondary' }"
@@ -170,6 +172,7 @@
               :button="cta"
               :data="{
                 calendlyUrl: calendlyUrl,
+                appTreatmentSlug: appTreatmentSlug,
                 treatmentType: treatment?.type,
               }"
               :button-props="{

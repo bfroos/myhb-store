@@ -53,6 +53,23 @@ export function withAppTreatmentSlug(
 }
 
 /**
+ * Resolves the slug that is appended as `treatment=` to an in-app booking URL.
+ *
+ * Prefers the `appTreatmentSlug` field maintained in Strapi (the app's own
+ * treatment slug, e.g. "lipfiller"); falls back to the page slug of the
+ * website (e.g. "lippen-aufspritzen"), which the app resolves via its alias
+ * table (bfroos/myhb-store#66, docs/DEEPLINKS.md in elanagency/myhb-os). An
+ * unknown slug does not break the flow: the app keeps the pre-selected venue
+ * and only shows a subtle hint.
+ */
+export function resolveAppTreatmentSlug(page?: {
+  appTreatmentSlug?: string | null;
+  slug?: string | null;
+} | null): string | undefined {
+  return page?.appTreatmentSlug?.trim() || page?.slug?.trim() || undefined;
+}
+
+/**
  * Collects Google Ads click identifiers so the in-app booking flow (rendered
  * in an iframe on the app.* subdomain) can attribute the conversion to the
  * originating ad click. Reads from the current URL first, then falls back to

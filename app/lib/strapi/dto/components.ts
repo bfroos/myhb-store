@@ -297,6 +297,8 @@ export type BlockTreatmentHeroDto = {
   treatment?: TreatmentDto;
   cardSettings?: CardSettingsDto;
   calendlyUrl?: string;
+  /** Behandlungs-Slug fuer den App-Deeplink (`?treatment=`), siehe #66. */
+  appTreatmentSlug?: string;
   googlePlaceId?: string;
 };
 

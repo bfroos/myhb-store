@@ -164,7 +164,10 @@ function openCalendlyDialogForButton() {
   const url = props.data?.calendlyUrl || button.value?.data?.calendlyUrl;
   const treatmentType =
     props.data?.treatmentType || button.value?.data?.treatmentType;
-  openCalendlyDialog(url, treatmentType);
+  // Deeplink #66: Behandlungs-Slug fuer `?treatment=` in der App-Buchungs-URL.
+  const appTreatmentSlug =
+    props.data?.appTreatmentSlug || button.value?.data?.appTreatmentSlug;
+  openCalendlyDialog(url, treatmentType, appTreatmentSlug);
 }
 
 const openNewsletterSignUpDialog = () => {

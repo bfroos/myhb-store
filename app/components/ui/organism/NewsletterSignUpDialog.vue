@@ -194,11 +194,22 @@ async function handleSubmit() {
   // Buchungsdaten (calendlyUrl/treatmentType) werden ueber die Dialog-Daten
   // durchgereicht (siehe SharedButton.openNewsletterSignUpDialog).
   const booking = dialogRef?.value?.data as
-    | { calendlyUrl?: string; treatmentType?: TreatmentType }
+    | {
+        calendlyUrl?: string;
+        treatmentType?: TreatmentType;
+        appTreatmentSlug?: string;
+      }
     | undefined;
-  if (booking && (booking.calendlyUrl || booking.treatmentType)) {
+  if (
+    booking &&
+    (booking.calendlyUrl || booking.treatmentType || booking.appTreatmentSlug)
+  ) {
     if (dialogRef) dialogRef.value.close();
-    openCalendlyDialog(booking.calendlyUrl, booking.treatmentType);
+    openCalendlyDialog(
+      booking.calendlyUrl,
+      booking.treatmentType,
+      booking.appTreatmentSlug,
+    );
   }
 }
 </script>
