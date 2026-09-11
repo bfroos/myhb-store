@@ -1,12 +1,16 @@
 import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 
-export function useGeneralPage() {
+/**
+ * @param fixedSlug - Slug fuer Seiten mit fester Route (z.B. /karriere/aerzte).
+ *   Ohne Angabe kommt der Slug aus dem Route-Param, wie bei /p/[slug].
+ */
+export function useGeneralPage(fixedSlug?: string) {
   const route = useRoute();
   const { locale, fallbackLocale, t } = useI18n();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
   const localizations = ref<LocalizationDto[]>([]);
-  const slug = route.params.slug as string;
+  const slug = fixedSlug ?? (route.params.slug as string);
   const seo = ref<SharedSeoDto | null>(null);
   const blocks = ref<StrapiBlock[]>([]);
 

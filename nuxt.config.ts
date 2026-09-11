@@ -339,6 +339,13 @@ export default defineNuxtConfig({
         fr: "/carrieres",
         nl: "/carriere",
       },
+      "karriere/aerzte": {
+        en: "/careers/doctors",
+        tr: "/kariyer/doktorlar",
+        ar: "/masar-mihani/atibba",
+        fr: "/carrieres/medecins",
+        nl: "/carriere/artsen",
+      },
       "karriere/jobs/[slug]": {
         en: "/careers/[slug]",
         tr: "/kariyer/[slug]",
