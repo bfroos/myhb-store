@@ -1,12 +1,37 @@
 /**
- * Composable for Google Analytics 4 Event Tracking
- * Provides gtag() interface for tracking custom events
+ * Composable fuer GA4-Event-Tracking ueber den GTM-Container GTM-5KCNWFWS.
+ *
+ * Events gehen als flache Datenschicht-Objekte `{ event, ...params }` raus,
+ * NICHT als `gtag('event', ...)`. Hintergrund (bfroos/myhb-store#120):
+ *
+ * GTM macht aus einem gtag-Aufruf zwar ein Ereignis mit dem passenden Namen —
+ * der GA4-Tag "Funnel Events" (tag_id 108) feuerte deshalb auch fuer das
+ * `booking_confirmed` dieser Website. Die Parameter eines gtag-Aufrufs liegen
+ * in GTM aber unter `eventModel.*`, waehrend die Datenschichtvariablen des
+ * Containers (`booking_type`, `event_id`, `location`, ...) die Top-Level-Keys
+ * lesen. Ergebnis in GA4, Woche 04.–10.09.2026: 86 von 87 `booking_confirmed`
+ * mit `booking_type = (not set)`, das einzige gesetzte kam aus der App.
+ *
+ * Die App pusht seit jeher flache Objekte (src/lib/analytics.ts in
+ * elanagency/myhb-os). Diese Datei folgt jetzt demselben Vertrag, damit ein
+ * Variablensatz im Container beide Flaechen bedient. Nebeneffekt: Kein
+ * `if (window.gtag)`-Guard mehr — GTM arbeitet die Datenschicht beim Laden
+ * nach, fruehe Klicks vor dem Consent-Banner gehen nicht verloren.
  */
 import { readGaAttributionParams } from "~/lib/attribution";
 
+type DataLayerObject = Record<string, unknown> & { event: string };
+
+const pushToDataLayer = (payload: DataLayerObject) => {
+  if (typeof window === 'undefined') return;
+  const w = window as unknown as { dataLayer?: unknown[] };
+  w.dataLayer = w.dataLayer || [];
+  w.dataLayer.push(payload);
+};
+
 export const useGoogleAnalytics = () => {
   /**
-   * Track custom event in GA4
+   * Track custom event in GA4 (via GTM-Datenschicht)
    * @param eventName - Event identifier
    * @param eventParams - Event parameters (optional)
    */
@@ -14,19 +39,18 @@ export const useGoogleAnalytics = () => {
     eventName: string,
     eventParams?: Record<string, any>
   ) => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      // Conversion-Events tragen die Kampagnenwerte selbst mit. GA4 kennt die
-      // Sitzungsquelle ohnehin, aber nur so lassen sich Calendly- und
-      // App-Buchungen im selben Funnel nach Kanal aufteilen — die App schickt
-      // dieselben Feldnamen mit `booking_confirmed`. Explizite Parameter des
-      // Aufrufers gewinnen.
-      const params = eventParams || {};
-      const withAttribution =
-        params.event_category === 'conversion'
-          ? { ...(readGaAttributionParams() ?? {}), ...params }
-          : params;
-      (window as any).gtag('event', eventName, withAttribution);
-    }
+    // Conversion-Events tragen die Kampagnenwerte selbst mit. GA4 kennt die
+    // Sitzungsquelle ohnehin, aber nur so lassen sich Calendly- und
+    // App-Buchungen im selben Funnel nach Kanal aufteilen — die App schickt
+    // dieselben Feldnamen mit `booking_confirmed`. Explizite Parameter des
+    // Aufrufers gewinnen.
+    const params = eventParams || {};
+    const withAttribution =
+      params.event_category === 'conversion'
+        ? { ...(readGaAttributionParams() ?? {}), ...params }
+        : params;
+    // `event` zuletzt, damit kein Parameter den Ereignisnamen ueberschreibt.
+    pushToDataLayer({ ...withAttribution, event: eventName });
   };
 
   /**
@@ -35,12 +59,11 @@ export const useGoogleAnalytics = () => {
    * @param pageTitle - Page title
    */
   const trackPageView = (pagePath: string, pageTitle?: string) => {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'page_view', {
-        page_path: pagePath,
-        page_title: pageTitle,
-      });
-    }
+    pushToDataLayer({
+      event: 'page_view',
+      page_path: pagePath,
+      page_title: pageTitle,
+    });
   };
 
   /**
