@@ -6,11 +6,17 @@
  * selbst — sonst liefe die Property doppelt.
  *
  * Was hier trotzdem passieren muss: den `gtag`-Stub sofort bereitstellen.
- * `useGoogleAnalytics().trackEvent` prueft `if (window.gtag)` und verwirft das
- * Event stillschweigend, wenn es die Funktion noch nicht gibt. GTM haengt
- * hinter dem Cookiebot-Banner und laedt entsprechend spaet — jeder Klick davor
- * war bisher verloren. Der Stub schiebt die Aufrufe in dieselbe `dataLayer`,
- * aus der der Google-Tag sie beim Laden nachverarbeitet.
+ * Einige Stellen rufen `window.gtag('event', ...)` noch direkt auf
+ * (useNewsletterSignup, StrapiLandingPage, LandingPageSocial) und wuerden
+ * das Event stillschweigend verwerfen, wenn es die Funktion noch nicht gibt.
+ * GTM haengt hinter dem Cookiebot-Banner und laedt entsprechend spaet. Der
+ * Stub schiebt die Aufrufe in dieselbe `dataLayer`, aus der GTM sie beim
+ * Laden nachverarbeitet.
+ *
+ * `useGoogleAnalytics().trackEvent` braucht den Stub seit #120 nicht mehr: Es
+ * pusht flache Objekte direkt in die Datenschicht, weil die Parameter eines
+ * gtag-Aufrufs in GTM unter `eventModel.*` landen und die Datenschicht-
+ * variablen des Containers (`booking_type` etc.) sie dort nicht sehen.
  *
  * `NUXT_PUBLIC_GA_ID` ist bewusst nicht in `runtimeConfig.public` deklariert.
  * Setzt jemand die Variable trotzdem und ergaenzt den Key, konfiguriert diese
