@@ -6,8 +6,11 @@ Ticket: bfroos/myhb-store#101 · Epic E6 (#103) · Stand: 11.09.2026
 > Struktur**. Es enthält bewusst **keine fertigen Seitentexte**: Grundlage wäre
 > `Ausbildungskonzept_Aerzte-2.pptx` von Rihem Mikhail (Mail „Fwd: Präsentation“
 > vom 12.08.2026, Hessam an Benjamin/Michael). Die Präsentation lag dieser
-> Session nicht vor (siehe „Was fehlt“). Die Texte werden erst geschrieben, wenn
-> die Präsentation da ist, und gehen anschließend zur Freigabe an Hessam/Rihem.
+> Session nicht vor: der angebundene Gmail-Account ist `marketing@myhb.app`,
+> die Mail liegt in Benjamins Postfach `b.roos@myhb.app`; in Google Drive ist
+> die Datei ebenfalls nicht abgelegt (siehe „Was fehlt“). Die Texte werden erst
+> geschrieben, wenn die Präsentation da ist, und gehen anschließend zur Freigabe
+> an Hessam/Rihem.
 
 ## Zielgruppe und Kanal
 
@@ -70,6 +73,11 @@ der Arzt-Stellenanzeige zeigen
 - Route: `app/pages/karriere/aerzte.vue` → `/karriere/aerzte`
 - Inhalte: Strapi-Collection `pages`, Eintrag mit **Slug `karriere-aerzte`**.
   Redaktion pflegt Blöcke, Texte, Videos und SEO ohne Deploy.
+  Der Eintrag ist angelegt: `documentId zsv06zditubao6x2mbrvfa9w` (id 713),
+  **Status Entwurf** (`publishedAt: null`), `blocks` noch leer, `seo` als
+  Entwurfstext gefüllt, `excludeFromSitemap` vorsorglich auf `true`.
+  Solange er Entwurf ist, bleibt `/karriere/aerzte` öffentlich 404 und ist nur
+  über die Strapi-Vorschau sichtbar.
 - SEO: kommt aus dem `seo`-Feld des Strapi-Eintrags (`setPageSeo`).
 - Sprachpfade in `nuxt.config.ts`: `/en/careers/doctors`,
   `/tr/kariyer/doktorlar`, `/ar/masar-mihani/atibba`, `/fr/carrieres/medecins`,
