@@ -1,6 +1,6 @@
 // Strapi proxy with server-side caching.
-// CRITICAL: When __NUXT_PREVIEW cookie is set (via /api/preview route),
-// all requests include status=draft and cache is bypassed.
+// CRITICAL: When the __NUXT_PREVIEW cookie is set (via /api/preview route),
+// the request skips the cache wrapper entirely and carries status=draft.
 
 const FALLBACK_LOCALE = 'de';
 
@@ -143,103 +143,110 @@ function mergeFallback(target: any, fallback: any): any {
   return target; // non-empty primitive: a real translated value, keep it
 }
 
-export default defineCachedEventHandler(
-  async (event) => {
-    const config = useRuntimeConfig(event);
-    const incoming = getRequestURL(event);
-    const siteMode = config.siteMode || config.public.siteMode;
-    const preview = isPreviewRequest(event);
-    const previewStatus = getPreviewStatus(event);
+// Nitro reicht dem inneren Handler von defineCachedEventHandler ein Event, dem
+// die Request-Header fehlen (durchgereicht wird nur, was in opts.varies steht).
+// Das Preview-Cookie ist dort also unsichtbar und jede Anfrage sah aus wie eine
+// veroeffentlichte. Der Preview-Fall wird deshalb aussen am echten Event
+// entschieden: Preview geht ungecacht direkt an Strapi, alles andere weiter
+// durch den Cache.
+async function fetchFromStrapi(
+  event: any,
+  preview: boolean,
+  previewStatus: 'draft' | 'published',
+) {
+  const config = useRuntimeConfig(event);
+  const incoming = getRequestURL(event);
+  const siteMode = config.siteMode || config.public.siteMode;
 
-    setHeader(event, 'X-MyHB-Strapi-Proxy', '1');
-    if (preview) {
-      setHeader(event, 'Cache-Control', 'no-store, no-cache, must-revalidate');
-      setHeader(event, 'Pragma', 'no-cache');
-      setHeader(event, 'Expires', '0');
-    }
+  setHeader(event, 'X-MyHB-Strapi-Proxy', '1');
 
-    if (!config.public.strapiUrl) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Strapi URL missing',
-      });
-    }
+  if (!config.public.strapiUrl) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Strapi URL missing',
+    });
+  }
 
-    const restPath = incoming.pathname.replace(/^\/api\/strapi/, '');
-    const strapiBase = config.public.strapiUrl.replace(/\/+$/, '');
+  const restPath = incoming.pathname.replace(/^\/api\/strapi/, '');
+  const strapiBase = config.public.strapiUrl.replace(/\/+$/, '');
 
-    const params = new URLSearchParams(incoming.search);
-    if (preview) {
-      params.set('status', previewStatus);
-    }
+  const params = new URLSearchParams(incoming.search);
+  if (preview) {
+    params.set('status', previewStatus);
+  }
 
-    const fetchHeaders = {
-      ...(siteMode ? { 'x-site-mode': siteMode } : {}),
-      ...(preview ? { 'strapi-encode-source-maps': 'true' } : {}),
-    };
+  const fetchHeaders = {
+    ...(siteMode ? { 'x-site-mode': siteMode } : {}),
+    ...(preview ? { 'strapi-encode-source-maps': 'true' } : {}),
+  };
 
-    const fetchStrapi = (searchParams: URLSearchParams) => {
-      const search = searchParams.toString() ? `?${searchParams.toString()}` : '';
-      return $fetch(`${strapiBase}/api${restPath}${search}`, {
-        headers: fetchHeaders,
-      });
-    };
+  const fetchStrapi = (searchParams: URLSearchParams) => {
+    const search = searchParams.toString() ? `?${searchParams.toString()}` : '';
+    return $fetch(`${strapiBase}/api${restPath}${search}`, {
+      headers: fetchHeaders,
+    });
+  };
 
-    const requestedLocale = params.get('locale');
-    // A menu lists what exists in a locale, so German must never pad it.
-    const isNavigationIndex = NO_FALLBACK_PATHS.some((re) => re.test(restPath));
-    const wantsFallback =
-      !preview &&
-      !isNavigationIndex &&
-      !!requestedLocale &&
-      requestedLocale !== FALLBACK_LOCALE;
+  const requestedLocale = params.get('locale');
+  // A menu lists what exists in a locale, so German must never pad it.
+  const isNavigationIndex = NO_FALLBACK_PATHS.some((re) => re.test(restPath));
+  const wantsFallback =
+    !preview &&
+    !isNavigationIndex &&
+    !!requestedLocale &&
+    requestedLocale !== FALLBACK_LOCALE;
 
+  try {
+    const primary: any = await fetchStrapi(params);
+    if (!wantsFallback) return primary;
+
+    const data = primary?.data;
+    if (Array.isArray(data)) return primary; // collections: out of scope
+
+    let deResult: any;
     try {
-      const primary: any = await fetchStrapi(params);
-      if (!wantsFallback) return primary;
-
-      const data = primary?.data;
-      if (Array.isArray(data)) return primary; // collections: out of scope
-
-      let deResult: any;
-      try {
-        deResult = await fetchStrapi(withLocale(params, FALLBACK_LOCALE));
-      } catch {
-        return primary; // German fetch failed too; fail open with what we have
-      }
-
-      if (data == null) {
-        return deResult;
-      }
-
-      // The German lookup replays a locale-specific identifier, so confirm it
-      // came back with the same document before merging anything into it.
-      const deData = deResult?.data;
-      const sameDocument =
-        deData &&
-        (!data.documentId ||
-          !deData.documentId ||
-          data.documentId === deData.documentId);
-      if (!sameDocument) return primary;
-
-      return { ...primary, data: mergeFallback(data, deData) };
-    } catch (error: any) {
-      const statusCode = error?.statusCode || error?.status || 500;
-
-      if (wantsFallback && statusCode === 404) {
-        try {
-          return await fetchStrapi(withLocale(params, FALLBACK_LOCALE));
-        } catch {
-        }
-      }
-
-      throw createError({
-        statusCode,
-        statusMessage:
-          error?.statusMessage || error?.message || 'Strapi API error',
-      });
+      deResult = await fetchStrapi(withLocale(params, FALLBACK_LOCALE));
+    } catch {
+      return primary; // German fetch failed too; fail open with what we have
     }
-  },
+
+    if (data == null) {
+      return deResult;
+    }
+
+    // The German lookup replays a locale-specific identifier, so confirm it
+    // came back with the same document before merging anything into it.
+    const deData = deResult?.data;
+    const sameDocument =
+      deData &&
+      (!data.documentId ||
+        !deData.documentId ||
+        data.documentId === deData.documentId);
+    if (!sameDocument) return primary;
+
+    return { ...primary, data: mergeFallback(data, deData) };
+  } catch (error: any) {
+    const statusCode = error?.statusCode || error?.status || 500;
+
+    if (wantsFallback && statusCode === 404) {
+      try {
+        return await fetchStrapi(withLocale(params, FALLBACK_LOCALE));
+      } catch {
+      }
+    }
+
+    throw createError({
+      statusCode,
+      statusMessage:
+        error?.statusMessage || error?.message || 'Strapi API error',
+    });
+  }
+}
+
+// Only published content reaches this handler, so the cache key needs no
+// preview dimension.
+const cachedProxy = defineCachedEventHandler(
+  (event) => fetchFromStrapi(event, false, 'published'),
   {
     maxAge: process.env.NODE_ENV === 'production' ? 60 : 0,
     staleMaxAge: process.env.NODE_ENV === 'production' ? 240 : 0,
@@ -247,25 +254,29 @@ export default defineCachedEventHandler(
       const url = getRequestURL(event);
       const path = url.pathname.replace(/^\/api\/strapi/, '');
 
-      // Include preview status in cache key so draft/published are cached separately
-      const isPreview = isPreviewRequest(event);
-      const previewStatus = getPreviewStatus(event);
-      const previewFlag = isPreview ? `:preview:${previewStatus}` : ':published';
-
-      // Build query string
-      let params = new URLSearchParams(url.search);
-      if (isPreview) {
-        params.set('status', previewStatus);
-      }
+      const params = new URLSearchParams(url.search);
       params.sort();
 
       const config = useRuntimeConfig(event);
       const siteMode = config.siteMode || config.public.siteMode || 'default';
 
-      return `strapi:${path}:${params.toString()}:${siteMode}${previewFlag}`;
+      return `strapi:${path}:${params.toString()}:${siteMode}:published`;
     },
-    // Bypass cache entirely when in preview mode (get latest draft data)
-    shouldBypassCache: (event) => isPreviewRequest(event),
-    shouldInvalidateCache: (event) => false,
+    shouldInvalidateCache: () => false,
   },
 );
+
+export default defineEventHandler((event) => {
+  if (!isPreviewRequest(event)) {
+    return cachedProxy(event);
+  }
+
+  // Drafts must never end up in a shared or browser cache. Nitro's cache
+  // wrapper overwrites Cache-Control with its own max-age, so these headers
+  // only survive outside of it.
+  setHeader(event, 'Cache-Control', 'no-store, no-cache, must-revalidate');
+  setHeader(event, 'Pragma', 'no-cache');
+  setHeader(event, 'Expires', '0');
+
+  return fetchFromStrapi(event, true, getPreviewStatus(event));
+});
