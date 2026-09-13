@@ -1,7 +1,13 @@
 <template>
-  <UiLayoutSectionBlock v-if="hasVideo">
-    <UiLayoutCardSurface :card-settings="cardSettings">
-      <section class="youTubeVideoBlock">
+  <component :is="isInline ? 'div' : SectionBlock" v-if="hasVideo">
+    <component
+      :is="isInline ? 'div' : CardSurface"
+      v-bind="isInline ? {} : { cardSettings }"
+    >
+      <section
+        class="youTubeVideoBlock"
+        :class="{ 'youTubeVideoBlock--inline': isInline }"
+      >
         <header v-if="headline || intro" class="youTubeVideoBlock__header">
           <h2 v-if="headline" class="youTubeVideoBlock__heading">
             {{ headline }}
@@ -12,11 +18,10 @@
           :video-url="videoUrl"
           :poster="poster"
           :title="headline"
-          :aspect-ratio="aspectRatio"
         />
       </section>
-    </UiLayoutCardSurface>
-  </UiLayoutSectionBlock>
+    </component>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -24,6 +29,11 @@ import type { BlockYoutubeVideoDto } from "~/lib/strapi/dto/components";
 import { parseYouTubeUrl } from "~/utils/youtube";
 
 const props = defineProps<BlockYoutubeVideoDto>();
+
+const SectionBlock = resolveComponent("UiLayoutSectionBlock");
+const CardSurface = resolveComponent("UiLayoutCardSurface");
+
+const isInline = inject("blockSurface", "section") === "inline";
 
 const hasVideo = computed(() => !!parseYouTubeUrl(props.videoUrl));
 </script>
@@ -34,6 +44,11 @@ const hasVideo = computed(() => !!parseYouTubeUrl(props.videoUrl));
   flex-direction: column;
   width: 100%;
   padding: var(--space-card-pad);
+}
+
+.youTubeVideoBlock--inline {
+  padding: 0;
+  margin: 2em 0;
 }
 
 .youTubeVideoBlock__header {
@@ -50,5 +65,15 @@ const hasVideo = computed(() => !!parseYouTubeUrl(props.videoUrl));
   margin: var(--space-300) 0 0;
   font-size: var(--font-lg);
   line-height: var(--line-lg);
+}
+
+@media (max-width: 700px) {
+  .youTubeVideoBlock {
+    padding: var(--space-400);
+  }
+
+  .youTubeVideoBlock--inline {
+    padding: 0;
+  }
 }
 </style>
