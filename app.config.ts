@@ -7,9 +7,9 @@ export default defineAppConfig({
      */
     aggregateRating: {
       ratingValue: 4.9,
-      reviewCount: 1547,
+      reviewCount: 1549,
       source: "Google Business Profile (aggregated)",
-      lastUpdated: "2026-09-12",
+      lastUpdated: "2026-09-13",
     },
 
     /**
