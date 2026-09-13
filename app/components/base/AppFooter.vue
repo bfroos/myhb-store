@@ -235,6 +235,7 @@ const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 const PRICE_LINK_OVERRIDES: Record<string, string> = {
   botox: "/p/botox-kosten",
   skinbooster: "/p/skinbooster-preise",
+  "hyaluron-und-filler": "/p/hyaluron-spritzen-kosten",
 };
 
 function priceCategoryLink(category: { slug: string }) {
