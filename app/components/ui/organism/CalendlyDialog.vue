@@ -81,6 +81,11 @@ import {
   withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
+import {
+  inviteeUuidFromUri,
+  markBookingConfirmedFired,
+  writeBookingHandoff,
+} from "~/lib/calendlyBookingHandoff";
 
 const { t } = useI18n();
 const dialogRef = inject("dialogRef") as any;
@@ -132,10 +137,15 @@ function isFromCalendly(e: MessageEvent) {
   return e.origin === CALENDLY_ORIGIN;
 }
 
+// #131: Die Dankesseite, auf die Calendly nach der Buchung weiterleitet, feuert
+// `booking_confirmed` ebenfalls (useBookingThankYouTracking). Die Übergabe im
+// Storage sagt ihr, ob diese Buchung hier schon gemeldet wurde — und liefert
+// Standort/Behandlung nach, falls die Nachricht des Widgets verloren ging.
 useCalendlyEventListener({
   onDateAndTimeSelected: (e: MessageEvent) => {
     if (!isFromCalendly(e)) return;
     trackCalendlyDateTimeSelected(trackingContext());
+    writeBookingHandoff({ ...trackingContext(), fired: false });
   },
   onEventScheduled: (e: MessageEvent) => {
     if (!isFromCalendly(e)) return;
@@ -148,9 +158,17 @@ useCalendlyEventListener({
       if (seenScheduledIds.has(inviteeUri)) return;
       seenScheduledIds.add(inviteeUri);
     }
+    const inviteeUuid = inviteeUuidFromUri(inviteeUri);
+    writeBookingHandoff({
+      ...trackingContext(),
+      invitee_uuid: inviteeUuid,
+      fired: true,
+    });
+    if (inviteeUuid) markBookingConfirmedFired(`calendly:${inviteeUuid}`);
     trackCalendlyBookingConfirmed({
       ...trackingContext(),
-      event_id: inviteeUri,
+      event_id: inviteeUuid ?? inviteeUri,
+      embedded: true,
     });
   },
 });

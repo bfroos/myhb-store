@@ -169,13 +169,23 @@ export const useGoogleAnalytics = () => {
    * Until this existed we only tracked that Calendly *opened*, never that
    * somebody booked — Calendly had a denominator but no numerator.
    *
-   * `event_id` carries the Calendly invitee URI so a booking counts once even
+   * `event_id` carries the Calendly invitee UUID so a booking counts once even
    * if the widget fires the message twice.
+   *
+   * Fires from two places (elanagency/myhb-os#131): the embedded widget
+   * (`embedded: true`) and the thank-you page Calendly redirects to
+   * (`confirmation_page: true`; `embedded` false for bookings made on
+   * calendly.com itself). lib/calendlyBookingHandoff.ts keeps the two from
+   * double counting. `location` is the Calendly calendar's display name
+   * (`assigned_to`) when the thank-you page has no location slug.
    */
   const trackCalendlyBookingConfirmed = (extra?: {
     location_slug?: string;
     treatment_type?: string;
     event_id?: string;
+    embedded?: boolean;
+    location?: string;
+    confirmation_page?: boolean;
   }) => {
     trackEvent('booking_confirmed', {
       event_category: 'conversion',
