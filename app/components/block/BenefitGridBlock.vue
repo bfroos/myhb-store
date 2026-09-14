@@ -1,5 +1,8 @@
 <template>
   <section v-if="hasContent" class="block bg-grid" :class="[themeClass]">
+    <header v-if="headline" class="bg__header">
+      <h2 class="bg__heading">{{ headline }}</h2>
+    </header>
     <ul class="bg__list" role="list">
       <li v-for="(item, index) in items" :key="item.heading ?? index" class="bg__cell">
         <UiLayoutIconWrapper
@@ -21,6 +24,10 @@
 import type { SharedIconHeadingTextDto } from "~/lib/strapi/dto/components";
 
 const props = withDefaults(defineProps<{
+  /* Optional. Die Strapi-Komponente blocks.benefit-grid hat dieses Feld noch
+     nicht — bis es dort ergaenzt wird, bleibt der Block wie bisher ohne
+     Ueberschrift. */
+  headline?: string;
   items?: SharedIconHeadingTextDto[];
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
@@ -39,6 +46,16 @@ const hasContent = computed(() => (props.items?.length ?? 0) > 0);
 }
 @media (min-width: 900px) {
   .bg-grid { grid-template-columns: repeat(4, 1fr); }
+}
+/* .bg-grid ist selbst das Grid (die Liste nutzt display: contents), die
+   Ueberschrift muss deshalb ueber alle Spalten laufen. */
+.bg__header {
+  grid-column: 1 / -1;
+}
+.bg__heading {
+  font-size: var(--font-3xl);
+  line-height: var(--line-3xl);
+  margin: 0;
 }
 .bg__list {
   display: contents;

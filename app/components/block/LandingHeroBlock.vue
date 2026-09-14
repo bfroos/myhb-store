@@ -13,12 +13,54 @@
       </ul>
 
       <div class="hero__cta">
-        <button v-if="primaryCta" type="button" class="button button--primary button--lg button--fullWidth" @click="handlePrimaryCta">
-          {{ primaryCta.label }}
-        </button>
-        <button v-if="secondaryCta" type="button" class="button button--tertiary button--lg button--fullWidth" @click="handleSecondaryCta">
-          {{ secondaryCta.label }}
-        </button>
+        <template v-if="primaryCta">
+          <a
+            v-if="isExternalHref(primaryCta.to)"
+            :href="primaryCta.to"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="button button--primary button--lg button--fullWidth"
+            @click="trackPrimaryCta"
+          >
+            {{ primaryCta.label }}
+          </a>
+          <NuxtLink
+            v-else-if="primaryCta.to"
+            :to="primaryCta.to"
+            class="button button--primary button--lg button--fullWidth"
+            @click="trackPrimaryCta"
+          >
+            {{ primaryCta.label }}
+          </NuxtLink>
+          <button v-else type="button" class="button button--primary button--lg button--fullWidth" @click="handlePrimaryCta">
+            {{ primaryCta.label }}
+          </button>
+        </template>
+
+        <template v-if="secondaryCta">
+          <a
+            v-if="isExternalHref(secondaryCta.to)"
+            :href="secondaryCta.to"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="button button--tertiary button--lg button--fullWidth"
+            @click="trackSecondaryCta"
+          >
+            {{ secondaryCta.label }}
+          </a>
+          <NuxtLink
+            v-else-if="secondaryCta.to"
+            :to="secondaryCta.to"
+            class="button button--tertiary button--lg button--fullWidth"
+            @click="trackSecondaryCta"
+          >
+            {{ secondaryCta.label }}
+          </NuxtLink>
+          <button v-else type="button" class="button button--tertiary button--lg button--fullWidth" @click="handleSecondaryCta">
+            {{ secondaryCta.label }}
+          </button>
+        </template>
+
         <p v-if="priceLabel" class="hero__price">{{ priceLabel }}</p>
       </div>
     </div>
@@ -58,6 +100,14 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{ primary: []; secondary: [] }>();
 
 const { trackCtaClick } = useGoogleAnalytics();
+
+/** Externe Ziele oeffnen wie bisher in einem neuen Tab, interne per NuxtLink. */
+const isExternalHref = (to?: string) => !!to && /^https?:\/\//i.test(to);
+
+/* Liegt ein Ziel vor, navigiert der Link selbst — dann darf kein Event mehr
+   fliegen, sonst wuerde der BlockRenderer ein zweites Mal navigieren. */
+const trackPrimaryCta = () => trackCtaClick('hero');
+const trackSecondaryCta = () => trackCtaClick('hero_secondary');
 
 const handlePrimaryCta = () => {
   trackCtaClick('hero');
@@ -178,6 +228,7 @@ const displayImage = computed(() => mediaToLegacyImage(props.imageMedia) ?? prop
   transition: all 0.15s linear;
   background: transparent;
   color: inherit;
+  text-decoration: none;
 }
 .button--lg { height: var(--control-height-lg); padding-inline: calc(var(--control-height-lg) / 2); }
 .button--fullWidth { width: 100%; }
