@@ -1,12 +1,24 @@
 # Karriere-Landingpage Ärzte — Seitenstruktur und Texte
 
-Ticket: bfroos/myhb-store#101 · Epic E6 (#103) · Stand: 11.09.2026
+Ticket: bfroos/myhb-store#101 · Epic E6 (#103) · Stand: 14.09.2026
 
-> **Status: Entwurf in Strapi, nicht veröffentlicht.** Die Seite ist als
-> Draft-Eintrag `karriere-aerzte` (documentId `zsv06zditubao6x2mbrvfa9w`) mit
-> allen 13 Blöcken befüllt und über die Strapi-Live-Preview ansehbar (siehe
-> `STRAPI_PREVIEW_SETUP.md`). Sie geht erst live, wenn Hessam und Rihem die
-> Texte freigegeben haben — und bis dahin ist `excludeFromSitemap` gesetzt.
+> **Status: veröffentlicht, Texte weiterhin nicht freigegeben.** Der Eintrag
+> `karriere-aerzte` (documentId `zsv06zditubao6x2mbrvfa9w`) wurde am 12.09.2026
+> versehentlich veröffentlicht und ist seitdem unter
+> `https://www.myhealthandbeauty.com/karriere/aerzte` öffentlich erreichbar —
+> inklusive Fixum, Provisionsstaffel und Brutto-Spanne. Die Entscheidung, sie
+> vorerst online zu lassen, ist bewusst gefallen; die Freigabe durch Hessam und
+> Rihem steht aus. Die Seite ist nicht verlinkt und `excludeFromSitemap` bleibt
+> `true`, gefunden wird sie also nur über die direkte URL.
+>
+> Die Bilder (Hero und die sechs Prozessschritte) liegen bislang nur im Draft,
+> sind also **nicht** Teil der öffentlichen Version.
+>
+> **Die Strapi-Live-Preview funktioniert für diese Seite nicht.** Der
+> Preview-Handler in `config/admin.ts` des Strapi-Projekts baut für
+> `api::page.page` den Pfad `/{slug}`, also `/karriere-aerzte`. Die Seite hängt
+> aber unter der festen Route `/karriere/aerzte`. Der Preview-Button läuft damit
+> ins Leere; der Handler braucht einen Sonderfall für Seiten mit fester Route.
 
 ## Quelle der Inhalte
 
@@ -95,16 +107,20 @@ dieses Ziel dort.
 - Inhalte: Strapi-Collection `pages`, Eintrag mit Slug `karriere-aerzte`.
   Redaktion pflegt Blöcke, Texte, Bilder und SEO ohne Deploy.
 - SEO: `metaTitle` und `metaDescription` sind gesetzt. `excludeFromSitemap` ist
-  **bewusst auf `true`**, solange die Texte nicht freigegeben sind.
+  **bewusst auf `true`**, solange die Texte nicht freigegeben sind. Da die Seite
+  seit dem 12.09.2026 öffentlich erreichbar ist, hält das sie zwar aus der
+  Sitemap, verhindert aber keine Indexierung, falls die URL anderweitig bekannt
+  wird.
 - Sprachpfade in `nuxt.config.ts`: `/en/careers/doctors`,
   `/tr/kariyer/doktorlar`, `/ar/masar-mihani/atibba`, `/fr/carrieres/medecins`,
   `/nl/carriere/artsen`.
 - ISR: von der bestehenden Regel `/karriere/**` (12 h) abgedeckt.
-- Solange der Eintrag unveröffentlicht ist, liefert die Route sauber 404.
+- Ohne veröffentlichten Strapi-Eintrag liefert die Route sauber 404. Das war bis
+  zum 12.09.2026 der Fall.
 
 **Noch offen:** Eintrag in `server/routes/sitemap.xml.ts` (`ROUTE_MAP` und
-`staticRoutes`). Kommt erst mit der Veröffentlichung, zusammen mit
-`excludeFromSitemap: false` — sonst steht eine 404-URL in der Sitemap.
+`staticRoutes`), zusammen mit `excludeFromSitemap: false`. Beides erst, wenn die
+Texte freigegeben sind — die Seite soll bis dahin nicht aktiv beworben werden.
 
 ## Offene Punkte — vor der Veröffentlichung zu klären
 
