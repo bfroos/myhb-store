@@ -143,6 +143,99 @@ function mergeFallback(target: any, fallback: any): any {
   return target; // non-empty primitive: a real translated value, keep it
 }
 
+// FAQ sets, their FAQ lists and the page's choice of sets all follow German; FAQ text is translated where it exists.
+type StrapiGet = (path: string, params: URLSearchParams) => Promise<any>;
+
+const FAQ_FIELDS = ['question', 'answer', 'isActive'];
+const FAQ_PAGE_SIZE = 100;
+
+function isFaqHolder(value: any): boolean {
+  return isPlainObject(value) && (Array.isArray(value.faqSets) || Array.isArray(value.faqs));
+}
+
+function isSameEntity(target: any, fallback: any): boolean {
+  if (!isPlainObject(fallback)) return false;
+  if ('__component' in target && '__component' in fallback && target.__component !== fallback.__component) return false;
+  return !(target.documentId && fallback.documentId && target.documentId !== fallback.documentId);
+}
+
+function alignFaqHolders(target: any, fallback: any, holders: any[]): any {
+  if (Array.isArray(target)) {
+    const aligned = Array.isArray(fallback) && fallback.length === target.length;
+    return target.map((item, i) => alignFaqHolders(item, aligned ? fallback[i] : undefined, holders));
+  }
+  if (!isPlainObject(target)) return target;
+
+  const fb = isSameEntity(target, fallback) ? fallback : undefined;
+  if (isFaqHolder(target) || isFaqHolder(fb)) {
+    const holder = { ...target };
+    if (Array.isArray(fb?.faqSets)) holder.faqSets = fb.faqSets;
+    if (Array.isArray(fb?.faqs)) holder.faqs = fb.faqs;
+    holders.push(holder);
+    return holder;
+  }
+
+  const result: Record<string, any> = { ...target };
+  for (const key of new Set([...Object.keys(target), ...Object.keys(fb ?? {})])) {
+    if (SKIP_MERGE_KEYS.has(key)) continue;
+    if (isEmptyValue(target[key]) && isFaqHolder(fb?.[key])) {
+      result[key] = alignFaqHolders({}, fb[key], holders);
+    } else if (key in target) {
+      result[key] = alignFaqHolders(target[key], fb?.[key], holders);
+    }
+  }
+  return result;
+}
+
+function uniqueDocumentIds(items: any[]): string[] {
+  return [...new Set(items.map((item) => item?.documentId).filter(Boolean))] as string[];
+}
+
+async function findByDocumentIds(get: StrapiGet, path: string, locale: string, documentIds: string[], extra: Record<string, string>) {
+  const found: any[] = [];
+  for (let start = 0; start < documentIds.length; start += FAQ_PAGE_SIZE) {
+    const params = new URLSearchParams({ locale, 'pagination[pageSize]': String(FAQ_PAGE_SIZE), ...extra });
+    documentIds.slice(start, start + FAQ_PAGE_SIZE).forEach((id, i) => params.set(`filters[documentId][$in][${i}]`, id));
+    const response = await get(path, params);
+    if (Array.isArray(response?.data)) found.push(...response.data);
+  }
+  return found;
+}
+
+async function applyGermanFaqMaster(data: any, deData: any, locale: string, get: StrapiGet): Promise<any> {
+  const holders: any[] = [];
+  const aligned = alignFaqHolders(data, deData, holders);
+  if (!holders.length) return data;
+
+  const faqFields = Object.fromEntries(FAQ_FIELDS.map((field, i) => [`fields[${i}]`, field]));
+  const setFaqFields = Object.fromEntries(FAQ_FIELDS.map((field, i) => [`populate[faqs][fields][${i}]`, field]));
+
+  const setIds = uniqueDocumentIds(holders.flatMap((holder) => holder.faqSets ?? []));
+  const masterSets = setIds.length
+    ? await findByDocumentIds(get, '/faq-sets', FALLBACK_LOCALE, setIds, setFaqFields)
+    : [];
+  const masterById = new Map(masterSets.map((set) => [set.documentId, set]));
+
+  const faqIds = uniqueDocumentIds([
+    ...holders.flatMap((holder) => holder.faqs ?? []),
+    ...masterSets.flatMap((set) => set.faqs ?? []),
+  ]);
+  const translated = faqIds.length ? await findByDocumentIds(get, '/faqs', locale, faqIds, faqFields) : [];
+  const translatedById = new Map(translated.map((faq) => [faq.documentId, faq]));
+  const pick = (faq: any) => translatedById.get(faq?.documentId) ?? faq;
+
+  for (const holder of holders) {
+    if (Array.isArray(holder.faqSets)) {
+      holder.faqSets = holder.faqSets.map((set: any) => {
+        const master = masterById.get(set?.documentId);
+        return master ? { ...set, faqs: (master.faqs ?? []).map(pick) } : set;
+      });
+    }
+    if (Array.isArray(holder.faqs)) holder.faqs = holder.faqs.map(pick);
+  }
+  return aligned;
+}
+
 export default defineCachedEventHandler(
   async (event) => {
     const config = useRuntimeConfig(event);
@@ -222,7 +315,15 @@ export default defineCachedEventHandler(
           data.documentId === deData.documentId);
       if (!sameDocument) return primary;
 
-      return { ...primary, data: mergeFallback(data, deData) };
+      let withFaqs = data;
+      try {
+        withFaqs = await applyGermanFaqMaster(data, deData, requestedLocale as string, (path, searchParams) =>
+          $fetch(`${strapiBase}/api${path}?${searchParams.toString()}`, { headers: fetchHeaders }),
+        );
+      } catch {
+      }
+
+      return { ...primary, data: mergeFallback(withFaqs, deData) };
     } catch (error: any) {
       const statusCode = error?.statusCode || error?.status || 500;
 
