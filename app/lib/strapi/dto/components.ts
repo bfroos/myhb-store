@@ -256,6 +256,7 @@ export type BlockYoutubeVideoDto = {
   headline?: string;
   intro?: string;
   videoUrl?: string;
+  embedCode?: string;
   poster?: StrapiMedia;
   cardSettings?: CardSettingsDto;
 };
