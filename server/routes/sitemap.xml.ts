@@ -144,6 +144,16 @@ const ROUTE_MAP: Record<
     base: "/karriere",
     locales: { en: "/careers", tr: "/kariyer", ar: "/masar-mihani", fr: "/carrieres", nl: "/carriere" },
   },
+  careerDoctors: {
+    base: "/karriere/aerzte",
+    locales: {
+      en: "/careers/doctors",
+      tr: "/kariyer/doktorlar",
+      ar: "/masar-mihani/atibba",
+      fr: "/carrieres/medecins",
+      nl: "/carriere/artsen",
+    },
+  },
   job: {
     base: "/karriere/jobs/[slug]",
     locales: {
@@ -354,6 +364,11 @@ export default defineCachedEventHandler(
         { key: "locations" },
         { key: "blog" },
         { key: "career" },
+        // Feste Route mit Inhalt aus dem pages-Eintrag "karriere-aerzte" (#101).
+        // Sie kann nicht aus der pages-Schleife weiter unten kommen: die baut
+        // /p/[slug], und genau diese Zwillings-URL leitet jetzt per 301 hierher.
+        // Der Eintrag behaelt deshalb excludeFromSitemap: true.
+        { key: "careerDoctors" },
         { key: "prices" },
         { key: "about" },
         { key: "doctors" },
