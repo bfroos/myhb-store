@@ -87,10 +87,19 @@ const hasSteps = computed(() => (props.steps?.length ?? 0) > 0);
 }
 
 .steps__heading {
-  font-size: var(--font-4xl);
-  line-height: var(--line-4xl);
+  /* 4xl waere hier zu gross: "Entwicklungsstufen" braucht bei 40px 376px, die
+     Spalte ist 377px breit — es bricht also faktisch immer. Mobil (281px) ist
+     der Abstand noch groesser. Die Groessen unten lassen das Wort ganz. */
+  font-size: var(--font-2xl);
+  line-height: var(--line-2xl);
   margin: 0 0 var(--space-600);
 }
+
+/* Die globale Trennung aus main.css (hyphens: auto) bleibt bewusst aktiv:
+   Schaltet man sie ab, greift stattdessen overflow-wrap und bricht
+   "Herstellerzertifizierun|g" ohne Bindestrich um — schlechter als eine
+   saubere Trennung. Stattdessen sind die Groessen unten so gewaehlt, dass die
+   langen Komposita in die Spalte passen und gar nicht erst getrennt werden. */
 
 .steps__intro {
   margin-bottom: var(--space-600);
@@ -158,6 +167,10 @@ const hasSteps = computed(() => (props.steps?.length ?? 0) > 0);
 
 .steps__title {
   margin: 0 0 var(--space-200);
+  /* 33px (h3-Default) sprengen die Mobilspalte: "Herstellerzertifizierung"
+     braucht dort 364px bei 281px Platz. Bei 23px passt es ohne Umbruch. */
+  font-size: var(--font-xl);
+  line-height: var(--line-xl);
 }
 
 .steps__text {
@@ -191,6 +204,12 @@ const hasSteps = computed(() => (props.steps?.length ?? 0) > 0);
   .steps__image :deep(img),
   .steps__image {
     aspect-ratio: 5 / 4;
+  }
+
+  .steps__heading,
+  .steps__title {
+    font-size: var(--font-3xl);
+    line-height: var(--line-3xl);
   }
 }
 </style>
