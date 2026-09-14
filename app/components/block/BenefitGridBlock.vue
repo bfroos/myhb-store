@@ -73,6 +73,17 @@ const hasContent = computed(() => (props.items?.length ?? 0) > 0);
   text-align: center;
   gap: var(--space-300);
   box-shadow: var(--shadow-1);
+  /* Grid-Items haben von sich aus min-width:auto und schrumpfen damit nie
+     unter die min-content-Breite ihres laengsten Wortes. Bei Komposita wie
+     "Herstellerzertifizierungen" sprengt das die 1fr-Spalte und die ganze
+     Seite scrollt auf dem Handy horizontal.
+     hyphens statt overflow-wrap:anywhere: anywhere trennt auch dort, wo ein
+     normaler Umbruch reichen wuerde ("Produktspezifisc/hes"). hyphens:auto
+     trennt nach Silben und setzt einen Trennstrich; break-word bleibt als
+     Notausgang fuer Woerter, die auch getrennt nicht passen. */
+  min-width: 0;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 .bg__icon { color: var(--color-text-light); }
 .bg__h {
