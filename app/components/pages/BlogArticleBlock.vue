@@ -134,6 +134,8 @@ defineProps<{
 }
 
 .blogArticle__main {
+  /* Page-width gutters would squeeze full-width blocks inside the article column. */
+  --container-pad: 0px;
   padding: var(--space-card-pad);
 }
 
