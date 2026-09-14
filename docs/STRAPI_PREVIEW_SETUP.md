@@ -2,6 +2,14 @@
 
 Complete guide to get instant preview updates working for `www.myhealthandbeauty.com`.
 
+> ⚠️ **Das frühere `PREVIEW_SECRET` steht im Klartext in der Git-History dieser
+> Datei und gilt damit als kompromittiert.** Es wurde hier durch einen
+> Platzhalter ersetzt, was den Wert in der History **nicht** entfernt. Wer das
+> Secret kennt, kann über `/api/preview` unveröffentlichte Inhalte lesen.
+> Erforderlich: neues Secret erzeugen und in Strapi (`.env`) **und** Vercel
+> setzen — beide Seiten müssen übereinstimmen. Echte Werte gehören nie in
+> committete Dateien.
+
 ---
 
 ## 🎯 Problems Solved
@@ -80,7 +88,7 @@ function getPreviewPathname(uid, { locale, document }): string | null {
 
 ```env
 CLIENT_URL=https://www.myhealthandbeauty.com
-PREVIEW_SECRET=KatWVxAyGAJMiBpbxOSkNpxDIo0Z5jOIPf82I9fTB2M=
+PREVIEW_SECRET=<dein-preview-secret>
 ```
 
 ---
@@ -98,7 +106,7 @@ PREVIEW_SECRET=KatWVxAyGAJMiBpbxOSkNpxDIo0Z5jOIPf82I9fTB2M=
 
 ```env
 # Must match Strapi PREVIEW_SECRET
-PREVIEW_SECRET=KatWVxAyGAJMiBpbxOSkNpxDIo0Z5jOIPf82I9fTB2M=
+PREVIEW_SECRET=<dein-preview-secret>
 
 # For webhook revalidation (generate random secret)
 STRAPI_WEBHOOK_SECRET=your-random-webhook-secret
@@ -158,7 +166,7 @@ Expected response:
 ```bash
 # Set via Vercel Dashboard or CLI
 vercel env add PREVIEW_SECRET production
-# Paste: KatWVxAyGAJMiBpbxOSkNpxDIo0Z5jOIPf82I9fTB2M=
+# Paste: <dein-preview-secret>
 
 vercel env add STRAPI_WEBHOOK_SECRET production
 # Paste your generated secret
