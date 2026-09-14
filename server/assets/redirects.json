@@ -11348,5 +11348,35 @@
     "from": "/produkte/btx/btx",
     "to": "/behandlungen/botox",
     "code": 301
+  },
+  {
+    "from": "/p/karriere-aerzte",
+    "to": "/karriere/aerzte",
+    "code": 301
+  },
+  {
+    "from": "/en/p/karriere-aerzte",
+    "to": "/en/careers/doctors",
+    "code": 301
+  },
+  {
+    "from": "/tr/p/karriere-aerzte",
+    "to": "/tr/kariyer/doktorlar",
+    "code": 301
+  },
+  {
+    "from": "/ar/p/karriere-aerzte",
+    "to": "/ar/masar-mihani/atibba",
+    "code": 301
+  },
+  {
+    "from": "/fr/p/karriere-aerzte",
+    "to": "/fr/carrieres/medecins",
+    "code": 301
+  },
+  {
+    "from": "/nl/p/karriere-aerzte",
+    "to": "/nl/carriere/artsen",
+    "code": 301
   }
 ]
