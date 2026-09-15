@@ -137,7 +137,18 @@ provide("blockSurface", "inline");
 }
 
 .blogArticle__main {
+  --container-pad: 0;
   padding: var(--space-card-pad);
+}
+
+.blogArticle .blogArticle__main :deep(.faq) {
+  flex-direction: column;
+}
+
+.blogArticle .blogArticle__main :deep(.faq__header) {
+  flex: none;
+  border-right: none;
+  border-bottom: 1px solid var(--color-border-mute);
 }
 
 .blogArticle__footer {
