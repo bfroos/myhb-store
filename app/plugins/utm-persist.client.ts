@@ -1,5 +1,5 @@
 /**
- * MYH&B UTM-Persistenz v1.3
+ * MYH&B UTM-Persistenz v1.4
  *
  * v1.0: Speichert utm_*, gclid, fbclid, ttclid beim Erstbesuch (First Touch)
  * und dekoriert automatisch alle Calendly-URLs (Links, Embeds, Popups) sowie
@@ -30,6 +30,15 @@
  *   bzw. Klick-ID) mit ft_-Praefix, und nur wenn das Feld sonst leer bliebe.
  *   Echte Kampagnenwerte haben Vorrang. Wirkt erst, wenn der Calendly-Sub die
  *   beiden Felder auswertet.
+ *
+ * v1.4 (E1 #126): Consent-Stand an Calendly. salesforce_uuid traegt zusaetzlich
+ * "c:1" (Cookiebot-Marketing-Consent erteilt) oder "c:0" (abgelehnt), mit
+ * Semikolon an die Klick-ID gehaengt ("fbclid:…;c:1"), ohne Klick-ID allein.
+ * Hat die Person das Banner noch nicht beantwortet oder ist Cookiebot nicht
+ * geladen, gibt es keinen Stempel (unbekannt). n8n T14 schreibt daraus
+ * appointment_attribution.marketing_consent; die Meta-CAPI sendet nur bei c:1.
+ * Nach Accept/Decline werden die Calendly-URLs neu dekoriert, damit der
+ * Stempel den Stand im Moment der Buchung traegt.
  *
  * Consent: Mit Cookiebot-Marketing-Consent 90 Tage persistent (First-Party-
  * Cookie + localStorage), ohne Consent nur sessionStorage. Bei nachtraeglichem
@@ -68,6 +77,14 @@ export default defineNuxtPlugin(() => {
     const cb = (window as any).Cookiebot;
     if (!cb || !cb.consent) return true;
     return !!cb.consent.marketing;
+  }
+  // v1.4: Consent-Stempel fuer Calendly. Nur wenn Cookiebot geladen ist und die
+  // Person geantwortet hat (consented/declined); sonst null = unbekannt.
+  function consentStamp(): string | null {
+    const cb = (window as any).Cookiebot;
+    if (!cb || !cb.consent) return null;
+    if (cb.consented !== true && cb.declined !== true) return null;
+    return cb.consent.marketing === true ? "c:1" : "c:0";
   }
 
   // ---------- Storage ----------
@@ -227,8 +244,18 @@ export default defineNuxtPlugin(() => {
       // verloren gehen, nur weil die Person spaeter organisch zurueckkam.
       const first = store && store.first ? store.first : null;
       const cid = clickIdOf(data) || clickIdOf(first);
-      if (cid && !u.searchParams.get("salesforce_uuid")) {
-        u.searchParams.set("salesforce_uuid", cid);
+      // v1.4 (#126): salesforce_uuid = "<klick-id>;c:1" | "<klick-id>" | "c:0" | …
+      // Eine schon vorhandene Klick-ID in der URL hat Vorrang; ein alter
+      // Consent-Stempel wird durch den aktuellen ersetzt.
+      const vorhanden = (u.searchParams.get("salesforce_uuid") || "")
+        .split(";")
+        .filter((p) => p !== "" && p !== "c:1" && p !== "c:0");
+      const teile = vorhanden.length ? vorhanden : cid ? [cid] : [];
+      const stamp = consentStamp();
+      if (stamp) teile.push(stamp);
+      if (teile.length) {
+        const sfid = teile.join(";");
+        if (u.searchParams.get("salesforce_uuid") !== sfid) u.searchParams.set("salesforce_uuid", sfid);
       }
       // v1.3: First Touch zusaetzlich mitgeben, wenn er ein anderer Besuch war
       // als der Last Touch. utm_term/utm_content werden nur belegt, wenn sie
@@ -310,5 +337,7 @@ export default defineNuxtPlugin(() => {
   window.addEventListener("CookiebotOnAccept", () => {
     const data = load();
     if (data) save(data);
+    run(); // v1.4: Consent-Stempel in den Calendly-URLs aktualisieren
   });
+  window.addEventListener("CookiebotOnDecline", run);
 });
