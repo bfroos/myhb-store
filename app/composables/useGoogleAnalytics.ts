@@ -19,6 +19,7 @@
  * nach, fruehe Klicks vor dem Consent-Banner gehen nicht verloren.
  */
 import { readGaAttributionParams } from "~/lib/attribution";
+import { readActiveAbVariant } from "~/lib/bookingAbTest";
 
 type DataLayerObject = Record<string, unknown> & { event: string };
 
@@ -44,11 +45,25 @@ export const useGoogleAnalytics = () => {
     // App-Buchungen im selben Funnel nach Kanal aufteilen — die App schickt
     // dieselben Feldnamen mit `booking_confirmed`. Explizite Parameter des
     // Aufrufers gewinnen.
-    const params = eventParams || {};
-    const withAttribution =
-      params.event_category === 'conversion'
-        ? { ...(readGaAttributionParams() ?? {}), ...params }
-        : params;
+    // Leere Felder rausfiltern: Ein `ab_variant: undefined` aus einem
+    // Aufrufer-Objekt wuerde sonst den Wert aus dem Speicher ueberschreiben.
+    const params = Object.fromEntries(
+      Object.entries(eventParams ?? {}).filter(([, v]) => v !== undefined),
+    ) as Record<string, any>;
+    // #100: `ab_variant` haengt an jedem Conversion-Event, sobald der Besucher
+    // einen Buchungsweg unter dem A/B-Split geoeffnet hat — auch an denen, die
+    // erst spaeter kommen (booking_datetime_selected, booking_confirmed auf der
+    // Dankesseite). Ohne Split bleibt der Parameter weg und GA4 zeigt fuer den
+    // Rest sauber "(not set)".
+    const isConversion = params.event_category === 'conversion';
+    const abVariant = isConversion ? readActiveAbVariant() : undefined;
+    const withAttribution = isConversion
+      ? {
+          ...(readGaAttributionParams() ?? {}),
+          ...(abVariant ? { ab_variant: abVariant } : {}),
+          ...params,
+        }
+      : params;
     // `event` zuletzt, damit kein Parameter den Ereignisnamen ueberschreibt.
     pushToDataLayer({ ...withAttribution, event: eventName });
   };
@@ -117,7 +132,13 @@ export const useGoogleAnalytics = () => {
    */
   const trackBookingClick = (
     bookingType: 'calendly' | 'app' | 'location_search' = 'calendly',
-    extra?: { location_slug?: string; treatment_type?: string; cta_location?: string },
+    extra?: {
+      location_slug?: string;
+      treatment_type?: string;
+      cta_location?: string;
+      /** Variante des A/B-Splits (#100), falls der Standort im Test ist. */
+      ab_variant?: 'app' | 'calendly';
+    },
   ) => {
     trackEvent('click_booking', {
       event_category: 'conversion',
@@ -134,11 +155,13 @@ export const useGoogleAnalytics = () => {
   const trackBookingLocationSelected = (
     bookingType: 'calendly' | 'app',
     locationSlug?: string,
+    abVariant?: 'app' | 'calendly',
   ) => {
     trackEvent('booking_location_selected', {
       event_category: 'conversion',
       booking_type: bookingType,
       location_slug: locationSlug,
+      ...(abVariant ? { ab_variant: abVariant } : {}),
     });
   };
 

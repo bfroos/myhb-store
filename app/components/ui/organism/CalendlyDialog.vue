@@ -91,6 +91,7 @@ const { t } = useI18n();
 const dialogRef = inject("dialogRef") as any;
 const params = ref<any>({});
 const { openAppBookingDialog } = useAppBookingDialog();
+const { resolveBooking } = useBookingAbTest();
 const {
   trackBookingLocationSelected,
   trackCalendlyDateTimeSelected,
@@ -173,27 +174,40 @@ useCalendlyEventListener({
   },
 });
 
-function handleLocationBook(location: { calendlyUrl?: string; slug?: string }) {
+function handleLocationBook(location: {
+  calendlyUrl?: string;
+  appBookingUrl?: string;
+  slug?: string;
+}) {
   if (!location.calendlyUrl) return;
+  // #100: Der Standort steht erst hier fest — also faellt auch die
+  // A/B-Entscheidung erst hier. Ohne Freigabe kommt die Calendly-URL zurueck.
+  const { url: targetUrl, abVariant } = resolveBooking({
+    calendlyUrl: location.calendlyUrl,
+    appBookingUrl: location.appBookingUrl,
+    locationSlug: location.slug,
+  });
   // Deeplink #66: Wurde der Dialog von einer Behandlungsseite geoeffnet, haengt
   // der Behandlungs-Slug auch an der App-URL des erst hier gewaehlten
   // Standorts, damit die Behandlung in der App vorausgewaehlt ist.
   const bookingUrl =
-    withAppTreatmentSlug(
-      location.calendlyUrl,
-      params.value?.appTreatmentSlug,
-    ) ?? location.calendlyUrl;
+    withAppTreatmentSlug(targetUrl, params.value?.appTreatmentSlug) ??
+    location.calendlyUrl;
   const isApp = isAppBookingUrl(bookingUrl);
   // Conversion-Audit #67: Standortwahl im Dialog tracken, aufgeteilt nach
   // Buchungssystem (Calendly vs. App), damit die Migration messbar ist.
-  trackBookingLocationSelected(isApp ? "app" : "calendly", location.slug);
+  trackBookingLocationSelected(
+    isApp ? "app" : "calendly",
+    location.slug,
+    abVariant,
+  );
   bookedLocationSlug.value = location.slug;
   // If the picked location already uses the in-app booking flow, close this
   // Calendly dialog and open the in-app iframe dialog instead. Calendly
   // locations keep rendering the inline widget in place as before.
   if (isApp) {
     dialogRef.value.close();
-    openAppBookingDialog(t("cta.bookAppointment"), bookingUrl);
+    openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, { abVariant });
     return;
   }
   params.value = { ...params.value, url: bookingUrl };

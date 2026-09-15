@@ -91,6 +91,8 @@ export type MoleculeLocationItem = {
   buildingImage?: StrapiMedia;
   distanceInKilometers?: number;
   calendlyUrl?: string;
+  /** App-Buchungs-URL des Standorts (#97), Gegenstueck zu calendlyUrl. */
+  appBookingUrl?: string;
   coordinates?: SharedCoordinatesDto;
   /** Google Place ID fuer die statische Bewertungsanzeige (GOOGLE_RATINGS). */
   googlePlaceId?: string;

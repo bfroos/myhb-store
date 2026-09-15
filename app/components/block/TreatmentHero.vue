@@ -70,6 +70,8 @@
                     :button="cta"
                     :data="{
                       calendlyUrl: calendlyUrl,
+                      appBookingUrl: appBookingUrl,
+                      locationSlug: locationSlug,
                       appTreatmentSlug: appTreatmentSlug,
                       treatmentType: treatment?.type,
                     }"
@@ -89,6 +91,8 @@
                   }"
                   :data="{
                     calendlyUrl: calendlyUrl,
+                    appBookingUrl: appBookingUrl,
+                    locationSlug: locationSlug,
                     appTreatmentSlug: appTreatmentSlug,
                     treatmentType: treatment?.type,
                   }"
@@ -172,6 +176,8 @@
               :button="cta"
               :data="{
                 calendlyUrl: calendlyUrl,
+                appBookingUrl: appBookingUrl,
+                locationSlug: locationSlug,
                 appTreatmentSlug: appTreatmentSlug,
                 treatmentType: treatment?.type,
               }"
