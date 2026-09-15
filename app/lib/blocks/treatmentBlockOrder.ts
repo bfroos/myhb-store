@@ -39,9 +39,9 @@ export const COMMON_TREATMENT_BLOCK_ORDER: string[] = [
 export const LOCATION_SEO_BLOCK_ORDER: string[] = [
   "hero",
   "locationContact",
-  "aboutLocation",
   "locationDirections",
   ...COMMON_TREATMENT_BLOCK_ORDER,
+  "aboutLocation",
   "blocks",
 ];
 
