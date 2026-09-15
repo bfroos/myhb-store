@@ -44,7 +44,11 @@ export const useGoogleAnalytics = () => {
     // App-Buchungen im selben Funnel nach Kanal aufteilen — die App schickt
     // dieselben Feldnamen mit `booking_confirmed`. Explizite Parameter des
     // Aufrufers gewinnen.
-    const params = eventParams || {};
+    // Leere Felder rausfiltern: Ein `ab_variant: undefined` aus einem
+    // Aufrufer-Objekt wuerde sonst den Wert aus dem Speicher ueberschreiben.
+    const params = Object.fromEntries(
+      Object.entries(eventParams ?? {}).filter(([, v]) => v !== undefined),
+    ) as Record<string, any>;
     const withAttribution =
       params.event_category === 'conversion'
         ? { ...(readGaAttributionParams() ?? {}), ...params }
@@ -117,7 +121,15 @@ export const useGoogleAnalytics = () => {
    */
   const trackBookingClick = (
     bookingType: 'calendly' | 'app' | 'location_search' = 'calendly',
-    extra?: { location_slug?: string; treatment_type?: string; cta_location?: string },
+    extra?: {
+      location_slug?: string;
+      treatment_type?: string;
+      cta_location?: string;
+      /** Variante des A/B-Splits (#100), falls der Besucher im Test ist. */
+      ab_variant?: 'app' | 'calendly';
+      /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
+      ab_fallback?: boolean;
+    },
   ) => {
     trackEvent('click_booking', {
       event_category: 'conversion',
@@ -134,11 +146,13 @@ export const useGoogleAnalytics = () => {
   const trackBookingLocationSelected = (
     bookingType: 'calendly' | 'app',
     locationSlug?: string,
+    ab?: { ab_variant?: 'app' | 'calendly'; ab_fallback?: boolean },
   ) => {
     trackEvent('booking_location_selected', {
       event_category: 'conversion',
       booking_type: bookingType,
       location_slug: locationSlug,
+      ...(ab ?? {}),
     });
   };
 
@@ -150,6 +164,8 @@ export const useGoogleAnalytics = () => {
   const trackCalendlyDateTimeSelected = (extra?: {
     location_slug?: string;
     treatment_type?: string;
+    ab_variant?: 'app' | 'calendly';
+    ab_fallback?: boolean;
   }) => {
     trackEvent('booking_datetime_selected', {
       event_category: 'conversion',
@@ -186,6 +202,10 @@ export const useGoogleAnalytics = () => {
     embedded?: boolean;
     location?: string;
     confirmation_page?: boolean;
+    /** Variante des A/B-Splits (#100), falls die Buchung aus dem Test kommt. */
+    ab_variant?: 'app' | 'calendly';
+    /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
+    ab_fallback?: boolean;
   }) => {
     trackEvent('booking_confirmed', {
       event_category: 'conversion',

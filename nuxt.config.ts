@@ -469,6 +469,11 @@ export default defineNuxtConfig({
       googleMapsKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY,
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
       siteMode: process.env.NUXT_PUBLIC_SITE_MODE,
+      // A/B-Split Calendly vs. App-Buchung (#100): Anteil der Besucher in
+      // Prozent, die die App-Buchung bekommen. Leer/0 = alle bekommen
+      // Calendly; das ist der Auslieferungszustand. Wirkt nur im
+      // Ads-Deployment, siehe app/lib/bookingAbTest.ts.
+      abBookingSplit: process.env.NUXT_PUBLIC_AB_BOOKING_SPLIT,
     },
   },
 

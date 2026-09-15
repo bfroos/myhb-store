@@ -82,6 +82,12 @@ export function useBookingThankYouTracking() {
       embedded,
       location_slug: sameBooking ? handoff?.location_slug : undefined,
       treatment_type: sameBooking ? handoff?.treatment_type : undefined,
+      // #100: Die Variante kommt aus der Uebergabe, nicht aus dem Bucket-Cookie.
+      // Der Cookie sagt nur, in welchem Arm der Besucher ist — die Uebergabe
+      // sagt, dass DIESE Buchung aus einem Dialog unter dem Split stammt. Sonst
+      // zaehlte eine spaetere Buchung ueber eine SEO-Seite mit in den Test.
+      ab_variant: sameBooking ? handoff?.ab_variant : undefined,
+      ab_fallback: sameBooking ? handoff?.ab_fallback : undefined,
       // Calendly-Anzeigename des Standort-Kalenders, wenn kein Slug bekannt ist.
       location: assignedTo,
       confirmation_page: true,

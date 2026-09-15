@@ -94,6 +94,11 @@ export function mapLocationTreatmentPageFixedBlocks(
       treatment: treatmentPage.treatment,
       cta: link,
       calendlyUrl: location?.calendlyUrl,
+      // #97/#100: Die zweite Buchungs-URL und der Standort-Slug wandern mit,
+      // damit der Buchungs-Button beim Klick zwischen Calendly und App
+      // waehlen kann. Ohne Freigabe bleibt es bei Calendly.
+      appBookingUrl: location?.appBookingUrl,
+      locationSlug: location?.slug,
       // Deeplink #66: Der Slug wird beim Öffnen des Dialogs als
       // treatment=<slug> an die App-Buchungs-URL gehängt (Calendly-URLs
       // bleiben unverändert), damit die Behandlung in der App vorausgewählt

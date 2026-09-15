@@ -1,6 +1,7 @@
 import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { readWireAttribution } from "~/lib/attribution";
+import type { BookingVariant } from "~/lib/bookingAbTest";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -195,6 +196,14 @@ export function collectAttributionParams(): Record<string, string> {
 export type AppBookingUrlOptions = {
   /** Rabattcode (z. B. Neukundenrabatt nach Newsletter-Anmeldung, #82/#74). */
   promo?: string | null;
+  /**
+   * Variante des A/B-Splits (#100). Geht als `ab_variant` an die App mit: Die
+   * Buchung wird im iframe auf app.myhealthandbeauty.com abgeschlossen, das
+   * abschliessende `booking_confirmed` pusht also die App in ihre eigene
+   * Datenschicht. Ohne diesen Parameter liesse sich die Conversion der
+   * App-Variante nicht gegen die von Calendly stellen.
+   */
+  abVariant?: BookingVariant | null;
 };
 
 /**
@@ -216,6 +225,9 @@ export function buildBookingUrl(
     }
     if (options?.promo && !url.searchParams.has("promo")) {
       url.searchParams.set("promo", options.promo);
+    }
+    if (options?.abVariant && !url.searchParams.has("ab_variant")) {
+      url.searchParams.set("ab_variant", options.abVariant);
     }
     return url.toString();
   } catch {

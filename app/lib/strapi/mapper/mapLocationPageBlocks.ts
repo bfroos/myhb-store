@@ -76,6 +76,11 @@ export function mapLocationFixedBlocks(
       showCompanyLogos: true,
       showReviews: true,
       calendlyUrl: location?.calendlyUrl,
+      // #97/#100: Die zweite Buchungs-URL und der Standort-Slug wandern mit,
+      // damit der Buchungs-Button beim Klick zwischen Calendly und App
+      // waehlen kann. Ohne Freigabe bleibt es bei Calendly.
+      appBookingUrl: location?.appBookingUrl,
+      locationSlug: location?.slug,
       googlePlaceId: location?.googlePlaceId ?? undefined,
     };
   }

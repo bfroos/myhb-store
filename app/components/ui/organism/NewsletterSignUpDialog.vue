@@ -196,6 +196,8 @@ async function handleSubmit() {
   const booking = dialogRef?.value?.data as
     | {
         calendlyUrl?: string;
+        appBookingUrl?: string;
+        locationSlug?: string;
         treatmentType?: TreatmentType;
         appTreatmentSlug?: string;
       }
@@ -209,6 +211,10 @@ async function handleSubmit() {
       booking.calendlyUrl,
       booking.treatmentType,
       booking.appTreatmentSlug,
+      {
+        appBookingUrl: booking.appBookingUrl,
+        locationSlug: booking.locationSlug,
+      },
     );
   }
 }

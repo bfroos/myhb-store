@@ -296,6 +296,10 @@ export type BlockTreatmentHeroDto = {
   treatment?: TreatmentDto;
   cardSettings?: CardSettingsDto;
   calendlyUrl?: string;
+  /** App-Buchungs-URL des Standorts (#97), Gegenstueck zu calendlyUrl. */
+  appBookingUrl?: string;
+  /** Standort-Slug — entscheidet ueber die Freigabe des A/B-Splits (#100). */
+  locationSlug?: string;
   /** Behandlungs-Slug fuer den App-Deeplink (`?treatment=`), siehe #66. */
   appTreatmentSlug?: string;
   googlePlaceId?: string;

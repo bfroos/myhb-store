@@ -83,6 +83,9 @@ export function mapTreatmentCommonFixedBlocks(
       action: SharedButtonAction.APPOINTMENT_BOOKING,
       data: {
         calendlyUrl: location?.calendlyUrl,
+        // #97/#100: zweite Buchungs-URL + Standort-Slug fuer den A/B-Split.
+        appBookingUrl: location?.appBookingUrl,
+        locationSlug: location?.slug,
         // Deeplink #66: Behandlung in der App vorauswählen. Ohne Standort
         // öffnet der Button zuerst die Standortsuche – der Slug wandert mit
         // und landet an der URL des dort gewählten Standorts.

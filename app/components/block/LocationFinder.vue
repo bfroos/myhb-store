@@ -77,7 +77,12 @@ function handleCityInputUpdate(val: string | CitySuggestion | null) {
 
 function handleLocationBook(location: MoleculeLocationItem) {
   if (!location.calendlyUrl) return;
-  openCalendlyDialog(location.calendlyUrl);
+  // #97/#100: zweiter Buchungsweg des Standorts; der Split entscheidet beim
+  // Klick, sofern der Standort dafuer freigegeben ist.
+  openCalendlyDialog(location.calendlyUrl, undefined, undefined, {
+    appBookingUrl: location.appBookingUrl,
+    locationSlug: location.slug,
+  });
 }
 
 function scrollSearchToTop() {

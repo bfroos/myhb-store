@@ -91,6 +91,7 @@ const { t } = useI18n();
 const dialogRef = inject("dialogRef") as any;
 const params = ref<any>({});
 const { openAppBookingDialog } = useAppBookingDialog();
+const { resolveBooking } = useBookingAbTest();
 const {
   trackBookingLocationSelected,
   trackCalendlyDateTimeSelected,
@@ -119,6 +120,10 @@ function trackingContext() {
   return {
     location_slug: bookedLocationSlug.value ?? calendlyUserFromUrl(params.value?.url),
     treatment_type: params.value?.treatmentType,
+    // #100: Die Variante gehoert an jede Stufe des Funnels — sonst laesst sich
+    // `booking_confirmed` nicht gegen den Nenner aus `ab_assigned` stellen.
+    ab_variant: params.value?.abVariant,
+    ab_fallback: params.value?.abFallback,
   };
 }
 
@@ -173,27 +178,41 @@ useCalendlyEventListener({
   },
 });
 
-function handleLocationBook(location: { calendlyUrl?: string; slug?: string }) {
+function handleLocationBook(location: {
+  calendlyUrl?: string;
+  appBookingUrl?: string;
+  slug?: string;
+}) {
   if (!location.calendlyUrl) return;
+  // #100: Auf den Meta-Landingpages steht der Standort erst hier fest — der
+  // Bucket dagegen schon seit dem Seitenaufruf. Hier wird er angewendet.
+  const { url: targetUrl, abVariant, abFallback } = resolveBooking({
+    calendlyUrl: location.calendlyUrl,
+    appBookingUrl: location.appBookingUrl,
+  });
   // Deeplink #66: Wurde der Dialog von einer Behandlungsseite geoeffnet, haengt
   // der Behandlungs-Slug auch an der App-URL des erst hier gewaehlten
   // Standorts, damit die Behandlung in der App vorausgewaehlt ist.
   const bookingUrl =
-    withAppTreatmentSlug(
-      location.calendlyUrl,
-      params.value?.appTreatmentSlug,
-    ) ?? location.calendlyUrl;
+    withAppTreatmentSlug(targetUrl, params.value?.appTreatmentSlug) ??
+    location.calendlyUrl;
   const isApp = isAppBookingUrl(bookingUrl);
   // Conversion-Audit #67: Standortwahl im Dialog tracken, aufgeteilt nach
   // Buchungssystem (Calendly vs. App), damit die Migration messbar ist.
-  trackBookingLocationSelected(isApp ? "app" : "calendly", location.slug);
+  trackBookingLocationSelected(isApp ? "app" : "calendly", location.slug, {
+    ab_variant: abVariant,
+    ab_fallback: abFallback,
+  });
   bookedLocationSlug.value = location.slug;
+  // Der Dialog wurde ohne Standort geoeffnet; erst die Auswahl hier bringt die
+  // Variante in den Kontext der folgenden Ereignisse.
+  params.value = { ...params.value, abVariant, abFallback };
   // If the picked location already uses the in-app booking flow, close this
   // Calendly dialog and open the in-app iframe dialog instead. Calendly
   // locations keep rendering the inline widget in place as before.
   if (isApp) {
     dialogRef.value.close();
-    openAppBookingDialog(t("cta.bookAppointment"), bookingUrl);
+    openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, { abVariant });
     return;
   }
   params.value = { ...params.value, url: bookingUrl };

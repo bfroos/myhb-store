@@ -167,7 +167,17 @@ function openCalendlyDialogForButton() {
   // Deeplink #66: Behandlungs-Slug fuer `?treatment=` in der App-Buchungs-URL.
   const appTreatmentSlug =
     props.data?.appTreatmentSlug || button.value?.data?.appTreatmentSlug;
-  openCalendlyDialog(url, treatmentType, appTreatmentSlug);
+  // #97/#100: Zweiter Buchungsweg des Standorts. Liegt er vor und ist der
+  // Standort freigegeben, entscheidet der A/B-Split beim Klick zwischen
+  // Calendly und App — sonst bleibt es bei der Calendly-URL.
+  const appBookingUrl =
+    props.data?.appBookingUrl || button.value?.data?.appBookingUrl;
+  const locationSlug =
+    props.data?.locationSlug || button.value?.data?.locationSlug;
+  openCalendlyDialog(url, treatmentType, appTreatmentSlug, {
+    appBookingUrl,
+    locationSlug,
+  });
 }
 
 const openNewsletterSignUpDialog = () => {
