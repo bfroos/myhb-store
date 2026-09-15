@@ -32,7 +32,6 @@ import {
   ProductVolumeUnit,
   MediaBentoLayout,
   MediaBentoMediaItemAlignment,
-  BlockYoutubeVideoAspectRatio,
 } from "./enums";
 import {
   OrganismMediaCardContentAlignment,
@@ -257,8 +256,8 @@ export type BlockYoutubeVideoDto = {
   headline?: string;
   intro?: string;
   videoUrl?: string;
+  embedCode?: string;
   poster?: StrapiMedia;
-  aspectRatio?: BlockYoutubeVideoAspectRatio;
   cardSettings?: CardSettingsDto;
 };
 

@@ -55,6 +55,9 @@ defineProps<{
   displayDate?: string;
   footnotes?: StrapiRichText;
 }>();
+
+// The article already supplies the section and card, so blocks inside it must not nest a second one.
+provide("blockSurface", "inline");
 </script>
 <style scoped>
 .blogArticle__header {

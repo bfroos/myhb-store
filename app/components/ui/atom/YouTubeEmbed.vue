@@ -2,7 +2,7 @@
   <div
     v-if="videoId"
     class="youTubeEmbed"
-    :class="`youTubeEmbed--${aspectRatio ?? '16-9'}`"
+    :class="{ 'youTubeEmbed--portrait': isShort }"
   >
     <iframe
       v-if="isActivated"
@@ -32,7 +32,7 @@
       </div>
 
       <div v-else-if="!hasMarketingConsent" class="youTubeEmbed__overlay">
-        <UiLayoutIconWrapper :size="40">
+        <UiLayoutIconWrapper :size="40" class="youTubeEmbed__icon">
           <IconBrandYoutube />
         </UiLayoutIconWrapper>
         <h3>{{ $t("youtube.consentRequired") }}</h3>
@@ -69,7 +69,6 @@ import {
   IconPlayerPlayFilled,
 } from "@tabler/icons-vue";
 import { ImageFormat } from "~/lib/strapi/dto/enums";
-import type { BlockYoutubeVideoAspectRatio } from "~/lib/strapi/dto/enums";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { getMediaUrl } from "~/utils/media";
 import { parseYouTubeUrl } from "~/utils/youtube";
@@ -78,7 +77,6 @@ const props = defineProps<{
   videoUrl?: string;
   poster?: StrapiMedia;
   title?: string;
-  aspectRatio?: BlockYoutubeVideoAspectRatio;
 }>();
 
 const { hasMarketingConsent, openCookieSettings, isReady, didTimeout } =
@@ -88,6 +86,7 @@ const isActivated = ref(false);
 
 const parsed = computed(() => parseYouTubeUrl(props.videoUrl));
 const videoId = computed(() => parsed.value?.id);
+const isShort = computed(() => !!parsed.value?.isShort);
 
 const embedSrc = computed(() => {
   if (!videoId.value) return "";
@@ -117,24 +116,15 @@ const previewSrc = computed(() => {
   overflow: hidden;
   border-radius: var(--radius-md, 8px);
   background-color: var(--color-gray-900);
-}
-
-.youTubeEmbed--16-9 {
+  container-type: size;
   aspect-ratio: 16 / 9;
 }
 
-.youTubeEmbed--9-16 {
+/* Shorts are vertical, so the box follows the footage instead of pillarboxing it. */
+.youTubeEmbed--portrait {
   aspect-ratio: 9 / 16;
-  max-width: 420px;
+  max-width: 360px;
   margin-inline: auto;
-}
-
-.youTubeEmbed--4-3 {
-  aspect-ratio: 4 / 3;
-}
-
-.youTubeEmbed--1-1 {
-  aspect-ratio: 1 / 1;
 }
 
 .youTubeEmbed__frame,
@@ -158,11 +148,45 @@ const previewSrc = computed(() => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-400);
-  padding: var(--space-600);
+  gap: var(--space-300);
+  padding: var(--space-400);
   text-align: center;
   color: var(--color-text-muted);
   background-color: rgba(0, 0, 0, 0.72);
+  overflow: hidden;
+}
+
+/* A 16:9 box gets short in narrow columns, so the panel sheds parts rather than clipping. */
+@container (max-height: 260px) {
+  .youTubeEmbed__icon {
+    display: none;
+  }
+
+  .youTubeEmbed__overlay h3 {
+    font-size: var(--font-md);
+    line-height: var(--line-md);
+  }
+
+  .youTubeEmbed__overlay p {
+    font-size: var(--font-xs);
+    line-height: var(--line-xs);
+  }
+}
+
+@container (max-height: 170px) {
+  .youTubeEmbed__overlay {
+    gap: var(--space-200);
+    padding: var(--space-300);
+  }
+
+  .youTubeEmbed__overlay p {
+    display: none;
+  }
+
+  .youTubeEmbed__overlay h3 {
+    font-size: var(--font-sm);
+    line-height: var(--line-sm);
+  }
 }
 
 .youTubeEmbed__overlay :deep(svg) {
