@@ -8,8 +8,8 @@ import {
 } from "~/composables/useAppBookingDialog";
 
 /**
- * Zweiter Buchungsweg desselben Standorts (#97) plus der Slug, an dem der
- * A/B-Split (#100) seine Freigabe erkennt.
+ * Zweiter Buchungsweg desselben Standorts (#97) plus sein Slug fuer den
+ * Tracking-Kontext.
  */
 export type BookingAlternatives = {
   appBookingUrl?: string;
@@ -28,9 +28,9 @@ export function useCalendlyDialog() {
    *   (`?treatment=`). Wird an die App-Buchungs-URL gehaengt – auch an die des
    *   Standorts, den der Nutzer erst im Standort-Dialog auswaehlt. Bei
    *   Calendly-URLs bleibt er ohne Wirkung.
-   * @param alternatives Zweite Buchungs-URL des Standorts und sein Slug. Nur
-   *   wenn beide Wege hinterlegt sind und der Standort freigegeben ist, faellt
-   *   hier eine A/B-Entscheidung (#100) – sonst bleibt es bei `url`.
+   * @param alternatives Zweite Buchungs-URL des Standorts und sein Slug. Ohne
+   *   zugewiesenen Bucket (kein Ads-Deployment, keine Einwilligung, Split aus)
+   *   bleibt es bei `url`.
    */
   function openCalendlyDialog(
     url?: string,
@@ -38,13 +38,12 @@ export function useCalendlyDialog() {
     appTreatmentSlug?: string,
     alternatives?: BookingAlternatives,
   ) {
-    // #100: Erst hier – beim Klick – faellt die Entscheidung zwischen Calendly
-    // und App. Nicht beim Rendern: Die Seiten liegen 15 Minuten im ISR-Cache,
-    // eine dort gezogene Variante waere fuer alle Besucher dieselbe.
-    const { url: targetUrl, abVariant } = resolveBooking({
+    // #100: Der Bucket steht schon seit dem Seitenaufruf fest
+    // (plugins/ab-split.client.ts); hier wird er angewendet, weil jetzt der
+    // Standort und damit die zweite URL bekannt ist.
+    const { url: targetUrl, abVariant, abFallback } = resolveBooking({
       calendlyUrl: url,
       appBookingUrl: alternatives?.appBookingUrl,
-      locationSlug: alternatives?.locationSlug,
     });
     const bookingUrl =
       withAppTreatmentSlug(targetUrl, appTreatmentSlug) ?? targetUrl;
@@ -62,6 +61,7 @@ export function useCalendlyDialog() {
         treatment_type: treatmentType,
         location_slug: alternatives?.locationSlug,
         ab_variant: abVariant,
+        ab_fallback: abFallback,
       },
     );
 
@@ -80,7 +80,13 @@ export function useCalendlyDialog() {
         () => import("~/components/ui/organism/CalendlyDialog.vue"),
       ),
       {
-        data: { url: bookingUrl, treatmentType, appTreatmentSlug },
+        data: {
+          url: bookingUrl,
+          treatmentType,
+          appTreatmentSlug,
+          abVariant,
+          abFallback,
+        },
         props: {
           modal: true,
           draggable: false,

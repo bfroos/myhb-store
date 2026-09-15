@@ -34,6 +34,10 @@ export type CalendlyBookingHandoff = {
   invitee_uuid?: string;
   location_slug?: string;
   treatment_type?: string;
+  /** Variante des A/B-Splits (#100), damit sie den Redirect ueberlebt. */
+  ab_variant?: "app" | "calendly";
+  /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
+  ab_fallback?: boolean;
   /** true, sobald der Dialog `booking_confirmed` dafür gepusht hat. */
   fired?: boolean;
   /** ISO-Zeitstempel des letzten Schreibvorgangs. */

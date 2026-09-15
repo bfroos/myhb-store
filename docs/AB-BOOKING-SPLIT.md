@@ -1,105 +1,77 @@
 # A/B-Split Calendly vs. App-Buchung (#100)
 
-**Stand:** 15.09.2026 · **Code:** `app/lib/bookingAbTest.ts`, `app/composables/useBookingAbTest.ts`
+**Stand:** 15.09.2026 · **Zuschnitt:** bfroos/myhb-store#100, Begründung elanagency/myhb-os#87
+**Code:** `app/lib/bookingAbTest.ts`, `app/plugins/ab-split.client.ts`, `app/composables/useBookingAbTest.ts`
 
-Ein Standort kann beide Buchungswege haben: die Calendly-URL (`calendlyUrl`) und
-die App-Buchungs-URL (`appBookingUrl`, Feld seit #97). Welchen ein Besucher
-bekommt, wird **beim Klick auf den Buchungs-Button** entschieden, einmal je
-Besucher, gemerkt für 30 Tage.
+Ein Standort kann beide Buchungswege haben: die Calendly-URL (`calendlyUrl`) und die App-Buchungs-URL (`appBookingUrl`, Feld seit #97). Der Test entscheidet je Besucher, welchen er bekommt.
 
-Beim Rendern geht das nicht: Die Seiten liegen 15 Minuten im ISR-Cache, eine dort
-gezogene Variante wäre für alle Besucher dieselbe.
+## Zwei Zeitpunkte
 
-## Auslieferungszustand: alles Calendly
+**Zuweisung** beim Seitenaufruf im Ads-Deployment (`NUXT_PUBLIC_SITE_MODE=ads`, also `go.myhealthandbeauty.com`): Bucket `app` oder `calendly`, Cookie 30 Tage, **nur mit Cookiebot-Marketing-Einwilligung**.
 
-Ohne gesetzte Env-Variablen bekommt **jeder** Besucher Calendly. Das ist
-Absicht, siehe „Warum der Default Calendly ist" weiter unten.
+**Anwendung** beim Öffnen des Buchungsdialogs, wenn der Standort feststeht: Der Bucket entscheidet zwischen `calendlyUrl` und `appBookingUrl` der Location.
 
-## Scharfschalten
+Diese Trennung ist kein Umweg für die Meta-Landingpages (die keinen festen Standort haben, sondern die Standortsuche öffnen) — derselbe Mechanismus trägt ohne Änderung auch die Google-Seiten mit festem Standort (`go.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen`). Weil die Zuweisung vor der Standortwahl liegt, ist sie von ihr unabhängig zufällig: Der Nenner bleibt sauber, auch wenn die Standortwahl selbst eine Funnel-Stufe ist.
 
-Zwei Env-Variablen im Vercel-Projekt (beide gelten für das jeweilige
-Deployment — SEO wie Ads):
+Zugewiesen wird bewusst nicht beim Rendern — die Seiten liegen 15 Minuten im ISR-Cache, eine dort gezogene Variante wäre für alle Besucher dieselbe.
 
-| Variable | Bedeutung | Default |
-| --- | --- | --- |
-| `NUXT_PUBLIC_AB_BOOKING_SPLIT` | Anteil der Besucher in Prozent, die die App bekommen. `50` = 50/50. | `0` (aus) |
-| `NUXT_PUBLIC_AB_BOOKING_LOCATIONS` | Standort-Slugs mit Komma getrennt, für die der Split gilt | leer (nirgends) |
+## Abgrenzung und Auslieferungszustand
 
-Zusätzlich muss am Standort in Strapi `appBookingUrl` gefüllt sein. Ohne zweite
-URL gibt es nichts zu splitten — dann bleibt es bei Calendly, egal was in den
-Env-Variablen steht.
+| Regel | Wirkung |
+| --- | --- |
+| `NUXT_PUBLIC_AB_BOOKING_SPLIT` leer/0 | Kein Besucher wird zugewiesen, alle bekommen Calendly. **Auslieferungszustand.** |
+| Nur Ads-Deployment | SEO-Seiten weisen nicht zu und wenden nichts an, auch nicht bei vorhandenem Cookie |
+| Nur mit Marketing-Einwilligung | Ohne Einwilligung kein Bucket, Default Calendly, außerhalb des Tests |
+| `?ab=app` / `?ab=calendly` | Erzwingt und merkt die Variante — auch ohne Anteil und ohne Banner-Antwort (bewusste Testhandlung) |
 
-Beispiel Köln Arcaden:
+Scharfschalten ist eine Env-Änderung im Ads-Projekt, kein Code-Deploy:
 
 ```
 NUXT_PUBLIC_AB_BOOKING_SPLIT=50
-NUXT_PUBLIC_AB_BOOKING_LOCATIONS=koeln-arcaden
 ```
 
-Strapi, Location „Köln Arcaden":
+Dazu muss an den Standorten in Strapi `appBookingUrl` gefüllt sein, z. B. Köln Arcaden:
 
 ```
-appBookingUrl = https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden
+https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden
 ```
 
-> Der Standort-Slug der **App** heißt wirklich `koeln-aracden` (Buchstabendreher
-> in `venues.url_slug`). Der Slug in Strapi (`koeln-arcaden`) ist ein anderer
-> Wert und gehört in `NUXT_PUBLIC_AB_BOOKING_LOCATIONS`.
-
-## Testen ohne Rollout
-
-`?ab=app` bzw. `?ab=calendly` an eine Seiten-URL hängen erzwingt die Variante —
-auch dann, wenn der Standort noch nicht freigegeben ist. Voraussetzung ist nur,
-dass der Standort beide URLs hat. Die erzwungene Variante landet im selben
-Cookie, der Tester bleibt also dabei, bis er das Cookie löscht oder mit dem
-anderen Wert neu aufruft.
-
-Die Bucket-Logik selbst prüft `npm run check:ab-split` ohne Browser.
+> Der Standort-Slug der **App** heißt wirklich `koeln-aracden` (Buchstabendreher in `venues.url_slug`). Nie aus dem Standortnamen ableiten, immer aus `select name, url_slug from public.venues` kopieren.
 
 ## Was in GA4 ankommt
 
-`ab_variant` (`app` | `calendly`) hängt an allen Conversion-Events der Website,
-sobald der Besucher einen Buchungsweg unter dem Split geöffnet hat:
-`click_booking`, `booking_location_selected`, `booking_datetime_selected`,
-`booking_confirmed`. Wer nicht im Test ist, sendet den Parameter nicht — in GA4
-steht dort „(not set)".
+| Ereignis | Wann | Rolle |
+| --- | --- | --- |
+| `ab_assigned` (+ `ab_variant`) | Bucket wurde neu gezogen | **Nenner** — so viele Besucher je Arm |
+| `ab_variant` als Datenschicht-Variable | jeder Seitenaufruf im Test | hängt an den Ereignissen der Seite |
+| `click_booking` (+ `ab_variant`, ggf. `ab_fallback`) | Buchungsdialog geht auf | Zwischenstufe |
+| `booking_confirmed` (+ `ab_variant`) | Buchung bestätigt | **Zähler** |
 
-Damit das sichtbar wird, braucht es zwei Dinge außerhalb dieses Repos:
+`booking_type` bleibt die Gegenprobe: `ab_variant=app` muss `booking_type=app` ergeben. Jede Abweichung ist ein Bug, kein Messrauschen — die einzige erlaubte Ausnahme trägt `ab_fallback: true`.
 
-1. **GTM** (Container GTM-5KCNWFWS): Datenschichtvariable `ab_variant` und den
-   Parameter am GA4-Tag „Funnel Events".
-2. **GA4** (G-PB2XDTTPKZ): benutzerdefinierte Dimension `ab_variant`
-   (ereignisbezogen). Ohne sie ist der Parameter in Berichten unsichtbar — genau
-   die Falle aus #120.
+**`ab_fallback: true`** heißt: Der Besucher ist im App-Arm, aber die gewählte Location hat keine `appBookingUrl`, also ging Calendly auf. Diese Sitzungen müssen aus der Auswertung fliegen, sonst verwässern sie den App-Arm mit Calendly-Buchungen.
 
-Die Buchung der App-Variante wird im iframe auf `app.myhealthandbeauty.com`
-abgeschlossen; das abschließende `booking_confirmed` pusht die **App** in ihre
-eigene Datenschicht. Die Website hängt deshalb `ab_variant` als Query-Parameter
-an die App-URL. Damit die App-Conversions in der Auswertung auf der richtigen
-Variante landen, muss die App diesen Parameter in ihr `booking_confirmed`
-übernehmen (offen, elanagency/myhb-os).
+Auf der Dankesseite kommt `ab_variant` aus der Übergabe in `lib/calendlyBookingHandoff.ts`, nicht aus dem Cookie: Das Cookie sagt nur, in welchem Arm der Besucher ist — die Übergabe sagt, dass **diese** Buchung aus einem Dialog unter dem Split stammt.
 
-## Warum der Default Calendly ist
+Die App-Buchung läuft im iframe auf `app.myhealthandbeauty.com` und pusht ihr `booking_confirmed` selbst; sie bekommt `ab_variant` deshalb als Query-Parameter mit. Damit die App-Conversions im richtigen Arm landen, muss die App diesen Parameter übernehmen (offen, elanagency/myhb-os).
 
-Ein in der App gebuchter Termin blockiert den Calendly-Slot nur dort, wo der
-Kalender-Write-back (#95) läuft: Die App schreibt ihre Termine in den
-Google-Kalender des Standorts, den Calendly auf Konflikte prüft. Fehlt das,
-nimmt ein Standort über beide Systeme Termine für denselben Slot an —
-Doppelbuchungen sind dann sicher, nicht nur möglich (Kaiserslautern,
-08.09.2026).
+## Vor dem Teststart
 
-Stand 15.09.2026 schreibt der Write-back an **allen** Standorten; für Köln
-Arcaden nachgewiesen für alle nicht aus Calendly gespiegelten Termine seit
-11.09. (Termine mit `walk_in_source = 'calendly'` lässt er bewusst aus, die
-haben in Calendly schon ein Event; abgesagte Termine verlieren den Eintrag
-wieder).
+1. **GA4** (G-PB2XDTTPKZ): benutzerdefinierte Dimension `ab_variant` (ereignisbezogen) — sonst sammelt GA4 den Wert ein, zeigt ihn nirgends und füllt rückwirkend nichts nach. Sinnvoll zusätzlich: `ab_fallback`.
+2. **GTM** (GTM-5KCNWFWS): Datenschichtvariable `ab_variant` und Parameter am GA4-Tag „Funnel Events". Der Stape-Loader sitzt vor GTM — ein Publish wirkt erst nach rund 40 Minuten.
+3. **Beide Arme auf derselben Seitenvariante** laufen lassen. Düsseldorf lief im Juni parallel auf `/lippen-aufspritzen` (12,1 % CR) und `/lippen-aufspritzen-rabatt` (5,6 %) — wer die Arme auf verschiedene Seiten legt, misst Rabatt gegen Nicht-Rabatt statt Calendly gegen App.
 
-Trotzdem bleibt der Default Calendly: Das Umlegen auf 50/50 ist eine
-Freigabe-Entscheidung von Benjamin, keine Nebenwirkung eines Deployments. Und es
-ist eine Env-Änderung — kein Code-Deploy, in Minuten zurückdrehbar.
+## Bekannte Einschränkungen
+
+- Der Bucket hängt am Cookie; ein Gerätewechsel kann dieselbe Person in beide Arme bringen. Akzeptiert, gehört in die Auswertungs-Fußnote.
+- Besucher ohne Marketing-Einwilligung stehen außerhalb des Tests. Sie sind mangels GA4-Ereignissen ohnehin unsichtbar, aber ohne diese Regel passten die Nenner nicht.
 
 ## Was der Split *nicht* macht
 
-Die Regel „SEO-Deployment → App, Ads-Deployment → Calendly" aus #97 ist hier
-nicht enthalten. Sie ist eine eigene Entscheidung und würde einen Standort
-dauerhaft in beiden Systemen betreiben.
+Die Regel „SEO-Deployment → App, Ads-Deployment → Calendly" aus #97 ist hier nicht enthalten. Sie ist eine eigene Entscheidung und betriebe einen Standort dauerhaft in beiden Systemen.
+
+Der Kalender-Write-back (#95) ist keine Vorbedingung mehr: Alle neun Standorte schreiben seit 11.09.2026 in ihren Google-Kalender, Calendly blendet die Slots damit selbst aus.
+
+## Prüfen
+
+`npm run check:ab-split` — 20 Fälle ohne Browser: Auslieferungszustand, Einwilligungspflicht, `?ab=`, 50/50-Verteilung über 4000 Durchläufe, Beständigkeit des Buckets, `ab_assigned` nur beim ersten Mal, und der sichtbare Rückfall ohne `appBookingUrl`.

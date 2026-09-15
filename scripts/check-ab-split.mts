@@ -3,21 +3,24 @@
  *
  * Aufruf: npm run check:ab-split
  *
- * Stubt window/document/sessionStorage und spielt die Faelle durch, an denen
- * der A/B-Split haengt: Auslieferungszustand (alles Calendly), Erzwingen per
- * ?ab=, Freigabe je Standort, 50/50-Verteilung, Bestaendigkeit der Variante
- * und die Frage, ob ein Bucket auf nicht freigegebene Standorte abfaerbt.
+ * Stubt window/document und spielt die Faelle durch, an denen der A/B-Split
+ * haengt: Auslieferungszustand (alles Calendly), Einwilligungspflicht,
+ * Erzwingen per ?ab=, 50/50-Verteilung, Bestaendigkeit des Buckets, und den
+ * sichtbaren Rueckfall, wenn einer Location die appBookingUrl fehlt.
  *
  * Das Repo hat keinen Test-Runner; diese Datei ist bewusst ein eigenstaendiges
  * Skript statt einer halben Test-Infrastruktur.
  */
-type Store = Record<string, string>;
 
-function setupDom(search: string) {
-  const session: Store = {};
+function setupDom(search: string, opts?: { marketing?: boolean | null }) {
   let cookies = "";
+  const consent =
+    opts?.marketing === null || opts?.marketing === undefined
+      ? undefined
+      : { marketing: opts.marketing };
   (globalThis as any).window = {
-    location: { search, hostname: "www.myhealthandbeauty.com" },
+    location: { search, hostname: "go.myhealthandbeauty.com" },
+    ...(consent ? { Cookiebot: { consent } } : {}),
   };
   (globalThis as any).document = {
     get cookie() {
@@ -25,152 +28,143 @@ function setupDom(search: string) {
     },
     set cookie(v: string) {
       const [pair] = v.split(";");
-      cookies = cookies ? `${cookies}; ${pair}` : pair!;
+      const name = pair!.split("=")[0];
+      cookies = cookies
+        .split("; ")
+        .filter((c) => c && !c.startsWith(name + "="))
+        .concat(pair!)
+        .join("; ");
     },
   };
-  (globalThis as any).sessionStorage = {
-    getItem: (k: string) => (k in session ? session[k]! : null),
-    setItem: (k: string, v: string) => {
-      session[k] = v;
-    },
-    removeItem: (k: string) => {
-      delete session[k];
-    },
-  };
-  return { session, cookies: () => cookies };
+  return { cookies: () => cookies };
 }
 
 const CAL = "https://calendly.com/koeln-arcaden";
-const APP = "https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden";
+const APP =
+  "https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden";
 
 let failed = 0;
 function check(name: string, ok: boolean, detail?: unknown) {
-  console.log(`${ok ? "ok  " : "FAIL"}  ${name}${ok ? "" : `  -> ${JSON.stringify(detail)}`}`);
+  console.log(
+    `${ok ? "ok  " : "FAIL"}  ${name}${ok ? "" : `  -> ${JSON.stringify(detail)}`}`,
+  );
   if (!ok) failed++;
 }
 
-const mod = await import(
-  "../app/lib/bookingAbTest.ts"
-);
-const { resolveBookingTarget, readAbBookingConfig, readActiveAbVariant } = mod;
+const mod = await import("../app/lib/bookingAbTest.ts");
+const {
+  assignAbBucket,
+  readAbBucket,
+  readAbBookingConfig,
+  resolveBookingTarget,
+} = mod;
 
-// --- Auslieferungszustand: kein Split konfiguriert -------------------------
+// --- Auslieferungszustand: Split aus ---------------------------------------
 {
-  setupDom("");
+  setupDom("", { marketing: true });
   const cfg = readAbBookingConfig({});
-  check("Default-Config ist aus", cfg.splitPercent === 0 && cfg.locations.length === 0, cfg);
-  const r = resolveBookingTarget(
-    { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-    cfg,
+  check("Default-Config ist aus", cfg.splitPercent === 0, cfg);
+  const r = assignAbBucket(cfg);
+  check("keine Zuweisung ohne Anteil", !r.variant && !r.assigned, r);
+  check(
+    "ohne Bucket -> Calendly, keine Variante",
+    (() => {
+      const b = resolveBookingTarget({ calendlyUrl: CAL, appBookingUrl: APP });
+      return b.url === CAL && !b.abVariant && !b.abFallback;
+    })(),
   );
-  check("ohne Freigabe -> Calendly, keine Variante", r.url === CAL && !r.abVariant, r);
-  check("ohne Split kein ab_variant an den Events", readActiveAbVariant() === undefined);
 }
 
-// --- Standort freigegeben, aber Anteil 0 ----------------------------------
+// --- Einwilligung ist Pflicht ---------------------------------------------
 {
-  setupDom("");
-  const cfg = readAbBookingConfig({ abBookingSplit: "0", abBookingLocations: "koeln-arcaden" });
-  const r = resolveBookingTarget(
-    { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-    cfg,
-  );
-  check("Anteil 0 -> Calendly", r.url === CAL && !r.abVariant, r);
+  setupDom("", { marketing: false });
+  const r = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }));
+  check("Marketing abgelehnt -> keine Zuweisung", !r.variant, r);
+}
+{
+  setupDom("", { marketing: null }); // Banner noch unbeantwortet / kein Cookiebot
+  const r = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }));
+  check("ohne Cookiebot-Antwort -> keine Zuweisung", !r.variant, r);
 }
 
-// --- ?ab=app erzwingt, auch ohne Freigabe ---------------------------------
+// --- ?ab= erzwingt, auch ohne Einwilligung und ohne Anteil -----------------
 {
-  setupDom("?ab=app");
-  const cfg = readAbBookingConfig({});
-  const r = resolveBookingTarget(
-    { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-    cfg,
-  );
-  check("?ab=app -> App-URL + Variante app", r.url === APP && r.abVariant === "app", r);
-  check("?ab=app setzt ab_variant fuer die Events", readActiveAbVariant() === "app");
+  const dom = setupDom("?ab=app", { marketing: false });
+  const r = assignAbBucket(readAbBookingConfig({}));
+  check("?ab=app weist zu", r.variant === "app" && r.assigned, r);
+  check("?ab=app schreibt das Cookie", dom.cookies().includes("myhb_ab_booking=app"), dom.cookies());
+  const again = assignAbBucket(readAbBookingConfig({}));
+  check("?ab=app zweiter Aufruf meldet keine neue Zuweisung", again.variant === "app" && !again.assigned, again);
 }
 {
-  setupDom("?ab=calendly");
-  const r = resolveBookingTarget(
-    { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-    readAbBookingConfig({ abBookingSplit: "100", abBookingLocations: "koeln-arcaden" }),
-  );
-  check("?ab=calendly schlaegt den 100%-Anteil", r.url === CAL && r.abVariant === "calendly", r);
+  setupDom("?ab=calendly", { marketing: true });
+  assignAbBucket(readAbBookingConfig({ abBookingSplit: "100" }));
+  check("?ab=calendly schlaegt den 100%-Anteil", readAbBucket() === "calendly", readAbBucket());
 }
 
-// --- ohne zweite URL gibt es nichts zu splitten ---------------------------
+// --- Verteilung und Bestaendigkeit ----------------------------------------
 {
-  setupDom("?ab=app");
-  const r = resolveBookingTarget(
-    { calendlyUrl: CAL, locationSlug: "koeln-arcaden" },
-    readAbBookingConfig({ abBookingSplit: "50", abBookingLocations: "koeln-arcaden" }),
-  );
-  check("ohne appBookingUrl -> Calendly, keine Variante", r.url === CAL && !r.abVariant, r);
-}
-
-// --- Freigegeben + 50 %: Verteilung und Bestaendigkeit --------------------
-{
-  const cfg = readAbBookingConfig({ abBookingSplit: "50", abBookingLocations: "koeln-arcaden" });
+  const cfg = readAbBookingConfig({ abBookingSplit: "50" });
   let app = 0;
   const N = 4000;
   for (let i = 0; i < N; i++) {
-    setupDom("");
-    const r = resolveBookingTarget(
-      { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-      cfg,
-    );
-    if (r.abVariant === "app") app++;
+    setupDom("", { marketing: true });
+    if (assignAbBucket(cfg).variant === "app") app++;
   }
   const share = (app / N) * 100;
   check(`50/50 (gemessen ${share.toFixed(1)} %)`, Math.abs(share - 50) < 5, share);
 
-  // Derselbe Besucher bekommt bei jedem weiteren Klick dasselbe
-  setupDom("");
-  const first = resolveBookingTarget(
-    { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-    cfg,
-  );
-  const again = Array.from({ length: 20 }, () =>
-    resolveBookingTarget(
-      { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-      cfg,
-    ).abVariant,
-  );
+  setupDom("", { marketing: true });
+  const first = assignAbBucket(cfg).variant;
+  const again = Array.from({ length: 20 }, () => assignAbBucket(cfg));
   check(
-    "Variante bleibt ueber weitere Klicks gleich",
-    again.every((v) => v === first.abVariant),
-    { first: first.abVariant, again },
+    "Bucket bleibt ueber weitere Seitenaufrufe gleich",
+    again.every((r) => r.variant === first && !r.assigned),
+    { first, again: again.map((r) => r.variant) },
   );
-
-  // Anderer Standort ohne Freigabe: kein ab_variant, obwohl Bucket existiert
-  const other = resolveBookingTarget(
-    { calendlyUrl: "https://calendly.com/leipzig", appBookingUrl: APP, locationSlug: "leipzig-hoefe" },
-    cfg,
-  );
-  check(
-    "nicht freigegebener Standort faerbt nicht ab",
-    other.url === "https://calendly.com/leipzig" && !other.abVariant && readActiveAbVariant() === undefined,
-    other,
-  );
+  check("ab_assigned faellt nur beim ersten Mal", again.every((r) => !r.assigned));
 }
 
-// --- Cookie wird gesetzt (30 Tage) ---------------------------------------
+// --- Anwendung ------------------------------------------------------------
 {
-  const dom = setupDom("?ab=app");
-  resolveBookingTarget(
-    { calendlyUrl: CAL, appBookingUrl: APP, locationSlug: "koeln-arcaden" },
-    readAbBookingConfig({}),
+  const b = resolveBookingTarget({ calendlyUrl: CAL, appBookingUrl: APP }, "app");
+  check("Arm app -> App-URL", b.url === APP && b.abVariant === "app" && !b.abFallback, b);
+}
+{
+  const b = resolveBookingTarget({ calendlyUrl: CAL, appBookingUrl: APP }, "calendly");
+  check("Arm calendly -> Calendly-URL", b.url === CAL && b.abVariant === "calendly", b);
+}
+{
+  const b = resolveBookingTarget({ calendlyUrl: CAL }, "app");
+  check(
+    "Arm app ohne appBookingUrl -> Calendly MIT ab_fallback",
+    b.url === CAL && b.abVariant === "app" && b.abFallback === true,
+    b,
   );
-  check("Cookie myhb_ab_booking=app gesetzt", dom.cookies().includes("myhb_ab_booking=app"), dom.cookies());
 }
 
-// --- Unsinnige Env-Werte schalten ab, nicht auf -----------------------------
+{
+  // Buchungs-Button ohne Standort (Meta-Landingpage): oeffnet die
+  // Standortsuche, es gibt nichts anzuwenden — und keinen Rueckfall.
+  const b = resolveBookingTarget({}, "app");
+  check(
+    "ohne Standort -> kein ab_fallback",
+    b.url === undefined && b.abVariant === "app" && !b.abFallback,
+    b,
+  );
+}
+
+// --- Unsinnige Env-Werte schalten ab, nicht auf ----------------------------
 {
   for (const bad of ["abc", "-5", "500", ""]) {
-    const cfg = readAbBookingConfig({ abBookingSplit: bad, abBookingLocations: "koeln-arcaden" });
+    const cfg = readAbBookingConfig({ abBookingSplit: bad });
     check(`Anteil "${bad}" -> 0`, cfg.splitPercent === 0, cfg);
   }
 }
 
-console.log(failed === 0 ? "\nAlle Pruefungen bestanden." : `\n${failed} Pruefung(en) fehlgeschlagen.`);
+console.log(
+  failed === 0
+    ? "\nAlle Pruefungen bestanden."
+    : `\n${failed} Pruefung(en) fehlgeschlagen.`,
+);
 process.exit(failed === 0 ? 0 : 1);
