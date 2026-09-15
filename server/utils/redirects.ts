@@ -132,6 +132,28 @@ const sanitizeStatusCode = (code?: number | null) => {
 const isAbsoluteUrl = (value: string) =>
   value.startsWith("http://") || value.startsWith("https://");
 
+// Köln: Schönheits-OPs only at MediaPark Klinik, everything else only at Köln Arcaden.
+const KOELN_LOCATION_TREATMENT_PATH =
+  /^(\/standorte|\/en\/locations|\/tr\/konumlar|\/ar\/konumlar|\/fr\/lieux|\/nl\/locaties)\/koeln\/(koeln-arcaden|mediapark-klinik)\/(.+)$/;
+const SURGERY_CATEGORY_SLUGS = new Set([
+  "schoenheitsoperationen",
+  "cosmetic-surgeries",
+  "estetik-ameliyatlar",
+  "amaliat-altajmeel",
+  "chirurgie-esthetique",
+  "schoonheidsoperaties",
+]);
+
+const resolveKoelnLocationTarget = (path: string) => {
+  const match = path.match(KOELN_LOCATION_TREATMENT_PATH);
+  if (!match) return null;
+  const [, base, location, treatmentPath] = match;
+  const isSurgery = SURGERY_CATEGORY_SLUGS.has(treatmentPath!.split("/")[0]!);
+  const targetLocation = isSurgery ? "mediapark-klinik" : "koeln-arcaden";
+  if (targetLocation === location) return null;
+  return `${base}/koeln/${targetLocation}/${treatmentPath}`;
+};
+
 const shouldSkipPath = (path: string) => {
   if (SKIP_PATHS.has(path)) return true;
   return SKIP_PREFIXES.some((prefix) => path.startsWith(prefix));
@@ -331,25 +353,41 @@ export const resolveRedirect = async (
     if (shouldSkipPath(normalizedPath)) return null;
 
     const redirectMap = await getRedirectMap();
-    const match = redirectMap.get(normalizedPath);
-    if (!match) return null;
-
-    const target = normalizeTo(match.to);
-    if (!target) return null;
-    if (normalizePath(target) === normalizedPath) return null;
-    if (
-      !isAbsoluteUrl(target) &&
-      hasRedirectLoop(normalizedPath, redirectMap)
-    ) {
-      return null;
+    const mapped = resolveMappedRedirect(normalizedPath, redirectMap);
+    const destination = mapped?.target ?? normalizedPath;
+    const koelnTarget = isAbsoluteUrl(destination)
+      ? null
+      : resolveKoelnLocationTarget(normalizePath(destination));
+    if (koelnTarget) {
+      return {
+        target: `${koelnTarget}${search || ""}`,
+        code: mapped?.code ?? 301,
+      };
     }
-
-    const statusCode = sanitizeStatusCode(match.code ?? undefined);
-    return { target: `${target}${search || ""}`, code: statusCode };
+    return mapped
+      ? { target: `${mapped.target}${search || ""}`, code: mapped.code }
+      : null;
   } catch {
     // Fail-open: don't block site if redirects lookup fails.
     return null;
   }
+};
+
+const resolveMappedRedirect = (
+  normalizedPath: string,
+  redirectMap: Map<string, RedirectAttributes>,
+): RedirectResult | null => {
+  const match = redirectMap.get(normalizedPath);
+  if (!match) return null;
+
+  const target = normalizeTo(match.to);
+  if (!target) return null;
+  if (normalizePath(target) === normalizedPath) return null;
+  if (!isAbsoluteUrl(target) && hasRedirectLoop(normalizedPath, redirectMap)) {
+    return null;
+  }
+
+  return { target, code: sanitizeStatusCode(match.code ?? undefined) };
 };
 
 const hasRedirectLoop = (
