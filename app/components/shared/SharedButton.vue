@@ -186,9 +186,14 @@ const openNewsletterSignUpDialog = () => {
       () => import("~/components/ui/organism/NewsletterSignUpDialog.vue"),
     ),
     {
-      // Buchungsdaten (calendlyUrl/treatmentType) durchreichen, damit der
-      // Dialog nach der Anmeldung den passenden Buchungs-Dialog oeffnen kann.
-      data: props.data,
+      // Buchungsdaten (calendlyUrl/appBookingUrl/treatmentType) durchreichen,
+      // damit der Dialog nach der Anmeldung den passenden Buchungs-Dialog
+      // oeffnen kann. Beide Quellen wie in openCalendlyDialogForButton: ein in
+      // Strapi gepflegter Rabatt-Button traegt seine Buchungsdaten unter
+      // `button.data`, nur die fest verdrahteten unter `props.data`. Fiel das
+      // weg, verlor der Weg `appBookingUrl` -- und der A/B-Split (#100) haette
+      // dort still immer Calendly geliefert.
+      data: { ...button.value?.data, ...props.data },
       props: {
         modal: true,
         draggable: false,
