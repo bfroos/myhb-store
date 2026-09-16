@@ -123,18 +123,18 @@ async function ladeListe(locale: Locale, withToken: boolean): Promise<Employee[]
   return liste;
 }
 
-/** Eintrag in einer Sprache holen -- null, wenn es ihn dort nicht gibt. */
+/**
+ * Eintrag in einer Sprache holen -- null, wenn es ihn dort nicht gibt.
+ * Ein Lesefehler ist etwas anderes als ein fehlender Eintrag und wird
+ * durchgereicht: sonst sieht ein abgelehnter Token aus wie "nicht vorhanden".
+ */
 async function lade(
   documentId: string,
   locale: Locale,
   withToken = true,
 ): Promise<Employee | null> {
-  try {
-    const liste = await ladeListe(locale, withToken);
-    return liste.find((e) => e.documentId === documentId) ?? null;
-  } catch {
-    return null;
-  }
+  const liste = await ladeListe(locale, withToken);
+  return liste.find((e) => e.documentId === documentId) ?? null;
 }
 
 async function schreibe(
@@ -182,6 +182,21 @@ async function main(): Promise<void> {
         "  STRAPI_TOKEN=<token> npx tsx scripts/aerzte-profile-bereinigen.mts --apply",
     );
     process.exit(1);
+  }
+
+  // Ein ungueltiger Token liefert 401 auf jeden Lesezugriff. Ohne diese
+  // Pruefung sieht das spaeter aus wie "Eintrag nicht gefunden".
+  if (TOKEN) {
+    try {
+      await strapi(`/api/employees?pagination[pageSize]=1&fields[0]=slug`);
+    } catch (err) {
+      console.error(
+        `Strapi lehnt den STRAPI_TOKEN ab:\n  ${(err as Error).message}\n\n` +
+          "Steht da noch der Platzhalter aus der Anleitung? Es muss der echte\n" +
+          "Token-Wert hin, ohne spitze Klammern.",
+      );
+      process.exit(1);
+    }
   }
 
   console.log(`Strapi: ${STRAPI_URL}`);

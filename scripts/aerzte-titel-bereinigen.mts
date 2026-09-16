@@ -83,6 +83,25 @@ type Employee = {
   locale?: string;
 };
 
+/**
+ * Ein abgelehnter Token darf nicht als "nichts zu tun" durchgehen: die Lese-
+ * aufrufe tragen den Token mit, ein ungueltiger liefert 401 auf alles, und
+ * ohne diese Pruefung meldet das Skript faelschlich Erfolg.
+ */
+async function pruefeToken(): Promise<void> {
+  if (!TOKEN) return;
+  try {
+    await strapi(`/api/employees?pagination[pageSize]=1&fields[0]=slug`);
+  } catch (err) {
+    console.error(
+      `Strapi lehnt den STRAPI_TOKEN ab:\n  ${(err as Error).message}\n\n` +
+        "Steht da noch der Platzhalter aus der Anleitung? Es muss der echte\n" +
+        "Token-Wert hin, ohne spitze Klammern.",
+    );
+    process.exit(1);
+  }
+}
+
 /** Nur zum Schreiben noetig -- der Trockenlauf liest oeffentlich. */
 function assertToken(): void {
   if (!TOKEN) {
@@ -231,12 +250,14 @@ async function slugPhase(): Promise<void> {
   console.log("\n--- Slugs und Redirects ---\n");
 
   const plaene: SlugPlan[] = [];
+  const nichtGelesen: string[] = [];
   for (const locale of LOCALES) {
     let eintraege: Employee[];
     try {
       eintraege = await ladeEintraege(locale);
     } catch (err) {
-      console.warn(`Sprache ${locale} uebersprungen: ${(err as Error).message}`);
+      console.error(`Sprache ${locale} nicht lesbar: ${(err as Error).message}`);
+      nichtGelesen.push(locale);
       continue;
     }
     // Belegte Slugs dieser Sprache: bestehende plus die schon eingeplanten.
@@ -253,6 +274,13 @@ async function slugPhase(): Promise<void> {
 
   for (const p of plaene) {
     console.log(`[${p.e.locale}] ${p.von} -> ${p.nach}`);
+  }
+
+  if (nichtGelesen.length > 0) {
+    console.error(
+      `\nAbgebrochen: ${nichtGelesen.join(", ")} liessen sich nicht lesen.`,
+    );
+    process.exit(1);
   }
 
   if (plaene.length === 0) {
@@ -317,19 +345,22 @@ async function slugPhase(): Promise<void> {
 
 async function main(): Promise<void> {
   if (APPLY) assertToken();
+  await pruefeToken();
 
   console.log(`Strapi: ${STRAPI_URL}`);
   console.log(APPLY ? "MODUS: schreiben (--apply)\n" : "MODUS: Trockenlauf\n");
 
   const offen: Array<{ e: Employee; neu: { firstName: string; lastName: string } }> = [];
   const titelImFeld: Employee[] = [];
+  const nichtGelesen: string[] = [];
 
   for (const locale of LOCALES) {
     let eintraege: Employee[];
     try {
       eintraege = await ladeEintraege(locale);
     } catch (err) {
-      console.warn(`Sprache ${locale} uebersprungen: ${(err as Error).message}`);
+      console.error(`Sprache ${locale} nicht lesbar: ${(err as Error).message}`);
+      nichtGelesen.push(locale);
       continue;
     }
     for (const e of eintraege) {
@@ -342,6 +373,15 @@ async function main(): Promise<void> {
         titelImFeld.push(e);
       }
     }
+  }
+
+  if (nichtGelesen.length > 0) {
+    console.error(
+      `\nAbgebrochen: ${nichtGelesen.join(", ")} liessen sich nicht lesen.\n` +
+        "Ein unvollstaendiges Bild darf hier nicht als Ergebnis durchgehen --\n" +
+        "sonst sieht ein Fehlschlag aus wie 'nichts zu tun'.",
+    );
+    process.exit(1);
   }
 
   if (offen.length === 0) {
