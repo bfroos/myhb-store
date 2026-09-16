@@ -460,6 +460,11 @@
     },
     "newsletterSignUp": {
       "header": "S'abonner à la newsletter"
+    },
+    "booking": {
+      "loading": "Chargement de la réservation …",
+      "slowHint": "La réservation prend anormalement longtemps.",
+      "openInNewTab": "Ouvrir dans un nouvel onglet"
     }
   },
   "newsletter": {
