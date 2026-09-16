@@ -15,29 +15,31 @@
  * Promotion hat, gehoert in BELEGTE_PROMOTION und wird nicht angefasst --
  * dort gehoert der Titel in `academicTitle`, so wie bei Gero Ruppert.
  *
- * Aufruf (Trockenlauf, aendert nichts):
- *   STRAPI_TOKEN=... npx tsx scripts/aerzte-titel-bereinigen.mts
+ * Aufruf (Trockenlauf, aendert nichts, braucht keinen Token):
+ *   npx tsx scripts/aerzte-titel-bereinigen.mts
  *
- * Aufruf (schreibt):
- *   STRAPI_TOKEN=... npx tsx scripts/aerzte-titel-bereinigen.mts --apply
+ * Aufruf (schreibt -- fragt den Token ab, wenn STRAPI_TOKEN nicht gesetzt ist):
+ *   npx tsx scripts/aerzte-titel-bereinigen.mts --apply
  *
  * Zusaetzlich die Slugs (--slugs): die URLs tragen den Titel ebenfalls
  * (/aerzte/dr-katharina). Mit --slugs wird der Slug auf den Anzeigenamen
  * umgestellt und fuer die alte URL ein 301 in der Strapi-Collection
  * `redirects` angelegt -- je Sprache mit ihrem eigenen Routen-Segment
  * (/aerzte, /en/doctors, /tr/doktorlar, /ar/atibba, /fr/medecins, /nl/artsen).
- *   STRAPI_TOKEN=... npx tsx scripts/aerzte-titel-bereinigen.mts --slugs --apply
+ *   npx tsx scripts/aerzte-titel-bereinigen.mts --slugs --apply
  *
  * Ohne --apply ist alles Trockenlauf. Nach dem Schreiben prueft das Skript
  * ueber die oeffentliche API nach und meldet jede Zeile einzeln.
  */
+
+import { ladeToken } from "./strapiToken.mts";
 
 const STRAPI_URL = (
   process.env.NUXT_PUBLIC_STRAPI_URL ??
   "https://striking-bear-e5a15ddc94.strapiapp.com"
 ).replace(/\/+$/, "");
 
-const TOKEN = process.env.STRAPI_TOKEN ?? "";
+let TOKEN = (process.env.STRAPI_TOKEN ?? "").trim();
 const APPLY = process.argv.includes("--apply");
 const SLUGS = process.argv.includes("--slugs");
 
@@ -97,17 +99,6 @@ async function pruefeToken(): Promise<void> {
       `Strapi lehnt den STRAPI_TOKEN ab:\n  ${(err as Error).message}\n\n` +
         "Steht da noch der Platzhalter aus der Anleitung? Es muss der echte\n" +
         "Token-Wert hin, ohne spitze Klammern.",
-    );
-    process.exit(1);
-  }
-}
-
-/** Nur zum Schreiben noetig -- der Trockenlauf liest oeffentlich. */
-function assertToken(): void {
-  if (!TOKEN) {
-    console.error(
-      "Kein STRAPI_TOKEN gesetzt. Aufruf:\n" +
-        "  STRAPI_TOKEN=<token> npx tsx scripts/aerzte-titel-bereinigen.mts [--apply]",
     );
     process.exit(1);
   }
@@ -344,7 +335,9 @@ async function slugPhase(): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  if (APPLY) assertToken();
+  // Zum Schreiben brauchen wir einen Token -- notfalls fragt ladeToken() nach,
+  // damit er nicht als Platzhalter in der Kommandozeile landet.
+  if (APPLY && !TOKEN) TOKEN = await ladeToken();
   await pruefeToken();
 
   console.log(`Strapi: ${STRAPI_URL}`);

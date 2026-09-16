@@ -30,16 +30,18 @@
  * Aufruf (Trockenlauf, liest oeffentlich, aendert nichts):
  *   npx tsx scripts/aerzte-profile-bereinigen.mts
  *
- * Aufruf (schreibt):
- *   STRAPI_TOKEN=... npx tsx scripts/aerzte-profile-bereinigen.mts --apply
+ * Aufruf (schreibt -- fragt den Token ab, wenn STRAPI_TOKEN nicht gesetzt ist):
+ *   npx tsx scripts/aerzte-profile-bereinigen.mts --apply
  */
+
+import { ladeToken } from "./strapiToken.mts";
 
 const STRAPI_URL = (
   process.env.NUXT_PUBLIC_STRAPI_URL ??
   "https://striking-bear-e5a15ddc94.strapiapp.com"
 ).replace(/\/+$/, "");
 
-const TOKEN = process.env.STRAPI_TOKEN ?? "";
+let TOKEN = (process.env.STRAPI_TOKEN ?? "").trim();
 const APPLY = process.argv.includes("--apply");
 
 const LOCALES = ["de", "en", "ar", "tr", "fr", "nl"] as const;
@@ -176,13 +178,9 @@ async function redirect(von: string, nach: string): Promise<"neu" | "vorhanden">
 }
 
 async function main(): Promise<void> {
-  if (APPLY && !TOKEN) {
-    console.error(
-      "Kein STRAPI_TOKEN gesetzt. Aufruf:\n" +
-        "  STRAPI_TOKEN=<token> npx tsx scripts/aerzte-profile-bereinigen.mts --apply",
-    );
-    process.exit(1);
-  }
+  // Zum Schreiben brauchen wir einen Token -- notfalls fragt ladeToken() nach,
+  // damit er nicht als Platzhalter in der Kommandozeile landet.
+  if (APPLY && !TOKEN) TOKEN = await ladeToken();
 
   // Ein ungueltiger Token liefert 401 auf jeden Lesezugriff. Ohne diese
   // Pruefung sieht das spaeter aus wie "Eintrag nicht gefunden".
