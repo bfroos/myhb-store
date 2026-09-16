@@ -1,14 +1,16 @@
 <template>
-  <CalendlyInlineWidget
-    v-if="params.url"
-    :url="params.url"
-    class="calendlyDialog"
-    :page-settings="{
-      hideLandingPageDetails: true,
-      hideEventTypeDetails: true,
-      hideGdprBanner: true,
-    }"
-  />
+  <div v-if="params.url" class="calendlyDialog__embed">
+    <CalendlyInlineWidget
+      :url="params.url"
+      class="calendlyDialog"
+      :page-settings="{
+        hideLandingPageDetails: true,
+        hideEventTypeDetails: true,
+        hideGdprBanner: true,
+      }"
+    />
+    <UiMoleculeBookingEmbedStatus :ready="widgetReady" :url="params.url" />
+  </div>
   <template v-else>
     <div ref="contentRef" class="calendlyDialog__content">
       <div class="calendlyDialog__search">
@@ -143,13 +145,40 @@ function isFromCalendly(e: MessageEvent) {
   return e.origin === CALENDLY_ORIGIN;
 }
 
+/**
+ * Hat das Widget schon etwas gezeichnet?
+ *
+ * Das `load`-Ereignis des iFrames taugt dafuer nicht: Es feuert nach ~0,4 s,
+ * die Terminarten erscheinen aber erst nach mehreren Sekunden — dazwischen lag
+ * ein weisses Feld im Dialog. Calendly meldet sich selbst, sobald es eine Seite
+ * zeigt; darauf warten wir.
+ */
+const widgetReady = ref(false);
+function markWidgetReady(e: MessageEvent) {
+  if (!isFromCalendly(e)) return;
+  widgetReady.value = true;
+}
+
+// Das Widget wird erst mit der Standortwahl eingehaengt — dann faengt das
+// Laden von vorne an.
+watch(
+  () => params.value?.url,
+  () => {
+    widgetReady.value = false;
+  },
+);
+
 // #131: Die Dankesseite, auf die Calendly nach der Buchung weiterleitet, feuert
 // `booking_confirmed` ebenfalls (useBookingThankYouTracking). Die Übergabe im
 // Storage sagt ihr, ob diese Buchung hier schon gemeldet wurde — und liefert
 // Standort/Behandlung nach, falls die Nachricht des Widgets verloren ging.
 useCalendlyEventListener({
+  onProfilePageViewed: markWidgetReady,
+  onEventTypeViewed: markWidgetReady,
+  onPageHeightResize: markWidgetReady,
   onDateAndTimeSelected: (e: MessageEvent) => {
     if (!isFromCalendly(e)) return;
+    markWidgetReady(e);
     trackCalendlyDateTimeSelected(trackingContext());
     writeBookingHandoff({ ...trackingContext(), fired: false });
   },
@@ -327,6 +356,12 @@ watch(selectedCity, (city) => {
 });
 </script>
 <style scoped>
+.calendlyDialog__embed {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
 .calendlyDialog {
   width: 100% !important;
   height: 100% !important;

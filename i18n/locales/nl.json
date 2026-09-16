@@ -460,6 +460,11 @@
     },
     "newsletterSignUp": {
       "header": "Abonneren op nieuwsbrief"
+    },
+    "booking": {
+      "loading": "Boeking wordt geladen …",
+      "slowHint": "De boeking duurt ongewoon lang.",
+      "openInNewTab": "In een nieuw tabblad openen"
     }
   },
   "newsletter": {

@@ -461,6 +461,11 @@
     },
     "newsletterSignUp": {
       "header": "Newsletter abonnieren"
+    },
+    "booking": {
+      "loading": "Buchung wird geladen …",
+      "slowHint": "Die Buchung braucht ungewöhnlich lange.",
+      "openInNewTab": "In neuem Tab öffnen"
     }
   },
   "newsletter": {

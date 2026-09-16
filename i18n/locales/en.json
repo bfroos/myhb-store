@@ -474,6 +474,11 @@
     },
     "newsletterSignUp": {
       "header": "Subscribe to our newsletter"
+    },
+    "booking": {
+      "loading": "Loading booking …",
+      "slowHint": "The booking is taking unusually long.",
+      "openInNewTab": "Open in a new tab"
     }
   },
 

@@ -448,6 +448,11 @@
     },
     "newsletterSignUp": {
       "header": "Bültenimize abone ol"
+    },
+    "booking": {
+      "loading": "Randevu yükleniyor …",
+      "slowHint": "Randevu penceresi alışılmadık şekilde uzun sürüyor.",
+      "openInNewTab": "Yeni sekmede aç"
     }
   },
 
