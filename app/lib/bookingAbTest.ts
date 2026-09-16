@@ -19,8 +19,19 @@
  *
  * ## Regeln
  *
- * - **Nur Ads-Deployment.** Auf den SEO-Seiten wird weder zugewiesen noch
- *   angewendet; sie sollen ihr Buchungsverhalten nicht ungefragt aendern.
+ * - **Je Deployment ein Schalter.** Zugewiesen und angewendet wird nur dort, wo
+ *   `NUXT_PUBLIC_AB_BOOKING_SPLIT` gesetzt ist — getrennt fuer Ads
+ *   (go.myhealthandbeauty.com) und SEO (www). Wer im einen Deployment einen
+ *   Bucket bekommen hat, behaelt ihn; angewendet wird er im anderen erst, wenn
+ *   dort ebenfalls ein Anteil gesetzt ist. So aendert kein Deployment sein
+ *   Buchungsverhalten ungefragt.
+ * - **Die Quelle haengt am Ereignis.** Bezahlter und organischer Verkehr haben
+ *   verschiedene Grundkonversionsraten; wirft man beide Toepfe zusammen, kann
+ *   eine echte Wirkung verschwinden oder eine erfundene entstehen. Deshalb
+ *   merkt sich die Zuweisung, in welchem Deployment sie fiel (`ab_source`), und
+ *   traegt das an jedes Ereignis mit. Der Hostname reicht dafuer nicht: Die
+ *   Dankesseite nach einer Calendly-Buchung liegt immer auf www, auch wenn der
+ *   Besucher aus der Anzeige kam.
  * - **Nur mit Marketing-Einwilligung.** Ohne Einwilligung kein Cookie, kein
  *   Bucket, Default Calendly — diese Besucher stehen ausserhalb des Tests. Sie
  *   sind mangels GA4-Ereignissen ohnehin unsichtbar, aber ohne die Regel
@@ -38,9 +49,13 @@
  */
 
 export type BookingVariant = "app" | "calendly";
+/** Deployment, in dem der Bucket zugewiesen wurde. */
+export type AbSource = "ads" | "seo";
 
 /** Zugeloster Bucket des Besuchers. */
 export const AB_BOOKING_COOKIE = "myhb_ab_booking";
+/** Deployment der Zuweisung — bleibt beim Besucher, auch auf der Dankesseite. */
+export const AB_SOURCE_COOKIE = "myhb_ab_source";
 const TTL_DAYS = 30;
 
 export type AbBookingConfig = {
@@ -69,6 +84,20 @@ export type ResolvedBooking = {
 
 function isVariant(value: unknown): value is BookingVariant {
   return value === "app" || value === "calendly";
+}
+
+function isSource(value: unknown): value is AbSource {
+  return value === "ads" || value === "seo";
+}
+
+function readCookie(name: string): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
+    return m ? decodeURIComponent(m.pop() as string) : null;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -119,16 +148,14 @@ function writeCookie(name: string, value: string, days: number) {
  * die Calendly nach der Buchung weiterleitet.
  */
 export function readAbBucket(): BookingVariant | undefined {
-  if (typeof window === "undefined") return undefined;
-  try {
-    const m = document.cookie.match(
-      "(^|;)\\s*" + AB_BOOKING_COOKIE + "\\s*=\\s*([^;]+)",
-    );
-    const value = m ? decodeURIComponent(m.pop() as string) : null;
-    return isVariant(value) ? value : undefined;
-  } catch {
-    return undefined;
-  }
+  const value = readCookie(AB_BOOKING_COOKIE);
+  return isVariant(value) ? value : undefined;
+}
+
+/** In welchem Deployment wurde der Bucket zugewiesen? */
+export function readAbSource(): AbSource | undefined {
+  const value = readCookie(AB_SOURCE_COOKIE);
+  return isSource(value) ? value : undefined;
 }
 
 /** `?ab=app` / `?ab=calendly` aus der aktuellen URL. */
@@ -146,39 +173,56 @@ export type AssignResult = {
   variant?: BookingVariant;
   /** true, wenn der Bucket in diesem Aufruf neu gezogen wurde. */
   assigned: boolean;
+  /** Deployment, in dem die Zuweisung faellt bzw. fiel. */
+  source?: AbSource;
 };
 
 /**
- * Zuweisung beim Seitenaufruf (nur Ads-Deployment, siehe Plugin).
+ * Zuweisung beim Seitenaufruf (siehe Plugin).
  *
  * Gibt den bestehenden Bucket zurueck, wenn es einen gibt, sonst wuerfelt er —
- * aber nur mit Marketing-Einwilligung und nur, wenn der Split ueberhaupt an
- * ist. `?ab=` schlaegt beides.
+ * aber nur mit Marketing-Einwilligung und nur, wenn der Split in **diesem**
+ * Deployment an ist. `?ab=` schlaegt beides.
+ *
+ * `siteMode` wird beim Ziehen als Quelle mitgeschrieben und spaeter an jedes
+ * Ereignis gehaengt; ein bestehender Bucket behaelt seine urspruengliche
+ * Quelle, auch wenn der Besucher das Deployment wechselt.
  */
-export function assignAbBucket(config: AbBookingConfig): AssignResult {
+export function assignAbBucket(
+  config: AbBookingConfig,
+  siteMode: AbSource,
+): AssignResult {
   if (typeof window === "undefined") return { assigned: false };
 
   const forced = forcedAbVariant();
   const current = readAbBucket();
+  const currentSource = readAbSource();
+
+  const merke = (variant: BookingVariant, source: AbSource) => {
+    try {
+      writeCookie(AB_BOOKING_COOKIE, variant, TTL_DAYS);
+      writeCookie(AB_SOURCE_COOKIE, source, TTL_DAYS);
+    } catch {}
+  };
 
   if (forced) {
-    if (forced === current) return { variant: forced, assigned: false };
-    try {
-      writeCookie(AB_BOOKING_COOKIE, forced, TTL_DAYS);
-    } catch {}
-    return { variant: forced, assigned: true };
+    if (forced === current) {
+      return { variant: forced, assigned: false, source: currentSource ?? siteMode };
+    }
+    merke(forced, siteMode);
+    return { variant: forced, assigned: true, source: siteMode };
   }
 
-  if (current) return { variant: current, assigned: false };
+  if (current) {
+    return { variant: current, assigned: false, source: currentSource ?? siteMode };
+  }
   if (config.splitPercent <= 0) return { assigned: false };
   if (!hasMarketingConsent()) return { assigned: false };
 
   const variant: BookingVariant =
     Math.random() * 100 < config.splitPercent ? "app" : "calendly";
-  try {
-    writeCookie(AB_BOOKING_COOKIE, variant, TTL_DAYS);
-  } catch {}
-  return { variant, assigned: true };
+  merke(variant, siteMode);
+  return { variant, assigned: true, source: siteMode };
 }
 
 /**

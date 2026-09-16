@@ -1,8 +1,13 @@
 /**
  * Zuweisung des A/B-Buckets Calendly vs. App-Buchung (#100).
  *
- * Laeuft **nur im Ads-Deployment** (`NUXT_PUBLIC_SITE_MODE=ads`, also
- * go.myhealthandbeauty.com). Die SEO-Seiten bleiben ausserhalb des Tests.
+ * Laeuft in jedem Deployment, in dem `NUXT_PUBLIC_AB_BOOKING_SPLIT` gesetzt
+ * ist — getrennt fuer Ads (go.myhealthandbeauty.com) und SEO (www). Ohne
+ * Anteil passiert nichts, das ist der Auslieferungszustand fuer beide.
+ *
+ * Seit 16.09.2026 laeuft der Test auf Entscheidung von Benjamin auch auf dem
+ * organischen Verkehr: mehr Faelle, schnellere Antwort. Damit die beiden
+ * Toepfe nicht vermischt werden, traegt jedes Ereignis `ab_source` (ads|seo).
  *
  * Der Bucket wird beim Seitenaufruf gezogen — vor der Standortwahl, damit er
  * von ihr unabhaengig zufaellig ist (elanagency/myhb-os#87). Angewendet wird er
@@ -17,7 +22,8 @@
  *   plugins/attribution-datalayer.client.ts.
  * - `ab_assigned` als eigenes Ereignis, wenn der Bucket neu gezogen wurde. Das
  *   ist der **Nenner** der Auswertung: so viele Besucher sind je Arm in den
- *   Test gekommen.
+ *   Test gekommen — aufteilbar nach `ab_source`, weil bezahlter und
+ *   organischer Verkehr verschiedene Grundkonversionsraten haben.
  *
  * Einwilligung: Ohne Cookiebot-Marketing-Consent wird nicht zugewiesen. Das
  * Banner antwortet spaeter als dieses Plugin laeuft, deshalb der Listener auf
@@ -28,6 +34,7 @@ import {
   assignAbBucket,
   forcedAbVariant,
   readAbBookingConfig,
+  type AbSource,
   type BookingVariant,
 } from "~/lib/bookingAbTest";
 
@@ -35,7 +42,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.server) return;
 
   const config = useRuntimeConfig();
-  if (config.public.siteMode !== "ads") return;
+  const siteMode: AbSource = config.public.siteMode === "ads" ? "ads" : "seo";
 
   const abConfig = readAbBookingConfig(config.public as any);
   // Aus ohne Anteil — ausser jemand erzwingt eine Variante zum Testen.
@@ -47,20 +54,25 @@ export default defineNuxtPlugin((nuxtApp) => {
     w.dataLayer.push(payload);
   };
 
-  const publish = (variant: BookingVariant, assigned: boolean) => {
-    pushToDataLayer({ ab_variant: variant });
+  const publish = (
+    variant: BookingVariant,
+    assigned: boolean,
+    source: AbSource,
+  ) => {
+    pushToDataLayer({ ab_variant: variant, ab_source: source });
     if (assigned) {
       pushToDataLayer({
         event: "ab_assigned",
         event_category: "experiment",
         ab_variant: variant,
+        ab_source: source,
       });
     }
   };
 
   const run = () => {
-    const { variant, assigned } = assignAbBucket(abConfig);
-    if (variant) publish(variant, assigned);
+    const { variant, assigned, source } = assignAbBucket(abConfig, siteMode);
+    if (variant) publish(variant, assigned, source ?? siteMode);
     return !!variant;
   };
 
@@ -75,7 +87,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   // auch nach einem Routenwechsel an den Ereignissen haengt. Kein zweites
   // `ab_assigned` — der Nenner zaehlt Besucher, nicht Seitenaufrufe.
   nuxtApp.hook("page:finish", () => {
-    const { variant } = assignAbBucket(abConfig);
-    if (variant) pushToDataLayer({ ab_variant: variant });
+    const { variant, source } = assignAbBucket(abConfig, siteMode);
+    if (variant) {
+      pushToDataLayer({ ab_variant: variant, ab_source: source ?? siteMode });
+    }
   });
 });

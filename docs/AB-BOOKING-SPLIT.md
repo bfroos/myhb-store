@@ -7,7 +7,7 @@ Ein Standort kann beide Buchungswege haben: die Calendly-URL (`calendlyUrl`) und
 
 ## Zwei Zeitpunkte
 
-**Zuweisung** beim Seitenaufruf im Ads-Deployment (`NUXT_PUBLIC_SITE_MODE=ads`, also `go.myhealthandbeauty.com`): Bucket `app` oder `calendly`, Cookie 30 Tage, **nur mit Cookiebot-Marketing-Einwilligung**.
+**Zuweisung** beim Seitenaufruf in jedem Deployment, in dem ein Anteil gesetzt ist: Bucket `app` oder `calendly`, Cookie 30 Tage, **nur mit Cookiebot-Marketing-Einwilligung**. Mitgeschrieben wird `ab_source` (`ads` bei go.myhealthandbeauty.com, `seo` bei www) — die Quelle bleibt am Besucher, auch wenn er später das Deployment wechselt.
 
 **Anwendung** beim Öffnen des Buchungsdialogs, wenn der Standort feststeht: Der Bucket entscheidet zwischen `calendlyUrl` und `appBookingUrl` der Location.
 
@@ -20,7 +20,7 @@ Zugewiesen wird bewusst nicht beim Rendern — die Seiten liegen 15 Minuten im I
 | Regel | Wirkung |
 | --- | --- |
 | `NUXT_PUBLIC_AB_BOOKING_SPLIT` leer/0 | Kein Besucher wird zugewiesen, alle bekommen Calendly. **Auslieferungszustand.** |
-| Nur Ads-Deployment | SEO-Seiten weisen nicht zu und wenden nichts an, auch nicht bei vorhandenem Cookie |
+| Ein Schalter je Deployment | Ads (`myhb-store-ads`) und SEO (`myhb-store`) haben getrennte Env-Werte; wo kein Anteil gesetzt ist, wird weder zugewiesen noch angewendet — auch nicht bei vorhandenem Cookie |
 | Nur mit Marketing-Einwilligung | Ohne Einwilligung kein Bucket, Default Calendly, außerhalb des Tests |
 | `?ab=app` / `?ab=calendly` | Erzwingt und merkt die Variante — auch ohne Anteil und ohne Banner-Antwort (bewusste Testhandlung) |
 
@@ -42,7 +42,7 @@ https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden
 
 | Ereignis | Wann | Rolle |
 | --- | --- | --- |
-| `ab_assigned` (+ `ab_variant`) | Bucket wurde neu gezogen | **Nenner** — so viele Besucher je Arm |
+| `ab_assigned` (+ `ab_variant`, `ab_source`) | Bucket wurde neu gezogen | **Nenner** — so viele Besucher je Arm und Quelle |
 | `ab_variant` als Datenschicht-Variable | jeder Seitenaufruf im Test | hängt an den Ereignissen der Seite |
 | `click_booking` (+ `ab_variant`, ggf. `ab_fallback`) | Buchungsdialog geht auf | Zwischenstufe |
 | `booking_confirmed` (+ `ab_variant`) | Buchung bestätigt | **Zähler** |
@@ -61,9 +61,16 @@ Die App-Buchung läuft im iframe auf `app.myhealthandbeauty.com` und pusht ihr `
 2. **GTM** (GTM-5KCNWFWS): Datenschichtvariable `ab_variant` und Parameter am GA4-Tag „Funnel Events". Der Stape-Loader sitzt vor GTM — ein Publish wirkt erst nach rund 40 Minuten.
 3. **Beide Arme auf derselben Seitenvariante** laufen lassen. Düsseldorf lief im Juni parallel auf `/lippen-aufspritzen` (12,1 % CR) und `/lippen-aufspritzen-rabatt` (5,6 %) — wer die Arme auf verschiedene Seiten legt, misst Rabatt gegen Nicht-Rabatt statt Calendly gegen App.
 
+## Warum `ab_source` und nicht der Hostname
+
+Seit 16.09.2026 läuft der Test auf Entscheidung von Benjamin auch auf dem organischen Verkehr — mehr Fälle, schnellere Antwort. Bezahlt und organisch haben aber verschiedene Grundkonversionsraten: Wirft man beide Töpfe zusammen, kann eine echte Wirkung verschwinden oder eine erfundene entstehen. Jedes Ereignis trägt deshalb `ab_source`.
+
+Der Hostname reicht dafür **nicht**: Die Dankesseite nach einer Calendly-Buchung liegt immer auf `www`, auch wenn der Besucher aus einer Anzeige kam. Eine Trennung über den Hostnamen würde jede Ads-Conversion als SEO zählen. `ab_source` kommt deshalb aus dem Cookie der Zuweisung und reist über die Übergabe in `calendlyBookingHandoff.ts` bis zur Dankesseite mit.
+
 ## Bekannte Einschränkungen
 
 - Der Bucket hängt am Cookie; ein Gerätewechsel kann dieselbe Person in beide Arme bringen. Akzeptiert, gehört in die Auswertungs-Fußnote.
+- **Standorte ohne `appBookingUrl` landen im App-Arm durchgehend im Fallback.** Auf den Ads-Seiten fällt das kaum ins Gewicht (die Kampagnen zeigen auf wenige Standorte), auf SEO betrifft es alle neun. Solange nur Köln Arcaden eine App-URL hat, sind die SEO-Daten des App-Arms wertlos — `appBookingUrl` gehört vorher an alle Standorte, die am Test teilnehmen sollen.
 - Besucher ohne Marketing-Einwilligung stehen außerhalb des Tests. Sie sind mangels GA4-Ereignissen ohnehin unsichtbar, aber ohne diese Regel passten die Nenner nicht.
 
 ## Was der Split *nicht* macht
@@ -74,4 +81,4 @@ Der Kalender-Write-back (#95) ist keine Vorbedingung mehr: Alle neun Standorte s
 
 ## Prüfen
 
-`npm run check:ab-split` — 20 Fälle ohne Browser: Auslieferungszustand, Einwilligungspflicht, `?ab=`, 50/50-Verteilung über 4000 Durchläufe, Beständigkeit des Buckets, `ab_assigned` nur beim ersten Mal, und der sichtbare Rückfall ohne `appBookingUrl`.
+`npm run check:ab-split` — 23 Fälle ohne Browser: Auslieferungszustand, Einwilligungspflicht, `?ab=`, 50/50-Verteilung über 4000 Durchläufe, Beständigkeit des Buckets, `ab_assigned` nur beim ersten Mal, und der sichtbare Rückfall ohne `appBookingUrl`.
