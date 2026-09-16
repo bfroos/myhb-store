@@ -21,8 +21,15 @@
  * Aufruf (schreibt):
  *   STRAPI_TOKEN=... npx tsx scripts/aerzte-titel-bereinigen.mts --apply
  *
- * Nach dem Schreiben prueft das Skript ueber die oeffentliche API nach, ob der
- * Titel wirklich weg ist, und meldet jede Zeile einzeln.
+ * Zusaetzlich die Slugs (--slugs): die URLs tragen den Titel ebenfalls
+ * (/aerzte/dr-katharina). Mit --slugs wird der Slug auf den Anzeigenamen
+ * umgestellt und fuer die alte URL ein 301 in der Strapi-Collection
+ * `redirects` angelegt -- je Sprache mit ihrem eigenen Routen-Segment
+ * (/aerzte, /en/doctors, /tr/doktorlar, /ar/atibba, /fr/medecins, /nl/artsen).
+ *   STRAPI_TOKEN=... npx tsx scripts/aerzte-titel-bereinigen.mts --slugs --apply
+ *
+ * Ohne --apply ist alles Trockenlauf. Nach dem Schreiben prueft das Skript
+ * ueber die oeffentliche API nach und meldet jede Zeile einzeln.
  */
 
 const STRAPI_URL = (
@@ -32,9 +39,27 @@ const STRAPI_URL = (
 
 const TOKEN = process.env.STRAPI_TOKEN ?? "";
 const APPLY = process.argv.includes("--apply");
+const SLUGS = process.argv.includes("--slugs");
 
 /** Sprachen, in denen die Arzt-Eintraege gepflegt sind. */
 const LOCALES = ["de", "en", "ar", "tr", "fr", "nl"] as const;
+
+type Locale = (typeof LOCALES)[number];
+
+/**
+ * Routen-Segment je Sprache, inklusive Sprachpraefix. Muss zur Zuordnung
+ * "aerzte/[slug]" in nuxt.config.ts passen; strategy ist prefix_except_default,
+ * deutsch laeuft also ohne Praefix. resolveRedirect() vergleicht den rohen
+ * Pfad, deshalb muss `from` genau diese Form haben.
+ */
+const SEKTION: Record<Locale, string> = {
+  de: "/aerzte",
+  en: "/en/doctors",
+  tr: "/tr/doktorlar",
+  ar: "/ar/atibba",
+  fr: "/fr/medecins",
+  nl: "/nl/artsen",
+};
 
 /**
  * Belegte Promotion -- diese Eintraege bleiben unveraendert.
@@ -112,6 +137,184 @@ function planen(e: Employee): { firstName: string; lastName: string } | null {
   return { firstName: nachname, lastName: "" };
 }
 
+/** Name, wie er nach der Titel-Bereinigung auf der Seite steht. */
+function anzeigename(e: Employee): string {
+  return [e.academicTitle, e.firstName, e.lastName]
+    .map((s) => (s ?? "").trim())
+    .filter((s) => s && !NUR_TITEL.test(s))
+    .join(" ");
+}
+
+function slugify(wert: string): string {
+  return wert
+    .toLowerCase()
+    .replace(/ä/g, "ae")
+    .replace(/ö/g, "oe")
+    .replace(/ü/g, "ue")
+    .replace(/ß/g, "ss")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+type SlugPlan = {
+  e: Employee;
+  alterSlug: string;
+  neuerSlug: string;
+  von: string;
+  nach: string;
+};
+
+/** Nur Slugs, die den Titel tragen. `employee` oder `katharina-makhlin` bleiben. */
+function slugPlanen(e: Employee, belegteSlugs: Set<string>): SlugPlan | null {
+  if (BELEGTE_PROMOTION.has(e.documentId)) return null;
+
+  const alterSlug = (e.slug ?? "").trim();
+  if (!/^dr-/i.test(alterSlug)) return null;
+
+  const neuerSlug = slugify(anzeigename(e));
+  if (!neuerSlug || neuerSlug === alterSlug) return null;
+
+  // Zwei Eintraege duerfen in derselben Sprache nicht auf denselben Slug fallen.
+  if (belegteSlugs.has(neuerSlug)) {
+    console.warn(
+      `  ! [${e.locale}] ${alterSlug}: "${neuerSlug}" ist in dieser Sprache schon vergeben -- uebersprungen`,
+    );
+    return null;
+  }
+
+  const sektion = SEKTION[e.locale as Locale];
+  return {
+    e,
+    alterSlug,
+    neuerSlug,
+    von: `${sektion}/${alterSlug}`,
+    nach: `${sektion}/${neuerSlug}`,
+  };
+}
+
+/** Legt den 301 an, falls er noch nicht existiert, und veroeffentlicht ihn. */
+async function redirectAnlegen(plan: SlugPlan): Promise<"neu" | "vorhanden"> {
+  const vorhanden = await strapi<{ data: Array<{ documentId: string }> }>(
+    `/api/redirects?filters[from][$eq]=${encodeURIComponent(plan.von)}&fields[0]=from`,
+  );
+  if (vorhanden.data.length > 0) return "vorhanden";
+
+  const angelegt = await strapi<{ data: { documentId: string } }>(
+    `/api/redirects`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        data: { from: plan.von, to: plan.nach, code: 301 },
+      }),
+    },
+  );
+
+  // Draft & Publish: ohne diesen Schritt liest die oeffentliche API -- und
+  // damit die Redirect-Middleware -- den Eintrag nicht. Hat die Collection
+  // kein Draft & Publish, laeuft der Aufruf ins Leere; das ist kein Fehler,
+  // die Gegenprobe am Ende sagt ohnehin die Wahrheit.
+  try {
+    await strapi(`/api/redirects/${angelegt.data.documentId}?status=published`, {
+      method: "PUT",
+      body: JSON.stringify({ data: {} }),
+    });
+  } catch {
+    // bewusst geschluckt -- siehe Kommentar oben
+  }
+
+  return "neu";
+}
+
+async function slugPhase(): Promise<void> {
+  console.log("\n--- Slugs und Redirects ---\n");
+
+  const plaene: SlugPlan[] = [];
+  for (const locale of LOCALES) {
+    let eintraege: Employee[];
+    try {
+      eintraege = await ladeEintraege(locale);
+    } catch (err) {
+      console.warn(`Sprache ${locale} uebersprungen: ${(err as Error).message}`);
+      continue;
+    }
+    // Belegte Slugs dieser Sprache: bestehende plus die schon eingeplanten.
+    const belegt = new Set(
+      eintraege.map((x) => (x.slug ?? "").trim()).filter(Boolean),
+    );
+    for (const e of eintraege) {
+      const plan = slugPlanen(e, belegt);
+      if (!plan) continue;
+      belegt.add(plan.neuerSlug);
+      plaene.push(plan);
+    }
+  }
+
+  for (const p of plaene) {
+    console.log(`[${p.e.locale}] ${p.von} -> ${p.nach}`);
+  }
+
+  if (plaene.length === 0) {
+    console.log("Kein Slug traegt noch einen Titel.");
+    return;
+  }
+
+  if (!APPLY) {
+    console.log(`\n${plaene.length} Slug-Aenderung(en) vorgemerkt. Mit --apply ausfuehren.`);
+    return;
+  }
+
+  console.log(`\nSchreibe ${plaene.length} Slug-Aenderung(en) ...`);
+  let fehler = 0;
+  for (const p of plaene) {
+    try {
+      // Erst der Slug, dann der Redirect: andersherum zeigte der 301 eine
+      // Zeit lang auf eine Adresse, die es noch nicht gibt.
+      await strapi(
+        `/api/employees/${p.e.documentId}?locale=${p.e.locale}&status=published`,
+        { method: "PUT", body: JSON.stringify({ data: { slug: p.neuerSlug } }) },
+      );
+      const zustand = await redirectAnlegen(p);
+      console.log(`  ok   [${p.e.locale}] ${p.von} -> ${p.nach} (301 ${zustand})`);
+    } catch (err) {
+      fehler++;
+      console.error(`  FEHL [${p.e.locale}] ${p.von}: ${(err as Error).message}`);
+    }
+  }
+
+  // Gegenprobe: liest die oeffentliche API genau das, was die Middleware liest?
+  console.log("\nGegenprobe Redirects (oeffentliche API, ohne Token):");
+  let fehlend = 0;
+  for (const p of plaene) {
+    try {
+      const { data } = await strapi<{ data: Array<{ to: string }> }>(
+        `/api/redirects?filters[from][$eq]=${encodeURIComponent(p.von)}&fields[0]=to`,
+        {},
+        false,
+      );
+      if (data.length === 0 || data[0]?.to !== p.nach) {
+        fehlend++;
+        console.log(`  FEHLT ${p.von}`);
+      }
+    } catch {
+      fehlend++;
+      console.log(`  UNKLAR ${p.von}`);
+    }
+  }
+  console.log(
+    fehlend === 0
+      ? `  Alle ${plaene.length} Weiterleitungen sind oeffentlich sichtbar.`
+      : `  ${fehlend} Weiterleitung(en) fehlen -- oben nachsehen.`,
+  );
+  console.log(
+    "  Hinweis: der Server cacht die Redirect-Liste 5 Minuten. Bis dahin kann\n" +
+      "  die alte URL noch ins Leere laufen.",
+  );
+
+  if (fehler > 0) process.exit(1);
+}
+
 async function main(): Promise<void> {
   if (APPLY) assertToken();
 
@@ -169,6 +372,7 @@ async function main(): Promise<void> {
     console.log(
       `\n${offen.length} Aenderung(en) vorgemerkt. Mit --apply ausfuehren.`,
     );
+    if (SLUGS) await slugPhase();
     return;
   }
 
@@ -223,6 +427,8 @@ async function main(): Promise<void> {
       ? "  Kein unbelegter Titel mehr in den Namen."
       : `  ${uebrig} Eintrag/Eintraege tragen weiter einen Titel -- oben nachsehen.`,
   );
+
+  if (SLUGS) await slugPhase();
 
   if (fehler > 0) process.exit(1);
 }
