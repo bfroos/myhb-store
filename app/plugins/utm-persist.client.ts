@@ -32,13 +32,14 @@
  *   beiden Felder auswertet.
  *
  * v1.4 (#126): salesforce_uuid traegt zusaetzlich den Cookiebot-Stand als
- * ";c=1" / ";c=0". Ohne diesen Stempel kennt T14 den Einwilligungsstand einer
+ * ";c:1" / ";c:0". Ohne diesen Stempel kennt T14 den Einwilligungsstand einer
  * Calendly-Buchung nicht, appointment_attribution.marketing_consent bleibt NULL
  * und meta-capi-purchase ueberspringt JEDE Calendly-Buchung ("no_marketing_-
  * consent") — das waren zuletzt 739 von 749. Format daher:
- * "fbclid:...;c=1" | "gclid:...;c=0" | "c=1" (ohne Klick-ID).
- * ACHTUNG Reihenfolge: T14 muss den Suffix abschneiden, BEVOR diese Fassung
- * live geht, sonst landet er in last_click_id und fbc wird ungueltig.
+ * "fbclid:...;c:1" | "gclid:...;c:0" | "c:1" (ohne Klick-ID).
+ * Das Trennzeichen ist ein Doppelpunkt, kein Gleichheitszeichen: T14 vergleicht
+ * den Teil nach dem ";" exakt gegen "c:1"/"c:0". Mit "c=1" wuerde der Stempel
+ * stillschweigend verworfen und marketing_consent bliebe NULL.
  *
  * Consent: Mit Cookiebot-Marketing-Consent 90 Tage persistent (First-Party-
  * Cookie + localStorage), ohne Consent nur sessionStorage. Bei nachtraeglichem
@@ -251,16 +252,16 @@ export default defineNuxtPlugin(() => {
       // verloren gehen, nur weil die Person spaeter organisch zurueckkam.
       const first = store && store.first ? store.first : null;
       const cid = clickIdOf(data) || clickIdOf(first);
-      // v1.4 (#126): Der Consent reist als ";c=1"/";c=0" im selben Feld mit.
+      // v1.4 (#126): Der Consent reist als ";c:1"/";c:0" im selben Feld mit.
       // salesforce_uuid ist der einzige freie Passthrough, den Calendly im
       // Webhook zurueckgibt. Ohne Klick-ID wird der Stempel allein gesetzt,
       // sonst haette eine organische Buchung nie einen Einwilligungsnachweis.
       const consent = marketingConsentFlag();
       const existing = u.searchParams.get("salesforce_uuid");
-      const stamp = [cid, consent ? `c=${consent}` : null].filter(Boolean).join(";");
+      const stamp = [cid, consent ? `c:${consent}` : null].filter(Boolean).join(";");
       // Cookiebot antwortet oft erst nach dem ersten Dekorieren. Einen eigenen
       // Wert ohne Stempel deshalb nachtraeglich hochstufen, einen fremden nicht.
-      const nachruesten = !!existing && !!consent && !/(^|;)c=/.test(existing);
+      const nachruesten = !!existing && !!consent && !/(^|;)c:[01]$/.test(existing);
       if (stamp && (!existing || nachruesten)) {
         u.searchParams.set("salesforce_uuid", stamp);
       }
