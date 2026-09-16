@@ -88,6 +88,9 @@ export function useBookingThankYouTracking() {
       // zaehlte eine spaetere Buchung ueber eine SEO-Seite mit in den Test.
       ab_variant: sameBooking ? handoff?.ab_variant : undefined,
       ab_fallback: sameBooking ? handoff?.ab_fallback : undefined,
+      // Ohne diesen Wert waere die Buchung nicht mehr der Quelle zuzuordnen:
+      // Calendly leitet immer auf www weiter, auch bei Anzeigen-Verkehr.
+      ab_source: sameBooking ? handoff?.ab_source : undefined,
       // Calendly-Anzeigename des Standort-Kalenders, wenn kein Slug bekannt ist.
       location: assignedTo,
       confirmation_page: true,

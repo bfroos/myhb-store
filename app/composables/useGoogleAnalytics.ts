@@ -129,6 +129,8 @@ export const useGoogleAnalytics = () => {
       ab_variant?: 'app' | 'calendly';
       /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
       ab_fallback?: boolean;
+      /** Deployment der Zuweisung: ads oder seo — trennt die beiden Toepfe. */
+      ab_source?: 'ads' | 'seo';
     },
   ) => {
     trackEvent('click_booking', {
@@ -146,7 +148,11 @@ export const useGoogleAnalytics = () => {
   const trackBookingLocationSelected = (
     bookingType: 'calendly' | 'app',
     locationSlug?: string,
-    ab?: { ab_variant?: 'app' | 'calendly'; ab_fallback?: boolean },
+    ab?: {
+      ab_variant?: 'app' | 'calendly';
+      ab_fallback?: boolean;
+      ab_source?: 'ads' | 'seo';
+    },
   ) => {
     trackEvent('booking_location_selected', {
       event_category: 'conversion',
@@ -166,6 +172,7 @@ export const useGoogleAnalytics = () => {
     treatment_type?: string;
     ab_variant?: 'app' | 'calendly';
     ab_fallback?: boolean;
+    ab_source?: 'ads' | 'seo';
   }) => {
     trackEvent('booking_datetime_selected', {
       event_category: 'conversion',
@@ -206,6 +213,8 @@ export const useGoogleAnalytics = () => {
     ab_variant?: 'app' | 'calendly';
     /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
     ab_fallback?: boolean;
+    /** Deployment der Zuweisung: ads oder seo. */
+    ab_source?: 'ads' | 'seo';
   }) => {
     trackEvent('booking_confirmed', {
       event_category: 'conversion',

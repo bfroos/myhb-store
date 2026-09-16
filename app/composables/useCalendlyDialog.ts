@@ -41,7 +41,7 @@ export function useCalendlyDialog() {
     // #100: Der Bucket steht schon seit dem Seitenaufruf fest
     // (plugins/ab-split.client.ts); hier wird er angewendet, weil jetzt der
     // Standort und damit die zweite URL bekannt ist.
-    const { url: targetUrl, abVariant, abFallback } = resolveBooking({
+    const { url: targetUrl, abVariant, abFallback, abSource } = resolveBooking({
       calendlyUrl: url,
       appBookingUrl: alternatives?.appBookingUrl,
     });
@@ -62,6 +62,7 @@ export function useCalendlyDialog() {
         location_slug: alternatives?.locationSlug,
         ab_variant: abVariant,
         ab_fallback: abFallback,
+        ab_source: abSource,
       },
     );
 
@@ -86,6 +87,7 @@ export function useCalendlyDialog() {
           appTreatmentSlug,
           abVariant,
           abFallback,
+          abSource,
         },
         props: {
           modal: true,

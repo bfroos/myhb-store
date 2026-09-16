@@ -5,8 +5,9 @@
  *
  * Stubt window/document und spielt die Faelle durch, an denen der A/B-Split
  * haengt: Auslieferungszustand (alles Calendly), Einwilligungspflicht,
- * Erzwingen per ?ab=, 50/50-Verteilung, Bestaendigkeit des Buckets, und den
- * sichtbaren Rueckfall, wenn einer Location die appBookingUrl fehlt.
+ * Erzwingen per ?ab=, 50/50-Verteilung, Bestaendigkeit des Buckets, die Quelle
+ * der Zuweisung (ads|seo) und den sichtbaren Rueckfall, wenn einer Location die
+ * appBookingUrl fehlt.
  *
  * Das Repo hat keinen Test-Runner; diese Datei ist bewusst ein eigenstaendiges
  * Skript statt einer halben Test-Infrastruktur.
@@ -55,6 +56,7 @@ const mod = await import("../app/lib/bookingAbTest.ts");
 const {
   assignAbBucket,
   readAbBucket,
+  readAbSource,
   readAbBookingConfig,
   resolveBookingTarget,
 } = mod;
@@ -64,7 +66,7 @@ const {
   setupDom("", { marketing: true });
   const cfg = readAbBookingConfig({});
   check("Default-Config ist aus", cfg.splitPercent === 0, cfg);
-  const r = assignAbBucket(cfg);
+  const r = assignAbBucket(cfg, "ads");
   check("keine Zuweisung ohne Anteil", !r.variant && !r.assigned, r);
   check(
     "ohne Bucket -> Calendly, keine Variante",
@@ -78,27 +80,27 @@ const {
 // --- Einwilligung ist Pflicht ---------------------------------------------
 {
   setupDom("", { marketing: false });
-  const r = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }));
+  const r = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "ads");
   check("Marketing abgelehnt -> keine Zuweisung", !r.variant, r);
 }
 {
   setupDom("", { marketing: null }); // Banner noch unbeantwortet / kein Cookiebot
-  const r = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }));
+  const r = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "ads");
   check("ohne Cookiebot-Antwort -> keine Zuweisung", !r.variant, r);
 }
 
 // --- ?ab= erzwingt, auch ohne Einwilligung und ohne Anteil -----------------
 {
   const dom = setupDom("?ab=app", { marketing: false });
-  const r = assignAbBucket(readAbBookingConfig({}));
+  const r = assignAbBucket(readAbBookingConfig({}), "ads");
   check("?ab=app weist zu", r.variant === "app" && r.assigned, r);
   check("?ab=app schreibt das Cookie", dom.cookies().includes("myhb_ab_booking=app"), dom.cookies());
-  const again = assignAbBucket(readAbBookingConfig({}));
+  const again = assignAbBucket(readAbBookingConfig({}), "ads");
   check("?ab=app zweiter Aufruf meldet keine neue Zuweisung", again.variant === "app" && !again.assigned, again);
 }
 {
   setupDom("?ab=calendly", { marketing: true });
-  assignAbBucket(readAbBookingConfig({ abBookingSplit: "100" }));
+  assignAbBucket(readAbBookingConfig({ abBookingSplit: "100" }), "ads");
   check("?ab=calendly schlaegt den 100%-Anteil", readAbBucket() === "calendly", readAbBucket());
 }
 
@@ -109,14 +111,14 @@ const {
   const N = 4000;
   for (let i = 0; i < N; i++) {
     setupDom("", { marketing: true });
-    if (assignAbBucket(cfg).variant === "app") app++;
+    if (assignAbBucket(cfg, "ads").variant === "app") app++;
   }
   const share = (app / N) * 100;
   check(`50/50 (gemessen ${share.toFixed(1)} %)`, Math.abs(share - 50) < 5, share);
 
   setupDom("", { marketing: true });
-  const first = assignAbBucket(cfg).variant;
-  const again = Array.from({ length: 20 }, () => assignAbBucket(cfg));
+  const first = assignAbBucket(cfg, "ads").variant;
+  const again = Array.from({ length: 20 }, () => assignAbBucket(cfg, "ads"));
   check(
     "Bucket bleibt ueber weitere Seitenaufrufe gleich",
     again.every((r) => r.variant === first && !r.assigned),
@@ -152,6 +154,26 @@ const {
     b.url === undefined && b.abVariant === "app" && !b.abFallback,
     b,
   );
+}
+
+// --- Quelle der Zuweisung -------------------------------------------------
+{
+  setupDom("", { marketing: true });
+  const cfg = readAbBookingConfig({ abBookingSplit: "100" });
+  const r = assignAbBucket(cfg, "seo");
+  check("SEO-Zuweisung merkt sich die Quelle", r.source === "seo" && readAbSource() === "seo", r);
+  // Derselbe Besucher spaeter im Ads-Deployment: Bucket UND Quelle bleiben.
+  const spaeter = assignAbBucket(cfg, "ads");
+  check(
+    "Deployment-Wechsel aendert die Quelle nicht",
+    spaeter.source === "seo" && spaeter.variant === r.variant && !spaeter.assigned,
+    spaeter,
+  );
+}
+{
+  setupDom("?ab=app", { marketing: false });
+  const r = assignAbBucket(readAbBookingConfig({}), "seo");
+  check("?ab= schreibt die Quelle mit", r.source === "seo" && readAbSource() === "seo", r);
 }
 
 // --- Unsinnige Env-Werte schalten ab, nicht auf ----------------------------

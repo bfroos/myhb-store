@@ -38,6 +38,8 @@ export type CalendlyBookingHandoff = {
   ab_variant?: "app" | "calendly";
   /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
   ab_fallback?: boolean;
+  /** Deployment der Zuweisung (ads|seo) — die Dankesseite liegt immer auf www. */
+  ab_source?: "ads" | "seo";
   /** true, sobald der Dialog `booking_confirmed` dafür gepusht hat. */
   fired?: boolean;
   /** ISO-Zeitstempel des letzten Schreibvorgangs. */

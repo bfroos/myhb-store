@@ -124,6 +124,7 @@ function trackingContext() {
     // `booking_confirmed` nicht gegen den Nenner aus `ab_assigned` stellen.
     ab_variant: params.value?.abVariant,
     ab_fallback: params.value?.abFallback,
+    ab_source: params.value?.abSource,
   };
 }
 
@@ -186,7 +187,7 @@ function handleLocationBook(location: {
   if (!location.calendlyUrl) return;
   // #100: Auf den Meta-Landingpages steht der Standort erst hier fest — der
   // Bucket dagegen schon seit dem Seitenaufruf. Hier wird er angewendet.
-  const { url: targetUrl, abVariant, abFallback } = resolveBooking({
+  const { url: targetUrl, abVariant, abFallback, abSource } = resolveBooking({
     calendlyUrl: location.calendlyUrl,
     appBookingUrl: location.appBookingUrl,
   });
@@ -202,11 +203,12 @@ function handleLocationBook(location: {
   trackBookingLocationSelected(isApp ? "app" : "calendly", location.slug, {
     ab_variant: abVariant,
     ab_fallback: abFallback,
+    ab_source: abSource,
   });
   bookedLocationSlug.value = location.slug;
   // Der Dialog wurde ohne Standort geoeffnet; erst die Auswahl hier bringt die
   // Variante in den Kontext der folgenden Ereignisse.
-  params.value = { ...params.value, abVariant, abFallback };
+  params.value = { ...params.value, abVariant, abFallback, abSource };
   // If the picked location already uses the in-app booking flow, close this
   // Calendly dialog and open the in-app iframe dialog instead. Calendly
   // locations keep rendering the inline widget in place as before.
