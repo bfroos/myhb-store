@@ -1,5 +1,5 @@
 /**
- * MYH&B UTM-Persistenz v1.4
+ * MYH&B UTM-Persistenz v1.5
  *
  * v1.0: Speichert utm_*, gclid, fbclid, ttclid beim Erstbesuch (First Touch)
  * und dekoriert automatisch alle Calendly-URLs (Links, Embeds, Popups) sowie
@@ -30,6 +30,12 @@
  *   bzw. Klick-ID) mit ft_-Praefix, und nur wenn das Feld sonst leer bliebe.
  *   Echte Kampagnenwerte haben Vorrang. Wirkt erst, wenn der Calendly-Sub die
  *   beiden Felder auswertet.
+ *
+ * v1.5 (#86): salesforce_uuid traegt zusaetzlich die Kampagne des First Touch als
+ * ";ft_cmp:<id>". Ohne sie steht in appointment_attribution.first_utm_campaign nur
+ * eine Kopie von last_utm_campaign — First-Touch-Attribution trug damit auf Kanal-,
+ * aber nicht auf Kampagnenebene, was #86 ("CAC je Kanal UND Kampagne") braucht.
+ * T14 liest das Token seit dem 16.09.; aeltere T14-Fassungen ignorieren es still.
  *
  * v1.4 (#126): salesforce_uuid traegt zusaetzlich den Cookiebot-Stand als
  * ";c:1" / ";c:0". Ohne diesen Stempel kennt T14 den Einwilligungsstand einer
@@ -258,7 +264,26 @@ export default defineNuxtPlugin(() => {
       // sonst haette eine organische Buchung nie einen Einwilligungsnachweis.
       const consent = marketingConsentFlag();
       const existing = u.searchParams.get("salesforce_uuid");
-      const stamp = [cid, consent ? `c:${consent}` : null].filter(Boolean).join(";");
+      // v1.5 (#86): Kampagne des First Touch als ";ft_cmp:<id>". Sie reist hier mit
+      // und nicht in utm_term/utm_content, weil die beiden nur belegt werden, wenn
+      // sie sonst leer blieben — bei bezahltem Verkehr sind sie besetzt, also genau
+      // dort, wo die First-Touch-Kampagne interessant waere.
+      const ersterBesuchAnders = !!(
+        first && first._ts && first._ts !== data._ts && first.utm_source
+      );
+      // Semikolon ist das Trennzeichen des Stempels; ein Kampagnenname, der eines
+      // enthaelt, wuerde den Rest abschneiden. Deshalb raus damit, nicht escapen.
+      const ftCmp =
+        ersterBesuchAnders && first?.utm_campaign
+          ? String(first.utm_campaign).replace(/;/g, "").trim() || null
+          : null;
+      const stamp = [
+        cid,
+        consent ? `c:${consent}` : null,
+        ftCmp ? `ft_cmp:${ftCmp}` : null,
+      ]
+        .filter(Boolean)
+        .join(";");
       // Cookiebot antwortet oft erst nach dem ersten Dekorieren. Einen eigenen
       // Wert ohne Stempel deshalb nachtraeglich hochstufen, einen fremden nicht.
       const nachruesten = !!existing && !!consent && !/(^|;)c:[01]$/.test(existing);
@@ -269,7 +294,7 @@ export default defineNuxtPlugin(() => {
       // als der Last Touch. utm_term/utm_content werden nur belegt, wenn sie
       // sonst leer blieben — echte Kampagnenwerte haben Vorrang. Das ft_-Praefix
       // macht die Herkunft im Webhook eindeutig unterscheidbar.
-      if (first && first._ts && first._ts !== data._ts && first.utm_source) {
+      if (ersterBesuchAnders && first) {
         if (!u.searchParams.get("utm_term")) {
           u.searchParams.set("utm_term", `ft_src:${first.utm_source}|${first.utm_medium || "none"}`);
         }
