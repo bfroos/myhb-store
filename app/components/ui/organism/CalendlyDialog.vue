@@ -278,6 +278,34 @@ function onItemSelect(event: { value: CitySuggestion }) {
   onSelect({ value: event.value });
 }
 
+/**
+ * Die Ueberschrift folgt dem Schritt.
+ *
+ * Bisher stand ueber dem Dialog immer "Waehle deine Lounge" — auch dann noch,
+ * wenn das Calendly-Widget schon die Terminarten auflistet. Dort waehlt man
+ * keine Lounge mehr, sondern Terminart und Zeit. Wird der Dialog von einer
+ * Standortseite geoeffnet, steht der Standort sogar von Anfang an fest und die
+ * Ueberschrift war nie richtig.
+ *
+ * Fuer den A/B-Test (#100) ist das mehr als Kosmetik: Diese Zwischenstufe gibt
+ * es nur im Calendly-Arm. Eine verwirrende Ueberschrift auf genau einer Seite
+ * des Tests wuerde man spaeter faelschlich dem Buchungssystem zuschreiben.
+ *
+ * "Termin buchen" ist dieselbe Ueberschrift, die der App-Arm traegt — beide
+ * Arme sagen an dieser Stelle jetzt dasselbe.
+ */
+watch(
+  () => params.value?.url,
+  (url) => {
+    const dialogProps = dialogRef?.value?.options?.props;
+    if (!dialogProps) return;
+    dialogProps.header = url
+      ? t("cta.bookAppointment")
+      : t("dialogs.calendly.header");
+  },
+  { immediate: true },
+);
+
 onMounted(async () => {
   params.value = dialogRef.value.data;
 
