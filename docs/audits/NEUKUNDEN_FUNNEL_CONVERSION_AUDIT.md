@@ -225,3 +225,27 @@ PR [elanagency/myhb-os#54](https://github.com/elanagency/myhb-os/pull/54), Branc
 | #75 Fragebogen | Nur Code-Review (kein Test-Konto): Antworten werden je Frage gespeichert, Events vorhanden; offen: Erfolgsdialog ohne Ausstieg, Sie-Form in `medicalForms.json`, kein Footer auf `/q/:token`, keine E-Mail |
 
 Nach dem Merge (außerhalb des Codes): GTM-Trigger umstellen, SQL-Vorschlag prüfen und ausführen, Store-Seite (Strapi-Feld, `myhb:booking-cancelled`-Listener, AGB-Seite), Lovable-Publish.
+
+### 6.2 Stand 17.09.2026 (Issue-Review und Live-Prüfung)
+
+Quellen: Issue-Status in bfroos/myhb-store, gemergte Store-PRs (#89, #91, #98, #99, #104, #113, #119–#124), Abschnitt 6.1 (App-PR elanagency/myhb-os#54) und ein Live-Durchlauf der App am 17.09. (390 px, Deeplink `?location=aachen-aquiz-plaza&treatment=lippen-aufspritzen`).
+
+**Bilanz:** 17 von 28 Issues erledigt oder weitgehend umgesetzt, 4 teilweise, 7 offen. 6 von 7 P0-Issues erledigt; offen ist operativ die Calendly-Migration (#77).
+
+| Status | Issues |
+|--------|--------|
+| Erledigt (live verifiziert bzw. gemergt) | #61, #62, #64, #65, #66, #68, #69, #70, #71, #72, #88 |
+| Weitgehend erledigt, Rest-Notiz | #63 (Sie-Form außerhalb des Buchungsflusses, SMS-Vorlage), #67 (GTM-Trigger, Cross-Domain-Liste, SQL-Vorschlag), #73 (Marketing-Opt-in mit Double-Opt-in), #78 (Store fertig; Strapi liefert `googlePlaceId`/`contact` weiterhin nicht), #80 (Store fertig; CMS-Reihenfolge offen), #86 |
+| Teilweise | #75 (nur Code-Review, keine Test-Nummer), #76 (nur `booking_confirmed` auf der Danke-Seite), #79 (Hero-Caps; Sticky-CTA und H1 offen), #85 (A/B-Split-Infrastruktur gebaut, Split aus) |
+| Offen | #74, #77, #81, #82, #83, #84, #87 |
+
+**Live in der App verifiziert (17.09.):** `lang="de"`, Titel je Route, Meta ohne Lovable, eigenes OG-Bild, Wortmarke im Header; Footer mit Impressum · Datenschutz · AGB; Trust-Leiste; Stepper „Schritt 3 von 4“; deutscher Kalender mit „Nächster freier Termin“; „Abbrechen“ statt „Ablehnen“; Zusammenfassung mit „Do, 17.09.2026 · 14:45 Uhr · Ab 149,99 €“, Preis-Erklärung, „So geht es weiter“, Storno-/Vorkasse-Zeile, Google-Note des Standorts; Registrierungs-Modal „Fast geschafft“ 358 px breit, Handynummer zuerst, Datenschutz-Link; Deeplink mit Website-Slug ohne Fehlerbanner.
+
+**Im Store seit dem Audit gemergt:** #91 (Deeplink-Slug auch für den im Dialog gewählten Standort, `appTreatmentSlug` mit Fallback, Abbruch-Handshake, AGB-Seite), #98/#104/#113 (Calendly-Buchungen als `booking_confirmed`, flache Datenschicht-Objekte: zuvor hatten 86 von 87 `booking_confirmed` in GA4 kein `booking_type`), #119/#122/#123 (A/B-Split Calendly vs. App mit `ab_variant`/`ab_source`, Dialog-Überschrift je Schritt), #124 (Ladezustand im Dialog).
+
+**Neu aufgefallen:**
+- Bewertungszahlen widersprechen sich: App „1.640 Google-Bewertungen“ (`venues.google_rating`), Website-Badge „1.538+ 5-Sterne“ (Strapi Global), Store-Aggregat 1.551 (`GOOGLE_RATINGS`). Eine Quelle festlegen (#88 erweitern).
+- Strapi: `appBookingUrl` existiert am Standort, ist aber bei allen 10 Standorten leer; A/B-Split steht auf 0 %. Der Store routet weiterhin 0 von 10 Standorten in die App.
+- Strapi: `appTreatmentSlug` bei 71 Behandlungs- und 109 Ads-Seiten leer; Alias-Tabelle in der App fachlich unbestätigt.
+
+**Empfehlung Issue-Pflege:** #62, #64, #65, #68, #69, #70, #71, #72, #88 schließen; #63 und #73 mit Rest-Notiz schließen; #67 und #74–#87 offen lassen. Nächster Schritt mit größtem Hebel: #77, Aachen mit `appBookingUrl` befüllen und Split auf 50 % stellen, eine Woche messen.
