@@ -249,3 +249,16 @@ Quellen: Issue-Status in bfroos/myhb-store, gemergte Store-PRs (#89, #91, #98, #
 - Strapi: `appTreatmentSlug` bei 71 Behandlungs- und 109 Ads-Seiten leer; Alias-Tabelle in der App fachlich unbestätigt.
 
 **Empfehlung Issue-Pflege:** #62, #64, #65, #68, #69, #70, #71, #72, #88 schließen; #63 und #73 mit Rest-Notiz schließen; #67 und #74–#87 offen lassen. Nächster Schritt mit größtem Hebel: #77, Aachen mit `appBookingUrl` befüllen und Split auf 50 % stellen, eine Woche messen.
+
+### 6.3 A/B-Test Calendly vs. App läuft (Prüfung 17.09.2026)
+
+Korrektur zu 6.2: Der Test aus `docs/AB-BOOKING-SPLIT.md` (#100) ist seit 16./17.09. scharf. `NUXT_PUBLIC_AB_BOOKING_SPLIT=50` auf www und go., `appBookingUrl` an 9 von 10 Standorten (MediaPark Klinik ohne App-URL, fällt im App-Arm mit `ab_fallback: true` auf Calendly zurück). #77 und #85 laufen damit als Test statt als offene Aufgabe.
+
+**Live geprüft (390 px, `?ab=app` / `?ab=calendly`, www und go.):** Cookies `myhb_ab_booking` und `myhb_ab_source` auf `.myhealthandbeauty.com`; `ab_assigned` genau einmal je Bucket; `ab_variant`/`ab_source` an `click_booking` und `booking_location_selected`; App-Arm öffnet `app.myhealthandbeauty.com/book-appointment?location=aachen-aquiz-plaza&treatment=lippen-aufspritzen&…&ab_variant=app`, Calendly-Arm das Widget mit Consent-Stempel. Die App liest Variante und Quelle aus den Cookies (Fallback URL-Parameter in sessionStorage) und hängt beide an `booking_confirmed` mit `booking_type: app`. Der GTM-Container GTM-5KCNWFWS enthält `ab_variant`, `ab_source`, `ab_fallback`, `ab_assigned`, `booking_confirmed`.
+
+**Für die Auswertung:**
+- Buttons mit Methode `app-booking` (Neukundenrabatt-Seite) umgehen den Split; die App hängt den Cookie-Bucket an → `booking_type=app` mit `ab_variant=calendly` möglich. Als Datenqualitätsprüfung mitführen und ausschließen, oder den Button durch `resolveBooking` schicken.
+- Besucher außerhalb der EU erhalten von Cookiebot implied consent und sind automatisch im Test (Fußnote).
+- Randfall: Bucket `calendly` an einem Standort ohne `calendlyUrl` öffnet die App mit `ab_variant=calendly`; heute nicht relevant, wird es beim Entfernen erster Calendly-URLs.
+- Laufzeit: bei grob 140 Buchungs-Klicks je Arm und Woche etwa 4 Wochen für einen relativen Effekt von 30 % auf Klick → Buchung, etwa 8 Wochen für 20 % (80 % Power, α 5 %). Nach drei Tagen die realen Wochenwerte je Arm und `ab_source` aus GA4 nehmen. Primärmetrik `booking_confirmed` je `ab_assigned` (Intent-to-treat), getrennt nach `ab_source`, ohne `ab_fallback`; Guardrail: Anteil `booking_type ≠ ab_variant`.
+- Nicht von außen prüfbar: Registrierung von `ab_variant`, `ab_source`, `ab_fallback` als ereignisbezogene Dimensionen in GA4.
