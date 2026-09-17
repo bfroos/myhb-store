@@ -11,7 +11,9 @@
  * § 132a Abs. 1 Nr. 1 StGB strafbar und wettbewerbsrechtlich abmahnbar.
  *
  * Das Skript verschiebt den echten Vornamen nach `firstName` und leert
- * `lastName`. Aus "DR." + "Katharina" wird "Katharina". Wer eine belegte
+ * `lastName`. Aus "DR." + "Katharina" wird "Katharina". Dasselbe gilt fuer
+ * "Arzt"/"Ärztin" im Namensfeld -- die Berufsbezeichnung gehoert ins Feld
+ * `role`, das den Untertitel fuellt, nicht in den Namen. Wer eine belegte
  * Promotion hat, gehoert in BELEGTE_PROMOTION und wird nicht angefasst --
  * dort gehoert der Titel in `academicTitle`, so wie bei Gero Ruppert.
  *
@@ -74,6 +76,18 @@ const BELEGTE_PROMOTION = new Set<string>([
 
 /** "Dr", "Dr.", "DR." -- der Titel als ganzer Feldinhalt. */
 const NUR_TITEL = /^\s*dr\.?\s*$/i;
+
+/**
+ * Berufsbezeichnung als ganzer Feldinhalt. Am 17.09.2026 wurde das "DR." in
+ * `firstName` bei 16 Eintraegen durch "Arzt "/"Ärztin" ersetzt -- rechtlich
+ * sauber, aber das Feld bleibt falsch belegt: die Rolle steht ohnehin im Feld
+ * `role` und erscheint als Untertitel. Die Seite las sich dadurch
+ * "Arzt Adi" mit "Arzt" direkt darunter.
+ */
+const NUR_BERUF = /^\s*(arzt|ärztin|aerztin)\s*$/i;
+
+/** Feldinhalt, der kein Name ist, sondern Titel oder Berufsbezeichnung. */
+const KEIN_NAME = (wert: string) => NUR_TITEL.test(wert) || NUR_BERUF.test(wert);
 
 type Employee = {
   id: number;
@@ -139,7 +153,7 @@ function planen(e: Employee): { firstName: string; lastName: string } | null {
 
   const vorname = (e.firstName ?? "").trim();
   const nachname = (e.lastName ?? "").trim();
-  if (!NUR_TITEL.test(vorname)) return null;
+  if (!KEIN_NAME(vorname)) return null;
 
   // Ohne echten Namen im zweiten Feld waere die Zeile nach der Aenderung leer.
   if (!nachname) return null;
@@ -151,7 +165,7 @@ function planen(e: Employee): { firstName: string; lastName: string } | null {
 function anzeigename(e: Employee): string {
   return [e.academicTitle, e.firstName, e.lastName]
     .map((s) => (s ?? "").trim())
-    .filter((s) => s && !NUR_TITEL.test(s))
+    .filter((s) => s && !KEIN_NAME(s))
     .join(" ");
 }
 
@@ -176,12 +190,18 @@ type SlugPlan = {
   nach: string;
 };
 
-/** Nur Slugs, die den Titel tragen. `employee` oder `katharina-makhlin` bleiben. */
+/**
+ * Nur Slugs, die Titel oder Berufsbezeichnung tragen (`dr-katharina`,
+ * `arzt-adi`, `aerztin-avin`). Echte Namens-Slugs wie `employee`,
+ * `katharina-makhlin` oder `avin-mohammad` bleiben unberuehrt.
+ */
+const SLUG_MIT_TITEL = /^(dr|arzt|aerztin)-/i;
+
 function slugPlanen(e: Employee, belegteSlugs: Set<string>): SlugPlan | null {
   if (BELEGTE_PROMOTION.has(e.documentId)) return null;
 
   const alterSlug = (e.slug ?? "").trim();
-  if (!/^dr-/i.test(alterSlug)) return null;
+  if (!SLUG_MIT_TITEL.test(alterSlug)) return null;
 
   const neuerSlug = slugify(anzeigename(e));
   if (!neuerSlug || neuerSlug === alterSlug) return null;
@@ -444,11 +464,11 @@ async function main(): Promise<void> {
     }
     for (const e of eintraege) {
       if (BELEGTE_PROMOTION.has(e.documentId)) continue;
-      const name = [e.academicTitle, e.firstName, e.lastName]
+      const teile = [e.academicTitle, e.firstName, e.lastName]
         .map((s) => (s ?? "").trim())
-        .filter(Boolean)
-        .join(" ");
-      if (/\bdr\.?\b/i.test(name)) {
+        .filter(Boolean);
+      const name = teile.join(" ");
+      if (teile.some(KEIN_NAME)) {
         uebrig++;
         console.log(`  OFFEN [${locale}] ${e.slug ?? e.documentId}: "${name}"`);
       }
