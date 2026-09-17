@@ -264,3 +264,15 @@ Korrektur zu 6.2: Der Test aus `docs/AB-BOOKING-SPLIT.md` (#100) ist seit 16./17
 - GA4/GTM sind vorbereitet (laut #100, 15./16.09.): ereignisbezogene Dimensionen „AB Variante“, „AB Fallback“, „AB Quelle“ in G-PB2XDTTPKZ; GTM Version 82 mit `ab_variant`/`ab_source`/`ab_fallback` am Tag „Funnel Events“, Trigger für `ab_assigned` und `click_booking`. `booking_location_selected` und `booking_datetime_selected` erreichen GA4 bewusst nicht.
 
 **Folge-Tickets (17.09.):** unter Epic #93 „Buchungssystem-Migration“ (`E2-buchung`): #128 Buchungen am Split vorbei kennzeichnen (`app-booking`-Buttons), #129 Randfall Bucket `calendly` ohne `calendlyUrl`. Unter Epic #60: #130 Bewertungszahlen vereinheitlichen, #131 `appTreatmentSlug` befüllen und Alias-Tabelle freigeben, #132 `/locations/bookable` um `googlePlaceId` und `contact` erweitern. Messung und Entscheidungsregel des Tests: elanagency/myhb-os#204.
+
+### 6.4 Epic-Zuordnung der offenen Tickets (17.09.2026)
+
+Neues Epic-Label `E9-funnel` für #60, nach dem Schema E1–E8 des Repos. Alle offenen Sub-Issues tragen es.
+
+| Label | Epic | Offene Tickets |
+|-------|------|----------------|
+| `E9-funnel` | #60 Neukunden-Funnel Conversion-Audit | #67, #74–#87, #131, #132 |
+| `E2-buchung` | #93 Buchungssystem-Migration Calendly → App | #96, #97, #128, #129 |
+| `E1-tracking` | Messung und Entscheidungsregel (Epic in elanagency/myhb-os, u. a. #204) | #100, #130 |
+
+Session-Regel aus #93: je Epic höchstens eine Claude-Session, 🔒-Kommentar beim Start und 🔓 beim Ende am Epic-Issue. Der Parent von #130 bleibt technisch #60; das Umhängen auf das E1-Epic geht nur über die GitHub-Oberfläche.
