@@ -178,6 +178,30 @@ export type AssignResult = {
 };
 
 /**
+ * Seiten, die einen Buchungsabschluss bestaetigen. Gemessen am 18.09.2026 fiel
+ * auf `/p/danke-fuer-deine-terminbuchung` der Bucket fuer 39 Besucher in drei
+ * Tagen — Leute, die gerade ueber Calendly gebucht hatten und erst danach dem
+ * Test zugelost wurden. Dieselbe Seite feuert `booking_confirmed`, und so
+ * erschienen zehn von ihnen als App-Arm-Nutzer, die ueber Calendly buchten.
+ * Die Auswertung las das als Leckage im Buchungsweg (elanagency/myhb-os#272).
+ *
+ * Ein bereits gezogener Bucket bleibt gueltig: wer VOR der Buchung zugeteilt
+ * wurde, soll auf der Dankesseite weiter seinem Arm zugerechnet werden. Diese
+ * Sperre greift nur fuer NEUE Zuweisungen — siehe assignAbBucket().
+ */
+const NACH_BUCHUNG_PFADE = ["/p/danke-fuer-deine-terminbuchung"];
+
+export function istNachBuchungsSeite(
+  pathname: string | undefined = typeof window === "undefined"
+    ? undefined
+    : window.location?.pathname,
+): boolean {
+  if (!pathname) return false;
+  const rein = pathname.replace(/\/+$/, "").toLowerCase() || "/";
+  return NACH_BUCHUNG_PFADE.some((p) => rein === p || rein.startsWith(p + "/"));
+}
+
+/**
  * Zuweisung beim Seitenaufruf (siehe Plugin).
  *
  * Gibt den bestehenden Bucket zurueck, wenn es einen gibt, sonst wuerfelt er —
@@ -216,6 +240,9 @@ export function assignAbBucket(
   if (current) {
     return { variant: current, assigned: false, source: currentSource ?? siteMode };
   }
+  // Wer hier ankommt, hat noch keinen Bucket. Auf einer Bestaetigungsseite ist
+  // das kein Testteilnehmer, sondern jemand, der gerade fertig gebucht hat.
+  if (istNachBuchungsSeite()) return { assigned: false };
   if (config.splitPercent <= 0) return { assigned: false };
   if (!hasMarketingConsent()) return { assigned: false };
 
