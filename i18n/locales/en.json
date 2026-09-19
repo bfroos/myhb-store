@@ -167,6 +167,41 @@
 
   "career": {
     "breadcrumbTitle": "Careers",
+    "application": {
+      "headline": "Your application",
+      "intro": "Fill in the form and attach your CV. We will get back to you within a few days.",
+      "firstName": "First name",
+      "lastName": "Last name",
+      "email": "Email",
+      "phone": "Phone number",
+      "trainingLevel": "Stage of training",
+      "location": "Preferred location",
+      "selectPlaceholder": "Please select",
+      "cv": "CV",
+      "cvHint": "PDF or Word file, 4 MB maximum.",
+      "message": "Message (optional)",
+      "submit": "Send application",
+      "submitting": "Sending …",
+      "privacyBefore": "I have read the",
+      "privacyLinkText": "privacy policy",
+      "privacyAfter": "and agree that my data will be stored to process my application and deleted after {months} months.",
+      "success": {
+        "headline": "Thank you for your application!",
+        "text": "We have received your documents and will get back to you within a few days."
+      },
+      "errors": {
+        "name": "Please enter your first and last name.",
+        "email": "Please enter a valid email address.",
+        "phone": "Please enter your phone number.",
+        "trainingLevel": "Please select your stage of training.",
+        "location": "Please select a preferred location.",
+        "cvMissing": "Please upload your CV.",
+        "cvType": "Please upload your CV as a PDF or Word file.",
+        "cvSize": "The file is too large (4 MB maximum).",
+        "privacy": "Please agree to the privacy policy.",
+        "generic": "That did not work. Please try again."
+      }
+    },
     "job": {
       "apply": "Apply now",
       "description": {

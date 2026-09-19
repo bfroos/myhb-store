@@ -160,6 +160,41 @@
   },
   "career": {
     "breadcrumbTitle": "Carrières",
+    "application": {
+      "headline": "Votre candidature",
+      "intro": "Remplissez le formulaire et joignez votre CV. Nous vous répondrons sous quelques jours.",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "email": "E-mail",
+      "phone": "Numéro de téléphone",
+      "trainingLevel": "Niveau de formation",
+      "location": "Site souhaité",
+      "selectPlaceholder": "Veuillez sélectionner",
+      "cv": "CV",
+      "cvHint": "Fichier PDF ou Word, 4 Mo maximum.",
+      "message": "Message (facultatif)",
+      "submit": "Envoyer la candidature",
+      "submitting": "Envoi en cours …",
+      "privacyBefore": "J'ai lu la",
+      "privacyLinkText": "politique de confidentialité",
+      "privacyAfter": "et j'accepte que mes données soient conservées pour le traitement de ma candidature et supprimées après {months} mois.",
+      "success": {
+        "headline": "Merci pour votre candidature !",
+        "text": "Nous avons bien reçu votre dossier et vous répondrons sous quelques jours."
+      },
+      "errors": {
+        "name": "Veuillez indiquer vos nom et prénom.",
+        "email": "Veuillez saisir une adresse e-mail valide.",
+        "phone": "Veuillez saisir votre numéro de téléphone.",
+        "trainingLevel": "Veuillez sélectionner votre niveau de formation.",
+        "location": "Veuillez sélectionner un site souhaité.",
+        "cvMissing": "Veuillez téléverser votre CV.",
+        "cvType": "Veuillez téléverser votre CV au format PDF ou Word.",
+        "cvSize": "Le fichier est trop volumineux (4 Mo maximum).",
+        "privacy": "Veuillez accepter la politique de confidentialité.",
+        "generic": "Cela n'a pas fonctionné. Veuillez réessayer."
+      }
+    },
     "job": {
       "apply": "Postuler maintenant",
       "description": {

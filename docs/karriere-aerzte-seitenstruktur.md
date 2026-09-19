@@ -108,9 +108,11 @@ stehen aber weiterhin an drei Stellen auf der Seite — siehe offener Punkt 1.
 
 Primär- und Final-CTA zeigen beide auf
 `https://recruiting.myhealthandbeauty.com/docs1/`, das bestehende Ziel der
-Arzt-Stellenanzeige. Das ist eine **Übergangslösung**: Das Bewerbungsformular
-mit HubSpot-Pipeline und Benachrichtigung an Jenny ist **#102** und ersetzt
-dieses Ziel dort.
+Arzt-Stellenanzeige. Das Bewerbungsformular aus **#102** steht seit dem
+19.09.2026 am Seitenende (Anker `#bewerbung`, siehe
+`docs/hubspot-bewerbung-aerzte.md`). Die CTA-Ziele sind Strapi-Inhalt und
+gehören noch auf `#bewerbung` umgestellt — bis dahin führen die Buttons an
+dem Formular vorbei.
 
 ## Technische Umsetzung
 

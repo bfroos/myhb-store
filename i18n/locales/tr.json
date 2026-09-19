@@ -155,6 +155,41 @@
 
   "career": {
     "breadcrumbTitle": "Kariyer",
+    "application": {
+      "headline": "Başvurunuz",
+      "intro": "Formu doldurun ve özgeçmişinizi ekleyin. Birkaç gün içinde size geri dönüş yapacağız.",
+      "firstName": "Ad",
+      "lastName": "Soyad",
+      "email": "E-posta",
+      "phone": "Telefon numarası",
+      "trainingLevel": "Eğitim durumu",
+      "location": "Tercih edilen lokasyon",
+      "selectPlaceholder": "Lütfen seçin",
+      "cv": "Özgeçmiş",
+      "cvHint": "PDF veya Word dosyası, en fazla 4 MB.",
+      "message": "Mesaj (isteğe bağlı)",
+      "submit": "Başvuruyu gönder",
+      "submitting": "Gönderiliyor …",
+      "privacyBefore": "",
+      "privacyLinkText": "Gizlilik politikasını",
+      "privacyAfter": "okudum ve verilerimin başvurumun değerlendirilmesi için saklanmasını, {months} ay sonra silinmesini kabul ediyorum.",
+      "success": {
+        "headline": "Başvurunuz için teşekkür ederiz!",
+        "text": "Belgelerinizi aldık, birkaç gün içinde size geri dönüş yapacağız."
+      },
+      "errors": {
+        "name": "Lütfen adınızı ve soyadınızı girin.",
+        "email": "Lütfen geçerli bir e-posta adresi girin.",
+        "phone": "Lütfen telefon numaranızı girin.",
+        "trainingLevel": "Lütfen eğitim durumunuzu seçin.",
+        "location": "Lütfen tercih ettiğiniz lokasyonu seçin.",
+        "cvMissing": "Lütfen özgeçmişinizi yükleyin.",
+        "cvType": "Lütfen özgeçmişinizi PDF veya Word dosyası olarak yükleyin.",
+        "cvSize": "Dosya çok büyük (en fazla 4 MB).",
+        "privacy": "Lütfen gizlilik politikasını kabul edin.",
+        "generic": "Maalesef işlem başarısız oldu. Lütfen tekrar deneyin."
+      }
+    },
     "job": {
       "apply": "Şimdi başvur",
       "description": {
