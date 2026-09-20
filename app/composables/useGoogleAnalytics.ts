@@ -234,6 +234,23 @@ export const useGoogleAnalytics = () => {
   };
 
   /**
+   * Track a submitted job application (bfroos/myhb-store#102).
+   *
+   * Fires only after the server route confirmed that the application reached
+   * HubSpot — a `career_apply` on a failed submit would inflate the only
+   * number the recruiting funnel has.
+   */
+  const trackCareerApply = (extra?: {
+    job_type?: string;
+    location_slug?: string;
+  }) => {
+    trackEvent('career_apply', {
+      event_category: 'conversion',
+      ...(extra ?? {}),
+    });
+  };
+
+  /**
    * Track form submission
    */
   const trackFormSubmission = (formName: string) => {
@@ -255,6 +272,7 @@ export const useGoogleAnalytics = () => {
     trackCalendlyDateTimeSelected,
     trackCalendlyBookingConfirmed,
     trackPhoneClick,
+    trackCareerApply,
     trackFormSubmission,
   };
 };

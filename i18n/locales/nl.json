@@ -160,6 +160,41 @@
   },
   "career": {
     "breadcrumbTitle": "Carrière",
+    "application": {
+      "headline": "Uw sollicitatie",
+      "intro": "Vul het formulier in en voeg uw cv toe. We nemen binnen enkele dagen contact met u op.",
+      "firstName": "Voornaam",
+      "lastName": "Achternaam",
+      "email": "E-mail",
+      "phone": "Telefoonnummer",
+      "trainingLevel": "Opleidingsniveau",
+      "location": "Gewenste locatie",
+      "selectPlaceholder": "Maak een keuze",
+      "cv": "Cv",
+      "cvHint": "PDF- of Word-bestand, maximaal 4 MB.",
+      "message": "Bericht (optioneel)",
+      "submit": "Sollicitatie versturen",
+      "submitting": "Wordt verzonden …",
+      "privacyBefore": "Ik heb het",
+      "privacyLinkText": "privacybeleid",
+      "privacyAfter": "gelezen en ga ermee akkoord dat mijn gegevens worden bewaard om mijn sollicitatie te behandelen en na {months} maanden worden verwijderd.",
+      "success": {
+        "headline": "Bedankt voor uw sollicitatie!",
+        "text": "We hebben uw documenten ontvangen en nemen binnen enkele dagen contact met u op."
+      },
+      "errors": {
+        "name": "Vul uw voor- en achternaam in.",
+        "email": "Vul een geldig e-mailadres in.",
+        "phone": "Vul uw telefoonnummer in.",
+        "trainingLevel": "Kies uw opleidingsniveau.",
+        "location": "Kies een gewenste locatie.",
+        "cvMissing": "Upload uw cv.",
+        "cvType": "Upload uw cv als PDF- of Word-bestand.",
+        "cvSize": "Het bestand is te groot (maximaal 4 MB).",
+        "privacy": "Ga akkoord met het privacybeleid.",
+        "generic": "Dat is niet gelukt. Probeer het opnieuw."
+      }
+    },
     "job": {
       "apply": "Nu solliciteren",
       "description": {

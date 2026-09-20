@@ -160,6 +160,41 @@
   },
   "career": {
     "breadcrumbTitle": "Karriere",
+    "application": {
+      "headline": "Deine Bewerbung",
+      "intro": "Füll das Formular aus und häng deinen Lebenslauf an. Wir melden uns innerhalb weniger Tage bei dir.",
+      "firstName": "Vorname",
+      "lastName": "Nachname",
+      "email": "E-Mail",
+      "phone": "Telefonnummer",
+      "trainingLevel": "Ausbildungsstand",
+      "location": "Wunschstandort",
+      "selectPlaceholder": "Bitte auswählen",
+      "cv": "Lebenslauf",
+      "cvHint": "PDF oder Word-Datei, maximal 4 MB.",
+      "message": "Nachricht (optional)",
+      "submit": "Bewerbung absenden",
+      "submitting": "Wird gesendet …",
+      "privacyBefore": "Ich habe die",
+      "privacyLinkText": "Datenschutzerklärung",
+      "privacyAfter": "gelesen und bin damit einverstanden, dass meine Daten zur Bearbeitung meiner Bewerbung gespeichert und nach {months} Monaten gelöscht werden.",
+      "success": {
+        "headline": "Vielen Dank für deine Bewerbung!",
+        "text": "Wir haben deine Unterlagen erhalten und melden uns innerhalb weniger Tage bei dir."
+      },
+      "errors": {
+        "name": "Bitte gib Vor- und Nachnamen an.",
+        "email": "Bitte gib eine gültige E-Mail-Adresse an.",
+        "phone": "Bitte gib deine Telefonnummer an.",
+        "trainingLevel": "Bitte wähle deinen Ausbildungsstand aus.",
+        "location": "Bitte wähle einen Wunschstandort aus.",
+        "cvMissing": "Bitte lade deinen Lebenslauf hoch.",
+        "cvType": "Bitte lade den Lebenslauf als PDF oder Word-Datei hoch.",
+        "cvSize": "Die Datei ist zu groß (maximal 4 MB).",
+        "privacy": "Bitte stimme der Datenschutzerklärung zu.",
+        "generic": "Das hat leider nicht geklappt. Bitte versuch es erneut."
+      }
+    },
     "job": {
       "apply": "Jetzt bewerben",
       "description": {
