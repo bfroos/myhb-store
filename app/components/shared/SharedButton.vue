@@ -141,6 +141,22 @@ const dialog = useDialog();
 const { openCalendlyDialog } = useCalendlyDialog();
 const { openAppBookingDialog } = useAppBookingDialog();
 const { trackBookingClick } = useGoogleAnalytics();
+const { prewarmBookingWhenIdle } = useBookingPrewarm();
+
+/** Die Buchungs-URL dieses Knopfes, aus beiden Quellen wie beim Klick. */
+const bookingUrl = computed(
+  () => props.data?.calendlyUrl || button.value?.data?.calendlyUrl,
+);
+
+// #141: Calendly zeichnet im iFrame erst 10 bis ueber 40 Sekunden nach dem
+// Klick — es sei denn, seine Dateien liegen schon im Cache. Genau das holt das
+// Vorwaermen nach, waehrend die Seite gelesen wird. Es laeuft nur einmal je
+// Seite; weitere Buchungsknoepfe zeigen auf dieselbe URL.
+onMounted(() => {
+  if (button.value?.method !== "action") return;
+  if (button.value?.action !== SharedButtonAction.APPOINTMENT_BOOKING) return;
+  prewarmBookingWhenIdle(bookingUrl.value);
+});
 
 const handleClick = () => {
   // New in-app booking iframe method (limited rollout, e.g. Neukundenrabatt page)
@@ -161,7 +177,7 @@ const handleClick = () => {
 };
 
 function openCalendlyDialogForButton() {
-  const url = props.data?.calendlyUrl || button.value?.data?.calendlyUrl;
+  const url = bookingUrl.value;
   const treatmentType =
     props.data?.treatmentType || button.value?.data?.treatmentType;
   // Deeplink #66: Behandlungs-Slug fuer `?treatment=` in der App-Buchungs-URL.

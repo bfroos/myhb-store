@@ -52,7 +52,11 @@
  * Accept wird hochgestuft.
  */
 export default defineNuxtPlugin(() => {
-  if (import.meta.server) return;
+  // Auf dem Server gibt es keinen Speicher und keine Klick-ID; der Dialog ruft
+  // $decorateBookingUrl trotzdem auf und bekommt die URL unveraendert zurueck.
+  if (import.meta.server) {
+    return { provide: { decorateBookingUrl: (url: string) => url } };
+  }
 
   const PARAMS = [
     "utm_source",
@@ -319,7 +323,15 @@ export default defineNuxtPlugin(() => {
       el.setAttribute("data-url", decorate(el.getAttribute("data-url") as string));
     });
     document.querySelectorAll<HTMLIFrameElement>('iframe[src*="calendly.com"]').forEach((f) => {
+      // #141: Nur beim ersten Mal. Eine zweite Zuweisung an `src` laedt das
+      // iFrame neu — und der Ladevorgang, den der Besucher gerade ansieht,
+      // finge von vorne an. Das passierte, sobald Cookiebot spaeter antwortete:
+      // Der Einwilligungsstempel in salesforce_uuid aendert sich, die URL damit
+      // auch. Die Buchungs-URL wird seit #141 schon vor dem Einhaengen
+      // dekoriert (CalendlyDialog), hier bleibt nur der Fall fremder iFrames.
+      if (f.dataset.myhbDecorated) return;
       const dec = decorate(f.src);
+      f.dataset.myhbDecorated = "1";
       if (dec !== f.src) f.src = dec;
     });
     document.querySelectorAll<HTMLAnchorElement>('a[href*="myhealthandbeauty."]').forEach((a) => {
@@ -371,4 +383,9 @@ export default defineNuxtPlugin(() => {
     const data = load();
     if (data) save(data);
   });
+
+  // #141: Die Buchungs-URL wird jetzt dekoriert, *bevor* das iFrame entsteht.
+  // Vorher hing das an der MutationObserver-Runde nach dem Einhaengen — die
+  // Zuweisung an `src` war ein zweiter Ladevorgang.
+  return { provide: { decorateBookingUrl: decorate } };
 });

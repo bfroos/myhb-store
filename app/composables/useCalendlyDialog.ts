@@ -6,6 +6,7 @@ import {
   useAppBookingDialog,
   withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
+import { disposeBookingPrewarm } from "~/composables/useBookingPrewarm";
 
 /**
  * Zweiter Buchungsweg desselben Standorts (#97) plus sein Slug fuer den
@@ -76,6 +77,11 @@ export function useCalendlyDialog() {
       return;
     }
 
+    // #141: Der vorgewaermte Rahmen hat seine Arbeit getan — die Dateien von
+    // calendly.com liegen im Cache. Ab jetzt wuerde er dem sichtbaren Widget
+    // nur noch Bandbreite wegnehmen.
+    disposeBookingPrewarm();
+
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/CalendlyDialog.vue"),
@@ -88,6 +94,10 @@ export function useCalendlyDialog() {
           abVariant,
           abFallback,
           abSource,
+          // #141: Ab hier laeuft die Uhr, die `booking_embed_ready` misst —
+          // der Klick ist der Moment, den das Ticket abnimmt, nicht das
+          // Einhaengen des Widgets ein paar Hundert Millisekunden spaeter.
+          openedAt: import.meta.client ? performance.now() : undefined,
         },
         props: {
           modal: true,
