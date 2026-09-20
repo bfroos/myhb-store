@@ -73,15 +73,15 @@ export function useCalendlyDialog() {
     // changing the "Calendly URL" field in Strapi. Everything else (a
     // calendly.com URL, or no URL -> location search) keeps working as before.
     if (isAppBookingUrl(bookingUrl)) {
+      // #141: Fuer die App-Buchung ist der vorgewaermte Calendly-Rahmen wertlos.
+      disposeBookingPrewarm();
       openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, { abVariant });
       return;
     }
 
-    // #141: Der vorgewaermte Rahmen hat seine Arbeit getan — die Dateien von
-    // calendly.com liegen im Cache. Ab jetzt wuerde er dem sichtbaren Widget
-    // nur noch Bandbreite wegnehmen.
-    disposeBookingPrewarm();
-
+    // #141: Der vorgewaermte Rahmen wird hier *nicht* abgeraeumt — der Dialog
+    // legt ihn sichtbar ueber sich, statt ein zweites Mal zu laden. Passt er
+    // nicht zur URL, raeumt der Dialog ihn selbst ab.
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/CalendlyDialog.vue"),

@@ -38,6 +38,34 @@ export function calendlyEmbedUrl(url: string): string {
     .join("&")}`;
 }
 
+/**
+ * Setzt die Sprache des Widgets fest (#141).
+ *
+ * Ohne `locale` richtet sich Calendly nach der Browsersprache des Besuchers.
+ * Auf einer deutschen Landingpage stand damit bei jedem, dessen Browser auf
+ * Englisch steht, "Date & Time", "Next available slot" und Mon/Tue/Wed — auf
+ * einer Seite, die Vertrauen fuer einen medizinischen Termin aufbauen soll.
+ * Nachgeprueft am 20.09.2026: `?locale=de` setzt das Widget vollstaendig auf
+ * Deutsch ("Datum & Uhrzeit waehlen", Mo/Di/Mi), unabhaengig vom Browser.
+ *
+ * Ein vorhandener Wert bleibt stehen — eine in Strapi gepflegte URL darf ihre
+ * eigene Sprache behalten.
+ */
+export function withCalendlyLocale(
+  url: string,
+  locale: string | undefined,
+): string {
+  const kurz = (locale ?? "").slice(0, 2).toLowerCase();
+  if (!kurz || !isCalendlyUrl(url)) return url;
+  try {
+    const u = new URL(url);
+    if (!u.searchParams.get("locale")) u.searchParams.set("locale", kurz);
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
+
 /** Zeigt die URL auf calendly.com? */
 export function isCalendlyUrl(url?: string | null): boolean {
   if (!url) return false;

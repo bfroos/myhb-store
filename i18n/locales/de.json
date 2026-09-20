@@ -424,6 +424,7 @@
       "address": "Standortadresse"
     },
     "locationFinder": {
+      "noResults": "Kein Ort gefunden. Bitte anders schreiben oder PLZ eingeben.",
       "mapLoading": "Karte wird geladen…",
       "headline": "Standort finden",
       "searchPlaceholder": "PLZ oder Ort",

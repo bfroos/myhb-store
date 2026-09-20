@@ -435,6 +435,7 @@
       "address": "Location address"
     },
     "locationFinder": {
+      "noResults": "No place found. Try a different spelling or a postcode.",
       "mapLoading": "Loading map…",
       "headline": "Find a location",
       "searchPlaceholder": "ZIP or city",

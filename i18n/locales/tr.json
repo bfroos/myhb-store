@@ -409,6 +409,7 @@
       "address": "Konum adresi"
     },
     "locationFinder": {
+      "noResults": "Yer bulunamadı. Farklı bir yazım ya da posta kodu deneyin.",
       "mapLoading": "Harita yükleniyor…",
       "headline": "Konum bul",
       "searchPlaceholder": "Posta kodu veya şehir",

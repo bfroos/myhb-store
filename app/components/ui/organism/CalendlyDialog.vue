@@ -1,6 +1,10 @@
 <template>
   <div v-if="params.url" class="calendlyDialog__embed">
+    <!-- #141: Liegt das Fenster schon vorgewaermt bereit, wird es hierhin
+         gelegt statt neu geladen. Der Platzhalter gibt nur die Flaeche vor. -->
+    <div v-if="nutztVorgewaermtes" ref="prewarmSlot" class="calendlyDialog" />
     <CalendlyInlineWidget
+      v-else
       :url="embedUrl"
       class="calendlyDialog"
       :page-settings="PAGE_SETTINGS"
@@ -19,6 +23,7 @@
             :suggestions="citySuggestions"
             :placeholder="t('blocks.locationFinder.searchPlaceholder')"
             option-label="label"
+            :empty-search-message="t('blocks.locationFinder.noResults')"
             :loading="cityLoading"
             fluid
             show-clear
@@ -84,13 +89,17 @@ import {
   markBookingConfirmedFired,
   writeBookingHandoff,
 } from "~/lib/calendlyBookingHandoff";
-import { PAGE_SETTINGS } from "~/lib/calendlyEmbedUrl";
+import { PAGE_SETTINGS, withCalendlyLocale } from "~/lib/calendlyEmbedUrl";
 import {
+  attachBookingPrewarm,
   bookingWasPrewarmed,
+  disposeBookingPrewarm,
   isPrewarmSource,
+  prewarmHasRendered,
+  prewarmMatches,
 } from "~/composables/useBookingPrewarm";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const dialogRef = inject("dialogRef") as any;
 const params = ref<any>({});
 const { $decorateBookingUrl } = useNuxtApp();
@@ -105,8 +114,62 @@ const { $decorateBookingUrl } = useNuxtApp();
  */
 const embedUrl = computed(() => {
   const url = params.value?.url;
-  return url ? $decorateBookingUrl(url) : url;
+  return url
+    ? withCalendlyLocale($decorateBookingUrl(url), locale.value)
+    : url;
 });
+
+const { bookingEmbedSrc } = useBookingPrewarm();
+const prewarmSlot = ref<HTMLElement | null>(null);
+const nutztVorgewaermtes = ref(false);
+
+/**
+ * Nimmt den vorgewaermten Rahmen, wenn er zu dieser URL passt (#141).
+ *
+ * Passt er nicht — anderer Standort, abgeschaltet, im Dialog erst ausgewaehlt —
+ * wird er abgeraeumt und das normale Widget gezeichnet. Der schlechteste Fall
+ * ist damit der Zustand vor diesem Ticket.
+ */
+function uebernimmVorgewaermtes() {
+  if (!import.meta.client) return;
+  const url = params.value?.url;
+  // Ohne URL steht der Standort noch nicht fest (Standortsuche im Dialog). Der
+  // vorgewaermte Rahmen bleibt dann stehen — die Auswahl kann ihn treffen.
+  if (!url) {
+    nutztVorgewaermtes.value = false;
+    return;
+  }
+  const src = bookingEmbedSrc(url);
+  if (!prewarmMatches(src)) {
+    nutztVorgewaermtes.value = false;
+    disposeBookingPrewarm();
+    return;
+  }
+  nutztVorgewaermtes.value = true;
+  nextTick(() => {
+    const ziel = prewarmSlot.value;
+    const zurueckfallen = () => {
+      nutztVorgewaermtes.value = false;
+      disposeBookingPrewarm();
+    };
+    const uebernommen =
+      !!ziel &&
+      attachBookingPrewarm(
+        ziel,
+        src,
+        // Liegt der Rahmen sichtbar ueber dem Dialog und steht darin schon ein
+        // Kalender, hat der Besucher gar nicht gewartet — dann darf auch kein
+        // Ladekreisel mehr davor liegen.
+        () => {
+          if (prewarmHasRendered()) setReady();
+        },
+        zurueckfallen,
+      );
+    if (!uebernommen) zurueckfallen();
+  });
+}
+
+onBeforeUnmount(disposeBookingPrewarm);
 const { openAppBookingDialog } = useAppBookingDialog();
 const { resolveBooking } = useBookingAbTest();
 const {
@@ -173,10 +236,14 @@ function isFromCalendly(e: MessageEvent) {
  * zeigt; darauf warten wir.
  */
 const widgetReady = ref(false);
+function setReady() {
+  if (widgetReady.value) return;
+  reportEmbedReady();
+  widgetReady.value = true;
+}
 function markWidgetReady(e: MessageEvent) {
   if (!isFromCalendly(e)) return;
-  if (!widgetReady.value) reportEmbedReady();
-  widgetReady.value = true;
+  setReady();
 }
 
 /**
@@ -210,6 +277,7 @@ watch(
     embedStartedAt.value = url
       ? (params.value?.openedAt ?? performance.now())
       : null;
+    uebernimmVorgewaermtes();
   },
   { immediate: true },
 );
