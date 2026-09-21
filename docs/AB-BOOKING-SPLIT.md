@@ -36,7 +36,26 @@ Dazu muss an den Standorten in Strapi `appBookingUrl` gefüllt sein, z. B. Köln
 https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden
 ```
 
-> Der Standort-Slug der **App** heißt wirklich `koeln-aracden` (Buchstabendreher in `venues.url_slug`). Nie aus dem Standortnamen ableiten, immer aus `select name, url_slug from public.venues` kopieren.
+> Der Standort-Slug der **App** ist nicht aus dem Namen ableitbar und enthält teils Buchstabendreher:
+> `koeln-aracden` (Köln Arcaden) und `aachen-aquiz-plaza` (Aachen Aquis Plaza) sind so korrekt, ebenso
+> verkürzt `leipzig-hoefe`, `moenchen-minto`, `berlin-gesundbrunnen`. Nie raten, immer aus
+> `select name, url_slug from public.venues` kopieren.
+>
+> Stand 21.09.2026 gefüllt (9 von 10 buchbaren Standorten):
+>
+> | Strapi-Slug | App `url_slug` |
+> | --- | --- |
+> | `aquis-plaza` | `aachen-aquiz-plaza` |
+> | `gesundbrunnencenter` | `berlin-gesundbrunnen` |
+> | `forum` | `duisburg-forum` |
+> | `duesseldorf-arcaden` | `duesseldorf-arcaden` |
+> | `k-in-lautern` | `k-in-lautern` |
+> | `koeln-arcaden` | `koeln-aracden` |
+> | `hoefe-am-bruehl` | `leipzig-hoefe` |
+> | `minto` | `moenchen-minto` |
+> | `palais-vest` | `recklinghausen-palais-vest` |
+>
+> `mediapark-klinik` hat kein Venue in der App (Klinik, keine Lounge) und bleibt Calendly-only.
 
 ## Was in GA4 ankommt
 
@@ -70,7 +89,10 @@ Der Hostname reicht dafür **nicht**: Die Dankesseite nach einer Calendly-Buchun
 ## Bekannte Einschränkungen
 
 - Der Bucket hängt am Cookie; ein Gerätewechsel kann dieselbe Person in beide Arme bringen. Akzeptiert, gehört in die Auswertungs-Fußnote.
-- **Standorte ohne `appBookingUrl` landen im App-Arm durchgehend im Fallback.** Auf den Ads-Seiten fällt das kaum ins Gewicht (die Kampagnen zeigen auf wenige Standorte), auf SEO betrifft es alle neun. Solange nur Köln Arcaden eine App-URL hat, sind die SEO-Daten des App-Arms wertlos — `appBookingUrl` gehört vorher an alle Standorte, die am Test teilnehmen sollen.
+- **Standorte ohne `appBookingUrl` landen im App-Arm durchgehend im Fallback.** Seit 21.09.2026 betrifft das nur noch
+  `mediapark-klinik` — die übrigen neun buchbaren Standorte haben eine App-URL. Davor hatte nur Köln Arcaden eine,
+  der App-Arm fiel also vom 16. bis 21.09. fast vollständig auf Calendly zurück: **Auswertungen aus diesem Zeitraum
+  sind ohne Filter auf `ab_fallback = false` wertlos.**
 - Besucher ohne Marketing-Einwilligung stehen außerhalb des Tests. Sie sind mangels GA4-Ereignissen ohnehin unsichtbar, aber ohne diese Regel passten die Nenner nicht.
 
 ## Was der Split *nicht* macht
