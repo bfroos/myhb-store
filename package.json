@@ -15,7 +15,8 @@
     "postinstall": "nuxt prepare",
     "generate:posters": "node scripts/generate-video-posters.js",
     "update:ratings": "tsx scripts/update-google-ratings.ts",
-    "check:ab-split": "tsx scripts/check-ab-split.mts"
+    "check:ab-split": "tsx scripts/check-ab-split.mts",
+    "check:booking-slugs": "tsx scripts/check-booking-slugs.mts"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",

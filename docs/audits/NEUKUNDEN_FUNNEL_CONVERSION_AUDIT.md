@@ -265,6 +265,20 @@ Korrektur zu 6.2: Der Test aus `docs/AB-BOOKING-SPLIT.md` (#100) ist seit 16./17
 
 **Folge-Tickets (17.09.):** unter Epic #93 „Buchungssystem-Migration“ (`E2-buchung`): #128 Buchungen am Split vorbei kennzeichnen (`app-booking`-Buttons), #129 Randfall Bucket `calendly` ohne `calendlyUrl`. Unter Epic #60: #130 Bewertungszahlen vereinheitlichen, #131 `appTreatmentSlug` befüllen und Alias-Tabelle freigeben, #132 `/locations/bookable` um `googlePlaceId` und `contact` erweitern. Messung und Entscheidungsregel des Tests: elanagency/myhb-os#204.
 
+### 6.3.1 Korrektur zu 6.3 (21.09.2026)
+
+Die Angabe „`appBookingUrl` an 9 von 10 Standorten" in 6.3 war zum Zeitpunkt der Prüfung **falsch**. Tatsächlich hatte
+nur `koeln-arcaden` eine App-URL; die übrigen acht buchbaren Lounges hatten das Feld leer. Der App-Arm fiel damit vom
+16.09. bis 21.09.2026 an neun von zehn Standorten auf Calendly zurück (`ab_fallback: true`).
+
+**Folge für die Auswertung:** Alle Zahlen aus diesem Zeitraum — auch der gemeldete Vergleich 22 % (App) zu 24 %
+(Calendly) — vergleichen im Wesentlichen Calendly mit Calendly, solange nicht auf `ab_fallback = false` gefiltert wird.
+Der Zeitraum taugt nicht als Testperiode; die Messung beginnt praktisch am 21.09.2026 neu.
+
+Am 21.09.2026 wurden die acht fehlenden `appBookingUrl` in Strapi nachgetragen (Slugs aus `public.venues` der App,
+Tabelle in `docs/AB-BOOKING-SPLIT.md`). Ohne App-Venue bleibt `mediapark-klinik` (Klinik, keine Lounge) — dort ist der
+Fallback weiterhin korrekt und erwartet.
+
 ### 6.4 Epic-Zuordnung der offenen Tickets (17.09.2026)
 
 Neues Epic-Label `E9-funnel` für #60, nach dem Schema E1–E8 des Repos. Alle offenen Sub-Issues tragen es.
