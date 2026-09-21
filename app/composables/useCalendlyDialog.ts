@@ -6,6 +6,7 @@ import {
   useAppBookingDialog,
   withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
+import { disposeBookingPrewarm } from "~/composables/useBookingPrewarm";
 
 /**
  * Zweiter Buchungsweg desselben Standorts (#97) plus sein Slug fuer den
@@ -72,10 +73,15 @@ export function useCalendlyDialog() {
     // changing the "Calendly URL" field in Strapi. Everything else (a
     // calendly.com URL, or no URL -> location search) keeps working as before.
     if (isAppBookingUrl(bookingUrl)) {
+      // #141: Fuer die App-Buchung ist der vorgewaermte Calendly-Rahmen wertlos.
+      disposeBookingPrewarm();
       openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, { abVariant });
       return;
     }
 
+    // #141: Der vorgewaermte Rahmen wird hier *nicht* abgeraeumt — der Dialog
+    // legt ihn sichtbar ueber sich, statt ein zweites Mal zu laden. Passt er
+    // nicht zur URL, raeumt der Dialog ihn selbst ab.
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/CalendlyDialog.vue"),
@@ -88,6 +94,10 @@ export function useCalendlyDialog() {
           abVariant,
           abFallback,
           abSource,
+          // #141: Ab hier laeuft die Uhr, die `booking_embed_ready` misst —
+          // der Klick ist der Moment, den das Ticket abnimmt, nicht das
+          // Einhaengen des Widgets ein paar Hundert Millisekunden spaeter.
+          openedAt: import.meta.client ? performance.now() : undefined,
         },
         props: {
           modal: true,

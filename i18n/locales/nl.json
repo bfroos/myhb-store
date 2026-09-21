@@ -423,6 +423,7 @@
       "address": "Locatieadres"
     },
     "locationFinder": {
+      "noResults": "Geen plaats gevonden. Probeer een andere spelling of een postcode.",
       "mapLoading": "Kaart wordt geladen…",
       "headline": "Locatie zoeken",
       "searchPlaceholder": "Postcode of plaats",

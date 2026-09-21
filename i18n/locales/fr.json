@@ -423,6 +423,7 @@
       "address": "Adresse du lieu"
     },
     "locationFinder": {
+      "noResults": "Aucun lieu trouvé. Essayez une autre orthographe ou un code postal.",
       "mapLoading": "Chargement de la carte…",
       "headline": "Trouver un lieu",
       "searchPlaceholder": "Code postal ou ville",

@@ -22,6 +22,7 @@
                 :suggestions="citySuggestions"
                 :placeholder="t('blocks.locationFinder.searchPlaceholder')"
                 option-label="label"
+                :empty-search-message="t('blocks.locationFinder.noResults')"
                 :loading="cityLoading"
                 fluid
                 show-clear
@@ -57,6 +58,7 @@
               :suggestions="citySuggestions"
               :placeholder="t('blocks.locationFinder.searchPlaceholder')"
               option-label="label"
+              :empty-search-message="t('blocks.locationFinder.noResults')"
               :loading="cityLoading"
               fluid
               show-clear

@@ -125,6 +125,28 @@ export default defineNuxtConfig({
           rel: "preconnect" as const,
           href: "https://consent.cookiebot.com",
         },
+        // #141: Das Buchungsfenster ist ein Calendly-iFrame. Ohne diese Zeilen
+        // beginnen DNS, TLS und der erste Abruf erst mit dem Klick — mitten in
+        // der Wartezeit, die das Ticket misst. Die Verbindung steht damit, bevor
+        // jemand auf "Termin buchen" drueckt; die Seite selbst waermt
+        // useBookingPrewarm vor.
+        {
+          rel: "preconnect" as const,
+          href: "https://calendly.com",
+        },
+        {
+          rel: "preconnect" as const,
+          href: "https://assets.calendly.com",
+          crossorigin: "anonymous" as const,
+        },
+        {
+          rel: "dns-prefetch" as const,
+          href: "https://calendly.com",
+        },
+        {
+          rel: "dns-prefetch" as const,
+          href: "https://assets.calendly.com",
+        },
         ...(process.env.NUXT_PUBLIC_MEDIA_URL
           ? [
               {
@@ -488,6 +510,11 @@ export default defineNuxtConfig({
       // Calendly; das ist der Auslieferungszustand. Wirkt nur im
       // Ads-Deployment, siehe app/lib/bookingAbTest.ts.
       abBookingSplit: process.env.NUXT_PUBLIC_AB_BOOKING_SPLIT,
+      // #141: Abschalter fuer das Vorwaermen des Buchungsfensters. Leer =
+      // eingeschaltet, "off" = aus. Das Vorwaermen laedt calendly.com ohne
+      // Zutun des Besuchers; wer das aus Einwilligungsgruenden nicht will,
+      // stellt es je Deployment ab, ohne Code zu deployen.
+      bookingPrewarm: process.env.NUXT_PUBLIC_BOOKING_PREWARM,
     },
   },
 

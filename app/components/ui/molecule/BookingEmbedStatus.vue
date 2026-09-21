@@ -37,6 +37,11 @@ import { IconLoader } from "@tabler/icons-vue";
  * Der Hinweis erscheint erst nach `hintAfterMs` und liegt bewusst *nicht*
  * ueber dem Embed: Bleibt eine Meldung aus, obwohl das Embed laengst
  * gezeichnet hat, verdeckt er nichts.
+ *
+ * #141: Der Notausgang stand bei 12 s. Gemessen wurde am 20.09.2026, dass der
+ * Kalender im kalten Fall 12 bis ueber 36 Sekunden braucht — wer so lange
+ * wartet, ist laengst weg. 6 s liegt ueber dem gewaermten Normalfall (1–3 s)
+ * und bietet den Ausweg noch, solange jemand hinsieht.
  */
 const props = withDefaults(
   defineProps<{
@@ -46,7 +51,7 @@ const props = withDefaults(
     url?: string;
     hintAfterMs?: number;
   }>(),
-  { hintAfterMs: 12000 },
+  { hintAfterMs: 6000 },
 );
 
 const { t } = useI18n();
