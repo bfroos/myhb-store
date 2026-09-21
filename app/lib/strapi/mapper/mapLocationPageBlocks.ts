@@ -8,6 +8,7 @@ import {
   MediaBentoLayout,
 } from "../dto/enums";
 import type { SharedButtonDto } from "../dto/components";
+import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
 import type { LocationDto, TreatmentPageDto } from "../dto/collections";
 import { DEFAULT_TIMEZONE } from "../config";
 import { formatDate } from "~/utils/date";
@@ -75,11 +76,9 @@ export function mapLocationFixedBlocks(
       showBookingButton: location?.showBookingButton ?? true,
       showCompanyLogos: true,
       showReviews: true,
-      calendlyUrl: location?.calendlyUrl,
-      // #97/#100: Die zweite Buchungs-URL und der Standort-Slug wandern mit,
-      // damit der Buchungs-Button beim Klick zwischen Calendly und App
-      // waehlen kann. Ohne Freigabe bleibt es bei Calendly.
-      appBookingUrl: location?.appBookingUrl,
+      // #141: Gesperrte Standorte geben keine URL heraus — sonst nimmt der
+      // Knopf Termine an, die niemand bedient.
+      ...bookingUrlsOf(location),
       locationSlug: location?.slug,
       googlePlaceId: location?.googlePlaceId ?? undefined,
     };
