@@ -37,20 +37,21 @@ https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden
 ```
 
 > Der Standort-Slug der **App** ist nicht aus dem Namen ableitbar und enthält teils Buchstabendreher:
-> `koeln-aracden` (Köln Arcaden) und `aachen-aquiz-plaza` (Aachen Aquis Plaza) sind so korrekt, ebenso
-> verkürzt `leipzig-hoefe`, `moenchen-minto`, `berlin-gesundbrunnen`. Nie raten, immer aus
-> `select name, url_slug from public.venues` kopieren.
+> verkürzt oder anders geschnitten als der Strapi-Slug (`leipzig-hoefe`, `moenchen-minto`,
+> `berlin-gesundbrunnen`, `aachen-aquis-plaza`). Nie raten, immer aus
+> `select name, url_slug from public.venues` kopieren — oder `npm run check:booking-slugs` laufen lassen.
 >
-> Stand 21.09.2026 gefüllt (9 von 10 buchbaren Standorten):
+> Stand 21.09.2026 (9 von 10 buchbaren Standorten; die Dreher in Köln und Aachen sind am selben Tag
+> korrigiert worden, siehe myhb-os `docs/venue-slug-umbenennung-2026-09-21.md`):
 >
 > | Strapi-Slug | App `url_slug` |
 > | --- | --- |
-> | `aquis-plaza` | `aachen-aquiz-plaza` |
+> | `aquis-plaza` | `aachen-aquis-plaza` |
 > | `gesundbrunnencenter` | `berlin-gesundbrunnen` |
 > | `forum` | `duisburg-forum` |
 > | `duesseldorf-arcaden` | `duesseldorf-arcaden` |
 > | `k-in-lautern` | `k-in-lautern` |
-> | `koeln-arcaden` | `koeln-aracden` |
+> | `koeln-arcaden` | `koeln-arcaden` |
 > | `hoefe-am-bruehl` | `leipzig-hoefe` |
 > | `minto` | `moenchen-minto` |
 > | `palais-vest` | `recklinghausen-palais-vest` |
