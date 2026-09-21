@@ -9,6 +9,7 @@ import type {
   SharedKeyValueDto,
 } from "../dto/components";
 import type { LocationDto, TreatmentPageDto } from "../dto/collections";
+import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
 import { DEFAULT_TIMEZONE } from "../config";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
@@ -93,11 +94,9 @@ export function mapLocationTreatmentPageFixedBlocks(
       showReviews: true,
       treatment: treatmentPage.treatment,
       cta: link,
-      calendlyUrl: location?.calendlyUrl,
-      // #97/#100: Die zweite Buchungs-URL und der Standort-Slug wandern mit,
-      // damit der Buchungs-Button beim Klick zwischen Calendly und App
-      // waehlen kann. Ohne Freigabe bleibt es bei Calendly.
-      appBookingUrl: location?.appBookingUrl,
+      // #141: Gesperrte Standorte geben keine URL heraus — sonst nimmt der
+      // Knopf Termine an, die niemand bedient.
+      ...bookingUrlsOf(location),
       locationSlug: location?.slug,
       // Deeplink #66: Der Slug wird beim Öffnen des Dialogs als
       // treatment=<slug> an die App-Buchungs-URL gehängt (Calendly-URLs

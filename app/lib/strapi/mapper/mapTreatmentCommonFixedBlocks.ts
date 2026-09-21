@@ -8,6 +8,7 @@ import {
   SharedButtonTargetType,
 } from "../dto/enums";
 import type { SharedButtonDto, SharedKeyValueDto } from "../dto/components";
+import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
 import type { LocationDto, TreatmentPageLikeDto } from "../dto/collections";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
@@ -82,9 +83,9 @@ export function mapTreatmentCommonFixedBlocks(
       method: SharedButtonMethod.ACTION,
       action: SharedButtonAction.APPOINTMENT_BOOKING,
       data: {
-        calendlyUrl: location?.calendlyUrl,
-        // #97/#100: zweite Buchungs-URL + Standort-Slug fuer den A/B-Split.
-        appBookingUrl: location?.appBookingUrl,
+        // #141: Gesperrte Standorte geben keine URL heraus — sonst nimmt der
+        // Knopf Termine an, die niemand bedient.
+        ...bookingUrlsOf(location),
         locationSlug: location?.slug,
         // Deeplink #66: Behandlung in der App vorauswählen. Ohne Standort
         // öffnet der Button zuerst die Standortsuche – der Slug wandert mit
