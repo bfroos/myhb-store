@@ -13,14 +13,21 @@
  * Skript statt einer halben Test-Infrastruktur.
  */
 
-function setupDom(search: string, opts?: { marketing?: boolean | null }) {
+function setupDom(
+  search: string,
+  opts?: { marketing?: boolean | null; pathname?: string },
+) {
   let cookies = "";
   const consent =
     opts?.marketing === null || opts?.marketing === undefined
       ? undefined
       : { marketing: opts.marketing };
   (globalThis as any).window = {
-    location: { search, hostname: "go.myhealthandbeauty.com" },
+    location: {
+      search,
+      hostname: "go.myhealthandbeauty.com",
+      pathname: opts?.pathname ?? "/",
+    },
     ...(consent ? { Cookiebot: { consent } } : {}),
   };
   (globalThis as any).document = {
@@ -59,6 +66,7 @@ const {
   readAbSource,
   readAbBookingConfig,
   resolveBookingTarget,
+  istNachBuchungsSeite,
 } = mod;
 
 // --- Auslieferungszustand: Split aus ---------------------------------------
@@ -182,6 +190,53 @@ const {
     const cfg = readAbBookingConfig({ abBookingSplit: bad });
     check(`Anteil "${bad}" -> 0`, cfg.splitPercent === 0, cfg);
   }
+}
+
+// --- Dankesseite teilt niemanden mehr zu (elanagency/myhb-os#272) ----------
+{
+  check(
+    "Dankesseite wird erkannt",
+    istNachBuchungsSeite("/p/danke-fuer-deine-terminbuchung") === true &&
+      istNachBuchungsSeite("/p/danke-fuer-deine-terminbuchung/") === true &&
+      istNachBuchungsSeite("/P/Danke-Fuer-Deine-Terminbuchung") === true,
+  );
+  check(
+    "normale Seiten nicht",
+    istNachBuchungsSeite("/") === false &&
+      istNachBuchungsSeite("/p/botox-meta-rabatt") === false &&
+      istNachBuchungsSeite("/standorte/koeln/koeln-arcaden/botox") === false &&
+      istNachBuchungsSeite(undefined) === false,
+  );
+  // Keine halbe Uebereinstimmung: eine Seite, die nur so anfaengt, ist keine.
+  check(
+    "kein Praefix-Treffer auf einer fremden Seite",
+    istNachBuchungsSeite("/p/danke-fuer-deine-terminbuchung-alt") === false,
+  );
+
+  setupDom("", {
+    marketing: true,
+    pathname: "/p/danke-fuer-deine-terminbuchung",
+  });
+  const cfg = readAbBookingConfig({ abBookingSplit: "50" });
+  const r = assignAbBucket(cfg, "seo");
+  check(
+    "auf der Dankesseite wird kein Bucket gezogen",
+    !r.variant && !r.assigned && !readAbBucket(),
+    r,
+  );
+
+  // Wer VOR der Buchung zugeteilt wurde, behaelt seinen Arm — sonst faende die
+  // Auswertung die Buchung nicht mehr wieder.
+  setupDom("", { marketing: true, pathname: "/p/botox-meta-rabatt" });
+  const vorher = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "seo");
+  const bucket = vorher.variant;
+  (globalThis as any).window.location.pathname = "/p/danke-fuer-deine-terminbuchung";
+  const danach = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "seo");
+  check(
+    "bestehender Bucket gilt auf der Dankesseite weiter",
+    !!bucket && danach.variant === bucket && !danach.assigned,
+    { bucket, danach },
+  );
 }
 
 console.log(
