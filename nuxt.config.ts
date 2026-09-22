@@ -518,6 +518,23 @@ export default defineNuxtConfig({
     },
   },
 
+  // On-Demand-Revalidierung des ISR-Caches, siehe
+  // server/routes/api/revalidate.post.ts. Vercel erneuert einen ISR-Pfad nur,
+  // wenn ein GET/HEAD darauf den Header x-prerender-revalidate mit genau
+  // diesem Token traegt. Ohne bypassToken schreibt das Vercel-Preset keinen in
+  // die prerender-config.json, und dann gibt es keinen Weg, den Cache der
+  // Plattform vor Ablauf des isr-Fensters zu erneuern - bei /karriere/** waeren
+  // das 12 Stunden.
+  // VERCEL_BYPASS_TOKEN muss in den Vercel-Projekt-Einstellungen gesetzt sein,
+  // fuer Build UND Runtime, sonst weist Vercel den Header ab.
+  nitro: {
+    vercel: {
+      config: {
+        bypassToken: process.env.VERCEL_BYPASS_TOKEN,
+      },
+    },
+  },
+
   routeRules:
     process.env.NODE_ENV === "production"
       ? {
