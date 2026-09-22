@@ -204,6 +204,13 @@ export type AppBookingUrlOptions = {
    * App-Variante nicht gegen die von Calendly stellen.
    */
   abVariant?: BookingVariant | null;
+  /**
+   * Knopf am Split vorbei (Strapi-Methode `app-booking`, #128). Geht als
+   * `ab_bypass=1` an die App, die es an alle Funnel-Ereignisse haengt; die
+   * Auswertung (elanagency/myhb-os scripts/ab-auswertung.mjs) nimmt solche
+   * Buchungen aus beiden Armen heraus.
+   */
+  abBypass?: boolean | null;
 };
 
 /**
@@ -229,6 +236,9 @@ export function buildBookingUrl(
     if (options?.abVariant && !url.searchParams.has("ab_variant")) {
       url.searchParams.set("ab_variant", options.abVariant);
     }
+    if (options?.abBypass && !url.searchParams.has("ab_bypass")) {
+      url.searchParams.set("ab_bypass", "1");
+    }
     return url.toString();
   } catch {
     return base;
@@ -248,7 +258,15 @@ export function useAppBookingDialog() {
         () => import("~/components/ui/organism/AppBookingDialog.vue"),
       ),
       {
-        data: { url: buildBookingUrl(url, options) },
+        data: {
+          url: buildBookingUrl(url, options),
+          // Messung zu elanagency/myhb-os#205 (Abbruch Klick -> App geladen):
+          // ab hier laeuft die Uhr fuer `booking_embed_ready` und
+          // `booking_dialog_closed`, analog zum Calendly-Dialog (#141).
+          openedAt: import.meta.client ? performance.now() : undefined,
+          abVariant: options?.abVariant ?? undefined,
+          abBypass: options?.abBypass ? true : undefined,
+        },
         props: {
           modal: true,
           draggable: false,

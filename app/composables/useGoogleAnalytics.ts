@@ -131,6 +131,12 @@ export const useGoogleAnalytics = () => {
       ab_fallback?: boolean;
       /** Deployment der Zuweisung: ads oder seo — trennt die beiden Toepfe. */
       ab_source?: 'ads' | 'seo';
+      /**
+       * Knopf mit Strapi-Methode `app-booking` (#128): oeffnet die App am
+       * A/B-Split vorbei. Nur wenn wahr — ein `false` an jedem Klick wuerde die
+       * GA4-Dimension fuellen, ohne etwas zu sagen.
+       */
+      ab_bypass?: boolean;
     },
   ) => {
     trackEvent('click_booking', {

@@ -66,8 +66,12 @@ https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden
 | `ab_variant` als Datenschicht-Variable | jeder Seitenaufruf im Test | hängt an den Ereignissen der Seite |
 | `click_booking` (+ `ab_variant`, ggf. `ab_fallback`) | Buchungsdialog geht auf | Zwischenstufe |
 | `booking_confirmed` (+ `ab_variant`) | Buchung bestätigt | **Zähler** |
+| `click_booking` (+ `ab_bypass: true`) | Knopf mit Strapi-Methode `app-booking` öffnet die App am Split vorbei (#128) | **raus aus beiden Armen** |
+| `booking_embed_ready` / `booking_dialog_closed` (+ `booking_type`, `event_label`, `embed_ready_ms` / `dialog_open_ms`) | Embed hat sich gemeldet / Dialog wurde zugemacht | Messung des Abbruchs „Klick → App geladen“ (elanagency/myhb-os#205) |
 
 `booking_type` bleibt die Gegenprobe: `ab_variant=app` muss `booking_type=app` ergeben. Jede Abweichung ist ein Bug, kein Messrauschen — die einzige erlaubte Ausnahme trägt `ab_fallback: true`.
+
+**`ab_bypass: true`** (#128) heißt: Ein Strapi-Knopf mit Methode `app-booking` hat die App geöffnet, ohne den Bucket zu fragen. Die Website hängt `ab_bypass=1` an die App-URL, die App trägt es an alle ihre Funnel-Ereignisse; `scripts/ab-auswertung.mjs` in elanagency/myhb-os nimmt solche Sitzungen aus beiden Armen, sobald die GA4-Dimension `ab_bypass` existiert. Gemessen 16.–21.09.2026: null solche Klicks — der Weg ist selten, aber ohne Kennzeichnung von einem Fehler nicht zu unterscheiden.
 
 **`ab_fallback: true`** heißt: Der Besucher ist im App-Arm, aber die gewählte Location hat keine `appBookingUrl`, also ging Calendly auf. Diese Sitzungen müssen aus der Auswertung fliegen, sonst verwässern sie den App-Arm mit Calendly-Buchungen.
 

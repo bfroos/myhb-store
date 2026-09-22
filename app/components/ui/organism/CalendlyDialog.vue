@@ -169,8 +169,36 @@ function uebernimmVorgewaermtes() {
   });
 }
 
-onBeforeUnmount(disposeBookingPrewarm);
+/**
+ * Messung zu elanagency/myhb-os#205 (Abbruch "Klick -> App geladen"): Ueber
+ * die Haelfte der Klicks im App-Arm oeffnet erst diese Standortsuche
+ * (`booking_type: location_search`), und GA4 sah bisher nicht, wer sie ohne
+ * Auswahl wieder zumacht. `booking_dialog_closed` schliesst die Luecke; die
+ * Uebergabe an den App-Dialog und der Sprung auf eine Standortseite zaehlen
+ * nicht als Abbruch.
+ */
+const uebergeben = ref(false);
+const mountedAt = ref<number | null>(null);
+onBeforeUnmount(() => {
+  disposeBookingPrewarm();
+  if (uebergeben.value) return;
+  const start = params.value?.openedAt ?? mountedAt.value;
+  trackEvent("booking_dialog_closed", {
+    ...trackingContext(),
+    booking_type: params.value?.url ? "calendly" : "location_search",
+    event_label: params.value?.url
+      ? widgetReady.value
+        ? "ready"
+        : "not_ready"
+      : "no_location",
+    dialog_open_ms:
+      typeof start === "number"
+        ? Math.round(performance.now() - start)
+        : undefined,
+  });
+});
 const { openAppBookingDialog } = useAppBookingDialog();
+const { treatmentEventUrl } = useCalendlyTreatmentEvent();
 const { resolveBooking } = useBookingAbTest();
 const {
   trackEvent,
@@ -331,7 +359,11 @@ function handleLocationBook(location: {
   // #100: Auf den Meta-Landingpages steht der Standort erst hier fest — der
   // Bucket dagegen schon seit dem Seitenaufruf. Hier wird er angewendet.
   const { url: targetUrl, abVariant, abFallback, abSource } = resolveBooking({
-    calendlyUrl: location.calendlyUrl,
+    // #148: von einer Behandlungsseite aus direkt zum Behandlungstermin.
+    calendlyUrl: treatmentEventUrl(
+      location.calendlyUrl,
+      params.value?.treatmentType,
+    ),
     appBookingUrl: location.appBookingUrl,
   });
   // Deeplink #66: Wurde der Dialog von einer Behandlungsseite geoeffnet, haengt
@@ -364,6 +396,7 @@ function handleLocationBook(location: {
   // Calendly dialog and open the in-app iframe dialog instead. Calendly
   // locations keep rendering the inline widget in place as before.
   if (isApp) {
+    uebergeben.value = true;
     dialogRef.value.close();
     openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, { abVariant });
     return;
@@ -372,6 +405,7 @@ function handleLocationBook(location: {
 }
 
 function handleLocationNavigate() {
+  uebergeben.value = true;
   dialogRef.value.close();
 }
 
@@ -461,6 +495,7 @@ watch(
 
 onMounted(async () => {
   params.value = dialogRef.value.data;
+  mountedAt.value = performance.now();
 
   if (!params.value?.url) {
     showResults.value = false;

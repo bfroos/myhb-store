@@ -18,7 +18,11 @@ import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import type { SharedButtonDto } from "~/lib/strapi/dto/components";
 import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
-import { useAppBookingDialog } from "~/composables/useAppBookingDialog";
+import {
+  APP_BOOKING_URL,
+  useAppBookingDialog,
+} from "~/composables/useAppBookingDialog";
+import { useCalendlyTreatmentEvent } from "~/composables/useCalendlyTreatmentEvent";
 import { SharedButtonAction } from "~/lib/strapi/dto/enums";
 import type { BaseButtonProps } from "~/lib/ui/types";
 
@@ -142,10 +146,21 @@ const { openCalendlyDialog } = useCalendlyDialog();
 const { openAppBookingDialog } = useAppBookingDialog();
 const { trackBookingClick } = useGoogleAnalytics();
 const { prewarmBookingWhenIdle } = useBookingPrewarm();
+const { treatmentEventUrl } = useCalendlyTreatmentEvent();
 
-/** Die Buchungs-URL dieses Knopfes, aus beiden Quellen wie beim Klick. */
-const bookingUrl = computed(
-  () => props.data?.calendlyUrl || button.value?.data?.calendlyUrl,
+/**
+ * Die Buchungs-URL dieses Knopfes, aus beiden Quellen wie beim Klick.
+ *
+ * #148: Kommt der Knopf von einer Behandlungsseite (`treatmentType` gesetzt),
+ * zeigt die Calendly-URL direkt auf den Behandlungstermin des Kontos statt auf
+ * die Terminart-Auswahl. Vorwaermen und Dialog muessen dieselbe URL sehen,
+ * deshalb passiert das hier und nicht erst beim Klick.
+ */
+const bookingUrl = computed(() =>
+  treatmentEventUrl(
+    props.data?.calendlyUrl || button.value?.data?.calendlyUrl,
+    props.data?.treatmentType || button.value?.data?.treatmentType,
+  ),
 );
 
 // #141: Calendly zeichnet im iFrame erst 10 bis ueber 40 Sekunden nach dem
@@ -161,8 +176,13 @@ onMounted(() => {
 const handleClick = () => {
   // New in-app booking iframe method (limited rollout, e.g. Neukundenrabatt page)
   if (button.value?.method === "app-booking") {
-    trackBookingClick("app");
-    openAppBookingDialog(button.value?.label);
+    // #128: Dieser Knopf oeffnet die App unabhaengig vom A/B-Bucket. Ohne
+    // Kennzeichnung saehe ein Besucher aus dem Calendly-Arm in GA4 aus wie ein
+    // Messfehler (`booking_type=app` bei `ab_variant=calendly`).
+    trackBookingClick("app", { ab_bypass: true });
+    openAppBookingDialog(button.value?.label, APP_BOOKING_URL, {
+      abBypass: true,
+    });
     return;
   }
 

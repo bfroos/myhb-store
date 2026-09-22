@@ -16,6 +16,7 @@ import { APP_BOOKING_URL } from "~/composables/useAppBookingDialog";
 
 const dialogRef = inject("dialogRef") as any;
 const params = ref<any>({});
+const { trackEvent } = useGoogleAnalytics();
 
 /**
  * Die App meldet den Abbruch der Buchung ("Abbrechen" nach Rückfrage) per
@@ -49,11 +50,53 @@ const LOAD_GRACE_MS = 2000;
 const appReady = ref(false);
 let graceTimer: ReturnType<typeof setTimeout> | undefined;
 
+/**
+ * Messung zu elanagency/myhb-os#205, Abbruch "Klick -> App geladen".
+ *
+ * GA4 sieht den Klick auf der Website und `booking_start` in der App, aber
+ * nichts dazwischen: Wie lange hat das Laden gedauert, und wie viele haben den
+ * Dialog zugemacht, bevor die App ueberhaupt gezeichnet hatte? Dieselben zwei
+ * Ereignisse wie am Calendly-Dialog (#141), mit `booking_type: "app"`:
+ *
+ *   booking_embed_ready    einmal je Dialog, sobald die App sich meldet
+ *                          (event_label "ready") oder der Nachlauf greift
+ *                          ("load_grace" -- dann weiss niemand, ob sie steht)
+ *   booking_dialog_closed  beim Schliessen; event_label "ready"/"not_ready",
+ *                          dialog_open_ms seit dem Klick
+ *
+ * Die Uhr startet beim Klick (`openedAt` aus useAppBookingDialog), nicht beim
+ * Einhaengen des iFrames.
+ */
+const openedAt = computed<number | null>(() =>
+  typeof params.value?.openedAt === "number" ? params.value.openedAt : null,
+);
+function messkontext() {
+  return {
+    booking_type: "app",
+    ab_variant: params.value?.abVariant,
+    ab_bypass: params.value?.abBypass ? true : undefined,
+  };
+}
+function sinceOpen(): number | undefined {
+  return openedAt.value === null
+    ? undefined
+    : Math.round(performance.now() - openedAt.value);
+}
+function setReady(quelle: "ready" | "load_grace") {
+  if (appReady.value) return;
+  appReady.value = true;
+  if (graceTimer) clearTimeout(graceTimer);
+  trackEvent("booking_embed_ready", {
+    ...messkontext(),
+    event_label: quelle,
+    embed_ready_ms: sinceOpen(),
+    embed_prewarmed: false,
+  });
+}
+
 function onIframeLoad() {
   if (appReady.value || graceTimer) return;
-  graceTimer = setTimeout(() => {
-    appReady.value = true;
-  }, LOAD_GRACE_MS);
+  graceTimer = setTimeout(() => setReady("load_grace"), LOAD_GRACE_MS);
 }
 
 function handleAppMessage(event: MessageEvent) {
@@ -61,8 +104,7 @@ function handleAppMessage(event: MessageEvent) {
   const type =
     typeof event.data === "string" ? event.data : (event.data as any)?.type;
   if (type === BOOKING_READY_MESSAGE) {
-    appReady.value = true;
-    if (graceTimer) clearTimeout(graceTimer);
+    setReady("ready");
     return;
   }
   if (type !== BOOKING_CANCELLED_MESSAGE) return;
@@ -85,6 +127,14 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("message", handleAppMessage);
   if (graceTimer) clearTimeout(graceTimer);
+  // Auch nach einer fertigen Buchung schliesst jemand den Dialog -- dann mit
+  // "ready". Die interessante Zahl ist der Anteil "not_ready": zu, bevor die
+  // App stand.
+  trackEvent("booking_dialog_closed", {
+    ...messkontext(),
+    event_label: appReady.value ? "ready" : "not_ready",
+    dialog_open_ms: sinceOpen(),
+  });
 });
 </script>
 <style scoped>

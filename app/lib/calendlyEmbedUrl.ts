@@ -76,3 +76,56 @@ export function isCalendlyUrl(url?: string | null): boolean {
     return false;
   }
 }
+
+/**
+ * Der Termintyp "Behandlungstermin" je Calendly-Konto (#148).
+ *
+ * Die Standort-URLs in Strapi zeigen auf das Konto (`calendly.com/koeln-arcaden`);
+ * Calendly fragt dann zuerst nach der Terminart — Behandlungstermin, kostenloses
+ * Beratungsgespraech, Vitamin-Infusion. Wer von einer Behandlungsseite kommt
+ * ("Lippen aufspritzen", beworben mit 60 EUR am Tag), hat diese Frage schon
+ * beantwortet; die Zwischenseite kostet einen Schritt und eine Ladezeit.
+ *
+ * Die Slugs sind je Konto verschieden (`behandlungstermin`, `-dua`, `-30min`,
+ * `-30min-klon`) und stammen aus der oeffentlichen Calendly-Antwort
+ * `/api/booking/profiles/<konto>/event_types`, abgefragt am 22.09.2026. Ein
+ * Konto, das hier fehlt, behaelt die Konto-URL — der Weg bleibt dann wie bisher.
+ * mediapark-klinik hat keine Termintypen.
+ */
+export const CALENDLY_TREATMENT_EVENT: Readonly<Record<string, string>> = {
+  "koeln-arcaden": "behandlungstermin",
+  "duesseldorf-arcaden": "behandlungstermin-dua",
+  "gesundbrunnen-center-berlin": "behandlungstermin",
+  "forum-duisburg": "behandlungstermin-30min-klon",
+  "k-in-lautern": "behandlungstermin-30min",
+  "hoefe-am-bruehl-leipzig": "behandlungstermin-30min",
+  "minto-moenchengladbach": "behandlungstermin",
+  "palais-vest-recklinghausen": "behandlungstermin",
+  "aquis-plaza-aachen": "behandlungstermin-30min",
+};
+
+/**
+ * Haengt den Behandlungstermin-Typ an eine Konto-URL (#148).
+ *
+ * Nur wenn die Seite eine Behandlung meint (`treatmentType` gesetzt), nur bei
+ * Calendly, und nur, wenn die URL noch auf das Konto zeigt — eine in Strapi
+ * gepflegte Termintyp-URL bleibt unangetastet.
+ */
+export function withCalendlyTreatmentEvent(
+  url: string | undefined,
+  treatmentType: string | null | undefined,
+): string | undefined {
+  if (!url || !treatmentType || !isCalendlyUrl(url)) return url;
+  try {
+    const u = new URL(url);
+    const teile = u.pathname.split("/").filter(Boolean);
+    if (teile.length !== 1) return url;
+    const konto = teile[0]!;
+    const termintyp = CALENDLY_TREATMENT_EVENT[konto];
+    if (!termintyp) return url;
+    u.pathname = `/${konto}/${termintyp}`;
+    return u.toString();
+  } catch {
+    return url;
+  }
+}
