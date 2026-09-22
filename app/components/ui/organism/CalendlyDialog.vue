@@ -90,6 +90,7 @@ import {
   writeBookingHandoff,
 } from "~/lib/calendlyBookingHandoff";
 import { PAGE_SETTINGS, withCalendlyLocale } from "~/lib/calendlyEmbedUrl";
+import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
 import {
   attachBookingPrewarm,
   bookingWasPrewarmed,
@@ -358,13 +359,17 @@ function handleLocationBook(location: {
   if (!location.calendlyUrl) return;
   // #100: Auf den Meta-Landingpages steht der Standort erst hier fest — der
   // Bucket dagegen schon seit dem Seitenaufruf. Hier wird er angewendet.
+  // #78: `bookingUrlsOf` wertet die Sperre der Redaktion aus. Der Knopf dazu
+  // wird zwar gar nicht mehr gerendert, aber die Sperre gehoert an die Stelle,
+  // die die URL herausgibt, nicht nur an die, die sie anzeigt.
+  const erlaubt = bookingUrlsOf(location as any);
   const { url: targetUrl, abVariant, abFallback, abSource } = resolveBooking({
     // #148: von einer Behandlungsseite aus direkt zum Behandlungstermin.
     calendlyUrl: treatmentEventUrl(
-      location.calendlyUrl,
+      erlaubt.calendlyUrl,
       params.value?.treatmentType,
     ),
-    appBookingUrl: location.appBookingUrl,
+    appBookingUrl: erlaubt.appBookingUrl,
   });
   // Deeplink #66: Wurde der Dialog von einer Behandlungsseite geoeffnet, haengt
   // der Behandlungs-Slug auch an der App-URL des erst hier gewaehlten

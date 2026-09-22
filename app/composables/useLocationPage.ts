@@ -16,6 +16,7 @@ export function useLocationPage() {
     () => (localeProperties.value?.iso as string | undefined) ?? currentLocale,
   );
   const location = ref<LocationDto | null>(null);
+  const { setzeSeitenStandort } = useSeitenStandort();
   const citySlug = route.params.citySlug as string;
   const locationSlug = route.params.locationSlug as string;
   const locationLocalizations = ref<LocalizationDto[]>([]);
@@ -63,6 +64,10 @@ export function useLocationPage() {
     }
 
     location.value = data.value.data.location;
+    // #78: Ab hier kennt die Seite ihren Standort. Jeder Buchungsknopf, der
+    // keine eigenen Buchungsdaten traegt, faellt darauf zurueck, statt den
+    // Standortwaehler zu oeffnen.
+    setzeSeitenStandort(data.value.data.location);
     treatmentPages.value = data.value.data.treatmentPages;
     locationLocalizations.value = data.value.data.location?.localizations ?? [];
     cityLocalizations.value =
