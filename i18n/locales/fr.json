@@ -86,6 +86,7 @@
     }
   },
   "cta": {
+    "newsletterSignUp": "S'abonner à la newsletter",
     "bookAppointment": "Prendre rendez-vous",
     "bookAppointmentNotAvailable": "Non réservable",
     "call": "Appeler",
@@ -249,6 +250,7 @@
       "openingHoursOpenNewToday": "Nouvelle ouverture aujourd'hui",
       "openingHoursOpenSoon": "dès le {date}",
       "openingHoursComingSoon": "Prochainement",
+      "openingHoursTemporarilyClosed": "Temporairement fermé",
       "cityPhrase": "à {city}"
     },
     "city": {

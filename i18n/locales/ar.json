@@ -88,6 +88,7 @@
   },
 
   "cta": {
+    "newsletterSignUp": "اشترك في النشرة الإخبارية",
     "bookAppointment": "احجز موعدًا",
     "bookAppointmentNotAvailable": "احجز موعدًا غير متاح",
     "call": "اتصل",
@@ -245,6 +246,7 @@
       "openingHoursOpenNewToday": "افتتاح جديد اليوم",
       "openingHoursOpenSoon": "من {date}",
       "openingHoursComingSoon": "قريباً",
+      "openingHoursTemporarilyClosed": "مغلق مؤقتاً",
       "cityPhrase": "في {city}"
     },
     "city": {

@@ -86,6 +86,7 @@
     }
   },
   "cta": {
+    "newsletterSignUp": "Nieuwsbrief abonneren",
     "bookAppointment": "Afspraak maken",
     "bookAppointmentNotAvailable": "Niet boekbaar",
     "call": "Bellen",
@@ -249,6 +250,7 @@
       "openingHoursOpenNewToday": "Vandaag nieuw geopend",
       "openingHoursOpenSoon": "vanaf {date}",
       "openingHoursComingSoon": "Binnenkort",
+      "openingHoursTemporarilyClosed": "Tijdelijk gesloten",
       "cityPhrase": "in {city}"
     },
     "city": {
