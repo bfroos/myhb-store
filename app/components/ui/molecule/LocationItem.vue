@@ -61,7 +61,7 @@
       <div class="locationTile__actions">
         <UiMoleculeButtonGroup>
           <UiAtomBaseButton
-            v-if="item.calendlyUrl"
+            v-if="buchbar"
             size="sm"
             @click="handleBookClick"
           >
@@ -122,6 +122,7 @@ import {
 } from "~/lib/strapi/dto/enums";
 import { isMediaImage } from "~/utils/media";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
+import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
 
 const { locale, locales } = useI18n();
 const { formatInteger, localeIso } = useFormatInteger();
@@ -184,6 +185,19 @@ const googleReview = computed(() => {
     countDisplay: formatInteger(review.userRatingsTotal),
   };
 });
+
+/**
+ * Nimmt dieser Standort ueberhaupt Termine an? (#78)
+ *
+ * Bisher reichte eine `calendlyUrl` — die Sperre der Redaktion
+ * (`isBookingAllowed`) wurde hier nie ausgewertet, weil
+ * `/api/locations/bookable` das Feld gar nicht auslieferte. Seit
+ * bfroos/myhb-cms#32 tut es das, und damit greift `bookingUrlsOf` auch im
+ * Standortwaehler: Die MediaPark-Klinik stand dort buchbar, obwohl sie
+ * gesperrt ist (#141: 70 Klicks in zwei Wochen, null Buchungen). Jetzt
+ * bekommt sie den Kontaktweg darunter statt eines Knopfes ins Leere.
+ */
+const buchbar = computed(() => !!bookingUrlsOf(props.item as any).calendlyUrl);
 
 const phoneHref = computed(() => {
   const phone = props.item.contact?.phoneNumber?.trim();

@@ -30,6 +30,14 @@ const props = defineProps<{
   button?: SharedButtonDto | null;
   buttonProps?: BaseButtonProps;
   data?: any;
+  /**
+   * Knopf, der bewusst NICHT den Standort der Seite erbt (#78).
+   *
+   * Der Knopf in der Kopfzeile ist auf jeder Seite derselbe und meint „ich
+   * moechte einen Termin", nicht „ich moechte hier einen Termin". Er oeffnet
+   * deshalb weiter den Standortwaehler, auch auf einer Standortseite.
+   */
+  ohneSeitenStandort?: boolean;
 }>();
 
 const { t } = useI18n();
@@ -147,6 +155,26 @@ const { openAppBookingDialog } = useAppBookingDialog();
 const { trackBookingClick } = useGoogleAnalytics();
 const { prewarmBookingWhenIdle } = useBookingPrewarm();
 const { treatmentEventUrl } = useCalendlyTreatmentEvent();
+const { seitenStandort } = useSeitenStandort();
+
+/**
+ * Der Standort, den dieser Knopf benutzt (#78).
+ *
+ * Eigene Buchungsdaten gewinnen immer. Fehlen sie, erbt der Knopf den Standort
+ * der Seite — auf einer Standortseite ist das genau die Lounge, die der
+ * Besucher schon ausgesucht hat. Gibt es weder noch, oeffnet der Knopf wie
+ * bisher den Standortwaehler.
+ */
+const knopfStandort = computed(() => {
+  const eigen = {
+    calendlyUrl: props.data?.calendlyUrl || button.value?.data?.calendlyUrl,
+    appBookingUrl: props.data?.appBookingUrl || button.value?.data?.appBookingUrl,
+    locationSlug: props.data?.locationSlug || button.value?.data?.locationSlug,
+  };
+  if (eigen.calendlyUrl || eigen.appBookingUrl) return eigen;
+  if (props.ohneSeitenStandort) return eigen;
+  return seitenStandort.value ?? eigen;
+});
 
 /**
  * Die Buchungs-URL dieses Knopfes, aus beiden Quellen wie beim Klick.
@@ -158,7 +186,7 @@ const { treatmentEventUrl } = useCalendlyTreatmentEvent();
  */
 const bookingUrl = computed(() =>
   treatmentEventUrl(
-    props.data?.calendlyUrl || button.value?.data?.calendlyUrl,
+    knopfStandort.value.calendlyUrl,
     props.data?.treatmentType || button.value?.data?.treatmentType,
   ),
 );
@@ -206,10 +234,8 @@ function openCalendlyDialogForButton() {
   // #97/#100: Zweiter Buchungsweg des Standorts. Liegt er vor und ist der
   // Standort freigegeben, entscheidet der A/B-Split beim Klick zwischen
   // Calendly und App — sonst bleibt es bei der Calendly-URL.
-  const appBookingUrl =
-    props.data?.appBookingUrl || button.value?.data?.appBookingUrl;
-  const locationSlug =
-    props.data?.locationSlug || button.value?.data?.locationSlug;
+  const appBookingUrl = knopfStandort.value.appBookingUrl;
+  const locationSlug = knopfStandort.value.locationSlug;
   openCalendlyDialog(url, treatmentType, appTreatmentSlug, {
     appBookingUrl,
     locationSlug,

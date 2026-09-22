@@ -11,6 +11,7 @@
             method: SharedButtonMethod.ACTION,
             action: SharedButtonAction.APPOINTMENT_BOOKING,
           }"
+          ohne-seiten-standort
           @click="closeMobileMenu"
         />
       </div>
