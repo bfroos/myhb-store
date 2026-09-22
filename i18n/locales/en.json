@@ -88,6 +88,7 @@
   },
 
   "cta": {
+    "newsletterSignUp": "Subscribe to newsletter",
     "bookAppointment": "Book appointment",
     "bookAppointmentNotAvailable": "Booking not available",
     "call": "Call",
@@ -257,6 +258,7 @@
       "openingHoursOpenNewToday": "New opening today",
       "openingHoursOpenSoon": "from {date}",
       "openingHoursComingSoon": "Coming Soon",
+      "openingHoursTemporarilyClosed": "Temporarily closed",
       "cityPhrase": "in {city}"
     },
     "city": {

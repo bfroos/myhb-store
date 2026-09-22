@@ -88,6 +88,7 @@
   },
 
   "cta": {
+    "newsletterSignUp": "Bültene abone ol",
     "bookAppointment": "Randevu al",
     "bookAppointmentNotAvailable": "Randevu alınamaz",
     "call": "Ara",
@@ -245,6 +246,7 @@
       "openingHoursOpenNewToday": "Bugün yeni açılış",
       "openingHoursOpenSoon": "{date} tarihinden itibaren",
       "openingHoursComingSoon": "Yakında",
+      "openingHoursTemporarilyClosed": "Geçici olarak kapalı",
       "cityPhrase": "{city} şehrinde"
     },
     "city": {

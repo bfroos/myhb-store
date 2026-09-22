@@ -27,6 +27,13 @@ export function mapLocationFixedBlocks(
   sortLocale: string,
   isAdsMode = false,
 ) {
+  /**
+   * #141: Standort nimmt gerade keine Termine an — voruebergehend geschlossen,
+   * noch nicht eroeffnet, kein Personal. Die Redaktion schaltet das ueber
+   * `isBookingAllowed`.
+   */
+  const buchungGesperrt = location?.isBookingAllowed === false;
+
   const fixed = {
     hero: buildTreatmentHeroBlockModel(),
     reviews: buildReviewsBlockModel(),
@@ -65,8 +72,20 @@ export function mapLocationFixedBlocks(
       ),
     };
 
+    // #141: Ein gesperrter Standort, der laut Datum laengst offen ist, sah aus
+    // wie jeder andere — die MediaPark-Klinik trug nicht einmal einen Hinweis,
+    // waehrend 70 Menschen im Monat dort vergeblich einen Termin suchten. Fuer
+    // die noch nicht eroeffneten Standorte steht der richtige Hinweis schon da
+    // ("Coming Soon"), der darf nicht ueberschrieben werden.
+    const laengstOffen =
+      locationOpenStatus === LocationOpenStatus.OPEN ||
+      locationOpenStatus === LocationOpenStatus.OPEN_NEW_TODAY;
+
     return {
-      announcementText: announcementText[locationOpenStatus],
+      announcementText:
+        buchungGesperrt && laengstOffen
+          ? t("locations.location.openingHoursTemporarilyClosed")
+          : announcementText[locationOpenStatus],
       headline: location?.name,
       headlinePrefix: `${brandName} · ${location?.city?.name}`,
       cover: location?.buildingImage,
@@ -143,11 +162,21 @@ export function mapLocationFixedBlocks(
       return;
     }
 
-    const link = {
-      label: t("cta.bookAppointment"),
-      method: SharedButtonMethod.ACTION,
-      action: SharedButtonAction.APPOINTMENT_BOOKING,
-    };
+    // #141: Der Knopf war fest auf Buchung verdrahtet und ignorierte die
+    // Sperre — auf den Seiten von Wuppertal und Magdeburg stand er direkt
+    // neben "Coming Soon". Wer nicht buchen kann, soll wenigstens erfahren,
+    // wann es losgeht.
+    const link = buchungGesperrt
+      ? {
+          label: t("cta.newsletterSignUp"),
+          method: SharedButtonMethod.ACTION,
+          action: SharedButtonAction.NEWSLETTER_SIGN_UP,
+        }
+      : {
+          label: t("cta.bookAppointment"),
+          method: SharedButtonMethod.ACTION,
+          action: SharedButtonAction.APPOINTMENT_BOOKING,
+        };
 
     const replacements = [
       {
