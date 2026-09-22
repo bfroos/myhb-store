@@ -65,6 +65,18 @@ const tag = (versatz) => {
 
 const EREIGNISSE = ['click_booking', 'invitee_event_type_page', 'booking_confirmed'];
 
+// Unter so vielen click_booking im Zeitraum wird nicht geurteilt: bezahlte Suche
+// bringt 3–5 Ereignisse am Tag, da kippt die Quote an einem einzigen Klick.
+const MINDEST_N = 30;
+
+const quantil = (werte, p) => {
+  if (!werte.length) return null;
+  const s = [...werte].sort((a, b) => a - b);
+  const i = (s.length - 1) * p;
+  const lo = Math.floor(i), hi = Math.ceil(i);
+  return Math.round(s[lo] + (s[hi] - s[lo]) * (i - lo));
+};
+
 const main = async () => {
   let key;
   try { key = JSON.parse(fs.readFileSync(KEYPFAD, 'utf8')); }
@@ -82,12 +94,12 @@ const main = async () => {
     limit: 1000,
   };
 
-  for (const [titel, zusatz, hinweis] of [
-    ['Nur bezahlte Suche (die Zahl aus dem Ticket)', { fieldName: 'sessionDefaultChannelGroup', stringFilter: { value: 'Paid Search' } }, null],
+  for (const [titel, zusatz, hinweis, urteilen] of [
+    ['Nur bezahlte Suche (die Zahl aus dem Ticket)', { fieldName: 'sessionDefaultChannelGroup', stringFilter: { value: 'Paid Search' } }, null, true],
     ['Alle Quellen', null,
       'Die Quote hier ist KEINE Trichterquote: invitee_event_type_page feuert auch\n'
       + 'fuer direkte Calendly-Links aus Mail, WhatsApp und Anzeigen, die nie ueber\n'
-      + 'unseren Knopf laufen (14.09.: 374 Kalender bei 0 Klicks). Nur als Grundrauschen lesen.'],
+      + 'unseren Knopf laufen (14.09.: 374 Kalender bei 0 Klicks). Nur als Grundrauschen lesen.', false],
   ]) {
     const body = { ...basis };
     if (zusatz) {
@@ -123,9 +135,18 @@ const main = async () => {
     }
     const quote = sk ? Math.round((si / sk) * 100) : null;
     console.log(`Summe       ${String(sk).padStart(11)}  ${String(si).padStart(17)}  ${(quote === null ? '—' : quote + ' %').padStart(6)}  ${String(sb).padStart(8)}`);
-    if (quote === null) console.log('Urteil: keine click_booking im Zeitraum — nichts zu beurteilen.');
-    else if (quote >= 70) console.log(`Urteil: Abnahmeschwelle (70 %) erreicht — ${quote} %.`);
-    else console.log(`Urteil: unter der Abnahmeschwelle — ${quote} % statt 70 %.`);
+    if (!urteilen) {
+      console.log('Kein Urteil: diese Quote ist keine Trichterquote (siehe Hinweis oben).');
+    } else if (quote === null) {
+      console.log('Urteil: keine click_booking im Zeitraum — nichts zu beurteilen.');
+    } else if (sk < MINDEST_N) {
+      console.log(`Urteil: Datenbasis zu duenn — ${sk} click_booking im Zeitraum (unter ${MINDEST_N}).`);
+      console.log(`        ${quote} % waeren hier ein Zufallswert; mit TAGE=28 weiten oder abwarten.`);
+    } else if (quote >= 70) {
+      console.log(`Urteil: Abnahmeschwelle (70 %) erreicht — ${quote} %.`);
+    } else {
+      console.log(`Urteil: unter der Abnahmeschwelle — ${quote} % statt 70 %.`);
+    }
     console.log();
   }
 
@@ -137,9 +158,55 @@ const main = async () => {
     dimensionFilter: { filter: { fieldName: 'eventName', stringFilter: { value: 'booking_embed_ready' } } },
   });
   const n = d.rows && d.rows[0] ? Number(d.rows[0].metricValues[0].value) : 0;
-  console.log('## Ladezeit-Messung (booking_embed_ready)');
-  if (n > 0) console.log(`${n} Ereignisse — kommt an. Fuer embed_ready_ms/embed_prewarmed muessen beide noch als benutzerdefinierte Metrik bzw. Dimension in GA4 registriert sein.`);
-  else console.log('0 Ereignisse. Der GTM-Container laesst den Namen nicht durch (Ausloeser-Regex, Liste erlaubter Ereignisnamen) — bis das ergaenzt ist, gibt es keine Ladezeitmessung aus dem Feld.');
+  console.log('## Ladezeit-Messung (booking_embed_ready) — die Leitkennzahl');
+  if (n === 0) {
+    console.log('0 Ereignisse. Der GTM-Container laesst den Namen nicht durch (Ausloeser-Regex, Liste erlaubter Ereignisnamen) — bis das ergaenzt ist, gibt es keine Ladezeitmessung aus dem Feld.');
+    return;
+  }
+  console.log(`${n} Ereignisse im Zeitraum.`);
+
+  // embed_ready_ms gibt die Data API nur als Summe her. Ueber die Minute als
+  // Dimension zerfaellt das in viele Zeilen mit genau einem Ereignis — deren
+  // Summe *ist* der Einzelwert. Nur aus diesen wird die Verteilung gerechnet.
+  const fein = await bericht(tok, {
+    dateRanges: [{ startDate: VON, endDate: BIS }],
+    dimensions: [{ name: 'dateHourMinute' }, { name: 'customEvent:embed_prewarmed' }],
+    metrics: [{ name: 'eventCount' }, { name: 'customEvent:embed_ready_ms' }],
+    dimensionFilter: { filter: { fieldName: 'eventName', stringFilter: { value: 'booking_embed_ready' } } },
+    limit: 100000,
+  });
+  if (fein.fehler) {
+    console.log(`Verteilung nicht abrufbar — ${fein.fehler}`);
+    console.log('Fehlt embed_ready_ms als benutzerdefinierte Metrik oder embed_prewarmed als Dimension, hier in GA4 nachtragen.');
+    return;
+  }
+
+  const einzel = new Map();
+  let gesamt = 0, einzeln = 0;
+  for (const r of fein.rows || []) {
+    const vorgewaermt = r.dimensionValues[1].value;
+    const anzahl = Number(r.metricValues[0].value);
+    const summe = Number(r.metricValues[1].value);
+    gesamt += anzahl;
+    if (anzahl !== 1) continue; // Mischzeilen sagen nichts ueber den Einzelwert
+    einzeln += 1;
+    if (!einzel.has(vorgewaermt)) einzel.set(vorgewaermt, []);
+    einzel.get(vorgewaermt).push(summe);
+  }
+  const alle = [...einzel.values()].flat();
+  if (!alle.length) { console.log('Keine Einzelwerte isolierbar — Verteilung diesmal nicht belastbar.'); return; }
+
+  console.log(`Verteilung aus ${einzeln} eindeutigen Einzelwerten (von ${gesamt} Ereignissen):`);
+  console.log('vorgewaermt       n   Median      p90  schlechtester');
+  for (const [vorgewaermt, werte] of [...einzel.entries()].sort()) {
+    console.log(`${String(vorgewaermt).padEnd(12)}${String(werte.length).padStart(5)}`
+      + `${(quantil(werte, 0.5) + ' ms').padStart(9)}${(quantil(werte, 0.9) + ' ms').padStart(9)}`
+      + `${(Math.max(...werte) + ' ms').padStart(15)}`);
+  }
+  console.log(`gesamt      ${String(alle.length).padStart(5)}${(quantil(alle, 0.5) + ' ms').padStart(9)}`
+    + `${(quantil(alle, 0.9) + ' ms').padStart(9)}${(Math.max(...alle) + ' ms').padStart(15)}`);
+  const zaeh = (s) => alle.filter((v) => v >= s).length;
+  console.log(`ueber 3 s: ${zaeh(3000)} von ${alle.length} · ueber 12 s (Beschwerde aus dem Ticket): ${zaeh(12000)}`);
 };
 
 main().catch((e) => { console.error('Fehlgeschlagen:', e.message); process.exit(1); });
