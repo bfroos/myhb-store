@@ -42,13 +42,26 @@ const classifyLink = (a: HTMLAnchorElement): LinkKind | null => {
 };
 
 // Wo auf der Seite der Link sitzt: explizit per data-track-placement, sonst die
-// erste CSS-Klasse des Links oder seines naechsten Elternteils mit Klasse
-// (z. B. "loc__pill", "sticky__btn", "reviewsBadge").
+// naechste sprechende BEM-Klasse (z. B. "loc__pill", "sticky__btn",
+// "hero__reviews", "contact__bar"). Generische Klassen wie "button" sagen
+// nichts ueber die Stelle und werden uebersprungen.
+const GENERIC = /^(button|btn|link|icon|theme-)/;
 const placementOf = (a: HTMLElement): string | undefined => {
   const explicit = a.closest<HTMLElement>("[data-track-placement]");
   if (explicit?.dataset.trackPlacement) return explicit.dataset.trackPlacement;
-  const withClass = a.classList.length ? a : a.closest<HTMLElement>("[class]");
-  return withClass?.classList[0];
+  let el: HTMLElement | null = a;
+  for (let depth = 0; el && depth < 6; depth++, el = el.parentElement) {
+    const bem = [...el.classList].find(
+      (c) => c.includes("__") && !GENERIC.test(c),
+    );
+    if (bem) return bem;
+  }
+  return [...a.classList].find((c) => !GENERIC.test(c)) ?? a.classList[0];
+};
+
+const fileTitle = (src: string): string | undefined => {
+  const name = src.split("/").pop()?.split("?")[0];
+  return name ? name.replace(/(_[0-9a-f]{10})?\.[a-z0-9]+$/i, "") : undefined;
 };
 
 export default defineNuxtPlugin(() => {
@@ -95,8 +108,11 @@ export default defineNuxtPlugin(() => {
   const videoParams = (v: HTMLVideoElement) => ({
     ...pageContext(),
     video_provider: "html5",
+    // CMS-Videos haben oft keinen Titel — dann der Dateiname ohne Hash-Anhang.
     video_title:
-      v.getAttribute("aria-label") || v.getAttribute("title") || undefined,
+      v.getAttribute("aria-label") ||
+      v.getAttribute("title") ||
+      fileTitle(v.currentSrc || v.src),
     video_url: v.currentSrc || v.src || undefined,
     video_duration: Number.isFinite(v.duration)
       ? Math.round(v.duration)
