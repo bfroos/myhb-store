@@ -6,6 +6,7 @@
   >
     <iframe
       v-if="isActivated"
+      ref="frameRef"
       class="youTubeEmbed__frame"
       :src="embedSrc"
       :title="title ?? 'YouTube'"
@@ -72,6 +73,7 @@ import { ImageFormat } from "~/lib/strapi/dto/enums";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { getMediaUrl } from "~/utils/media";
 import { parseYouTubeUrl } from "~/utils/youtube";
+import { useYouTubeTracking } from "~/composables/useYouTubeTracking";
 
 const props = defineProps<{
   videoUrl?: string;
@@ -95,10 +97,21 @@ const embedSrc = computed(() => {
     rel: "0",
     modestbranding: "1",
     playsinline: "1",
+    // Fuer die Messung (useYouTubeTracking): Player-API freischalten.
+    enablejsapi: "1",
+    origin: import.meta.client ? window.location.origin : "",
   });
   if (parsed.value?.start) params.set("start", String(parsed.value.start));
   return `https://www.youtube-nocookie.com/embed/${videoId.value}?${params.toString()}`;
 });
+
+const frameRef = ref<HTMLIFrameElement | null>(null);
+const tracking = useYouTubeTracking(frameRef, () => ({
+  videoId: videoId.value,
+  title: props.title,
+}));
+watch(frameRef, (el) => (el ? tracking.attach() : tracking.detach()));
+onBeforeUnmount(() => tracking.detach());
 
 // The CMS poster is served from our own CDN, so it may render before consent; the
 // YouTube thumbnail is a Google request and waits for it.
