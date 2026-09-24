@@ -67,6 +67,7 @@ const {
   readAbBookingConfig,
   resolveBookingTarget,
   istNachBuchungsSeite,
+  istNurCalendlySeite,
 } = mod;
 
 // --- Auslieferungszustand: Split aus ---------------------------------------
@@ -227,7 +228,7 @@ const {
 
   // Wer VOR der Buchung zugeteilt wurde, behaelt seinen Arm — sonst faende die
   // Auswertung die Buchung nicht mehr wieder.
-  setupDom("", { marketing: true, pathname: "/p/botox-meta-rabatt" });
+  setupDom("", { marketing: true, pathname: "/behandlungen/botox" });
   const vorher = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "seo");
   const bucket = vorher.variant;
   (globalThis as any).window.location.pathname = "/p/danke-fuer-deine-terminbuchung";
@@ -236,6 +237,53 @@ const {
     "bestehender Bucket gilt auf der Dankesseite weiter",
     !!bucket && danach.variant === bucket && !danach.assigned,
     { bucket, danach },
+  );
+}
+
+// --- Meta-Rabatt-Seiten buchen immer ueber Calendly ------------------------
+{
+  check(
+    "Meta-Rabatt-Pfade erkannt, auch mit Sprachpraefix und Schraegstrich",
+    istNurCalendlySeite("/p/botox-meta-rabatt") &&
+      istNurCalendlySeite("/p/lippen-meta-rabatt/") &&
+      istNurCalendlySeite("/en/p/botox-meta-rabatt") &&
+      istNurCalendlySeite("/P/Lippen-Meta-Rabatt"),
+  );
+  check(
+    "andere Seiten sind nicht ausgenommen",
+    !istNurCalendlySeite("/") &&
+      !istNurCalendlySeite("/p/neukundenrabatt") &&
+      !istNurCalendlySeite("/p/botox-meta-rabatt-alt") &&
+      !istNurCalendlySeite("/en/p") &&
+      !istNurCalendlySeite(undefined),
+  );
+
+  setupDom("", { marketing: true, pathname: "/p/botox-meta-rabatt" });
+  const neu = assignAbBucket(readAbBookingConfig({ abBookingSplit: "100" }), "ads");
+  check(
+    "auf der Meta-Rabatt-Seite wird kein Bucket gezogen",
+    !neu.variant && !neu.assigned && !readAbBucket(),
+    neu,
+  );
+
+  const dom = setupDom("?ab=app", { marketing: true, pathname: "/p/lippen-meta-rabatt" });
+  const erzwungen = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "ads");
+  check(
+    "?ab=app wirkt dort nicht",
+    !erzwungen.variant && !dom.cookies().includes("myhb_ab_booking"),
+    { erzwungen, cookies: dom.cookies() },
+  );
+
+  // Bestehender App-Bucket von einer anderen Seite: dort nicht mehr gemeldet.
+  setupDom("?ab=app", { marketing: true, pathname: "/behandlungen/botox" });
+  assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "ads");
+  (globalThis as any).window.location.search = "";
+  (globalThis as any).window.location.pathname = "/p/botox-meta-rabatt";
+  const dort = assignAbBucket(readAbBookingConfig({ abBookingSplit: "50" }), "ads");
+  check(
+    "bestehender App-Bucket wird dort nicht gemeldet, bleibt aber erhalten",
+    !dort.variant && readAbBucket() === "app",
+    { dort, bucket: readAbBucket() },
   );
 }
 

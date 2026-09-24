@@ -202,6 +202,31 @@ export function istNachBuchungsSeite(
 }
 
 /**
+ * Seiten, auf denen immer Calendly bucht — unabhaengig vom Bucket.
+ *
+ * Die beiden Meta-Rabatt-Landingpages sollen auf Wunsch des Marketings
+ * (24.09.2026) wieder ausschliesslich ueber Calendly buchen. Hier wird weder
+ * ein Bucket gezogen noch ein bestehender angewendet, und die Variante wird
+ * aus der Datenschicht genommen: Klicks von hier tragen kein `ab_variant` und
+ * stehen damit wie Besucher ohne Einwilligung ausserhalb des Tests. Sonst
+ * zaehlte ein App-Arm-Besucher, der hier Calendly bekommt, im Wochenbericht
+ * als Leckage des App-Arms.
+ */
+const NUR_CALENDLY_PFADE = ["/p/botox-meta-rabatt", "/p/lippen-meta-rabatt"];
+
+export function istNurCalendlySeite(
+  pathname: string | undefined = typeof window === "undefined"
+    ? undefined
+    : window.location?.pathname,
+): boolean {
+  if (!pathname) return false;
+  const teile = pathname.toLowerCase().split("/").filter(Boolean);
+  // Sprachpraefix der uebrigen Locales (/en/p/..., /tr/p/...) abschneiden.
+  if (teile.length > 2 && /^[a-z]{2}$/.test(teile[0]!)) teile.shift();
+  return NUR_CALENDLY_PFADE.includes("/" + teile.join("/"));
+}
+
+/**
  * Zuweisung beim Seitenaufruf (siehe Plugin).
  *
  * Gibt den bestehenden Bucket zurueck, wenn es einen gibt, sonst wuerfelt er —
@@ -217,6 +242,8 @@ export function assignAbBucket(
   siteMode: AbSource,
 ): AssignResult {
   if (typeof window === "undefined") return { assigned: false };
+  // Ausserhalb des Tests, auch fuer `?ab=` — siehe NUR_CALENDLY_PFADE.
+  if (istNurCalendlySeite()) return { assigned: false };
 
   const forced = forcedAbVariant();
   const current = readAbBucket();

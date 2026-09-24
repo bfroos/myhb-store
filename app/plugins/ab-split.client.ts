@@ -33,6 +33,7 @@
 import {
   assignAbBucket,
   forcedAbVariant,
+  istNurCalendlySeite,
   readAbBookingConfig,
   type AbSource,
   type BookingVariant,
@@ -87,6 +88,13 @@ export default defineNuxtPlugin((nuxtApp) => {
   // auch nach einem Routenwechsel an den Ereignissen haengt. Kein zweites
   // `ab_assigned` — der Nenner zaehlt Besucher, nicht Seitenaufrufe.
   nuxtApp.hook("page:finish", () => {
+    // Meta-Rabatt-Seiten stehen ausserhalb des Tests. Kam der Besucher von
+    // einer Testseite, steht die Variante noch im Datenmodell und hinge sonst
+    // an den Klicks von hier.
+    if (istNurCalendlySeite()) {
+      pushToDataLayer({ ab_variant: undefined, ab_source: undefined });
+      return;
+    }
     const { variant, source } = assignAbBucket(abConfig, siteMode);
     if (variant) {
       pushToDataLayer({ ab_variant: variant, ab_source: source ?? siteMode });

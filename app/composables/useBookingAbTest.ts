@@ -4,6 +4,7 @@ import {
   readAbSource,
   resolveBookingTarget,
   forcedAbVariant,
+  istNurCalendlySeite,
   type AbSource,
   type BookingUrls,
   type ResolvedBooking,
@@ -34,7 +35,10 @@ export function useBookingAbTest() {
   const siteMode: AbSource = config.public.siteMode === "ads" ? "ads" : "seo";
 
   function resolveBooking(urls: BookingUrls): AppliedBooking {
-    const aktiv = abConfig.splitPercent > 0 || !!forcedAbVariant();
+    // Die Meta-Rabatt-Seiten buchen immer ueber Calendly (NUR_CALENDLY_PFADE).
+    const aktiv =
+      (abConfig.splitPercent > 0 || !!forcedAbVariant()) &&
+      !istNurCalendlySeite();
     const bucket = aktiv ? readAbBucket() : undefined;
     const resolved = resolveBookingTarget(urls, bucket);
     return resolved.abVariant
