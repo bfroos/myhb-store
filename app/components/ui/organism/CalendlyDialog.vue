@@ -9,7 +9,11 @@
       class="calendlyDialog"
       :page-settings="PAGE_SETTINGS"
     />
-    <UiMoleculeBookingEmbedStatus :ready="widgetReady" :url="embedUrl" />
+    <UiMoleculeBookingEmbedStatus
+      :ready="widgetReady"
+      :unbestaetigt="readyAusVorwaermen"
+      :url="embedUrl"
+    />
   </div>
   <template v-else>
     <div ref="contentRef" class="calendlyDialog__content">
@@ -162,7 +166,7 @@ function uebernimmVorgewaermtes() {
         // Kalender, hat der Besucher gar nicht gewartet — dann darf auch kein
         // Ladekreisel mehr davor liegen.
         () => {
-          if (prewarmHasRendered()) setReady();
+          if (prewarmHasRendered()) setReady(true);
         },
         zurueckfallen,
       );
@@ -265,14 +269,34 @@ function isFromCalendly(e: MessageEvent) {
  * zeigt; darauf warten wir.
  */
 const widgetReady = ref(false);
-function setReady() {
-  if (widgetReady.value) return;
+/**
+ * Die Fertigmeldung stammt aus der Vorwaermphase, nicht aus dem sichtbaren
+ * Rahmen (#141, 23.09.2026).
+ *
+ * Gemessen: Der Dialog galt als fertig, weil Calendly sich beim Vorwaermen
+ * gemeldet hatte — im eingeblendeten Rahmen stand danach bis zu 19 Sekunden
+ * ein leeres weisses Feld, ohne Kreisel und ohne Notausgang. Ein Lauscher, der
+ * erst beim Klick ansetzt, faengt null Nachrichten: sie sind alle vorher durch.
+ *
+ * Solange diese Vermutung nicht durch eine Meldung aus dem sichtbaren Rahmen
+ * bestaetigt ist, bleibt der Notausgang scharf. Der Kreisel geht trotzdem weg —
+ * im Normalfall steht der Kalender ja wirklich schon da.
+ */
+const readyAusVorwaermen = ref(false);
+function setReady(ausVorwaermen = false) {
+  if (widgetReady.value) {
+    if (!ausVorwaermen) readyAusVorwaermen.value = false;
+    return;
+  }
   reportEmbedReady();
+  readyAusVorwaermen.value = ausVorwaermen;
   widgetReady.value = true;
 }
 function markWidgetReady(e: MessageEvent) {
   if (!isFromCalendly(e)) return;
-  setReady();
+  // Eine Meldung aus dem sichtbaren Rahmen bestaetigt, was das Vorwaermen nur
+  // vermutet hat.
+  setReady(false);
 }
 
 /**
@@ -303,6 +327,7 @@ watch(
   () => params.value?.url,
   (url) => {
     widgetReady.value = false;
+    readyAusVorwaermen.value = false;
     embedStartedAt.value = url
       ? (params.value?.openedAt ?? performance.now())
       : null;

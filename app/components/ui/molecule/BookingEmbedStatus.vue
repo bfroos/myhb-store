@@ -47,6 +47,13 @@ const props = withDefaults(
   defineProps<{
     /** Das Embed hat sich gemeldet. */
     ready: boolean;
+    /**
+     * Die Meldung stammt aus der Vorwaermphase und ist vom sichtbaren Rahmen
+     * nicht bestaetigt (#141). Dann verschwindet zwar der Kreisel, der
+     * Notausgang bleibt aber scharf — genau in diesem Fall stand das Feld
+     * gemessen bis zu 19 Sekunden leer, ohne jede Rueckmeldung.
+     */
+    unbestaetigt?: boolean;
     /** Buchungs-URL fuer den Notausgang in einen neuen Tab. */
     url?: string;
     hintAfterMs?: number;
@@ -58,18 +65,26 @@ const { t } = useI18n();
 const showHint = ref(false);
 let timer: ReturnType<typeof setTimeout> | undefined;
 
+/** Wartet der Besucher noch auf etwas Sichtbares? */
+const wartetNoch = () => !props.ready || props.unbestaetigt === true;
+
 onMounted(() => {
   timer = setTimeout(() => {
-    if (!props.ready && props.url) showHint.value = true;
+    if (wartetNoch() && props.url) showHint.value = true;
   }, props.hintAfterMs);
 });
 
 watch(
-  () => props.ready,
-  (ready) => {
-    if (!ready) return;
-    showHint.value = false;
+  () => [props.ready, props.unbestaetigt] as const,
+  () => {
+    if (wartetNoch()) return;
     if (timer) clearTimeout(timer);
+    // Der Hinweis wird bewusst NICHT wieder zurueckgenommen (#141,
+    // 23.09.2026). Gemessen auf der Preview: Calendly meldet sein
+    // Render-Ereignis auch dann, wenn im Rahmen weiter nichts steht — der
+    // Ausweg verschwand damit genau in dem Moment, in dem der Besucher ihn
+    // gebraucht haette. Wer ihn einmal gesehen hat, behaelt ihn; er liegt
+    // unter dem Embed und verdeckt einen fertigen Kalender nicht.
   },
 );
 
