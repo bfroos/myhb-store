@@ -47,6 +47,13 @@ const props = withDefaults(
   defineProps<{
     /** Das Embed hat sich gemeldet. */
     ready: boolean;
+    /**
+     * Die Meldung stammt aus der Vorwaermphase und ist vom sichtbaren Rahmen
+     * nicht bestaetigt (#141). Dann verschwindet zwar der Kreisel, der
+     * Notausgang bleibt aber scharf — genau in diesem Fall stand das Feld
+     * gemessen bis zu 19 Sekunden leer, ohne jede Rueckmeldung.
+     */
+    unbestaetigt?: boolean;
     /** Buchungs-URL fuer den Notausgang in einen neuen Tab. */
     url?: string;
     hintAfterMs?: number;
@@ -58,16 +65,19 @@ const { t } = useI18n();
 const showHint = ref(false);
 let timer: ReturnType<typeof setTimeout> | undefined;
 
+/** Wartet der Besucher noch auf etwas Sichtbares? */
+const wartetNoch = () => !props.ready || props.unbestaetigt === true;
+
 onMounted(() => {
   timer = setTimeout(() => {
-    if (!props.ready && props.url) showHint.value = true;
+    if (wartetNoch() && props.url) showHint.value = true;
   }, props.hintAfterMs);
 });
 
 watch(
-  () => props.ready,
-  (ready) => {
-    if (!ready) return;
+  () => [props.ready, props.unbestaetigt] as const,
+  () => {
+    if (wartetNoch()) return;
     showHint.value = false;
     if (timer) clearTimeout(timer);
   },

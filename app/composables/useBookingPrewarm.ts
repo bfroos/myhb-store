@@ -56,6 +56,17 @@ let detachAufraeumen: (() => void) | null = null;
  * der Browser drosselt den versteckten also nicht. Ein Pixel ist die Variante
  * mit dem geringsten Risiko, je etwas zu verdecken oder abzufangen.
  */
+/**
+ * Calendly-Ereignisse, die bedeuten: Es steht eine Buchungsseite im Rahmen.
+ * Alles andere (frueher Lebenszeichen, interne Meldungen) sagt nichts darueber,
+ * ob schon etwas zu sehen ist.
+ */
+const RENDER_EREIGNISSE = new Set([
+  "calendly.event_type_viewed",
+  "calendly.profile_page_viewed",
+  "calendly.date_and_time_selected",
+]);
+
 const HUELLE_VERSTECKT =
   "position:fixed;top:0;left:0;width:1px;height:1px;overflow:hidden;" +
   "pointer-events:none;z-index:-2147483647";
@@ -260,7 +271,14 @@ export function useBookingPrewarm() {
     const merken = (e: MessageEvent) => {
       if (e.origin !== "https://calendly.com") return;
       if (frameWindow && e.source !== frameWindow) return;
-      if (typeof (e.data as any)?.event !== "string") return;
+      const name = (e.data as { event?: unknown } | null)?.event;
+      if (typeof name !== "string") return;
+      // #141, 23.09.2026: Vorher zaehlte JEDE Nachricht mit `event`-Feld als
+      // "gezeichnet". Calendly meldet aber frueh, dass die Seite da ist,
+      // bevor der Kalender steht — der Dialog hielt sich dann fuer fertig und
+      // nahm Kreisel UND Notausgang weg, waehrend das Feld noch weiss war.
+      // Nur die Ereignisse zaehlen, die eine sichtbare Buchungsseite meinen.
+      if (!RENDER_EREIGNISSE.has(name)) return;
       hasRendered = true;
       window.removeEventListener("message", merken);
     };
