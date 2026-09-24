@@ -42,6 +42,7 @@ const UiMoleculeLocationMap = defineAsyncComponent(
 );
 
 const { openCalendlyDialog } = useCalendlyDialog();
+const { seitenBehandlung } = useSeitenBehandlung();
 const {
   fetchLocations,
   citySuggestions,
@@ -79,10 +80,16 @@ function handleLocationBook(location: MoleculeLocationItem) {
   if (!location.calendlyUrl) return;
   // #97/#100: zweiter Buchungsweg des Standorts; der Split entscheidet beim
   // Klick, sofern der Standort dafuer freigegeben ist.
-  openCalendlyDialog(location.calendlyUrl, undefined, undefined, {
-    appBookingUrl: location.appBookingUrl,
-    locationSlug: location.slug,
-  });
+  // #78: Auf einer Behandlungsseite reist die Behandlung mit — Behandlungstyp,
+  // App-Deeplink (#66) und Kontextzeile im Dialogkopf.
+  const seite = seitenBehandlung.value;
+  openCalendlyDialog(
+    location.calendlyUrl,
+    seite?.treatmentType,
+    seite?.appTreatmentSlug,
+    { appBookingUrl: location.appBookingUrl, locationSlug: location.slug },
+    seite?.kontext,
+  );
 }
 
 function scrollSearchToTop() {

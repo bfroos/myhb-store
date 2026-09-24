@@ -1,22 +1,28 @@
 <template>
-  <div v-if="params.url" class="calendlyDialog__embed">
-    <!-- #141: Liegt das Fenster schon vorgewaermt bereit, wird es hierhin
-         gelegt statt neu geladen. Der Platzhalter gibt nur die Flaeche vor. -->
-    <div v-if="nutztVorgewaermtes" ref="prewarmSlot" class="calendlyDialog" />
-    <CalendlyInlineWidget
-      v-else
-      :url="embedUrl"
-      class="calendlyDialog"
-      :page-settings="PAGE_SETTINGS"
+  <div class="calendlyDialog__root">
+    <!-- #78: Kontextzeile „<Behandlung> · ab <Preis>", wenn der Dialog von
+         einer Behandlungsseite kommt. Bleibt beim Standortwechsel stehen. -->
+    <UiMoleculeBookingTreatmentContext
+      v-if="params.treatmentContext"
+      v-bind="params.treatmentContext"
     />
-    <UiMoleculeBookingEmbedStatus
-      :ready="widgetReady"
-      :unbestaetigt="readyAusVorwaermen"
-      :url="embedUrl"
-    />
-  </div>
-  <template v-else>
-    <div ref="contentRef" class="calendlyDialog__content">
+    <div v-if="params.url" class="calendlyDialog__embed">
+      <!-- #141: Liegt das Fenster schon vorgewaermt bereit, wird es hierhin
+           gelegt statt neu geladen. Der Platzhalter gibt nur die Flaeche vor. -->
+      <div v-if="nutztVorgewaermtes" ref="prewarmSlot" class="calendlyDialog" />
+      <CalendlyInlineWidget
+        v-else
+        :url="embedUrl"
+        class="calendlyDialog"
+        :page-settings="PAGE_SETTINGS"
+      />
+      <UiMoleculeBookingEmbedStatus
+        :ready="widgetReady"
+        :unbestaetigt="readyAusVorwaermen"
+        :url="embedUrl"
+      />
+    </div>
+    <div v-else ref="contentRef" class="calendlyDialog__content">
       <div class="calendlyDialog__search">
         <IconField>
           <InputIcon>
@@ -76,7 +82,7 @@
         </div>
       </div>
     </div>
-  </template>
+  </div>
 </template>
 <script setup lang="ts">
 import { IconCurrentLocation, IconLoader, IconSearch } from "@tabler/icons-vue";
@@ -239,6 +245,8 @@ function trackingContext() {
     ab_variant: params.value?.abVariant,
     ab_fallback: params.value?.abFallback,
     ab_source: params.value?.abSource,
+    // #78: Dialog kam von einer Behandlungsseite (Kontextzeile im Kopf).
+    treatment_context: !!params.value?.treatmentContext,
   };
 }
 
@@ -409,6 +417,7 @@ function handleLocationBook(location: {
     ab_variant: abVariant,
     ab_fallback: abFallback,
     ab_source: abSource,
+    treatment_context: !!params.value?.treatmentContext,
   });
   bookedLocationSlug.value = location.slug;
   // Der Dialog wurde ohne Standort geoeffnet; erst die Auswahl hier bringt die
@@ -428,7 +437,11 @@ function handleLocationBook(location: {
   if (isApp) {
     uebergeben.value = true;
     dialogRef.value.close();
-    openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, { abVariant });
+    // #78: Die Kontextzeile wandert mit in den App-Dialog.
+    openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, {
+      abVariant,
+      treatmentContext: params.value?.treatmentContext,
+    });
     return;
   }
   params.value = { ...params.value, url: bookingUrl };
@@ -543,10 +556,17 @@ watch(selectedCity, (city) => {
 });
 </script>
 <style scoped>
+.calendlyDialog__root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .calendlyDialog__embed {
   position: relative;
   width: 100%;
-  height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 .calendlyDialog {
@@ -557,7 +577,8 @@ watch(selectedCity, (city) => {
 
 .calendlyDialog__content {
   overflow-y: auto;
-  height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
 }

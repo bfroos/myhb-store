@@ -28,6 +28,7 @@ import type { LocationDto } from "~/lib/strapi/dto/collections";
 
 const props = defineProps<BlockLocationTeasersDto>();
 const { openCalendlyDialog } = useCalendlyDialog();
+const { seitenBehandlung } = useSeitenBehandlung();
 
 const selectedFederalState = ref<string | null>(null);
 
@@ -70,9 +71,15 @@ function buildLocationPath(location: LocationDto): string {
 function handleLocationBook(location: LocationDto) {
   // #97/#100: zweiter Buchungsweg des Standorts; der Split entscheidet beim
   // Klick, sofern der Standort dafuer freigegeben ist.
-  openCalendlyDialog(location.calendlyUrl, undefined, undefined, {
-    appBookingUrl: location.appBookingUrl,
-    locationSlug: location.slug,
-  });
+  // #78: Auf einer Behandlungsseite reist die Behandlung mit — Behandlungstyp,
+  // App-Deeplink (#66) und Kontextzeile im Dialogkopf.
+  const seite = seitenBehandlung.value;
+  openCalendlyDialog(
+    location.calendlyUrl,
+    seite?.treatmentType,
+    seite?.appTreatmentSlug,
+    { appBookingUrl: location.appBookingUrl, locationSlug: location.slug },
+    seite?.kontext,
+  );
 }
 </script>

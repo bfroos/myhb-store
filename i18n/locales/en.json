@@ -516,7 +516,8 @@
     "booking": {
       "loading": "Loading booking …",
       "slowHint": "The booking is taking unusually long.",
-      "openInNewTab": "Open in a new tab"
+      "openInNewTab": "Open in a new tab",
+      "treatmentContext": "{treatment} · {price}"
     }
   },
 

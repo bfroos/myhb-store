@@ -503,7 +503,8 @@
     "booking": {
       "loading": "Buchung wird geladen …",
       "slowHint": "Die Buchung braucht ungewöhnlich lange.",
-      "openInNewTab": "In neuem Tab öffnen"
+      "openInNewTab": "In neuem Tab öffnen",
+      "treatmentContext": "{treatment} · {price}"
     }
   },
   "newsletter": {

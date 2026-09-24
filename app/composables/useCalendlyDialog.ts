@@ -7,6 +7,7 @@ import {
   withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
 import { disposeBookingPrewarm } from "~/composables/useBookingPrewarm";
+import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 
 /**
  * Zweiter Buchungsweg desselben Standorts (#97) plus sein Slug fuer den
@@ -32,12 +33,16 @@ export function useCalendlyDialog() {
    * @param alternatives Zweite Buchungs-URL des Standorts und sein Slug. Ohne
    *   zugewiesenen Bucket (kein Ads-Deployment, keine Einwilligung, Split aus)
    *   bleibt es bei `url`.
+   * @param treatmentContext Name und Preis der Behandlung, von deren Seite der
+   *   Dialog geoeffnet wurde (#78). Steht als Kontextzeile im Dialogkopf und
+   *   geht als `treatment_context` (true/false) an `click_booking`.
    */
   function openCalendlyDialog(
     url?: string,
     treatmentType?: TreatmentType,
     appTreatmentSlug?: string,
     alternatives?: BookingAlternatives,
+    treatmentContext?: BookingTreatmentContext,
   ) {
     // #100: Der Bucket steht schon seit dem Seitenaufruf fest
     // (plugins/ab-split.client.ts); hier wird er angewendet, weil jetzt der
@@ -64,6 +69,9 @@ export function useCalendlyDialog() {
         ab_variant: abVariant,
         ab_fallback: abFallback,
         ab_source: abSource,
+        // #78: trennt in der Wochenauswertung (elanagency/myhb-os#271) die
+        // Klicks mit Kontextzeile von denen ohne.
+        treatment_context: !!treatmentContext,
       },
     );
 
@@ -75,7 +83,10 @@ export function useCalendlyDialog() {
     if (isAppBookingUrl(bookingUrl)) {
       // #141: Fuer die App-Buchung ist der vorgewaermte Calendly-Rahmen wertlos.
       disposeBookingPrewarm();
-      openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, { abVariant });
+      openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, {
+        abVariant,
+        treatmentContext,
+      });
       return;
     }
 
@@ -91,6 +102,7 @@ export function useCalendlyDialog() {
           url: bookingUrl,
           treatmentType,
           appTreatmentSlug,
+          treatmentContext,
           abVariant,
           abFallback,
           abSource,

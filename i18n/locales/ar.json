@@ -490,7 +490,8 @@
     "booking": {
       "loading": "جارٍ تحميل الحجز …",
       "slowHint": "يستغرق الحجز وقتًا أطول من المعتاد.",
-      "openInNewTab": "فتح في علامة تبويب جديدة"
+      "openInNewTab": "فتح في علامة تبويب جديدة",
+      "treatmentContext": "{treatment} · {price}"
     }
   },
 

@@ -71,7 +71,7 @@
               method: SharedButtonMethod.ACTION,
               action: SharedButtonAction.APPOINTMENT_BOOKING,
             }"
-            ohne-seiten-standort
+            ohne-seiten-kontext
           />
         </div>
       </nav>

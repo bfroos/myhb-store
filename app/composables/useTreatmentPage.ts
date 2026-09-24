@@ -6,6 +6,7 @@ import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 
 export function useTreatmentPage() {
   const { locale, fallbackLocale, locales, t } = useI18n();
+  const { setzeSeitenBehandlung } = useSeitenBehandlung();
   const { isAdsMode } = useSiteModeFlags();
   const route = useRoute();
   const currentLocale = (locale.value || fallbackLocale.value) as string;
@@ -121,6 +122,9 @@ export function useTreatmentPage() {
     }
 
     treatmentPage.value = data.value.data as any;
+    // #78: Die Behandlung der Seite traegt alle Buchungsknoepfe darauf —
+    // Kontextzeile im Dialogkopf, Behandlungstyp, App-Deeplink (#66).
+    setzeSeitenBehandlung(treatmentPage.value);
     localizations.value = (data.value.data.localizations ??
       []) as LocalizationDto[];
     seo.value = data.value.data.seo as SharedSeoDto;

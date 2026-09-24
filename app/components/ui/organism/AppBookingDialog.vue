@@ -1,14 +1,22 @@
 <template>
-  <div v-if="params.url" class="appBookingDialog__embed">
-    <iframe
-      :src="params.url"
-      class="appBookingDialog"
-      title="Termin buchen"
-      allow="clipboard-write; payment"
-      loading="eager"
-      @load="onIframeLoad"
+  <div v-if="params.url" class="appBookingDialog__root">
+    <!-- #78: Kontextzeile „<Behandlung> · ab <Preis>", wenn der Dialog von
+         einer Behandlungsseite kommt. -->
+    <UiMoleculeBookingTreatmentContext
+      v-if="params.treatmentContext"
+      v-bind="params.treatmentContext"
     />
-    <UiMoleculeBookingEmbedStatus :ready="appReady" :url="params.url" />
+    <div class="appBookingDialog__embed">
+      <iframe
+        :src="params.url"
+        class="appBookingDialog"
+        title="Termin buchen"
+        allow="clipboard-write; payment"
+        loading="eager"
+        @load="onIframeLoad"
+      />
+      <UiMoleculeBookingEmbedStatus :ready="appReady" :url="params.url" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -75,6 +83,8 @@ function messkontext() {
     booking_type: "app",
     ab_variant: params.value?.abVariant,
     ab_bypass: params.value?.abBypass ? true : undefined,
+    // #78: Dialog kam von einer Behandlungsseite (Kontextzeile im Kopf).
+    treatment_context: !!params.value?.treatmentContext,
   };
 }
 function sinceOpen(): number | undefined {
@@ -138,10 +148,17 @@ onBeforeUnmount(() => {
 });
 </script>
 <style scoped>
+.appBookingDialog__root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .appBookingDialog__embed {
   position: relative;
   width: 100%;
-  height: 100%;
+  flex: 1 1 0;
+  min-height: 0;
 }
 
 .appBookingDialog {

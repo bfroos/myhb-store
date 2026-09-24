@@ -104,6 +104,7 @@ import { inject } from "vue";
 import InputText from "primevue/inputtext";
 import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
+import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 
 const globals = useGlobals();
 const { brandNameShort } = useBrand();
@@ -200,6 +201,8 @@ async function handleSubmit() {
         locationSlug?: string;
         treatmentType?: TreatmentType;
         appTreatmentSlug?: string;
+        /** #78: Kontextzeile der Behandlungsseite, von der der Knopf kam. */
+        treatmentContext?: BookingTreatmentContext;
       }
     | undefined;
   if (
@@ -215,6 +218,7 @@ async function handleSubmit() {
         appBookingUrl: booking.appBookingUrl,
         locationSlug: booking.locationSlug,
       },
+      booking.treatmentContext,
     );
   }
 }

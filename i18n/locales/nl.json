@@ -502,7 +502,8 @@
     "booking": {
       "loading": "Boeking wordt geladen …",
       "slowHint": "De boeking duurt ongewoon lang.",
-      "openInNewTab": "In een nieuw tabblad openen"
+      "openInNewTab": "In een nieuw tabblad openen",
+      "treatmentContext": "{treatment} · {price}"
     }
   },
   "newsletter": {
