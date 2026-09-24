@@ -7,6 +7,8 @@
  *     ReviewsBadge)                          -> click_reviews
  *   - Wegbeschreibung (google.com/maps/dir)  -> click_directions
  * Damit zaehlen auch Links, die spaeter aus dem CMS dazukommen.
+ * Jeder andere Klick auf einen Button oder Link meldet click_element mit
+ * element_text und placement (#155: "welche Taste wurde geklickt").
  *
  * Native Videos (<video>) melden video_start, video_progress (25/50/75) und
  * video_complete. Media-Events blubbern nicht hoch, darum ebenfalls Capture.
@@ -77,19 +79,42 @@ export default defineNuxtPlugin(() => {
     };
   };
 
+  // #155: alle uebrigen Klicks auf Buttons und Links. Der Cookie-Dialog zaehlt
+  // nicht, er sagt nichts ueber die Landingpage.
+  const trackElementClick = (target: Element | null) => {
+    const el = target?.closest?.(
+      "a[href], button, [role=button]",
+    ) as HTMLElement | null;
+    if (!el || el.closest("#CybotCookiebotDialog")) return;
+    const text = (el.getAttribute("aria-label") || el.textContent || "")
+      .replace(/\s+/g, " ")
+      .trim()
+      .slice(0, 80);
+    const href = el instanceof HTMLAnchorElement ? el.href : undefined;
+    trackEvent("click_element", {
+      ...pageContext(),
+      placement: placementOf(el),
+      element_text: text || undefined,
+      link_url: href,
+      outbound: href ? !href.startsWith(window.location.origin) : undefined,
+    });
+  };
+
   document.addEventListener(
     "click",
     (e) => {
       const a = (e.target as Element | null)?.closest?.(
         "a[href]",
       ) as HTMLAnchorElement | null;
-      if (!a) return;
-      const kind = classifyLink(a);
-      if (!kind) return;
+      const kind = a ? classifyLink(a) : null;
+      if (!kind) {
+        trackElementClick(e.target as Element | null);
+        return;
+      }
       trackEvent(`click_${kind}`, {
         ...pageContext(),
-        placement: placementOf(a),
-        link_url: a.href,
+        placement: placementOf(a!),
+        link_url: a!.href,
         outbound: true,
         // Der Link oeffnet meist einen neuen Tab oder die WhatsApp-App —
         // beacon sorgt dafuer, dass der Treffer trotzdem ankommt.

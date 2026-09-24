@@ -37,6 +37,12 @@
  * aber nicht auf Kampagnenebene, was #86 ("CAC je Kanal UND Kampagne") braucht.
  * T14 liest das Token seit dem 16.09.; aeltere T14-Fassungen ignorieren es still.
  *
+ * v1.6 (myhb-os#399): salesforce_uuid traegt zusaetzlich die Seite, auf der die
+ * Buchung startete, als ";lp:<pfad>" (ohne Query). Auf dem App-Weg kommt sie als
+ * ref_path an, auf dem Calendly-Weg fehlte sie bisher: 90 % der Buchungen hatten
+ * keine Landingpage. T14 schreibt das Token nach appointment_attribution.ref_path;
+ * aeltere T14-Fassungen ignorieren es still wie jedes unbekannte Token.
+ *
  * v1.4 (#126): salesforce_uuid traegt zusaetzlich den Cookiebot-Stand als
  * ";c:1" / ";c:0". Ohne diesen Stempel kennt T14 den Einwilligungsstand einer
  * Calendly-Buchung nicht, appointment_attribution.marketing_consent bleibt NULL
@@ -281,16 +287,19 @@ export default defineNuxtPlugin(() => {
         ersterBesuchAnders && first?.utm_campaign
           ? String(first.utm_campaign).replace(/;/g, "").trim() || null
           : null;
+      // v1.6 (#399): Seite, auf der die Buchung startete. Semikolon raus wie oben.
+      const lp = window.location.pathname.replace(/;/g, "").slice(0, 150) || null;
       const stamp = [
         cid,
         consent ? `c:${consent}` : null,
         ftCmp ? `ft_cmp:${ftCmp}` : null,
+        lp ? `lp:${lp}` : null,
       ]
         .filter(Boolean)
         .join(";");
       // Cookiebot antwortet oft erst nach dem ersten Dekorieren. Einen eigenen
       // Wert ohne Stempel deshalb nachtraeglich hochstufen, einen fremden nicht.
-      const nachruesten = !!existing && !!consent && !/(^|;)c:[01]$/.test(existing);
+      const nachruesten = !!existing && !!consent && !/(^|;)c:[01](;|$)/.test(existing);
       if (stamp && (!existing || nachruesten)) {
         u.searchParams.set("salesforce_uuid", stamp);
       }
