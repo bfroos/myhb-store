@@ -2,6 +2,7 @@ import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { readWireAttribution } from "~/lib/attribution";
 import type { BookingVariant } from "~/lib/bookingAbTest";
+import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -211,6 +212,11 @@ export type AppBookingUrlOptions = {
    * Buchungen aus beiden Armen heraus.
    */
   abBypass?: boolean | null;
+  /**
+   * Behandlung der Seite fuer die Kontextzeile im Dialogkopf (#78). Kein
+   * URL-Parameter — die App bekommt die Behandlung ueber `treatment=` (#66).
+   */
+  treatmentContext?: BookingTreatmentContext | null;
 };
 
 /**
@@ -266,6 +272,7 @@ export function useAppBookingDialog() {
           openedAt: import.meta.client ? performance.now() : undefined,
           abVariant: options?.abVariant ?? undefined,
           abBypass: options?.abBypass ? true : undefined,
+          treatmentContext: options?.treatmentContext ?? undefined,
         },
         props: {
           modal: true,

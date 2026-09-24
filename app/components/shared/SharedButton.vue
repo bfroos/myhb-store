@@ -31,13 +31,14 @@ const props = defineProps<{
   buttonProps?: BaseButtonProps;
   data?: any;
   /**
-   * Knopf, der bewusst NICHT den Standort der Seite erbt (#78).
+   * Knopf, der bewusst weder Standort noch Behandlung der Seite erbt (#78).
    *
    * Der Knopf in der Kopfzeile ist auf jeder Seite derselbe und meint „ich
-   * moechte einen Termin", nicht „ich moechte hier einen Termin". Er oeffnet
-   * deshalb weiter den Standortwaehler, auch auf einer Standortseite.
+   * moechte einen Termin", nicht „ich moechte hier diesen Termin". Er oeffnet
+   * deshalb weiter den Standortwaehler ohne Kontextzeile, auch auf einer
+   * Standort- oder Behandlungsseite.
    */
-  ohneSeitenStandort?: boolean;
+  ohneSeitenKontext?: boolean;
 }>();
 
 const { t } = useI18n();
@@ -156,6 +157,7 @@ const { trackBookingClick } = useGoogleAnalytics();
 const { prewarmBookingWhenIdle } = useBookingPrewarm();
 const { treatmentEventUrl } = useCalendlyTreatmentEvent();
 const { seitenStandort } = useSeitenStandort();
+const { seitenBehandlung } = useSeitenBehandlung();
 
 /**
  * Der Standort, den dieser Knopf benutzt (#78).
@@ -172,8 +174,31 @@ const knopfStandort = computed(() => {
     locationSlug: props.data?.locationSlug || button.value?.data?.locationSlug,
   };
   if (eigen.calendlyUrl || eigen.appBookingUrl) return eigen;
-  if (props.ohneSeitenStandort) return eigen;
+  if (props.ohneSeitenKontext) return eigen;
   return seitenStandort.value ?? eigen;
+});
+
+/**
+ * Die Behandlung, die dieser Knopf in den Dialog traegt (#78).
+ *
+ * Eigene Daten gewinnen (Hero, schwebender CTA). Fehlen sie, erbt der Knopf
+ * die Behandlung der Seite — auf einer Behandlungsseite gilt das fuer jeden
+ * Knopf, nicht nur den ersten. `kontext` ist die Kontextzeile
+ * „<Behandlung> · ab <Preis>" im Dialogkopf; sie kommt immer von der Seite.
+ */
+const knopfBehandlung = computed(() => {
+  const eigen = {
+    treatmentType: props.data?.treatmentType || button.value?.data?.treatmentType,
+    appTreatmentSlug:
+      props.data?.appTreatmentSlug || button.value?.data?.appTreatmentSlug,
+  };
+  if (props.ohneSeitenKontext) return { ...eigen, kontext: undefined };
+  const seite = seitenBehandlung.value;
+  return {
+    treatmentType: eigen.treatmentType || seite?.treatmentType,
+    appTreatmentSlug: eigen.appTreatmentSlug || seite?.appTreatmentSlug,
+    kontext: seite?.kontext,
+  };
 });
 
 /**
@@ -187,7 +212,7 @@ const knopfStandort = computed(() => {
 const bookingUrl = computed(() =>
   treatmentEventUrl(
     knopfStandort.value.calendlyUrl,
-    props.data?.treatmentType || button.value?.data?.treatmentType,
+    knopfBehandlung.value.treatmentType,
   ),
 );
 
@@ -226,20 +251,21 @@ const handleClick = () => {
 
 function openCalendlyDialogForButton() {
   const url = bookingUrl.value;
-  const treatmentType =
-    props.data?.treatmentType || button.value?.data?.treatmentType;
-  // Deeplink #66: Behandlungs-Slug fuer `?treatment=` in der App-Buchungs-URL.
-  const appTreatmentSlug =
-    props.data?.appTreatmentSlug || button.value?.data?.appTreatmentSlug;
+  // #66/#78: Behandlungstyp, App-Slug (`?treatment=`) und Kontextzeile —
+  // eigene Daten des Knopfes oder die Behandlung der Seite.
+  const { treatmentType, appTreatmentSlug, kontext } = knopfBehandlung.value;
   // #97/#100: Zweiter Buchungsweg des Standorts. Liegt er vor und ist der
   // Standort freigegeben, entscheidet der A/B-Split beim Klick zwischen
   // Calendly und App — sonst bleibt es bei der Calendly-URL.
   const appBookingUrl = knopfStandort.value.appBookingUrl;
   const locationSlug = knopfStandort.value.locationSlug;
-  openCalendlyDialog(url, treatmentType, appTreatmentSlug, {
-    appBookingUrl,
-    locationSlug,
-  });
+  openCalendlyDialog(
+    url,
+    treatmentType,
+    appTreatmentSlug,
+    { appBookingUrl, locationSlug },
+    kontext,
+  );
 }
 
 const openNewsletterSignUpDialog = () => {
@@ -255,7 +281,14 @@ const openNewsletterSignUpDialog = () => {
       // `button.data`, nur die fest verdrahteten unter `props.data`. Fiel das
       // weg, verlor der Weg `appBookingUrl` -- und der A/B-Split (#100) haette
       // dort still immer Calendly geliefert.
-      data: { ...button.value?.data, ...props.data },
+      data: {
+        ...button.value?.data,
+        ...props.data,
+        // #78: Behandlung der Seite, falls der Knopf selbst keine traegt.
+        treatmentType: knopfBehandlung.value.treatmentType,
+        appTreatmentSlug: knopfBehandlung.value.appTreatmentSlug,
+        treatmentContext: knopfBehandlung.value.kontext,
+      },
       props: {
         modal: true,
         draggable: false,

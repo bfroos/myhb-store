@@ -16,6 +16,7 @@ export function useLocationTreatmentPage() {
   const treatmentPage = ref<TreatmentPageDto>();
   const location = ref<LocationDto | null>(null);
   const { setzeSeitenStandort } = useSeitenStandort();
+  const { setzeSeitenBehandlung } = useSeitenBehandlung();
   const citySlug = route.params.citySlug as string;
   const locationSlug = route.params.locationSlug as string;
   const locationLocalizations = ref<LocalizationDto[]>([]);
@@ -103,6 +104,8 @@ export function useLocationTreatmentPage() {
     // #78: siehe useLocationPage — der Standort der Seite traegt alle
     // Buchungsknoepfe darauf.
     setzeSeitenStandort(data.value.data.location);
+    // #78: ... und die Behandlung der Seite ebenso (Kontextzeile im Dialog).
+    setzeSeitenBehandlung(data.value.data.treatmentPage);
     locationLocalizations.value = data.value.data.location?.localizations ?? [];
     cityLocalizations.value =
       data.value.data.location?.city?.localizations ?? [];

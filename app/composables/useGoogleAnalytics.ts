@@ -137,12 +137,20 @@ export const useGoogleAnalytics = () => {
        * GA4-Dimension fuellen, ohne etwas zu sagen.
        */
       ab_bypass?: boolean;
+      /**
+       * Dialog von einer Behandlungsseite geoeffnet, mit Kontextzeile
+       * „<Behandlung> · ab <Preis>" im Kopf (bfroos/myhb-store#78). Immer
+       * gesetzt (true/false), damit die Wochenauswertung
+       * (elanagency/myhb-os#271) beide Gruppen gegeneinander stellen kann.
+       */
+      treatment_context?: boolean;
     },
   ) => {
     trackEvent('click_booking', {
       event_category: 'conversion',
       booking_type: bookingType,
       ...(extra ?? {}),
+      treatment_context: extra?.treatment_context ?? false,
     });
   };
 
@@ -158,6 +166,8 @@ export const useGoogleAnalytics = () => {
       ab_variant?: 'app' | 'calendly';
       ab_fallback?: boolean;
       ab_source?: 'ads' | 'seo';
+      /** Dialog kam von einer Behandlungsseite (#78). */
+      treatment_context?: boolean;
     },
   ) => {
     trackEvent('booking_location_selected', {

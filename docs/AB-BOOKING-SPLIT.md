@@ -68,6 +68,7 @@ https://app.myhealthandbeauty.com/book-appointment?location=koeln-aracden
 | `booking_confirmed` (+ `ab_variant`) | Buchung bestätigt | **Zähler** |
 | `click_booking` (+ `ab_bypass: true`) | Knopf mit Strapi-Methode `app-booking` öffnet die App am Split vorbei (#128) | **raus aus beiden Armen** |
 | `booking_embed_ready` / `booking_dialog_closed` (+ `booking_type`, `event_label`, `embed_ready_ms` / `dialog_open_ms`) | Embed hat sich gemeldet / Dialog wurde zugemacht | Messung des Abbruchs „Klick → App geladen“ (elanagency/myhb-os#205) |
+| `treatment_context` (`true`/`false`) an `click_booking`, `booking_dialog_closed`, `booking_embed_ready`, `booking_location_selected` | Dialog kam von einer Behandlungsseite und zeigt im Kopf „<Behandlung> · ab <Preis>“ (bfroos/myhb-store#78) | trennt in der Wochenauswertung (elanagency/myhb-os#271) Klicks mit Kontextzeile von denen ohne — braucht in GTM eine Datenschichtvariable und einen Parameter am Tag „Funnel Events (App)“ (Tag 108), in GA4 eine ereignisbezogene Dimension; Stand 24.09.2026 (Container v92) fehlt beides |
 
 `booking_type` bleibt die Gegenprobe: `ab_variant=app` muss `booking_type=app` ergeben. Jede Abweichung ist ein Bug, kein Messrauschen — die einzige erlaubte Ausnahme trägt `ab_fallback: true`.
 

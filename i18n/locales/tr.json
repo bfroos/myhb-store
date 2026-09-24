@@ -490,7 +490,8 @@
     "booking": {
       "loading": "Randevu yükleniyor …",
       "slowHint": "Randevu penceresi alışılmadık şekilde uzun sürüyor.",
-      "openInNewTab": "Yeni sekmede aç"
+      "openInNewTab": "Yeni sekmede aç",
+      "treatmentContext": "{treatment} · {price}"
     }
   },
 

@@ -292,16 +292,11 @@ const marqueeDurationSeconds = computed(() => {
 
 const hasCover = computed(() => !!props.cover && isMediaImage(props.cover));
 
-const priceLabel = computed(() => {
-  if (!props.showPrice) return "";
-  const price =
-    props.treatment?.priceInEuroCent ||
-    props.treatment?.cheapestPriceInEuroCent;
-  const isStarting = props.treatment?.isStartingPrice;
-  return formatPriceInEuro(price as number, {
-    prefix: isStarting ? t("common.price.startingPrefix") : undefined,
-  });
-});
+// #78: dieselbe Quelle wie die Kontextzeile im Buchungsdialog
+// (useSeitenBehandlung) — Seite und Dialog zeigen nie zwei Preise.
+const priceLabel = computed(() =>
+  treatmentPriceLabel(props.treatment, props.showPrice, t),
+);
 
 const discountLabel = computed(() => {
   const pct = globals.value?.ecommerce?.newsletterDiscountPercentage;
