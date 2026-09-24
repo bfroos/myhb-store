@@ -78,8 +78,13 @@ watch(
   () => [props.ready, props.unbestaetigt] as const,
   () => {
     if (wartetNoch()) return;
-    showHint.value = false;
     if (timer) clearTimeout(timer);
+    // Der Hinweis wird bewusst NICHT wieder zurueckgenommen (#141,
+    // 23.09.2026). Gemessen auf der Preview: Calendly meldet sein
+    // Render-Ereignis auch dann, wenn im Rahmen weiter nichts steht — der
+    // Ausweg verschwand damit genau in dem Moment, in dem der Besucher ihn
+    // gebraucht haette. Wer ihn einmal gesehen hat, behaelt ihn; er liegt
+    // unter dem Embed und verdeckt einen fertigen Kalender nicht.
   },
 );
 
