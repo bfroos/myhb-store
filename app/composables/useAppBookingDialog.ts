@@ -3,6 +3,7 @@ import { useDialog } from "primevue/usedialog";
 import { readWireAttribution } from "~/lib/attribution";
 import type { BookingVariant } from "~/lib/bookingAbTest";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
+import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -262,6 +263,11 @@ export function buildBookingUrl(
     }
     if (options?.abBypass && !url.searchParams.has("ab_bypass")) {
       url.searchParams.set("ab_bypass", "1");
+    }
+    // Sitzung der Website an die App geben, damit Klick und App-Schritte in
+    // funnel_events zusammengehoeren (elanagency/myhb-os#521).
+    if (!url.searchParams.has("fp_sid")) {
+      url.searchParams.set("fp_sid", getFunnelSessionId());
     }
     if (hatAbgelehnt() && !url.searchParams.has("consent")) {
       url.searchParams.set("consent", "necessary");
