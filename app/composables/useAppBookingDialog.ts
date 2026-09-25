@@ -194,6 +194,24 @@ export function collectAttributionParams(): Record<string, string> {
   return params;
 }
 
+/**
+ * Hat die Besucherin bei Cookiebot ausdruecklich abgelehnt (nur notwendige)?
+ *
+ * elanagency/myhb-os#205: Website und App teilen sich eine Cookiebot-Domain-
+ * Gruppe, das domainuebergreifende Consent-Sharing ist an — aber Cookiebot
+ * teilt nur Einwilligungen ab „Praeferenzen". Wer hier ablehnt, wurde im
+ * Buchungsfenster (app.myhealthandbeauty.com) ein zweites Mal gefragt. Mit
+ * `consent=necessary` speichert die App dieselbe Ablehnung, ohne zu fragen
+ * (myhb-app/myhb-os#479). Weitergegeben wird nur die Ablehnung, nie eine
+ * Zustimmung; ohne Antwort (Banner noch offen) nichts.
+ */
+export function hatAbgelehnt(): boolean {
+  if (typeof window === "undefined") return false;
+  const cb = (window as any).Cookiebot;
+  if (!cb?.hasResponse || !cb.consent) return false;
+  return !cb.consent.preferences && !cb.consent.statistics && !cb.consent.marketing;
+}
+
 export type AppBookingUrlOptions = {
   /** Rabattcode (z. B. Neukundenrabatt nach Newsletter-Anmeldung, #82/#74). */
   promo?: string | null;
@@ -244,6 +262,9 @@ export function buildBookingUrl(
     }
     if (options?.abBypass && !url.searchParams.has("ab_bypass")) {
       url.searchParams.set("ab_bypass", "1");
+    }
+    if (hatAbgelehnt() && !url.searchParams.has("consent")) {
+      url.searchParams.set("consent", "necessary");
     }
     return url.toString();
   } catch {
