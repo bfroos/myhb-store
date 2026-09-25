@@ -266,6 +266,16 @@ export function buildBookingUrl(
     if (hatAbgelehnt() && !url.searchParams.has("consent")) {
       url.searchParams.set("consent", "necessary");
     }
+    // Sprache der Seite mitgeben (elanagency/myhb-os#205). Ohne das richtete
+    // sich die App nach der Browsersprache: deutsche Seite + englisches Handy
+    // = englische Buchung. Die App kennt nur de und en; alles andere laesst
+    // sie weiter ueber den Browser entscheiden.
+    const seitenSprache = typeof document !== "undefined"
+      ? document.documentElement.lang.slice(0, 2).toLowerCase()
+      : "";
+    if ((seitenSprache === "de" || seitenSprache === "en") && !url.searchParams.has("lang")) {
+      url.searchParams.set("lang", seitenSprache);
+    }
     return url.toString();
   } catch {
     return base;
