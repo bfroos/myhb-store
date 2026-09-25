@@ -19,6 +19,7 @@
  * nach, fruehe Klicks vor dem Consent-Banner gehen nicht verloren.
  */
 import { readGaAttributionParams } from "~/lib/attribution";
+import { mirrorFunnelEvent } from "~/lib/firstPartyFunnel";
 
 type DataLayerObject = Record<string, unknown> & { event: string };
 
@@ -27,6 +28,8 @@ const pushToDataLayer = (payload: DataLayerObject) => {
   const w = window as unknown as { dataLayer?: unknown[] };
   w.dataLayer = w.dataLayer || [];
   w.dataLayer.push(payload);
+  // Trichter-Ereignisse zusaetzlich in die eigene Datenbank (myhb-os#521).
+  mirrorFunnelEvent(payload);
 };
 
 export const useGoogleAnalytics = () => {

@@ -38,6 +38,7 @@ import {
   type AbSource,
   type BookingVariant,
 } from "~/lib/bookingAbTest";
+import { mirrorFunnelEvent } from "~/lib/firstPartyFunnel";
 
 export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.server) return;
@@ -62,12 +63,15 @@ export default defineNuxtPlugin((nuxtApp) => {
   ) => {
     pushToDataLayer({ ab_variant: variant, ab_source: source });
     if (assigned) {
-      pushToDataLayer({
+      const zuteilung = {
         event: "ab_assigned",
         event_category: "experiment",
         ab_variant: variant,
         ab_source: source,
-      });
+      };
+      pushToDataLayer(zuteilung);
+      // Nenner auch in der eigenen Datenbank (myhb-os#521).
+      mirrorFunnelEvent(zuteilung);
     }
   };
 
