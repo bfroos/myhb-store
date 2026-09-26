@@ -291,7 +291,11 @@
       "counter": "{total} görselden {current}.",
       "close": "Kapat",
       "previousImage": "Önceki görsel",
-      "nextImage": "Sonraki görsel"
+      "nextImage": "Sonraki görsel",
+      "slideLabel": "{total} görselden {index}.",
+      "selectImage": "{index}. görseli göster",
+      "before": "Önce",
+      "after": "Sonra"
     },
     "jobTeasers": {
       "headline": "Mevcut iş ilanları",

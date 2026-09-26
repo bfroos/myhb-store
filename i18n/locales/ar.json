@@ -291,7 +291,11 @@
       "counter": "الصورة {current} من {total}",
       "close": "إغلاق",
       "previousImage": "الصورة السابقة",
-      "nextImage": "الصورة التالية"
+      "nextImage": "الصورة التالية",
+      "slideLabel": "الصورة {index} من {total}",
+      "selectImage": "عرض الصورة {index}",
+      "before": "قبل",
+      "after": "بعد"
     },
     "jobTeasers": {
       "headline": "الوظائف الشاغرة الحالية",

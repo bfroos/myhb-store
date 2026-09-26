@@ -99,6 +99,14 @@ export type BlockGalleryDto = {
   headline?: string;
   intro?: string;
   images?: StrapiMedia[];
+  layout?: "grid" | "slider" | null;
+  mode?: "images" | "before-after" | null;
+  items?: {
+    id: number;
+    before?: StrapiMedia;
+    after?: StrapiMedia;
+    caption?: string;
+  }[];
   columns: "2" | "3" | "4";
   aspectRatio: "1-1" | "4-3" | "3-4" | "16-9" | "original";
   showCaptions: boolean;

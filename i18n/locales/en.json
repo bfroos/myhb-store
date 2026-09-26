@@ -317,7 +317,11 @@
       "counter": "Image {current} of {total}",
       "close": "Close",
       "previousImage": "Previous image",
-      "nextImage": "Next image"
+      "nextImage": "Next image",
+      "slideLabel": "Image {index} of {total}",
+      "selectImage": "Show image {index}",
+      "before": "Before",
+      "after": "After"
     },
     "jobTeasers": {
       "headline": "Current job openings",

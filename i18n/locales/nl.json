@@ -305,7 +305,11 @@
       "counter": "Afbeelding {current} van {total}",
       "close": "Sluiten",
       "previousImage": "Vorige afbeelding",
-      "nextImage": "Volgende afbeelding"
+      "nextImage": "Volgende afbeelding",
+      "slideLabel": "Afbeelding {index} van {total}",
+      "selectImage": "Afbeelding {index} tonen",
+      "before": "Voor",
+      "after": "Na"
     },
     "jobTeasers": {
       "headline": "Actuele vacatures",

@@ -305,7 +305,11 @@
       "counter": "Image {current} sur {total}",
       "close": "Fermer",
       "previousImage": "Image précédente",
-      "nextImage": "Image suivante"
+      "nextImage": "Image suivante",
+      "slideLabel": "Image {index} sur {total}",
+      "selectImage": "Afficher l'image {index}",
+      "before": "Avant",
+      "after": "Après"
     },
     "jobTeasers": {
       "headline": "Offres d'emploi actuelles",
