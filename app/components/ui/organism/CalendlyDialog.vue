@@ -369,9 +369,20 @@ watch(
 // Kalender. Dazwischen nahm der Kreisel ab page_height ein leeres Feld frei,
 // das war das "weisse Feld" aus dem Kommentar vom 23.09. Dieselbe Liste wie
 // RENDER_EREIGNISSE im Vorwaermen.
+//
+// Als *Bestaetigung* zaehlt page_height weiter: Ein uebernommener Rahmen, der
+// beim Vorwaermen schon gezeichnet hat, schickt nach dem Einblenden nur noch
+// page_height (event_type_viewed kommt nicht ein zweites Mal). Ohne diese
+// Bestaetigung stuende nach 6 s der Notausgang unter dem fertigen Kalender —
+// so gemessen auf dem lokalen Build am 26.09.
+function bestaetigeVorgewaermtes(e: MessageEvent) {
+  if (!isFromCalendly(e)) return;
+  if (widgetReady.value) readyAusVorwaermen.value = false;
+}
 useCalendlyEventListener({
   onProfilePageViewed: markWidgetReady,
   onEventTypeViewed: markWidgetReady,
+  onPageHeightResize: bestaetigeVorgewaermtes,
   onDateAndTimeSelected: (e: MessageEvent) => {
     if (!isFromCalendly(e)) return;
     markWidgetReady(e);
