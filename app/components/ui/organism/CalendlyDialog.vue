@@ -108,6 +108,8 @@ import {
   isPrewarmSource,
   prewarmHasRendered,
   prewarmMatches,
+  prewarmVerdict,
+  type PrewarmVerdict,
 } from "~/composables/useBookingPrewarm";
 
 const { t, locale } = useI18n();
@@ -133,13 +135,21 @@ const embedUrl = computed(() => {
 const { bookingEmbedSrc } = useBookingPrewarm();
 const prewarmSlot = ref<HTMLElement | null>(null);
 const nutztVorgewaermtes = ref(false);
+/**
+ * Was der Dialog beim Oeffnen vorgefunden hat — reused / stale / none (#141).
+ * Geht als `event_label` an `booking_embed_ready`. `embed_prewarmed` allein
+ * sagte nur "auf dieser Seite lief ein Vorwaermen", nicht, ob der Rahmen auch
+ * benutzt wurde; im Feld war das in zwei von drei Faellen nicht so.
+ */
+const prewarmErgebnis = ref<PrewarmVerdict>("none");
 
 /**
  * Nimmt den vorgewaermten Rahmen, wenn er zu dieser URL passt (#141).
  *
- * Passt er nicht — anderer Standort, abgeschaltet, im Dialog erst ausgewaehlt —
- * wird er abgeraeumt und das normale Widget gezeichnet. Der schlechteste Fall
- * ist damit der Zustand vor diesem Ticket.
+ * Passt er nicht — anderer Standort, abgeschaltet, im Dialog erst ausgewaehlt,
+ * oder die Buchungs-URL hat sich seit dem Vorwaermen geaendert — wird er
+ * abgeraeumt und das normale Widget gezeichnet. Der schlechteste Fall ist damit
+ * der Zustand vor diesem Ticket.
  */
 function uebernimmVorgewaermtes() {
   if (!import.meta.client) return;
@@ -151,6 +161,7 @@ function uebernimmVorgewaermtes() {
     return;
   }
   const src = bookingEmbedSrc(url);
+  prewarmErgebnis.value = prewarmVerdict(src);
   if (!prewarmMatches(src)) {
     nutztVorgewaermtes.value = false;
     disposeBookingPrewarm();
@@ -325,6 +336,9 @@ function reportEmbedReady() {
     booking_type: "calendly",
     embed_ready_ms: Math.round(performance.now() - embedStartedAt.value),
     embed_prewarmed: bookingWasPrewarmed(),
+    // prewarm_reused / prewarm_stale / prewarm_none — erst damit trennt die
+    // Auswertung "Rahmen uebernommen" von "trotz Vorwaermen kalt geladen".
+    event_label: `prewarm_${prewarmErgebnis.value}`,
   });
   embedStartedAt.value = null;
 }
@@ -348,10 +362,27 @@ watch(
 // `booking_confirmed` ebenfalls (useBookingThankYouTracking). Die Übergabe im
 // Storage sagt ihr, ob diese Buchung hier schon gemeldet wurde — und liefert
 // Standort/Behandlung nach, falls die Nachricht des Widgets verloren ging.
+//
+// #141, 26.09.2026: `page_height` zaehlt hier nicht mehr als Fertigmeldung.
+// Gemessen live (Koeln, Behandlungstermin): page_height kommt nach ~1,2 s,
+// event_type_viewed nach ~2,7 s — und erst mit event_type_viewed steht der
+// Kalender. Dazwischen nahm der Kreisel ab page_height ein leeres Feld frei,
+// das war das "weisse Feld" aus dem Kommentar vom 23.09. Dieselbe Liste wie
+// RENDER_EREIGNISSE im Vorwaermen.
+//
+// Als *Bestaetigung* zaehlt page_height weiter: Ein uebernommener Rahmen, der
+// beim Vorwaermen schon gezeichnet hat, schickt nach dem Einblenden nur noch
+// page_height (event_type_viewed kommt nicht ein zweites Mal). Ohne diese
+// Bestaetigung stuende nach 6 s der Notausgang unter dem fertigen Kalender —
+// so gemessen auf dem lokalen Build am 26.09.
+function bestaetigeVorgewaermtes(e: MessageEvent) {
+  if (!isFromCalendly(e)) return;
+  if (widgetReady.value) readyAusVorwaermen.value = false;
+}
 useCalendlyEventListener({
   onProfilePageViewed: markWidgetReady,
   onEventTypeViewed: markWidgetReady,
-  onPageHeightResize: markWidgetReady,
+  onPageHeightResize: bestaetigeVorgewaermtes,
   onDateAndTimeSelected: (e: MessageEvent) => {
     if (!isFromCalendly(e)) return;
     markWidgetReady(e);
