@@ -1,6 +1,8 @@
 # Video Sitemap & VideoObject — Google Video Indexing
 
-**Status:** Reworked 2026-08-20. Requires a `poster` image per video (see "Prerequisite").
+**Status:** Reworked 2026-08-20, sitemap tags corrected 2026-08-30 (Search Console had rejected all
+entries: `upload_date` is not a sitemap tag and `player_loc` must not equal `loc`). Requires a
+`poster` image per video (see "Prerequisite").
 
 ## Problem
 
@@ -13,7 +15,7 @@ against production on 2026-08-20:
 |---|---|
 | 22 sitemap entries, all `<loc>` = homepage | Story clips are carousel tiles; no page is "the" page for them |
 | 22/22 `<video:thumbnail_loc>` pointed at an `.mp4` | `buildVideoPosterUrl()` is a stub returning `""`, so the code fell back to the video URL |
-| All entries shared one `upload_date` = request time | `media.createdAt` was not populated, so `new Date()` was used |
+| All entries shared one `publication_date` = request time | `media.createdAt` was not populated, so `new Date()` was used |
 | 0 treatment/location videos in the sitemap | `populate=deep` is Strapi **4** syntax and returns **HTTP 400** on Strapi 5; the error was swallowed |
 | Homepage HTML contained no `<video>` at all | `VideoTile` gated rendering on an `IntersectionObserver` in `onMounted` (client-only) |
 
@@ -38,7 +40,8 @@ sitemap is better than one Google rejects wholesale.
 ## What is indexed
 
 Only videos that can pass Google's "watch page" rule — the video must be the primary content of the
-page `player_loc` points at.
+page `loc` points at. Only `content_loc` is emitted, no `player_loc` (Google rejects
+`player_loc` = `loc`).
 
 | Source | In sitemap? | Why |
 |---|---|---|
@@ -50,7 +53,7 @@ Story videos still render (and take a poster for UX), they are simply not advert
 
 ## Where things live
 
-- `server/routes/sitemap-videos.xml.ts` — one `<url>` per page, poster required, real `upload_date`
+- `server/routes/sitemap-videos.xml.ts` — one `<url>` per page, poster required, real `publication_date`
 - `app/utils/schemaVideo.ts` — `buildVideoObjectSchema()`, returns `null` unless media is a video
   **and** a poster image exists **and** a stable date is available
 - `app/components/ui/atom/MediaVideo.vue` / `ui/molecule/VideoTile.vue` — render `<video>`
@@ -75,7 +78,8 @@ curl -s https://www.myhealthandbeauty.com/sitemap-videos.xml | grep -c "<video:v
 Then Search Console → Video indexing report, and the Rich Results Test on a page with a video.
 Expect weeks, not days.
 
-## Dead code
+## Removed
 
-`scripts/generate-video-posters.js` and `public/posters/video-poster-mapping.json` belonged to the
-abandoned auto-poster approach. `VideoTile` no longer reads the mapping. Left in place, not wired up.
+The abandoned auto-poster approach (`scripts/generate-video-posters.js`, an always-empty
+`public/posters/video-poster-mapping.json` and the mapping lookup in `VideoTile`) was removed on
+2026-09-26. Posters come from Strapi, or from the first frame on the client as a UX fallback.

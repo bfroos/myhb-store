@@ -61,8 +61,10 @@ function isPlainObject(value: any): boolean {
 // Fields that identify an entity or address it in a specific locale. When a
 // German value is substituted wholesale these must not travel with it, or a
 // translated page ends up carrying German documentIds and German URLs.
+// `id` stays: the frontend keys v-for lists on it (faq.id, slide.id, link.id)
+// and never fetches by it, so stripping it turned every substituted list into
+// undefined keys.
 const LOCALE_BOUND_KEYS = new Set([
-  'id',
   'documentId',
   'createdAt',
   'updatedAt',

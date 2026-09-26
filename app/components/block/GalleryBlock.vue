@@ -282,6 +282,8 @@ const thumbsEl = ref<HTMLElement | null>(null);
 
 const lightboxIndex = ref<number | null>(null);
 const lightboxEl = ref<HTMLElement | null>(null);
+// The element that opened the lightbox gets focus back when it closes.
+let lightboxOpener: HTMLElement | null = null;
 
 const activeFrame = computed(() =>
   lightboxIndex.value === null ? null : (lightboxFrames.value[lightboxIndex.value] ?? null),
@@ -295,6 +297,10 @@ const lightboxCaption = computed(() => {
 });
 
 function open(slideIndex: number, frameIndex = 0) {
+  if (import.meta.client) {
+    lightboxOpener =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  }
   lightboxIndex.value = (offsets.value[slideIndex] ?? 0) + frameIndex;
 }
 
@@ -303,6 +309,35 @@ function close() {
   lightboxIndex.value = null;
   if (isSlider.value && last !== null) {
     nextTick(() => goTo(last, false));
+  }
+  const opener = lightboxOpener;
+  lightboxOpener = null;
+  if (opener?.isConnected) nextTick(() => opener.focus());
+}
+
+const FOCUSABLE = 'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
+
+// Keeps Tab inside the dialog; without this the focus walks into the page
+// behind the overlay, which aria-modal only claims to prevent.
+function trapTab(event: KeyboardEvent) {
+  const root = lightboxEl.value;
+  if (!root) return;
+  const items = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE));
+  if (items.length === 0) {
+    event.preventDefault();
+    root.focus();
+    return;
+  }
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (!first || !last) return;
+  const active = document.activeElement;
+  if (event.shiftKey && (active === first || active === root)) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && active === last) {
+    event.preventDefault();
+    first.focus();
   }
 }
 
@@ -414,6 +449,8 @@ function onKeydown(event: KeyboardEvent) {
   if (event.key === "Escape") {
     event.preventDefault();
     close();
+  } else if (event.key === "Tab") {
+    trapTab(event);
   } else if (event.key === "ArrowLeft") {
     event.preventDefault();
     step(-1);

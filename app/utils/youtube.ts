@@ -8,8 +8,11 @@ export type ParsedYouTubeUrl = {
 
 function parseStart(value: string | null): number | undefined {
   if (!value) return undefined;
-  const asNumber = Number.parseInt(value, 10);
-  if (Number.isFinite(asNumber) && asNumber > 0) return asNumber;
+  // Only a bare number is seconds; parseInt("1h2m") would silently yield 1.
+  if (/^\d+$/.test(value)) {
+    const asNumber = Number.parseInt(value, 10);
+    return asNumber > 0 ? asNumber : undefined;
+  }
 
   const match = value.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/i);
   if (!match) return undefined;

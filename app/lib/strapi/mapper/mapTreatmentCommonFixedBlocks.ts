@@ -412,13 +412,10 @@ export function mapTreatmentCommonFixedBlocks(
       showShortDescriptions: true,
       showPrices: true,
       showDescriptions: true,
-      // SEO-Fix (404-Vermeidung): Auf Standort-Behandlungsseiten baute der
-      // "Weitere Behandlungen"-Teaser bisher /standorte/{ort}/{pathKey} fuer JEDE
-      // verwandte Behandlung - auch fuer solche, die es am Standort gar nicht gibt.
-      // Google folgte diesen internen Links und bekam 404 (GSC: 1.742 "Nicht gefunden").
-      // Verwandte Behandlungen verlinken jetzt immer auf die ueberregionale
-      // /behandlungen/{pathKey}-Seite (existiert stets), daher kein locationPathKey.
-      // Reverted: location link again, but only where the treatment exists.
+      // Standort-Link nur, wo die Behandlung am Standort existiert; alle
+      // anderen Karten gehen auf die ueberregionale /behandlungen/{pathKey}-Seite
+      // (PR #33 hatte Standort-Links wegen 404s komplett abgeschaltet, #51 hat
+      // sie je Karte wieder eingefuehrt).
       locationPathKey: useLocationLinks
         ? `${location?.city?.slug}/${location?.slug}`
         : undefined,
