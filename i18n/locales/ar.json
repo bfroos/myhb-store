@@ -330,9 +330,7 @@
       "previousImage": "الصورة السابقة",
       "nextImage": "الصورة التالية",
       "slideLabel": "الصورة {index} من {total}",
-      "selectImage": "عرض الصورة {index}",
-      "before": "قبل",
-      "after": "بعد"
+      "selectImage": "عرض الصورة {index}"
     },
     "jobTeasers": {
       "headline": "الوظائف الشاغرة الحالية",

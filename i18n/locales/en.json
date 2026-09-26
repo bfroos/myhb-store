@@ -356,9 +356,7 @@
       "previousImage": "Previous image",
       "nextImage": "Next image",
       "slideLabel": "Image {index} of {total}",
-      "selectImage": "Show image {index}",
-      "before": "Before",
-      "after": "After"
+      "selectImage": "Show image {index}"
     },
     "jobTeasers": {
       "headline": "Current job openings",

@@ -2,7 +2,7 @@
   <div
     v-if="videoId"
     class="youTubeEmbed"
-    :class="{ 'youTubeEmbed--portrait': isShort }"
+    :class="{ 'youTubeEmbed--portrait': isPortrait }"
   >
     <iframe
       v-if="isActivated"
@@ -71,12 +71,15 @@ import {
 } from "@tabler/icons-vue";
 import { ImageFormat } from "~/lib/strapi/dto/enums";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import type { YouTubeAspectRatio } from "~/lib/strapi/dto/components";
 import { getMediaUrl } from "~/utils/media";
 import { parseYouTubeUrl } from "~/utils/youtube";
 import { useYouTubeTracking } from "~/composables/useYouTubeTracking";
 
 const props = defineProps<{
+  /** Link oder Embed-Code, siehe parseYouTubeUrl. */
   videoUrl?: string;
+  aspectRatio?: YouTubeAspectRatio | null;
   poster?: StrapiMedia;
   title?: string;
 }>();
@@ -88,7 +91,12 @@ const isActivated = ref(false);
 
 const parsed = computed(() => parseYouTubeUrl(props.videoUrl));
 const videoId = computed(() => parsed.value?.id);
-const isShort = computed(() => !!parsed.value?.isShort);
+// Ein gesetztes Format gewinnt. "auto" folgt der URL: /shorts/ wird hochkant,
+// ein Short aus dem Embed-Code (Pfad /embed/) braucht das explizite 9-16.
+const isPortrait = computed(() => {
+  const ratio = props.aspectRatio ?? "auto";
+  return ratio === "auto" ? !!parsed.value?.isShort : ratio === "9-16";
+});
 
 const embedSrc = computed(() => {
   if (!videoId.value) return "";
