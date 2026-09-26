@@ -37,10 +37,16 @@ export type BookingPrewarmMode = "off" | "eager";
 let frame: HTMLIFrameElement | null = null;
 let huelle: HTMLDivElement | null = null;
 let frameWindow: Window | null = null;
-/** Seite, fuer die schon vorgewaermt wurde — je Seitenaufruf genau einmal. */
+/** Seite, fuer die zuletzt vorgewaermt wurde (SPA-Wechsel erkennt man daran). */
 let warmedPath: string | null = null;
+/** Buchungs-URL des letzten Vorwaermens — fuer das Nachwaermen nach Consent. */
+let warmedUrl: string | null = null;
 /** Wurde auf dieser Seite vorgewaermt? Faerbt die Messung im Feld. */
 let wasPrewarmed = false;
+/** Wie viele Rahmen diese Seite schon geladen hat (Vorwaermen + Nachwaermen). */
+let ladeVorgaenge = 0;
+/** Hoert schon jemand auf Cookiebot? Je Seitenaufruf genau einmal. */
+let consentLauscherAktiv = false;
 /** Hat Calendly im verborgenen Rahmen schon gezeichnet? */
 let hasRendered = false;
 /** Liegt der Rahmen gerade sichtbar im Dialog? */
@@ -66,6 +72,9 @@ const RENDER_EREIGNISSE = new Set([
   "calendly.profile_page_viewed",
   "calendly.date_and_time_selected",
 ]);
+
+/** Vorwaermen plus hoechstens zwei Nachwaermen je Seite. */
+const MAX_LADEVORGAENGE = 3;
 
 const HUELLE_VERSTECKT =
   "position:fixed;top:0;left:0;width:1px;height:1px;overflow:hidden;" +
@@ -106,7 +115,30 @@ export function prewarmMatches(embedSrc: string): boolean {
   return !!frame && !isAttached && frame.src === embedSrc;
 }
 
-/** Raeumt den verborgenen Rahmen ab. `warmedPath` bleibt: nicht neu erzeugen. */
+/**
+ * Was der Dialog vorfindet, wenn er diese Embed-URL anfordert (#141):
+ *
+ *   reused  ein warmer Rahmen mit genau dieser URL — wird uebernommen
+ *   stale   ein warmer Rahmen, aber mit anderer URL — wird verworfen, der
+ *           Dialog laedt kalt. Gemessen im Feld 21.–26.09.2026: nur 32 % der
+ *           als vorgewaermt gemeldeten Oeffnungen kamen unter 400 ms; die
+ *           uebrigen 68 % waren dieser Fall, weil sich die Buchungs-URL
+ *           zwischen Vorwaermen und Klick geaendert hatte (Consent-Stempel).
+ *   none    kein Rahmen (abgeschaltet, keine Calendly-URL, schon verbraucht)
+ *
+ * Geht als `event_label` an `booking_embed_ready`, damit die Messung nicht
+ * mehr "vorgewaermt" sagt, wo in Wahrheit kalt geladen wurde.
+ */
+export type PrewarmVerdict = "reused" | "stale" | "none";
+export function prewarmVerdict(embedSrc: string): PrewarmVerdict {
+  if (!frame || isAttached) return "none";
+  return frame.src === embedSrc ? "reused" : "stale";
+}
+
+/**
+ * Raeumt den verborgenen Rahmen ab. `warmedPath`/`warmedUrl` bleiben stehen:
+ * Ohne Rahmen waermt auch ein spaeteres Cookiebot-Ereignis nichts nach.
+ */
 export function disposeBookingPrewarm() {
   detachAufraeumen?.();
   detachAufraeumen = null;
@@ -227,17 +259,40 @@ export function useBookingPrewarm() {
     );
   }
 
-  /** Waermt die Buchungs-URL vor. Der zweite Aufruf je Seite tut nichts. */
+  /**
+   * Waermt die Buchungs-URL vor.
+   *
+   * Dieselbe Embed-URL ein zweites Mal: nichts tun — eine Seite hat mehrere
+   * Buchungsknoepfe, und ein zweiter Rahmen naehme dem ersten die Bandbreite.
+   *
+   * Eine *andere* Embed-URL: den alten Rahmen abraeumen und neu laden. Bis zum
+   * 26.09.2026 galt "je Seite genau einmal", und genau das hat das Vorwaermen
+   * beim Erstbesuch entwertet: Die Buchungs-URL traegt den Cookiebot-Stand als
+   * `;c:1`/`;c:0` in salesforce_uuid (utm-persist v1.4). Beim Vorwaermen ist der
+   * Banner noch offen, der Stempel fehlt; der Besucher antwortet, klickt — und
+   * der Dialog findet einen Rahmen mit fremder URL, verwirft ihn und laedt kalt.
+   * Jeder Anzeigenklick ist ein Erstbesuch, also traf es genau den Fall, fuer
+   * den das Vorwaermen gebaut wurde. Nachwaermen ist der zweite Rahmen, nicht
+   * der erste: die Antwort auf den Banner kommt Sekunden nach dem Seitenaufbau,
+   * der Klick auf "Termin buchen" deutlich spaeter.
+   */
   function prewarmBooking(url?: string | null) {
     if (!import.meta.client || mode === "off") return;
     // Nur Calendly: Die App-Buchung ist unsere eigene Domain und faellt nicht
     // durch diese Wartezeit auf (E2).
     if (!isCalendlyUrl(url)) return;
-    // Je Seite genau einmal — eine Seite hat mehrere Buchungsknoepfe, und ein
-    // zweiter Rahmen naehme dem ersten die Bandbreite weg. Beim Wechsel auf
-    // eine andere Seite (SPA) faellt die Sperre.
-    if (warmedPath === route.path) return;
+    // Liegt der Rahmen sichtbar im Dialog, ist er das echte Widget — den tauscht
+    // niemand unter dem Besucher weg.
+    if (isAttached) return;
+    const src = bookingEmbedSrc(url as string);
+    if (frame && frame.src === src) return;
+    // Obergrenze je Seite: Vorwaermen plus ein, zwei Nachwaermen. Mehr waere ein
+    // Zeichen, dass irgendetwas die URL staendig aendert — dann lieber kalt.
+    if (warmedPath !== route.path) ladeVorgaenge = 0;
+    if (ladeVorgaenge >= MAX_LADEVORGAENGE) return;
+    ladeVorgaenge += 1;
     warmedPath = route.path;
+    warmedUrl = url as string;
     disposeBookingPrewarm();
     wasPrewarmed = true;
 
@@ -257,7 +312,7 @@ export function useBookingPrewarm() {
     // neu geladen und das Vorwaermen finge von vorne an.
     el.dataset.myhbDecorated = "1";
     el.dataset.myhbPrewarm = "1";
-    el.src = bookingEmbedSrc(url as string);
+    el.src = src;
     box.appendChild(el);
     document.body.appendChild(box);
     huelle = box;
@@ -285,11 +340,38 @@ export function useBookingPrewarm() {
     window.addEventListener("message", merken);
   }
 
+  /**
+   * Nachwaermen, sobald der Besucher den Cookie-Banner beantwortet hat.
+   *
+   * Nur, solange noch ein unbenutzter warmer Rahmen wartet: Ist der Dialog
+   * schon offen (Rahmen uebernommen oder verworfen), wuerde ein neuer Rahmen
+   * nur Bandbreite kosten. `prewarmBooking` prueft selbst, ob sich die URL
+   * ueberhaupt geaendert hat. Der Aufschub um einen Tick laesst Cookiebot
+   * seinen eigenen Zustand (`hasResponse`, `consent`) fertig schreiben, den
+   * utm-persist fuer den Stempel liest.
+   */
+  function nachwaermenBeiConsent() {
+    if (consentLauscherAktiv) return;
+    consentLauscherAktiv = true;
+    const nachwaermen = () => {
+      setTimeout(() => {
+        if (!frame || isAttached || !warmedUrl) return;
+        if (warmedPath !== route.path) return;
+        prewarmBooking(warmedUrl);
+      }, 0);
+    };
+    window.addEventListener("CookiebotOnAccept", nachwaermen);
+    window.addEventListener("CookiebotOnDecline", nachwaermen);
+  }
+
   /** Startet das Vorwaermen, sobald die Seite nichts Wichtigeres zu tun hat. */
   function prewarmBookingWhenIdle(url?: string | null) {
     if (!import.meta.client || mode === "off" || !isCalendlyUrl(url)) return;
     onNuxtReady(() => {
-      const start = () => prewarmBooking(url);
+      const start = () => {
+        prewarmBooking(url);
+        nachwaermenBeiConsent();
+      };
       if (typeof requestIdleCallback === "function") {
         requestIdleCallback(start, { timeout: 2000 });
       } else {
