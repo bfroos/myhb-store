@@ -1,4 +1,5 @@
 <template>
+  <slot v-if="!heroRendered" name="after-hero" />
   <template v-for="key in order" :key="key">
     <BlockRenderer
       v-if="key === 'blocks' && dynamicBlocks?.length"
@@ -13,17 +14,22 @@
         ...(BLOCK_MAP[key]!.id ? { id: BLOCK_MAP[key]!.id } : {}),
       }"
     />
+    <slot v-if="key === 'hero' && heroRendered" name="after-hero" />
   </template>
 </template>
 
 <script setup lang="ts">
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
 
-defineProps<{
+const props = defineProps<{
   fixedBlocks?: Record<string, any>;
   dynamicBlocks?: StrapiBlock[];
   order: string[];
 }>();
+
+const heroRendered = computed(
+  () => props.order.includes("hero") && !!props.fixedBlocks?.hero,
+);
 
 const BLOCK_MAP: Record<
   string,
