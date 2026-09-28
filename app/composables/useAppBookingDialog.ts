@@ -4,6 +4,7 @@ import { readWireAttribution } from "~/lib/attribution";
 import type { BookingVariant } from "~/lib/bookingAbTest";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
+import { currentCheckoutId } from "~/lib/checkoutAttempt";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -268,6 +269,13 @@ export function buildBookingUrl(
     // funnel_events zusammengehoeren (elanagency/myhb-os#521).
     if (!url.searchParams.has("fp_sid")) {
       url.searchParams.set("fp_sid", getFunnelSessionId());
+    }
+    // Buchungsversuch des Klicks an die App geben (elanagency/myhb-os#400):
+    // `click_booking` hier und `booking_start` dort tragen dieselbe
+    // event_id, Meta zaehlt InitiateCheckout einmal.
+    const checkoutId = currentCheckoutId();
+    if (checkoutId && !url.searchParams.has("checkout_id")) {
+      url.searchParams.set("checkout_id", checkoutId);
     }
     if (hatAbgelehnt() && !url.searchParams.has("consent")) {
       url.searchParams.set("consent", "necessary");

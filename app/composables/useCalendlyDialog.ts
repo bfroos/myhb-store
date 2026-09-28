@@ -8,6 +8,7 @@ import {
 } from "~/composables/useAppBookingDialog";
 import { disposeBookingPrewarm } from "~/composables/useBookingPrewarm";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
+import { priceFromLabel } from "~/lib/checkoutAttempt";
 
 /**
  * Zweiter Buchungsweg desselben Standorts (#97) plus sein Slug fuer den
@@ -72,6 +73,8 @@ export function useCalendlyDialog() {
         // #78: trennt in der Wochenauswertung (elanagency/myhb-os#271) die
         // Klicks mit Kontextzeile von denen ohne.
         treatment_context: !!treatmentContext,
+        // #400 (myhb-os): Seitenpreis fuer Meta „Schedule mit Wert".
+        booking_value: priceFromLabel(treatmentContext?.priceLabel),
       },
     );
 
