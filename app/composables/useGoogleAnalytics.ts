@@ -32,6 +32,10 @@ const pushToDataLayer = (payload: DataLayerObject) => {
   mirrorFunnelEvent(payload);
 };
 
+/** Ereignisse, an denen die A/B-Werte je Ereignis stimmen muessen (#161). */
+const istBuchungsereignis = (eventName: string): boolean =>
+  eventName === "click_booking" || eventName.startsWith("booking_");
+
 export const useGoogleAnalytics = () => {
   /**
    * Track custom event in GA4 (via GTM-Datenschicht)
@@ -52,6 +56,18 @@ export const useGoogleAnalytics = () => {
     const params = Object.fromEntries(
       Object.entries(eventParams ?? {}).filter(([, v]) => v !== undefined),
     ) as Record<string, any>;
+    // #161: `ab_fallback` und `ab_bypass` sind ereignisgenau. Der Filter oben
+    // liess ein frueheres `ab_fallback: true` im Datenmodell stehen, und jedes
+    // spaetere Buchungsereignis ohne Rueckfall erbte es — GTM liest den
+    // zusammengefuehrten Stand, nicht den auslösenden Push. Ein Push mit
+    // `undefined` setzt den Schluessel im Modell zurueck (so arbeitet auch
+    // plugins/ab-split.client.ts). Bewusst kein `false`: das fuellte die
+    // GA4-Dimension, ohne etwas zu sagen. `ab_variant`/`ab_source` bleiben
+    // beim Modell — die pflegt ab-split je Seite aus dem Cookie.
+    if (istBuchungsereignis(eventName)) {
+      params.ab_fallback = params.ab_fallback === true ? true : undefined;
+      params.ab_bypass = params.ab_bypass === true ? true : undefined;
+    }
     const withAttribution =
       params.event_category === 'conversion'
         ? { ...(readGaAttributionParams() ?? {}), ...params }

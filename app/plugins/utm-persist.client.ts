@@ -1,5 +1,5 @@
 /**
- * MYH&B UTM-Persistenz v1.5
+ * MYH&B UTM-Persistenz v1.7
  *
  * v1.0: Speichert utm_*, gclid, fbclid, ttclid beim Erstbesuch (First Touch)
  * und dekoriert automatisch alle Calendly-URLs (Links, Embeds, Popups) sowie
@@ -42,6 +42,18 @@
  * ref_path an, auf dem Calendly-Weg fehlte sie bisher: 90 % der Buchungen hatten
  * keine Landingpage. T14 schreibt das Token nach appointment_attribution.ref_path;
  * aeltere T14-Fassungen ignorieren es still wie jedes unbekannte Token.
+ *
+ * v1.7 (store#168): Cookiebot raeumt bei der Antwort auf den Banner alle
+ * Cookies und Storage-Schluessel ab, die im Scan als "nicht klassifiziert"
+ * gefuehrt werden — myhb_attribution eingeschlossen, bei "Alle zulassen"
+ * genauso wie bei "Ablehnen". Fast jeder Anzeigenklick ist ein Erstbesuch, der
+ * den Banner vor dem Klick auf "Termin buchen" beantwortet; die Calendly-URL
+ * bekam danach weder gclid noch utm_* noch den c:-Stempel (#126, myhb-os#399,
+ * myhb-os#82). Der Speicher haelt deshalb eine Kopie im Arbeitsspeicher der
+ * Seite und schreibt sie nach jeder Cookiebot-Antwort zurueck (sofort und mit
+ * zwei Nachlaeufen, weil Cookiebot nicht synchron raeumt); danach werden die
+ * Calendly-URLs neu dekoriert. Dauerhaft loest das nur die Klassifizierung von
+ * myhb_attribution als "Notwendig" im Cookiebot-Manager.
  *
  * v1.4 (#126): salesforce_uuid traegt zusaetzlich den Cookiebot-Stand als
  * ";c:1" / ";c:0". Ohne diesen Stempel kennt T14 den Einwilligungsstand einer
@@ -123,7 +135,12 @@ export default defineNuxtPlugin(() => {
     const m = document.cookie.match("(^|;)\\s*" + name + "\\s*=\\s*([^;]+)");
     return m ? decodeURIComponent(m.pop() as string) : null;
   }
+  // v1.7 (store#168): letzte bekannte Attribution, ueberlebt das Aufraeumen
+  // durch Cookiebot, weil das nur Cookies und Web Storage trifft.
+  let kopie: Store | null = null;
+
   function save(store: Store) {
+    kopie = store;
     const payload = JSON.stringify(store);
     try {
       sessionStorage.setItem(KEY, payload);
@@ -145,10 +162,12 @@ export default defineNuxtPlugin(() => {
     try {
       const parsed = JSON.parse(raw);
       // Migration vom flachen v1.0-Format
-      if (parsed && !parsed.first && !parsed.last && (parsed.utm_source || parsed._ts)) {
-        return { first: parsed as Touch, last: parsed as Touch };
-      }
-      return parsed as Store;
+      const store: Store =
+        parsed && !parsed.first && !parsed.last && (parsed.utm_source || parsed._ts)
+          ? { first: parsed as Touch, last: parsed as Touch }
+          : (parsed as Store);
+      kopie = store;
+      return store;
     } catch {
       return null;
     }
@@ -388,10 +407,28 @@ export default defineNuxtPlugin(() => {
     childList: true,
     subtree: true,
   });
-  window.addEventListener("CookiebotOnAccept", () => {
-    const data = load();
-    if (data) save(data);
-  });
+  // v1.7 (store#168): Nach der Banner-Antwort ist der Speicher leer. Aus der
+  // Kopie zurueckschreiben (bei Accept stuft save() dabei auf 90 Tage hoch) und
+  // die Calendly-URLs neu dekorieren, damit Klick-ID und c:-Stempel an der
+  // Buchung ankommen. Cookiebot raeumt nicht immer synchron zum Ereignis,
+  // deshalb zwei Nachlaeufe.
+  function nachAntwort() {
+    const data = load() || kopie;
+    if (!data) return;
+    save(data);
+    run();
+  }
+  const nachAntwortMitNachlauf = () => {
+    nachAntwort();
+    for (const ms of [300, 1500]) {
+      window.setTimeout(() => {
+        if (!load()) nachAntwort();
+      }, ms);
+    }
+  };
+  for (const ev of ["CookiebotOnConsentReady", "CookiebotOnAccept", "CookiebotOnDecline"]) {
+    window.addEventListener(ev, nachAntwortMitNachlauf);
+  }
 
   // #141: Die Buchungs-URL wird jetzt dekoriert, *bevor* das iFrame entsteht.
   // Vorher hing das an der MutationObserver-Runde nach dem Einhaengen — die
