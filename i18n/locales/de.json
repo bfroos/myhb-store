@@ -345,9 +345,7 @@
       "previousImage": "Vorheriges Bild",
       "nextImage": "Nächstes Bild",
       "slideLabel": "Bild {index} von {total}",
-      "selectImage": "Bild {index} anzeigen",
-      "before": "Vorher",
-      "after": "Nachher"
+      "selectImage": "Bild {index} anzeigen"
     },
     "jobTeasers": {
       "headline": "Aktuelle Stellenangebote",

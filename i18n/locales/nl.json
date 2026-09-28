@@ -344,9 +344,7 @@
       "previousImage": "Vorige afbeelding",
       "nextImage": "Volgende afbeelding",
       "slideLabel": "Afbeelding {index} van {total}",
-      "selectImage": "Afbeelding {index} tonen",
-      "before": "Voor",
-      "after": "Na"
+      "selectImage": "Afbeelding {index} tonen"
     },
     "jobTeasers": {
       "headline": "Actuele vacatures",

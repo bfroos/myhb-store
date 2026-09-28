@@ -100,13 +100,6 @@ export type BlockGalleryDto = {
   intro?: string;
   images?: StrapiMedia[];
   layout?: "grid" | "slider" | null;
-  mode?: "images" | "before-after" | null;
-  items?: {
-    id: number;
-    before?: StrapiMedia;
-    after?: StrapiMedia;
-    caption?: string;
-  }[];
   columns: "2" | "3" | "4";
   aspectRatio: "1-1" | "4-3" | "3-4" | "16-9" | "original";
   showCaptions: boolean;
@@ -260,11 +253,15 @@ export type BlockTextContentDto = {
   cardSettings?: CardSettingsDto;
 };
 
+/** "auto" folgt der URL (Shorts werden hochkant), alles andere erzwingt das Format. */
+export type YouTubeAspectRatio = "auto" | "16-9" | "9-16";
+
 export type BlockYoutubeVideoDto = {
   headline?: string;
   intro?: string;
-  videoUrl?: string;
-  embedCode?: string;
+  /** YouTube-Link oder kompletter Embed-Code; parseYouTubeUrl nimmt beides. */
+  video?: string;
+  aspectRatio?: YouTubeAspectRatio | null;
   poster?: StrapiMedia;
   cardSettings?: CardSettingsDto;
 };

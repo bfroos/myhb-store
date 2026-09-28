@@ -15,7 +15,8 @@
           <p v-if="intro" class="youTubeVideoBlock__intro">{{ intro }}</p>
         </header>
         <UiAtomYouTubeEmbed
-          :video-url="videoSource"
+          :video-url="video"
+          :aspect-ratio="aspectRatio"
           :poster="poster"
           :title="headline"
         />
@@ -35,12 +36,7 @@ const CardSurface = resolveComponent("UiLayoutCardSurface");
 
 const isInline = inject("blockSurface", "section") === "inline";
 
-// The embed code wins when it holds a usable video; videoUrl stays the fallback.
-const videoSource = computed(() =>
-  parseYouTubeUrl(props.embedCode) ? props.embedCode : props.videoUrl,
-);
-
-const hasVideo = computed(() => !!parseYouTubeUrl(videoSource.value));
+const hasVideo = computed(() => !!parseYouTubeUrl(props.video));
 </script>
 
 <style scoped>
