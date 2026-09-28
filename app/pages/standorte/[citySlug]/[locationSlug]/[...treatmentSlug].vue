@@ -5,7 +5,7 @@
     :dynamic-blocks="treatmentPage?.blocks"
     :order="blockOrder"
   >
-    <template #after-hero>
+    <template #after-intro>
       <UiMoleculeMedicalReviewerSignature
         v-if="!isAdsMode"
         :reviewer="DEFAULT_MEDICAL_REVIEWER"

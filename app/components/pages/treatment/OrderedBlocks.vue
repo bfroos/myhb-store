@@ -1,5 +1,5 @@
 <template>
-  <slot v-if="!heroRendered" name="after-hero" />
+  <slot v-if="!anchorKey" name="after-intro" />
   <template v-for="key in order" :key="key">
     <BlockRenderer
       v-if="key === 'blocks' && dynamicBlocks?.length"
@@ -14,7 +14,7 @@
         ...(BLOCK_MAP[key]!.id ? { id: BLOCK_MAP[key]!.id } : {}),
       }"
     />
-    <slot v-if="key === 'hero' && heroRendered" name="after-hero" />
+    <slot v-if="key === anchorKey" name="after-intro" />
   </template>
 </template>
 
@@ -27,9 +27,16 @@ const props = defineProps<{
   order: string[];
 }>();
 
-const heroRendered = computed(
-  () => props.order.includes("hero") && !!props.fixedBlocks?.hero,
-);
+const anchorKey = computed(() => {
+  const rendered = props.order.filter((key) =>
+    key === "blocks"
+      ? !!props.dynamicBlocks?.length
+      : !!(BLOCK_MAP[key] && props.fixedBlocks?.[key]),
+  );
+  if (rendered.includes("tableOfContents")) return "tableOfContents";
+  const heroIndex = rendered.indexOf("hero");
+  return rendered[heroIndex + 1] ?? rendered[heroIndex] ?? null;
+});
 
 const BLOCK_MAP: Record<
   string,

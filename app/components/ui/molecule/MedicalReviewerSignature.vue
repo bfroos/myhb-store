@@ -65,7 +65,8 @@ const formattedDate = computed(() => {
 
 <style scoped>
 .medReviewer__card {
-  width: max(50%, min(100%, 680px));
+  width: fit-content;
+  max-width: 100%;
   margin-inline: auto;
 }
 .medReviewer {
@@ -74,7 +75,7 @@ const formattedDate = computed(() => {
 .medReviewer__frame {
   position: relative;
   display: grid;
-  grid-template-columns: 64px 1fr 64px;
+  grid-template-columns: 64px auto 64px;
   align-items: center;
   gap: var(--space-500);
   min-height: 104px;
@@ -182,6 +183,9 @@ const formattedDate = computed(() => {
 }
 
 @media screen and (max-width: 768px) {
+  .medReviewer__card {
+    width: auto;
+  }
   .medReviewer__frame {
     grid-template-columns: 56px 1fr;
     gap: var(--space-400);
