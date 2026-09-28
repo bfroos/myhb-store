@@ -1,6 +1,6 @@
 <template>
   <UiLayoutSectionBlock>
-    <UiLayoutCardSurface :card-settings="{ colorTheme: ColorTheme.STRONG }">
+    <UiLayoutCardSurface class="medReviewer__card" :card-settings="{ colorTheme: ColorTheme.STRONG }">
       <aside class="medReviewer" :aria-label="$t('treatment.medicalReviewer.ariaLabel')">
         <div class="medReviewer__frame">
           <div class="medReviewer__avatar">
@@ -9,8 +9,8 @@
               :src="reviewer.photoUrl"
               :alt="reviewer.name"
               class="medReviewer__photo"
-              width="112"
-              height="112"
+              width="64"
+              height="64"
               loading="lazy"
             />
             <IconRosetteDiscountCheckFilled class="medReviewer__badge" aria-hidden="true" />
@@ -64,36 +64,40 @@ const formattedDate = computed(() => {
 </script>
 
 <style scoped>
+.medReviewer__card {
+  width: max(50%, min(100%, 680px));
+  margin-inline: auto;
+}
 .medReviewer {
-  padding: var(--space-500);
+  padding: var(--space-300);
 }
 .medReviewer__frame {
   position: relative;
   display: grid;
-  grid-template-columns: 112px 1fr 112px;
+  grid-template-columns: 64px 1fr 64px;
   align-items: center;
-  gap: var(--space-700);
-  min-height: 208px;
+  gap: var(--space-500);
+  min-height: 104px;
   box-sizing: border-box;
-  padding: var(--space-700) var(--space-800);
+  padding: var(--space-400) var(--space-500);
   border: 1px solid var(--color-border-mute);
-  border-radius: calc(var(--border-radius-card) - var(--space-500) / 2);
+  border-radius: calc(var(--border-radius-card) - var(--space-300) / 2);
 }
 .medReviewer__frame::before {
   content: "";
   position: absolute;
-  inset: 6px;
+  inset: 4px;
   border: 1px solid var(--color-border-light);
-  border-radius: calc(var(--border-radius-card) - var(--space-500) / 2 - 6px);
+  border-radius: calc(var(--border-radius-card) - var(--space-300) / 2 - 4px);
   pointer-events: none;
 }
 .medReviewer__avatar {
   position: relative;
-  width: 112px;
-  height: 112px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: var(--color-gray-100);
-  box-shadow: 0 0 0 4px var(--card-color-bg), 0 0 0 6px var(--color-text-light);
+  box-shadow: 0 0 0 3px var(--card-color-bg), 0 0 0 4px var(--color-text-light);
 }
 .medReviewer__photo {
   display: block;
@@ -109,7 +113,7 @@ const formattedDate = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-400);
+  gap: var(--space-300);
   min-width: 0;
   text-align: center;
 }
@@ -117,17 +121,17 @@ const formattedDate = computed(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--space-300);
+  gap: var(--space-100);
   margin: 0;
 }
 .medReviewer__label {
-  font-size: var(--font-sm);
-  letter-spacing: 0.2em;
+  font-size: var(--font-xs);
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-text-light);
 }
 .medReviewer__name {
-  font-size: var(--font-3xl);
+  font-size: var(--font-lg);
   font-weight: 600;
   line-height: 1.2;
   color: var(--color-text);
@@ -137,11 +141,11 @@ const formattedDate = computed(() => {
 .medReviewer__name:focus-visible {
   text-decoration: underline;
   text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
+  text-underline-offset: 4px;
 }
 .medReviewer__rule {
   position: relative;
-  width: min(240px, 60%);
+  width: min(180px, 60%);
   height: 1px;
   background: var(--color-text-light);
 }
@@ -150,70 +154,66 @@ const formattedDate = computed(() => {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 7px;
-  height: 7px;
+  width: 5px;
+  height: 5px;
   background: var(--color-text);
   transform: translate(-50%, -50%) rotate(45deg);
   box-shadow: 0 0 0 4px var(--card-color-bg);
 }
 .medReviewer__date {
   margin: 0;
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   letter-spacing: 0.04em;
   color: var(--color-text-light);
 }
 .medReviewer__seal {
   display: grid;
   place-items: center;
-  width: 112px;
-  height: 112px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   border: 2px solid var(--color-text);
-  box-shadow: inset 0 0 0 6px var(--card-color-bg), inset 0 0 0 7px var(--color-text-light);
+  box-shadow: inset 0 0 0 4px var(--card-color-bg), inset 0 0 0 5px var(--color-text-light);
 }
 .medReviewer__sealIcon {
-  width: 56px;
-  height: 56px;
+  width: 32px;
+  height: 32px;
   color: var(--color-text);
 }
 
 @media screen and (max-width: 768px) {
-  .medReviewer {
-    padding: var(--space-300);
-  }
   .medReviewer__frame {
-    grid-template-columns: 1fr;
-    justify-items: center;
-    gap: var(--space-500);
+    grid-template-columns: 56px 1fr;
+    gap: var(--space-400);
     min-height: 0;
-    padding: var(--space-700) var(--space-500);
-    border-radius: calc(var(--border-radius-card) - var(--space-300) / 2);
-  }
-  .medReviewer__frame::before {
-    border-radius: calc(var(--border-radius-card) - var(--space-300) / 2 - 6px);
+    padding: var(--space-400);
   }
   .medReviewer__avatar {
-    width: 88px;
-    height: 88px;
+    width: 56px;
+    height: 56px;
   }
   .medReviewer__badge {
     display: block;
     position: absolute;
-    right: -6px;
-    bottom: -6px;
-    width: 30px;
-    height: 30px;
+    right: -5px;
+    bottom: -5px;
+    width: 22px;
+    height: 22px;
     padding: 1px;
     border-radius: 50%;
     background: var(--card-color-bg);
     color: var(--color-text);
   }
+  .medReviewer__body,
+  .medReviewer__text {
+    align-items: flex-start;
+    text-align: left;
+  }
   .medReviewer__label {
-    font-size: var(--font-xs);
-    letter-spacing: 0.16em;
+    letter-spacing: 0.12em;
   }
   .medReviewer__name {
-    font-size: var(--font-xl);
+    font-size: var(--font-md);
   }
   .medReviewer__seal {
     display: none;
