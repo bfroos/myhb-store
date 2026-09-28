@@ -1,0 +1,29 @@
+# Baut jeden PR und jeden Push auf main einmal komplett durch, bevor Vercel
+# es tut. Faengt Typ- und Template-Fehler in .vue/.ts, kaputte Imports und
+# fehlende Locale-Keys. Das Repo hat keinen vue-tsc und keine ESLint-Config,
+# der Nuxt-Build ist deshalb die einzige Pruefung, die alles anfasst.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NUXT_PUBLIC_SITE_MODE: seo
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx nuxt build
