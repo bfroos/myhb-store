@@ -21,6 +21,12 @@ type PriceCategory = {
 export function buildPriceListSchema(
   categories: PriceCategory[] | null | undefined,
   publicUrl: string,
+  /**
+   * go.*: keine Offer-Preise (wie buildMedicalProcedureSchema, #187). Die
+   * Seite zeigt dort Neukundenpreise; der regulaere Preis als Offer passte
+   * nicht zur Seite, der Neukundenpreis waere falsch ausgezeichnet.
+   */
+  options: { omitOffers?: boolean } = {},
 ): Record<string, unknown> | null {
   if (!categories || categories.length === 0) return null;
 
@@ -43,12 +49,16 @@ export function buildPriceListSchema(
               ),
             }
           : {}),
-        offers: {
-          "@type": "Offer",
-          price: (treatment.priceInEuroCent / 100).toFixed(2),
-          priceCurrency: "EUR",
-          availability: "https://schema.org/InStock",
-        },
+        ...(options.omitOffers
+          ? {}
+          : {
+              offers: {
+                "@type": "Offer",
+                price: (treatment.priceInEuroCent / 100).toFixed(2),
+                priceCurrency: "EUR",
+                availability: "https://schema.org/InStock",
+              },
+            }),
       };
 
       items.push({

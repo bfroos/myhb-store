@@ -1,6 +1,7 @@
 <template>
   <UiLayoutSectionBlock v-if="hasContent">
     <div class="overview">
+      <UiMoleculeNewCustomerPriceNote :categories="productCategories" />
       <section
         v-for="category in productCategories"
         :key="category.id"
@@ -13,6 +14,7 @@
           />
         </UiLayoutCardSurface>
       </section>
+      <UiMoleculeNewCustomerPriceNote :categories="productCategories" compact />
     </div>
   </UiLayoutSectionBlock>
 </template>
