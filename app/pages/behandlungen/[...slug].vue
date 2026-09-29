@@ -9,11 +9,12 @@
     :fixed-blocks="fixedBlocks"
     :order="COMMON_TREATMENT_BLOCK_ORDER"
   >
-    <template #after-intro>
+    <template #reviewer="{ inline }">
       <UiMoleculeMedicalReviewerSignature
         v-if="!isAdsMode"
         :reviewer="reviewer"
         :date="treatmentUpdatedAt"
+        :inline="inline"
       />
     </template>
   </PagesTreatmentOrderedBlocks>

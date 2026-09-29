@@ -1,7 +1,10 @@
 <template>
-  <UiLayoutSectionBlock>
-    <UiLayoutCardSurface class="medReviewer__card" :card-settings="{ colorTheme: ColorTheme.STRONG }">
-      <aside class="medReviewer" :aria-label="$t('treatment.medicalReviewer.ariaLabel')">
+  <component :is="inline ? 'div' : UiLayoutSectionBlock">
+    <component
+      :is="inline ? 'div' : UiLayoutCardSurface"
+      v-bind="inline ? {} : { class: 'medReviewer__card', cardSettings: { colorTheme: ColorTheme.STRONG } }"
+    >
+      <aside class="medReviewer" :class="{ 'medReviewer--inline': inline }" :aria-label="$t('treatment.medicalReviewer.ariaLabel')">
         <div class="medReviewer__frame">
           <div class="medReviewer__avatar">
             <img
@@ -32,18 +35,20 @@
           </div>
         </div>
       </aside>
-    </UiLayoutCardSurface>
-  </UiLayoutSectionBlock>
+    </component>
+  </component>
 </template>
 
 <script setup lang="ts">
 import { IconRosetteDiscountCheckFilled } from "@tabler/icons-vue";
+import { UiLayoutCardSurface, UiLayoutSectionBlock } from "#components";
 import { ColorTheme } from "~/lib/strapi/dto/enums";
 import type { MedicalReviewer } from "~/utils/medicalReviewer";
 
 const props = defineProps<{
   reviewer: MedicalReviewer;
   date?: string | null;
+  inline?: boolean;
 }>();
 
 const { locale, localeProperties } = useI18n();
@@ -71,6 +76,11 @@ const formattedDate = computed(() => {
 }
 .medReviewer {
   padding: var(--space-300);
+}
+.medReviewer--inline {
+  width: fit-content;
+  max-width: 100%;
+  padding: 0;
 }
 .medReviewer__frame {
   position: relative;
@@ -183,7 +193,8 @@ const formattedDate = computed(() => {
 }
 
 @media screen and (max-width: 768px) {
-  .medReviewer__card {
+  .medReviewer__card,
+  .medReviewer--inline {
     width: auto;
   }
   .medReviewer__frame {

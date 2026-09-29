@@ -5,10 +5,11 @@
     :dynamic-blocks="treatmentPage?.blocks"
     :order="blockOrder"
   >
-    <template #after-intro>
+    <template #reviewer="{ inline }">
       <UiMoleculeMedicalReviewerSignature
         v-if="!isAdsMode"
         :reviewer="DEFAULT_MEDICAL_REVIEWER"
+        :inline="inline"
       />
     </template>
   </PagesTreatmentOrderedBlocks>

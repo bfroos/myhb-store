@@ -1,5 +1,5 @@
 <template>
-  <slot v-if="!anchorKey" name="after-intro" />
+  <slot v-if="!anchorKey" name="reviewer" :inline="false" />
   <template v-for="key in order" :key="key">
     <BlockRenderer
       v-if="key === 'blocks' && dynamicBlocks?.length"
@@ -13,8 +13,16 @@
         ...(BLOCK_MAP[key]!.props ?? {}),
         ...(BLOCK_MAP[key]!.id ? { id: BLOCK_MAP[key]!.id } : {}),
       }"
+    >
+      <template v-if="key === 'tableOfContents'" #default>
+        <slot name="reviewer" :inline="true" />
+      </template>
+    </component>
+    <slot
+      v-if="key === anchorKey && key !== 'tableOfContents'"
+      name="reviewer"
+      :inline="false"
     />
-    <slot v-if="key === anchorKey" name="after-intro" />
   </template>
 </template>
 
