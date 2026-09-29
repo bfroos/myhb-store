@@ -13,6 +13,13 @@ type TreatmentSchemaContext = SchemaOrgContext & {
   ratingValue?: number;
   reviewCount?: number;
   priceInEuroCent?: number | null; // Optional external price override
+  /**
+   * go.*: Kein Offer-Preis. Die Seite zeigt dort den Neukundenpreis; der
+   * regulaere Preis als Offer passte nicht zur Seite, der Neukundenpreis als
+   * Offer waere falsch ausgezeichnet (gilt nur mit Newsletter-Rabatt). go.*
+   * steht ohnehin auf noindex.
+   */
+  omitOffer?: boolean;
 };
 
 /**
@@ -33,9 +40,11 @@ export function buildMedicalProcedureSchema(
 
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   // Use external price override if provided, otherwise fallback to treatment price
-  const priceInCent = parseEuroCent(
-    ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent
-  );
+  const priceInCent = ctx.omitOffer
+    ? undefined
+    : parseEuroCent(
+        ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent,
+      );
 
   // AggregateRating from context (passed from component)
   const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);
@@ -82,9 +91,11 @@ export function buildGeneralMedicalProcedureSchema(
   const image = treatmentPage.hero?.cover?.url;
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   // Use external price override if provided, otherwise fallback to treatment price
-  const priceInCent = parseEuroCent(
-    ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent
-  );
+  const priceInCent = ctx.omitOffer
+    ? undefined
+    : parseEuroCent(
+        ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent,
+      );
 
   // AggregateRating from context (passed from component)
   const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);

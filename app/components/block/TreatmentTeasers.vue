@@ -18,6 +18,10 @@
           v-bind="getTileProps(page)"
         />
       </UiOrganismTilesCard>
+      <!-- go.: Die Kacheln zeigen Neukundenpreise mit Sternchen. -->
+      <p v-if="showsNewCustomerPrice" class="teasers__footnote">
+        {{ newCustomerFootnote(globals?.ecommerce?.newsletterDiscountPercentage ?? undefined) }}
+      </p>
     </div>
   </UiLayoutSectionBlock>
 </template>
@@ -29,10 +33,16 @@ import type {
   TreatmentPageDto,
 } from "~/lib/strapi/dto/collections";
 import type { MoleculeTreatmentTile } from "~/lib/ui/types";
+import { newCustomerFootnote } from "#shared/newCustomerOffer";
 
 const props = defineProps<BlockTreatmentTeasersDto>();
 const { t, locale } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
+const globals = useGlobals();
+const { showsNewCustomerPrice: newCustomerPriceMode } = useDisplayPrice();
+const showsNewCustomerPrice = computed(
+  () => newCustomerPriceMode.value && !!props.showPrices,
+);
 const selectedTopCategoryKey = ref<string | null>(null);
 const teasersRoot = ref<HTMLElement | null>(null);
 
@@ -166,6 +176,13 @@ function getTileProps(
 <style scoped>
 .teasers__heading {
   margin: 0;
+}
+
+.teasers__footnote {
+  margin: var(--space-300) 0 0;
+  font-size: var(--font-xs, 0.75rem);
+  color: var(--color-text-light);
+  text-align: center;
 }
 
 .teasers__filterArea {

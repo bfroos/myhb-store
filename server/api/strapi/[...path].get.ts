@@ -1,5 +1,9 @@
 // Strapi proxy with server-side caching.
 import { sanitizeAdsContent } from "#shared/adsTerms";
+import {
+  applyNewCustomerPricesDeep,
+  isSurgeryPathKey,
+} from "#shared/newCustomerOffer";
 
 // CRITICAL: When the __NUXT_PREVIEW cookie is set (via /api/preview route),
 // the request skips the cache wrapper entirely and carries status=draft.
@@ -166,8 +170,37 @@ async function fetchFromStrapi(
   const siteMode = config.siteMode || config.public.siteMode;
   const result = await fetchFromStrapiRaw(event, preview, previewStatus);
   if (siteMode !== 'ads') return result;
-  const locale = getRequestURL(event).searchParams.get('locale');
-  return sanitizeAdsContent(result, locale);
+  const url = getRequestURL(event);
+  const locale = url.searchParams.get('locale');
+  const sanitized = sanitizeAdsContent(result, locale);
+  // go.: Preise in Texten der Behandlungsseite (Preistabellen, FAQ, Teaser,
+  // SEO-Title/Description) zeigen den Neukundenpreis mit Sternchen
+  // (shared/newCustomerOffer.ts). Nur der Behandlungsteil der Antwort: Die
+  // Standortdaten daneben tragen andere Euro-Betraege (Parkgebuehren), und
+  // freie Landingpages (/p/…) koennten Rabatte schon selbst ausweisen. Nur
+  // Deutsch, weil Fussnote und Hinweis deutsch sind. Zahlenfelder
+  // (priceInEuroCent) bleiben unveraendert.
+  const restPath = url.pathname.replace(/^\/api\/strapi/, '');
+  if ((!locale || locale === 'de') && restPath.startsWith('/treatment-pages/')) {
+    const data = (sanitized as any)?.data;
+    if (data?.treatmentPage) {
+      return {
+        ...(sanitized as any),
+        data: {
+          ...data,
+          treatmentPage: applyNewCustomerPricesDeep(data.treatmentPage),
+          // SEO-Felder der Seite (Title/Description) liegen daneben.
+          ...(data.seo && !isSurgeryPathKey(data.treatmentPage.pathKey)
+            ? { seo: applyNewCustomerPricesDeep(data.seo) }
+            : {}),
+        },
+      };
+    }
+    if (data && typeof data === 'object' && !Array.isArray(data) && data.pathKey) {
+      return { ...(sanitized as any), data: applyNewCustomerPricesDeep(data) };
+    }
+  }
+  return sanitized;
 }
 
 async function fetchFromStrapiRaw(

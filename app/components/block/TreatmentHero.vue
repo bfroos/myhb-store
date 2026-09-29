@@ -31,6 +31,8 @@
           :class="{
             'hero--has-marquee': hasMarquee,
             'hero--has-reviews': showReviews,
+            'hero--ads-offer': !!newCustomerOffer,
+            'hero--ads-buttons': forceBothButtons,
           }"
         >
           <div v-if="hasCover" class="hero__media">
@@ -59,6 +61,22 @@
                 <strong>{{ subline }}</strong>
               </p>
               <p v-if="text" class="hero__text">{{ text }}</p>
+              <div
+                v-if="newCustomerOffer"
+                class="hero__offer"
+                :data-offer-kind="newCustomerOffer.kind"
+              >
+                <p class="hero__offer-headline">
+                  {{ newCustomerOffer.headline }}
+                </p>
+                <p class="hero__offer-regular">{{ newCustomerOffer.regular }}</p>
+                <p v-if="newCustomerOffer.calculation" class="hero__offer-calc">
+                  {{ newCustomerOffer.calculation }}
+                </p>
+                <p class="hero__offer-footnote">
+                  {{ newCustomerOffer.footnote }}
+                </p>
+              </div>
               <div class="hero__cta">
                 <div
                   class="hero__cta-price"
@@ -66,7 +84,7 @@
                 >
                   <strong v-if="priceLabel">{{ priceLabel }}</strong>
                   <SharedButton
-                    v-if="cta && showBookingButton"
+                    v-if="cta && bookingButtonVisible"
                     :button="cta"
                     :data="{
                       calendlyUrl: calendlyUrl,
@@ -78,12 +96,14 @@
                     :button-props="{
                       size: 'lg',
                       variant: 'primary',
-                      wide: !priceLabel,
+                      wide: !priceLabel && !forceBothButtons,
                     }"
+                    class="hero-cta-btn"
                   />
                 </div>
                 <SharedButton
-                  v-if="showGlobalDiscount"
+                  v-if="discountButtonVisible"
+                  class="hero-cta-btn"
                   :button="{
                     label: discountLabel,
                     method: SharedButtonMethod.ACTION,
@@ -99,6 +119,12 @@
                   :button-props="{ size: 'lg', variant: 'secondary' }"
                 />
               </div>
+              <p
+                v-if="newCustomerOffer?.footnote2"
+                class="hero__offer-footnote hero__offer-footnote--page"
+              >
+                {{ newCustomerOffer.footnote2 }}
+              </p>
               <template v-if="showReviews">
                 <UiMoleculeReviewsBadge
                   v-if="googlePlaceId"
@@ -144,7 +170,13 @@
       <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
-            <strong v-if="priceLabel" class="floating-cta__price">
+            <strong
+              v-if="newCustomerOffer"
+              class="floating-cta__price floating-cta__price--offer"
+            >
+              {{ newCustomerOffer.headline }}
+            </strong>
+            <strong v-else-if="priceLabel" class="floating-cta__price">
               {{ priceLabel }}
             </strong>
             <span v-if="headline || eyebrow" class="floating-cta__title">
@@ -172,7 +204,7 @@
               />
             </template>
             <SharedButton
-              v-if="cta && showBookingButton"
+              v-if="cta && bookingButtonVisible"
               :button="cta"
               :data="{
                 calendlyUrl: calendlyUrl,
@@ -185,7 +217,26 @@
                 size: 'md',
                 variant: 'primary',
               }"
+              class="floating-cta-btn"
               :class="{ 'floating-cta__button--ads-mode': isAdsMode }"
+            />
+            <!-- go.: zweiter Knopf auch in der mitlaufenden Leiste -->
+            <SharedButton
+              v-if="isAdsMode && discountButtonVisible"
+              :button="{
+                label: discountLabel,
+                method: SharedButtonMethod.ACTION,
+                action: SharedButtonAction.NEWSLETTER_SIGN_UP,
+              }"
+              :data="{
+                calendlyUrl: calendlyUrl,
+                appBookingUrl: appBookingUrl,
+                locationSlug: locationSlug,
+                appTreatmentSlug: appTreatmentSlug,
+                treatmentType: treatment?.type,
+              }"
+              :button-props="{ size: 'md', variant: 'secondary' }"
+              class="floating-cta-btn floating-cta-btn--discount"
             />
           </div>
         </div>
@@ -205,6 +256,7 @@ import {
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import { IconAsterisk } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
+import { buildNewCustomerOffer } from "#shared/newCustomerOffer";
 
 const { isAdsMode } = useSiteModeFlags();
 
@@ -215,8 +267,42 @@ const props = withDefaults(
     showBookingButton: true,
   },
 );
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const globals = useGlobals();
+
+// go.: Benjamins Vorgabe (29.09.2026) - im Hero stehen immer beide Knoepfe:
+// "Termin buchen" (primaer, oeffnet direkt die Buchung) und "20 % Rabatt
+// sichern" (sekundaer, erst Newsletter, dann Buchung). Die Strapi-Schalter
+// showBookingButton/showDiscount gelten dort nicht, auch nicht auf den
+// "-rabatt"-Seiten, die bisher nur den Rabatt-Knopf hatten. Ohne `cta` (Standort
+// nimmt keine Buchungen an) bleibt es beim Strapi-Stand. www unveraendert.
+const forceBothButtons = computed(() => isAdsMode.value && !!props.cta);
+const bookingButtonVisible = computed(
+  () => forceBothButtons.value || props.showBookingButton,
+);
+const discountButtonVisible = computed(
+  () => forceBothButtons.value || !!props.showGlobalDiscount,
+);
+
+// go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet) neben dem
+// regulaeren Preis. Texte sind deutsch; andere Sprachen zeigen nichts.
+const newCustomerOffer = computed(() => {
+  if (!isAdsMode.value) return null;
+  if (!String(locale.value || "de").startsWith("de")) return null;
+  const treatment = props.treatment;
+  if (!treatment) return null;
+  const twoZonePriceCent = (treatment.products ?? [])
+    .flatMap((product) => product.variants ?? [])
+    .find((variant) => variant.slug === "2-zonen" && variant.isActive !== false)
+    ?.priceInEuroCent;
+  return buildNewCustomerOffer({
+    pathKey: props.treatmentPathKey,
+    priceCent: treatment.priceInEuroCent || treatment.cheapestPriceInEuroCent,
+    isStartingPrice: treatment.isStartingPrice,
+    twoZonePriceCent,
+    discountPct: globals.value?.ecommerce?.newsletterDiscountPercentage,
+  });
+});
 
 // Floating CTA logic
 const heroCardRef = ref<HTMLElement | null>(null);
@@ -294,8 +380,12 @@ const hasCover = computed(() => !!props.cover && isMediaImage(props.cover));
 
 // #78: dieselbe Quelle wie die Kontextzeile im Buchungsdialog
 // (useSeitenBehandlung) — Seite und Dialog zeigen nie zwei Preise.
+// go.: Steht der Neukundenpreis im Hero, ist er der Hauptpreis; die Preis-
+// Pille mit dem regulaeren Preis entfaellt dann (er steht klein im Kasten).
 const priceLabel = computed(() =>
-  treatmentPriceLabel(props.treatment, props.showPrice, t),
+  newCustomerOffer.value
+    ? ""
+    : treatmentPriceLabel(props.treatment, props.showPrice, t),
 );
 
 const discountLabel = computed(() => {
@@ -406,6 +496,104 @@ const discountLabel = computed(() => {
   max-width: 48ch;
   color: var(--color-text-light);
   margin: 0;
+}
+
+.hero__offer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-100);
+  max-width: 44ch;
+  padding: var(--space-300) var(--space-400);
+  background: linear-gradient(to right, #f6eef6, #fff5f1);
+  border-radius: var(--border-radius-200);
+  color: var(--color-gray-900);
+}
+
+.hero__offer p {
+  margin: 0;
+}
+
+.hero__offer-headline {
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
+  font-weight: var(--font-bold);
+  color: #b91c1c;
+}
+
+.hero__offer-regular {
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  font-weight: var(--font-bold);
+}
+
+.hero__offer-calc,
+.hero__offer-footnote {
+  font-size: var(--font-xs, 0.75rem);
+  line-height: var(--line-xs, 1.35);
+  color: var(--color-gray-700, #374151);
+}
+
+.hero__offer-footnote--page {
+  max-width: 44ch;
+  margin: 0;
+}
+
+/* go.: Preis und beide Knoepfe im ersten Screen (375 x 667, #181). */
+@media (max-width: 899px) {
+  .hero--ads-buttons .hero__media {
+    max-height: min(20svh, 150px);
+  }
+
+  .hero--ads-buttons .hero__main {
+    gap: var(--space-300);
+    padding-top: var(--space-400);
+  }
+
+  .hero--ads-buttons .hero__eyebrow {
+    font-size: var(--font-sm);
+    line-height: var(--line-sm);
+  }
+
+  .hero--ads-buttons .hero__title {
+    font-size: 1.75rem;
+    line-height: 1.15;
+    max-width: none;
+  }
+
+  .hero--ads-buttons .hero__subline {
+    display: none;
+  }
+
+  .hero--ads-buttons .hero__text {
+    font-size: var(--font-sm);
+    line-height: var(--line-sm);
+  }
+
+  .hero--ads-offer .hero__offer {
+    padding: var(--space-200) var(--space-300);
+  }
+
+  .hero--ads-offer .hero__offer-headline {
+    font-size: var(--font-md);
+    line-height: var(--line-md);
+  }
+
+  .hero--ads-buttons .hero__cta {
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: var(--space-200);
+  }
+
+  .hero--ads-buttons .hero__cta-price {
+    display: contents;
+  }
+
+  .hero--ads-buttons .hero-cta-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: var(--space-300);
+    white-space: nowrap;
+  }
 }
 
 .hero__cta {
@@ -669,6 +857,30 @@ const discountLabel = computed(() => {
 
 .floating-cta__reviews {
   display: none;
+}
+
+.floating-cta__price--offer {
+  color: #b91c1c;
+}
+
+/* go.: Zwei Knoepfe passen auf dem Handy nur untereinander zum Text. */
+@media (max-width: 767px) {
+  .floating-cta--ads-mode .floating-cta__content {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-200);
+  }
+
+  .floating-cta--ads-mode .floating-cta__actions {
+    gap: var(--space-200);
+  }
+
+  .floating-cta--ads-mode .floating-cta-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: var(--space-300);
+    white-space: nowrap;
+  }
 }
 
 @media (min-width: 768px) {

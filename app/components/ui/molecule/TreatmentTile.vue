@@ -51,9 +51,11 @@ import { ImageFormat, ImageBreakpoint } from "~/lib/strapi/dto/enums";
 import type { MoleculeTreatmentTile } from "~/lib/ui/types";
 
 const props = defineProps<MoleculeTreatmentTile>();
+// go.: Neukundenpreis mit Sternchen, www unveraendert.
+const { formatDisplayPrice } = useDisplayPrice();
 
 const priceLabel = computed(() => {
-  return formatPriceInEuro(props.priceInEuroCent ?? 0, {
+  return formatDisplayPrice(props.priceInEuroCent ?? 0, {
     prefix: props.isStartingPrice
       ? $t("common.price.startingPrefix")
       : undefined,

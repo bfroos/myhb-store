@@ -62,6 +62,7 @@ export function mapTreatmentPageFixedBlocks(
       showGlobalDiscount: treatmentPage?.hero?.showDiscount ?? true,
       showBookingButton: treatmentPage?.hero?.showBookingButton ?? true,
       treatment: treatmentPage?.treatment,
+      treatmentPathKey: treatmentPage?.pathKey,
       showCompanyLogos: true,
       showReviews: true,
     };

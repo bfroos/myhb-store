@@ -7,6 +7,10 @@ import type { BreadcrumbItem } from "~/lib/ui/types";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
+import {
+  isSurgeryPathKey,
+  newCustomerPriceLabel,
+} from "#shared/newCustomerOffer";
 
 export function useLocationTreatmentPage() {
   const { locale, fallbackLocale, localeProperties, t } = useI18n();
@@ -86,8 +90,8 @@ export function useLocationTreatmentPage() {
     // Ads-Modus: Einige Behandlungen gibt es im Ads-Baum nur als "-rabatt"-
     // Variante (z. B. muskelrelaxans/lachfalten). Anzeigen auf die Grundseite
     // liefen dann auf 404. Fehlt die Grundseite, wird die "-rabatt"-Seite
-    // geladen und wie eine Grundseite gezeigt: Termin-Button statt
-    // Newsletter-Rabatt im Hero.
+    // geladen und wie eine Grundseite gezeigt. (Die Knoepfe im Hero setzt der
+    // Ads-Modus inzwischen ohnehin fest: Termin buchen + Rabatt, TreatmentHero.)
     const rabattFallbackPathKey =
       isAdsMode.value && !treatmentPathKey.endsWith("-rabatt")
         ? `${treatmentPathKey}-rabatt`
@@ -199,14 +203,29 @@ export function useLocationTreatmentPage() {
     
     // Only optimize SEO for www. (seo mode), not go. (ads mode)
     if (isAdsMode.value) {
-      // Ads mode: Keep original SEO structure
+      // Ads mode: Neukundenpreis wie auf der Seite ("ab 119,99 €*"), sonst
+      // ohne Preis. Leerzeichen zusammenziehen: ein leerer {priceTag}
+      // hinterliess ein doppeltes Leerzeichen im <title> (#186).
+      const price =
+        treatmentPage.value?.treatment?.priceInEuroCent ||
+        treatmentPage.value?.treatment?.cheapestPriceInEuroCent;
+      const priceTag =
+        (currentLocale === "de" &&
+          !isSurgeryPathKey(treatmentPage.value?.pathKey) &&
+          newCustomerPriceLabel(
+            price,
+            treatmentPage.value?.treatment?.isStartingPrice ? "ab" : "",
+          )) ||
+        "";
       return {
         metaTitle: t("locations.location.locationTreatment.seo.title", {
           treatmentName,
           city: loc?.city?.name ?? "",
-          priceTag: "", // No price in ads mode
+          priceTag,
           brandName: brandName.value,
-        }),
+        })
+          .replace(/\s+/g, " ")
+          .trim(),
         metaDescription: t(
           "locations.location.locationTreatment.seo.description",
           {

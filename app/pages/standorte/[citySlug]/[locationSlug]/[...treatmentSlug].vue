@@ -80,6 +80,7 @@ const medicalProcedureSchema = computed(() =>
     ratingValue: appConfig.seo?.aggregateRating?.ratingValue,
     reviewCount: appConfig.seo?.aggregateRating?.reviewCount,
     priceInEuroCent: treatmentPrice?.value, // Pass fetched price to schema
+    omitOffer: isAdsMode.value,
   }),
 );
 
