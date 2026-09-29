@@ -2,6 +2,7 @@ import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import type { TreatmentPageDto } from "~/lib/strapi/dto/collections";
 import { mapProductPageBlocks } from "~/lib/strapi/mapper/mapProductPageBlocks";
 import type { BreadcrumbItem } from "~/lib/ui/types";
+import { formatEuroCent } from "#shared/newCustomerOffer";
 
 export function useProductPage() {
   const { locale, fallbackLocale, t } = useI18n();
@@ -14,6 +15,7 @@ export function useProductPage() {
   const blocks = ref<StrapiBlock[]>([]);
   const cheapestVariantPrice = ref<number>(0);
   const { brandName } = useBrand();
+  const { newCustomerCent } = useDisplayPrice();
 
   const breadcrumbItems = computed<BreadcrumbItem[]>(() => [
     {
@@ -73,7 +75,9 @@ export function useProductPage() {
     // NOTE: The "ab"/"from" prefix comes from the i18n title template
     // ("{productName} ab {priceTag} …"), so priceTag must NOT include it,
     // otherwise the title renders "ab ab 149,99 €".
-    const priceTag = formatPriceInEuro(price);
+    // go.*: Neukundenpreis wie im Hero ("… ab 119,99 €* | …").
+    const nk = newCustomerCent(price);
+    const priceTag = nk ? `${formatEuroCent(nk)}*` : formatPriceInEuro(price);
 
     // NOTE: Deliberately no metaRobots here. setPageSeo() then falls back to
     // "index, follow" in normal mode and "noindex, nofollow" in ads mode.

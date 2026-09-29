@@ -25,7 +25,22 @@
       <div v-if="hasDescription" class="productHero__details__description">
         <UiLayoutRichText :blocks="currentVariant?.description ?? []" />
       </div>
-      <div v-if="hasPrice" class="productHero__details__price">
+      <div
+        v-if="hasPrice && offerCent"
+        class="productHero__details__price productHero__details__price--offer"
+      >
+        <span class="productHero__details__offer">
+          {{ formatEuroCent(offerCent) }}*
+        </span>
+        <span class="productHero__details__price-note">{{
+          t("blocks.productHero.includesVat")
+        }}</span>
+        <span class="productHero__details__regular">
+          regulär {{ formatPriceInEuro(currentVariant?.priceInEuroCent ?? 0) }}
+        </span>
+        <span class="productHero__details__footnote">{{ footnote }}</span>
+      </div>
+      <div v-else-if="hasPrice" class="productHero__details__price">
         {{ formatPriceInEuro(currentVariant?.priceInEuroCent ?? 0) }}
         <span class="productHero__details__price-note">{{
           t("blocks.productHero.includesVat")
@@ -55,6 +70,7 @@
 import { IconShoppingCartOff } from "@tabler/icons-vue";
 import { SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
 import type { ProductVariantDto } from "~/lib/strapi/dto/components";
+import { formatEuroCent, newCustomerFootnote } from "#shared/newCustomerOffer";
 
 const props = defineProps<{
   manufacturerName: string;
@@ -80,6 +96,14 @@ const hasDescription = computed(
 const hasPrice = computed(
   () => (props.currentVariant?.priceInEuroCent ?? 0) > 0,
 );
+
+// go.* (Ads-Modus): Neukundenpreis mit Sternchen, regulaerer Preis klein
+// darunter (wie /preise und die Behandlungsseiten, #187). www: unveraendert.
+const { newCustomerCent, discountPct } = useDisplayPrice();
+const offerCent = computed(() =>
+  newCustomerCent(props.currentVariant?.priceInEuroCent),
+);
+const footnote = computed(() => newCustomerFootnote(discountPct.value));
 
 const bookAppointmentButton = computed(() => ({
   label: t("cta.bookAppointment"),
@@ -142,6 +166,32 @@ function isCurrentVariant(variant: ProductVariantDto): boolean {
   font-size: var(--font-xl);
   line-height: var(--line-xl);
   margin-top: var(--space-600);
+}
+
+.productHero__details__price--offer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-200);
+}
+
+.productHero__details__offer {
+  font-weight: var(--font-bold);
+  color: #b91c1c;
+}
+
+.productHero__details__regular {
+  flex-basis: 100%;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  font-weight: var(--font-bold);
+}
+
+.productHero__details__footnote {
+  flex-basis: 100%;
+  font-size: var(--font-xs, 0.75rem);
+  line-height: var(--line-xs, 1.35);
+  color: var(--color-gray-700, #374151);
 }
 
 .productHero__details__price-note {

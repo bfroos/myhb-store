@@ -62,12 +62,14 @@ useHead(() => ({
   ],
 }));
 
-// Schema.org Product
+// Schema.org Product (go.*: ohne Offer-Preise, siehe schemaProduct.ts)
+const { isAdsMode } = useSiteModeFlags();
 const productSchema = computed(() =>
   buildProductSchema(product.value, {
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
     currency: "EUR",
+    omitOffers: isAdsMode.value,
   }),
 );
 

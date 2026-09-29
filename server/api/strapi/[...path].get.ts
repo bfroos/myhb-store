@@ -200,6 +200,24 @@ async function fetchFromStrapi(
       return { ...(sanitized as any), data: applyNewCustomerPricesDeep(data) };
     }
   }
+  // go.: Produktseiten (/produkte/…, verlinkt aus /preise) nennen die Preise
+  // der Varianten im Beschreibungstext ("… ab 149,99€"). Gleiche Umstellung,
+  // Zahlenfelder (priceInEuroCent, cheapestVariantPrice) bleiben.
+  if ((!locale || locale === 'de') && restPath.startsWith('/product-pages/')) {
+    const data = (sanitized as any)?.data;
+    if (data?.product) {
+      return {
+        ...(sanitized as any),
+        data: {
+          ...data,
+          product: applyNewCustomerPricesDeep(data.product),
+          ...(data.productPage
+            ? { productPage: applyNewCustomerPricesDeep(data.productPage) }
+            : {}),
+        },
+      };
+    }
+  }
   return sanitized;
 }
 

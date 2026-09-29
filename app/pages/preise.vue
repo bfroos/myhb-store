@@ -16,10 +16,12 @@ if (pageLoaded) {
 
 // Schema.org ItemList (Service + Offer) for the treatment prices
 const config = useRuntimeConfig();
+const { isAdsMode } = useSiteModeFlags();
 const priceListSchema = computed(() =>
   buildPriceListSchema(
     productCategories.value,
     (config.public.publicUrl as string) || "",
+    { omitOffers: isAdsMode.value },
   ),
 );
 useSchemaOrg(priceListSchema);

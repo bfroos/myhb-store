@@ -8,7 +8,11 @@ import {
   toAbsoluteUrl,
 } from "~/utils/schemaShared";
 
-type ProductSchemaContext = SchemaOrgContext & { currency?: string };
+type ProductSchemaContext = SchemaOrgContext & {
+  currency?: string;
+  /** go.*: keine Offer-Preise (Seite zeigt Neukundenpreise, wie #187). */
+  omitOffers?: boolean;
+};
 
 /**
  * Schema.org Product for product detail pages.
@@ -54,6 +58,8 @@ export function buildProductSchema(
       name: product.manufacturer.name,
     };
   }
+
+  if (ctx.omitOffers) return schema;
 
   const offers = variantsForOffers
     .map((v) => buildOffer(v, { currency, pageUrl }))
