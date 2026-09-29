@@ -4,7 +4,15 @@
     :fixed-blocks="fixedBlocks"
     :dynamic-blocks="treatmentPage?.blocks"
     :order="blockOrder"
-  />
+  >
+    <template #reviewer="{ inline }">
+      <UiMoleculeMedicalReviewerSignature
+        v-if="!isAdsMode"
+        :reviewer="DEFAULT_MEDICAL_REVIEWER"
+        :inline="inline"
+      />
+    </template>
+  </PagesTreatmentOrderedBlocks>
 </template>
 <script setup lang="ts">
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";

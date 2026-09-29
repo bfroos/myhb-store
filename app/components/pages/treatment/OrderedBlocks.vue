@@ -1,4 +1,5 @@
 <template>
+  <slot v-if="!anchorKey" name="reviewer" :inline="false" />
   <template v-for="key in order" :key="key">
     <BlockRenderer
       v-if="key === 'blocks' && dynamicBlocks?.length"
@@ -12,6 +13,15 @@
         ...(BLOCK_MAP[key]!.props ?? {}),
         ...(BLOCK_MAP[key]!.id ? { id: BLOCK_MAP[key]!.id } : {}),
       }"
+    >
+      <template v-if="key === 'tableOfContents'" #default>
+        <slot name="reviewer" :inline="true" />
+      </template>
+    </component>
+    <slot
+      v-if="key === anchorKey && key !== 'tableOfContents'"
+      name="reviewer"
+      :inline="false"
     />
   </template>
 </template>
@@ -19,11 +29,22 @@
 <script setup lang="ts">
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
 
-defineProps<{
+const props = defineProps<{
   fixedBlocks?: Record<string, any>;
   dynamicBlocks?: StrapiBlock[];
   order: string[];
 }>();
+
+const anchorKey = computed(() => {
+  const rendered = props.order.filter((key) =>
+    key === "blocks"
+      ? !!props.dynamicBlocks?.length
+      : !!(BLOCK_MAP[key] && props.fixedBlocks?.[key]),
+  );
+  if (rendered.includes("tableOfContents")) return "tableOfContents";
+  const heroIndex = rendered.indexOf("hero");
+  return rendered[heroIndex + 1] ?? rendered[heroIndex] ?? null;
+});
 
 const BLOCK_MAP: Record<
   string,
