@@ -104,6 +104,7 @@ export function mapLocationTreatmentPageFixedBlocks(
       // ist.
       appTreatmentSlug: resolveAppTreatmentSlug(treatmentPage),
       googlePlaceId: location?.googlePlaceId ?? undefined,
+      treatmentPathKey: treatmentPage.pathKey,
     };
   }
 

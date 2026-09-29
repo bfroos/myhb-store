@@ -308,6 +308,11 @@ export type BlockTreatmentHeroDto = {
   /** Behandlungs-Slug fuer den App-Deeplink (`?treatment=`), siehe #66. */
   appTreatmentSlug?: string;
   googlePlaceId?: string;
+  /**
+   * pathKey der Behandlungsseite (z. B. "muskelrelaxans/stirnfalte"). Waehlt im
+   * Ads-Modus das Neukundenangebot (Zonenpreis bei Muskelrelaxans).
+   */
+  treatmentPathKey?: string;
 };
 
 export type BlockTreatmentPlanDto = {

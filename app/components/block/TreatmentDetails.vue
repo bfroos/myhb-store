@@ -65,6 +65,7 @@ import { replacePlaceholderString } from "~/utils/placeholder";
 
 const props = defineProps<BlockTreatmentDetailsDto>();
 const { t } = useI18n();
+const { formatDisplayPrice } = useDisplayPrice();
 
 const hasImage = computed(() => !!props.image && isMediaImage(props.image));
 
@@ -102,7 +103,8 @@ function formatFieldValue(value: string | undefined): string {
     replacePlaceholderString(raw, [
       {
         placeholder: "{{ price }}",
-        replacement: formatPriceInEuro(props.treatment?.priceInEuroCent ?? 0),
+        // go.: Neukundenpreis mit Sternchen, www unveraendert.
+        replacement: formatDisplayPrice(props.treatment?.priceInEuroCent ?? 0),
       },
     ]) ?? raw;
 

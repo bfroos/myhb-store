@@ -104,6 +104,7 @@ const medicalProcedureSchema = computed(() =>
     brandName: brandName.value,
     ratingValue: appConfig.seo?.aggregateRating?.ratingValue,
     reviewCount: appConfig.seo?.aggregateRating?.reviewCount,
+    omitOffer: isAdsMode.value,
   }),
 );
 
