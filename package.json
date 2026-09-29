@@ -15,7 +15,8 @@
     "postinstall": "nuxt prepare",
     "update:ratings": "tsx scripts/update-google-ratings.ts",
     "check:ab-split": "tsx scripts/check-ab-split.mts",
-    "check:booking-slugs": "tsx scripts/check-booking-slugs.mts"
+    "check:booking-slugs": "tsx scripts/check-booking-slugs.mts",
+    "test:unit": "node --experimental-strip-types --test app/lib/checkoutAttempt.test.ts"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",

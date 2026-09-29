@@ -20,6 +20,7 @@
  */
 import { readGaAttributionParams } from "~/lib/attribution";
 import { mirrorFunnelEvent } from "~/lib/firstPartyFunnel";
+import { checkoutEventId, startCheckoutAttempt } from "~/lib/checkoutAttempt";
 
 type DataLayerObject = Record<string, unknown> & { event: string };
 
@@ -163,13 +164,28 @@ export const useGoogleAnalytics = () => {
        * (elanagency/myhb-os#271) beide Gruppen gegeneinander stellen kann.
        */
       treatment_context?: boolean;
+      /**
+       * Preis der Behandlungsseite als Zahl (elanagency/myhb-os#400), aus
+       * der Kontextzeile. GTM liest ihn fuer Meta „Schedule mit Wert", wenn
+       * spaeter die Calendly-Buchung eintrifft.
+       */
+      booking_value?: number;
     },
   ) => {
+    // #400: ein Klick = ein Buchungsversuch. Dieselbe event_id traegt die App
+    // an `booking_start` (per ?checkout_id=), Meta zaehlt InitiateCheckout
+    // dann einmal.
+    const checkoutId = startCheckoutAttempt();
     trackEvent('click_booking', {
       event_category: 'conversion',
       booking_type: bookingType,
       ...(extra ?? {}),
       treatment_context: extra?.treatment_context ?? false,
+      event_id: checkoutEventId(checkoutId),
+      // Bewusst null statt weglassen: GTM liest den zusammengefuehrten Stand
+      // der Datenschicht, ein Preis vom vorigen Klick darf nicht kleben (#161).
+      booking_value: extra?.booking_value ?? null,
+      booking_currency: extra?.booking_value ? 'EUR' : null,
     });
   };
 
