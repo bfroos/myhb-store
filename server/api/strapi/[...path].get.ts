@@ -1,4 +1,6 @@
 // Strapi proxy with server-side caching.
+import { sanitizeAdsContent } from "#shared/adsTerms";
+
 // CRITICAL: When the __NUXT_PREVIEW cookie is set (via /api/preview route),
 // the request skips the cache wrapper entirely and carries status=draft.
 
@@ -151,7 +153,24 @@ function mergeFallback(target: any, fallback: any): any {
 // veroeffentlichte. Der Preview-Fall wird deshalb aussen am echten Event
 // entschieden: Preview geht ungecacht direkt an Strapi, alles andere weiter
 // durch den Cache.
+// Ads-Modus (go.*): Google lehnt Anzeigen ab, wenn auf der Zielseite "Botox"
+// steht (RESTRICTED_DRUG_TERMS). Die Antwort wird deshalb hier einmal zentral
+// bereinigt - so erreicht der Begriff weder Seite, Meta, JSON-LD noch den
+// Nuxt-Payload. SEO-Modus (www) bleibt unveraendert.
 async function fetchFromStrapi(
+  event: any,
+  preview: boolean,
+  previewStatus: 'draft' | 'published',
+) {
+  const config = useRuntimeConfig(event);
+  const siteMode = config.siteMode || config.public.siteMode;
+  const result = await fetchFromStrapiRaw(event, preview, previewStatus);
+  if (siteMode !== 'ads') return result;
+  const locale = getRequestURL(event).searchParams.get('locale');
+  return sanitizeAdsContent(result, locale);
+}
+
+async function fetchFromStrapiRaw(
   event: any,
   preview: boolean,
   previewStatus: 'draft' | 'published',

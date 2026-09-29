@@ -79,17 +79,45 @@ export function useLocationTreatmentPage() {
   ]);
 
   async function fetchPage(): Promise<boolean> {
-    const { data, error } = await useStrapiFetch<any>(
-      `/treatment-pages/${citySlug}/${locationSlug}/${treatmentPathKey}`,
-      {
-        query: {
-          locale: currentLocale,
-        },
-        fetchOptions: {
-          key: `location-treatment-page:${currentLocale}:${citySlug}:${locationSlug}:${treatmentPathKey}`,
-        },
-      },
-    );
+    const pagePath = `/treatment-pages/${citySlug}/${locationSlug}/${treatmentPathKey}`;
+    const pageQuery = { locale: currentLocale };
+    const pageKey = `location-treatment-page:${currentLocale}:${citySlug}:${locationSlug}:${treatmentPathKey}`;
+
+    // Ads-Modus: Einige Behandlungen gibt es im Ads-Baum nur als "-rabatt"-
+    // Variante (z. B. muskelrelaxans/lachfalten). Anzeigen auf die Grundseite
+    // liefen dann auf 404. Fehlt die Grundseite, wird die "-rabatt"-Seite
+    // geladen und wie eine Grundseite gezeigt: Termin-Button statt
+    // Newsletter-Rabatt im Hero.
+    const rabattFallbackPathKey =
+      isAdsMode.value && !treatmentPathKey.endsWith("-rabatt")
+        ? `${treatmentPathKey}-rabatt`
+        : null;
+
+    const { data, error } = rabattFallbackPathKey
+      ? await useAsyncData<any>(pageKey, async () => {
+          try {
+            return await strapiFetch<any>(pagePath, { query: pageQuery });
+          } catch (err: any) {
+            if ((err?.statusCode ?? err?.status) !== 404) throw err;
+            const fallback = await strapiFetch<any>(
+              `/treatment-pages/${citySlug}/${locationSlug}/${rabattFallbackPathKey}`,
+              { query: pageQuery },
+            );
+            const page = fallback?.data?.treatmentPage;
+            if (page) {
+              page.hero = {
+                ...(page.hero ?? {}),
+                showDiscount: false,
+                showBookingButton: true,
+              };
+            }
+            return fallback;
+          }
+        })
+      : await useStrapiFetch<any>(pagePath, {
+          query: pageQuery,
+          fetchOptions: { key: pageKey },
+        });
 
     if (error.value) {
       throw handleFetchError(error.value, t);

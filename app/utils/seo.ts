@@ -1,5 +1,6 @@
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
 
 /**
  * Fallback share image (Open Graph / Twitter) used when a page has neither a
@@ -151,24 +152,36 @@ export async function setPageSeo(
       toOgImageValue(fallbackOgImage) ??
       DEFAULT_OG_IMAGE;
 
+    // Ads-Modus (go.*): Meta-Texte stammen teils aus i18n (z. B. Standortseite
+    // "Botox & Hyaluron") und laufen nicht durch den Strapi-Proxy. Google
+    // prueft sie wie sichtbaren Text (RESTRICTED_DRUG_TERMS).
+    const { isAdsMode } = useSiteModeFlags();
+    const clean = (value?: string | null) =>
+      value && isAdsMode.value
+        ? replaceRestrictedDrugTerms(value, currentLocale)
+        : value ?? undefined;
+
     useSeoMeta({
-      title,
-      description: pageSeo?.metaDescription || globalsSeo?.defaultDescription,
+      title: clean(title),
+      description: clean(pageSeo?.metaDescription || globalsSeo?.defaultDescription),
       robots: robots.value,
       ogType: "website",
       ogLocale: mapStrapiLocaleToOpenGraphLocale(currentLocale),
       ogUrl: canonicalUrl,
       ogSiteName: brandName.value,
-      ogTitle,
-      ogDescription:
+      ogTitle: clean(ogTitle),
+      ogDescription: clean(
         pageSeo?.openGraph?.ogDescription ||
-        pageSeo?.metaDescription ||
-        globalsSeo?.defaultDescription,
+          pageSeo?.metaDescription ||
+          globalsSeo?.defaultDescription,
+      ),
       ogImage,
       twitterCard: "summary_large_image",
       twitterSite: "@myhealthbeauty",
-      twitterTitle: title,
-      twitterDescription: pageSeo?.metaDescription || globalsSeo?.defaultDescription,
+      twitterTitle: clean(title),
+      twitterDescription: clean(
+        pageSeo?.metaDescription || globalsSeo?.defaultDescription,
+      ),
       twitterImage: ogImage,
     });
   });
