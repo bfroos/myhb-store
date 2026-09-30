@@ -1,0 +1,53 @@
+# Taegliche Botox-Sonde fuer go.myhealthandbeauty.com (Google-Ads-Domain).
+#
+# Google Ads lehnt Anzeigen wegen RESTRICTED_DRUG_TERMS ab, sobald die
+# Zielseite sichtbar "Botox" zeigt; go. sagt deshalb "Muskelrelaxans". Die
+# Inhalte kommen aus Strapi, der Begriff kann dort jederzeit wieder auftauchen.
+#
+# scripts/botox-sonde-go.mjs laedt alle go.-Seiten (Standort x Behandlung,
+# /behandlungen, /preise, /p/..., /produkte/..., /standorte, plus jeder interne
+# Link), prueft nur Sichtbares (Text, Title, Meta, alt/title, src/href) und
+# fuehrt ein Issue mit Label "botox-sonde": Treffer -> anlegen bzw.
+# kommentieren, sauber -> schliessen. Vorher laeuft eine Positivkontrolle gegen
+# eine www-Seite, auf der "Botox" steht; ist die Sonde blind, wird der Lauf rot.
+name: Botox-Sonde go.
+
+on:
+  schedule:
+    - cron: "0 6 * * *" # 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: botox-sonde-go
+  cancel-in-progress: false
+
+jobs:
+  sonde:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Keine Abhaengigkeiten noetig: das Skript nutzt nur Node-Bordmittel (fetch).
+      - name: Sonde laufen lassen
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          node scripts/botox-sonde-go.mjs \
+            --issue \
+            --json botox-sonde.json \
+            --summary "$GITHUB_STEP_SUMMARY"
+      - name: Ergebnis aufheben
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: botox-sonde
+          path: botox-sonde.json
+          if-no-files-found: ignore
+          retention-days: 30
