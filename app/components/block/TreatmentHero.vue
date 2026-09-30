@@ -35,10 +35,12 @@
             'hero--ads-buttons': forceBothButtons,
             'hero--ads-compact': isAdsMode,
             'hero--ads-long-title': isAdsMode && (headline?.length ?? 0) > 26,
+            'hero--v2': templateV2,
           }"
         >
-          <div v-if="hasCover" class="hero__media">
+          <div v-if="hasCover || heroClip" class="hero__media">
             <UiAtomMediaPicture
+              v-if="!heroClip"
               class="hero__media-image"
               :media="cover!"
               :sources="{
@@ -46,6 +48,9 @@
               }"
               priority
             />
+            <!-- go.-Vorlage v2: Clip statt Foto; sein Poster ist das
+                 LCP-Element (shared/adsClips.ts). -->
+            <PagesTreatmentAdsV2HeroClip v-if="heroClip" :clip="heroClip" />
           </div>
           <div class="hero__body">
             <header class="hero__main">
@@ -176,7 +181,7 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode }">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2 }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong
@@ -227,7 +232,7 @@
             </template>
             <SharedButton
               v-if="cta && bookingButtonVisible"
-              :button="cta"
+              :button="stickyCta"
               :data="{
                 calendlyUrl: calendlyUrl,
                 appBookingUrl: appBookingUrl,
@@ -260,15 +265,37 @@ import {
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import { IconAsterisk, IconPhone } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
+import type { AdsClip } from "#shared/adsClips";
 
 const { isAdsMode } = useSiteModeFlags();
 
 const props = withDefaults(
-  defineProps<BlockTreatmentHeroDto & { showFloatingCta?: boolean }>(),
+  defineProps<
+    BlockTreatmentHeroDto & {
+      showFloatingCta?: boolean;
+      /** go.-Vorlage v2 (shared/adsTemplateV2.ts): Knoepfe untereinander. */
+      templateV2?: boolean;
+      /** go.-Vorlage v2: stummer Clip ueber dem Hero-Foto. */
+      heroClip?: AdsClip | null;
+      /** Kurzer Text fuer den Knopf der mitlaufenden Leiste. */
+      stickyCtaLabel?: string | null;
+    }
+  >(),
   {
     showFloatingCta: false,
     showBookingButton: true,
+    templateV2: false,
+    heroClip: null,
+    stickyCtaLabel: null,
   },
+);
+
+// Gleicher Knopf (gleiche Aktion, gleiche Daten -> gleiches click_booking),
+// nur kuerzer beschriftet.
+const stickyCta = computed(() =>
+  props.cta && props.stickyCtaLabel
+    ? { ...props.cta, label: props.stickyCtaLabel }
+    : props.cta,
 );
 const { t, locale } = useI18n();
 const globals = useGlobals();
@@ -535,6 +562,23 @@ const discountLabel = computed(() => {
   hyphens: manual;
 }
 
+/* go.-Vorlage v2: Clip an der Stelle des Fotos (gleiche Innenabstaende
+   wie .hero__media). */
+.hero--v2 .hero__media {
+  position: relative;
+}
+
+.hero--v2 .hero__media > :deep(.heroClip) {
+  inset: var(--space-card-figure-pad) var(--space-card-figure-pad) 0;
+}
+
+@media (min-width: 900px) {
+  .hero--v2 .hero__media > :deep(.heroClip) {
+    inset: var(--space-card-figure-pad) var(--space-card-figure-pad)
+      var(--space-card-figure-pad) 0;
+  }
+}
+
 /* go.: Bild klein, alles Weitere im ersten Screen (375 x 667, #181). */
 @media (max-width: 899px) {
   /* Das Bild nimmt den Platz, den Text und Knoepfe freilassen - sonst
@@ -603,6 +647,18 @@ const discountLabel = computed(() => {
     min-width: 0;
     padding-inline: var(--space-300);
     white-space: nowrap;
+  }
+
+  /* v2: "Kostenlose Beratung buchen" ist zu lang fuer zwei Knoepfe in
+     einer Zeile - untereinander, volle Breite. */
+  .hero--v2.hero--ads-buttons .hero__cta {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .hero--v2.hero--ads-buttons .hero-cta-btn {
+    flex: 0 0 auto;
+    width: 100%;
   }
 }
 
@@ -909,6 +965,20 @@ const discountLabel = computed(() => {
 
   .floating-cta--ads-mode .floating-cta-btn {
     white-space: nowrap;
+  }
+}
+
+/* v2: "Beratung buchen" ist laenger als "Termin buchen" - Preis kleiner,
+   damit die Leiste einzeilig bleibt. */
+@media (max-width: 767px) {
+  .floating-cta--v2 .floating-cta__price {
+    font-size: var(--font-sm);
+    line-height: var(--line-sm);
+  }
+
+  .floating-cta--v2 .floating-cta__phone {
+    width: 40px;
+    height: 40px;
   }
 }
 

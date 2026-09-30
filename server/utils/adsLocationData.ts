@@ -6,6 +6,7 @@ import {
   reviewsWithoutRestrictedTerms,
   type AdsTreePage,
 } from "#shared/adsLocationTreatments";
+import { pickAdsV2Doctors } from "#shared/adsTemplateV2";
 
 // #184: pathKeys, die es an einem Standort gibt (5 min im Speicher). Die
 // Antwort der Behandlungsseite traegt sie nicht mit; "with-treatments" nennt
@@ -158,3 +159,64 @@ export async function withAdsLocationExtras(
   };
 }
 
+// go.-Seitenvorlage v2 (shared/adsTemplateV2.ts), nur fuer die Vorschau
+// /vorschau-v2/...: Bewertungen und Aerzt:innen des Standorts. Eigener
+// Endpunkt (server/api/ads-template-v2), damit die Strapi-Antwort der echten
+// Anzeigenseiten unveraendert bleibt. 5 min im Speicher.
+const doctorCache = new Map<string, { at: number; data: any[] }>();
+
+async function locationDoctors(event: any, loc: string, locale: string): Promise<any[]> {
+  const key = `${locale}:${loc}`;
+  const hit = doctorCache.get(key);
+  if (hit && Date.now() - hit.at < 5 * 60_000) return hit.data;
+  try {
+    const config = useRuntimeConfig(event);
+    const base = String(config.public.strapiUrl || '').replace(/\/+$/, '');
+    const params = new URLSearchParams({
+      locale,
+      'filters[locations][slug][$eq]': loc,
+      'filters[employeeType][$eq]': 'doctor',
+      'pagination[pageSize]': '50',
+      'fields[0]': 'academicTitle',
+      'fields[1]': 'firstName',
+      'fields[2]': 'lastName',
+      'fields[3]': 'role',
+      'fields[4]': 'employeeType',
+      'fields[5]': 'isActive',
+      'fields[6]': 'hideFromPublic',
+      'fields[7]': 'slug',
+      'populate[photo]': 'true',
+      'populate[locations][fields][0]': 'slug',
+    });
+    const res: any = await $fetch(`${base}/api/employees?${params}`);
+    const data = pickAdsV2Doctors(res?.data ?? [], loc).map((e: any) => ({
+      id: e.id,
+      academicTitle: e.academicTitle,
+      firstName: e.firstName,
+      lastName: e.lastName,
+      role: e.role,
+      photo: e.photo,
+    }));
+    doctorCache.set(key, { at: Date.now(), data });
+    return data;
+  } catch {
+    return [];
+  }
+}
+
+export async function adsTemplateV2Extras(
+  event: any,
+  city: string,
+  loc: string,
+  locale: string,
+) {
+  const [seo, doctors] = await Promise.all([
+    seoLocationWithTreatments(event, city, loc, locale),
+    locationDoctors(event, loc, locale),
+  ]);
+  // Kundenzitate mit dem Markennamen fallen weg, statt umgeschrieben zu werden.
+  const reviews = reviewsWithoutRestrictedTerms(seo?.location?.reviews ?? []).map(
+    (r: any) => ({ id: r.id, rating: r.rating, text: r.text, author: r.author }),
+  );
+  return { reviews, doctors };
+}
