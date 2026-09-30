@@ -313,6 +313,8 @@ export type BlockTreatmentHeroDto = {
    * Ads-Modus das Neukundenangebot (Zonenpreis bei Muskelrelaxans).
    */
   treatmentPathKey?: string;
+  /** Telefon des Standorts, nur go.: Knopf in der mitlaufenden Leiste (#181). */
+  phoneNumber?: string | null;
 };
 
 export type BlockTreatmentPlanDto = {

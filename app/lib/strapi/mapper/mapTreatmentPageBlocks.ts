@@ -2,6 +2,7 @@ import { SharedButtonAction, SharedButtonMethod } from "../dto/enums";
 import type { SharedKeyValueDto } from "../dto/components";
 import type { TreatmentPageDto } from "../dto/collections";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
+import { adsTreatmentHeadline } from "./adsTreatmentHeadline";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 
 type TranslateFn = ReturnType<typeof useI18n>["t"];
@@ -49,7 +50,10 @@ export function mapTreatmentPageFixedBlocks(
     ).trim();
 
     return {
-      headline: treatmentKeyword,
+      // go.: Muskelrelaxans-Grundseite in Suchsprache (#186).
+      headline:
+        (isAdsMode ? adsTreatmentHeadline(treatmentPage?.pathKey) : null) ??
+        treatmentKeyword,
       subline: treatmentPage?.hero?.subline,
       text: treatmentPage?.hero?.text,
       cover: treatmentPage?.hero?.cover,

@@ -2,7 +2,7 @@
   <UiLayoutSectionBlock>
     <UiLayoutCardSurface :card-settings="cardSettings">
       <div class="hero-card" ref="heroCardRef">
-        <div v-if="hasMarquee" class="hero__marquee-wrapper">
+        <div v-if="hasMarquee && !isAdsMode" class="hero__marquee-wrapper">
           <div class="hero__marquee" role="marquee" aria-live="polite">
             <div class="hero__marquee-viewport">
               <div
@@ -33,6 +33,8 @@
             'hero--has-reviews': showReviews,
             'hero--ads-offer': !!newCustomerOffer,
             'hero--ads-buttons': forceBothButtons,
+            'hero--ads-compact': isAdsMode,
+            'hero--ads-long-title': isAdsMode && (headline?.length ?? 0) > 26,
           }"
         >
           <div v-if="hasCover" class="hero__media">
@@ -47,36 +49,49 @@
           </div>
           <div class="hero__body">
             <header class="hero__main">
-              <p v-if="eyebrow" class="hero__eyebrow">{{ eyebrow }}</p>
+              <!--
+                go.: Im ersten Screen nur Bild, H1, EINE Unterzeile, EINE
+                Preiszeile, zwei Knoepfe, Google-Sterne (Benjamin, 30.09.2026).
+                Eyebrow, Zusatztext, Marquee, Logos, regulaerer Preis und
+                Rechnung entfallen dort; Sternchen und regulaerer Preis stehen
+                in der Fussnotenzeile am Seitenende (BlockAdsPriceFootnote).
+              -->
+              <p v-if="eyebrow && !isAdsMode" class="hero__eyebrow">
+                {{ eyebrow }}
+              </p>
               <h1 v-if="headline" class="hero__title">
-                <span v-if="headlinePrefix" class="hero__title-prefix">
+                <span
+                  v-if="headlinePrefix && !isAdsMode"
+                  class="hero__title-prefix"
+                >
                   {{ headlinePrefix }}
                 </span>
                 {{ headline }}
-                <span v-if="headlineSuffix" class="hero__title-suffix">
+                <span
+                  v-if="headlineSuffix && !isAdsMode"
+                  class="hero__title-suffix"
+                >
                   {{ headlineSuffix }}
                 </span>
               </h1>
-              <p v-if="subline" class="hero__subline">
-                <strong>{{ subline }}</strong>
-              </p>
-              <p v-if="text" class="hero__text">{{ text }}</p>
-              <div
-                v-if="newCustomerOffer"
-                class="hero__offer"
-                :data-offer-kind="newCustomerOffer.kind"
-              >
-                <p class="hero__offer-headline">
-                  {{ newCustomerOffer.headline }}
+              <template v-if="isAdsMode">
+                <p v-if="adsSubline" class="hero__subline hero__subline--ads">
+                  {{ adsSubline }}
                 </p>
-                <p class="hero__offer-regular">{{ newCustomerOffer.regular }}</p>
-                <p v-if="newCustomerOffer.calculation" class="hero__offer-calc">
-                  {{ newCustomerOffer.calculation }}
+                <p
+                  v-if="newCustomerOffer"
+                  class="hero__price"
+                  :data-offer-kind="newCustomerOffer.kind"
+                >
+                  {{ newCustomerOffer.heroLine }}
                 </p>
-                <p class="hero__offer-footnote">
-                  {{ newCustomerOffer.footnote }}
+              </template>
+              <template v-else>
+                <p v-if="subline" class="hero__subline">
+                  <strong>{{ subline }}</strong>
                 </p>
-              </div>
+                <p v-if="text" class="hero__text">{{ text }}</p>
+              </template>
               <div class="hero__cta">
                 <div
                   class="hero__cta-price"
@@ -119,12 +134,6 @@
                   :button-props="{ size: 'lg', variant: 'secondary' }"
                 />
               </div>
-              <p
-                v-if="newCustomerOffer?.footnote2"
-                class="hero__offer-footnote hero__offer-footnote--page"
-              >
-                {{ newCustomerOffer.footnote2 }}
-              </p>
               <template v-if="showReviews">
                 <UiMoleculeReviewsBadge
                   v-if="googlePlaceId"
@@ -145,7 +154,7 @@
                 />
               </template>
             </header>
-            <ul v-if="showCompanyLogos" class="hero__logos" role="list">
+            <ul v-if="showCompanyLogos && !isAdsMode" class="hero__logos" role="list">
               <li class="hero__logo">
                 <ImageBildLogo style="height: 30px" />
               </li>
@@ -174,17 +183,30 @@
               v-if="newCustomerOffer"
               class="floating-cta__price floating-cta__price--offer"
             >
-              {{ newCustomerOffer.headline }}
+              {{ stickyPriceLine }}
             </strong>
             <strong v-else-if="priceLabel" class="floating-cta__price">
               {{ priceLabel }}
             </strong>
-            <span v-if="headline || eyebrow" class="floating-cta__title">
+            <!-- go.: Leiste einzeilig, nur Preis + Telefon + Buchen (#181) -->
+            <span
+              v-if="!isAdsMode && (headline || eyebrow)"
+              class="floating-cta__title"
+            >
               {{ headline || eyebrow }}
             </span>
           </div>
           <div class="floating-cta__actions">
-            <template v-if="showReviews">
+            <a
+              v-if="isAdsMode && phoneHref"
+              :href="phoneHref"
+              class="floating-cta__phone"
+              :aria-label="`${t('blocks.locationContact.phone')}: ${phoneNumber}`"
+              @click="trackPhoneClick(phoneNumber ?? undefined)"
+            >
+              <IconPhone size="22" aria-hidden="true" />
+            </a>
+            <template v-if="showReviews && !isAdsMode">
               <UiMoleculeReviewsBadge
                 v-if="googlePlaceId"
                 show-text
@@ -220,24 +242,6 @@
               class="floating-cta-btn"
               :class="{ 'floating-cta__button--ads-mode': isAdsMode }"
             />
-            <!-- go.: zweiter Knopf auch in der mitlaufenden Leiste -->
-            <SharedButton
-              v-if="isAdsMode && discountButtonVisible"
-              :button="{
-                label: discountLabel,
-                method: SharedButtonMethod.ACTION,
-                action: SharedButtonAction.NEWSLETTER_SIGN_UP,
-              }"
-              :data="{
-                calendlyUrl: calendlyUrl,
-                appBookingUrl: appBookingUrl,
-                locationSlug: locationSlug,
-                appTreatmentSlug: appTreatmentSlug,
-                treatmentType: treatment?.type,
-              }"
-              :button-props="{ size: 'md', variant: 'secondary' }"
-              class="floating-cta-btn floating-cta-btn--discount"
-            />
           </div>
         </div>
       </div>
@@ -254,9 +258,8 @@ import {
   SharedButtonAction,
 } from "~/lib/strapi/dto/enums";
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
-import { IconAsterisk } from "@tabler/icons-vue";
+import { IconAsterisk, IconPhone } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
-import { buildNewCustomerOffer } from "#shared/newCustomerOffer";
 
 const { isAdsMode } = useSiteModeFlags();
 
@@ -284,24 +287,28 @@ const discountButtonVisible = computed(
   () => forceBothButtons.value || !!props.showGlobalDiscount,
 );
 
-// go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet) neben dem
-// regulaeren Preis. Texte sind deutsch; andere Sprachen zeigen nichts.
-const newCustomerOffer = computed(() => {
-  if (!isAdsMode.value) return null;
-  if (!String(locale.value || "de").startsWith("de")) return null;
-  const treatment = props.treatment;
-  if (!treatment) return null;
-  const twoZonePriceCent = (treatment.products ?? [])
-    .flatMap((product) => product.variants ?? [])
-    .find((variant) => variant.slug === "2-zonen" && variant.isActive !== false)
-    ?.priceInEuroCent;
-  return buildNewCustomerOffer({
-    pathKey: props.treatmentPathKey,
-    priceCent: treatment.priceInEuroCent || treatment.cheapestPriceInEuroCent,
-    isStartingPrice: treatment.isStartingPrice,
-    twoZonePriceCent,
-    discountPct: globals.value?.ecommerce?.newsletterDiscountPercentage,
-  });
+// go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet). Texte sind
+// deutsch; andere Sprachen zeigen nichts.
+const newCustomerOffer = useNewCustomerOffer(
+  () => props.treatment,
+  () => props.treatmentPathKey,
+);
+
+// go.: Leiste einzeilig - "ab 119,99 €*" ohne "Neukunden" (Sternchen erklaert
+// die Fussnote am Seitenende).
+const stickyPriceLine = computed(() =>
+  (newCustomerOffer.value?.heroLine ?? "").replace(/^Neukunden\s+/, ""),
+);
+
+// go.: EINE kurze Unterzeile (Strapi-Subline, sonst der Hero-Text).
+const adsSubline = computed(
+  () => (props.subline || props.text || "").trim() || null,
+);
+
+const { trackPhoneClick } = useGoogleAnalytics();
+const phoneHref = computed(() => {
+  const digits = (props.phoneNumber ?? "").replace(/[^\d+]/g, "");
+  return digits ? `tel:${digits}` : null;
 });
 
 // Floating CTA logic
@@ -498,84 +505,69 @@ const discountLabel = computed(() => {
   margin: 0;
 }
 
-.hero__offer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-100);
-  max-width: 44ch;
-  padding: var(--space-300) var(--space-400);
-  background: linear-gradient(to right, #f6eef6, #fff5f1);
-  border-radius: var(--border-radius-200);
-  color: var(--color-gray-900);
+/* go.: EINE Unterzeile, EINE grosse Preiszeile (Benjamin, 30.09.2026). */
+.hero__subline--ads {
+  max-width: 100%;
+  font-weight: var(--font-bold);
 }
 
-.hero__offer p {
+.hero__price {
   margin: 0;
-}
-
-.hero__offer-headline {
-  font-size: var(--font-lg);
-  line-height: var(--line-lg);
+  font-size: var(--font-xl, 1.5rem);
+  line-height: 1.2;
   font-weight: var(--font-bold);
   color: #b91c1c;
 }
 
-.hero__offer-regular {
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-  font-weight: var(--font-bold);
+/* go.: Der Hero fuellt den ersten Screen allein - darunter beginnt kein
+   weiterer Abschnitt im ersten Viewport (Benjamin, 30.09.2026). */
+.hero-card:has(.hero--ads-compact) {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - 110px);
 }
 
-.hero__offer-calc,
-.hero__offer-footnote {
-  font-size: var(--font-xs, 0.75rem);
-  line-height: var(--line-xs, 1.35);
-  color: var(--color-gray-700, #374151);
+.hero--ads-compact {
+  flex: 1;
 }
 
-.hero__offer-footnote--page {
-  max-width: 44ch;
-  margin: 0;
+.hero--ads-compact .hero__title {
+  hyphens: manual;
 }
 
-/* go.: Preis und beide Knoepfe im ersten Screen (375 x 667, #181). */
+/* go.: Bild klein, alles Weitere im ersten Screen (375 x 667, #181). */
 @media (max-width: 899px) {
-  .hero--ads-buttons .hero__media {
-    max-height: min(20svh, 150px);
+  .hero--ads-compact .hero__media {
+    max-height: min(18svh, 130px);
   }
 
-  .hero--ads-buttons .hero__main {
+  .hero--ads-compact .hero__main {
+    justify-content: flex-start;
     gap: var(--space-300);
-    padding-top: var(--space-400);
+    padding-top: var(--space-500);
   }
 
-  .hero--ads-buttons .hero__eyebrow {
-    font-size: var(--font-sm);
-    line-height: var(--line-sm);
-  }
-
-  .hero--ads-buttons .hero__title {
+  .hero--ads-compact .hero__title {
     font-size: 1.75rem;
     line-height: 1.15;
     max-width: none;
   }
 
-  .hero--ads-buttons .hero__subline {
-    display: none;
+  .hero--ads-long-title .hero__title {
+    font-size: 1.5rem;
   }
 
-  .hero--ads-buttons .hero__text {
-    font-size: var(--font-sm);
+  /* genau eine Zeile */
+  .hero--ads-compact .hero__subline--ads {
+    font-size: 0.8125rem;
     line-height: var(--line-sm);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .hero--ads-offer .hero__offer {
-    padding: var(--space-200) var(--space-300);
-  }
-
-  .hero--ads-offer .hero__offer-headline {
-    font-size: var(--font-md);
-    line-height: var(--line-md);
+  .hero--ads-compact .hero__reviews {
+    margin-top: var(--space-100);
   }
 
   .hero--ads-buttons .hero__cta {
@@ -863,12 +855,34 @@ const discountLabel = computed(() => {
   color: #b91c1c;
 }
 
-/* go.: Zwei Knoepfe passen auf dem Handy nur untereinander zum Text. */
+/* go.: Leiste einzeilig - Preis links, Telefon + "Termin buchen" rechts
+   (#181, Benjamin 30.09.2026). */
+.floating-cta__phone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
 @media (max-width: 767px) {
+  .floating-cta--ads-mode {
+    padding: var(--space-300) var(--space-400);
+  }
+
   .floating-cta--ads-mode .floating-cta__content {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-200);
+    gap: var(--space-300);
+  }
+
+  .floating-cta--ads-mode .floating-cta__price {
+    font-size: var(--font-md);
+    line-height: var(--line-md);
+    white-space: nowrap;
   }
 
   .floating-cta--ads-mode .floating-cta__actions {
@@ -876,9 +890,6 @@ const discountLabel = computed(() => {
   }
 
   .floating-cta--ads-mode .floating-cta-btn {
-    flex: 1 1 0;
-    min-width: 0;
-    padding-inline: var(--space-300);
     white-space: nowrap;
   }
 }

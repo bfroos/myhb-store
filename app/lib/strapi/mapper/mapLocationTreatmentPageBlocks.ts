@@ -14,6 +14,7 @@ import { DEFAULT_TIMEZONE } from "../config";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
+import { adsTreatmentHeadline } from "./adsTreatmentHeadline";
 
 type TranslateFn = ReturnType<typeof useI18n>["t"];
 
@@ -77,9 +78,15 @@ export function mapLocationTreatmentPageFixedBlocks(
     // treatmentPage.name ist dasselbe Keyword wie im Meta-Titel (treatmentName).
     const treatmentKeyword =
       treatmentPage.name ?? treatmentPage.hero?.headline ?? "";
-    const heroHeadline = city
-      ? `${treatmentKeyword} ${city}`
-      : treatmentKeyword;
+    // go.: Die Muskelrelaxans-Grundseite in Suchsprache (#186) - Gesucht
+    // wird "Faltenbehandlung", nicht der Fachbegriff. Unterseiten
+    // (Zornesfalte, Stirnfalte ...) behalten ihren Problem-Namen.
+    const adsSearchHeadline = isAdsMode
+      ? adsTreatmentHeadline(treatmentPage.pathKey, city)
+      : null;
+    const heroHeadline =
+      adsSearchHeadline ??
+      (city ? `${treatmentKeyword} ${city}` : treatmentKeyword);
 
     return {
       eyebrow: fullLocationName,
@@ -105,6 +112,8 @@ export function mapLocationTreatmentPageFixedBlocks(
       appTreatmentSlug: resolveAppTreatmentSlug(treatmentPage),
       googlePlaceId: location?.googlePlaceId ?? undefined,
       treatmentPathKey: treatmentPage.pathKey,
+      // go.: Telefon-Knopf in der mitlaufenden Leiste (#181).
+      phoneNumber: isAdsMode ? location.contact?.phoneNumber ?? null : null,
     };
   }
 
