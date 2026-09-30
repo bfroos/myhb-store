@@ -203,6 +203,11 @@ export const useGoogleAnalytics = () => {
       ab_source?: 'ads' | 'seo';
       /** Dialog kam von einer Behandlungsseite (#78). */
       treatment_context?: boolean;
+      /**
+       * #182: Slug des Seitenstandorts ohne Online-Buchung, von dem aus eine
+       * andere Lounge gewaehlt wurde (z. B. "mediapark-klinik").
+       */
+      fallback_from?: string;
     },
   ) => {
     trackEvent('booking_location_selected', {

@@ -55,8 +55,17 @@ const teasersRoot = ref<HTMLElement | null>(null);
 // gefunden"). Ist die Relation des aktiven Baums leer, bleibt der Block leer -
 // besser als ein kaputter interner Link.
 const treatmentItems = computed<Array<TreatmentPageDto | TreatmentAdsPageDto>>(
-  () =>
-    (isAdsMode.value ? props.treatmentAdsPages : props.treatmentPages) ?? [],
+  () => {
+    const items =
+      (isAdsMode.value ? props.treatmentAdsPages : props.treatmentPages) ?? [];
+    // go. (#184): keine Karte, die den Standort verlaesst.
+    if (!props.hideUnavailableAtLocation || !props.locationTreatmentPathKeys) {
+      return items;
+    }
+    return items.filter((page) =>
+      props.locationTreatmentPathKeys!.includes(page.pathKey ?? ""),
+    );
+  },
 );
 
 const hasItems = computed(() => treatmentItems.value.length > 0);

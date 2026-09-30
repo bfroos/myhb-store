@@ -219,8 +219,15 @@ const hasProducts = computed(
   () => (props.productCategory?.products?.length ?? 0) > 0,
 );
 
+const { isAdsMode } = useSiteModeFlags();
+
 function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
-  return `/behandlungen/${treatment.treatmentPage?.pathKey ?? ""}`;
+  const pathKey = treatment.treatmentPage?.pathKey ?? "";
+  // go. (#184): Der Ads-Baum heisst "muskelrelaxans"; die SEO-pathKeys
+  // ("botox/stirnfalte", "botox/baby-botox") liefen dort auf 404.
+  return `/behandlungen/${
+    isAdsMode.value ? pathKey.replace(/botox/g, "muskelrelaxans") : pathKey
+  }`;
 }
 
 function getVariantPath(

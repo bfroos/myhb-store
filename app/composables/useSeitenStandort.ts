@@ -35,17 +35,54 @@ export type SeitenStandort = {
 
 type Gemerkt = SeitenStandort & { pfad: string };
 
+/**
+ * Ort der Seite fuer den Standortwaehler (#182) — auch dann, wenn der
+ * Standort selbst nicht online buchbar ist (MediaPark Klinik). Dann oeffnet der
+ * Knopf den Waehler; der sortiert ohne Standortfreigabe nach Entfernung zu
+ * diesem Ort und bietet die naechste buchbare Lounge an.
+ */
+export type SeitenOrt = {
+  slug?: string;
+  name?: string;
+  lat: number;
+  long: number;
+  phoneNumber?: string | null;
+  /** Standort nimmt selbst Online-Buchungen an. */
+  buchbar: boolean;
+};
+
+type GemerkterOrt = SeitenOrt & { pfad: string };
+
 export function useSeitenStandort() {
   const gemerkt = useState<Gemerkt | null>("seitenStandort", () => null);
+  const gemerkterOrt = useState<GemerkterOrt | null>(
+    "seitenStandortOrt",
+    () => null,
+  );
   const route = useRoute();
 
   /** Setzt den Standort der Seite. `null` loescht ihn. */
   function setzeSeitenStandort(location?: LocationDto | null) {
     if (!location) {
       gemerkt.value = null;
+      gemerkterOrt.value = null;
       return;
     }
     const { calendlyUrl, appBookingUrl } = bookingUrlsOf(location);
+    const lat = Number(location.coordinates?.lat);
+    const long = Number(location.coordinates?.long);
+    gemerkterOrt.value =
+      Number.isFinite(lat) && Number.isFinite(long) && (lat || long)
+        ? {
+            pfad: route.path,
+            slug: location.slug ?? undefined,
+            name: location.name ?? undefined,
+            lat,
+            long,
+            phoneNumber: location.contact?.phoneNumber ?? null,
+            buchbar: !!(calendlyUrl || appBookingUrl),
+          }
+        : null;
     gemerkt.value =
       calendlyUrl || appBookingUrl
         ? {
@@ -68,5 +105,12 @@ export function useSeitenStandort() {
     return rest;
   });
 
-  return { seitenStandort, setzeSeitenStandort };
+  const seitenOrt = computed<SeitenOrt | null>(() => {
+    const wert = gemerkterOrt.value;
+    if (!wert || wert.pfad !== route.path) return null;
+    const { pfad: _pfad, ...rest } = wert;
+    return rest;
+  });
+
+  return { seitenStandort, seitenOrt, setzeSeitenStandort };
 }

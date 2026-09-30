@@ -125,7 +125,13 @@ export async function setPageSeo(
     });
 
     // Only append titleSuffix if it's not already in the metaTitle
-    const metaTitle = pageSeo?.metaTitle || globalsSeo?.defaultTitle || "";
+    // go. (#186): Strapi-Titel enden teils auf "| MY"; mit dem angehaengten
+    // "| MY HEALTH & BEAUTY" stand die Marke doppelt im Tab.
+    const rawMetaTitle = pageSeo?.metaTitle || globalsSeo?.defaultTitle || "";
+    const metaTitle =
+      useRuntimeConfig().public.siteMode === "ads"
+        ? rawMetaTitle.replace(/\s*[|–-]\s*MY\s*$/, "")
+        : rawMetaTitle;
     const titleSuffix = globalsSeo?.titleSuffix || "";
     const titleSeparator = globalsSeo?.titleSeparator || "";
     

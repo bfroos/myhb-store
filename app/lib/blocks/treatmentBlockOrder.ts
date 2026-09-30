@@ -56,6 +56,8 @@ export const LOCATION_ADS_BLOCK_ORDER: string[] = [
   "hero",
   "about",
   "reviews",
+  // #181: Adresse und Oeffnungszeiten nicht erst bei y≈15.000 px.
+  "locationContact",
   "treatmentDetails",
   "relatedTreatments",
   "treatmentProcess",
@@ -64,7 +66,6 @@ export const LOCATION_ADS_BLOCK_ORDER: string[] = [
   "suitability",
   "tableOfContents",
   "treatmentPlan",
-  "locationContact",
   "aboutLocation",
   "locationDirections",
   "faq",

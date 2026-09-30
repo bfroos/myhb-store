@@ -42,7 +42,8 @@
           <ImageAppLogo />
         </NuxtLinkLocale>
         <span v-else class="appHeader__mainNav__brand"><ImageAppLogo /></span>
-        <div class="appHeader__desktop appHeader__mainNav__menu">
+        <!-- go. (#184): keine Kategorie-Navigation auf Landingpages -->
+        <div v-if="!isAdsMode" class="appHeader__desktop appHeader__mainNav__menu">
           <div class="appHeader__priorityWrap">
             <BaseAppHeaderMainNav
               :links="priorityNavItems"
@@ -64,7 +65,16 @@
         <div v-if="!isAdsMode" class="appHeader__mobile">
           <UiMoleculeLanguageSwitcher />
         </div>
-        <div class="appHeader__desktop">
+        <div class="appHeader__desktop appHeader__actions">
+          <a
+            v-if="isAdsMode && adsPhone"
+            :href="adsPhone.href"
+            class="appHeader__phone text-link"
+            @click="trackPhoneClick(adsPhone.label)"
+          >
+            <IconPhone :size="18" aria-hidden="true" />
+            {{ adsPhone.label }}
+          </a>
           <SharedButton
             :button="{
               label: t('cta.bookAppointment'),
@@ -86,7 +96,7 @@
   </header>
 </template>
 <script setup lang="ts">
-import { IconMenu2 } from "@tabler/icons-vue";
+import { IconMenu2, IconPhone } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
@@ -130,10 +140,34 @@ const priorityNavItems = computed(() =>
   })),
 );
 
+// go. (#184): Standort der Seite fuer "Anrufen" und "Standort" im Menue.
+const { seitenOrt } = useSeitenStandort();
+const { trackPhoneClick } = useGoogleAnalytics();
+const route = useRoute();
+const adsPhone = computed(() => {
+  const phone = seitenOrt.value?.phoneNumber;
+  const digits = (phone ?? "").replace(/[^\d+]/g, "");
+  return isAdsMode.value && phone && digits
+    ? { label: phone, href: `tel:${digits}` }
+    : null;
+});
+const adsLocationLink = computed(() => {
+  const city = route.params.citySlug as string | undefined;
+  const loc = route.params.locationSlug as string | undefined;
+  if (!isAdsMode.value || !city || !loc || !seitenOrt.value) return null;
+  return {
+    label: seitenOrt.value.name ?? t("navigation.secondary.locations"),
+    // Sprung zum Standort-Block (Adresse, Oeffnungszeiten) derselben Seite.
+    to: `${route.path}#standort`,
+  };
+});
+
 const mobileMenuItems = computed(() => {
   return {
     secondaryNavItems: secondaryNavItems.value,
-    mainNavItems: treatmentPages.value,
+    mainNavItems: isAdsMode.value ? [] : treatmentPages.value,
+    adsPhone: adsPhone.value,
+    adsLocation: adsLocationLink.value,
   };
 });
 
@@ -195,6 +229,19 @@ function closeMobileMenu() {
   background: var(--color-card-bg-light);
   border-radius: var(--border-radius-card);
   box-shadow: var(--shadow-1);
+}
+.appHeader__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-500);
+}
+.appHeader__phone {
+  margin-right: var(--space-500);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
+  font-weight: var(--font-bold);
+  white-space: nowrap;
 }
 .appHeader__secondaryNav {
   padding: var(--space-100) var(--space-card-pad);

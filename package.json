@@ -16,7 +16,7 @@
     "update:ratings": "tsx scripts/update-google-ratings.ts",
     "check:ab-split": "tsx scripts/check-ab-split.mts",
     "check:booking-slugs": "tsx scripts/check-booking-slugs.mts",
-    "test:unit": "node --experimental-strip-types --test app/lib/checkoutAttempt.test.ts shared/adsTerms.test.ts shared/newCustomerOffer.test.ts shared/adsMedia.test.ts"
+    "test:unit": "node --experimental-strip-types --test app/lib/checkoutAttempt.test.ts shared/adsTerms.test.ts shared/newCustomerOffer.test.ts shared/adsLinks.test.ts shared/adsPricePages.test.ts shared/adsMedia.test.ts"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",

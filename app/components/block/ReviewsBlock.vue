@@ -3,14 +3,16 @@
     <UiLayoutCardSurface>
       <div
         class="reviews"
-        :class="reviewsCountClass"
+        :class="[reviewsCountClass, { 'reviews--ads': isAdsMode }]"
       >
         <header
           class="reviews__header reviews__header--static"
           :class="themeClass(1)"
         >
           <h2 v-if="displayHeadline" :id="mobileHeadingId">{{ displayHeadline }}</h2>
-          <SharedButton :button="ctaButton" />
+          <div class="reviews__static-cta">
+            <SharedButton :button="ctaButton" />
+          </div>
         </header>
         <div class="reviews__body reviews__body--scroll">
           <UiOrganismHorizontalScroll class="reviews__scroll">
@@ -37,7 +39,13 @@
             class="reviews__header reviews__header--floating"
             :class="themeClass(1)"
           >
-            <h2 :id="desktopHeadingId">{{ displayHeadline }}</h2>
+            <!-- go. (#186): nur EINE H2 im HTML. Die Desktop-Ueberschrift ist
+                 dort reine Optik; Screenreader lesen die (auf Desktop
+                 unsichtbare) H2 oben. -->
+            <p v-if="isAdsMode" class="reviews__title" aria-hidden="true">
+              {{ displayHeadline }}
+            </p>
+            <h2 v-else :id="desktopHeadingId">{{ displayHeadline }}</h2>
             <div>
               <SharedButton :button="ctaButton" />
             </div>
@@ -75,6 +83,7 @@ import type { BlockReviewsDto } from "~/lib/strapi/dto/components";
 
 const props = defineProps<BlockReviewsDto>();
 const { t } = useI18n();
+const { isAdsMode } = useSiteModeFlags();
 const mobileHeadingId = useId();
 const desktopHeadingId = useId();
 
@@ -205,5 +214,30 @@ function themeClass(index: number) {
   .reviews__header--static {
     display: none;
   }
+
+  /* go.: H2 bleibt im Accessibility-Tree, nur unsichtbar. */
+  .reviews--ads .reviews__header--static {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .reviews--ads .reviews__static-cta {
+    display: none;
+  }
+}
+
+.reviews__title {
+  margin: 0;
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
+  font-weight: var(--font-bold);
+  text-wrap: balance;
 }
 </style>

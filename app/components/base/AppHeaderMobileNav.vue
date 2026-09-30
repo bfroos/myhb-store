@@ -16,7 +16,35 @@
         />
       </div>
       <div class="mobileMenu__content">
-        <nav class="mobileMenu__mainNav">
+        <!-- go. (#184): nur Conversion-Ausgaenge statt Kategorien -->
+        <nav
+          v-if="isAdsMode && (props.items.adsPhone || props.items.adsLocation)"
+          class="mobileMenu__mainNav"
+        >
+          <ul class="mobileMenu__mainNav__parentList">
+            <li v-if="props.items.adsPhone">
+              <a
+                :href="props.items.adsPhone.href"
+                class="mobileMenu__link mobileMenu__link--parent"
+                @click="onAdsPhone"
+              >
+                <span>{{ $t("blocks.locationContact.phone") }}: {{ props.items.adsPhone.label }}</span>
+                <IconPhone :size="24" aria-hidden="true" />
+              </a>
+            </li>
+            <li v-if="props.items.adsLocation">
+              <NuxtLinkLocale
+                :to="props.items.adsLocation.to"
+                class="mobileMenu__link mobileMenu__link--parent"
+                @click="closeMobileMenu"
+              >
+                <span>{{ props.items.adsLocation.label }}</span>
+                <IconMapPin :size="24" aria-hidden="true" />
+              </NuxtLinkLocale>
+            </li>
+          </ul>
+        </nav>
+        <nav v-if="!isAdsMode" class="mobileMenu__mainNav">
           <ul class="mobileMenu__mainNav__parentList">
             <li v-for="item in props.items.mainNavItems" :key="item.slug">
               <button
@@ -94,7 +122,13 @@
 </template>
 
 <script setup lang="ts">
-import { IconChevronDown, IconChevronUp, IconX } from "@tabler/icons-vue";
+import {
+  IconChevronDown,
+  IconChevronUp,
+  IconMapPin,
+  IconPhone,
+  IconX,
+} from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { isAdsMode } = useSiteModeFlags();
 const emit = defineEmits<{
@@ -110,8 +144,16 @@ const props = defineProps<{
       pathKey?: string;
       children: { name: string; slug: string; pathKey?: string }[];
     }[];
+    adsPhone?: { label: string; href: string } | null;
+    adsLocation?: { label: string; to: string } | null;
   };
 }>();
+
+const { trackPhoneClick } = useGoogleAnalytics();
+function onAdsPhone() {
+  trackPhoneClick(props.items.adsPhone?.label);
+  closeMobileMenu();
+}
 
 function closeMobileMenu() {
   emit("closeMobileMenu");

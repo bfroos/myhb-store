@@ -3,6 +3,7 @@
   <BlockTreatmentHero v-if="fixedBlocks?.hero" v-bind="fixedBlocks.hero" />
   <BlockLocationContact
     v-if="fixedBlocks?.locationContact"
+    id="standort"
     v-bind="fixedBlocks.locationContact"
   />
   <BlockLocationDirections

@@ -497,7 +497,11 @@
     "calendly": {
       "header": "Wähle deine Lounge",
       "sortedByDistance": "Nach Entfernung sortiert",
-      "locationDenied": "Standort nicht verfügbar. Bitte PLZ oder Ort eingeben."
+      "locationDenied": "Standort nicht verfügbar. Bitte PLZ oder Ort eingeben.",
+      "sortedByPageLocation": "Nach Entfernung zu {name} sortiert",
+      "fallbackUnavailable": "In der {name} ist Online-Buchung gerade nicht möglich.",
+      "fallbackNearest": "Nächste Lounge: {name} (≈ {km} km)",
+      "fallbackCall": "{name} anrufen"
     },
     "newsletterSignUp": {
       "header": "Newsletter abonnieren"

@@ -33,7 +33,11 @@ const BLOCK_MAP: Record<
     is: resolveComponent("BlockTreatmentHero"),
     props: { showFloatingCta: true },
   },
-  locationContact: { is: resolveComponent("BlockLocationContact") },
+  locationContact: {
+    is: resolveComponent("BlockLocationContact"),
+    // Ziel von "Standort" im go.-Menue (#184).
+    id: "standort",
+  },
   aboutLocation: { is: resolveComponent("BlockMediaCard") },
   locationDirections: { is: resolveComponent("BlockLocationDirections") },
   tableOfContents: { is: resolveComponent("BlockTableOfContents") },
