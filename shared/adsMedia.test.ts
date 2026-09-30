@@ -33,3 +33,10 @@ test("Poster mit dem Begriff im Dateinamen faellt weg", () => {
   assert.equal(out.poster, null);
   assert.equal(out.media.id, 5);
 });
+
+test("Eingebrannter Markenname (Texterkennung 30.09.2026) ist gesperrt", () => {
+  for (const id of [224, 277, 280, 286]) {
+    assert.equal(isBlockedAdsVideo(vid(id, "https://m/neutral.mp4")), true);
+  }
+  assert.equal(isBlockedAdsVideo(vid(546, "https://m/Lippenergebnisse.mp4")), false);
+});
