@@ -537,8 +537,24 @@ const discountLabel = computed(() => {
 
 /* go.: Bild klein, alles Weitere im ersten Screen (375 x 667, #181). */
 @media (max-width: 899px) {
+  /* Das Bild nimmt den Platz, den Text und Knoepfe freilassen - sonst
+     bleibt unter den Sternen eine leere Flaeche (Benjamin, 30.09.2026). */
   .hero--ads-compact .hero__media {
-    max-height: min(18svh, 130px);
+    aspect-ratio: auto;
+    flex: 1 1 auto;
+    min-height: min(18svh, 130px);
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero--ads-compact .hero__media-image {
+    flex: 1 1 auto;
+    height: auto;
+  }
+
+  .hero--ads-compact .hero__body {
+    flex: 0 0 auto;
   }
 
   .hero--ads-compact .hero__main {
@@ -557,13 +573,15 @@ const discountLabel = computed(() => {
     font-size: 1.5rem;
   }
 
-  /* genau eine Zeile */
+  /* hoechstens zwei Zeilen, nicht mitten im Wort abgeschnitten */
   .hero--ads-compact .hero__subline--ads {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
     line-height: var(--line-sm);
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .hero--ads-compact .hero__reviews {
