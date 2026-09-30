@@ -5,6 +5,7 @@ import type { BookingVariant } from "~/lib/bookingAbTest";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
 import { currentCheckoutId } from "~/lib/checkoutAttempt";
+import { markBookingDialogOpened } from "~/composables/useBookingPrewarm";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -304,6 +305,8 @@ export function useAppBookingDialog() {
     url: string = APP_BOOKING_URL,
     options?: AppBookingUrlOptions,
   ) {
+    // #180: Ein spaeter geplantes Calendly-Vorwaermen waere jetzt nur Ballast.
+    markBookingDialogOpened();
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/AppBookingDialog.vue"),
