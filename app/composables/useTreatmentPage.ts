@@ -167,7 +167,7 @@ export function useTreatmentPage() {
   }
 
   const fixedBlocks = computed(() =>
-    mapTreatmentPageFixedBlocks(treatmentPage.value, t, isAdsMode.value),
+    mapTreatmentPageFixedBlocks(treatmentPage.value, t, isAdsMode.value, currentLocale),
   );
 
   const { brandName } = useBrand();

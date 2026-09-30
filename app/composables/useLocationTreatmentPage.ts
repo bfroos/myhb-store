@@ -8,9 +8,11 @@ import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
 import {
+  buildNewCustomerOffer,
   isSurgeryPathKey,
   newCustomerPriceLabel,
 } from "#shared/newCustomerOffer";
+import { adsTreatmentHeadline } from "~/lib/strapi/mapper/adsTreatmentHeadline";
 
 export function useLocationTreatmentPage() {
   const { locale, fallbackLocale, localeProperties, t } = useI18n();
@@ -165,6 +167,7 @@ export function useLocationTreatmentPage() {
   );
 
   const { brandName, brandNameShort } = useBrand();
+  const globals = useGlobals();
   
   // Price fallback: fetch from general treatment page if location treatment has no price
   const treatmentPrice = ref<number | null>(null);
@@ -206,21 +209,50 @@ export function useLocationTreatmentPage() {
       // Ads mode: Neukundenpreis wie auf der Seite ("ab 119,99 €*"), sonst
       // ohne Preis. Leerzeichen zusammenziehen: ein leerer {priceTag}
       // hinterliess ein doppeltes Leerzeichen im <title> (#186).
+      const treatment = treatmentPage.value?.treatment;
       const price =
-        treatmentPage.value?.treatment?.priceInEuroCent ||
-        treatmentPage.value?.treatment?.cheapestPriceInEuroCent;
+        treatment?.priceInEuroCent || treatment?.cheapestPriceInEuroCent;
+      // Titel nennt denselben Preis wie der Hero: bei Muskelrelaxans-Zonen
+      // "ab 79,99 € pro Zone*" statt des 1-Zonen-Preises (30.09.2026).
+      const offer =
+        currentLocale === "de"
+          ? buildNewCustomerOffer({
+              pathKey: treatmentPage.value?.pathKey,
+              priceCent: price,
+              isStartingPrice: treatment?.isStartingPrice,
+              twoZonePriceCent: (treatment?.products ?? [])
+                .flatMap((product: any) => product.variants ?? [])
+                .find(
+                  (variant: any) =>
+                    variant.slug === "2-zonen" && variant.isActive !== false,
+                )?.priceInEuroCent,
+              discountPct:
+                globals.value?.ecommerce?.newsletterDiscountPercentage,
+            })
+          : null;
       const priceTag =
         (currentLocale === "de" &&
           !isSurgeryPathKey(treatmentPage.value?.pathKey) &&
-          newCustomerPriceLabel(
-            price,
-            treatmentPage.value?.treatment?.isStartingPrice ? "ab" : "",
-          )) ||
+          (offer?.heroLine.replace(/^Neukunden\s+/, "") ||
+            newCustomerPriceLabel(
+              price,
+              treatment?.isStartingPrice ? "ab" : "",
+            ))) ||
         "";
+      // go.: Titel und Beschreibung mit der H1 in Suchsprache ("Stirnfalte
+      // glätten in Köln"), shared/adsHeadlines.ts. Die Stadt steckt dann
+      // schon in der Ueberschrift.
+      const searchHeadline = adsTreatmentHeadline(
+        treatmentPage.value?.pathKey,
+        loc?.city?.name ?? "",
+        currentLocale,
+      );
+      const titleName = searchHeadline ?? treatmentName;
+      const titleCity = searchHeadline ? "" : loc?.city?.name ?? "";
       return {
         metaTitle: t("locations.location.locationTreatment.seo.title", {
-          treatmentName,
-          city: loc?.city?.name ?? "",
+          treatmentName: titleName,
+          city: titleCity,
           priceTag,
           brandName: brandName.value,
         })
@@ -229,11 +261,14 @@ export function useLocationTreatmentPage() {
         metaDescription: t(
           "locations.location.locationTreatment.seo.description",
           {
-            treatmentName,
-            city: loc?.city?.name ?? "",
+            treatmentName: titleName,
+            city: titleCity,
             locationName: loc?.name ?? "",
           },
-        ),
+        )
+          .replace(/\s+:/g, ":")
+          .replace(/\s+/g, " ")
+          .trim(),
       };
     }
     

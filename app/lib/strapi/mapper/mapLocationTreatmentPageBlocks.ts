@@ -14,7 +14,10 @@ import { DEFAULT_TIMEZONE } from "../config";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
-import { adsTreatmentHeadline } from "./adsTreatmentHeadline";
+import {
+  adsTreatmentHeadline,
+  adsTreatmentSubline,
+} from "./adsTreatmentHeadline";
 
 type TranslateFn = ReturnType<typeof useI18n>["t"];
 
@@ -78,11 +81,10 @@ export function mapLocationTreatmentPageFixedBlocks(
     // treatmentPage.name ist dasselbe Keyword wie im Meta-Titel (treatmentName).
     const treatmentKeyword =
       treatmentPage.name ?? treatmentPage.hero?.headline ?? "";
-    // go.: Die Muskelrelaxans-Grundseite in Suchsprache (#186) - Gesucht
-    // wird "Faltenbehandlung", nicht der Fachbegriff. Unterseiten
-    // (Zornesfalte, Stirnfalte ...) behalten ihren Problem-Namen.
+    // go.: H1 in Suchsprache, wie gesucht wird ("Stirnfalte glätten in
+    // Köln" statt "Stirnfalte Köln"; shared/adsHeadlines.ts).
     const adsSearchHeadline = isAdsMode
-      ? adsTreatmentHeadline(treatmentPage.pathKey, city)
+      ? adsTreatmentHeadline(treatmentPage.pathKey, city, localeCode)
       : null;
     const heroHeadline =
       adsSearchHeadline ??
@@ -91,7 +93,15 @@ export function mapLocationTreatmentPageFixedBlocks(
     return {
       eyebrow: fullLocationName,
       headline: heroHeadline,
-      subline: treatmentPage.hero?.subline,
+      // go.: generische Strapi-Unterzeile ("Erfahrene Ärzte & Premium
+      // Produkte") -> konkrete Unterzeile der Behandlung.
+      subline: isAdsMode
+        ? adsTreatmentSubline(
+            treatmentPage.pathKey,
+            treatmentPage.hero?.subline,
+            localeCode,
+          )
+        : treatmentPage.hero?.subline,
       cover: treatmentPage.hero?.cover ?? location.buildingImage,
       text: treatmentPage.hero?.text,
       showPrice: treatmentPage.hero?.showPrice,

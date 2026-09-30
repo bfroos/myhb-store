@@ -2,7 +2,10 @@ import { SharedButtonAction, SharedButtonMethod } from "../dto/enums";
 import type { SharedKeyValueDto } from "../dto/components";
 import type { TreatmentPageDto } from "../dto/collections";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
-import { adsTreatmentHeadline } from "./adsTreatmentHeadline";
+import {
+  adsTreatmentHeadline,
+  adsTreatmentSubline,
+} from "./adsTreatmentHeadline";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 
 type TranslateFn = ReturnType<typeof useI18n>["t"];
@@ -11,6 +14,7 @@ export function mapTreatmentPageFixedBlocks(
   treatmentPage: TreatmentPageDto = {} as TreatmentPageDto,
   t: TranslateFn,
   isAdsMode = false,
+  localeCode?: string,
 ) {
   const tableOfContents: SharedKeyValueDto[] = [];
 
@@ -50,11 +54,18 @@ export function mapTreatmentPageFixedBlocks(
     ).trim();
 
     return {
-      // go.: Muskelrelaxans-Grundseite in Suchsprache (#186).
+      // go.: H1 in Suchsprache ("Stirnfalte glätten"), shared/adsHeadlines.ts.
       headline:
-        (isAdsMode ? adsTreatmentHeadline(treatmentPage?.pathKey) : null) ??
-        treatmentKeyword,
-      subline: treatmentPage?.hero?.subline,
+        (isAdsMode
+          ? adsTreatmentHeadline(treatmentPage?.pathKey, null, localeCode)
+          : null) ?? treatmentKeyword,
+      subline: isAdsMode
+        ? adsTreatmentSubline(
+            treatmentPage?.pathKey,
+            treatmentPage?.hero?.subline,
+            localeCode,
+          )
+        : treatmentPage?.hero?.subline,
       text: treatmentPage?.hero?.text,
       cover: treatmentPage?.hero?.cover,
       cta: link,
