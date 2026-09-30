@@ -40,3 +40,17 @@ test("Eingebrannter Markenname (Texterkennung 30.09.2026) ist gesperrt", () => {
   }
   assert.equal(isBlockedAdsVideo(vid(546, "https://m/Lippenergebnisse.mp4")), false);
 });
+
+test("#199: Bild mit dem Begriff in der Datei-URL wird ausgeblendet, Alt-Text allein nicht", () => {
+  const bad = { id: 1044, url: "https://m/Kopie_von_BOTOX_OT_NEU_45_2ff25e5fae.png", mime: "image/png" };
+  const altOnly = { id: 2, url: "https://m/lippen.png", alternativeText: "Botox", mime: "image/png" };
+  const out: any = stripBlockedAdsVideos({
+    details: { image: bad, text: "x" },
+    gallery: [bad, altOnly],
+    other: altOnly,
+  });
+  assert.equal(out.details.image, null);
+  assert.equal(out.details.text, "x");
+  assert.deepEqual(out.gallery, [altOnly]);
+  assert.equal(out.other, altOnly);
+});

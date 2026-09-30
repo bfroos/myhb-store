@@ -42,6 +42,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const { isAdsMode } = useSiteModeFlags();
 const button = computed(() => props.button ?? null);
 
 const as = computed(() => {
@@ -112,7 +113,8 @@ function resolveInternalToFromSharedButton(
       case "about-us":
         return "/ueber-uns";
       case "blog":
-        return "/blog";
+        // go.: Blog ist aus (#199), /blog leitet auf /behandlungen weiter.
+        return isAdsMode.value ? "/behandlungen" : "/blog";
       case "career":
         return "/karriere";
       case "doctors":

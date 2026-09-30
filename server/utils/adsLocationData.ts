@@ -97,6 +97,24 @@ async function adsTreePages(event: any, locale: string): Promise<AdsTreePage[] |
   }
 }
 
+/**
+ * pathKeys, unter denen go. eine /behandlungen/-Seite hat: alle Seiten des
+ * Ads-Baums, bei "-rabatt"-Seiten auch die Grundadresse (useTreatmentPage
+ * faellt dort auf "-rabatt" zurueck). `null`, wenn Strapi nicht lesbar ist.
+ */
+export async function adsTreePathKeys(event: any): Promise<Set<string> | null> {
+  const pages = await adsTreePages(event, 'de');
+  if (!pages) return null;
+  const keys = new Set<string>();
+  for (const page of pages) {
+    const key = page?.pathKey;
+    if (typeof key !== 'string' || !key) continue;
+    keys.add(key);
+    if (key.endsWith('-rabatt')) keys.add(key.slice(0, -'-rabatt'.length));
+  }
+  return keys;
+}
+
 export const ADS_LOCATION_PAGE = /^\/locations\/([^/]+)\/([^/]+)\/with-treatments-ads$/;
 
 /**

@@ -75,3 +75,42 @@ test("Strapi-Blocks, Buttons, Medien, Canonical", () => {
   assert.equal(out.image.url, "https://www.myhealthandbeauty.com/a.jpg");
   assert.equal(out.seo.canonicalUrl, "https://www.myhealthandbeauty.com/behandlungen/hyaluron");
 });
+
+test("#199: Blog-Links weg, Botox-Adressen auf Muskelrelaxans, Aachen-Lippenseite ersetzt", () => {
+  const adsPathKeys = new Set(["muskelrelaxans", "muskelrelaxans/zornesfalte", "hyaluron", "anti-haarausfall/prp-haartherapie"]);
+  assert.equal(mapAdsLink("/blog"), null);
+  assert.equal(mapAdsLink("https://www.myhealthandbeauty.com/blog/c/botox"), null);
+  assert.equal(mapAdsLink("/produkte/botox/botox"), "/behandlungen/muskelrelaxans");
+  assert.equal(mapAdsLink("/p/botox-kosten"), "/preise");
+  assert.equal(mapAdsLink("/behandlungen/botox/zornesfalte", { adsPathKeys }), "/behandlungen/muskelrelaxans/zornesfalte");
+  assert.equal(mapAdsLink("/behandlungen/botox/3-zonen-botox-preise", { adsPathKeys }), "/behandlungen/muskelrelaxans");
+  assert.equal(
+    mapAdsLink("/aachen/lip-filler/#booking"),
+    "/standorte/aachen/aquis-plaza/hyaluron/lippen-aufspritzen#booking",
+  );
+  // Standortseite: Botox-Querlink auf dieselbe Muskelrelaxans-Seite am Standort
+  assert.equal(
+    mapAdsLink("/behandlungen/botox", ctx),
+    "/standorte/koeln/koeln-arcaden/muskelrelaxans",
+  );
+});
+
+test("#199: Links auf Behandlungen, die es auf go. nicht gibt", () => {
+  const adsPathKeys = new Set(["hyaluron", "hyaluron/lippen-aufspritzen", "anti-haarausfall/prp-haartherapie"]);
+  const c = { adsPathKeys };
+  assert.equal(mapAdsLink("/behandlungen/hyaluron", c), "/behandlungen/hyaluron");
+  assert.equal(mapAdsLink("/behandlungen/prp-haartherapie", c), "/behandlungen/anti-haarausfall/prp-haartherapie");
+  assert.equal(mapAdsLink("/behandlungen/hyaluron/russian-lips", c), null);
+  assert.equal(mapAdsLink("/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/russian-lips", c), null);
+  assert.equal(
+    mapAdsLink("/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/lippen-aufspritzen", c),
+    "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/lippen-aufspritzen",
+  );
+  assert.equal(mapAdsLink("/standorte/duesseldorf/duesseldorf-arcaden", c), "/standorte/duesseldorf/duesseldorf-arcaden");
+  assert.equal(
+    rewriteAdsLinksInText('wie <a href="/behandlungen/hyaluron/russian-lips">Russian Lips</a> und [Blog](/blog)', c),
+    "wie Russian Lips und Blog",
+  );
+  const out = rewriteAdsLinksDeep({ button: { url: "/blog" } }, c);
+  assert.equal(out.button.url, "/behandlungen");
+});

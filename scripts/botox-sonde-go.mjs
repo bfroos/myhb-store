@@ -28,6 +28,9 @@
  * Standort x Ads-Behandlung (treatment-ads-pages), /behandlungen/..., /p/...,
  * /produkte/...; dazu jeder interne Link, der auf einer geprueften Seite steht.
  *
+ * Weiterleitungen (go.: /blog und Botox-Pfade -> 301, #199) sind kein
+ * Fehlabruf: geprueft wird das Ziel, einmal pro Ziel.
+ *
  * Vor jedem Lauf prueft die Sonde eine Positivkontrolle (www-Seite, auf der
  * "Botox" steht). Findet sie dort nichts, ist die Sonde blind und bricht ab.
  *
@@ -453,7 +456,10 @@ export async function scan(startUrls, { concurrency = 4, crawl = true, maxPages 
           page.error = r.error || `HTTP ${r.status}`;
         } else if (finalHost !== baseHost) {
           page.error = `Weiterleitung auf ${finalHost}`;
+        } else if (isRedirected(page) && queued.has(stripQuery(r.finalUrl))) {
+          // Ziel wird ohnehin (oder wurde schon) geprueft: nicht doppelt zaehlen.
         } else {
+          if (isRedirected(page)) queued.add(stripQuery(r.finalUrl));
           page.findings = findTerms(r.body, r.finalUrl);
           if (crawl) {
             for (const link of internalLinks(r.body, r.finalUrl)) {
@@ -497,15 +503,33 @@ function mdEscape(s) {
   return String(s).replace(/\|/g, "\\|").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, " ");
 }
 
+function stripQuery(u) {
+  try {
+    const x = new URL(u);
+    return `${x.origin}${x.pathname.replace(/\/+$/, "") || "/"}`;
+  } catch {
+    return u;
+  }
+}
+
+export function isRedirected(page) {
+  const norm = (u) => String(u || "").replace(/\/+$/, "");
+  return !!page.finalUrl && norm(page.finalUrl) !== norm(page.url);
+}
+
 export function renderReport({ base, pages, control, problems = [], runUrl }, limit = 60_000) {
   const hitPages = pages.filter((p) => p.findings.length);
   const failed = pages.filter((p) => p.error);
   const groups = groupFindings(pages);
+  // Weiterleitungen (go.: Blog, Botox-Pfade -> 301, #199) sind kein
+  // Fehlabruf; geprueft wird das Ziel, und dessen URL zaehlt als Seiten-URL.
+  const redirected = pages.filter((p) => !p.error && isRedirected(p));
   const lines = [];
   lines.push(`**Botox-Sonde ${base}** – ${new Date().toISOString().slice(0, 16).replace("T", " ")} UTC`);
   lines.push("");
   lines.push(
-    `Geprüft: ${pages.length} Seiten · mit Treffer: **${hitPages.length}** · Fundstellen: ${groups.length} · Abruf fehlgeschlagen: ${failed.length}`,
+    `Geprüft: ${pages.length} Seiten · mit Treffer: **${hitPages.length}** · Fundstellen: ${groups.length} · Abruf fehlgeschlagen: ${failed.length}` +
+      (redirected.length ? ` · weitergeleitet: ${redirected.length} (Ziel geprüft)` : ""),
   );
   if (control) {
     lines.push(

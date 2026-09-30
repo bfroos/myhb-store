@@ -2,7 +2,7 @@
 // Positivkontrolle gegen www laeuft im Skript selbst vor jedem Lauf.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { findTerms, internalLinks, renderReport } from "./botox-sonde-go.mjs";
+import { findTerms, internalLinks, isRedirected, renderReport } from "./botox-sonde-go.mjs";
 
 const PAGE = "https://go.example.test/standorte/koeln/x/muskelrelaxans/zornesfalte";
 const wrap = (head, body) => `<!doctype html><html><head>${head}</head><body>${body}</body></html>`;
@@ -83,4 +83,16 @@ test("Bericht schwaerzt Telefon/E-Mail und trennt Fehlabrufe von Treffern", () =
   assert.match(r, /mit Treffer: \*\*1\*\*/);
   assert.match(r, /Abruf fehlgeschlagen \(1\)/);
   assert.doesNotMatch(r, /801 423|info@/);
+});
+
+test("Weiterleitung ist kein Fehlabruf (#199)", () => {
+  const pages = [
+    { url: "https://go.example.test/blog", finalUrl: "https://go.example.test/behandlungen", status: 200, findings: [] },
+    { url: "https://go.example.test/a/", finalUrl: "https://go.example.test/a", status: 200, findings: [] },
+  ];
+  assert.equal(isRedirected(pages[0]), true);
+  assert.equal(isRedirected(pages[1]), false);
+  const r = renderReport({ base: "https://go.example.test", pages });
+  assert.match(r, /Abruf fehlgeschlagen: 0 · weitergeleitet: 1/);
+  assert.match(r, /Keine sichtbaren Treffer/);
 });
