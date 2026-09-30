@@ -225,9 +225,13 @@ function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
   const pathKey = treatment.treatmentPage?.pathKey ?? "";
   // go. (#184): Der Ads-Baum heisst "muskelrelaxans"; die SEO-pathKeys
   // ("botox/stirnfalte", "botox/baby-botox") liefen dort auf 404.
-  return `/behandlungen/${
-    isAdsMode.value ? pathKey.replace(/botox/g, "muskelrelaxans") : pathKey
-  }`;
+  if (!isAdsMode.value) return `/behandlungen/${pathKey}`;
+  // Lemon Bottle Wangen heisst im Ads-Baum "-wangen", der SEO-pathKey
+  // "-backen" lief dort auf 404.
+  const adsPathKey = pathKey
+    .replace(/botox/g, "muskelrelaxans")
+    .replace(/lemon-bottle-backen$/, "lemon-bottle-wangen");
+  return `/behandlungen/${adsPathKey}`;
 }
 
 function getVariantPath(
@@ -235,6 +239,14 @@ function getVariantPath(
   variant: ProductVariantDto,
   category: ProductCategoryDto,
 ) {
+  // go.: Die Produktseite heisst /produkte/botox/botox - der Markenname in
+  // der Adresse kostet die Anzeigen-Freigabe. Dort auf die Kategorie zeigen.
+  if (
+    isAdsMode.value &&
+    /botox|btx/i.test(`${category.slug}/${product.slug}`)
+  ) {
+    return "/behandlungen/muskelrelaxans";
+  }
   return `/produkte/${category.slug}/${product.slug}?v=${variant.slug}`;
 }
 
