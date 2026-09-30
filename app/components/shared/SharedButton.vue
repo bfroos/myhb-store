@@ -219,7 +219,8 @@ const bookingUrl = computed(() =>
 // #141: Calendly zeichnet im iFrame erst 10 bis ueber 40 Sekunden nach dem
 // Klick — es sei denn, seine Dateien liegen schon im Cache. Genau das holt das
 // Vorwaermen nach, waehrend die Seite gelesen wird. Es laeuft nur einmal je
-// Seite; weitere Buchungsknoepfe zeigen auf dieselbe URL.
+// Seite; weitere Buchungsknoepfe zeigen auf dieselbe URL. #180: Gestartet wird
+// erst nach dem ersten Screen (load + LCP, dann Regung oder 4 s Ruhe).
 onMounted(() => {
   if (button.value?.method !== "action") return;
   if (button.value?.action !== SharedButtonAction.APPOINTMENT_BOOKING) return;

@@ -149,10 +149,13 @@ export default defineNuxtConfig({
         },
         ...(process.env.NUXT_PUBLIC_MEDIA_URL
           ? [
+              // #180: ohne crossorigin. Hero-Bild, Bilder und Videos laden
+              // ohne CORS; eine Verbindung mit crossorigin gehoert zu einem
+              // anderen Verbindungs-Pool und wird dafuer nicht benutzt — das
+              // LCP-Bild baute bisher trotz Preconnect eine eigene auf.
               {
                 rel: "preconnect" as const,
                 href: new URL(process.env.NUXT_PUBLIC_MEDIA_URL).origin,
-                crossorigin: "anonymous" as const,
               },
               {
                 rel: "dns-prefetch" as const,

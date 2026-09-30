@@ -3,6 +3,7 @@ import {
   isCalendlyUrl,
   withCalendlyLocale,
 } from "~/lib/calendlyEmbedUrl";
+import { whenFirstScreenDone } from "~/lib/firstScreen";
 
 /**
  * Das Buchungsfenster laedt, bevor jemand klickt — und wird dann
@@ -240,6 +241,140 @@ export function attachBookingPrewarm(
   return true;
 }
 
+/**
+ * Wurde auf dieser Seite schon ein Buchungsdialog geoeffnet? Dann wird nicht
+ * mehr vorgewaermt (#180) — siehe `prewarmBookingWhenIdle`.
+ */
+let dialogGeoeffnetAuf: string | null = null;
+
+/** Aus `useCalendlyDialog`/`useAppBookingDialog` beim Oeffnen eines Buchungsdialogs. */
+export function markBookingDialogOpened() {
+  if (!import.meta.client) return;
+  dialogGeoeffnetAuf = window.location.pathname;
+}
+
+function bookingDialogWasOpened(): boolean {
+  return (
+    import.meta.client && dialogGeoeffnetAuf === window.location.pathname
+  );
+}
+
+/** Ruhe nach dem ersten Screen, nach der ohne Zutun vorgewaermt wird (#180). */
+const LEERLAUF_MS = 4000;
+/** So lange wartet das Vorwaermen nach einem Tipp in den Banner auf Cookiebot. */
+const BANNER_GEDULD_MS = 1500;
+
+/**
+ * Was als Regung des Besuchers zaehlt. `scroll` nur am Dokument (ohne
+ * Capture): Karussells und Laufbaender scrollen ihre eigenen Elemente per
+ * Skript, das waere keine Regung.
+ */
+const REGUNGEN = ["wheel", "touchstart", "pointerdown", "keydown"];
+
+/** Jede Seite (SPA-Wechsel eingeschlossen) plant hoechstens einen Start. */
+let geplantFuer: string | null = null;
+
+/**
+ * Ruft `start` genau einmal, sobald der erste Screen fertig ist und der
+ * Besucher sich regt oder `LEERLAUF_MS` lang Ruhe war.
+ */
+function nachErstemScreen(start: () => void) {
+  const pfad = window.location.pathname;
+  if (geplantFuer === pfad) return;
+  geplantFuer = pfad;
+
+  let gestartet = false;
+  let screenFertig = false;
+  let geregt: Event | null = null;
+  let leerlauf: ReturnType<typeof setTimeout> | null = null;
+
+  const aufraeumen = () => {
+    for (const typ of REGUNGEN) window.removeEventListener(typ, regung, true);
+    window.removeEventListener("scroll", regung);
+    if (leerlauf) clearTimeout(leerlauf);
+  };
+
+  const los = () => {
+    if (gestartet) return;
+    // SPA-Wechsel dazwischen: diese Seite ist nicht mehr da.
+    if (window.location.pathname !== pfad) {
+      gestartet = true;
+      aufraeumen();
+      return;
+    }
+    gestartet = true;
+    aufraeumen();
+    start();
+  };
+
+  /** Tipp in den Cookie-Banner: auf dessen Antwort warten, dann starten. */
+  const nachBanner = () => {
+    let fertig = false;
+    const weiter = () => {
+      if (fertig) return;
+      fertig = true;
+      window.removeEventListener("CookiebotOnAccept", weiter);
+      window.removeEventListener("CookiebotOnDecline", weiter);
+      // Ein Tick, damit Cookiebot `consent` fertig schreibt (wie beim
+      // Nachwaermen).
+      setTimeout(los, 0);
+    };
+    window.addEventListener("CookiebotOnAccept", weiter);
+    window.addEventListener("CookiebotOnDecline", weiter);
+    setTimeout(weiter, BANNER_GEDULD_MS);
+  };
+
+  const ausloesen = (e: Event | null) => {
+    const ziel = e?.target;
+    if (
+      ziel instanceof Element &&
+      ziel.closest("#CybotCookiebotDialog, #CookiebotWidget")
+    ) {
+      nachBanner();
+      return;
+    }
+    los();
+  };
+
+  function regung(e: Event) {
+    if (gestartet) return;
+    if (screenFertig) {
+      ausloesen(e);
+      return;
+    }
+    // Vor dem ersten Screen nur merken; ein Tipp in den Banner zaehlt dabei
+    // nicht als Regung, sonst stuende der Stempel beim Start noch nicht fest.
+    const ziel = e.target;
+    if (
+      ziel instanceof Element &&
+      ziel.closest("#CybotCookiebotDialog, #CookiebotWidget")
+    )
+      return;
+    geregt = e;
+  }
+  for (const typ of REGUNGEN)
+    window.addEventListener(typ, regung, { capture: true, passive: true });
+  window.addEventListener("scroll", regung, { passive: true });
+
+  const ersterScreenFertig = () => {
+    if (screenFertig || gestartet) return;
+    screenFertig = true;
+    if (geregt) {
+      los();
+      return;
+    }
+    leerlauf = setTimeout(() => {
+      if (typeof requestIdleCallback === "function") {
+        requestIdleCallback(los, { timeout: 2000 });
+      } else {
+        los();
+      }
+    }, LEERLAUF_MS);
+  };
+
+  whenFirstScreenDone(ersterScreenFertig);
+}
+
 export function useBookingPrewarm() {
   const config = useRuntimeConfig();
   const route = useRoute();
@@ -364,19 +499,51 @@ export function useBookingPrewarm() {
     window.addEventListener("CookiebotOnDecline", nachwaermen);
   }
 
-  /** Startet das Vorwaermen, sobald die Seite nichts Wichtigeres zu tun hat. */
+  /**
+   * Startet das Vorwaermen erst nach dem ersten Screen (#180).
+   *
+   * Bis zum 30.09.2026 lief es per `requestIdleCallback(…, { timeout: 2000 })`
+   * direkt nach dem Hydrieren — mitten im Seitenaufbau. Gemessen (Lighthouse
+   * mobil, go.): Calendly holt dabei ~3,6 MB (booking.js/.css, reCAPTCHA,
+   * Stripe, Segment) und verdraengt das Hero-Bild von der Leitung. Das
+   * Vorwaermen bleibt an (Entscheidung vom 21.09.2026), es wartet nur:
+   *
+   * 1. auf `load` und den ersten LCP-Eintrag — der erste Screen steht;
+   * 2. danach auf die erste Regung des Besuchers (Scrollen, Tippen, Taste)
+   *    oder, wenn keine kommt, auf `LEERLAUF_MS` Ruhe. Wer bis zum Button
+   *    liest, hat den Rahmen damit weiterhin warm.
+   *
+   * Tippt jemand in den Cookie-Banner, wartet das Vorwaermen auf dessen
+   * Antwort: Dann traegt schon der erste Rahmen den Consent-Stempel, statt
+   * gleich wieder verworfen und nachgewaermt zu werden.
+   *
+   * Hat der Besucher den Buchungsdialog vorher schon geoeffnet, entfaellt das
+   * Vorwaermen — der Dialog laedt dann selbst, ein zweiter Rahmen daneben
+   * kostete nur Bandbreite.
+   */
   function prewarmBookingWhenIdle(url?: string | null) {
     if (!import.meta.client || mode === "off" || !isCalendlyUrl(url)) return;
+    // Die Lauscher haengen schon ab dem Einhaengen des Knopfes — ein Wischen
+    // waehrend des Hydrierens zaehlt also mit. Gestartet wird trotzdem erst,
+    // wenn Nuxt fertig ist (gemessen: auf gedrosseltem Handy ~5 s nach `load`).
+    // Laeuft synchron, sobald beides erfuellt ist: Ein Tipp auf "Termin
+    // buchen" legt den Rahmen so noch vor dem Klick an, und der Dialog
+    // uebernimmt ihn, statt ein zweites Mal zu laden.
+    let nuxtBereit = false;
+    let wartet: (() => void) | null = null;
+    const starten = () => {
+      if (bookingDialogWasOpened()) return;
+      prewarmBooking(url);
+      nachwaermenBeiConsent();
+    };
     onNuxtReady(() => {
-      const start = () => {
-        prewarmBooking(url);
-        nachwaermenBeiConsent();
-      };
-      if (typeof requestIdleCallback === "function") {
-        requestIdleCallback(start, { timeout: 2000 });
-      } else {
-        setTimeout(start, 500);
-      }
+      nuxtBereit = true;
+      wartet?.();
+      wartet = null;
+    });
+    nachErstemScreen(() => {
+      if (nuxtBereit) starten();
+      else wartet = starten;
     });
   }
 

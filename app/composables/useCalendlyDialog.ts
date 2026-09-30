@@ -6,7 +6,10 @@ import {
   useAppBookingDialog,
   withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
-import { disposeBookingPrewarm } from "~/composables/useBookingPrewarm";
+import {
+  disposeBookingPrewarm,
+  markBookingDialogOpened,
+} from "~/composables/useBookingPrewarm";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { priceFromLabel } from "~/lib/checkoutAttempt";
 
@@ -45,6 +48,9 @@ export function useCalendlyDialog() {
     alternatives?: BookingAlternatives,
     treatmentContext?: BookingTreatmentContext,
   ) {
+    // #180: Ab jetzt laedt der Dialog selbst (oder uebernimmt den warmen
+    // Rahmen); ein noch ausstehendes Vorwaermen faellt weg.
+    markBookingDialogOpened();
     // #100: Der Bucket steht schon seit dem Seitenaufruf fest
     // (plugins/ab-split.client.ts); hier wird er angewendet, weil jetzt der
     // Standort und damit die zweite URL bekannt ist.
