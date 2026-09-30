@@ -437,7 +437,20 @@ export function pickAdsV2Reviews<T extends ReviewLike>(
     const len = text.length;
     return (words.test(text) ? 1000 : 0) - Math.abs(len - 220);
   };
-  return [...ok].sort((a, b) => score(b) - score(a)).slice(0, count);
+  // Dieselbe Bewertung steht in den Daten teils doppelt (z. B. zwei Eintraege
+  // derselben Person mit gleichem Text) - nur einmal zeigen.
+  const seen = new Set<string>();
+  const unique = [...ok]
+    .sort((a, b) => score(b) - score(a))
+    .filter((r) => {
+      const key = `${String(r.author ?? "").trim().toLowerCase()}|${String(r.text ?? "").replace(/\s+/g, " ").trim().toLowerCase()}`;
+      const textKey = String(r.text ?? "").replace(/\s+/g, " ").trim().toLowerCase();
+      if (seen.has(key) || seen.has(textKey)) return false;
+      seen.add(key);
+      seen.add(textKey);
+      return true;
+    });
+  return unique.slice(0, count);
 }
 
 /** Kuerzen am Wortende, hoechstens `max` Zeichen. */

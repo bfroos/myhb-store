@@ -16,7 +16,13 @@ import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
 } from "./adsTemplateV2.ts";
-import { adsClipAllowed, adsClipEntries, adsClipsFor } from "./adsClips.ts";
+import {
+  adsClipAllowed,
+  adsClipEntries,
+  adsClipIsShort,
+  adsClipsFor,
+  heroObjectPositionY,
+} from "./adsClips.ts";
 
 test("Vorlage v2 nur auf den zwei Musterseiten", () => {
   assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte"), true);
@@ -150,6 +156,72 @@ test("Clips: nur ungesperrte, Hero-Clip nur wo tauglich", () => {
   assert.equal(adsClipsFor("hyaluron/lippen-aufspritzen").hero?.url, "/videos/go/hero-lippen-8s.mp4");
   assert.equal(adsClipsFor("hyaluron/lippen-aufspritzen").hero?.posterUrl, "/videos/go/hero-lippen-8s-poster.jpg");
   assert.deepEqual(adsClipsFor("nix/da"), { carousel: [] });
+});
+
+test("Bewertungen: doppelte Eintraege nur einmal", () => {
+  const t = "Alle Mitarbeiter sowie besonders die Aerztin waren aeusserst freundlich, Behandlung mit Hyaluron.";
+  const picked = pickAdsV2Reviews(
+    [
+      { author: "Heike S.", text: t, rating: 5 },
+      { author: "Heike S.", text: `${t} `, rating: 5 },
+      { author: "Anna", text: "Sehr angenehme Atmosphaere, kompetente Aerztin, Lippen mit Hyaluron top.", rating: 5 },
+    ] as any,
+    "Köln",
+    "hyaluron/lippen-aufspritzen",
+  );
+  assert.equal(picked.length, 2);
+});
+
+test("Karussell: nur passende Clips ohne fremden Stadtnamen, volle Videos nur mit Poster", () => {
+  // Stirnfalte: kein passender Clip (807 = Masseter, Leipzig) -> Abschnitt aus
+  assert.deepEqual(adsClipsFor("muskelrelaxans/stirnfalte", "koeln").carousel, []);
+  const lippenKoeln = adsClipsFor("hyaluron/lippen-aufspritzen", "koeln").carousel;
+  assert.deepEqual(lippenKoeln.map((c) => c.mediaId), [547, 546]);
+  assert.ok(lippenKoeln.every((c) => !/leipzig|kaiserslautern/i.test(`${c.url} ${c.caption}`)));
+  // Kaiserslautern-Clip nur auf Kaiserslauterer Seiten
+  assert.deepEqual(
+    adsClipsFor("hyaluron/lippen-aufspritzen", "kaiserslautern").carousel.map((c) => c.mediaId),
+    [547, 806, 546],
+  );
+  for (const [, set] of adsClipEntries()) {
+    for (const c of set.carousel) {
+      assert.ok(adsClipIsShort(c) || !!c.posterUrl, `${c.url}: volles Video braucht ein Poster`);
+      assert.ok(!/807|masseter/i.test(c.url), "kein Masseter-Clip im Karussell");
+    }
+  }
+  assert.equal(adsClipIsShort({ url: "/videos/go/hero-lippen-8s.mp4" }), true);
+  assert.equal(adsClipIsShort({ url: "https://media.myhealthandbeauty.app/Lippen_1.mp4" }), false);
+});
+
+test("Hero-Ausschnitt: Untertitel ganz drin oder ganz draussen", () => {
+  const sizes: Array<[number, number]> = [
+    [284, 98], [312, 130], [336, 199], [353, 384], [398, 420], [700, 400], [560, 620],
+  ];
+  for (const key of ["hyaluron/lippen-aufspritzen", "muskelrelaxans/stirnfalte"]) {
+    const hero = adsClipsFor(key, "koeln").hero!;
+    assert.ok(hero.captionZones?.length, key);
+    for (const [w, h] of sizes) {
+      const p = heroObjectPositionY(w, h, hero) / 100;
+      const r = h / (w / (hero.aspect ?? 9 / 16));
+      if (r >= 1) continue;
+      const top = p * (1 - r);
+      const bottom = top + r;
+      for (const [a, z] of hero.captionZones!) {
+        const outside = bottom <= a + 0.002 || top >= z - 0.002;
+        const inside = top <= a + 0.002 && bottom >= z - 0.002;
+        assert.ok(outside || inside, `${key} ${w}x${h}: Zone ${a}-${z} angeschnitten (${top.toFixed(3)}-${bottom.toFixed(3)})`);
+      }
+    }
+  }
+  // iPhone SE (Karte 336 x 199): Lippen-Ausschnitt endet ueber den Untertiteln
+  // und zeigt die Lippen (53-66 %).
+  const lippen = adsClipsFor("hyaluron/lippen-aufspritzen").hero!;
+  const r = 199 / (336 * 16 / 9);
+  const top = (heroObjectPositionY(336, 199, lippen) / 100) * (1 - r);
+  assert.ok(top + r <= 0.685 && top + r >= 0.64, `Ende ${(top + r).toFixed(3)}`);
+  // ohne Zonen: Fokus mittig
+  assert.equal(heroObjectPositionY(336, 199, { focusY: 0.5 }), 50);
+  assert.equal(heroObjectPositionY(0, 0, { focusY: 0.3 }), 30);
 });
 
 test("Vorschau nur unter /vorschau-v2, Canonical auf die echte Seite", () => {

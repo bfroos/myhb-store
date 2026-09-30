@@ -74,8 +74,8 @@
           <li v-for="card in priceCards" :key="card.key" class="v2-price" :class="{ 'v2-price--package': card.isPackage }">
             <span class="v2-price__label">{{ card.label }}</span>
             <strong v-if="card.offer" class="v2-price__offer">{{ card.offer }}</strong>
-            <span class="v2-price__regular">{{ card.regular }}</span>
-            <span v-if="card.note" class="v2-price__note">{{ card.note }}</span>
+            <span class="v2-price__regular">{{ keepAmount(card.regular) }}</span>
+            <span v-if="card.note" class="v2-price__note">{{ keepAmount(card.note) }}</span>
           </li>
         </ul>
         <ul class="v2-notes" role="list">
@@ -286,7 +286,14 @@ const offer = useNewCustomerOffer(
   () => props.hero.treatmentPathKey,
 );
 
-const clips = computed(() => adsClipsFor(pathKey.value));
+// Stadt der Seite: Clips mit fremdem Stadtnamen im Bild fallen weg.
+// Betrag und Euro-Zeichen nicht trennen ("149,99" / "€" auf zwei Zeilen in
+// den schmalen Preiskarten).
+function keepAmount(text: string | null | undefined): string {
+  return String(text ?? "").replace(/(\d) (€)/g, "$1\u00a0$2");
+}
+
+const clips = computed(() => adsClipsFor(pathKey.value, citySlug));
 const trustItems = adsV2TrustItems();
 function trustIcon(key: string) {
   if (key === "garantie") return IconShieldCheck;
@@ -387,10 +394,14 @@ const routeHref = computed(() => {
 
 .v2-actions--row {
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
+/* "Anrufen" + "Route planen" nebeneinander; auf 320 px untereinander statt
+   ueber den Kartenrand hinaus. */
 .v2-actions--row .v2-btn {
-  flex: 1 1 0;
+  flex: 1 1 8.5rem;
+  min-width: 0;
 }
 
 .v2-btn {
@@ -512,6 +523,32 @@ const routeHref = computed(() => {
   color: var(--color-text-light);
 }
 
+/* Unter 375 px passen drei Preiskarten nicht nebeneinander ("239,99 €*" lief
+   ueber den Kartenrand): untereinander, Name links, Preis rechts. */
+@media (max-width: 374px) {
+  .v2-prices {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .v2-price {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: var(--space-300);
+    padding: var(--space-300) var(--space-400);
+    text-align: left;
+  }
+
+  .v2-price__offer {
+    text-align: right;
+  }
+
+  .v2-price__regular,
+  .v2-price__note {
+    grid-column: 1 / -1;
+  }
+}
+
 .v2-notes {
   margin: var(--space-400) 0 0;
   padding: 0;
@@ -542,6 +579,8 @@ const routeHref = computed(() => {
 .v2-doctor__photo {
   position: relative;
   width: 100%;
+  /* Tablet: drei Spalten waeren sonst ~200 px grosse Kreise */
+  max-width: 150px;
   aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 999px;
