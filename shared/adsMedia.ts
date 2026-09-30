@@ -4,8 +4,7 @@
  *
  * sanitizeAdsContent laesst Medien-URLs bewusst unveraendert (eine Ersetzung
  * wuerde die Datei brechen). Einige Videos tragen den Begriff aber im
- * Dateinamen/`src` und teils eingebrannt im Bild - ohne Poster ist genau
- * dieses Bild das Vorschaubild (MediaVideo setzt `#t=1`). Solche Videos
+ * Dateinamen/`src` oder im Strapi-Namen/Alt-Text. Solche Videos
  * werden im Ads-Modus nicht ausgeliefert: ersetzt durch ein unbedenkliches
  * Poster-Bild desselben Blocks, sonst entfernt. www unveraendert.
  */
@@ -14,23 +13,19 @@ const BLOCKED_TERM = /botox|btx/i;
 
 /**
  * Per Strapi-Media-ID gesperrt (Video-Inventur 30.09.2026):
- * - eingebrannter Text: 257 "BOTOX® MIT ÜBER…" (Zornesfalte), 273 "BOTOX
- *   OHNE TERMIN" (Stirnfalte);
  * - Begriff nur im Strapi-Dateinamen, den die API-Antwort nicht mitliefert
  *   (URL neutral): 34 Browlift_mit_BTX_Aachen, 209 …_drei_Zonen_BTX_Berlin,
  *   213 Lipflip_BTX_Berlin, 214 BTX_mit_50, 220 Erdbeerkinn_BTX_Koeln,
  *   223 BTX_gegen_Kopfschmerzen_Leipzig.
- * - Texterkennung aller Frames (30.09.2026), Begriff nur eingebrannt:
- *   224/286 Masseter Leipzig ("MIT BOTOX®" bei 18 s), 277 Erdbeerkinn
- *   (ab 1,5 s), 280 Lipflip (bei 6,5 s) - liefen auf go.; vorsorglich
- *   (heute nicht auf go. eingebunden): 247, 255, 272, 274, 279, 284, 285,
- *   518, 1052, 521, 523, 531, 532, 803, 833, 1046.
+ * - 257/273: Begriff in der URL (…_Botox_…) - sperrt schon BLOCKED_TERM,
+ *   die IDs bleiben zur Sicherheit stehen.
+ * Eingebrannter Text im Bild sperrt NICHT mehr (Benjamin, 30.09.2026:
+ * "Wenn es im Video selbst vorkommt, ist es okay" - nur Titel, Dateiname und
+ * Alt-Text zaehlen). Freigegeben: 224, 277, 280, 286, 247, 255, 272, 274,
+ * 279, 284, 285, 518, 1052, 521, 523, 531, 532, 803, 833, 1046.
  */
 export const BLOCKED_VIDEO_IDS: ReadonlySet<number> = new Set([
   257, 273, 34, 209, 213, 214, 220, 223,
-  224, 277, 280, 286,
-  247, 255, 272, 274, 279, 284, 285, 518, 1052, 521, 523, 531, 532, 803, 833,
-  1046,
 ]);
 
 function isMedia(value: any): boolean {
