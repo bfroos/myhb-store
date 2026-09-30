@@ -1,5 +1,6 @@
 // Strapi proxy with server-side caching.
 import { sanitizeAdsContent } from "#shared/adsTerms";
+import { stripBlockedAdsVideos } from "#shared/adsMedia";
 import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
@@ -172,7 +173,9 @@ async function fetchFromStrapi(
   if (siteMode !== 'ads') return result;
   const url = getRequestURL(event);
   const locale = url.searchParams.get('locale');
-  const sanitized = sanitizeAdsContent(result, locale);
+  // Videos mit dem Markennamen im Dateinamen/Bild nicht ausliefern
+  // (shared/adsMedia.ts).
+  const sanitized = sanitizeAdsContent(stripBlockedAdsVideos(result), locale);
   // go.: Preise in Texten der Behandlungsseite (Preistabellen, FAQ, Teaser,
   // SEO-Title/Description) zeigen den Neukundenpreis mit Sternchen
   // (shared/newCustomerOffer.ts). Nur der Behandlungsteil der Antwort: Die
