@@ -173,20 +173,22 @@ test("Bewertungen: doppelte Eintraege nur einmal", () => {
 });
 
 test("Karussell: nur passende Clips ohne fremden Stadtnamen, volle Videos nur mit Poster", () => {
-  // Stirnfalte: kein passender Clip (807 = Masseter, Leipzig) -> Abschnitt aus
-  assert.deepEqual(adsClipsFor("muskelrelaxans/stirnfalte", "koeln").carousel, []);
+  // Stirnfalte: Clips aus Benjamins Zuordnung (stirn), Koeln-Clip nur in Koeln
+  const src = (key: string, city: string) =>
+    adsClipsFor(key, city).carousel.map((c) => c.source);
+  assert.deepEqual(src("muskelrelaxans/stirnfalte", "koeln"), [209, 831, 839, 843, 1080, 266]);
+  assert.deepEqual(src("muskelrelaxans/stirnfalte", "berlin"), [209, 831, 839, 843, 266]);
   const lippenKoeln = adsClipsFor("hyaluron/lippen-aufspritzen", "koeln").carousel;
-  assert.deepEqual(lippenKoeln.map((c) => c.mediaId), [547, 546]);
+  assert.deepEqual(lippenKoeln.map((c) => c.source), [857, 854, 1046, 1073]);
   assert.ok(lippenKoeln.every((c) => !/leipzig|kaiserslautern/i.test(`${c.url} ${c.caption}`)));
-  // Kaiserslautern-Clip nur auf Kaiserslauterer Seiten
-  assert.deepEqual(
-    adsClipsFor("hyaluron/lippen-aufspritzen", "kaiserslautern").carousel.map((c) => c.mediaId),
-    [547, 806, 546],
-  );
-  for (const [, set] of adsClipEntries()) {
+  // Leipzig-Clip nur auf Leipziger Seiten
+  assert.deepEqual(src("hyaluron/lippen-aufspritzen", "leipzig"), [857, 854, 221, 1046, 1073]);
+  for (const [key, set] of adsClipEntries()) {
     for (const c of set.carousel) {
       assert.ok(adsClipIsShort(c) || !!c.posterUrl, `${c.url}: volles Video braucht ein Poster`);
-      assert.ok(!/807|masseter/i.test(c.url), "kein Masseter-Clip im Karussell");
+      if (!/masseter|bruxismus/.test(key)) {
+        assert.ok(!/masseter/i.test(c.url), `${key}: kein Masseter-Clip`);
+      }
     }
   }
   assert.equal(adsClipIsShort({ url: "/videos/go/hero-lippen-8s.mp4" }), true);

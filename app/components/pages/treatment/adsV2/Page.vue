@@ -1,14 +1,17 @@
 <template>
   <!--
     go.* Seitenvorlage v2 (bfroos/myhb-store#203, Playbook Kapitel 3):
-    Hero -> Vertrauenszeile -> Clips -> Ablauf -> Preise -> Aerzt:innen ->
-    Bewertungen -> Einwaende -> Standort -> Schlussaufruf, dazu die
-    mitlaufende Leiste des Heros. Keine Querlinks, kein SEO-Langtext.
-    Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES).
+    Hero -> Vertrauenszeile -> Steckbrief -> Clips -> Wirkweise (Zonenbild)
+    -> Ablauf (Zeitachse) -> Preise -> Weitere Zonen -> Aerzt:innen ->
+    Beratungsfoto -> Bewertungen -> Fragen + Nachsorge -> Standort ->
+    Schlussaufruf, dazu die mitlaufende Leiste des Heros. Kein SEO-Langtext.
+    Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
+    Behandlung: shared/adsTemplateV2Content.ts (Glowtox-Punkte 1-8).
   -->
   <div class="v2">
     <BlockTreatmentHero
       v-bind="hero"
+      :subline="terms?.subline ?? hero.subline"
       :cta="heroCta"
       show-floating-cta
       template-v2
@@ -36,19 +39,59 @@
       </ul>
     </UiLayoutSectionBlock>
 
+    <!-- 1. Steckbrief -->
+    <UiLayoutSectionBlock v-if="facts.length">
+      <div class="v2-card" data-track-placement="v2_facts">
+        <h2 class="v2-h2">{{ H.facts }}</h2>
+        <dl class="v2-facts">
+          <div v-for="f in facts" :key="f.key" class="v2-facts__row">
+            <dt>{{ f.label }}</dt>
+            <dd>{{ f.value }}</dd>
+          </div>
+        </dl>
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- Clips -->
     <UiLayoutSectionBlock v-if="clips.carousel.length">
       <div class="v2-card" data-track-placement="v2_clips">
-        <h2 class="v2-h2">So sieht die Behandlung aus</h2>
+        <h2 class="v2-h2">{{ H.clips }}</h2>
         <PagesTreatmentAdsV2ClipCarousel :clips="clips.carousel" />
       </div>
     </UiLayoutSectionBlock>
 
-    <!-- Ablauf -->
+    <!-- 2. Wirkweise mit Zonenbild -->
+    <UiLayoutSectionBlock v-if="terms">
+      <div class="v2-card" data-track-placement="v2_how">
+        <h2 class="v2-h2">{{ H.how }}</h2>
+        <div class="v2-how">
+          <img
+            v-if="zoneImage"
+            class="v2-how__img"
+            :src="zoneImage.src"
+            :alt="zoneImage.alt"
+            width="160"
+            height="216"
+            loading="lazy"
+            decoding="async"
+          />
+          <p class="v2-how__text">{{ terms.howItWorks }}</p>
+        </div>
+      </div>
+    </UiLayoutSectionBlock>
+
+    <!-- Ablauf (5. Zeitachse) -->
     <UiLayoutSectionBlock>
       <div class="v2-card v2-card--soft" data-track-placement="v2_steps">
-        <h2 class="v2-h2">So läuft dein Termin ab</h2>
-        <ol class="v2-steps">
+        <h2 class="v2-h2">{{ H.steps }}</h2>
+        <ol v-if="timeline.length" class="v2-timeline">
+          <li v-for="item in timeline" :key="item.when" class="v2-timeline__item">
+            <span class="v2-timeline__when">{{ item.when }}</span>
+            <strong class="v2-steps__title">{{ item.title }}</strong>
+            <span class="v2-steps__text">{{ item.text }}</span>
+          </li>
+        </ol>
+        <ol v-else class="v2-steps">
           <li v-for="(step, i) in steps" :key="step.title" class="v2-steps__item">
             <span class="v2-steps__num" aria-hidden="true">{{ i + 1 }}</span>
             <span>
@@ -66,7 +109,19 @@
     <!-- Preise -->
     <UiLayoutSectionBlock v-if="priceCards.length">
       <div class="v2-card" data-track-placement="v2_prices">
-        <h2 class="v2-h2">Preise in {{ locationName }}</h2>
+        <div class="v2-prices__head">
+          <h2 class="v2-h2">{{ H.prices }}</h2>
+          <img
+            v-if="zoneImage"
+            class="v2-prices__zone"
+            :src="zoneImage.src"
+            alt=""
+            width="56"
+            height="76"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
         <p v-if="offer" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
         </p>
@@ -90,10 +145,36 @@
       </div>
     </UiLayoutSectionBlock>
 
+    <!-- 7. Weitere Zonen -->
+    <UiLayoutSectionBlock v-if="zoneTiles.length">
+      <div class="v2-card" data-track-placement="v2_zones">
+        <h2 class="v2-h2">{{ H.zones }}</h2>
+        <p v-if="zoneHint" class="v2-lead">{{ zoneHint }}</p>
+        <ul class="v2-zones" role="list">
+          <li v-for="tile in zoneTiles" :key="tile.key">
+            <a class="v2-zone" :href="tile.href" data-track-placement="v2_zone_tile">
+              <img
+                v-if="tile.image"
+                class="v2-zone__img"
+                :src="tile.image.src"
+                alt=""
+                width="64"
+                height="86"
+                loading="lazy"
+                decoding="async"
+              />
+              <span v-else class="v2-zone__img v2-zone__img--empty" aria-hidden="true" />
+              <span class="v2-zone__label">{{ tile.label }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- Aerzt:innen des Centers -->
     <UiLayoutSectionBlock v-if="doctors.length">
       <div class="v2-card v2-card--soft" data-track-placement="v2_doctors">
-        <h2 class="v2-h2">Dein Ärzteteam in {{ locationName }}</h2>
+        <h2 class="v2-h2">{{ H.doctors }}</h2>
         <ul class="v2-doctors" role="list">
           <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
             <div class="v2-doctor__photo">
@@ -109,10 +190,26 @@
       </div>
     </UiLayoutSectionBlock>
 
+    <!-- 8. Beratungsfoto (leer = aus) -->
+    <UiLayoutSectionBlock v-if="consultPhoto">
+      <div class="v2-card" data-track-placement="v2_consult">
+        <h2 class="v2-h2">{{ H.consult }}</h2>
+        <img
+          class="v2-consult__img"
+          :src="consultPhoto.src"
+          :alt="consultPhoto.alt"
+          :width="consultPhoto.width"
+          :height="consultPhoto.height"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- Bewertungen des Standorts -->
     <UiLayoutSectionBlock v-if="reviews.length">
       <div class="v2-card" data-track-placement="v2_reviews">
-        <h2 class="v2-h2">Das sagen Kundinnen und Kunden</h2>
+        <h2 class="v2-h2">{{ H.reviews }}</h2>
         <p v-if="rating" class="v2-lead">
           <IconStarFilled class="v2-star" size="18" aria-hidden="true" />
           <strong>{{ ratingLabel }}</strong> · {{ ratingCountLabel }} bei Google für {{ locationName }}
@@ -139,20 +236,26 @@
     <!-- Einwaende -->
     <UiLayoutSectionBlock>
       <div class="v2-card v2-card--soft" data-track-placement="v2_faq">
-        <h2 class="v2-h2">Häufige Fragen</h2>
+        <h2 class="v2-h2">{{ H.faq }}</h2>
         <div class="v2-faq">
           <details v-for="(faq, i) in faqs" :key="faq.question" class="v2-faq__item" :open="i === 0">
             <summary class="v2-faq__q">{{ faq.question }}</summary>
             <p class="v2-faq__a">{{ faq.answer }}</p>
           </details>
         </div>
+        <template v-if="aftercare.length">
+          <h2 class="v2-h2 v2-h2--sub">{{ H.aftercare }}</h2>
+          <ul class="v2-aftercare" role="list">
+            <li v-for="tip in aftercare" :key="tip">{{ tip }}</li>
+          </ul>
+        </template>
       </div>
     </UiLayoutSectionBlock>
 
     <!-- Standort -->
     <UiLayoutSectionBlock>
       <div id="standort" class="v2-card" data-track-placement="v2_location">
-        <h2 class="v2-h2">So findest du uns</h2>
+        <h2 class="v2-h2">{{ H.location }}</h2>
         <div class="v2-location">
           <div v-if="location?.buildingImage" class="v2-location__image">
             <UiAtomMediaPicture :media="location.buildingImage" />
@@ -179,7 +282,7 @@
     <!-- Schlussaufruf -->
     <UiLayoutSectionBlock>
       <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_final">
-        <h2 class="v2-h2">Bereit für deine kostenlose Beratung?</h2>
+        <h2 class="v2-h2">{{ H.final }}</h2>
         <p v-if="offer" class="v2-final__price">{{ offer.heroLine }}</p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
@@ -218,6 +321,18 @@ import {
   shortenText,
 } from "#shared/adsTemplateV2";
 import { adsClipsFor } from "#shared/adsClips";
+import {
+  adsV2Aftercare,
+  adsV2ConsultPhoto,
+  adsV2Facts,
+  adsV2FaqsV2,
+  adsV2Headings,
+  adsV2Terms,
+  adsV2Timeline,
+  adsV2ZoneHint,
+  adsV2ZoneImage,
+  adsV2ZoneTiles,
+} from "#shared/adsTemplateV2Content";
 import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT } from "#shared/newCustomerOffer";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
 
@@ -313,12 +428,35 @@ const ratingCountLabel = computed(() =>
 
 const details = computed(() => (props.treatmentPage as any)?.treatmentDetails ?? null);
 const steps = computed(() => adsV2Steps(pathKey.value, details.value?.duration));
-const faqs = computed(() =>
-  adsV2Faqs(pathKey.value, {
+const faqs = computed(() => {
+  const v2 = adsV2FaqsV2(pathKey.value);
+  if (v2.length) return v2;
+  return adsV2Faqs(pathKey.value, {
     effectDuration: details.value?.effectDuration,
     initialResults: details.value?.initialResults,
-  }),
-);
+  });
+});
+
+// Glowtox-Punkte 1-8 (shared/adsTemplateV2Content.ts); ohne Eintrag fuer die
+// Behandlung bleiben die bisherigen Texte.
+const terms = computed(() => adsV2Terms(pathKey.value));
+const H = computed(() => {
+  if (terms.value) return adsV2Headings(terms.value, locationName.value);
+  const at = locationName.value ? ` in ${locationName.value}` : "";
+  return {
+    facts: "", how: "", clips: "So sieht die Behandlung aus", steps: "So läuft dein Termin ab",
+    prices: `Preise${at}`, zones: "", doctors: `Dein Ärzteteam${at}`, consult: "",
+    reviews: "Das sagen Kundinnen und Kunden", faq: "Häufige Fragen", aftercare: "",
+    location: "So findest du uns", final: "Bereit für deine kostenlose Beratung?",
+  };
+});
+const facts = computed(() => adsV2Facts(pathKey.value, details.value?.duration));
+const timeline = computed(() => adsV2Timeline(pathKey.value));
+const aftercare = computed(() => adsV2Aftercare(pathKey.value));
+const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
+const zoneTiles = computed(() => adsV2ZoneTiles(pathKey.value, citySlug, locSlug));
+const zoneHint = computed(() => adsV2ZoneHint(priceCards.value));
+const consultPhoto = computed(() => adsV2ConsultPhoto(pathKey.value));
 const priceCards = computed(() =>
   adsV2PriceCards(pathKey.value, props.hero.treatment as any, discountPct.value),
 );
@@ -406,6 +544,195 @@ const routeHref = computed(() => {
 
 .v2-btn {
   width: 100%;
+}
+
+.v2-h2--sub {
+  margin-top: var(--space-600, 32px);
+  font-size: 1.125rem;
+}
+
+/* 1. Steckbrief */
+.v2-facts {
+  display: grid;
+  margin: 0;
+}
+
+.v2-facts__row {
+  display: grid;
+  grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr);
+  gap: var(--space-300);
+  padding: var(--space-300) 0;
+  border-top: 1px solid var(--color-border-mute);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+}
+
+.v2-facts__row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.v2-facts dt {
+  font-weight: var(--font-bold);
+}
+
+.v2-facts dd {
+  margin: 0;
+  min-width: 0;
+  color: var(--color-text-light);
+  hyphens: auto;
+}
+
+/* 2. Wirkweise */
+.v2-how {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: var(--space-400);
+  align-items: center;
+}
+
+.v2-how__img {
+  width: 112px;
+  height: auto;
+}
+
+.v2-how__text {
+  margin: 0;
+  min-width: 0;
+  color: var(--color-text-light);
+  hyphens: auto;
+}
+
+/* 320-374 px: Steckbrief untereinander, Zonenbild kleiner */
+@media (max-width: 374px) {
+  .v2-facts__row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .v2-how {
+    grid-template-columns: 72px minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-300);
+    font-size: var(--font-sm);
+    line-height: var(--line-sm);
+  }
+
+  .v2-how__img {
+    width: 72px;
+  }
+}
+
+/* 5. Zeitachse */
+.v2-timeline {
+  position: relative;
+  display: grid;
+  gap: var(--space-400);
+  margin: 0;
+  padding: 0 0 0 var(--space-500);
+  list-style: none;
+  border-left: 2px solid #f1c9c9;
+}
+
+.v2-timeline__item {
+  position: relative;
+}
+
+.v2-timeline__item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--space-500) - 6px);
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #b91c1c;
+}
+
+.v2-timeline__when {
+  display: block;
+  font-size: var(--font-xs);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #b91c1c;
+}
+
+/* Preise: Zonenbild neben der Ueberschrift */
+.v2-prices__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-300);
+}
+
+.v2-prices__zone {
+  flex: 0 0 auto;
+  width: 56px;
+  height: auto;
+  margin-top: -4px;
+}
+
+/* 7. Weitere Zonen */
+.v2-zones {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-300);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.v2-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-200);
+  height: 100%;
+  padding: var(--space-300) var(--space-200);
+  border: 1px solid var(--color-border-mute);
+  border-radius: var(--border-radius-200, 12px);
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+}
+
+.v2-zone__img {
+  width: 64px;
+  height: 86px;
+}
+
+.v2-zone__img--empty {
+  display: block;
+  border-radius: 12px;
+  background: #fbf7f5;
+}
+
+.v2-zone__label {
+  font-size: 0.8125rem;
+  font-weight: var(--font-bold);
+  line-height: 1.2;
+  hyphens: auto;
+}
+
+/* 8. Beratungsfoto */
+.v2-consult__img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--border-radius-200, 12px);
+}
+
+/* 6. Nachsorge */
+.v2-aftercare {
+  display: grid;
+  gap: var(--space-200);
+  margin: 0;
+  padding: 0 0 0 1.1rem;
+  list-style: disc;
+  color: var(--color-text-light);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
 }
 
 /* Vertrauenszeile */

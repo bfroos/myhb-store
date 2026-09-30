@@ -42,6 +42,8 @@ export type AdsClip = {
   end?: number;
   /** Kurze Unterschrift unter dem Clip (Karussell), ohne Markennamen. */
   caption?: string;
+  /** Quelle im Strapi-Medienbestand (nur Doku, fuer Code-Dateien). */
+  source?: number;
   /** Seitenverhaeltnis Breite/Hoehe, Standard 9/16. */
   aspect?: number;
   /**
@@ -66,23 +68,15 @@ export type AdsClipSet = {
   carousel: AdsClip[];
 };
 
-const MEDIA = "https://media.myhealthandbeauty.app";
-
-// Lippen: 546 "Lippenergebnisse" (0-10 s, danach Rabatt-Text), 547 ohne
-// Einblendung, 806 Kundin in Kaiserslautern ("tat gar nicht weh").
-// Nicht: 837 (alte Preise im Bild "ab 199 €/149 €").
-const LIPPEN_546: AdsClip = {
-  mediaId: 546,
-  url: `${MEDIA}/Lippenergebnisse_1_1_62e7d5540c.mp4`,
-  start: 0,
-  end: 10,
-};
-
 /**
- * Hero-Clips aus dem Repo (public/videos/go/): 5-8 s, 540x960, H.264 ohne
- * Tonspur, faststart, je ~450-560 KB, Poster ~37 KB. Geschnitten und per
- * Texterkennung (0,25 s) geprueft am 30.09.2026; ein Strapi-Upload war
- * mangels Token nicht moeglich. Neutrale Dateinamen (kein Markenname).
+ * Alle Clips liegen im Repo (public/videos/go/), geschnitten am 30.09.2026
+ * aus Benjamins Video-Zuordnung (nur einsatz hero/karussell, Dubletten auf die
+ * beste Fassung zusammengefasst), 540x960 H.264, faststart:
+ * - Hero 4-8 s ohne Tonspur, <= 600 KB;
+ * - Karussell 12 s MIT Ton (startet stumm, Ton per Knopf), <= 1,2 MB.
+ * Neutrale Dateinamen; eingebrannter Text ist erlaubt (Benjamin), per
+ * Texterkennung geprueft: keine Preise, keine fremde Behandlung.
+ * Quelle (Strapi-Media-ID) steht als `source` dabei, nur zur Nachvollziehbarkeit.
  */
 const heroClip = (
   name: string,
@@ -92,6 +86,16 @@ const heroClip = (
   posterUrl: `/videos/go/${name}-poster.jpg`,
   aspect: 9 / 16,
   ...crop,
+});
+
+/** `city`: Stadtname prominent im Bild -> nur auf Seiten dieser Stadt. */
+const clip = (name: string, source: number, caption: string, city?: string): AdsClip => ({
+  url: `/videos/go/${name}.mp4`,
+  posterUrl: `/videos/go/${name}-poster.jpg`,
+  aspect: 9 / 16,
+  caption,
+  source,
+  ...(city ? { city } : {}),
 });
 
 // Untertitel-Zonen per Einzelbild (0,6 s) vermessen am 30.09.2026.
@@ -110,45 +114,84 @@ const STIRN_7S_CROP = {
   captionZones: [[0.61, 0.87]] as Array<[number, number]>,
 };
 
+
+// Muskelrelaxans Stirn/Zornesfalte/Kraehenfuesse (Benjamin: dieselben Videos
+// fuer alle drei Zonen, wo er sie so markiert hat).
+const MR = {
+  injectionMan: clip("stirn-karussell-2", 209, "Behandlung: die Zonen werden vorher erklärt"),
+  marking: clip("stirn-karussell-8", 831, "Einzeichnen und behandeln"),
+  threeZones: clip("stirn-karussell-10", 843, "Kundin direkt nach der Behandlung"),
+  refresh: clip("stirn-karussell-9", 839, "Stirn und Zornesfalte auffrischen"),
+  koeln: clip("stirn-karussell-14", 1080, "Kundin in Köln", "koeln"),
+  trio: clip("stirn-karussell-6", 266, "Kundinnen nach der Behandlung"),
+  firstTime: clip("stirn-karussell-12", 848, "Zum ersten Mal – trotz Angst vor Spritzen"),
+  patricia: clip("stirn-karussell-15", 1143, "Krähenfüße und Zornesfalte"),
+  zornesMan: clip("zornes-karussell-2", 272, "Behandlung der Zornesfalte"),
+  zornesKoeln: clip("zornes-karussell-1", 257, "Auf dem Weg in die Köln Arcaden", "koeln"),
+};
+
 const CLIPS: Record<string, AdsClipSet> = {
+  "muskelrelaxans/stirnfalte": {
+    hero: heroClip("hero-stirn-zornesfalte-7s", STIRN_7S_CROP),
+    carousel: [MR.injectionMan, MR.marking, MR.refresh, MR.threeZones, MR.koeln, MR.trio],
+  },
   "hyaluron/lippen-aufspritzen": {
     hero: heroClip("hero-lippen-8s", LIPPEN_8S_CROP),
     carousel: [
-      {
-        mediaId: 547,
-        url: `${MEDIA}/Lippen_1_a2715c62db.mp4`,
-        posterUrl: "/ads-clips/lippen-547.jpg",
-        caption: "Lippen mit Hyaluron",
-      },
-      {
-        // eingeblendet "LIPPENBEHANDLUNG, KAISERSLAUTERN"
-        mediaId: 806,
-        url: `${MEDIA}/Lippen_Kaiserslautern_7a33549a14.mp4`,
-        posterUrl: "/ads-clips/lippen-806.jpg",
-        caption: "Kundin direkt nach der Lippenbehandlung",
-        city: "kaiserslautern",
-      },
-      {
-        ...LIPPEN_546,
-        posterUrl: "/ads-clips/lippen-546.jpg",
-        caption: "Ergebnisse mit Hyaluron",
-      },
+      clip("lippen-karussell-7", 857, "Lippen mit 0,5 ml Hyaluron"),
+      clip("lippen-karussell-6", 854, "Direkt nach der Behandlung"),
+      clip("lippen-karussell-3", 221, "Die erste Lippenbehandlung", "leipzig"),
+      clip("lippen-karussell-2", 217, "Kundin in Mönchengladbach", "moenchengladbach"),
+      clip("lippen-karussell-8", 1046, "Warum sie zu uns gewechselt ist"),
+      clip("lippen-karussell-9", 1073, "Zwei Cousinen erzählen"),
     ],
   },
-  // Stirnfalte: nur der Hero-Clip. Kein Karussell - der einzige weitere
-  // Muskelrelaxans-Clip (807) zeigt eine Masseter-Behandlung mit
-  // eingeblendetem "LEIPZIG" und passt nicht zur Stirn.
-  "muskelrelaxans/stirnfalte": {
+  // Vorrat (Seiten noch nicht in ADS_TEMPLATE_V2_PAGES):
+  "muskelrelaxans/zornesfalte": {
     hero: heroClip("hero-stirn-zornesfalte-7s", STIRN_7S_CROP),
-    carousel: [],
+    carousel: [MR.zornesMan, MR.marking, MR.firstTime, MR.zornesKoeln, MR.threeZones, MR.koeln],
   },
-  // Vorbereitet fuer die Erweiterung (Seiten noch nicht in
-  // ADS_TEMPLATE_V2_PAGES; Ausschnitt vor dem Freischalten vermessen):
-  "muskelrelaxans/zornesfalte": { hero: heroClip("hero-stirn-zornesfalte-7s", STIRN_7S_CROP), carousel: [] },
-  "muskelrelaxans/kraehenfuesse": { hero: heroClip("hero-kraehenfuesse-7s"), carousel: [] },
-  "muskelrelaxans/lipflip": { hero: heroClip("hero-lipflip-5s"), carousel: [] },
-  "hyaluron/wangenaufbau": { hero: heroClip("hero-wangenaufbau-7s"), carousel: [] },
+  "muskelrelaxans/kraehenfuesse": {
+    hero: heroClip("hero-kraehenfuesse-7s"),
+    carousel: [MR.marking, MR.patricia, MR.threeZones, MR.koeln, MR.trio],
+  },
+  "muskelrelaxans/lipflip": {
+    hero: heroClip("hero-lipflip-5s"),
+    carousel: [clip("lipflip-karussell-1", 1053, "Lip Flip in Berlin", "berlin")],
+  },
+  "muskelrelaxans/zaehneknirschen-bruxismus": {
+    hero: heroClip("hero-masseter-1"),
+    carousel: [
+      clip("masseter-karussell-5", 1052, "Kundin in den Köln Arcaden", "koeln"),
+      clip("masseter-karussell-3", 521, "Aufklärung vor der Behandlung"),
+      clip("masseter-karussell-1", 223, "Kundin in Leipzig", "leipzig"),
+    ],
+  },
+  "hyaluron/kinnkorrektur": {
+    hero: heroClip("hero-kinn-1"),
+    carousel: [clip("kinn-karussell-1", 523, "Kundin in Recklinghausen", "recklinghausen")],
+  },
+  "hyaluron/jawline": {
+    hero: heroClip("hero-jaw-1"),
+    carousel: [
+      clip("jaw-karussell-1", 215, "Kundin in Köln", "koeln"),
+      clip("jaw-karussell-3", 1078, "Behandlung durch Ärztinnen und Ärzte"),
+      clip("jaw-karussell-2", 822, "Aufklärung und Beratung"),
+    ],
+  },
+  "hyaluron/wangenaufbau": {
+    hero: heroClip("hero-wangenaufbau-7s"),
+    carousel: [clip("wangen-karussell-1", 859, "Wangenaufbau mit 0,5 ml Hyaluron")],
+  },
+  "skinbooster/profhilo": {
+    carousel: [
+      clip("profhilo-karussell-3", 823, "Beratung und Behandlung"),
+      clip("profhilo-karussell-2", 268, "Frischekick für die Haut"),
+      clip("profhilo-karussell-1", 253, "Endlich wieder frisch fühlen"),
+    ],
+  },
 };
+CLIPS["muskelrelaxans/masseter"] = CLIPS["muskelrelaxans/zaehneknirschen-bruxismus"]!;
 
 function baseKey(pathKey: string | null | undefined): string {
   return String(pathKey ?? "").replace(/-rabatt$/, "");
