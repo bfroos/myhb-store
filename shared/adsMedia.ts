@@ -20,9 +20,17 @@ const BLOCKED_TERM = /botox|btx/i;
  *   (URL neutral): 34 Browlift_mit_BTX_Aachen, 209 …_drei_Zonen_BTX_Berlin,
  *   213 Lipflip_BTX_Berlin, 214 BTX_mit_50, 220 Erdbeerkinn_BTX_Koeln,
  *   223 BTX_gegen_Kopfschmerzen_Leipzig.
+ * - Texterkennung aller Frames (30.09.2026), Begriff nur eingebrannt:
+ *   224/286 Masseter Leipzig ("MIT BOTOX®" bei 18 s), 277 Erdbeerkinn
+ *   (ab 1,5 s), 280 Lipflip (bei 6,5 s) - liefen auf go.; vorsorglich
+ *   (heute nicht auf go. eingebunden): 247, 255, 272, 274, 279, 284, 285,
+ *   518, 1052, 521, 523, 531, 532, 803, 833, 1046.
  */
 export const BLOCKED_VIDEO_IDS: ReadonlySet<number> = new Set([
   257, 273, 34, 209, 213, 214, 220, 223,
+  224, 277, 280, 286,
+  247, 255, 272, 274, 279, 284, 285, 518, 1052, 521, 523, 531, 532, 803, 833,
+  1046,
 ]);
 
 function isMedia(value: any): boolean {
