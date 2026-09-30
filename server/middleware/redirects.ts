@@ -1,13 +1,19 @@
 import { resolveRedirect } from "../utils/redirects";
+import { resolvePatternRedirect } from "../utils/adsRedirects";
 
 export default defineEventHandler(async (event) => {
   const method = event.method || "GET";
   if (method !== "GET" && method !== "HEAD") return;
 
+  const { pathname, search } = getRequestURL(event);
+
+  // Muster-Weiterleitungen (beide: Aachen-Lippenseite; go.: Blog, Botox-Pfade).
+  const pattern = await resolvePatternRedirect(event, pathname, search);
+  if (pattern) return sendRedirect(event, pattern.target, pattern.code);
+
   const config = useRuntimeConfig();
   if (config.public.siteMode === "ads") return;
 
-  const { pathname, search } = getRequestURL(event);
   const result = await resolveRedirect(pathname, search);
   if (!result) return;
   return sendRedirect(event, result.target, result.code);

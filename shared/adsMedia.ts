@@ -58,6 +58,20 @@ function isBlockedAdsImage(media: any): boolean {
   return isMedia(media) && String(media.mime).startsWith("image/") && mentionsTerm(media);
 }
 
+/**
+ * Bild mit dem Begriff in der Datei-URL. Der Name steht in der Bild-URL
+ * (src/srcset, og:image) und zaehlt fuer Google wie sichtbarer Text - z. B.
+ * "Kopie_von_BOTOX_OT_NEU_45" (Lippenbild, id 1044) auf /p/lippen-meta-rabatt.
+ * Solche Bilder werden im Ads-Modus ausgeblendet (#199), www unveraendert.
+ * Nur die Adresse zaehlt: Alt-Texte ersetzt sanitizeAdsContent ohnehin.
+ */
+export function isBlockedAdsImageFile(media: any): boolean {
+  if (!isMedia(media) || !String(media.mime).startsWith("image/")) return false;
+  const urls = [media.url, media.hash];
+  for (const f of Object.values(media.formats ?? {})) urls.push((f as any)?.url);
+  return urls.some((v) => typeof v === "string" && BLOCKED_TERM.test(v));
+}
+
 export function stripBlockedAdsVideos<T>(input: T): T {
   const walk = (value: any): any => {
     if (Array.isArray(value)) return value.map(walk);
@@ -72,9 +86,11 @@ export function stripBlockedAdsVideos<T>(input: T): T {
         out[k] = poster;
       } else if (isBlockedAdsVideo(v)) {
         out[k] = poster; // Bild statt Video, sonst null
-      } else if (Array.isArray(v) && v.some(isBlockedAdsVideo)) {
+      } else if (isBlockedAdsImageFile(v)) {
+        out[k] = null; // #199: Bild mit dem Begriff im Dateinamen ausblenden
+      } else if (Array.isArray(v) && v.some((item) => isBlockedAdsVideo(item) || isBlockedAdsImageFile(item))) {
         out[k] = v
-          .map((item) => (isBlockedAdsVideo(item) ? poster : item))
+          .map((item) => (isBlockedAdsVideo(item) ? poster : isBlockedAdsImageFile(item) ? null : item))
           .filter((item) => item !== null)
           .map(walk);
       } else {

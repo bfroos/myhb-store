@@ -274,12 +274,14 @@ async function fetchFromStrapi(
 }
 
 async function adsLinkContext(event: any, pathname: string): Promise<AdsLinkContext> {
+  // #199: Links auf Behandlungen, die es im Ads-Baum nicht gibt, fallen weg.
+  const adsPathKeys = await adsTreePathKeys(event).catch(() => null);
   const m = /^\/api\/strapi\/treatment-pages\/([^/]+)\/([^/]+)\/.+/.exec(pathname);
-  if (!m || m[1] === 'by-path') return {};
+  if (!m || m[1] === 'by-path') return { adsPathKeys };
   const keys = await locationPathKeys(event, m[1]!, m[2]!);
   return keys
-    ? { locationBase: `/standorte/${m[1]}/${m[2]}`, availablePathKeys: keys }
-    : {};
+    ? { locationBase: `/standorte/${m[1]}/${m[2]}`, availablePathKeys: keys, adsPathKeys }
+    : { adsPathKeys };
 }
 
 async function fetchFromStrapiRaw(
