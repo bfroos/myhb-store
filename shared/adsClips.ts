@@ -18,6 +18,15 @@
  * - Poster: ohne `posterUrl` zeigt der Hero sein Foto darunter, das Karussell
  *   einen neutralen Platzhalter - nie `#t=1` (dort stand bei 257/273 der
  *   Markenname im Vorschaubild).
+ * - Karussell (Benjamin, 30.09.2026): nur Clips, die zur Behandlung der Seite
+ *   passen und keinen fremden Stadtnamen zeigen (`city`); passt keiner, wird
+ *   der Abschnitt ausgeblendet. Volle Strapi-Videos (2,5-8,5 MB) nur mit
+ *   eigenem Poster und erst auf Tippen geladen; von selbst laufen nur die
+ *   geschnittenen Clips aus public/videos/go/ (~0,5 MB).
+ * - Hero-Ausschnitt: eingebrannte Untertitel duerfen nicht halb angeschnitten
+ *   sein. `focusY` und `captionZones` je Clip; `heroObjectPositionY` waehlt
+ *   daraus je Kartengroesse den Ausschnitt (Untertitel ganz drin oder ganz
+ *   draussen).
  */
 import { BLOCKED_VIDEO_IDS } from "./adsMedia.ts";
 
@@ -35,8 +44,21 @@ export type AdsClip = {
   caption?: string;
   /** Seitenverhaeltnis Breite/Hoehe, Standard 9/16. */
   aspect?: number;
-  /** Bildausschnitt im querformatigen Hero (CSS object-position). */
-  focus?: string;
+  /**
+   * Hero: vertikale Bildmitte des Wichtigen (0 = oben, 1 = unten), z. B. die
+   * Lippen. Standard 0,4.
+   */
+  focusY?: number;
+  /**
+   * Hero: Bereiche (Anteil der Hoehe, von-bis) mit eingebrannten Untertiteln.
+   * Der Ausschnitt schneidet keinen davon an.
+   */
+  captionZones?: Array<[number, number]>;
+  /**
+   * Stadt-Slug, falls der Clip einen Stadtnamen im Bild zeigt; laeuft dann
+   * nur auf Seiten dieser Stadt.
+   */
+  city?: string;
 };
 
 export type AdsClipSet = {
@@ -62,16 +84,35 @@ const LIPPEN_546: AdsClip = {
  * Texterkennung (0,25 s) geprueft am 30.09.2026; ein Strapi-Upload war
  * mangels Token nicht moeglich. Neutrale Dateinamen (kein Markenname).
  */
-const heroClip = (name: string, focus?: string): AdsClip => ({
+const heroClip = (
+  name: string,
+  crop: Pick<AdsClip, "focusY" | "captionZones"> = {},
+): AdsClip => ({
   url: `/videos/go/${name}.mp4`,
   posterUrl: `/videos/go/${name}-poster.jpg`,
   aspect: 9 / 16,
-  focus,
+  ...crop,
 });
+
+// Untertitel-Zonen per Einzelbild (0,6 s) vermessen am 30.09.2026.
+const LIPPEN_8S_CROP = {
+  // Lippen der drei Kundinnen liegen bei 53-66 %, Augen bei 35-45 %.
+  focusY: 0.52,
+  // oben "LIPPENERGEBNISSE" (0-1,8 s), unten die laufenden Untertitel
+  captionZones: [
+    [0.2, 0.29],
+    [0.68, 0.88],
+  ] as Array<[number, number]>,
+};
+const STIRN_7S_CROP = {
+  // Stirn mit Markierungen bei 15-45 %
+  focusY: 0.32,
+  captionZones: [[0.61, 0.87]] as Array<[number, number]>,
+};
 
 const CLIPS: Record<string, AdsClipSet> = {
   "hyaluron/lippen-aufspritzen": {
-    hero: heroClip("hero-lippen-8s", "center 68%"),
+    hero: heroClip("hero-lippen-8s", LIPPEN_8S_CROP),
     carousel: [
       {
         mediaId: 547,
@@ -80,10 +121,12 @@ const CLIPS: Record<string, AdsClipSet> = {
         caption: "Lippen mit Hyaluron",
       },
       {
+        // eingeblendet "LIPPENBEHANDLUNG, KAISERSLAUTERN"
         mediaId: 806,
         url: `${MEDIA}/Lippen_Kaiserslautern_7a33549a14.mp4`,
         posterUrl: "/ads-clips/lippen-806.jpg",
         caption: "Kundin direkt nach der Lippenbehandlung",
+        city: "kaiserslautern",
       },
       {
         ...LIPPEN_546,
@@ -92,23 +135,16 @@ const CLIPS: Record<string, AdsClipSet> = {
       },
     ],
   },
-  // Stirnfalte: Hero-Clip "Stirn/Zornesfalte" (neu geschnitten). Im
-  // Karussell zusaetzlich ein Kundinnen-Clip derselben Behandlungsart
-  // (Masseter, Leipzig), klar beschriftet.
+  // Stirnfalte: nur der Hero-Clip. Kein Karussell - der einzige weitere
+  // Muskelrelaxans-Clip (807) zeigt eine Masseter-Behandlung mit
+  // eingeblendetem "LEIPZIG" und passt nicht zur Stirn.
   "muskelrelaxans/stirnfalte": {
-    hero: heroClip("hero-stirn-zornesfalte-7s"),
-    carousel: [
-      {
-        mediaId: 807,
-        url: `${MEDIA}/Masseter_Leipzig_4d0c7db665.mp4`,
-        posterUrl: "/ads-clips/muskelrelaxans-807.jpg",
-        caption: "Kundin nach der Kiefer-Behandlung (Leipzig)",
-      },
-    ],
+    hero: heroClip("hero-stirn-zornesfalte-7s", STIRN_7S_CROP),
+    carousel: [],
   },
   // Vorbereitet fuer die Erweiterung (Seiten noch nicht in
-  // ADS_TEMPLATE_V2_PAGES):
-  "muskelrelaxans/zornesfalte": { hero: heroClip("hero-stirn-zornesfalte-7s"), carousel: [] },
+  // ADS_TEMPLATE_V2_PAGES; Ausschnitt vor dem Freischalten vermessen):
+  "muskelrelaxans/zornesfalte": { hero: heroClip("hero-stirn-zornesfalte-7s", STIRN_7S_CROP), carousel: [] },
   "muskelrelaxans/kraehenfuesse": { hero: heroClip("hero-kraehenfuesse-7s"), carousel: [] },
   "muskelrelaxans/lipflip": { hero: heroClip("hero-lipflip-5s"), carousel: [] },
   "hyaluron/wangenaufbau": { hero: heroClip("hero-wangenaufbau-7s"), carousel: [] },
@@ -129,14 +165,69 @@ export function adsClipAllowed(clip: AdsClip | null | undefined): clip is AdsCli
   );
 }
 
-/** Clips einer Behandlungsseite (pathKey ohne Standort), bereits gefiltert. */
-export function adsClipsFor(pathKey: string | null | undefined): AdsClipSet {
+/** Geschnittener Kurzclip aus dem Repo (~0,5 MB): darf von selbst laufen. */
+export function adsClipIsShort(clip: AdsClip | null | undefined): boolean {
+  return typeof clip?.url === "string" && clip.url.startsWith("/videos/go/");
+}
+
+/**
+ * Clips einer Behandlungsseite (pathKey ohne Standort), bereits gefiltert.
+ * `citySlug`: Stadt der Seite - Clips mit fremdem Stadtnamen im Bild fallen
+ * weg. Volle Videos ohne eigenes Poster ebenso (sie wuerden sonst schon vor
+ * dem Tippen laden muessen, um ein Bild zu zeigen).
+ */
+export function adsClipsFor(
+  pathKey: string | null | undefined,
+  citySlug?: string | null,
+): AdsClipSet {
   const set = CLIPS[baseKey(pathKey)];
   if (!set) return { carousel: [] };
+  const city = String(citySlug ?? "").toLowerCase();
   return {
     hero: adsClipAllowed(set.hero) ? set.hero : undefined,
-    carousel: set.carousel.filter(adsClipAllowed),
+    carousel: set.carousel
+      .filter(adsClipAllowed)
+      .filter((c) => !c.city || c.city.toLowerCase() === city)
+      .filter((c) => adsClipIsShort(c) || !!c.posterUrl),
   };
+}
+
+/**
+ * Hero: object-position (Prozent, vertikal) fuer einen hochkant Clip in einer
+ * querformatigen Karte. Der sichtbare Ausschnitt liegt moeglichst mittig um
+ * `focusY` und schneidet keine Untertitel-Zone an: jede liegt ganz drin oder
+ * ganz draussen (lieber draussen). Laesst sich das nicht erfuellen, bleibt der
+ * Fokus-Ausschnitt.
+ */
+export function heroObjectPositionY(
+  boxWidth: number,
+  boxHeight: number,
+  clip: Pick<AdsClip, "aspect" | "focusY" | "captionZones">,
+): number {
+  const aspect = clip.aspect ?? 9 / 16;
+  const focus = clip.focusY ?? 0.4;
+  if (!(boxWidth > 0) || !(boxHeight > 0)) return Math.round(focus * 100);
+  // sichtbarer Anteil der Videohoehe bei object-fit: cover (Breite fuellt)
+  const r = boxHeight / (boxWidth / aspect);
+  if (r >= 1) return 50;
+  const maxTop = 1 - r;
+  const ideal = Math.min(Math.max(focus - r / 2, 0), maxTop);
+  const zones = clip.captionZones ?? [];
+  const eps = 0.001;
+  const ok = (t: number) =>
+    zones.every(([a, z]) => t + r <= a + eps || t >= z - eps || (t <= a + eps && t + r >= z - eps));
+  // Lieber ohne Untertitel: jede ganz sichtbare Zone kostet ihre Hoehe.
+  const cost = (t: number) =>
+    Math.abs(t - ideal) +
+    zones.reduce((sum, [a, z]) => sum + (t <= a + eps && t + r >= z - eps ? z - a : 0), 0);
+  let best: number | null = null;
+  const steps = 400;
+  for (let i = 0; i <= steps; i++) {
+    const t = (maxTop * i) / steps;
+    if (ok(t) && (best == null || cost(t) < cost(best))) best = t;
+  }
+  const top = best ?? ideal;
+  return Math.round((top / maxTop) * 1000) / 10;
 }
 
 /** Alle Eintraege (fuer Tests). */

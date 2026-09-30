@@ -6,6 +6,9 @@
     inline (iPhone: muted + playsinline), solange er sichtbar ist. Poster statt
     #t=1. Pause- und Ton-Knopf; bei prefers-reduced-motion kein Autoplay, der
     Clip startet erst auf Tippen.
+    Von selbst laufen nur die geschnittenen Kurzclips (public/videos/go/,
+    ~0,5 MB). Volle Strapi-Videos (2,5-8,5 MB) zeigen ihr Poster und laden
+    erst, wenn jemand auf Abspielen tippt (preload=none, keine Quelle vorher).
   -->
   <ul class="clips" role="list">
     <li v-for="(clip, i) in clips" :key="clip.url + i" class="clips__item">
@@ -36,7 +39,20 @@
           @pause="onPause(i)"
           @timeupdate="onTimeUpdate(i)"
         />
-        <div class="clips__controls">
+        <!-- Volles Video: grosse Flaeche zum Antippen, bis es laeuft. -->
+        <button
+          v-if="!isShort(clip) && !state[i]?.started"
+          type="button"
+          class="clips__start"
+          data-track-placement="v2_clip_play"
+          :aria-label="`Video abspielen: ${clip.caption || 'Behandlungsclip'}`"
+          @click="toggle(i)"
+        >
+          <span class="clips__startIcon" aria-hidden="true">
+            <IconPlayerPlayFilled size="26" />
+          </span>
+        </button>
+        <div v-else class="clips__controls">
           <button
             type="button"
             class="clips__btn"
@@ -72,7 +88,7 @@ import {
   IconVolume,
   IconVolumeOff,
 } from "@tabler/icons-vue";
-import type { AdsClip } from "#shared/adsClips";
+import { adsClipIsShort, type AdsClip } from "#shared/adsClips";
 import { whenFirstScreenDone } from "~/lib/firstScreen";
 
 const props = defineProps<{ clips: AdsClip[] }>();
@@ -99,6 +115,8 @@ let autoplay = true;
 let firstScreen = false;
 let observer: IntersectionObserver | null = null;
 const visible = new Set<number>();
+
+const isShort = adsClipIsShort;
 
 function setVideo(i: number, el: HTMLVideoElement | null) {
   videos[i] = el;
@@ -166,6 +184,8 @@ function toggleSound(i: number) {
 function autoplayVisible() {
   if (!autoplay || !firstScreen) return;
   for (const i of visible) {
+    // volle Videos nie von selbst laden
+    if (!adsClipIsShort(props.clips[i])) continue;
     if (!state[i]?.userPaused && videos[i]?.paused !== false) play(i);
   }
 }
@@ -259,6 +279,30 @@ onBeforeUnmount(() => {
   bottom: var(--space-300);
   display: flex;
   gap: var(--space-200);
+}
+
+.clips__start {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.clips__startIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
 }
 
 .clips__btn {

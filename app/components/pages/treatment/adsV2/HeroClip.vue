@@ -8,12 +8,16 @@
     - iPhone: muted + playsinline, sonst kein Autoplay in der Seite.
     - prefers-reduced-motion / Save-Data: kein Clip, nur das Foto.
     - Pause-Knopf (WCAG 2.2.2), Ausschnitt start..end als Schleife.
+    - Die Huelle liegt im Fluss der Karte (kein absolutes inset) und schneidet
+      Video und Knopf selbst ab: nichts ragt ueber den Kartenrand.
+    - Bildausschnitt je Kartengroesse aus focusY/captionZones
+      (heroObjectPositionY): Untertitel ganz drin oder ganz draussen.
   -->
-  <div class="heroClip">
+  <div ref="boxRef" class="heroClip">
     <video
       ref="videoRef"
       class="heroClip__video"
-      :style="clip.focus ? { objectPosition: clip.focus } : undefined"
+      :style="{ objectPosition: `50% ${posY}%` }"
       :src="src"
       :poster="clip.posterUrl || undefined"
       muted
@@ -44,7 +48,7 @@
 
 <script setup lang="ts">
 import { IconPlayerPauseFilled, IconPlayerPlayFilled } from "@tabler/icons-vue";
-import type { AdsClip } from "#shared/adsClips";
+import { heroObjectPositionY, type AdsClip } from "#shared/adsClips";
 import { whenFirstScreenDone } from "~/lib/firstScreen";
 
 const props = defineProps<{ clip: AdsClip }>();
@@ -66,6 +70,18 @@ useHead(() =>
 );
 
 const videoRef = ref<HTMLVideoElement | null>(null);
+const boxRef = ref<HTMLElement | null>(null);
+// Vorgabe fuer das Server-Rendern: typische Handy-Karte (375 x 667), im
+// Browser nach der echten Groesse neu berechnet.
+const posY = ref(heroObjectPositionY(336, 200, props.clip));
+let resizeObserver: ResizeObserver | null = null;
+
+function updatePosition() {
+  const el = boxRef.value;
+  if (!el) return;
+  const { width, height } = el.getBoundingClientRect();
+  if (width > 0 && height > 0) posY.value = heroObjectPositionY(width, height, props.clip);
+}
 const src = ref<string | undefined>(undefined);
 const visible = ref(false);
 const paused = ref(false);
@@ -114,6 +130,12 @@ function toggle() {
 }
 
 onMounted(() => {
+  updatePosition();
+  if (typeof ResizeObserver !== "undefined" && boxRef.value) {
+    resizeObserver = new ResizeObserver(updatePosition);
+    resizeObserver.observe(boxRef.value);
+  }
+
   let allowed = true;
   try {
     const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -146,26 +168,40 @@ onMounted(() => {
 onBeforeUnmount(() => {
   observer?.disconnect();
   observer = null;
+  resizeObserver?.disconnect();
+  resizeObserver = null;
 });
 </script>
 
 <style scoped>
 .heroClip {
-  position: absolute;
-  inset: 0;
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: var(--border-radius-card-figure);
+  /* Safari: abgerundete Ecken schneiden das Video sonst nicht zuverlaessig */
+  isolation: isolate;
+  background: var(--color-gray-200, #eee);
 }
 
 .heroClip__video {
+  position: absolute;
+  inset: 0;
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 40%;
-  border-radius: var(--border-radius-card-figure);
+  border-radius: inherit;
   background: transparent;
 }
 
 .heroClip__toggle {
   position: absolute;
+  z-index: 1;
   right: var(--space-300);
   bottom: var(--space-300);
   display: inline-flex;

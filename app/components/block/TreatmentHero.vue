@@ -562,21 +562,11 @@ const discountLabel = computed(() => {
   hyphens: manual;
 }
 
-/* go.-Vorlage v2: Clip an der Stelle des Fotos (gleiche Innenabstaende
-   wie .hero__media). */
+/* go.-Vorlage v2: Clip an der Stelle des Fotos. Er liegt im Fluss von
+   .hero__media und nutzt dessen Innenabstaende (links = rechts). */
 .hero--v2 .hero__media {
   position: relative;
-}
-
-.hero--v2 .hero__media > :deep(.heroClip) {
-  inset: var(--space-card-figure-pad) var(--space-card-figure-pad) 0;
-}
-
-@media (min-width: 900px) {
-  .hero--v2 .hero__media > :deep(.heroClip) {
-    inset: var(--space-card-figure-pad) var(--space-card-figure-pad)
-      var(--space-card-figure-pad) 0;
-  }
+  min-width: 0;
 }
 
 /* go.: Bild klein, alles Weitere im ersten Screen (375 x 667, #181). */
@@ -659,6 +649,23 @@ const discountLabel = computed(() => {
   .hero--v2.hero--ads-buttons .hero-cta-btn {
     flex: 0 0 auto;
     width: 100%;
+  }
+
+  /* v2 auf 320er-Handys: H1 und Preis je eine Zeile kuerzer, damit die
+     Sterne noch in den ersten Screen passen. */
+  @media (max-width: 359px) {
+    .hero--v2 .hero__title,
+    .hero--v2.hero--ads-long-title .hero__title {
+      font-size: 1.375rem;
+    }
+
+    .hero--v2 .hero__price {
+      font-size: 1.1875rem;
+    }
+
+    .hero--v2 .hero__main {
+      padding-top: var(--space-400);
+    }
   }
 }
 
@@ -979,6 +986,21 @@ const discountLabel = computed(() => {
   .floating-cta--v2 .floating-cta__phone {
     width: 40px;
     height: 40px;
+  }
+}
+
+/* v2 unter 375 px (320er, 360er Android): Preis, Telefon und "Beratung
+   buchen" passen nicht in eine Zeile ("ab 79,99 EUR pro Zone*" lief unter das
+   Telefon) - das Telefon faellt weg (Anrufen steht im Abschnitt Standort),
+   der Knopf wird schmaler. */
+@media (max-width: 374px) {
+  .floating-cta--v2 .floating-cta__phone {
+    display: none;
+  }
+
+  .floating-cta--v2 .floating-cta-btn :deep(button),
+  .floating-cta--v2 :deep(button.floating-cta-btn) {
+    padding-inline: var(--space-400);
   }
 }
 
