@@ -171,10 +171,13 @@ async function fetchFromStrapi(
 ) {
   const config = useRuntimeConfig(event);
   const siteMode = config.siteMode || config.public.siteMode;
-  const result = await fetchFromStrapiRaw(event, preview, previewStatus);
-  if (siteMode !== 'ads') return result;
+  const raw = await fetchFromStrapiRaw(event, preview, previewStatus);
+  if (siteMode !== 'ads') return raw;
   const url = getRequestURL(event);
   const locale = url.searchParams.get('locale');
+  // go.-Standortseite: Behandlungskacheln und Bewertungen zurueck (Inhaber,
+  // 30.09.2026). Vor der Bereinigung, damit auch diese Texte sie durchlaufen.
+  const result = await withAdsLocationExtras(event, url.pathname, raw, locale);
   // #184: Ausgaenge schliessen - www-Links werden relativ, ortlose
   // Querlinks auf Standort-Behandlungsseiten fuehren zum selben Standort.
   const linkCtx = await adsLinkContext(event, getRequestURL(event).pathname);
@@ -225,6 +228,21 @@ async function fetchFromStrapi(
       return { ...(sanitized as any), data: applyNewCustomerPricesDeep(data) };
     }
   }
+  // go.-Standortseite: Preise in den Kacheltexten ("PRP ab 199,99 €") wie
+  // auf den Behandlungsseiten mit Neukundenpreis. OPs kommen gar nicht mit.
+  if (
+    (!locale || locale === 'de') &&
+    ADS_LOCATION_PAGE.test(restPath) &&
+    Array.isArray((sanitized as any)?.data?.treatmentPages)
+  ) {
+    return {
+      ...(sanitized as any),
+      data: {
+        ...(sanitized as any).data,
+        treatmentPages: applyNewCustomerPricesDeep((sanitized as any).data.treatmentPages),
+      },
+    };
+  }
   // go.: Preisseiten /p/botox-kosten, /p/hyaluron-spritzen-kosten,
   // /p/skinbooster-preise mit Neukundenpreisen wie die Behandlungsseiten
   // (Benjamin, 30.09.2026). Andere /p/-Seiten bleiben, wie sie sind.
@@ -253,36 +271,6 @@ async function fetchFromStrapi(
     }
   }
   return sanitized;
-}
-
-// #184: pathKeys, die es an einem Standort gibt (5 min im Speicher). Die
-// Antwort der Behandlungsseite traegt sie nicht mit; "with-treatments" nennt
-// sie im SEO-Baum ("botox/..."), der Ads-Baum heisst dort "muskelrelaxans/...".
-const locationPathKeyCache = new Map<string, { at: number; keys: string[] }>();
-
-async function locationPathKeys(
-  event: any,
-  city: string,
-  loc: string,
-): Promise<string[] | null> {
-  const key = `${city}/${loc}`;
-  const hit = locationPathKeyCache.get(key);
-  if (hit && Date.now() - hit.at < 5 * 60_000) return hit.keys;
-  try {
-    const config = useRuntimeConfig(event);
-    const base = String(config.public.strapiUrl || '').replace(/\/+$/, '');
-    const res: any = await $fetch(
-      `${base}/api/locations/${encodeURIComponent(city)}/${encodeURIComponent(loc)}/with-treatments?locale=de`,
-    );
-    const keys = (res?.data?.treatmentPages ?? [])
-      .map((p: any) => p?.pathKey)
-      .filter((k: unknown): k is string => typeof k === 'string')
-      .map((k: string) => k.replace(/^botox(?=\/|$)/, 'muskelrelaxans'));
-    locationPathKeyCache.set(key, { at: Date.now(), keys });
-    return keys;
-  } catch {
-    return null;
-  }
 }
 
 async function adsLinkContext(event: any, pathname: string): Promise<AdsLinkContext> {

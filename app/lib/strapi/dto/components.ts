@@ -343,6 +343,8 @@ export type BlockTreatmentTeasersDto = {
   locationTreatmentPathKeys?: string[];
   /** go. (#184): Karten ohne Seite am Standort ausblenden. */
   hideUnavailableAtLocation?: boolean;
+  /** go.: Neukunden-Fussnote nicht unter den Kacheln (steht am Seitenende). */
+  hideNewCustomerFootnote?: boolean;
   cardSettings?: CardSettingsDto;
 };
 

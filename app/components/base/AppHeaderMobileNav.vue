@@ -44,7 +44,10 @@
             </li>
           </ul>
         </nav>
-        <nav v-if="!isAdsMode" class="mobileMenu__mainNav">
+        <nav
+          v-if="props.items.mainNavItems.length > 0"
+          class="mobileMenu__mainNav"
+        >
           <ul class="mobileMenu__mainNav__parentList">
             <li v-for="item in props.items.mainNavItems" :key="item.slug">
               <button
@@ -65,7 +68,7 @@
               </button>
               <NuxtLinkLocale
                 v-else
-                :to="treatmentPagePath(item.pathKey, item.slug)"
+                :to="item.href ?? treatmentPagePath(item.pathKey, item.slug)"
                 class="mobileMenu__link mobileMenu__link--parent"
                 @click="closeMobileMenu"
               >
@@ -81,7 +84,7 @@
               >
                 <li>
                   <NuxtLinkLocale
-                    :to="treatmentPagePath(item.pathKey, item.slug)"
+                    :to="item.href ?? treatmentPagePath(item.pathKey, item.slug)"
                     class="mobileMenu__link"
                     @click="closeMobileMenu"
                   >
@@ -91,6 +94,7 @@
                 <li v-for="child in item.children" :key="child.slug">
                   <NuxtLinkLocale
                     :to="
+                      child.href ??
                       treatmentPagePath(child.pathKey, item.slug, child.slug)
                     "
                     class="mobileMenu__link"
@@ -103,7 +107,10 @@
             </li>
           </ul>
         </nav>
-        <nav v-if="!isAdsMode" class="mobileMenu__secondaryNav">
+        <nav
+          v-if="props.items.secondaryNavItems.length > 0"
+          class="mobileMenu__secondaryNav"
+        >
           <ul>
             <li v-for="item in props.items.secondaryNavItems" :key="item.slug">
               <NuxtLinkLocale
@@ -142,7 +149,14 @@ const props = defineProps<{
       name: string;
       slug: string;
       pathKey?: string;
-      children: { name: string; slug: string; pathKey?: string }[];
+      /** go.: fertiges Ziel (Standort-Behandlungsseite o. ae.). */
+      href?: string;
+      children: {
+        name: string;
+        slug: string;
+        pathKey?: string;
+        href?: string;
+      }[];
     }[];
     adsPhone?: { label: string; href: string } | null;
     adsLocation?: { label: string; to: string } | null;

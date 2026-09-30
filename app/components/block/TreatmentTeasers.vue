@@ -19,7 +19,10 @@
         />
       </UiOrganismTilesCard>
       <!-- go.: Die Kacheln zeigen Neukundenpreise mit Sternchen. -->
-      <p v-if="showsNewCustomerPrice" class="teasers__footnote">
+      <p
+        v-if="showsNewCustomerPrice && !hideNewCustomerFootnote"
+        class="teasers__footnote"
+      >
         {{ newCustomerFootnote(globals?.ecommerce?.newsletterDiscountPercentage ?? undefined) }}
       </p>
     </div>
@@ -33,7 +36,10 @@ import type {
   TreatmentPageDto,
 } from "~/lib/strapi/dto/collections";
 import type { MoleculeTreatmentTile } from "~/lib/ui/types";
-import { newCustomerFootnote } from "#shared/newCustomerOffer";
+import {
+  buildNewCustomerOffer,
+  newCustomerFootnote,
+} from "#shared/newCustomerOffer";
 
 const props = defineProps<BlockTreatmentTeasersDto>();
 const { t, locale } = useI18n();
@@ -178,7 +184,21 @@ function getTileProps(
     isStartingPrice: props.showPrices
       ? page.treatment?.isStartingPrice
       : undefined,
+    priceLabel: zonePriceLabel(page),
   };
+}
+
+// go.: Muskelrelaxans ab 149,99 € (1 Zone) wird wie auf der Behandlungsseite
+// (#187) mit "ab 79,99 € pro Zone*" beworben, nicht mit 119,99 €.
+function zonePriceLabel(page: TreatmentItem): string | undefined {
+  if (!props.showPrices || !showsNewCustomerPrice.value) return undefined;
+  const offer = buildNewCustomerOffer({
+    pathKey: page.pathKey,
+    priceCent: page.treatment?.priceInEuroCent,
+    isStartingPrice: page.treatment?.isStartingPrice,
+    discountPct: globals.value?.ecommerce?.newsletterDiscountPercentage,
+  });
+  return offer?.kind === "zone" ? offer.heroLine : undefined;
 }
 </script>
 

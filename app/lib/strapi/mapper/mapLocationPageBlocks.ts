@@ -104,8 +104,9 @@ export function mapLocationFixedBlocks(
   }
 
   function buildReviewsBlockModel() {
+    // go.: Der Proxy liefert nur Bewertungen ohne Markennamen
+    // (shared/adsLocationTreatments.ts).
     if (
-      isAdsMode ||
       !location?.reviews ||
       location?.reviews?.length === 0
     ) {
@@ -145,6 +146,7 @@ export function mapLocationFixedBlocks(
   }
 
   function buildAboutBlockModel() {
+    // go.: Der Standorttext nennt den Markennamen und verlinkt www - weg.
     if (isAdsMode || !location?.about) {
       return;
     }
@@ -213,6 +215,7 @@ export function mapLocationFixedBlocks(
   }
 
   function buildJobTeasersBlockModel() {
+    // go.: keine Links auf Karriere.
     if (
       isAdsMode ||
       !location?.jobs ||
@@ -236,8 +239,9 @@ export function mapLocationFixedBlocks(
   }
 
   function buildTreatmentTeasersBlockModel() {
+    // go.: treatmentPages sind hier Seiten des Ads-Baums, die es am Standort
+    // gibt (Proxy, shared/adsLocationTreatments.ts).
     if (
-      isAdsMode ||
       !treatmentPages ||
       treatmentPages.length === 0
     ) {
@@ -294,9 +298,16 @@ export function mapLocationFixedBlocks(
       headline,
       showShortDescriptions: true,
       showPrices: true,
-      showDescriptions: true,
+      // go.: wenig Text (Inhaber) - nur Titel, Kurzzeile, Preis.
+      showDescriptions: !isAdsMode,
       showTopCategoryFilters: true,
-      treatmentPages: sortedTreatmentPages,
+      ...(isAdsMode
+        ? {
+            treatmentAdsPages: sortedTreatmentPages as any,
+            // Fussnote steht am Seitenende.
+            hideNewCustomerFootnote: true,
+          }
+        : { treatmentPages: sortedTreatmentPages }),
       locationPathKey: `${location?.city?.slug}/${location?.slug}`,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,
