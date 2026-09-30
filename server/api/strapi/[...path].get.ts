@@ -1,5 +1,7 @@
 // Strapi proxy with server-side caching.
 import { sanitizeAdsContent } from "#shared/adsTerms";
+import { rewriteAdsLinksDeep, type AdsLinkContext } from "#shared/adsLinks";
+import { isAdsPricePage, prepareAdsPricePage } from "#shared/adsPricePages";
 import { stripBlockedAdsVideos } from "#shared/adsMedia";
 import {
   applyNewCustomerPricesDeep,
@@ -173,9 +175,29 @@ async function fetchFromStrapi(
   if (siteMode !== 'ads') return result;
   const url = getRequestURL(event);
   const locale = url.searchParams.get('locale');
-  // Videos mit dem Markennamen im Dateinamen/Bild nicht ausliefern
-  // (shared/adsMedia.ts).
-  const sanitized = sanitizeAdsContent(stripBlockedAdsVideos(result), locale);
+  // #184: Ausgaenge schliessen - www-Links werden relativ, ortlose
+  // Querlinks auf Standort-Behandlungsseiten fuehren zum selben Standort.
+  const linkCtx = await adsLinkContext(event, getRequestURL(event).pathname);
+  let sanitized: any = rewriteAdsLinksDeep(
+    // Videos mit dem Markennamen im Dateinamen/Bild nicht ausliefern.
+    sanitizeAdsContent(stripBlockedAdsVideos(result), locale),
+    linkCtx,
+  );
+  // ... und die Kacheln "Passende Behandlungen" verlinken nur, was es am
+  // Standort gibt (mapTreatmentCommonFixedBlocks liest das Feld).
+  if (
+    linkCtx.availablePathKeys &&
+    sanitized?.data?.treatmentPage &&
+    !Array.isArray(sanitized.data.availableTreatmentPathKeys)
+  ) {
+    sanitized = {
+      ...sanitized,
+      data: {
+        ...sanitized.data,
+        availableTreatmentPathKeys: linkCtx.availablePathKeys,
+      },
+    };
+  }
   // go.: Preise in Texten der Behandlungsseite (Preistabellen, FAQ, Teaser,
   // SEO-Title/Description) zeigen den Neukundenpreis mit Sternchen
   // (shared/newCustomerOffer.ts). Nur der Behandlungsteil der Antwort: Die
@@ -203,6 +225,15 @@ async function fetchFromStrapi(
       return { ...(sanitized as any), data: applyNewCustomerPricesDeep(data) };
     }
   }
+  // go.: Preisseiten /p/botox-kosten, /p/hyaluron-spritzen-kosten,
+  // /p/skinbooster-preise mit Neukundenpreisen wie die Behandlungsseiten
+  // (Benjamin, 30.09.2026). Andere /p/-Seiten bleiben, wie sie sind.
+  if ((!locale || locale === 'de') && restPath.startsWith('/pages/by-slug/')) {
+    const data = (sanitized as any)?.data;
+    if (data && isAdsPricePage(data.slug)) {
+      return { ...(sanitized as any), data: prepareAdsPricePage(data) };
+    }
+  }
   // go.: Produktseiten (/produkte/…, verlinkt aus /preise) nennen die Preise
   // der Varianten im Beschreibungstext ("… ab 149,99€"). Gleiche Umstellung,
   // Zahlenfelder (priceInEuroCent, cheapestVariantPrice) bleiben.
@@ -222,6 +253,45 @@ async function fetchFromStrapi(
     }
   }
   return sanitized;
+}
+
+// #184: pathKeys, die es an einem Standort gibt (5 min im Speicher). Die
+// Antwort der Behandlungsseite traegt sie nicht mit; "with-treatments" nennt
+// sie im SEO-Baum ("botox/..."), der Ads-Baum heisst dort "muskelrelaxans/...".
+const locationPathKeyCache = new Map<string, { at: number; keys: string[] }>();
+
+async function locationPathKeys(
+  event: any,
+  city: string,
+  loc: string,
+): Promise<string[] | null> {
+  const key = `${city}/${loc}`;
+  const hit = locationPathKeyCache.get(key);
+  if (hit && Date.now() - hit.at < 5 * 60_000) return hit.keys;
+  try {
+    const config = useRuntimeConfig(event);
+    const base = String(config.public.strapiUrl || '').replace(/\/+$/, '');
+    const res: any = await $fetch(
+      `${base}/api/locations/${encodeURIComponent(city)}/${encodeURIComponent(loc)}/with-treatments?locale=de`,
+    );
+    const keys = (res?.data?.treatmentPages ?? [])
+      .map((p: any) => p?.pathKey)
+      .filter((k: unknown): k is string => typeof k === 'string')
+      .map((k: string) => k.replace(/^botox(?=\/|$)/, 'muskelrelaxans'));
+    locationPathKeyCache.set(key, { at: Date.now(), keys });
+    return keys;
+  } catch {
+    return null;
+  }
+}
+
+async function adsLinkContext(event: any, pathname: string): Promise<AdsLinkContext> {
+  const m = /^\/api\/strapi\/treatment-pages\/([^/]+)\/([^/]+)\/.+/.exec(pathname);
+  if (!m || m[1] === 'by-path') return {};
+  const keys = await locationPathKeys(event, m[1]!, m[2]!);
+  return keys
+    ? { locationBase: `/standorte/${m[1]}/${m[2]}`, availablePathKeys: keys }
+    : {};
 }
 
 async function fetchFromStrapiRaw(

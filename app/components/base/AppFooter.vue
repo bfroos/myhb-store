@@ -12,8 +12,9 @@
               <ImageAppLogo width="140" />
             </div>
             <div class="appFooter__navs">
+              <!-- go. (#184): keine Kategorie-Links im Footer -->
               <nav
-                v-if="treatmentPages.length > 0"
+                v-if="!isAdsMode && treatmentPages.length > 0"
                 :aria-label="$t('navigation.footer.treatments')"
               >
                 <h2 class="appFooter__navTitle">

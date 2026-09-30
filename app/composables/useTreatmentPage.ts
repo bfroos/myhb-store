@@ -101,17 +101,50 @@ export function useTreatmentPage() {
   async function fetchTreatment(): Promise<boolean> {
     const treatmentPathKey = resolveTreatmentPathKey();
 
-    const { data, error, status } = await useStrapiFetch<any>(
-      `/treatment-pages/by-path/${treatmentPathKey}`,
-      {
-        query: {
-          locale: currentLocale,
-        },
-        fetchOptions: {
-          key: `treatment-page:${currentLocale}:${treatmentPathKey}`,
-        },
-      },
-    );
+    // go.: Wie auf den Standortseiten gibt es manche Behandlungen im Ads-Baum
+    // nur als "-rabatt"-Seite (muskelrelaxans/lachfalten). Fehlt die
+    // Grundseite, wird die "-rabatt"-Seite geladen statt 404 (/preise
+    // verlinkt die Grundseite).
+    const rabattFallback =
+      isAdsMode.value && !treatmentPathKey.endsWith("-rabatt")
+        ? `${treatmentPathKey}-rabatt`
+        : null;
+    const pageKey = `treatment-page:${currentLocale}:${treatmentPathKey}`;
+    const { data, error, status } = rabattFallback
+      ? await useAsyncData<any>(pageKey, async () => {
+          try {
+            return await strapiFetch<any>(
+              `/treatment-pages/by-path/${treatmentPathKey}`,
+              { query: { locale: currentLocale } },
+            );
+          } catch (err: any) {
+            if ((err?.statusCode ?? err?.status) !== 404) throw err;
+            const fallback = await strapiFetch<any>(
+              `/treatment-pages/by-path/${rabattFallback}`,
+              { query: { locale: currentLocale } },
+            );
+            const page = fallback?.data;
+            if (page) {
+              page.hero = {
+                ...(page.hero ?? {}),
+                showDiscount: false,
+                showBookingButton: true,
+              };
+            }
+            return fallback;
+          }
+        })
+      : await useStrapiFetch<any>(
+          `/treatment-pages/by-path/${treatmentPathKey}`,
+          {
+            query: {
+              locale: currentLocale,
+            },
+            fetchOptions: {
+              key: pageKey,
+            },
+          },
+        );
 
     if (error.value) {
       throw handleFetchError(error.value, t);

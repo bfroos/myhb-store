@@ -341,6 +341,8 @@ export type BlockTreatmentTeasersDto = {
   treatmentAdsPages?: TreatmentAdsPageDto[];
   locationPathKey?: string;
   locationTreatmentPathKeys?: string[];
+  /** go. (#184): Karten ohne Seite am Standort ausblenden. */
+  hideUnavailableAtLocation?: boolean;
   cardSettings?: CardSettingsDto;
 };
 

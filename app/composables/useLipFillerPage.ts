@@ -7,9 +7,9 @@ export function useLipFillerPage() {
   const fixedBlocks = ref({
     hero: {
       headline: "Lippenaufpolsterung – Natürliche volle Lippen",
-      subline: "Board-zertifizierte Ärzte • Transparente Preise • 30-Tage Garantie",
+      subline: "Board-zertifizierte Ärzte • Transparente Preise • 14 Tage Nachkontrolle inklusive",
       text: "Echte Patienten-Ergebnisse. Keine künstliche Optik. Ab €299.",
-      trustBadges: ["1000+ zufriedene Patienten", "30-Tage Zufriedenheitsgarantie"],
+      trustBadges: ["1000+ zufriedene Patienten", "Kostenlose Nachkontrolle innerhalb von 14 Tagen"],
       ctaText: "Kostenlose Beratung buchen",
       ctaLink: "#booking"
     },
@@ -125,7 +125,7 @@ export function useLipFillerPage() {
         },
         {
           question: "Was, wenn ich es nicht mag?",
-          answer: "Das ist reversibel. Hyaluronsäure kann mit Enzym aufgelöst werden. Kostenlose Anpassungen für 30 Tage."
+          answer: "Das ist reversibel. Hyaluronsäure kann mit Enzym aufgelöst werden. Innerhalb von 14 Tagen kostenlose ärztliche Nachkontrolle mit Feinanpassung."
         },
         {
           question: "Können das Anfänger machen?",
@@ -138,12 +138,14 @@ export function useLipFillerPage() {
       ]
     },
     guarantee: {
-      headline: "30-Tage Zufriedenheitsgarantie",
+      // Benjamin, 30.09.2026: Es gilt nur die kostenlose aerztliche
+      // Nachkontrolle mit Feinanpassung innerhalb von 14 Tagen - keine
+      // 30-Tage-Garantie, kein Geld zurueck, keine Folgetermine "bis du
+      // zufrieden bist".
+      headline: "Kostenlose Nachkontrolle",
       icon: "🛡️",
-      description: "Du bist nicht 100% begeistert? Kostenlose Überarbeitung oder Geld zurück.",
+      description: "Kostenlose ärztliche Nachkontrolle mit Feinanpassung innerhalb von 14 Tagen.",
       items: [
-        "✓ Kostenlose Folge-Termine (bis du zufrieden bist)",
-        "✓ Filler kann ohne Kosten aufgelöst werden",
         "✓ 24/7 Support für alle Fragen",
         "✓ Transparent: Was du zahlst, ist was du bekommst"
       ]
@@ -163,7 +165,7 @@ export function useLipFillerPage() {
 
   const seo = ref<SharedSeoDto>({
     metaTitle: "Lippenaufpolsterung | Natürliche Ergebnisse | My Health & Beauty",
-    metaDescription: "Professionelle Lippenaufpolsterung mit natürlichen Ergebnissen. Board-zertifizierte Ärzte, transparente Preise, 30-Tage Garantie.",
+    metaDescription: "Professionelle Lippenaufpolsterung mit natürlichen Ergebnissen. Board-zertifizierte Ärzte, transparente Preise, kostenlose Nachkontrolle innerhalb von 14 Tagen.",
     keywords: "Lippenaufpolsterung, Lip Filler, Lippen vergrößern, Hyaluronsäure"
   });
 

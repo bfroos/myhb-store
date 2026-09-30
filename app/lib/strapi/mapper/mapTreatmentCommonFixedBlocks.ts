@@ -400,8 +400,11 @@ export function mapTreatmentCommonFixedBlocks(
       value: headline ?? "",
     });
 
+    // go. (#184): auf Standortseiten immer am Standort bleiben - Karten, die
+    // es dort nicht gibt, fallen weg statt auf /behandlungen zu fuehren.
     const useLocationLinks =
-      treatmentPage?.relatedTreatments?.linkTarget !== "overregional" &&
+      (isAdsMode ||
+        treatmentPage?.relatedTreatments?.linkTarget !== "overregional") &&
       !!location &&
       !!locationTreatmentPathKeys;
 
@@ -422,6 +425,7 @@ export function mapTreatmentCommonFixedBlocks(
       locationTreatmentPathKeys: useLocationLinks
         ? locationTreatmentPathKeys
         : undefined,
+      hideUnavailableAtLocation: isAdsMode && useLocationLinks,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,
       },
