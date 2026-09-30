@@ -55,6 +55,7 @@ const props = defineProps<MoleculeTreatmentTile>();
 const { formatDisplayPrice } = useDisplayPrice();
 
 const priceLabel = computed(() => {
+  if (props.priceLabel) return props.priceLabel;
   return formatDisplayPrice(props.priceInEuroCent ?? 0, {
     prefix: props.isStartingPrice
       ? $t("common.price.startingPrefix")

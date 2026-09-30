@@ -42,8 +42,11 @@
           <ImageAppLogo />
         </NuxtLinkLocale>
         <span v-else class="appHeader__mainNav__brand"><ImageAppLogo /></span>
-        <!-- go. (#184): keine Kategorie-Navigation auf Landingpages -->
-        <div v-if="!isAdsMode" class="appHeader__desktop appHeader__mainNav__menu">
+        <!-- go.: Behandlungsmenue nur mit go.-internen Zielen (useAdsNav) -->
+        <div
+          v-if="!isAdsMode || priorityNavItems.length > 0"
+          class="appHeader__desktop appHeader__mainNav__menu"
+        >
           <div class="appHeader__priorityWrap">
             <BaseAppHeaderMainNav
               :links="priorityNavItems"
@@ -100,7 +103,14 @@ import { IconMenu2, IconPhone } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
-const { treatmentPages } = useMenu("treatment-pages");
+const { treatmentPages: seoTreatmentPages } = useMenu("treatment-pages");
+// go.: Menue aus dem Ads-Baum, Ziele nur auf go. (Standort der Seite, sonst
+// Kategorie-Seiten und Uebersichten).
+const { categories: adsCategories, overviewLinks: adsOverviewLinks } =
+  await useAdsNav();
+const treatmentPages = computed(() =>
+  isAdsMode.value ? adsCategories.value : seoTreatmentPages.value,
+);
 const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 
@@ -132,13 +142,22 @@ const currentMainNav = computed(() =>
   treatmentPages.value.find((page) => page.id === mainNavId.value),
 );
 
-const priorityNavItems = computed(() =>
-  treatmentPages.value.map((page) => ({
+const priorityNavItems = computed(() => [
+  ...treatmentPages.value.map((page) => ({
     id: page.id,
     label: page.name,
-    href: treatmentPagePath(page.pathKey, page.slug),
+    href:
+      "href" in page && page.href
+        ? page.href
+        : treatmentPagePath(page.pathKey, page.slug),
   })),
-);
+  // go.: Uebersichten am Ende (ohne Untermenue).
+  ...adsOverviewLinks.value.map((link, i) => ({
+    id: -1 - i,
+    label: link.name,
+    href: `/${link.slug}`,
+  })),
+]);
 
 // go. (#184): Standort der Seite fuer "Anrufen" und "Standort" im Menue.
 const { seitenOrt } = useSeitenStandort();
@@ -164,8 +183,10 @@ const adsLocationLink = computed(() => {
 
 const mobileMenuItems = computed(() => {
   return {
-    secondaryNavItems: secondaryNavItems.value,
-    mainNavItems: isAdsMode.value ? [] : treatmentPages.value,
+    secondaryNavItems: isAdsMode.value
+      ? adsOverviewLinks.value
+      : secondaryNavItems.value,
+    mainNavItems: treatmentPages.value,
     adsPhone: adsPhone.value,
     adsLocation: adsLocationLink.value,
   };
@@ -177,11 +198,14 @@ const subnavItems = computed(() =>
     label: child.name,
     // pathKey statt parent-slug + child-slug: der zusammengesetzte Pfad
     // stimmt nur bei genau zwei Ebenen.
-    href: treatmentPagePath(
-      child.pathKey,
-      currentMainNav.value?.slug,
-      child.slug,
-    ),
+    href:
+      "href" in child && child.href
+        ? child.href
+        : treatmentPagePath(
+            child.pathKey,
+            currentMainNav.value?.slug,
+            child.slug,
+          ),
   })),
 );
 

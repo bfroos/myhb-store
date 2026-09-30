@@ -117,6 +117,8 @@ export type MoleculeTreatmentTile = {
   path: string;
   priceInEuroCent?: number;
   isStartingPrice?: boolean;
+  /** Fertige Preiszeile (go.: "ab 79,99 € pro Zone*"), sonst aus dem Preis. */
+  priceLabel?: string;
 };
 
 export type MoleculeBlogArticleTeaser = {
