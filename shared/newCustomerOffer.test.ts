@@ -85,8 +85,14 @@ test("Zonenangebot Muskelrelaxans: 2 Zonen 199,99 - 20 % = 159,99 -> 79,99 je Zo
   );
   assert.equal(
     offer.calculation,
-    "2 Zonen 199,99 € − 20 % Neukundenrabatt = 159,99 €, also 79,99 € je Zone (genau 79,995 €, abgerundet)",
+    "2 Zonen 199,99 € − 20 % Neukundenrabatt = 159,99 € (79,99 € je Zone)",
   );
+  assert.equal(offer.heroLine, "ab 79,99 € pro Zone*");
+  assert.equal(
+    offer.pageFootnote,
+    "*Neukundenpreise inkl. 20 % Neukundenrabatt. „ab 79,99 € pro Zone“ gilt ab zwei Zonen (2 Zonen 159,99 € statt 199,99 €), regulär ab 149,99 € (1 Zone).",
+  );
+  assert.doesNotMatch(Object.values(offer).join(" "), /genau|79,995/);
   assert.equal(
     offer.footnote,
     "*Gilt ab zwei Zonen Muskelrelaxans in Kombination mit dem 20-%-Neukundenrabatt.",
@@ -151,7 +157,9 @@ test("Allgemeiner Neukundenpreis mit regulaerem Preis und Fussnote", () => {
     kind: "price",
     regular: "regulär ab 149,99 €",
     headline: "Neukunden ab 119,99 €*",
+    heroLine: "Neukunden ab 119,99 €*",
     footnote: "*inkl. 20 % Neukundenrabatt",
+    pageFootnote: "*Neukundenpreise inkl. 20 % Neukundenrabatt, regulär ab 149,99 €.",
     priceCent: 11999,
   });
   const fix = buildNewCustomerOffer({ pathKey: "x", priceCent: 22999, isStartingPrice: false })!;

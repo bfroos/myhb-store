@@ -47,12 +47,23 @@ export type NewCustomerOffer = {
   regular: string;
   /** Hauptzeile mit Sternchen, z. B. "Neukunden: ab 79,99 € pro Zone*". */
   headline: string;
+  /**
+   * Kurze Preiszeile fuer den ersten Screen und die mitlaufende Leiste
+   * (Benjamin, 30.09.2026: im Hero nur EINE Preiszeile, keine Rechnung):
+   * "ab 79,99 € pro Zone*" bzw. "Neukunden ab 119,99 €*".
+   */
+  heroLine: string;
   /** Rechenweg, nur beim Zonenangebot. */
   calculation?: string;
   /** Fussnote mit Sternchen. */
   footnote: string;
   /** Zonenangebot: Fussnote fuer die uebrigen *-Preise der Seite. */
   footnote2?: string;
+  /**
+   * Eine kompakte Fussnotenzeile fuers Seitenende: erklaert das Sternchen
+   * und nennt den regulaeren Preis (der im Hero nicht mehr steht).
+   */
+  pageFootnote: string;
   /** Angezeigter Neukundenpreis in Cent (je Zone beim Zonenangebot). */
   priceCent: number;
 };
@@ -99,18 +110,6 @@ export function formatEuroCent(cent: number): string {
     .replace(/ /g, " ");
 }
 
-function formatEuroExact(cent: number): string {
-  // 7999.5 Cent -> "79,995 €" (dritte Nachkommastelle nur wenn noetig)
-  const euros = cent / 100;
-  const digits = Number.isInteger(Math.round(cent * 1000) / 1000) ? 2 : 3;
-  return (
-    new Intl.NumberFormat("de-DE", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: digits,
-    }).format(euros) + " €"
-  );
-}
-
 export function isZoneOfferPath(pathKey: string | null | undefined): boolean {
   if (!pathKey) return false;
   if (pathKey !== "muskelrelaxans" && !pathKey.startsWith("muskelrelaxans/"))
@@ -135,17 +134,19 @@ export function buildNewCustomerOffer(
     const perZone = Math.floor((perZoneExact - 99) / 100) * 100 + 99;
     if (perZone > 0 && perZoneExact - perZone <= MAX_ROUNDING_CENT) {
       const perZoneLabel = formatEuroCent(perZone);
-      const exactNote =
-        perZoneExact === perZone
-          ? ""
-          : ` (genau ${formatEuroExact(perZoneExact)}, abgerundet)`;
+      // Keine "genau 79,995 €"-Rechnung mehr (Benjamin, 30.09.2026): Die
+      // Kasse rechnet 159,99 € fuer zwei Zonen, je Zone steht der
+      // abgerundete Wert.
+      const regular = `regulär ${ab}${formatEuroCent(cent)} (1 Zone)`;
       return {
         kind: "zone",
-        regular: `regulär ${ab}${formatEuroCent(cent)} (1 Zone)`,
+        regular,
         headline: `Neukunden: ab ${perZoneLabel} pro Zone*`,
-        calculation: `2 Zonen ${formatEuroCent(twoZones)} − ${pct} % Neukundenrabatt = ${formatEuroCent(twoZonesDiscounted)}, also ${perZoneLabel} je Zone${exactNote}`,
+        heroLine: `ab ${perZoneLabel} pro Zone*`,
+        calculation: `2 Zonen ${formatEuroCent(twoZones)} − ${pct} % Neukundenrabatt = ${formatEuroCent(twoZonesDiscounted)} (${perZoneLabel} je Zone)`,
         footnote: `*Gilt ab zwei Zonen Muskelrelaxans in Kombination mit dem ${pct}-%-Neukundenrabatt.`,
         footnote2: `Alle anderen mit * markierten Preise auf dieser Seite ${newCustomerFootnote(pct).slice(1)}.`,
+        pageFootnote: `*Neukundenpreise inkl. ${pct} % Neukundenrabatt. „ab ${perZoneLabel} pro Zone“ gilt ab zwei Zonen (2 Zonen ${formatEuroCent(twoZonesDiscounted)} statt ${formatEuroCent(twoZones)}), ${regular}.`,
         priceCent: perZone,
       };
     }
@@ -153,11 +154,14 @@ export function buildNewCustomerOffer(
 
   const nk = newCustomerPriceCent(cent, pct);
   if (!nk) return null;
+  const regular = `regulär ${ab}${formatEuroCent(cent)}`;
   return {
     kind: "price",
-    regular: `regulär ${ab}${formatEuroCent(cent)}`,
+    regular,
     headline: `Neukunden ${ab}${formatEuroCent(nk)}*`,
+    heroLine: `Neukunden ${ab}${formatEuroCent(nk)}*`,
     footnote: newCustomerFootnote(pct),
+    pageFootnote: `*Neukundenpreise inkl. ${pct} % Neukundenrabatt, ${regular}.`,
     priceCent: nk,
   };
 }

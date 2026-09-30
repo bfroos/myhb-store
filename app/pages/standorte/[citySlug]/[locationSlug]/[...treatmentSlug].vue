@@ -5,6 +5,12 @@
     :dynamic-blocks="treatmentPage?.blocks"
     :order="blockOrder"
   />
+  <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
+  <BlockAdsPriceFootnote
+    v-if="isAdsMode && fixedBlocks?.hero"
+    :treatment="fixedBlocks.hero.treatment"
+    :treatment-path-key="fixedBlocks.hero.treatmentPathKey"
+  />
 </template>
 <script setup lang="ts">
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
