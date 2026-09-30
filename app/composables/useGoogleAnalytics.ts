@@ -73,8 +73,18 @@ export const useGoogleAnalytics = () => {
       params.event_category === 'conversion'
         ? { ...(readGaAttributionParams() ?? {}), ...params }
         : params;
+    // go.-Vorschau der Seitenvorlage v2 (/vorschau-v2/...): Ereignisse tragen
+    // `template: "v2-preview"`, damit Vorschau-Klicks die Messwerte der
+    // echten Anzeigenseiten nicht vermischen. Sonst kein Feld (unveraendert).
+    const previewTemplate =
+      typeof window !== 'undefined'
+        ? (window as any).__myhbPreviewTemplate
+        : undefined;
+    const tagged = previewTemplate
+      ? { ...withAttribution, template: previewTemplate }
+      : withAttribution;
     // `event` zuletzt, damit kein Parameter den Ereignisnamen ueberschreibt.
-    pushToDataLayer({ ...withAttribution, event: eventName });
+    pushToDataLayer({ ...tagged, event: eventName });
   };
 
   /**

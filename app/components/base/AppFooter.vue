@@ -1,6 +1,7 @@
 <template>
   <footer class="appFooter">
-    <UiLayoutSectionBlock>
+    <!-- go.-Vorlage v2 (Vorschau): Minimal-Footer ohne Querlinks -->
+    <UiLayoutSectionBlock v-if="!isAdsTemplateV2">
       <UiLayoutCardSurface>
         <div class="appFooter__inner">
           <aside class="appFooter__newsletter">
@@ -253,6 +254,7 @@ import {
 } from "@tabler/icons-vue";
 
 const { isAdsMode } = useSiteModeFlags();
+const isAdsTemplateV2 = useAdsTemplateV2();
 const { locale } = useI18n();
 const { treatmentPages, productCategories } = useMenu(() =>
   isAdsMode.value ? "treatment-pages" : "treatment-pages,product-categories",
