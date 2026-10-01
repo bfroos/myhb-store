@@ -104,6 +104,8 @@ type Spec = AdsV2Terms & {
   aftercareExtra?: string[];
   /** Kacheln "Weitere Zonen/Behandlungen" (pathKeys, Reihenfolge = Anzeige) */
   related: string[];
+  /** Zusaetzliche fette Begriffe in "So wirkt es" (adsV2Emphasize) */
+  bold?: string[];
 };
 
 type FaqSlot = "pain" | "natural" | "timing" | "side" | "undo" | "guarantee" | "last";
@@ -181,6 +183,7 @@ function infusion(key: string, label: string, treatment: string, content: string
       },
     },
     related: others(key, INFUSIONS).slice(0, 4),
+    bold: [`Lösung ${content}`],
   };
 }
 
@@ -230,7 +233,7 @@ const SPECS: Record<string, Spec> = {
     about: "zum Browlift",
     subline: "Offener, wacher Blick – ärztlich, ohne Ausfallzeit",
     zone: "browlift",
-    howItWorks: `${MR_HOW} So kann sich die Augenbraue sanft anheben.`,
+    howItWorks: `${MR_HOW} Gesetzt wird an je zwei Punkten am äußeren Ende der Augenbrauen, so kann sich die Braue leicht anheben.`,
     facts: MR_FACTS,
     related: others("muskelrelaxans/browlift", MR_FACE),
   },
@@ -248,12 +251,13 @@ const SPECS: Record<string, Spec> = {
     related: ["muskelrelaxans/kraehenfuesse", "muskelrelaxans/stirnfalte", "muskelrelaxans/zornesfalte", "muskelrelaxans/browlift"],
   },
   "muskelrelaxans/lipflip": {
+    bold: ["Oberlippe dreht sich leicht nach außen"],
     kind: "mr",
     label: "Lip Flip",
     treatment: "Lip-Flip-Behandlung",
     object: "den Lip Flip",
     about: "zum Lip Flip",
-    subline: "Oberlippe sanft betont – ganz ohne Filler, ärztlich",
+    subline: "Oberlippe wirkt voller – ohne Filler, in 15–20 Minuten",
     zone: "lipflip",
     howItWorks:
       "Beim Lip Flip wird eine sehr kleine Menge Muskelrelaxans knapp über der Oberlippe gesetzt. Der Ringmuskel um den Mund entspannt sich etwas, die Oberlippe dreht sich leicht nach außen und wirkt voller. Es wird kein Volumen aufgefüllt.",
@@ -305,7 +309,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Full-Face-Behandlung",
     object: "die Full-Face-Behandlung",
     about: "zur Full-Face-Behandlung",
-    subline: "Stirn, Zornesfalte und Augen in einem Termin – ärztlich, natürlich",
+    subline: "Stirn, Zornesfalte und Krähenfüße in einem Termin – ohne Ausfallzeit",
     howItWorks: `${MR_HOW} Bei Full Face werden mehrere Zonen in einer Sitzung behandelt, meist Stirn, Zornesfalte und Krähenfüße – die Menge je Zone passend zu deiner Mimik.`,
     facts: { ...MR_FACTS, dauer: "40–60 Minuten", wirkung: "nach 3–5 Tagen", ergebnis: "nach 10–14 Tagen" },
     firstWhen: "Tag 3–5",
@@ -316,6 +320,7 @@ const SPECS: Record<string, Spec> = {
     related: MR_FACE,
   },
   "muskelrelaxans/masseter": {
+    bold: ["großen Kaumuskel (Masseter)", "schmaler wirken"],
     kind: "mr",
     label: "Masseter",
     treatment: "Masseter-Behandlung",
@@ -330,7 +335,7 @@ const SPECS: Record<string, Spec> = {
     firstText: "Der Kaumuskel entspannt sich. Schmaler wirkt das Gesicht erst nach einigen Wochen.",
     refreshWhen: "nach ca. 4–6 Monaten",
     faq: {
-      natural: { question: "Verändert sich mein Gesicht stark?", answer: "Nein, die Veränderung kommt langsam über einige Wochen. Der Unterkiefer wirkt weicher und schmaler, deine Mimik bleibt. Lieber behutsam starten und bei Bedarf ergänzen." },
+      natural: { question: "Verändert sich mein Gesicht stark?", answer: "Nein, die Veränderung kommt langsam über einige Wochen. Der Unterkiefer wirkt weicher und schmaler, deine Mimik bleibt. Lieber mit weniger starten und bei Bedarf ergänzen." },
       timing: { answer: "Die Entspannung spürst du nach wenigen Tagen. Sichtbar schmaler wird das Gesicht nach etwa 6–8 Wochen. Meist hält es 4–6 Monate." },
       side: { answer: `Möglich sind eine leichte Rötung oder ein kleiner blauer Fleck. In den ersten Wochen kann sich Kauen etwas schwächer anfühlen, etwa bei zähem Essen. Selten wirkt das Lächeln kurz ungleichmäßig – das bildet sich von selbst zurück. ${RISK}` },
       last: { question: "Hilft das auch beim Zähneknirschen?", answer: "Die Behandlung entspannt den Kaumuskel. Ob sie bei deinem Knirschen sinnvoll ist, klärt die Ärztin oder der Arzt in der Beratung – bei Beschwerden am Kiefer gehört auch die Zahnärztin oder der Zahnarzt dazu." },
@@ -339,6 +344,7 @@ const SPECS: Record<string, Spec> = {
     related: ["muskelrelaxans/zaehneknirschen-bruxismus", "hyaluron/jawline", "muskelrelaxans/barbie-muskelrelaxans", "muskelrelaxans/full-face-muskelrelaxans"],
   },
   "muskelrelaxans/zaehneknirschen-bruxismus": {
+    bold: ["Kaumuskel (Masseter)", "weniger fest zubeißen"],
     kind: "mr",
     label: "Zähneknirschen",
     treatment: "Behandlung gegen Zähneknirschen",
@@ -362,6 +368,7 @@ const SPECS: Record<string, Spec> = {
     related: ["muskelrelaxans/masseter", "muskelrelaxans/stirnfalte", "muskelrelaxans/zornesfalte"],
   },
   "muskelrelaxans/barbie-muskelrelaxans": {
+    bold: ["oberen Teil des Trapezmuskels", "gestreckter"],
     kind: "mr",
     label: "Barbie-Behandlung",
     treatment: "Barbie-Behandlung",
@@ -384,6 +391,7 @@ const SPECS: Record<string, Spec> = {
     related: ["muskelrelaxans/masseter", "muskelrelaxans/halsfalten-platysma", "muskelrelaxans/hyperhidrose-starkes-schwitzen"],
   },
   "muskelrelaxans/halsfalten-platysma": {
+    bold: ["flachen Halsmuskel (Platysma)", "Haut darüber kann sich glätten"],
     kind: "mr",
     label: "Halsfalten",
     treatment: "Halsfalten-Behandlung",
@@ -402,6 +410,7 @@ const SPECS: Record<string, Spec> = {
     related: ["muskelrelaxans/full-face-muskelrelaxans", "muskelrelaxans/barbie-muskelrelaxans", "muskelrelaxans/masseter"],
   },
   "muskelrelaxans/hyperhidrose-starkes-schwitzen": {
+    bold: ["hemmt die Nervensignale an den Schweißdrüsen", "weniger Schweiß"],
     kind: "mr",
     label: "Starkes Schwitzen",
     treatment: "Behandlung gegen starkes Schwitzen",
@@ -438,9 +447,9 @@ const SPECS: Record<string, Spec> = {
     treatment: "Lippenbehandlung",
     object: "Lippen aufspritzen",
     about: "zum Lippen aufspritzen",
-    subline: "Weiche, natürlich betonte Lippen – ärztlich und behutsam",
+    subline: "Weiche, natürlich betonte Lippen – von Ärztinnen und Ärzten behandelt",
     zone: "lippen",
-    howItWorks: `${HA_HOW} Behutsam an Kontur und Lippenkörper gesetzt, betont es Form und Volumen.`,
+    howItWorks: `${HA_HOW} An Kontur und Lippenkörper gesetzt, betont es Form und Volumen.`,
     facts: HA_FACTS,
     aftercare: [
       "24 Stunden kein Sport, keine Sauna, kein Solarium",
@@ -453,15 +462,16 @@ const SPECS: Record<string, Spec> = {
     related: ["hyaluron/lippenkorrektur", "muskelrelaxans/lipflip", "hyaluron/nasolabialfalte", "hyaluron/kinnkorrektur"],
   },
   "hyaluron/lippenkorrektur": {
+    bold: ["mit einem Enzym aufgelöst", "neu geformt"],
     kind: "hyaluron",
     label: "Lippenkorrektur",
     treatment: "Lippenkorrektur",
     object: "die Lippenkorrektur",
     about: "zur Lippenkorrektur",
-    subline: "Wieder eine stimmige Lippenform – ärztlich und behutsam",
+    subline: "Früheres Ergebnis korrigieren – auflösen, dann neu formen",
     zone: "lippen",
     howItWorks:
-      "Bei einer Lippenkorrektur wird ein unschönes Ergebnis einer früheren Behandlung verbessert. Oft wird altes Hyaluron zuerst mit einem Enzym aufgelöst, dann werden die Lippen nach einer Pause behutsam neu geformt.",
+      "Bei einer Lippenkorrektur wird ein unschönes Ergebnis einer früheren Behandlung verbessert. Oft wird altes Hyaluron zuerst mit einem Enzym aufgelöst, dann werden die Lippen nach einer Pause neu geformt.",
     facts: {
       ...HA_FACTS,
       dauer: "20–30 Minuten je Schritt",
@@ -490,9 +500,9 @@ const SPECS: Record<string, Spec> = {
     treatment: "Nasolabialfalten-Behandlung",
     object: "die Nasolabialfalte",
     about: "zur Nasolabialfalte",
-    subline: "Weichere Falte zwischen Nase und Mund – ärztlich, natürlich",
+    subline: "Weichere Falte zwischen Nase und Mund – Ergebnis sofort sichtbar",
     zone: "nasolabial",
-    howItWorks: `${HA_HOW} Entlang der Falte von der Nase zum Mundwinkel gesetzt, polstert es sie sanft auf. Oft hilft auch etwas Volumen an der Wange.`,
+    howItWorks: `${HA_HOW} Entlang der Falte von der Nase zum Mundwinkel gesetzt, polstert es sie auf. Oft hilft auch etwas Volumen an der Wange.`,
     facts: { ...HA_FACTS, dauer: "20–30 Minuten", ergebnis: "nach ca. 1–2 Wochen" },
     related: ["hyaluron/marionettenfalten", "hyaluron/wangenaufbau", "hyaluron/lippen-aufspritzen", "hyaluron/full-face-hyaluron"],
   },
@@ -502,9 +512,9 @@ const SPECS: Record<string, Spec> = {
     treatment: "Marionettenfalten-Behandlung",
     object: "die Marionettenfalten",
     about: "zu Marionettenfalten",
-    subline: "Freundlicherer Mundbereich – ärztlich, behutsam",
+    subline: "Mundwinkel wirken weniger nach unten gezogen – in 30–40 Minuten",
     zone: "marionette",
-    howItWorks: `${HA_HOW} Unter den Mundwinkeln gesetzt, füllt es die Falten zum Kinn hin sanft auf. Die Mundwinkel wirken dadurch weniger nach unten gezogen.`,
+    howItWorks: `${HA_HOW} Unter den Mundwinkeln gesetzt, füllt es die Falten zum Kinn hin auf. Die Mundwinkel wirken dadurch weniger nach unten gezogen.`,
     facts: { ...HA_FACTS, dauer: "30–40 Minuten" },
     related: ["hyaluron/nasolabialfalte", "hyaluron/kinnkorrektur", "hyaluron/jawline", "hyaluron/lippen-aufspritzen"],
   },
@@ -514,7 +524,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Plisseefalten-Behandlung",
     object: "die Plisseefalten",
     about: "zu Plisseefalten",
-    subline: "Feine Linien an der Oberlippe mildern – ärztlich, behutsam",
+    subline: "Feine Linien über der Oberlippe mildern – die Lippe bleibt beweglich",
     howItWorks: `${HA_HOW} Ein feines, weiches Hyaluron wird in kleinen Mengen in die senkrechten Fältchen über der Oberlippe gesetzt. Die Haut wirkt glatter, die Lippe bleibt beweglich.`,
     facts: { ...HA_FACTS, dauer: "30–40 Minuten" },
     related: ["hyaluron/lippen-aufspritzen", "muskelrelaxans/lipflip", "hyaluron/nasolabialfalte", "hyaluron/marionettenfalten"],
@@ -557,7 +567,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Wangenbehandlung",
     object: "den Wangenaufbau",
     about: "zum Wangenaufbau",
-    subline: "Frischere, vollere Wangen – ärztlich und natürlich",
+    subline: "Mehr Volumen auf dem Wangenknochen – Ergebnis sofort sichtbar",
     zone: "wangen",
     howItWorks: `${HA_HOW} Auf dem Wangenknochen gesetzt, gibt es Volumen und Halt zurück. Das Gesicht kann frischer wirken, oft werden auch die Falten darunter weicher.`,
     facts: { ...HA_FACTS, dauer: "20–30 Minuten", ergebnis: "nach wenigen Tagen", haltbarkeit: "ca. 6–9 Monate" },
@@ -573,13 +583,13 @@ const SPECS: Record<string, Spec> = {
     treatment: "Full-Face-Behandlung",
     object: "Full Face Hyaluron",
     about: "zu Full Face Hyaluron",
-    subline: "Ein stimmiges Gesamtbild in einem Termin – ärztlich, behutsam",
+    subline: "Wangen, Kinn und Kieferlinie in einem Termin aufeinander abgestimmt",
     howItWorks: `${HA_HOW} Bei Full Face werden mehrere Bereiche in einer Sitzung aufeinander abgestimmt, etwa Wangen, Kinn, Kieferlinie und Falten um den Mund. Ziel ist ein ausgewogenes Gesicht, nicht ein einzelner Punkt.`,
     facts: { ...HA_FACTS, dauer: "60–90 Minuten", haltbarkeit: "ca. 6–9 Monate" },
     refreshWhen: "nach ca. 6–9 Monaten",
     faq: {
       timing: { answer: "Sofort. Endgültig nach Abklingen der Schwellung, etwa nach 1–2 Wochen. Meist hält es 6–9 Monate." },
-      natural: { question: "Sieht das nicht schnell zu viel aus?", answer: "Nicht, wenn behutsam gearbeitet wird. Die Ärztin oder der Arzt plant mit dir, welche Bereiche wirklich etwas brauchen, und setzt lieber weniger. Bei der Nachkontrolle kann ergänzt werden." },
+      natural: { question: "Sieht das nicht schnell zu viel aus?", answer: "Nicht, wenn mit kleinen Mengen gearbeitet wird. Die Ärztin oder der Arzt plant mit dir, welche Bereiche wirklich etwas brauchen, und setzt lieber weniger. Bei der Nachkontrolle kann ergänzt werden." },
     },
     related: ["hyaluron/wangenaufbau", "hyaluron/jawline", "hyaluron/kinnkorrektur", "hyaluron/nasolabialfalte"],
   },
@@ -589,7 +599,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Augenringe-Behandlung",
     object: "die Augenringe",
     about: "zu Augenringen",
-    subline: "Weniger Schatten unter den Augen – ärztlich und behutsam",
+    subline: "Weniger Schatten unter den Augen – Ergebnis zum Teil sofort sichtbar",
     zone: "traenenrinne",
     howItWorks: `${HA_HOW} Ein sehr weiches Hyaluron wird in kleinen Mengen in die Tränenrinne unter dem Auge gesetzt. Die Vertiefung wird flacher, der Schatten darüber weniger.`,
     facts: { ...HA_FACTS, dauer: "20–30 Minuten", ergebnis: "nach ca. 1–2 Wochen", haltbarkeit: "ca. 9–12 Monate, oft länger" },
@@ -602,6 +612,7 @@ const SPECS: Record<string, Spec> = {
     related: ["skinbooster/lumi-eyes-polynukleotide", "hyaluron/wangenaufbau", "muskelrelaxans/kraehenfuesse", "hyaluron/full-face-hyaluron"],
   },
   "hyaluron/hylase": {
+    bold: ["Hyaluronidase", "zurücknehmen"],
     kind: "hylase",
     label: "Hyaluron auflösen",
     treatment: "Hyaluron-Auflösung",
@@ -623,6 +634,7 @@ const SPECS: Record<string, Spec> = {
 
   // ---------------------------------------------------------- Skinbooster
   "skinbooster/profhilo": {
+    bold: ["sich in der Haut verteilt"],
     kind: "skinbooster",
     label: "Profhilo",
     treatment: "Profhilo-Behandlung",
@@ -691,6 +703,7 @@ const SPECS: Record<string, Spec> = {
     related: ["skinbooster/profhilo", "skinbooster/polynukleotide-lachssperma", "skinbooster/vampir-lifting-prp", "anti-haarausfall/mesotherapie-haare"],
   },
   "skinbooster/vampir-lifting-prp": {
+    bold: ["etwas Blut abgenommen"],
     kind: "prp",
     label: "Vampir-Lifting",
     treatment: "Vampir-Lifting-Behandlung",
@@ -711,6 +724,7 @@ const SPECS: Record<string, Spec> = {
 
   // ---------------------------------------------------------- Haare
   "anti-haarausfall/mesotherapie-haare": {
+    bold: ["Nährstoffmischung", "von Mensch zu Mensch verschieden"],
     kind: "meso",
     label: "Mesotherapie Haare",
     treatment: "Mesotherapie für die Haare",
@@ -737,6 +751,7 @@ const SPECS: Record<string, Spec> = {
     related: ["anti-haarausfall/prp-haartherapie", "skinbooster/mesotherapie-nctf-135-ha"],
   },
   "anti-haarausfall/prp-haartherapie": {
+    bold: ["etwas Blut abgenommen", "von Mensch zu Mensch verschieden"],
     kind: "prp",
     label: "PRP-Haartherapie",
     treatment: "PRP-Haartherapie",
@@ -766,11 +781,11 @@ const SPECS: Record<string, Spec> = {
   // ---------------------------------------------------------- Infusionen
   "infusionen/vitamin-c-infusion": infusion(
     "infusionen/vitamin-c-infusion", "Vitamin-C-Infusion", "Vitamin-C-Infusion", "mit Vitamin C",
-    "Vitamin C als Infusion – ärztlich begleitet, in entspannter Atmosphäre",
+    "Vitamin C als Infusion – ärztlich begleitet, in 30–45 Minuten",
   ),
   "infusionen/b-komplex-infusion": infusion(
     "infusionen/b-komplex-infusion", "Vitamin-B-Infusion", "Vitamin-B-Infusion", "mit B-Vitaminen",
-    "B-Vitamine als Infusion – ärztlich begleitet, in entspannter Atmosphäre",
+    "B-Vitamine als Infusion – ärztlich begleitet, in 30–45 Minuten",
   ),
   "infusionen/immun-infusion": infusion(
     "infusionen/immun-infusion", "Immun-Infusion", "Immun-Infusion", "mit Vitaminen und Mineralstoffen",
@@ -786,7 +801,7 @@ const SPECS: Record<string, Spec> = {
   ),
   "infusionen/relax-infusion": infusion(
     "infusionen/relax-infusion", "Relax-Infusion", "Relax-Infusion", "mit Mineralstoffen und Vitaminen",
-    "Eine ruhige Auszeit mit Infusion – ärztlich begleitet",
+    "Mineralstoffe und Vitamine als Infusion – ärztlich begleitet",
   ),
   "infusionen/anti-aging-infusion": infusion(
     "infusionen/anti-aging-infusion", "Anti-Aging-Infusion", "Anti-Aging-Infusion", "mit Vitaminen und Antioxidantien",
@@ -995,7 +1010,7 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
       {
         when: "Tag 0",
         title: "Beratung und Behandlung",
-        text: "Ihr besprecht Wunsch und Menge. Nach der Betäubung wird das Hyaluron behutsam gesetzt – das Ergebnis siehst du sofort.",
+        text: "Ihr besprecht Wunsch und Menge. Nach der Betäubung wird das Hyaluron an den besprochenen Stellen gesetzt – das Ergebnis siehst du sofort.",
       },
       first,
       control(pathKey),
@@ -1018,7 +1033,7 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
       {
         when: "ab ca. 2 Wochen",
         title: "Neu behandeln, wenn du magst",
-        text: "Ist alles abgeklungen, kann auf Wunsch neu und behutsam unterspritzt werden.",
+        text: "Ist alles abgeklungen, kann auf Wunsch neu unterspritzt werden.",
       },
     ];
   }
@@ -1094,7 +1109,7 @@ function defaultFaqs(s: Spec, pathKey: string): Record<FaqSlot, AdsV2FaqItem> {
   if (s.kind === "mr") {
     return {
       pain: { question: "Tut das weh?", answer: "Die meisten spüren nur kurze Pikser. Es wird mit sehr feinen Nadeln gearbeitet, auf Wunsch wird vorher gekühlt oder betäubt." },
-      natural: { question: "Sieht das natürlich aus?", answer: "Ziel ist ein entspannter Ausdruck, kein starres Gesicht. Die Menge wird an deine Mimik angepasst – lieber behutsam starten und bei der Nachkontrolle ergänzen." },
+      natural: { question: "Sieht das natürlich aus?", answer: "Ziel ist ein entspannter Ausdruck, kein starres Gesicht. Die Menge wird an deine Mimik angepasst – lieber mit weniger starten und bei der Nachkontrolle ergänzen." },
       timing: { question: "Wann wirkt es und wie lange hält es?", answer: `Erste Wirkung ${f.wirkung}, das Endergebnis ${f.ergebnis === "nach 14 Tagen" ? "nach etwa 14 Tagen" : f.ergebnis}. Meist hält es ${stripCa(f.haltbarkeit)}.` },
       side: { question: "Welche Nebenwirkungen kann es geben?", answer: `Möglich sind eine leichte Rötung oder ein kleiner blauer Fleck, meist nach wenigen Tagen weg. Selten wird das Ergebnis ungleichmäßig oder ein Lid hängt leicht – das bildet sich von selbst zurück. ${RISK}` },
       undo: { question: "Lässt sich das rückgängig machen?", answer: "Die Wirkung lässt nach einigen Monaten von selbst vollständig nach. Kleine Unterschiede gleichen wir bei der Nachkontrolle aus." },
@@ -1106,7 +1121,7 @@ function defaultFaqs(s: Spec, pathKey: string): Record<FaqSlot, AdsV2FaqItem> {
     const lips = pathKey === "hyaluron/lippen-aufspritzen";
     return {
       pain: { question: "Tut das weh?", answer: "Vorher wird betäubt. Die meisten spüren nur Druck und kurze Pikser." },
-      natural: { question: "Sieht das natürlich aus?", answer: "Wir arbeiten mit kleinen Mengen und passend zu deinem Gesicht. Lieber behutsam starten – bei der Nachkontrolle kann ergänzt werden." },
+      natural: { question: "Sieht das natürlich aus?", answer: "Wir arbeiten mit kleinen Mengen und passend zu deinem Gesicht. Lieber mit weniger starten – bei der Nachkontrolle kann ergänzt werden." },
       timing: {
         question: "Wann sehe ich das Ergebnis und wie lange hält es?",
         answer: lips
@@ -1335,4 +1350,197 @@ export const ADS_V2_CONSULT_PHOTOS: Readonly<Record<string, AdsV2Photo>> = {};
 
 export function adsV2ConsultPhoto(pathKey: string | null | undefined): AdsV2Photo | null {
   return ADS_V2_CONSULT_PHOTOS[baseKey(pathKey)] ?? null;
+}
+
+// ---------------------------------------------------------------- Hervorhebung
+
+/**
+ * Agentur-Feedback (Beispielseite Lippen, 01.10.2026): Fliesstexte ueber drei
+ * Zeilen bekommen fett gesetzte Schluesselwoerter, damit man sie ueberfliegen
+ * kann. Die Texte stehen im Code (nicht in Strapi), die Hervorhebung auch:
+ * feste Begriffe, die auf allen Seiten dasselbe bedeuten, plus Zeitangaben
+ * ("3–7 Tagen", "20–30 Minuten"). Kein v-html - die Seite rendert Teile.
+ */
+export type AdsV2TextPart = { text: string; strong: boolean };
+
+/** Ab dieser Laenge (ca. drei Zeilen auf 375 px) wird hervorgehoben. */
+export const ADS_V2_EMPHASIS_MIN_CHARS = 130;
+
+/** Hoechstens so viele fette Stellen je Text, sonst hebt sich nichts mehr ab. */
+const MAX_STRONG = 4;
+
+const KEY_TERMS: readonly string[] = [
+  "Zufriedenheitsgarantie",
+  "kostenlose Nachkontrolle",
+  "kostenlose Nachbehandlung",
+  "kostenloser Nachbehandlung",
+  "kostenlos",
+  "Ärztinnen und Ärzte",
+  "nach Preisliste berechnet",
+  "körpereigener Stoff",
+  "bindet Feuchtigkeit",
+  "Feuchtigkeit",
+  "entspannt gezielt den Muskel",
+  "deine Mimik bleibt",
+  "Form und Volumen",
+  "kein Volumen",
+  "füllt kein Volumen auf",
+  "Volumen füllen sie nicht auf",
+  "Betäubungscreme",
+  "sehr feinen Nadeln",
+  "direkt weitermachen",
+  "sofort",
+  "eigenen Blut",
+  "Plasma (PRP)",
+  "ohne Termin",
+  "in Raten",
+  "dünnen Zugang",
+  "unverbindlich",
+];
+
+// "3–7 Tagen", "20–30 Minuten", "6–12 Monate", "14 Tagen", "2 Wochen"
+const DURATION = String.raw`\d+(?:[–-]\d+)?\s(?:Minuten|Stunden|Tagen|Tage|Wochen|Monaten|Monate)`;
+
+function escapeRe(v: string): string {
+  return v.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function emphasisRe(extra: readonly string[] = []): RegExp {
+  const terms = [...extra, ...KEY_TERMS].sort((a, b) => b.length - a.length).map(escapeRe);
+  return new RegExp([...terms, DURATION].join("|"), "g");
+}
+
+const EMPHASIS_RE = emphasisRe();
+
+/**
+ * Teilt einen Text in normale und fette Teile. Kurze Texte (unter
+ * ADS_V2_EMPHASIS_MIN_CHARS) bleiben ein Teil. Jeder Begriff nur einmal fett.
+ */
+export function adsV2Emphasize(
+  text: string | null | undefined,
+  opts: { minChars?: number; extra?: readonly string[] } = {},
+): AdsV2TextPart[] {
+  const value = String(text ?? "");
+  if (!value) return [];
+  if (value.length < (opts.minChars ?? ADS_V2_EMPHASIS_MIN_CHARS)) return [{ text: value, strong: false }];
+  const re = opts.extra?.length ? emphasisRe(opts.extra) : EMPHASIS_RE;
+  const parts: AdsV2TextPart[] = [];
+  const seen = new Set<string>();
+  let last = 0;
+  let count = 0;
+  for (const m of value.matchAll(re)) {
+    if (count >= MAX_STRONG) break;
+    const word = m[0];
+    const at = m.index ?? 0;
+    // nur ganze Woerter ("sofort" nicht in "Sofortbild")
+    const before = value[at - 1] ?? " ";
+    const after = value[at + word.length] ?? " ";
+    if (/[\p{L}\d]/u.test(before) || /[\p{L}]/u.test(after)) continue;
+    const key = word.toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    if (at > last) parts.push({ text: value.slice(last, at), strong: false });
+    parts.push({ text: word, strong: true });
+    last = at + word.length;
+    count++;
+  }
+  if (last < value.length) parts.push({ text: value.slice(last), strong: false });
+  return parts;
+}
+
+/** "So wirkt es" mit Hervorhebung, unabhaengig von der Laenge (die Spalte
+ * neben dem Zonenbild ist schmal: 130 Zeichen sind dort sechs Zeilen). */
+export function adsV2HowParts(pathKey: string | null | undefined): AdsV2TextPart[] {
+  const s = SPECS[baseKey(pathKey)];
+  if (!s) return [];
+  return adsV2Emphasize(s.howItWorks, { minChars: 0, extra: s.bold });
+}
+
+// ---------------------------------------------------------------- Einwaende
+
+/**
+ * "Noch unsicher?" (Agentur-Feedback 01.10.2026): typische Einwaende mit
+ * Antwort. Nur Aussagen, die schon auf der Seite stehen (Garantie je Art,
+ * Betaeubung aus der FAQ, Dauer aus dem Steckbrief, Raten ueber Gutschein,
+ * auch ohne Termin, kostenlose Beratung). Keine Heilversprechen, keine neuen
+ * Zahlen. Hyaluron: kein "kostenlos nachspritzen" - weitere ml kosten.
+ *
+ * `price`: die Preiszeile der Seite, z. B. "ab 119,99 €*" (Variante A, mit
+ * Neukundenrabatt) oder "ab 149,99 €" (Variante B, regulaer); fehlt sie,
+ * entfaellt der Betrag. `discountPct` nur in Variante A.
+ */
+export type AdsV2Objection = {
+  key: "result" | "pain" | "price" | "time" | "info";
+  question: string;
+  answer: string;
+  /** Knopf unter der Antwort: Gutschein (Raten) oder Beratung buchen. */
+  action?: "voucher" | "booking";
+};
+
+export function adsV2Objections(
+  pathKey: string | null | undefined,
+  opts: { price?: string | null; discountPct?: number | null; strapiDuration?: string | null } = {},
+): AdsV2Objection[] {
+  const key = baseKey(pathKey);
+  const s = SPECS[key];
+  if (!s) return [];
+  const g = adsV2Guarantee(key);
+  const faqs = defaultFaqs(s, key);
+  const pain = s.faq?.pain?.answer ?? faqs.pain.answer;
+  const dauer = adsV2Facts(key, opts.strapiDuration).find((f) => f.key === "dauer")?.value ?? s.facts.dauer;
+  const noDowntime = /^keine/.test(s.facts.ausfall);
+
+  const result: AdsV2Objection =
+    s.kind === "infusion"
+      ? {
+          key: "result",
+          question: "Ist eine Infusion überhaupt das Richtige für mich?",
+          answer:
+            "Vorher gibt es ein ärztliches Gespräch zu Gesundheit und Medikamenten. Passt die Infusion nicht zu dir, sagen wir dir das ehrlich. Behandlung nur durch Ärztinnen und Ärzte.",
+        }
+      : {
+          key: "result",
+          question:
+            s.kind === "mr" || s.kind === "hyaluron"
+              ? "Ich habe Angst vor einem unnatürlichen Ergebnis."
+              : "Ich bin unsicher, ob mir das Ergebnis gefällt.",
+          answer: `Behandelt wird nur von Ärztinnen und Ärzten. ${
+            s.kind === "mr"
+              ? "Die Menge wird an deine Mimik angepasst – lieber mit weniger starten."
+              : s.kind === "hyaluron"
+                ? "Ihr besprecht vorher Wunsch und Menge, gearbeitet wird mit kleinen Mengen."
+                : "Sie besprechen vorher mit dir, was sinnvoll ist."
+          } Dazu gilt unsere Zufriedenheitsgarantie: ${g.short}.`,
+        };
+
+  const price = (opts.price ?? "").trim();
+  const pct = opts.discountPct ?? null;
+  const priceAnswer = [
+    price
+      ? pct
+        ? `Als Neukundin oder Neukunde bekommst du ${pct} % Rabatt – ${price} ist schon der Preis mit Rabatt.`
+        : `Den Preis kennst du vorher: ${price}. In der kostenlosen Beratung besprecht ihr, was bei dir sinnvoll ist.`
+      : null,
+    "Lieber in Raten? Kauf vorab einen Gutschein und zahl ihn mit Klarna oder PayPal in Raten.",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return [
+    result,
+    { key: "pain", question: "Ich habe Angst vor Schmerzen.", answer: pain },
+    { key: "price", question: "Das ist mir zu teuer.", answer: priceAnswer, action: "voucher" },
+    {
+      key: "time",
+      question: "Ich habe keine Zeit.",
+      answer: `${s.kind === "infusion" ? "Die Infusion" : "Die Behandlung"} dauert ${dauer}${noDowntime ? ", danach kannst du meist direkt weitermachen" : ""}. Du kannst auch ohne Termin vorbeikommen und fragen, ob gerade Zeit ist.`,
+    },
+    {
+      key: "info",
+      question: "Ich möchte mich erst mal nur informieren.",
+      answer:
+        "Gern. Die Beratung ist kostenlos und unverbindlich: Deine Ärztin oder dein Arzt beantwortet deine Fragen, du entscheidest danach in Ruhe.",
+      action: "booking",
+    },
+  ];
 }

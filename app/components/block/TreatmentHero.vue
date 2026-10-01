@@ -83,8 +83,19 @@
                 <p v-if="adsSubline" class="hero__subline hero__subline--ads">
                   {{ adsSubline }}
                 </p>
+                <!-- v2 (Agentur-Feedback 01.10.2026): EINE Preis-/Angebotszeile
+                     "Ab 119,99 €* – mit 20 % Neukundenrabatt" statt Preis +
+                     zweitem Rabatt-Link; Betrag ohne Umbruch. -->
                 <p
-                  v-if="newCustomerOffer"
+                  v-if="templateV2 && v2PriceLine"
+                  class="hero__price hero__price--v2"
+                  :data-offer-kind="newCustomerOffer?.kind ?? 'regular'"
+                >
+                  <span class="hero__nowrap">{{ v2PriceLine.main }}</span>
+                  <span v-if="v2PriceLine.extra" class="hero__price-extra">{{ v2PriceLine.extra }}</span>
+                </p>
+                <p
+                  v-else-if="newCustomerOffer"
                   class="hero__price"
                   :data-offer-kind="newCustomerOffer.kind"
                 >
@@ -140,31 +151,12 @@
                   }"
                   :button-props="{ size: 'lg', variant: 'secondary' }"
                 />
-                <!-- v2: nur EIN grosser Knopf; der Rabatt als kleine Zeile
-                     darunter, gleiche Aktion (Newsletter -> Buchung), eigenes
-                     Tracking-Merkmal (Benjamin, 01.10.2026). -->
-                <p
-                  v-if="discountButtonVisible && templateV2"
-                  class="hero__discount-link"
-                  data-track-placement="hero_discount_link"
-                >
-                  <SharedButton
-                    :button="{
-                      label: discountLinkLabel,
-                      method: SharedButtonMethod.ACTION,
-                      action: SharedButtonAction.NEWSLETTER_SIGN_UP,
-                    }"
-                    :data="{
-                      calendlyUrl: calendlyUrl,
-                      appBookingUrl: appBookingUrl,
-                      locationSlug: locationSlug,
-                      appTreatmentSlug: appTreatmentSlug,
-                      treatmentType: treatment?.type,
-                    }"
-                    :button-props="{ size: 'sm', variant: 'link' }"
-                  />
-                </p>
+                <!-- v2: nur EIN Knopf im Hero. Der zweite rote Rabatt-Link ist
+                     weg (Agentur-Feedback 01.10.2026), der Rabatt steht in der
+                     Preiszeile; "20 % Rabatt sichern" gibt es weiter unten
+                     (Preise, Schlussaufruf). -->
               </div>
+              <p v-if="templateV2 && v2Note" class="hero__v2-note">{{ v2Note }}</p>
               <template v-if="showReviews">
                 <UiMoleculeReviewsBadge
                   v-if="googlePlaceId"
@@ -211,7 +203,13 @@
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong
-              v-if="newCustomerOffer"
+              v-if="templateV2 && v2StickyPrice"
+              class="floating-cta__price floating-cta__price--offer"
+            >
+              {{ v2StickyPrice }}
+            </strong>
+            <strong
+              v-else-if="newCustomerOffer"
               class="floating-cta__price floating-cta__price--offer"
             >
               {{ stickyPriceLine }}
@@ -232,10 +230,13 @@
               v-if="isAdsMode && phoneHref"
               :href="phoneHref"
               class="floating-cta__phone"
+              :class="{ 'floating-cta__phone--label': templateV2 }"
               :aria-label="`${t('blocks.locationContact.phone')}: ${phoneNumber}`"
               @click="trackPhoneClick(phoneNumber ?? undefined)"
             >
-              <IconPhone size="22" aria-hidden="true" />
+              <IconPhone :size="templateV2 ? 18 : 22" aria-hidden="true" />
+              <!-- v2: Telefon mit Beschriftung (Agentur-Feedback 01.10.2026) -->
+              <span v-if="templateV2" class="floating-cta__phone-label">Anrufen</span>
             </a>
             <template v-if="showReviews && !isAdsMode">
               <UiMoleculeReviewsBadge
@@ -305,6 +306,15 @@ const props = withDefaults(
       heroClip?: AdsClip | null;
       /** Kurzer Text fuer den Knopf der mitlaufenden Leiste. */
       stickyCtaLabel?: string | null;
+      /**
+       * go.-Vorlage v2: EINE Preis-/Angebotszeile im Hero, z. B.
+       * { main: "Ab 119,99 €*", extra: "– mit 20 % Neukundenrabatt" }.
+       */
+      v2PriceLine?: { main: string; extra?: string | null } | null;
+      /** go.-Vorlage v2: kleine Zeile unter dem Knopf (Vertrauen). */
+      v2Note?: string | null;
+      /** go.-Vorlage v2: Preis in der mitlaufenden Leiste. */
+      v2StickyPrice?: string | null;
     }
   >(),
   {
@@ -313,6 +323,9 @@ const props = withDefaults(
     templateV2: false,
     heroClip: null,
     stickyCtaLabel: null,
+    v2PriceLine: null,
+    v2Note: null,
+    v2StickyPrice: null,
   },
 );
 
@@ -457,10 +470,6 @@ const priceLabel = computed(() =>
     : treatmentPriceLabel(props.treatment, props.showPrice, t),
 );
 
-const discountLinkLabel = computed(() => {
-  const pct = globals.value?.ecommerce?.newsletterDiscountPercentage || 20;
-  return `Neukunde? ${pct}\u00a0% Rabatt sichern`;
-});
 const discountLabel = computed(() => {
   const pct = globals.value?.ecommerce?.newsletterDiscountPercentage;
   return t("blocks.treatmentHero.discountCta", { pct });
@@ -712,21 +721,27 @@ const discountLabel = computed(() => {
   white-space: nowrap;
 }
 
-/* v2: Rabatt als kleine Textzeile unter dem einen Knopf */
-.hero__discount-link {
-  flex: none;
-  width: 100%;
-  margin: calc(-1 * var(--space-200)) 0 0;
-  text-align: center;
-  font-size: var(--font-sm);
+/* v2: Preis gross, der Rabatt-Zusatz kleiner in derselben Zeile; bricht
+   nur nach dem Betrag um, nie im Betrag. */
+.hero__price--v2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: 0.35em;
 }
 
-.hero__discount-link :deep(.button) {
-  min-height: 0;
-  padding: var(--space-100) var(--space-200);
+.hero__price-extra {
+  font-size: var(--font-md, 1rem);
+  line-height: 1.3;
+}
+
+/* v2: kleine Vertrauenszeile unter dem Knopf */
+.hero__v2-note {
+  margin: calc(-1 * var(--space-100)) 0 0;
   font-size: var(--font-sm);
-  font-weight: var(--font-bold);
-  color: #b91c1c;
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
 }
 
 .hero__cta {
@@ -1049,18 +1064,62 @@ const discountLabel = computed(() => {
   }
 }
 
-/* v2 unter 375 px (320er, 360er Android): Preis, Telefon und "Beratung
-   buchen" passen nicht in eine Zeile ("ab 79,99 EUR pro Zone*" lief unter das
-   Telefon) - das Telefon faellt weg (Anrufen steht im Abschnitt Standort),
-   der Knopf wird schmaler. */
-@media (max-width: 374px) {
-  .floating-cta--v2 .floating-cta__phone {
+/* v2 (Agentur-Feedback 01.10.2026): Telefon mit Beschriftung "Anrufen".
+   Preis, "Anrufen" und "Kostenlose Beratung" passen erst ab 480 px in eine
+   Zeile; darunter zeigt die Leiste nur die beiden Knoepfe (der Preis steht
+   im Hero und in den Preisen), einzeilig bis 320 px. */
+.floating-cta__phone--label {
+  width: auto;
+  gap: 6px;
+  padding: 0 14px;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .floating-cta--v2 .floating-cta__phone--label {
+    width: auto;
+    height: 44px;
+  }
+}
+
+@media (max-width: 479px) {
+  .floating-cta--v2 .floating-cta__text {
     display: none;
+  }
+
+  .floating-cta--v2 .floating-cta__content {
+    justify-content: stretch;
+  }
+
+  .floating-cta--v2 .floating-cta__actions {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .floating-cta--v2 .floating-cta-btn {
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .floating-cta--v2 .floating-cta-btn :deep(button),
   .floating-cta--v2 :deep(button.floating-cta-btn) {
-    padding-inline: var(--space-400);
+    width: 100%;
+    padding-inline: var(--space-300);
+  }
+}
+
+@media (max-width: 359px) {
+  .floating-cta--v2 .floating-cta__phone--label {
+    padding: 0 10px;
+  }
+
+  .floating-cta--v2 .floating-cta-btn :deep(button),
+  .floating-cta--v2 :deep(button.floating-cta-btn) {
+    font-size: var(--font-sm);
+    padding-inline: var(--space-200);
   }
 }
 
