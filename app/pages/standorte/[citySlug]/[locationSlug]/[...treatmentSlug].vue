@@ -26,6 +26,8 @@ import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
 import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
+import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
+import { rememberOfferVariant } from "~/lib/offerVariant";
 import {
   LOCATION_ADS_BLOCK_ORDER,
   LOCATION_SEO_BLOCK_ORDER,
@@ -59,6 +61,16 @@ if (import.meta.client && isV2.value) {
   ((window as any).dataLayer = (window as any).dataLayer || []).push({
     template: V2_TEMPLATE,
   });
+}
+// Angebots-Test (shared/adsOfferVariant.ts): `?angebot=beratung` fuehrt vor
+// dem ersten Zeichnen auf /ab-beratung/... (Variante B). Die Seite kommt aus
+// dem ISR-Cache ohne Query, deshalb ein Skript im <head> statt Server-Weiche.
+// Ohne den Parameter tut es nichts; hier ist man in Variante A.
+if (isV2.value && ADS_OFFER_AB_ENABLED) {
+  useHead({
+    script: [{ key: "ads-offer-ab", innerHTML: ADS_OFFER_REDIRECT_SCRIPT, tagPosition: "head", tagPriority: "critical" }],
+  });
+  if (import.meta.client) rememberOfferVariant("a");
 }
 onBeforeUnmount(() => {
   if (!import.meta.client) return;
