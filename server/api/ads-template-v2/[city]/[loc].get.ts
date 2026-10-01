@@ -1,6 +1,7 @@
 // go.* (Ads-Modus), Seitenvorlage v2 (nur Vorschau /vorschau-v2/...):
 // Bewertungen und Aerzt:innen des Standorts. Eigener Endpunkt, damit die
 // Strapi-Antwort der echten Anzeigenseiten unveraendert bleibt.
+import { stripBlockedAdsVideos } from "#shared/adsMedia";
 import { sanitizeAdsContent } from "#shared/adsTerms";
 import { isAdsTemplateV2Location } from "#shared/adsTemplateV2";
 
@@ -14,5 +15,7 @@ export default defineEventHandler(async (event) => {
   }
   const extras = await adsTemplateV2Extras(event, city, loc, "de");
   setHeader(event, "Cache-Control", "public, max-age=60, s-maxage=300");
-  return sanitizeAdsContent(extras, "de");
+  // Arztfotos mit altem Logo (adsMedia BLOCKED_IMAGE_FILES) fallen weg;
+  // die Vorlage zeigt nur Aerzt:innen mit Foto.
+  return sanitizeAdsContent(stripBlockedAdsVideos(extras), "de");
 });
