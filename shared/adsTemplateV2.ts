@@ -345,12 +345,42 @@ export function adsV2ProductNote(pathKey: string | null | undefined): string | n
 
 /**
  * Ratenzahlung (Benjamin, 01.10.2026): Raten gibt es nur ueber einen vorab
- * gekauften Gutschein, beim Gutscheinkauf mit Klarna oder PayPal. Eine
- * allgemeine Gutschein-Kaufseite gibt es derzeit weder auf go. noch im
- * Shop (nur saisonale Gutscheine), darum ohne Link.
+ * gekauften Gutschein, beim Gutscheinkauf mit Klarna oder PayPal. Der Knopf
+ * fuehrt auf den Geschenkgutschein im Shop.
  */
+export const ADS_V2_PAYMENT_TITLE = "Lieber in Raten?";
 export const ADS_V2_PAYMENT_NOTE =
-  "Lieber in Raten? Kauf vorab einen Gutschein und zahl ihn bequem mit Klarna oder PayPal in Raten.";
+  "Gutschein vorab kaufen und mit Klarna oder PayPal in Raten zahlen.";
+export const ADS_V2_VOUCHER_LABEL = "Gutschein kaufen\u00a0– in Raten zahlen";
+export const ADS_V2_VOUCHER_URL = "https://shop.myhealthandbeauty.com/products/myh-b-geschenkgutschein";
+
+const BLOCKED_UTM_TERM = /botox|btx|botulinum/gi;
+
+function utmSlug(v: string | null | undefined): string {
+  return String(v ?? "")
+    .toLowerCase()
+    .replace(BLOCKED_UTM_TERM, "muskelrelaxans")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** Behandlungs-Slug fuer Tracking und utm_content: letztes Segment des Pfads. */
+export function adsV2TreatmentSlug(pathKey: string | null | undefined): string {
+  const key = basePathKey(pathKey);
+  return utmSlug(key.split("/").pop());
+}
+
+/** Gutschein-Link mit Kampagnenwerten; utm_content = <behandlung>-<stadt>. */
+export function adsV2VoucherUrl(pathKey: string | null | undefined, citySlug: string | null | undefined): string {
+  const content = [adsV2TreatmentSlug(pathKey), utmSlug(citySlug)].filter(Boolean).join("-");
+  const params = new URLSearchParams({
+    utm_source: "go",
+    utm_medium: "landingpage",
+    utm_campaign: "gutschein_raten",
+  });
+  if (content) params.set("utm_content", content);
+  return `${ADS_V2_VOUCHER_URL}?${params.toString()}`;
+}
 
 export type AdsV2Faq = { question: string; answer: string };
 

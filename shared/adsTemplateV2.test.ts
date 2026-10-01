@@ -21,6 +21,7 @@ import {
   shortenText,
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
+  adsV2VoucherUrl,
 } from "./adsTemplateV2.ts";
 import {
   adsClipAllowed,
@@ -95,6 +96,12 @@ test("Zufriedenheitsgarantie fuer alle Kategorien, Text je Kategorie; Hersteller
   }
   assert.ok(adsV2TrustItems("infusionen/relax-infusion").some((i) => i.text === "Behandlung nur durch Ärztinnen und Ärzte"));
   assert.match(ADS_V2_PAYMENT_NOTE, /Gutschein.*Klarna oder PayPal in Raten/);
+  assert.equal(
+    adsV2VoucherUrl("hyaluron/lippen-aufspritzen-rabatt", "berlin"),
+    "https://shop.myhealthandbeauty.com/products/myh-b-geschenkgutschein?utm_source=go&utm_medium=landingpage&utm_campaign=gutschein_raten&utm_content=lippen-aufspritzen-berlin",
+  );
+  // Botox-Sonde: der Shop-Link nennt das Wort nie
+  assert.doesNotMatch(adsV2VoucherUrl("botox/3-zonen-botox", "koeln"), /botox|btx|botulinum/i);
   assert.equal(adsV2ProductNote("hyaluron/hylase"), null);
   assert.match(String(adsV2ProductNote("hyaluron/jawline")), /Aliaxin/);
   assert.match(String(adsV2ProductNote("skinbooster/profhilo")), /Profhilo/);

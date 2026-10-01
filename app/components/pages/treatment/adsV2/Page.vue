@@ -139,13 +139,26 @@
           <li v-if="productNote">{{ productNote }}</li>
         </ul>
         <!-- Raten nur ueber einen vorab gekauften Gutschein (Benjamin,
-             01.10.2026); ohne Fremdlogos, keine Gutschein-Kaufseite vorhanden -->
+             01.10.2026); ohne Fremdlogos. Knopf auf den Geschenkgutschein im Shop. -->
         <div class="v2-pay" data-track-placement="v2_payment">
-          <IconCreditCard class="v2-pay__icon" size="22" aria-hidden="true" />
-          <p class="v2-pay__text">
-            <strong>Klarna oder PayPal</strong>
-            <span>{{ ADS_V2_PAYMENT_NOTE }}</span>
-          </p>
+          <div class="v2-pay__body">
+            <IconCreditCard class="v2-pay__icon" size="22" aria-hidden="true" />
+            <p class="v2-pay__text">
+              <strong>{{ ADS_V2_PAYMENT_TITLE }}</strong>
+              <span>{{ ADS_V2_PAYMENT_NOTE }}</span>
+            </p>
+          </div>
+          <a
+            class="v2-pay__cta"
+            :href="voucherUrl"
+            target="_blank"
+            rel="noopener"
+            data-track-placement="v2_voucher"
+            @click="trackVoucherClick"
+          >
+            <span>{{ ADS_V2_VOUCHER_LABEL }}</span>
+            <IconArrowRight class="v2-pay__arrow" size="20" aria-hidden="true" />
+          </a>
         </div>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
@@ -326,6 +339,7 @@
 
 <script setup lang="ts">
 import {
+  IconArrowRight,
   IconCreditCard,
   IconMapPin,
   IconPhone,
@@ -340,11 +354,15 @@ import { SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
 import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
+  ADS_V2_PAYMENT_TITLE,
+  ADS_V2_VOUCHER_LABEL,
   adsV2Faqs,
   adsV2PriceCards,
   adsV2ProductNote,
   adsV2Steps,
+  adsV2TreatmentSlug,
   adsV2TrustItems,
+  adsV2VoucherUrl,
   employeeDisplayName,
   openingHoursSummary,
   pickAdsV2Reviews,
@@ -386,10 +404,21 @@ const { data: extras } = await useFetch<{ reviews?: any[]; doctors?: any[] }>(
 
 const { t } = useI18n();
 const globals = useGlobals();
-const { trackPhoneClick } = useGoogleAnalytics();
+const { trackPhoneClick, trackEvent } = useGoogleAnalytics();
 
 const pathKey = computed(() => props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey ?? "");
 const locationName = computed(() => props.location?.name ?? "");
+
+// Gutschein fuer Ratenzahlung: eigenes Ereignis, bewusst (noch) nicht in der
+// GTM-Ereignisliste; nur Behandlung, Standort, Vorlage, keine Personendaten.
+const voucherUrl = computed(() => adsV2VoucherUrl(pathKey.value, citySlug));
+function trackVoucherClick() {
+  trackEvent("click_voucher", {
+    treatment: adsV2TreatmentSlug(pathKey.value),
+    location: locSlug || citySlug,
+    template: "v2",
+  });
+}
 const discountPct = computed(
   () => globals.value?.ecommerce?.newsletterDiscountPercentage || DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT,
 );
@@ -748,6 +777,19 @@ const routeHref = computed(() => {
   margin-top: -4px;
 }
 
+/* Standortnamen mit geschuetztem Bindestrich ("Gesundbrunnen-Center") sind
+   ein Wort: auf 320 px schob das Zonenbild die Seite in die Breite. */
+.v2-prices__head .v2-h2 {
+  min-width: 0;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 359px) {
+  .v2-prices__zone {
+    display: none;
+  }
+}
+
 /* 7. Weitere Zonen */
 .v2-zones {
   display: grid;
@@ -1047,12 +1089,18 @@ const routeHref = computed(() => {
 /* Ratenzahlung ueber Gutschein */
 .v2-pay {
   display: flex;
-  align-items: flex-start;
-  gap: var(--space-300);
+  flex-direction: column;
+  gap: var(--space-400);
   margin-top: var(--space-400);
   padding: var(--space-400);
   border-radius: var(--border-radius-200, 12px);
   background: #fbeeee;
+}
+
+.v2-pay__body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-300);
 }
 
 .v2-pay__icon {
@@ -1067,6 +1115,48 @@ const routeHref = computed(() => {
   margin: 0;
   font-size: var(--font-sm);
   line-height: var(--line-sm);
+}
+
+/* Sekundaerknopf, aber klar als Knopf: weisse Fuellung, dunkler Rahmen,
+   Pfeil, mind. 48 px hoch; darf auf 320 px umbrechen statt ueberzulaufen. */
+.v2-pay__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-200);
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 20px;
+  border: 2px solid var(--color-black, #111);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--color-black, #111);
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s linear, color 0.15s linear;
+}
+
+.v2-pay__cta:hover {
+  background: var(--color-black, #111);
+  color: #fff;
+}
+
+.v2-pay__cta:focus-visible {
+  outline: 2px solid var(--color-text, #111);
+  outline-offset: 3px;
+}
+
+.v2-pay__cta:active {
+  transform: scale(0.98);
+}
+
+.v2-pay__arrow {
+  flex: 0 0 auto;
 }
 
 /* Kundenfeedback-Videos ueber den Textbewertungen */
