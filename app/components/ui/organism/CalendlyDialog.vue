@@ -428,7 +428,11 @@ useCalendlyEventListener({
     if (!isFromCalendly(e)) return;
     markWidgetReady(e);
     trackCalendlyDateTimeSelected(trackingContext());
-    writeBookingHandoff({ ...trackingContext(), fired: false });
+    writeBookingHandoff({
+      ...trackingContext(),
+      booking_value: params.value?.bookingValue,
+      fired: false,
+    });
   },
   onEventScheduled: (e: MessageEvent) => {
     if (!isFromCalendly(e)) return;
@@ -444,6 +448,7 @@ useCalendlyEventListener({
     const inviteeUuid = inviteeUuidFromUri(inviteeUri);
     writeBookingHandoff({
       ...trackingContext(),
+      booking_value: params.value?.bookingValue,
       invitee_uuid: inviteeUuid,
       fired: true,
     });
