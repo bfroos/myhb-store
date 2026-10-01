@@ -103,6 +103,7 @@ import {
 import { inject } from "vue";
 import InputText from "primevue/inputtext";
 import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
+import { NEUKUNDEN_OFFER } from "~/lib/checkoutAttempt";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 
@@ -219,6 +220,9 @@ async function handleSubmit() {
         locationSlug: booking.locationSlug,
       },
       booking.treatmentContext,
+      // Buchung mit Neukundenrabatt: Wert −20 %, InitiateCheckout erst bei
+      // der Standortwahl (useCalendlyDialog).
+      { offer: NEUKUNDEN_OFFER },
     );
   }
 }

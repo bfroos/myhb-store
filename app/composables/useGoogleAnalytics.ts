@@ -180,6 +180,11 @@ export const useGoogleAnalytics = () => {
        * spaeter die Calendly-Buchung eintrifft.
        */
       booking_value?: number;
+      /**
+       * Buchung nach „20 % Rabatt sichern" (`nk20`). Der Wert oben ist dann
+       * schon der Neukundenpreis.
+       */
+      offer?: string;
     },
   ) => {
     // #400: ein Klick = ein Buchungsversuch. Dieselbe event_id traegt die App
@@ -196,6 +201,8 @@ export const useGoogleAnalytics = () => {
       // der Datenschicht, ein Preis vom vorigen Klick darf nicht kleben (#161).
       booking_value: extra?.booking_value ?? null,
       booking_currency: extra?.booking_value ? 'EUR' : null,
+      // Ebenso: das Angebot des vorigen Versuchs darf nicht kleben.
+      offer: extra?.offer ?? null,
     });
   };
 

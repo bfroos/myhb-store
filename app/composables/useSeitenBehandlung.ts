@@ -34,6 +34,13 @@ export type SeitenBehandlung = {
 
 type Gemerkt = SeitenBehandlung & { pfad: string };
 
+/** Derselbe Preis wie `treatmentPriceLabel`, als Zahl und ohne Anzeigeschalter. */
+function preisInEuro(page: TreatmentPageDto): number | undefined {
+  const cent =
+    page.treatment?.priceInEuroCent || page.treatment?.cheapestPriceInEuroCent;
+  return cent && cent > 0 ? Math.round(cent) / 100 : undefined;
+}
+
 export function useSeitenBehandlung() {
   const gemerkt = useState<Gemerkt | null>("seitenBehandlung", () => null);
   const route = useRoute();
@@ -55,7 +62,7 @@ export function useSeitenBehandlung() {
       pfad: route.path,
       treatmentType: page.treatment?.type,
       appTreatmentSlug: resolveAppTreatmentSlug(page),
-      kontext: { name, priceLabel: priceLabel || undefined },
+      kontext: { name, priceLabel: priceLabel || undefined, value: preisInEuro(page) },
     };
   }
 

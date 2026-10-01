@@ -57,3 +57,26 @@ export function priceFromLabel(label: string | null | undefined): number | undef
   const wert = Number(roh.replace(",", "."));
   return Number.isFinite(wert) && wert > 0 ? Math.round(wert * 100) / 100 : undefined;
 }
+
+/**
+ * Buchung nach „20 % Rabatt sichern": Die Person hat sich zuerst fuer den
+ * Neukundenrabatt angemeldet. Geht als `?offer=` an die App (bewusst nicht
+ * `?promo=` — das zeigt die App als „Rabattcode … sichern" an, und den echten
+ * Code aus der Mail kennt die Website nicht).
+ */
+export const NEUKUNDEN_OFFER = "nk20";
+
+/** Kennung einer Rabatt-Anmeldung, fuer Meta „Lead" (Browser und Server gleich). */
+export const leadEventId = (): string => `lead_${neueKennung()}`;
+
+/**
+ * Wert einer Buchung mit Neukundenrabatt: 20 % weniger, auf Cent gerundet.
+ * Ohne Angebot oder ohne Wert bleibt alles, wie es ist.
+ */
+export function offerValue(
+  value: number | undefined,
+  offer: string | undefined,
+): number | undefined {
+  if (value === undefined || offer !== NEUKUNDEN_OFFER) return value;
+  return Math.round(value * 0.8 * 100) / 100;
+}
