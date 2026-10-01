@@ -1,4 +1,5 @@
 import { readWireAttribution } from "~/lib/attribution";
+import { leadEventId } from "~/lib/checkoutAttempt";
 
 export const NEWSLETTER_SIGNUP_SOURCES = [
   "newsletter_footer",
@@ -48,6 +49,7 @@ export function useNewsletterSignup(
   source: NewsletterSignupSource = "newsletter_footer",
 ) {
   const { t, te } = useI18n();
+  const { trackEvent } = useGoogleAnalytics();
 
   const email = ref("");
   const phone = ref("");
@@ -73,6 +75,16 @@ export function useNewsletterSignup(
         signup_source: source,
       });
     }
+    // Meta „Lead" und die Google-Ads-Conversion „Rabatt-Anmeldung" haengen in
+    // GTM an diesem flachen Ereignis. Das gtag-Ereignis oben bleibt fuer die
+    // bestehenden GA4-Berichte; seine Parameter liegen in GTM unter
+    // `eventModel.*` und taugen nicht fuer Tags (siehe useGoogleAnalytics).
+    // Bis 01.10.2026 kam eine Anmeldung bei Meta und Google Ads gar nicht an.
+    trackEvent("newsletter_signup", {
+      event_category: "conversion",
+      signup_source: source,
+      event_id: leadEventId(),
+    });
   }
 
   function invalidEmailMessage() {
