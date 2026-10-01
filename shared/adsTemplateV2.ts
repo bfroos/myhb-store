@@ -196,8 +196,11 @@ export function adsV2Category(pathKey: string | null | undefined): AdsV2Category
 export const ADS_V2_CTA = {
   /** Hauptknopf (oeffnet denselben Buchungsdialog wie "Termin buchen"). */
   primary: "Kostenlose Beratung buchen",
-  /** Mitlaufende Leiste, eine Zeile. */
-  sticky: "Beratung buchen",
+  /**
+   * Mitlaufende Leiste, eine Zeile (Agentur-Feedback 01.10.2026: "Kostenlose
+   * Beratung" statt "Beratung buchen"; daneben "Anrufen").
+   */
+  sticky: "Kostenlose Beratung",
 };
 
 export type AdsV2TrustItem = { key: string; title: string; text?: string };
@@ -314,7 +317,7 @@ export function adsV2Steps(
       consult,
       {
         title: `Behandlung in ${d}`,
-        text: "Nach der Betäubung wird das Hyaluron behutsam eingebracht. Leichte Schwellungen gehen meist nach wenigen Tagen zurück.",
+        text: "Nach der Betäubung wird das Hyaluron an den besprochenen Stellen eingebracht. Leichte Schwellungen gehen meist nach wenigen Tagen zurück.",
       },
       control,
     ];
@@ -409,7 +412,7 @@ export function adsV2Faqs(
       {
         question: "Sieht das natürlich aus?",
         answer:
-          "Ziel ist ein entspannter Ausdruck, kein starres Gesicht. Die Menge wird an deine Mimik angepasst. Lieber behutsam starten und bei der Nachkontrolle ergänzen.",
+          "Ziel ist ein entspannter Ausdruck, kein starres Gesicht. Die Menge wird an deine Mimik angepasst. Lieber mit weniger starten und bei der Nachkontrolle ergänzen.",
       },
       { question: "Wie lange hält das?", answer: duration },
       {
@@ -432,7 +435,7 @@ export function adsV2Faqs(
     {
       question: "Sieht das natürlich aus?",
       answer:
-        "Wir arbeiten mit kleinen Mengen und passend zu deinem Gesicht. Lieber behutsam starten – bei der Nachkontrolle kann ergänzt werden.",
+        "Wir arbeiten mit kleinen Mengen und passend zu deinem Gesicht. Lieber mit weniger starten – bei der Nachkontrolle kann ergänzt werden.",
     },
     { question: "Wie lange hält das?", answer: duration },
     {

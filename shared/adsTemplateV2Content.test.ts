@@ -17,6 +17,9 @@ import {
   adsV2HasGuarantee,
   adsV2PriceInclusion,
   adsV2Zones,
+  adsV2Emphasize,
+  adsV2HowParts,
+  adsV2Objections,
 } from "./adsTemplateV2Content.ts";
 import { adsClipEntries } from "./adsClips.ts";
 
@@ -257,4 +260,65 @@ test("Neue Zonenbilder: vorhanden, < 15 KB, title/desc, je Behandlung passend", 
   assert.equal(adsV2Terms("muskelrelaxans/masseter")!.zone, "masseter");
   assert.equal(adsV2Terms("skinbooster/profhilo")!.zone, undefined);
   assert.equal(adsV2Terms("infusionen/relax-infusion")!.zone, undefined);
+});
+
+// ---------------------------------------------------------------- Agentur-Feedback (01.10.2026)
+
+const FLOSKELN = /behutsam|sanft|harmonisch|Atmosphäre/i;
+
+test("Agentur: keine Leerformeln in Unterzeile, Wirkweise, Zeitachse, FAQ", () => {
+  for (const key of ALL) {
+    for (const text of allTexts(key)) assert.doesNotMatch(text, FLOSKELN, `${key}: ${text}`);
+  }
+  assert.equal(
+    adsV2Terms(LIPPEN)!.subline,
+    "Weiche, natürlich betonte Lippen – von Ärztinnen und Ärzten behandelt",
+  );
+});
+
+test("Agentur: Hervorhebung - Text bleibt gleich, kurze Texte unveraendert, hoechstens 4 fett", () => {
+  const long =
+    "Nach 14 Tagen gibt es eine kostenlose Nachkontrolle. Korrekturen der Form sind inklusive (Zufriedenheitsgarantie). Möchtest du mehr Volumen, wird das Material nach Preisliste berechnet.";
+  const parts = adsV2Emphasize(long);
+  assert.equal(parts.map((p) => p.text).join(""), long);
+  const strong = parts.filter((p) => p.strong).map((p) => p.text);
+  assert.deepEqual(strong, ["14 Tagen", "kostenlose Nachkontrolle", "Zufriedenheitsgarantie", "nach Preisliste berechnet"]);
+  assert.deepEqual(adsV2Emphasize("Kurz und kostenlos."), [{ text: "Kurz und kostenlos.", strong: false }]);
+  // nur ganze Woerter
+  assert.equal(
+    adsV2Emphasize("Sofortbild ".repeat(20), { minChars: 0 }).some((p) => p.strong),
+    false,
+  );
+  for (const key of ALL) {
+    const how = adsV2HowParts(key);
+    assert.equal(how.map((p) => p.text).join(""), adsV2Terms(key)!.howItWorks, key);
+    const n = how.filter((p) => p.strong).length;
+    assert.ok(n >= 1 && n <= 4, `${key}: ${n} fette Stellen`);
+  }
+});
+
+test("Agentur: Einwaende je Art, ohne Heilversprechen, Hyaluron ohne kostenloses Nachspritzen", () => {
+  for (const key of ALL) {
+    const a = adsV2Objections(key, { price: "ab 119,99 €*", discountPct: 20 });
+    assert.equal(a.length, 5, key);
+    for (const o of a) {
+      assert.doesNotMatch(`${o.question} ${o.answer}`, STRICT, `${key}: ${o.answer}`);
+      assert.doesNotMatch(o.answer, FLOSKELN, key);
+    }
+    assert.match(a.find((o) => o.key === "price")!.answer, /20 % Rabatt – ab 119,99 €\*/);
+    assert.match(a.find((o) => o.key === "price")!.answer, /Klarna oder PayPal/);
+    assert.match(a.find((o) => o.key === "info")!.answer, /kostenlos und unverbindlich/);
+    // Variante ohne Rabatt: keine Rabattbotschaft
+    const b = adsV2Objections(key, { price: "ab 149,99 €", discountPct: null });
+    assert.doesNotMatch(b.map((o) => o.answer).join(" "), /Rabatt|Neukund|\*/, key);
+  }
+  const ha = adsV2Objections(LIPPEN).map((o) => o.answer).join(" ");
+  assert.match(ha, /nach Preisliste berechnet/);
+  assert.doesNotMatch(ha, /kostenlos(e|es)? (nachspritz|Nachbehandlung)/i);
+  assert.match(adsV2Objections(STIRN).map((o) => o.answer).join(" "), /kostenloser Nachbehandlung/);
+  assert.match(
+    adsV2Objections("skinbooster/profhilo").map((o) => o.answer).join(" "),
+    /Kostenlose Nachkontrolle und Beratung innerhalb von 14 Tagen/,
+  );
+  assert.match(adsV2Objections(STIRN).find((o) => o.key === "pain")!.answer, /Betäub|feinen Nadeln/);
 });

@@ -1,12 +1,18 @@
 <template>
   <!--
     go.* Seitenvorlage v2 (bfroos/myhb-store#203, Playbook Kapitel 3):
-    Hero -> Vertrauenszeile -> Steckbrief -> Clips -> Wirkweise (Zonenbild)
-    -> Ablauf (Zeitachse) -> Preise -> Weitere Zonen -> Aerzt:innen ->
-    Beratungsfoto -> Bewertungen -> Fragen + Nachsorge -> Standort ->
-    Schlussaufruf, dazu die mitlaufende Leiste des Heros. Kein SEO-Langtext.
+    Hero -> Clips -> Vertrauenszeile -> Steckbrief -> Wirkweise (Zonenbild)
+    -> Aufruf -> Ablauf (Zeitachse) -> Preise -> Weitere Zonen -> Aerzt:innen
+    -> Beratungsfoto -> Bewertungen -> Einwaende ("Noch unsicher?") ->
+    Standort -> Fragen + Nachsorge -> Schlussaufruf, dazu die mitlaufende
+    Leiste des Heros. Kein SEO-Langtext.
+    Agentur-Feedback 01.10.2026 (Beispielseite Lippen): eine Preis-/Angebots-
+    zeile + ein Knopf im Hero, Leiste "Kostenlose Beratung" + "Anrufen",
+    Steckbrief mit Icons, Hervorhebungen in Fliesstexten, Zonen und
+    Bewertungen mobil als Wischreihe, Standort vor den Fragen, Aufruf auch
+    ueber dem Ablauf, Ueberschriften zentriert, Einwand-Abschnitt.
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
-    Behandlung: shared/adsTemplateV2Content.ts (Glowtox-Punkte 1-8).
+    Behandlung: shared/adsTemplateV2Content.ts.
   -->
   <div class="v2">
     <BlockTreatmentHero
@@ -17,6 +23,8 @@
       template-v2
       :hero-clip="clips.hero ?? null"
       :sticky-cta-label="ADS_V2_CTA.sticky"
+      :v2-price-line="heroPriceLine"
+      :v2-sticky-price="stickyPrice"
     />
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
@@ -48,12 +56,13 @@
       </ul>
     </UiLayoutSectionBlock>
 
-    <!-- 1. Steckbrief -->
+    <!-- 1. Steckbrief: Icon, Bezeichnung klein, Kernwert fett -->
     <UiLayoutSectionBlock v-if="facts.length">
       <div class="v2-card" data-track-placement="v2_facts">
         <h2 class="v2-h2">{{ H.facts }}</h2>
         <dl class="v2-facts">
-          <div v-for="f in facts" :key="f.key" class="v2-facts__row">
+          <div v-for="f in facts" :key="f.key" class="v2-facts__row" :class="{ 'v2-facts__row--price': f.key === 'preis' }">
+            <component :is="factIcon(f.key)" class="v2-facts__icon" size="22" aria-hidden="true" />
             <dt>{{ f.label }}</dt>
             <dd>{{ f.value }}</dd>
           </div>
@@ -76,7 +85,21 @@
             loading="lazy"
             decoding="async"
           />
-          <p class="v2-how__text">{{ terms.howItWorks }}</p>
+          <p class="v2-how__text"><PagesTreatmentAdsV2Emph :parts="howParts" /></p>
+        </div>
+      </div>
+    </UiLayoutSectionBlock>
+
+    <!-- Aufruf auch direkt ueber dem Ablauf (Agentur-Feedback 01.10.2026) -->
+    <UiLayoutSectionBlock>
+      <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_cta_mid">
+        <p class="v2-h2 v2-final__title">{{ H.final }}</p>
+        <p v-if="finalPrice" class="v2-final__price">
+          {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
+        </p>
+        <div class="v2-actions">
+          <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+          <SharedButton v-if="discountButton" :button="discountButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'secondary' }" class="v2-btn" />
         </div>
       </div>
     </UiLayoutSectionBlock>
@@ -89,7 +112,7 @@
           <li v-for="item in timeline" :key="item.when" class="v2-timeline__item">
             <span class="v2-timeline__when">{{ item.when }}</span>
             <strong class="v2-steps__title">{{ item.title }}</strong>
-            <span class="v2-steps__text">{{ item.text }}</span>
+            <span class="v2-steps__text"><PagesTreatmentAdsV2Emph :parts="emph(item.text)" /></span>
           </li>
         </ol>
         <ol v-else class="v2-steps">
@@ -110,19 +133,7 @@
     <!-- Preise -->
     <UiLayoutSectionBlock v-if="priceCards.length">
       <div class="v2-card" data-track-placement="v2_prices">
-        <div class="v2-prices__head">
-          <h2 class="v2-h2">{{ H.prices }}</h2>
-          <img
-            v-if="zoneImage"
-            class="v2-prices__zone"
-            :src="zoneImage.src"
-            alt=""
-            width="56"
-            height="76"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
+        <h2 class="v2-h2">{{ H.prices }}</h2>
         <p v-if="offer" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
         </p>
@@ -167,14 +178,14 @@
       </div>
     </UiLayoutSectionBlock>
 
-    <!-- 7. Weitere Zonen -->
+    <!-- 7. Weitere Zonen: mobil Wischreihe, ab 900 px Raster -->
     <UiLayoutSectionBlock v-if="zoneTiles.length">
       <div class="v2-card" data-track-placement="v2_zones">
         <h2 class="v2-h2">{{ H.zones }}</h2>
         <p v-if="zoneHint" class="v2-lead">{{ zoneHint }}</p>
         <!-- Jede Kachel mit Bild: Poster des Behandlungsclips, sonst Zonenbild -->
         <ul class="v2-zones" :class="{ 'v2-zones--text': !zoneTilesHaveImages }" role="list">
-          <li v-for="tile in zoneTiles" :key="tile.key">
+          <li v-for="tile in zoneTiles" :key="tile.key" class="v2-zones__item">
             <a class="v2-zone" :class="{ 'v2-zone--photo': !!tile.photo }" :href="tile.href" data-track-placement="v2_zone_tile">
               <img
                 v-if="tile.photo"
@@ -242,7 +253,7 @@
       </div>
     </UiLayoutSectionBlock>
 
-    <!-- Bewertungen des Standorts -->
+    <!-- Bewertungen des Standorts: Video mittig, Texte mobil als Wischreihe -->
     <UiLayoutSectionBlock v-if="reviews.length || clips.feedback.length">
       <div class="v2-card" data-track-placement="v2_reviews">
         <h2 class="v2-h2">{{ H.reviews }}</h2>
@@ -263,36 +274,49 @@
             <span class="v2-review__author">{{ review.author }}</span>
           </li>
         </ul>
-        <a
-          v-if="rating?.placeUrl"
-          class="v2-link"
-          :href="rating.placeUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Alle Bewertungen bei Google</a>
-      </div>
-    </UiLayoutSectionBlock>
-
-    <!-- Einwaende -->
-    <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--soft" data-track-placement="v2_faq">
-        <h2 class="v2-h2">{{ H.faq }}</h2>
-        <div class="v2-faq">
-          <details v-for="(faq, i) in faqs" :key="faq.question" class="v2-faq__item" :open="i === 0">
-            <summary class="v2-faq__q">{{ faq.question }}</summary>
-            <p class="v2-faq__a">{{ faq.answer }}</p>
-          </details>
+        <div class="v2-center">
+          <a
+            v-if="rating?.placeUrl"
+            class="v2-link"
+            :href="rating.placeUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Alle Bewertungen bei Google</a>
         </div>
-        <template v-if="aftercare.length">
-          <h2 class="v2-h2 v2-h2--sub">{{ H.aftercare }}</h2>
-          <ul class="v2-aftercare" role="list">
-            <li v-for="tip in aftercare" :key="tip">{{ tip }}</li>
-          </ul>
-        </template>
       </div>
     </UiLayoutSectionBlock>
 
-    <!-- Standort -->
+    <!-- Einwaende (Agentur-Feedback 01.10.2026): nur Aussagen, die schon auf
+         der Seite stehen; Texte in shared/adsTemplateV2Content.ts -->
+    <UiLayoutSectionBlock v-if="objections.length">
+      <div class="v2-card v2-card--soft" data-track-placement="v2_objections">
+        <h2 class="v2-h2">Noch unsicher?</h2>
+        <p class="v2-lead">Das hören wir oft – und das antworten wir.</p>
+        <ul class="v2-objections" role="list">
+          <li v-for="o in objections" :key="o.key" class="v2-objection">
+            <component :is="objectionIcon(o.key)" class="v2-objection__icon" size="22" aria-hidden="true" />
+            <div class="v2-objection__body">
+              <strong class="v2-objection__q">{{ o.question }}</strong>
+              <p class="v2-objection__a"><PagesTreatmentAdsV2Emph :parts="emph(o.answer, 0)" /></p>
+              <a
+                v-if="o.action === 'voucher'"
+                class="v2-objection__link"
+                :href="voucherUrl"
+                target="_blank"
+                rel="noopener"
+                data-track-placement="v2_objection_voucher"
+                @click="trackVoucherClick"
+              >{{ ADS_V2_VOUCHER_LABEL }}<IconArrowRight size="16" aria-hidden="true" /></a>
+            </div>
+          </li>
+        </ul>
+        <div class="v2-actions">
+          <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+        </div>
+      </div>
+    </UiLayoutSectionBlock>
+
+    <!-- Standort (Agentur-Feedback 01.10.2026: vor den Fragen) -->
     <UiLayoutSectionBlock>
       <div id="standort" class="v2-card" data-track-placement="v2_location">
         <h2 class="v2-h2">{{ H.location }}</h2>
@@ -319,12 +343,31 @@
       </div>
     </UiLayoutSectionBlock>
 
+    <!-- Fragen + Nachsorge -->
+    <UiLayoutSectionBlock>
+      <div class="v2-card v2-card--soft" data-track-placement="v2_faq">
+        <h2 class="v2-h2">{{ H.faq }}</h2>
+        <div class="v2-faq">
+          <details v-for="(faq, i) in faqs" :key="faq.question" class="v2-faq__item" :open="i === 0">
+            <summary class="v2-faq__q">{{ faq.question }}</summary>
+            <p class="v2-faq__a"><PagesTreatmentAdsV2Emph :parts="emph(faq.answer)" /></p>
+          </details>
+        </div>
+        <template v-if="aftercare.length">
+          <h2 class="v2-h2 v2-h2--sub">{{ H.aftercare }}</h2>
+          <ul class="v2-aftercare" role="list">
+            <li v-for="tip in aftercare" :key="tip">{{ tip }}</li>
+          </ul>
+        </template>
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- Schlussaufruf -->
     <UiLayoutSectionBlock>
       <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_final">
         <h2 class="v2-h2">{{ H.final }}</h2>
-        <p v-if="offer" class="v2-final__price">
-          {{ priceParts(offer.heroLine)[0] }}<span class="v2-nowrap">{{ priceParts(offer.heroLine)[1] }}</span>
+        <p v-if="finalPrice" class="v2-final__price">
+          {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
         </p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
@@ -339,13 +382,24 @@
 
 <script setup lang="ts">
 import {
+  IconArmchair,
   IconArrowRight,
+  IconCalendarCheck,
+  IconCircleCheck,
+  IconClock,
   IconCreditCard,
+  IconHourglass,
   IconMapPin,
+  IconMessageCircle,
+  IconMoodSmile,
   IconPhone,
+  IconRepeat,
   IconShieldCheck,
+  IconSnowflake,
+  IconSparkles,
   IconStarFilled,
   IconStethoscope,
+  IconTag,
   IconWalk,
 } from "@tabler/icons-vue";
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
@@ -382,6 +436,9 @@ import {
   adsV2ZoneTiles,
   adsV2PriceInclusion,
   adsV2AtLocation,
+  adsV2Emphasize,
+  adsV2HowParts,
+  adsV2Objections,
 } from "#shared/adsTemplateV2Content";
 import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT } from "#shared/newCustomerOffer";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
@@ -462,6 +519,23 @@ const offer = useNewCustomerOffer(
   () => props.hero.treatmentPathKey,
 );
 
+/** "ab 119,99 €*" / "ab 79,99 € pro Zone*" (ohne "Neukunden"). */
+const shortPrice = computed(() =>
+  offer.value ? offer.value.heroLine.replace(/^Neukunden\s+/, "") : null,
+);
+// Hero (Agentur-Feedback 01.10.2026): EINE Zeile "Ab 119,99 €* – mit 20 %
+// Neukundenrabatt" statt Preis + zweitem Rabatt-Link.
+const heroPriceLine = computed(() => {
+  const p = shortPrice.value;
+  if (!p) return null;
+  return {
+    main: `${p[0]!.toUpperCase()}${p.slice(1)}`.replace(/\s/g, "\u00a0"),
+    extra: `– mit ${discountPct.value}\u00a0% Neukundenrabatt`,
+  };
+});
+const stickyPrice = computed(() => shortPrice.value);
+const finalPrice = computed(() => offer.value?.heroLine ?? null);
+
 // Stadt der Seite: Clips mit fremdem Stadtnamen im Bild fallen weg.
 // Betrag und Euro-Zeichen nicht trennen ("149,99" / "€" auf zwei Zeilen in
 // den schmalen Preiskarten).
@@ -523,7 +597,52 @@ const H = computed(() => {
     location: "So findest du uns", final: "Bereit für deine kostenlose Beratung?",
   };
 });
-const facts = computed(() => adsV2Facts(pathKey.value, details.value?.duration));
+// Steckbrief + Preis (Agentur-Feedback 01.10.2026: Kernwerte wie Dauer,
+// Wirkung, Preis auf einen Blick). Preis = dieselbe Zeile wie im Hero.
+const facts = computed(() => {
+  const rows = adsV2Facts(pathKey.value, details.value?.duration);
+  if (rows.length && shortPrice.value) {
+    rows.splice(1, 0, { key: "preis", label: "Preis", value: shortPrice.value });
+  }
+  return rows;
+});
+const FACT_ICONS: Record<string, any> = {
+  dauer: IconClock,
+  preis: IconTag,
+  wirkung: IconSparkles,
+  ergebnis: IconCircleCheck,
+  haltbarkeit: IconHourglass,
+  sitzungen: IconRepeat,
+  betaeubung: IconSnowflake,
+  ausfall: IconWalk,
+  vorab: IconStethoscope,
+  ablauf: IconArmchair,
+};
+function factIcon(key: string) {
+  return FACT_ICONS[key] ?? IconCircleCheck;
+}
+const howParts = computed(() => adsV2HowParts(pathKey.value));
+/** Fliesstext mit fetten Schluesselwoertern (ab ca. drei Zeilen). */
+function emph(text: string, minChars?: number) {
+  return adsV2Emphasize(text, minChars === undefined ? {} : { minChars });
+}
+const objections = computed(() =>
+  adsV2Objections(pathKey.value, {
+    price: shortPrice.value,
+    discountPct: offer.value ? discountPct.value : null,
+    strapiDuration: details.value?.duration,
+  }),
+);
+const OBJECTION_ICONS: Record<string, any> = {
+  result: IconMoodSmile,
+  pain: IconSnowflake,
+  price: IconCreditCard,
+  time: IconCalendarCheck,
+  info: IconMessageCircle,
+};
+function objectionIcon(key: string) {
+  return OBJECTION_ICONS[key] ?? IconCircleCheck;
+}
 const timeline = computed(() => adsV2Timeline(pathKey.value));
 const aftercare = computed(() => adsV2Aftercare(pathKey.value));
 const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
@@ -605,15 +724,27 @@ const routeHref = computed(() => {
   background: #fbeeee;
 }
 
+/* Alle Abschnittsueberschriften fett und zentriert, einheitlich (Agentur-
+   Feedback 01.10.2026). */
 .v2-h2 {
   margin: 0 0 var(--space-400);
   font-size: 1.375rem;
   line-height: 1.2;
+  font-weight: var(--font-bold);
+  text-align: center;
+  text-wrap: balance;
+  /* keine Silbentrennung in Ueberschriften ("Vit-amin") */
+  hyphens: manual;
 }
 
 .v2-lead {
   margin: 0 0 var(--space-400);
   color: var(--color-text-light);
+  text-align: center;
+}
+
+.v2-center {
+  text-align: center;
 }
 
 .v2-actions {
@@ -644,7 +775,9 @@ const routeHref = computed(() => {
   font-size: 1.125rem;
 }
 
-/* 1. Steckbrief */
+/* 1. Steckbrief (Agentur-Feedback 01.10.2026): mobil Liste mit kleinem
+   Icon, Bezeichnung klein und grau, Kernwert fett darunter; ab 900 px
+   Kacheln in drei Spalten. */
 .v2-facts {
   display: grid;
   margin: 0;
@@ -652,12 +785,11 @@ const routeHref = computed(() => {
 
 .v2-facts__row {
   display: grid;
-  grid-template-columns: minmax(0, 8.5rem) minmax(0, 1fr);
-  gap: var(--space-300);
+  grid-template-columns: 22px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  column-gap: var(--space-300);
   padding: var(--space-300) 0;
   border-top: 1px solid var(--color-border-mute);
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
 }
 
 .v2-facts__row:first-child {
@@ -665,15 +797,66 @@ const routeHref = computed(() => {
   padding-top: 0;
 }
 
+.v2-facts__icon {
+  grid-row: 1 / span 2;
+  margin-top: 2px;
+  color: #b91c1c;
+}
+
 .v2-facts dt {
-  font-weight: var(--font-bold);
+  font-size: var(--font-xs);
+  line-height: 1.3;
+  color: var(--color-text-light);
 }
 
 .v2-facts dd {
   margin: 0;
   min-width: 0;
-  color: var(--color-text-light);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  font-weight: var(--font-bold);
+  color: var(--color-text);
   hyphens: auto;
+}
+
+.v2-facts__row--price dd {
+  color: #b91c1c;
+}
+
+@media (min-width: 900px) {
+  .v2-facts {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-300);
+  }
+
+  .v2-facts__row,
+  .v2-facts__row:first-child {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto;
+    row-gap: var(--space-100);
+    align-content: start;
+    padding: var(--space-400);
+    border: 0;
+    border-radius: var(--border-radius-200, 12px);
+    background: var(--color-card-bg-soft);
+  }
+
+  .v2-facts__icon {
+    grid-row: auto;
+    margin: 0 0 var(--space-100);
+  }
+
+  .v2-facts dd {
+    font-size: var(--font-md, 1rem);
+    line-height: 1.35;
+  }
+}
+
+/* 7-8 Kernwerte: vier Spalten statt einer einzelnen Kachel in der letzten Reihe */
+@media (min-width: 1100px) {
+  .v2-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
 }
 
 /* 2. Wirkweise */
@@ -707,13 +890,8 @@ const routeHref = computed(() => {
   hyphens: auto;
 }
 
-/* 320-374 px: Steckbrief untereinander, Zonenbild kleiner */
+/* 320-374 px: Zonenbild kleiner */
 @media (max-width: 374px) {
-  .v2-facts__row {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 0;
-  }
-
   .v2-how {
     grid-template-columns: 72px minmax(0, 1fr);
     align-items: start;
@@ -762,42 +940,50 @@ const routeHref = computed(() => {
   color: #b91c1c;
 }
 
-/* Preise: Zonenbild neben der Ueberschrift */
-.v2-prices__head {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--space-300);
-}
-
-.v2-prices__zone {
-  flex: 0 0 auto;
-  width: 56px;
-  height: auto;
-  margin-top: -4px;
-}
-
 /* Standortnamen mit geschuetztem Bindestrich ("Gesundbrunnen-Center") sind
-   ein Wort: auf 320 px schob das Zonenbild die Seite in die Breite. */
-.v2-prices__head .v2-h2 {
-  min-width: 0;
+   ein Wort: nicht ueber den Kartenrand hinaus. */
+.v2-h2 {
   overflow-wrap: break-word;
 }
 
-@media (max-width: 359px) {
-  .v2-prices__zone {
-    display: none;
-  }
+/* 7. Weitere Zonen: mobil Wischreihe mit Einrasten (Agentur-Feedback
+   01.10.2026), Kacheln ca. 44 % breit, die naechste schaut an. */
+.v2-zones {
+  display: flex;
+  gap: var(--space-300);
+  margin: 0 calc(-1 * var(--space-card-pad));
+  padding: 0 var(--space-card-pad) var(--space-200);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-card-pad);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
-/* 7. Weitere Zonen */
-.v2-zones {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-300);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.v2-zones__item {
+  flex: 0 0 min(44%, 200px);
+  min-width: 132px;
+  scroll-snap-align: start;
+}
+
+.v2-zones--text .v2-zones__item {
+  flex-basis: min(48%, 220px);
+}
+
+@media (min-width: 900px) {
+  .v2-zones {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .v2-zones__item {
+    min-width: 0;
+  }
 }
 
 .v2-zone {
@@ -846,7 +1032,7 @@ const routeHref = computed(() => {
 }
 
 .v2-zone__label {
-  font-size: 0.75rem;
+  font-size: var(--font-sm);
   font-weight: var(--font-bold);
   line-height: 1.2;
   hyphens: auto;
@@ -1159,9 +1345,19 @@ const routeHref = computed(() => {
   flex: 0 0 auto;
 }
 
-/* Kundenfeedback-Videos ueber den Textbewertungen */
+/* Kundenfeedback-Videos ueber den Textbewertungen: mittig, solange sie in
+   die Breite passen; mehr wischt (auto-Raender statt justify-content, sonst
+   waere der erste Clip abgeschnitten). */
 .v2-feedback {
   margin-bottom: var(--space-500);
+}
+
+.v2-feedback :deep(.clips__item:first-child) {
+  margin-left: auto;
+}
+
+.v2-feedback :deep(.clips__item:last-child) {
+  margin-right: auto;
 }
 
 .v2-nowrap {
@@ -1174,7 +1370,31 @@ const routeHref = computed(() => {
   vertical-align: -3px;
 }
 
+/* Bewertungen mobil als Wischreihe (Agentur-Feedback 01.10.2026) */
 .v2-reviews {
+  display: flex;
+  gap: var(--space-300);
+  margin: 0 calc(-1 * var(--space-card-pad));
+  padding: 0 var(--space-card-pad) var(--space-200);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-card-pad);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.v2-review {
+  flex: 0 0 85%;
+  scroll-snap-align: start;
+  padding: var(--space-400);
+  border: 1px solid var(--color-border-mute);
+  border-radius: var(--border-radius-200, 12px);
+  background: var(--color-card-bg-light, #fff);
+}
+
+/* Einwaende */
+.v2-objections {
   display: grid;
   gap: var(--space-300);
   margin: 0;
@@ -1182,10 +1402,50 @@ const routeHref = computed(() => {
   list-style: none;
 }
 
-.v2-review {
+.v2-objection {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: var(--space-300);
   padding: var(--space-400);
-  border: 1px solid var(--color-border-mute);
   border-radius: var(--border-radius-200, 12px);
+  background: var(--color-card-bg-light, #fff);
+}
+
+.v2-objection__icon {
+  margin-top: 1px;
+  color: #b91c1c;
+}
+
+.v2-objection__body {
+  min-width: 0;
+}
+
+.v2-objection__q {
+  display: block;
+  margin-bottom: var(--space-100);
+}
+
+.v2-objection__a {
+  margin: 0;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+}
+
+.v2-objection__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-100);
+  margin-top: var(--space-200);
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  color: inherit;
+}
+
+@media (min-width: 900px) {
+  .v2-objections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .v2-review__stars {
@@ -1270,6 +1530,10 @@ const routeHref = computed(() => {
   text-align: center;
 }
 
+.v2-final__title {
+  margin-bottom: var(--space-300);
+}
+
 .v2-final__price {
   margin: 0;
   font-size: 1.5rem;
@@ -1298,7 +1562,11 @@ const routeHref = computed(() => {
   }
 
   .v2-reviews {
+    display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    overflow: visible;
   }
 }
 </style>
