@@ -21,6 +21,7 @@
 import { readGaAttributionParams } from "~/lib/attribution";
 import { mirrorFunnelEvent } from "~/lib/firstPartyFunnel";
 import { checkoutEventId, startCheckoutAttempt } from "~/lib/checkoutAttempt";
+import { carriesOfferVariant, currentOfferVariant } from "~/lib/offerVariant";
 
 type DataLayerObject = Record<string, unknown> & { event: string };
 
@@ -80,9 +81,17 @@ export const useGoogleAnalytics = () => {
       typeof window !== 'undefined'
         ? (window as any).__myhbPreviewTemplate
         : undefined;
-    const tagged = previewTemplate
+    const withTemplate = previewTemplate
       ? { ...withAttribution, template: previewTemplate }
       : withAttribution;
+    // go.-Angebots-Test (shared/adsOfferVariant.ts): `offer_variant` "a"/"b"
+    // an den Konversions-Ereignissen, nur wenn bekannt. Ein Wert des
+    // Aufrufers gewinnt.
+    const offerVariant = carriesOfferVariant(eventName) ? currentOfferVariant() : undefined;
+    const tagged =
+      offerVariant && withTemplate.offer_variant === undefined
+        ? { ...withTemplate, offer_variant: offerVariant }
+        : withTemplate;
     // `event` zuletzt, damit kein Parameter den Ereignisnamen ueberschreibt.
     pushToDataLayer({ ...tagged, event: eventName });
   };

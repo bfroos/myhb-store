@@ -3,6 +3,7 @@ import {
   isAdsTemplateV2Page,
   isAdsTemplateV2PreviewPath,
 } from "#shared/adsTemplateV2";
+import { ADS_OFFER_AB_ENABLED, isAdsOfferBPath } from "#shared/adsOfferVariant";
 
 /**
  * go.* (Ads-Modus): Laeuft die aktuelle Standort-Behandlungsseite mit der
@@ -32,6 +33,11 @@ export function useAdsTemplateV2() {
     const loc = typeof p.locationSlug === "string" ? p.locationSlug : "";
     if (isAdsTemplateV2PreviewPath(route.path)) {
       return isAdsTemplateV2Page(city, loc, pathKey);
+    }
+    // A/B-Variante B des Angebots (shared/adsOfferVariant.ts): dieselben
+    // Seiten wie live, unter /ab-beratung/standorte/...
+    if (isAdsOfferBPath(route.path)) {
+      return ADS_OFFER_AB_ENABLED && isAdsTemplateV2LivePage(city, loc, pathKey);
     }
     // Nur die deutsche Standort-Behandlungsseite (go. ist deutsch).
     if (!/^\/standorte\/[^/]+\/[^/]+\/.+/.test(route.path)) return false;

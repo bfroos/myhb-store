@@ -25,6 +25,7 @@
       :sticky-cta-label="ADS_V2_CTA.sticky"
       :v2-price-line="heroPriceLine"
       :v2-sticky-price="stickyPrice"
+      :v2-note="heroNote"
     />
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
@@ -134,14 +135,14 @@
     <UiLayoutSectionBlock v-if="priceCards.length">
       <div class="v2-card" data-track-placement="v2_prices">
         <h2 class="v2-h2">{{ H.prices }}</h2>
-        <p v-if="offer" class="v2-lead">
+        <p v-if="offerShown" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
         </p>
         <ul class="v2-prices" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
           <li v-for="card in priceCards" :key="card.key" class="v2-price" :class="{ 'v2-price--package': card.isPackage }">
             <span class="v2-price__label">{{ card.label }}</span>
             <strong v-if="card.offer" class="v2-price__offer">{{ card.offer }}</strong>
-            <span class="v2-price__regular">{{ keepAmount(card.regular) }}</span>
+            <span v-if="card.regular" class="v2-price__regular">{{ keepAmount(card.regular) }}</span>
             <span v-if="card.note" class="v2-price__note">{{ keepAmount(card.note) }}</span>
           </li>
         </ul>
@@ -376,7 +377,8 @@
       </div>
     </UiLayoutSectionBlock>
 
-    <BlockAdsPriceFootnote :treatment="hero.treatment" :treatment-path-key="hero.treatmentPathKey" />
+    <!-- Variante B ohne Sternchen-Preise: keine Fussnote -->
+    <BlockAdsPriceFootnote v-if="!isB" :treatment="hero.treatment" :treatment-path-key="hero.treatmentPathKey" />
   </div>
 </template>
 
@@ -440,7 +442,12 @@ import {
   adsV2HowParts,
   adsV2Objections,
 } from "#shared/adsTemplateV2Content";
-import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT } from "#shared/newCustomerOffer";
+import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT, formatEuroCent } from "#shared/newCustomerOffer";
+import {
+  adsOfferBPath,
+  adsOfferRegularCards,
+  adsOfferRegularPriceLine,
+} from "#shared/adsOfferVariant";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
 
 const props = defineProps<{
@@ -505,7 +512,7 @@ const discountLabel = computed(() =>
   t("blocks.treatmentHero.discountCta", { pct: discountPct.value }),
 );
 const discountButton = computed(() =>
-  props.hero.cta
+  props.hero.cta && offerVariant.value !== "b"
     ? {
         label: discountLabel.value,
         method: SharedButtonMethod.ACTION,
@@ -519,9 +526,31 @@ const offer = useNewCustomerOffer(
   () => props.hero.treatmentPathKey,
 );
 
-/** "ab 119,99 €*" / "ab 79,99 € pro Zone*" (ohne "Neukunden"). */
+// Angebots-Test (shared/adsOfferVariant.ts): Variante B unter
+// /ab-beratung/... - keine Rabattbotschaft, regulaere Preise (Strapi
+// priceInEuroCent wie www), Vertrauenszeile im Hero. A = heutiger Stand.
+const offerVariant = useAdsOfferVariant();
+const isB = computed(() => offerVariant.value === "b");
+/** Neukundenangebot, wie es die Seite zeigt (B: keins). */
+const offerShown = computed(() => (isB.value ? null : offer.value));
+const regularLine = computed(() =>
+  adsOfferRegularPriceLine(props.hero.treatment as any, formatEuroCent),
+);
+const heroNote = computed(() =>
+  isB.value
+    ? ["Nur Ärztinnen und Ärzte", "Zufriedenheitsgarantie", "auch ohne Termin"]
+        .map((v) => v.replace(/ /g, "\u00a0"))
+        .join(" · ")
+    : null,
+);
+
+/** "ab 119,99 €*" / "ab 79,99 € pro Zone*" (ohne "Neukunden"); B: "ab 149,99 €". */
 const shortPrice = computed(() =>
-  offer.value ? offer.value.heroLine.replace(/^Neukunden\s+/, "") : null,
+  isB.value
+    ? regularLine.value
+    : offer.value
+      ? offer.value.heroLine.replace(/^Neukunden\s+/, "")
+      : null,
 );
 // Hero (Agentur-Feedback 01.10.2026): EINE Zeile "Ab 119,99 €* – mit 20 %
 // Neukundenrabatt" statt Preis + zweitem Rabatt-Link.
@@ -530,11 +559,11 @@ const heroPriceLine = computed(() => {
   if (!p) return null;
   return {
     main: `${p[0]!.toUpperCase()}${p.slice(1)}`.replace(/\s/g, "\u00a0"),
-    extra: `– mit ${discountPct.value}\u00a0% Neukundenrabatt`,
+    extra: isB.value ? null : `– mit ${discountPct.value}\u00a0% Neukundenrabatt`,
   };
 });
 const stickyPrice = computed(() => shortPrice.value);
-const finalPrice = computed(() => offer.value?.heroLine ?? null);
+const finalPrice = computed(() => (isB.value ? regularLine.value : offer.value?.heroLine ?? null));
 
 // Stadt der Seite: Clips mit fremdem Stadtnamen im Bild fallen weg.
 // Betrag und Euro-Zeichen nicht trennen ("149,99" / "€" auf zwei Zeilen in
@@ -629,7 +658,7 @@ function emph(text: string, minChars?: number) {
 const objections = computed(() =>
   adsV2Objections(pathKey.value, {
     price: shortPrice.value,
-    discountPct: offer.value ? discountPct.value : null,
+    discountPct: offerShown.value ? discountPct.value : null,
     strapiDuration: details.value?.duration,
   }),
 );
@@ -646,7 +675,12 @@ function objectionIcon(key: string) {
 const timeline = computed(() => adsV2Timeline(pathKey.value));
 const aftercare = computed(() => adsV2Aftercare(pathKey.value));
 const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
-const zoneTiles = computed(() => adsV2ZoneTiles(pathKey.value, citySlug, locSlug));
+// Variante B bleibt beim Wechsel auf eine andere Zone in B.
+const zoneTiles = computed(() =>
+  adsV2ZoneTiles(pathKey.value, citySlug, locSlug).map((t) =>
+    isB.value ? { ...t, href: adsOfferBPath(t.href) } : t,
+  ),
+);
 // Ohne ein einziges Zonenbild (Skinbooster, Infusionen): schlichte Textkacheln.
 const zoneTilesHaveImages = computed(() => zoneTiles.value.some((t) => !!t.image));
 const doctorsLead = "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle.";
@@ -654,9 +688,10 @@ const doctorsLead = "Bei uns behandeln nur Ärztinnen und Ärzte – von der Ber
 const atLocation = computed(() => adsV2AtLocation(locationName.value));
 const zoneHint = computed(() => adsV2ZoneHint(priceCards.value));
 const consultPhoto = computed(() => adsV2ConsultPhoto(pathKey.value));
-const priceCards = computed(() =>
-  adsV2PriceCards(pathKey.value, props.hero.treatment as any, discountPct.value),
-);
+const priceCards = computed(() => {
+  const cards = adsV2PriceCards(pathKey.value, props.hero.treatment as any, discountPct.value);
+  return isB.value ? adsOfferRegularCards(cards) : cards;
+});
 const productNote = computed(() => adsV2ProductNote(pathKey.value));
 
 /**
