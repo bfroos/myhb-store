@@ -24,7 +24,8 @@
  * Heilversprechen (bei Infusionen keine Wirkversprechen, nur Ablauf).
  * Hersteller nur, wo Benjamin sie freigegeben hat (adsV2ProductNote).
  */
-import { adsV2ProductNote } from "./adsTemplateV2.ts";
+import { adsV2Guarantee, adsV2ProductNote } from "./adsTemplateV2.ts";
+import { adsClipPostersFor } from "./adsClips.ts";
 
 function baseKey(pathKey: string | null | undefined): string {
   return String(pathKey ?? "")
@@ -811,18 +812,19 @@ export function adsV2Kind(pathKey: string | null | undefined): AdsV2Kind | null 
 }
 
 /**
- * Zufriedenheitsgarantie (Nachkontrolle mit Nachbehandlung) gilt fuer
- * Behandlungen mit Spritze, nicht fuer Infusionen.
+ * Zufriedenheitsgarantie gilt fuer alle Behandlungen (Benjamin, 01.10.2026),
+ * auch fuer Infusionen; der Umfang steht je Kategorie in adsV2Guarantee
+ * (shared/adsTemplateV2.ts).
  */
 export function adsV2HasGuarantee(pathKey: string | null | undefined): boolean {
-  return adsV2Kind(pathKey) !== "infusion";
+  return !!SPECS[baseKey(pathKey)];
 }
 
 /** Zeile unter den Preiskarten. */
 export function adsV2PriceInclusion(pathKey: string | null | undefined): string {
-  return adsV2HasGuarantee(pathKey)
-    ? "Inklusive Beratung und Nachkontrolle."
-    : "Inklusive ärztlichem Vorgespräch.";
+  return adsV2Kind(pathKey) === "infusion"
+    ? "Inklusive ärztlichem Vorgespräch und Nachkontrolle."
+    : "Inklusive Beratung und Nachkontrolle.";
 }
 
 const ZONE_ALT: Record<AdsV2Zone, string> = {
@@ -852,9 +854,49 @@ export function adsV2Zones(): AdsV2Zone[] {
   return Object.keys(ZONE_ALT) as AdsV2Zone[];
 }
 
+/**
+ * "in den Köln Arcaden", "im Minto": Praeposition mit Artikel je Standort
+ * (Benjamin, 01.10.2026: korrekter Satz statt "in Köln Arcaden"). Der Name
+ * bricht nicht um (geschuetzte Leerzeichen, geschuetzter Bindestrich).
+ * Unbekannte Standorte: "am Standort <Name>" - nie ein falscher Artikel.
+ */
+const AT_LOCATION: Readonly<Record<string, string>> = {
+  "Aquis Plaza": "im",
+  "Gesundbrunnen-Center": "im",
+  "Düsseldorf Arcaden": "in den",
+  "Forum Duisburg": "im",
+  "K in Lautern": "im",
+  "Köln Arcaden": "in den",
+  "Höfe am Brühl": "in den Höfen am Brühl",
+  Minto: "im",
+  "Palais Vest": "im",
+  "Europa Galerie": "in der",
+  "Löhr Center": "im",
+  Loom: "im",
+  "City Arkaden Wuppertal": "in den",
+  "Allee Center Magdeburg": "im",
+  "MediaPark Klinik": "in der",
+};
+
+/** Standortname ohne Umbruch (Leerzeichen und Bindestrich geschuetzt). */
+export function adsV2NoBreak(text: string): string {
+  return text.replace(/ /g, "\u00a0").replace(/-/g, "\u2011");
+}
+
+export function adsV2AtLocation(locationName: string | null | undefined): string {
+  const name = String(locationName ?? "").trim();
+  if (!name) return "";
+  const p = AT_LOCATION[name];
+  if (!p) return `am Standort ${adsV2NoBreak(name)}`;
+  // eigene Beugung ("in den Höfen am Brühl") steht komplett in der Tabelle
+  if (p.includes(" ") && p.split(" ").length > 2) return adsV2NoBreak(p).replace(/^in\u00a0den/, "in den");
+  return `${p} ${adsV2NoBreak(name)}`;
+}
+
 /** Ueberschriften (Punkt 3), Standort-Name eingesetzt. */
 export function adsV2Headings(terms: AdsV2Terms, locationName: string) {
-  const at = locationName ? ` in ${locationName}` : "";
+  const where = adsV2AtLocation(locationName);
+  const at = where ? ` ${where}` : "";
   const zonal = terms.kind === "mr" || terms.kind === "hyaluron";
   return {
     facts: `${terms.label} auf einen Blick`,
@@ -871,7 +913,7 @@ export function adsV2Headings(terms: AdsV2Terms, locationName: string) {
     reviews: `Vor deiner ${terms.treatment}: das sagen Kundinnen und Kunden`,
     faq: `Häufige Fragen ${terms.about}`,
     aftercare: `Nach deiner ${terms.treatment}`,
-    location: `Deine ${terms.treatment}${at}: so findest du uns`,
+    location: `So findest du uns – deine ${terms.treatment}${at}`,
     final: `Bereit für deine ${terms.treatment}?`,
   };
 }
@@ -919,11 +961,9 @@ export function adsV2Facts(
 
 export type AdsV2TimelineItem = { when: string; title: string; text: string };
 
-const CONTROL: AdsV2TimelineItem = {
-  when: "Tag 14",
-  title: "Kostenlose Nachkontrolle",
-  text: "Wir prüfen das Ergebnis und behandeln bei Bedarf kostenlos nach (Zufriedenheitsgarantie).",
-};
+function control(pathKey: string | null | undefined): AdsV2TimelineItem {
+  return { when: "Tag 14", title: "Kostenlose Nachkontrolle", text: adsV2Guarantee(pathKey).timeline };
+}
 
 export function adsV2Timeline(pathKey: string | null | undefined): AdsV2TimelineItem[] {
   const s = SPECS[baseKey(pathKey)];
@@ -939,7 +979,7 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
             : "Ärztliche Beratung zu deiner Mimik, dann wenige feine Pikser – du kannst direkt weitermachen.",
       },
       { when: s.firstWhen ?? "Tag 3–7", title: "Erste Wirkung", text: s.firstText ?? "Die Falte wird nach und nach weicher." },
-      CONTROL,
+      control(pathKey),
       {
         when: s.refreshWhen ?? "nach ca. 4 Monaten",
         title: "Auffrischen",
@@ -958,7 +998,7 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
         text: "Ihr besprecht Wunsch und Menge. Nach der Betäubung wird das Hyaluron behutsam gesetzt – das Ergebnis siehst du sofort.",
       },
       first,
-      CONTROL,
+      control(pathKey),
       {
         when: s.refreshWhen ?? "nach ca. 6–12 Monaten",
         title: "Auffrischen",
@@ -974,7 +1014,7 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
         text: "Die Ärztin oder der Arzt schaut sich das alte Hyaluron an und setzt das Enzym gezielt an diese Stelle.",
       },
       { when: "Tag 1–2", title: "Hyaluron löst sich", text: "Das Enzym wirkt meist innerhalb von ein bis zwei Tagen. Eine leichte Schwellung ist normal." },
-      CONTROL,
+      control(pathKey),
       {
         when: "ab ca. 2 Wochen",
         title: "Neu behandeln, wenn du magst",
@@ -994,7 +1034,11 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
         title: "Infusion",
         text: `Du sitzt entspannt, die Infusion läuft etwa ${shortDuration(null, s.facts.dauer)} lang über einen dünnen Zugang am Arm.`,
       },
-      { when: "Danach", title: "Weitermachen", text: "Nach einer kurzen Pause kannst du direkt in deinen Tag zurück." },
+      {
+        when: "Danach",
+        title: "Weitermachen",
+        text: "Nach einer kurzen Pause kannst du direkt in deinen Tag zurück. Innerhalb von 14 Tagen gibt es auf Wunsch eine kostenlose Nachkontrolle und Beratung (Zufriedenheitsgarantie).",
+      },
       { when: "Später", title: "Wiederholen nach Absprache", text: "Ob und wann eine weitere Infusion sinnvoll ist, besprecht ihr gemeinsam." },
     ];
   }
@@ -1011,8 +1055,8 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
     when: "nach einigen Wochen",
     title: "Weitere Sitzungen",
     text: s.facts.sitzungen
-      ? `${s.facts.sitzungen[0]!.toUpperCase()}${s.facts.sitzungen.slice(1)}. Innerhalb von 14 Tagen gibt es eine kostenlose Nachkontrolle.`
-      : "Innerhalb von 14 Tagen gibt es eine kostenlose Nachkontrolle.",
+      ? `${s.facts.sitzungen[0]!.toUpperCase()}${s.facts.sitzungen.slice(1)}. Innerhalb von 14 Tagen gibt es eine kostenlose Nachkontrolle und Beratung (Zufriedenheitsgarantie).`
+      : "Innerhalb von 14 Tagen gibt es eine kostenlose Nachkontrolle und Beratung (Zufriedenheitsgarantie).",
   };
   const refresh: AdsV2TimelineItem = {
     when: s.refreshWhen ?? "nach einigen Monaten",
@@ -1037,8 +1081,6 @@ export type AdsV2FaqItem = { question: string; answer: string };
 
 const WHO =
   "Ausschließlich Ärztinnen und Ärzte. Sie beraten dich vorher und sagen dir ehrlich, wenn eine Behandlung nicht zu dir passt.";
-const GUARANTEE =
-  "Innerhalb von 14 Tagen gibt es eine kostenlose ärztliche Nachkontrolle, bei Bedarf mit Nachbehandlung.";
 const DIFFERENCE =
   "Ein Muskelrelaxans entspannt den Muskel hinter Mimikfalten wie Stirn- oder Zornesfalte. Hyaluron füllt Volumen auf, etwa an den Lippen. Was zu dir passt, klärt die Beratung.";
 
@@ -1048,6 +1090,7 @@ function stripCa(v: string | undefined): string {
 
 function defaultFaqs(s: Spec, pathKey: string): Record<FaqSlot, AdsV2FaqItem> {
   const f = s.facts;
+  const GUARANTEE = adsV2Guarantee(pathKey).faq;
   if (s.kind === "mr") {
     return {
       pain: { question: "Tut das weh?", answer: "Die meisten spüren nur kurze Pikser. Es wird mit sehr feinen Nadeln gearbeitet, auf Wunsch wird vorher gekühlt oder betäubt." },
@@ -1072,7 +1115,7 @@ function defaultFaqs(s: Spec, pathKey: string): Record<FaqSlot, AdsV2FaqItem> {
       },
       side: { question: "Welche Nebenwirkungen kann es geben?", answer: `In den ersten Tagen sind Schwellung, Rötung oder ein kleiner blauer Fleck normal. Selten entstehen kleine tastbare Knötchen – die behandeln wir bei der Nachkontrolle. ${RISK}` },
       undo: { question: "Lässt sich das rückgängig machen?", answer: "Ja. Hyaluron lässt sich mit dem Enzym Hyaluronidase gezielt auflösen. Ohne Zutun baut der Körper es über Monate von selbst ab." },
-      guarantee: { question: "Hyaluron oder Muskelrelaxans – was ist der Unterschied?", answer: DIFFERENCE },
+      guarantee: { question: "Was, wenn mir das Ergebnis nicht gefällt?", answer: GUARANTEE },
       last: { question: "Welches Produkt wird verwendet – und wer behandelt?", answer: [adsV2ProductNote(pathKey), WHO].filter(Boolean).join(" ") },
     };
   }
@@ -1095,7 +1138,10 @@ function defaultFaqs(s: Spec, pathKey: string): Record<FaqSlot, AdsV2FaqItem> {
       side: { question: "Welche Nebenwirkungen kann es geben?", answer: `An der Einstichstelle kann ein kleiner blauer Fleck entstehen. Manche spüren ein kühles Gefühl im Arm, selten wird einem kurz schwindelig. Allergische Reaktionen sind selten. ${RISK}` },
       undo: { question: "Für wen ist eine Infusion nicht geeignet?", answer: "Zum Beispiel in der Schwangerschaft oder bei bestimmten Erkrankungen von Herz oder Nieren. Darum gibt es vorher das ärztliche Gespräch – sag dort bitte auch, welche Medikamente du nimmst." },
       guarantee: { question: "Ersetzt eine Infusion eine ärztliche Behandlung?", answer: "Nein. Eine Infusion ersetzt weder eine ausgewogene Ernährung noch die Behandlung einer Krankheit. Bei Beschwerden geh bitte zu deiner Hausärztin oder deinem Hausarzt." },
-      last: { question: "Wer betreut mich?", answer: "Das Vorgespräch führt eine Ärztin oder ein Arzt. Sie oder er sagt dir ehrlich, wenn eine Infusion nicht zu dir passt." },
+      last: {
+        question: "Wer betreut mich – und was, wenn ich danach Fragen habe?",
+        answer: `Behandlung nur durch Ärztinnen und Ärzte: Sie führen das Vorgespräch und sagen dir ehrlich, wenn eine Infusion nicht zu dir passt. ${GUARANTEE}`,
+      },
     };
   }
   // Skinbooster, Mesotherapie, PRP
@@ -1226,6 +1272,12 @@ export type AdsV2ZoneTile = {
   label: string;
   href: string;
   image: { src: string; alt: string } | null;
+  /**
+   * Vorschaubild der Behandlung (Poster ihres Hero-Clips aus
+   * public/videos/go/), damit jede Kachel ein Bild hat (Benjamin,
+   * 01.10.2026: sonst "aermlich"). Fehlt es, zeigt die Kachel das Zonenbild.
+   */
+  photo: string | null;
 };
 
 /**
@@ -1242,16 +1294,23 @@ export function adsV2ZoneTiles(
   const key = baseKey(pathKey);
   const s = SPECS[key];
   if (!s || !citySlug || !locationSlug) return [];
+  const used = new Set<string>();
   return s.related
     .filter((k) => k !== key && SPECS[k])
     // hoechstens 3: eine volle Reihe im 3er-Raster
     .slice(0, 3)
-    .map((k) => ({
-      key: k.split("/").pop()!,
-      label: SPECS[k]!.label,
-      href: `/standorte/${citySlug}/${locationSlug}/${k}`,
-      image: adsV2ZoneImage(SPECS[k]!.zone),
-    }));
+    .map((k) => {
+      const posters = adsClipPostersFor(k, citySlug);
+      const photo = posters.find((u) => !used.has(u)) ?? posters[0] ?? null;
+      if (photo) used.add(photo);
+      return {
+        key: k.split("/").pop()!,
+        label: SPECS[k]!.label,
+        href: `/standorte/${citySlug}/${locationSlug}/${k}`,
+        image: adsV2ZoneImage(SPECS[k]!.zone),
+        photo,
+      };
+    });
 }
 
 /** "ab 2 Zonen 79,99 € pro Zone*" aus der guenstigsten Zonen-Notiz der Preiskarten. */

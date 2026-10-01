@@ -84,9 +84,17 @@ test("Preiskarten je Behandlung passend zum Hero-Preis", () => {
   assert.equal(adsV2PriceMode("infusionen/relax-infusion"), "base");
 });
 
-test("Infusionen ohne Zufriedenheitsgarantie, Hersteller nur wo freigegeben", () => {
-  assert.equal(adsV2TrustItems("infusionen/vitamin-c-infusion").some((i) => i.key === "garantie"), false);
-  assert.equal(adsV2TrustItems("hyaluron/jawline").some((i) => i.key === "garantie"), true);
+test("Zufriedenheitsgarantie fuer alle Kategorien, Text je Kategorie; Hersteller nur wo freigegeben", () => {
+  const g = (k: string) => adsV2TrustItems(k).find((i) => i.key === "garantie")?.text ?? "";
+  // Reihenfolge nach der Google-Bewertung: Garantie, Aerzt:innen, ohne Termin
+  assert.deepEqual(adsV2TrustItems("hyaluron/jawline").map((i) => i.key), ["garantie", "aerzte", "walkin"]);
+  assert.equal(g("muskelrelaxans/stirnfalte"), "Kostenlose Nachkontrolle nach 14 Tagen inkl. kostenloser Nachbehandlung");
+  assert.match(g("hyaluron/lippen-aufspritzen"), /Korrekturen der Form inklusive – zusätzliches Volumen \(weitere ml\) wird nach Preisliste berechnet/);
+  for (const k of ["infusionen/vitamin-c-infusion", "skinbooster/profhilo", "skinbooster/vampir-lifting-prp", "anti-haarausfall/mesotherapie-haare", "hyaluron/hylase"]) {
+    assert.equal(g(k), "Kostenlose Nachkontrolle und Beratung innerhalb von 14 Tagen", k);
+  }
+  assert.ok(adsV2TrustItems("infusionen/relax-infusion").some((i) => i.text === "Behandlung nur durch Ärztinnen und Ärzte"));
+  assert.match(ADS_V2_PAYMENT_NOTE, /Gutschein.*Klarna oder PayPal in Raten/);
   assert.equal(adsV2ProductNote("hyaluron/hylase"), null);
   assert.match(String(adsV2ProductNote("hyaluron/jawline")), /Aliaxin/);
   assert.match(String(adsV2ProductNote("skinbooster/profhilo")), /Profhilo/);
@@ -206,7 +214,7 @@ test("Oeffnungszeiten zusammengefasst", () => {
 
 test("Clips: nur ungesperrte, Hero-Clip nur wo tauglich", () => {
   for (const [, set] of adsClipEntries()) {
-    for (const clip of [set.hero, ...set.carousel].filter(Boolean)) {
+    for (const clip of [...set.heroes, ...set.carousel, ...(set.feedback ?? [])]) {
       assert.equal(adsClipAllowed(clip), true, clip!.url);
     }
   }
@@ -215,20 +223,35 @@ test("Clips: nur ungesperrte, Hero-Clip nur wo tauglich", () => {
   assert.equal(adsClipsFor("muskelrelaxans/stirnfalte").hero?.url, "/videos/go/hero-stirn-zornesfalte-7s.mp4");
   assert.equal(adsClipsFor("hyaluron/lippen-aufspritzen").hero?.url, "/videos/go/hero-lippen-8s.mp4");
   assert.equal(adsClipsFor("hyaluron/lippen-aufspritzen").hero?.posterUrl, "/videos/go/hero-lippen-8s-poster.jpg");
-  assert.deepEqual(adsClipsFor("nix/da"), { carousel: [] });
+  assert.deepEqual(adsClipsFor("nix/da"), { carousel: [], feedback: [] });
 });
 
-test("Hero-Clip nur vermessen und ohne fremden Stadtnamen", () => {
+test("Hero-Clip nur vermessen und ohne fremden Stadtnamen, fuer jede Behandlung", () => {
   for (const [key, set] of adsClipEntries()) {
-    if (set.hero) assert.equal(typeof set.hero.focusY, "number", `${key}: Hero nicht vermessen`);
+    for (const h of set.heroes) assert.equal(typeof h.focusY, "number", `${key}: Hero nicht vermessen`);
   }
-  // Jawline-Hero zeigt "KÖLN", Kinn-Hero "KAISERSLAUTERN"
-  assert.ok(adsClipsFor("hyaluron/jawline", "koeln").hero);
-  assert.equal(adsClipsFor("hyaluron/jawline", "berlin").hero, undefined);
-  assert.ok(adsClipsFor("hyaluron/kinnkorrektur", "kaiserslautern").hero);
-  assert.equal(adsClipsFor("hyaluron/kinnkorrektur", "koeln").hero, undefined);
-  assert.ok(adsClipsFor("muskelrelaxans/kraehenfuesse", "berlin").hero);
-  assert.equal(adsClipsFor("skinbooster/profhilo", "koeln").hero, undefined);
+  // Jawline-Hero zeigt "KÖLN", Kinn-Hero "KAISERSLAUTERN": dort der Stadtclip,
+  // sonst ein neutraler
+  assert.equal(adsClipsFor("hyaluron/jawline", "koeln").hero?.url, "/videos/go/hero-jaw-1.mp4");
+  assert.equal(adsClipsFor("hyaluron/jawline", "berlin").hero?.url, "/videos/go/fio-jawline-1-hero-6s.mp4");
+  assert.equal(adsClipsFor("hyaluron/kinnkorrektur", "kaiserslautern").hero?.url, "/videos/go/hero-kinn-1.mp4");
+  assert.equal(adsClipsFor("hyaluron/kinnkorrektur", "koeln").hero?.url, "/videos/go/fio-jawline-2-hero-6s.mp4");
+  assert.equal(adsClipsFor("skinbooster/profhilo", "koeln").hero?.url, "/videos/go/hero-profhilo-7s.mp4");
+  assert.equal(adsClipsFor("muskelrelaxans/barbie-muskelrelaxans", "berlin").hero?.url, "/videos/go/fio-barbie-1-hero-7s.mp4");
+  for (const city of ["aachen", "berlin", "duesseldorf", "duisburg", "kaiserslautern", "koeln", "leipzig", "moenchengladbach", "recklinghausen"]) {
+    for (const [key] of adsClipEntries()) assert.ok(adsClipsFor(key, city).hero, `${key} ${city}: kein Hero-Clip`);
+  }
+});
+
+test("Kundenfeedback: nur passende Stadt, nichts doppelt zum Karussell", () => {
+  const fb = (key: string, city: string) => adsClipsFor(key, city).feedback.map((c) => c.source);
+  assert.deepEqual(fb("muskelrelaxans/browlift", "koeln"), [801, 874, 266, 862]);
+  assert.deepEqual(fb("muskelrelaxans/browlift", "berlin"), [874, 266, 862]);
+  // 266 laeuft auf der Stirnfalte schon im Karussell
+  assert.deepEqual(fb("muskelrelaxans/stirnfalte", "recklinghausen"), [802, 874, 862]);
+  assert.deepEqual(fb("hyaluron/lippen-aufspritzen", "berlin"), ["fio-lippen-2"]);
+  assert.deepEqual(fb("skinbooster/vampir-lifting-prp", "leipzig"), [808]);
+  assert.deepEqual(fb("skinbooster/vampir-lifting-prp", "berlin"), []);
 });
 
 test("Bewertungen: doppelte Eintraege nur einmal", () => {
@@ -272,9 +295,7 @@ test("Hero-Ausschnitt: Untertitel ganz drin oder ganz draussen", () => {
   const sizes: Array<[number, number]> = [
     [284, 98], [312, 130], [336, 199], [353, 384], [398, 420], [700, 400], [560, 620],
   ];
-  for (const [key, set] of adsClipEntries()) {
-    const hero = set.hero;
-    if (!hero) continue;
+  for (const [key, set] of adsClipEntries()) for (const hero of set.heroes) {
     for (const [w, h] of sizes) {
       const p = heroObjectPositionY(w, h, hero) / 100;
       const r = h / (w / (hero.aspect ?? 9 / 16));

@@ -89,7 +89,8 @@
                   :data-offer-kind="newCustomerOffer.kind"
                 >
                   <!-- v2: Betrag und "€*" nicht trennen ("239,99" / "€*") -->
-                  {{ templateV2 ? newCustomerOffer.heroLine.replace(/(\d) (€)/g, "$1 $2") : newCustomerOffer.heroLine }}
+                  <template v-if="templateV2">{{ heroPriceParts[0] }}<span class="hero__nowrap">{{ heroPriceParts[1] }}</span></template>
+                  <template v-else>{{ newCustomerOffer.heroLine }}</template>
                 </p>
               </template>
               <template v-else>
@@ -123,7 +124,7 @@
                   />
                 </div>
                 <SharedButton
-                  v-if="discountButtonVisible"
+                  v-if="discountButtonVisible && !templateV2"
                   class="hero-cta-btn"
                   :button="{
                     label: discountLabel,
@@ -139,6 +140,30 @@
                   }"
                   :button-props="{ size: 'lg', variant: 'secondary' }"
                 />
+                <!-- v2: nur EIN grosser Knopf; der Rabatt als kleine Zeile
+                     darunter, gleiche Aktion (Newsletter -> Buchung), eigenes
+                     Tracking-Merkmal (Benjamin, 01.10.2026). -->
+                <p
+                  v-if="discountButtonVisible && templateV2"
+                  class="hero__discount-link"
+                  data-track-placement="hero_discount_link"
+                >
+                  <SharedButton
+                    :button="{
+                      label: discountLinkLabel,
+                      method: SharedButtonMethod.ACTION,
+                      action: SharedButtonAction.NEWSLETTER_SIGN_UP,
+                    }"
+                    :data="{
+                      calendlyUrl: calendlyUrl,
+                      appBookingUrl: appBookingUrl,
+                      locationSlug: locationSlug,
+                      appTreatmentSlug: appTreatmentSlug,
+                      treatmentType: treatment?.type,
+                    }"
+                    :button-props="{ size: 'sm', variant: 'link' }"
+                  />
+                </p>
               </div>
               <template v-if="showReviews">
                 <UiMoleculeReviewsBadge
@@ -322,6 +347,15 @@ const newCustomerOffer = useNewCustomerOffer(
   () => props.treatmentPathKey,
 );
 
+// v2: "Neukunden " + "ab 239,99 €*" - der Betrag mit "ab" und "€*" bricht
+// nicht um (iPhone SE: sonst stand "€*" allein in der zweiten Zeile).
+const heroPriceParts = computed<[string, string]>(() => {
+  const t = newCustomerOffer.value?.heroLine ?? "";
+  const m = /(?:ab\s)?\d[\d.]*(?:,\d{2})?\s?€\*?(?:\s+pro\s+Zone\*?)?/.exec(t);
+  if (!m) return [t, ""];
+  return [t.slice(0, m.index), t.slice(m.index).replace(/\s/g, "\u00a0")];
+});
+
 // go.: Leiste einzeilig - "ab 119,99 €*" ohne "Neukunden" (Sternchen erklaert
 // die Fussnote am Seitenende).
 const stickyPriceLine = computed(() =>
@@ -423,6 +457,10 @@ const priceLabel = computed(() =>
     : treatmentPriceLabel(props.treatment, props.showPrice, t),
 );
 
+const discountLinkLabel = computed(() => {
+  const pct = globals.value?.ecommerce?.newsletterDiscountPercentage || 20;
+  return `Neukunde? ${pct}\u00a0% Rabatt sichern`;
+});
 const discountLabel = computed(() => {
   const pct = globals.value?.ecommerce?.newsletterDiscountPercentage;
   return t("blocks.treatmentHero.discountCta", { pct });
@@ -668,6 +706,27 @@ const discountLabel = computed(() => {
       padding-top: var(--space-400);
     }
   }
+}
+
+.hero__nowrap {
+  white-space: nowrap;
+}
+
+/* v2: Rabatt als kleine Textzeile unter dem einen Knopf */
+.hero__discount-link {
+  flex: none;
+  width: 100%;
+  margin: calc(-1 * var(--space-200)) 0 0;
+  text-align: center;
+  font-size: var(--font-sm);
+}
+
+.hero__discount-link :deep(.button) {
+  min-height: 0;
+  padding: var(--space-100) var(--space-200);
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  color: #b91c1c;
 }
 
 .hero__cta {

@@ -12,6 +12,7 @@ import {
   adsV2ZoneHint,
   adsV2ZoneImage,
   adsV2ZoneTiles,
+  adsV2AtLocation,
   adsV2ContentKeys,
   adsV2HasGuarantee,
   adsV2PriceInclusion,
@@ -67,7 +68,7 @@ test("Behandlungsbegriff in jeder H2", () => {
     assert.match(v, /Stirnfalte/, k);
   }
   assert.equal(h.steps, "So läuft deine Stirnfalten-Behandlung ab");
-  assert.equal(h.prices, "Preise für die Stirnfalte in Köln Arcaden");
+  assert.equal(h.prices.replace(/\u00a0/g, " "), "Preise für die Stirnfalte in den Köln Arcaden");
   const l = adsV2Headings(adsV2Terms(LIPPEN)!, "Köln Arcaden");
   for (const [k, v] of Object.entries(l)) {
     assert.match(v, /Lippe/, k);
@@ -128,7 +129,10 @@ test("Beratungsfoto: zunaechst leer", () => {
 
 test("Clips: Dateien im Repo, Groessen, neutraler Name, Poster", () => {
   for (const [, set] of adsClipEntries()) {
-    for (const [kind, c] of [["hero", set.hero], ...set.carousel.map((x) => ["karussell", x])] as const) {
+    for (const [kind, c] of [
+      ...set.heroes.map((x) => ["hero", x] as const),
+      ...[...set.carousel, ...(set.feedback ?? [])].map((x) => ["karussell", x] as const),
+    ]) {
       if (!c || !c.url.startsWith("/videos/go/")) continue;
       const f = `public${c.url}`;
       assert.ok(existsSync(f), f);
@@ -182,15 +186,47 @@ test("Behandlungsbegriff in jeder H2, alle Behandlungen", () => {
   }
 });
 
-test("Infusionen: keine Wirkversprechen, keine Nachbehandlung, kein Steckbrief zur Wirkung", () => {
+test("Infusionen: keine Wirkversprechen, keine Nachbehandlung, Garantie als Nachkontrolle und Beratung", () => {
   for (const key of ALL.filter((k) => k.startsWith("infusionen/"))) {
     const keys = adsV2Facts(key).map((f) => f.key);
     assert.ok(!keys.includes("wirkung") && !keys.includes("haltbarkeit"), key);
-    assert.doesNotMatch(allTexts(key).join(" "), /Nachbehandlung|Zufriedenheitsgarantie|Immunsystem|Abwehr/, key);
-    assert.equal(adsV2HasGuarantee(key), false);
-    assert.equal(adsV2PriceInclusion(key), "Inklusive ärztlichem Vorgespräch.");
+    const all = allTexts(key).join(" ");
+    assert.doesNotMatch(all, /Nachbehandlung|Immunsystem|Abwehr/, key);
+    assert.match(all, /kostenlose Nachkontrolle und Beratung \(Zufriedenheitsgarantie\)/, key);
+    assert.match(adsV2FaqsV2(key).map((f) => f.answer).join(" "), /Behandlung nur durch Ärztinnen und Ärzte/, key);
+    assert.equal(adsV2HasGuarantee(key), true);
+    assert.equal(adsV2PriceInclusion(key), "Inklusive ärztlichem Vorgespräch und Nachkontrolle.");
   }
   assert.equal(adsV2PriceInclusion(STIRN), "Inklusive Beratung und Nachkontrolle.");
+});
+
+test("Zufriedenheitsgarantie je Kategorie in Zeitachse und FAQ", () => {
+  const all = (k: string) => allTexts(k).join(" ");
+  for (const key of ALL) assert.match(all(key), /Zufriedenheitsgarantie/, key);
+  assert.match(all(STIRN), /Nachbehandlung nötig, ist sie kostenlos/);
+  assert.match(all(LIPPEN), /Korrekturen der Form sind inklusive/);
+  assert.match(all(LIPPEN), /weiteren ml nach Preisliste/);
+  assert.doesNotMatch(all("skinbooster/profhilo"), /Nachbehandlung/);
+  assert.doesNotMatch(all("hyaluron/hylase"), /Nachbehandlung|weitere ml/);
+});
+
+test("Standort-Ueberschrift mit Praeposition, Name ohne Umbruch", () => {
+  const t = adsV2Terms("skinbooster/profhilo")!;
+  const nb = (s: string) => s.replace(/\u00a0/g, " ").replace(/\u2011/g, "-");
+  assert.equal(nb(adsV2Headings(t, "Düsseldorf Arcaden").location), "So findest du uns – deine Profhilo-Behandlung in den Düsseldorf Arcaden");
+  assert.equal(nb(adsV2AtLocation("Gesundbrunnen-Center")), "im Gesundbrunnen-Center");
+  assert.equal(nb(adsV2AtLocation("Minto")), "im Minto");
+  assert.equal(nb(adsV2AtLocation("Höfe am Brühl")), "in den Höfen am Brühl");
+  assert.equal(nb(adsV2AtLocation("Neu Center")), "am Standort Neu Center");
+  assert.doesNotMatch(adsV2AtLocation("Köln Arcaden").split("den ")[1]!, / /);
+});
+
+test("Kacheln: jede mit Bild (Clip-Poster)", () => {
+  for (const key of ALL) {
+    for (const tile of adsV2ZoneTiles(key, "berlin", "gesundbrunnencenter")) {
+      assert.ok(tile.photo && existsSync(`public${tile.photo}`), `${key} -> ${tile.key}`);
+    }
+  }
 });
 
 test("Behandlungsspezifische Angaben", () => {

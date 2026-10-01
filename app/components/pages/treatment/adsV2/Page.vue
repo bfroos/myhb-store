@@ -19,21 +19,30 @@
       :sticky-cta-label="ADS_V2_CTA.sticky"
     />
 
-    <!-- Vertrauenszeile -->
+    <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
+         uns aus", noch vor der Vertrauenszeile) -->
+    <UiLayoutSectionBlock v-if="clips.carousel.length" spacing="sibling">
+      <div class="v2-card" data-track-placement="v2_clips">
+        <h2 class="v2-h2">{{ H.clips }}</h2>
+        <PagesTreatmentAdsV2ClipCarousel :clips="clips.carousel" />
+      </div>
+    </UiLayoutSectionBlock>
+
+    <!-- Vertrauenszeile: Google -> Garantie -> Aerzt:innen -> ohne Termin -->
     <UiLayoutSectionBlock spacing="sibling">
       <ul class="v2-trust" role="list" data-track-placement="v2_trust">
+        <li v-if="rating" class="v2-trust__item">
+          <IconStarFilled class="v2-trust__icon v2-trust__icon--star" size="22" aria-hidden="true" />
+          <span>
+            <strong>Google {{ ratingLabel }}</strong>
+            <span class="v2-trust__text">{{ ratingCountLabel }} {{ atLocation }}</span>
+          </span>
+        </li>
         <li v-for="item in trustItems" :key="item.key" class="v2-trust__item">
           <component :is="trustIcon(item.key)" class="v2-trust__icon" size="22" aria-hidden="true" />
           <span>
             <strong>{{ item.title }}</strong>
             <span v-if="item.text" class="v2-trust__text">{{ item.text }}</span>
-          </span>
-        </li>
-        <li v-if="rating" class="v2-trust__item">
-          <IconStarFilled class="v2-trust__icon v2-trust__icon--star" size="22" aria-hidden="true" />
-          <span>
-            <strong>Google {{ ratingLabel }}</strong>
-            <span class="v2-trust__text">{{ ratingCountLabel }} in {{ locationName }}</span>
           </span>
         </li>
       </ul>
@@ -49,14 +58,6 @@
             <dd>{{ f.value }}</dd>
           </div>
         </dl>
-      </div>
-    </UiLayoutSectionBlock>
-
-    <!-- Clips -->
-    <UiLayoutSectionBlock v-if="clips.carousel.length">
-      <div class="v2-card" data-track-placement="v2_clips">
-        <h2 class="v2-h2">{{ H.clips }}</h2>
-        <PagesTreatmentAdsV2ClipCarousel :clips="clips.carousel" />
       </div>
     </UiLayoutSectionBlock>
 
@@ -136,8 +137,16 @@
         <ul class="v2-notes" role="list">
           <li>{{ priceInclusion }}</li>
           <li v-if="productNote">{{ productNote }}</li>
-          <li>{{ ADS_V2_PAYMENT_NOTE }}</li>
         </ul>
+        <!-- Raten nur ueber einen vorab gekauften Gutschein (Benjamin,
+             01.10.2026); ohne Fremdlogos, keine Gutschein-Kaufseite vorhanden -->
+        <div class="v2-pay" data-track-placement="v2_payment">
+          <IconCreditCard class="v2-pay__icon" size="22" aria-hidden="true" />
+          <p class="v2-pay__text">
+            <strong>Klarna oder PayPal</strong>
+            <span>{{ ADS_V2_PAYMENT_NOTE }}</span>
+          </p>
+        </div>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
           <SharedButton v-if="discountButton" :button="discountButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'secondary' }" class="v2-btn" />
@@ -150,11 +159,22 @@
       <div class="v2-card" data-track-placement="v2_zones">
         <h2 class="v2-h2">{{ H.zones }}</h2>
         <p v-if="zoneHint" class="v2-lead">{{ zoneHint }}</p>
+        <!-- Jede Kachel mit Bild: Poster des Behandlungsclips, sonst Zonenbild -->
         <ul class="v2-zones" :class="{ 'v2-zones--text': !zoneTilesHaveImages }" role="list">
           <li v-for="tile in zoneTiles" :key="tile.key">
-            <a class="v2-zone" :href="tile.href" data-track-placement="v2_zone_tile">
+            <a class="v2-zone" :class="{ 'v2-zone--photo': !!tile.photo }" :href="tile.href" data-track-placement="v2_zone_tile">
               <img
-                v-if="tile.image"
+                v-if="tile.photo"
+                class="v2-zone__photo"
+                :src="tile.photo"
+                alt=""
+                width="180"
+                height="240"
+                loading="lazy"
+                decoding="async"
+              />
+              <img
+                v-else-if="tile.image"
                 class="v2-zone__img"
                 :src="tile.image.src"
                 alt=""
@@ -180,7 +200,10 @@
             <div class="v2-doctor__photo">
               <UiAtomMediaPicture :media="doc.photo" />
             </div>
-            <strong class="v2-doctor__name">{{ doc.name }}</strong>
+            <span class="v2-doctor__name">
+              <span class="v2-doctor__title">{{ doc.title || "\u00a0" }}</span>
+              <strong class="v2-doctor__full">{{ doc.fullName }}</strong>
+            </span>
           </li>
         </ul>
         <p class="v2-lead">{{ doctorsLead }}</p>
@@ -207,14 +230,18 @@
     </UiLayoutSectionBlock>
 
     <!-- Bewertungen des Standorts -->
-    <UiLayoutSectionBlock v-if="reviews.length">
+    <UiLayoutSectionBlock v-if="reviews.length || clips.feedback.length">
       <div class="v2-card" data-track-placement="v2_reviews">
         <h2 class="v2-h2">{{ H.reviews }}</h2>
         <p v-if="rating" class="v2-lead">
           <IconStarFilled class="v2-star" size="18" aria-hidden="true" />
-          <strong>{{ ratingLabel }}</strong> · {{ ratingCountLabel }} bei Google für {{ locationName }}
+          <strong>{{ ratingLabel }}</strong> · {{ ratingCountLabel }} bei Google {{ atLocation }}
         </p>
-        <ul class="v2-reviews" role="list">
+        <!-- Kundenfeedback-Videos (Benjamin, 01.10.2026): tippen zum Abspielen, mit Ton -->
+        <div v-if="clips.feedback.length" class="v2-feedback" data-track-placement="v2_feedback">
+          <PagesTreatmentAdsV2ClipCarousel :clips="clips.feedback" tap-to-play placement="v2_feedback" />
+        </div>
+        <ul v-if="reviews.length" class="v2-reviews" role="list">
           <li v-for="review in reviews" :key="review.id ?? review.author" class="v2-review">
             <span class="v2-review__stars" role="img" aria-label="5 von 5 Sternen">
               <IconStarFilled v-for="n in 5" :key="n" size="16" aria-hidden="true" />
@@ -283,7 +310,9 @@
     <UiLayoutSectionBlock>
       <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_final">
         <h2 class="v2-h2">{{ H.final }}</h2>
-        <p v-if="offer" class="v2-final__price">{{ offer.heroLine }}</p>
+        <p v-if="offer" class="v2-final__price">
+          {{ priceParts(offer.heroLine)[0] }}<span class="v2-nowrap">{{ priceParts(offer.heroLine)[1] }}</span>
+        </p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
           <SharedButton v-if="discountButton" :button="discountButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'secondary' }" class="v2-btn" />
@@ -297,6 +326,7 @@
 
 <script setup lang="ts">
 import {
+  IconCreditCard,
   IconMapPin,
   IconPhone,
   IconShieldCheck,
@@ -333,7 +363,7 @@ import {
   adsV2ZoneImage,
   adsV2ZoneTiles,
   adsV2PriceInclusion,
-  adsV2HasGuarantee,
+  adsV2AtLocation,
 } from "#shared/adsTemplateV2Content";
 import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT } from "#shared/newCustomerOffer";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
@@ -406,6 +436,17 @@ const offer = useNewCustomerOffer(
 // Stadt der Seite: Clips mit fremdem Stadtnamen im Bild fallen weg.
 // Betrag und Euro-Zeichen nicht trennen ("149,99" / "€" auf zwei Zeilen in
 // den schmalen Preiskarten).
+/**
+ * "Neukunden ab 239,99 €*" -> ["Neukunden ", "ab 239,99 €*"]: der Betrag samt
+ * "ab" und "€*" bricht nicht um (iPhone SE, 320 px).
+ */
+function priceParts(text: string | null | undefined): [string, string] {
+  const t = String(text ?? "");
+  const m = /(?:ab\s)?\d[\d.]*(?:,\d{2})?\s?€\*?(?:\s+pro\s+Zone\*?)?/.exec(t);
+  if (!m) return [t, ""];
+  return [t.slice(0, m.index), t.slice(m.index).replace(/\s/g, "\u00a0")];
+}
+
 function keepAmount(text: string | null | undefined): string {
   return String(text ?? "").replace(/(\d) (€)/g, "$1\u00a0$2");
 }
@@ -460,11 +501,9 @@ const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
 const zoneTiles = computed(() => adsV2ZoneTiles(pathKey.value, citySlug, locSlug));
 // Ohne ein einziges Zonenbild (Skinbooster, Infusionen): schlichte Textkacheln.
 const zoneTilesHaveImages = computed(() => zoneTiles.value.some((t) => !!t.image));
-const doctorsLead = computed(() =>
-  adsV2HasGuarantee(pathKey.value)
-    ? "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle."
-    : "Das Vorgespräch zu deiner Infusion führt bei uns eine Ärztin oder ein Arzt.",
-);
+const doctorsLead = "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle.";
+// "in den Köln Arcaden", "im Minto" (ohne Umbruch im Namen)
+const atLocation = computed(() => adsV2AtLocation(locationName.value));
 const zoneHint = computed(() => adsV2ZoneHint(priceCards.value));
 const consultPhoto = computed(() => adsV2ConsultPhoto(pathKey.value));
 const priceCards = computed(() =>
@@ -472,9 +511,24 @@ const priceCards = computed(() =>
 );
 const productNote = computed(() => adsV2ProductNote(pathKey.value));
 
+/**
+ * Zwei feste Zeilen (Benjamin, 01.10.2026: "Arzt Wisam" einzeilig neben
+ * "Arzt / Mamdoh" zweizeilig): oben die Anrede ("Arzt", "Ärztin", "Dr."),
+ * darunter der Name. Die Anrede steht in Strapi teils im Vornamen.
+ */
+function doctorLines(display: string): { title: string; fullName: string } {
+  const m = /^((?:Dr\.\s*(?:med\.\s*)?(?:dent\.\s*)?)|Ärztin|Arzt|Prof\.\s*(?:Dr\.\s*)?)\s*(.+)$/.exec(display.trim());
+  return m ? { title: m[1]!.trim(), fullName: m[2]!.trim() } : { title: "", fullName: display.trim() };
+}
+
 const doctors = computed(() =>
   (extras.value?.doctors ?? [])
-    .map((d: any) => ({ id: d.id, name: employeeDisplayName(d), photo: d.photo }))
+    .map((d: any) => ({
+      id: d.id,
+      name: employeeDisplayName(d),
+      ...doctorLines(employeeDisplayName(d)),
+      photo: d.photo,
+    }))
     .filter((d) => d.name && d.photo),
 );
 const reviews = computed(() =>
@@ -723,6 +777,26 @@ const routeHref = computed(() => {
   height: 86px;
 }
 
+/* Kachel mit Foto (Poster des Behandlungsclips): Bild fuellt die Breite */
+.v2-zone--photo {
+  padding: 0 0 var(--space-300);
+  overflow: hidden;
+}
+
+.v2-zone__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: center 40%;
+  background: #fbf7f5;
+}
+
+.v2-zone--photo .v2-zone__label {
+  padding: 0 var(--space-200);
+}
+
 .v2-zone__img--empty {
   display: block;
   border-radius: 12px;
@@ -730,7 +804,7 @@ const routeHref = computed(() => {
 }
 
 .v2-zone__label {
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: var(--font-bold);
   line-height: 1.2;
   hyphens: auto;
@@ -944,9 +1018,64 @@ const routeHref = computed(() => {
   object-position: center 25%;
 }
 
+/* Zwei feste Zeilen (Titel / Name), damit alle Namen auf einer Hoehe stehen */
 .v2-doctor__name {
+  display: grid;
+  grid-template-rows: auto auto;
+  width: 100%;
   font-size: var(--font-sm);
   line-height: var(--line-sm);
+}
+
+.v2-doctor__title {
+  color: var(--color-text-light);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.v2-doctor__full {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: calc(2em * var(--line-sm, 1.5));
+  hyphens: auto;
+}
+
+/* Ratenzahlung ueber Gutschein */
+.v2-pay {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-300);
+  margin-top: var(--space-400);
+  padding: var(--space-400);
+  border-radius: var(--border-radius-200, 12px);
+  background: #fbeeee;
+}
+
+.v2-pay__icon {
+  flex: 0 0 auto;
+  color: #b91c1c;
+}
+
+.v2-pay__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-100);
+  margin: 0;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+}
+
+/* Kundenfeedback-Videos ueber den Textbewertungen */
+.v2-feedback {
+  margin-bottom: var(--space-500);
+}
+
+.v2-nowrap {
+  white-space: nowrap;
 }
 
 /* Bewertungen */
