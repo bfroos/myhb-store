@@ -202,28 +202,75 @@ export const ADS_V2_CTA = {
 
 export type AdsV2TrustItem = { key: string; title: string; text?: string };
 
-/** Ohne Zufriedenheitsgarantie bei Infusionen (keine Nachbehandlung). */
+/**
+ * Zufriedenheitsgarantie je Kategorie (Benjamin, 01.10.2026: gilt fuer alles).
+ * - Muskelrelaxans: Nachkontrolle mit kostenloser Nachbehandlung (am staerksten).
+ * - Hyaluron: Nachkontrolle und Korrektur der Form ja; wer nach dem
+ *   Abschwellen mehr Volumen (weitere ml) moechte, zahlt das Material.
+ * - Hyaluron aufloesen, Skinbooster, Mesotherapie, PRP, Infusionen:
+ *   Nachkontrolle und Beratung (kein Heilversprechen).
+ */
+export type AdsV2GuaranteeKind = "mr" | "hyaluron" | "check";
+
+export function adsV2GuaranteeKind(pathKey: string | null | undefined): AdsV2GuaranteeKind {
+  const key = basePathKey(pathKey);
+  const cat = adsV2Category(key);
+  if (cat === "muskelrelaxans") return "mr";
+  if (cat === "hyaluron" && !key.endsWith("/hylase")) return "hyaluron";
+  return "check";
+}
+
+export const ADS_V2_GUARANTEE: Readonly<
+  Record<AdsV2GuaranteeKind, { short: string; timeline: string; faq: string }>
+> = {
+  mr: {
+    short: "Kostenlose Nachkontrolle nach 14 Tagen inkl. kostenloser Nachbehandlung",
+    timeline:
+      "Nach 14 Tagen schauen wir gemeinsam auf das Ergebnis. Ist eine Nachbehandlung nötig, ist sie kostenlos (Zufriedenheitsgarantie).",
+    faq: "Dann sag es uns: Nach 14 Tagen gibt es eine kostenlose Nachkontrolle, eine Nachbehandlung ist dabei inklusive und kostenlos (Zufriedenheitsgarantie).",
+  },
+  hyaluron: {
+    short:
+      "Kostenlose Nachkontrolle nach 14 Tagen; Korrekturen der Form inklusive – zusätzliches Volumen (weitere ml) wird nach Preisliste berechnet",
+    timeline:
+      "Nach 14 Tagen prüfen wir das Ergebnis kostenlos. Korrekturen der Form sind inklusive; möchtest du nach dem Abschwellen mehr Volumen, werden die weiteren ml nach Preisliste berechnet (Zufriedenheitsgarantie).",
+    faq: "Nach 14 Tagen gibt es eine kostenlose Nachkontrolle. Korrekturen der Form sind inklusive (Zufriedenheitsgarantie). Möchtest du nach dem Abschwellen mehr Volumen, also weitere ml, wird das zusätzliche Material nach Preisliste berechnet.",
+  },
+  check: {
+    short: "Kostenlose Nachkontrolle und Beratung innerhalb von 14 Tagen",
+    timeline:
+      "Innerhalb von 14 Tagen schauen wir uns das Ergebnis kostenlos an und beraten dich zum weiteren Vorgehen (Zufriedenheitsgarantie).",
+    faq: "Innerhalb von 14 Tagen gibt es eine kostenlose Nachkontrolle und Beratung (Zufriedenheitsgarantie). Ärztin oder Arzt schauen sich das Ergebnis an und besprechen mit dir, wie es weitergeht.",
+  },
+};
+
+export function adsV2Guarantee(pathKey: string | null | undefined) {
+  return ADS_V2_GUARANTEE[adsV2GuaranteeKind(pathKey)];
+}
+
+/**
+ * Vertrauenszeile (Benjamin, 01.10.2026): nach der Google-Bewertung (steht in
+ * der Seite davor) Garantie -> nur Aerztinnen und Aerzte -> auch ohne Termin.
+ * Die Garantie gilt fuer alle Kategorien, Text je Kategorie.
+ */
 export function adsV2TrustItems(pathKey?: string | null): AdsV2TrustItem[] {
-  const items: AdsV2TrustItem[] = [
+  return [
     {
       key: "garantie",
       title: "Zufriedenheitsgarantie",
-      text: "Kostenlose ärztliche Nachkontrolle mit Nachbehandlung innerhalb von 14 Tagen",
-    },
-    {
-      key: "walkin",
-      title: "Auch ohne Termin",
-      text: "Komm vorbei und frag, ob gerade Zeit ist. Mit Termin bist du auf der sicheren Seite.",
+      text: adsV2Guarantee(pathKey).short,
     },
     {
       key: "aerzte",
       title: "Nur Ärztinnen und Ärzte",
       text: "Behandlung nur durch Ärztinnen und Ärzte",
     },
+    {
+      key: "walkin",
+      title: "Auch ohne Termin",
+      text: "Komm vorbei und frag, ob gerade Zeit ist. Mit Termin bist du auf der sicheren Seite.",
+    },
   ];
-  return basePathKey(pathKey).startsWith("infusionen/")
-    ? items.filter((i) => i.key !== "garantie")
-    : items;
 }
 
 export type AdsV2Step = { title: string; text: string };
@@ -248,7 +295,7 @@ export function adsV2Steps(
   };
   const control = {
     title: "Nachkontrolle",
-    text: "Innerhalb von 14 Tagen schauen wir gemeinsam auf das Ergebnis und behandeln bei Bedarf kostenlos nach.",
+    text: adsV2Guarantee(pathKey).timeline,
   };
   if (cat === "muskelrelaxans") {
     const d = shortDuration(strapiDuration, "20–30 Minuten");
@@ -296,8 +343,14 @@ export function adsV2ProductNote(pathKey: string | null | undefined): string | n
   return null;
 }
 
+/**
+ * Ratenzahlung (Benjamin, 01.10.2026): Raten gibt es nur ueber einen vorab
+ * gekauften Gutschein, beim Gutscheinkauf mit Klarna oder PayPal. Eine
+ * allgemeine Gutschein-Kaufseite gibt es derzeit weder auf go. noch im
+ * Shop (nur saisonale Gutscheine), darum ohne Link.
+ */
 export const ADS_V2_PAYMENT_NOTE =
-  "Vorab bezahlen oder in Raten mit Klarna oder PayPal.";
+  "Lieber in Raten? Kauf vorab einen Gutschein und zahl ihn bequem mit Klarna oder PayPal in Raten.";
 
 export type AdsV2Faq = { question: string; answer: string };
 
@@ -307,8 +360,7 @@ export function adsV2Faqs(
 ): AdsV2Faq[] {
   const cat = adsV2Category(pathKey);
   const clean = (v?: string | null) => (v ?? "").replace(/\s+/g, " ").trim();
-  const guarantee =
-    "Innerhalb von 14 Tagen gibt es eine kostenlose ärztliche Nachkontrolle, bei Bedarf mit Nachbehandlung.";
+  const guarantee = adsV2Guarantee(pathKey).faq;
   const who =
     "Ausschließlich Ärztinnen und Ärzte. Sie beraten dich vorher und sagen dir ehrlich, wenn eine Behandlung nicht zu dir passt.";
 
