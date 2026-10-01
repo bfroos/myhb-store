@@ -1,21 +1,31 @@
 <template>
-  <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
-  <PagesTreatmentOrderedBlocks
-    :fixed-blocks="fixedBlocks"
-    :dynamic-blocks="treatmentPage?.blocks"
-    :order="blockOrder"
+  <!-- go.-Seitenvorlage v2 (shared/adsTemplateV2.ts, seit 01.10.2026 live) -->
+  <PagesTreatmentAdsV2Page
+    v-if="isV2 && fixedBlocks?.hero"
+    :hero="fixedBlocks.hero"
+    :treatment-page="treatmentPage"
+    :location="location"
   />
-  <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
-  <BlockAdsPriceFootnote
-    v-if="isAdsMode && fixedBlocks?.hero"
-    :treatment="fixedBlocks.hero.treatment"
-    :treatment-path-key="fixedBlocks.hero.treatmentPathKey"
-  />
+  <template v-else>
+    <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
+    <PagesTreatmentOrderedBlocks
+      :fixed-blocks="fixedBlocks"
+      :dynamic-blocks="treatmentPage?.blocks"
+      :order="blockOrder"
+    />
+    <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
+    <BlockAdsPriceFootnote
+      v-if="isAdsMode && fixedBlocks?.hero"
+      :treatment="fixedBlocks.hero.treatment"
+      :treatment-path-key="fixedBlocks.hero.treatmentPathKey"
+    />
+  </template>
 </template>
 <script setup lang="ts">
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
 import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
+import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import {
   LOCATION_ADS_BLOCK_ORDER,
   LOCATION_SEO_BLOCK_ORDER,
@@ -36,7 +46,30 @@ const {
 } = useLocationTreatmentPage();
 
 const { isAdsMode } = useSiteModeFlags();
+// go.: Seitenvorlage v2 fuer die Seiten aus ADS_TEMPLATE_V2_PAGES.
+const isV2 = useAdsTemplateV2();
 const pageLoaded = await fetchPage();
+
+// Tracking: Ereignisse auf v2-Seiten tragen `template: "v2"` (Vorschau:
+// "v2-preview"), damit sich vorher/nachher trennen laesst
+// (useGoogleAnalytics liest window.__myhbPreviewTemplate).
+const V2_TEMPLATE = "v2";
+if (import.meta.client && isV2.value) {
+  (window as any).__myhbPreviewTemplate = V2_TEMPLATE;
+  ((window as any).dataLayer = (window as any).dataLayer || []).push({
+    template: V2_TEMPLATE,
+  });
+}
+onBeforeUnmount(() => {
+  if (!import.meta.client) return;
+  if ((window as any).__myhbPreviewTemplate !== V2_TEMPLATE) return;
+  // Beim Wechsel auf die naechste v2-Seite hat deren setup die Markierung
+  // schon gesetzt (die URL ist hier bereits die neue) - dann stehen lassen.
+  const next = /^\/standorte\/([^/]+)\/([^/]+)\/(.+?)\/?$/.exec(window.location.pathname);
+  if (next && isAdsTemplateV2LivePage(next[1], next[2], next[3])) return;
+  delete (window as any).__myhbPreviewTemplate;
+  (window as any).dataLayer?.push({ template: undefined });
+});
 
 // blockOrder sortiert nur; nicht gelistete Bloecke werden in Default-
 // Reihenfolge angehaengt. Ausgeblendet wird ausschliesslich ueber
@@ -98,6 +131,8 @@ const breadcrumbSchema = computed(() =>
 // Schema.org FAQPage (nur wenn FAQ-Block sichtbar ist)
 const faqSchema = computed(() => {
   if (!fixedBlocks.value?.faq) return null;
+  // v2 zeigt eigene Fragen statt des Strapi-FAQ-Blocks.
+  if (isV2.value) return null;
   // Ausgeblendete Bloecke duerfen nicht im strukturierten Datensatz landen -
   // sonst bewirbt Google FAQs, die auf der Seite nicht existieren.
   if (!blockOrder.value.includes("faq")) return null;
@@ -114,6 +149,8 @@ const faqSchema = computed(() => {
 // Schema.org VideoObject (from about block videos)
 const videoSchema = computed(() => {
   if (!blockOrder.value.includes("about")) return null;
+  // v2 zeigt den About-Block (und sein Video) nicht.
+  if (isV2.value) return null;
 
   const about = fixedBlocks.value?.about as any;
 

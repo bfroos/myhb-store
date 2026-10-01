@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 216" width="160" height="216" role="img" aria-labelledby="t d"><title id="t">Einstichpunkte Lip Flip</title><desc id="d">Schematische Nahansicht des Mundes als Linienzeichnung. Vier Punkte knapp oberhalb der Oberlippenkontur markieren die Einstichstellen für den Lip Flip.</desc><rect x="0" y="0" width="160" height="216" rx="16" fill="#fbf7f5"/><g fill="none" stroke="#8a7873" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+<path d="M60 42C66 52 94 52 100 42"/>
+<path d="M56 38C52 44 54 50 60 50M104 38C108 44 106 50 100 50" stroke-opacity=".6"/>
+<path d="M73 56L71 88M87 56L89 88" stroke-opacity=".35"/>
+<path d="M26 110C42 98 60 87 71 90C75 91 78 94 80 96C82 94 85 91 89 90C100 87 118 98 134 110"/>
+<path d="M26 110C44 140 116 140 134 110"/>
+<path d="M26 110C50 115 110 115 134 110" stroke-opacity=".6"/>
+<path d="M38 172C54 200 106 200 122 172" stroke-opacity=".45"/>
+</g><g fill="#b91c1c"><circle cx="52" cy="90" r="7" fill-opacity=".16"/><circle cx="52" cy="90" r="3.2"/><circle cx="68" cy="82" r="7" fill-opacity=".16"/><circle cx="68" cy="82" r="3.2"/><circle cx="92" cy="82" r="7" fill-opacity=".16"/><circle cx="92" cy="82" r="3.2"/><circle cx="108" cy="90" r="7" fill-opacity=".16"/><circle cx="108" cy="90" r="3.2"/></g></svg>

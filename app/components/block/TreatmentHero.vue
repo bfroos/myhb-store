@@ -88,7 +88,8 @@
                   class="hero__price"
                   :data-offer-kind="newCustomerOffer.kind"
                 >
-                  {{ newCustomerOffer.heroLine }}
+                  <!-- v2: Betrag und "€*" nicht trennen ("239,99" / "€*") -->
+                  {{ templateV2 ? newCustomerOffer.heroLine.replace(/(\d) (€)/g, "$1 $2") : newCustomerOffer.heroLine }}
                 </p>
               </template>
               <template v-else>

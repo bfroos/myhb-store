@@ -12,7 +12,8 @@
  *   URL/Name/Alt). `adsClipAllowed` prueft das erneut, falls hier einmal ein
  *   gesperrtes Video eingetragen wird.
  * - Kein Vorher/Nachher: Behandlungsablauf und Kundinnen-Clips.
- * - Hero-Clip nur, wenn ein tauglicher existiert; sonst bleibt das Hero-Foto.
+ * - Hero-Clip nur, wenn ein tauglicher existiert UND vermessen ist (focusY,
+ *   captionZones) und keinen fremden Stadtnamen zeigt; sonst Hero-Foto.
  *   `start`/`end` schneiden ein laengeres Video im Browser zu (546: nur
  *   Sekunde 0-10, am Ende steht ein Rabatt-Text im Bild).
  * - Poster: ohne `posterUrl` zeigt der Hero sein Foto darunter, das Karussell
@@ -80,7 +81,7 @@ export type AdsClipSet = {
  */
 const heroClip = (
   name: string,
-  crop: Pick<AdsClip, "focusY" | "captionZones"> = {},
+  crop: Pick<AdsClip, "focusY" | "captionZones" | "city"> = {},
 ): AdsClip => ({
   url: `/videos/go/${name}.mp4`,
   posterUrl: `/videos/go/${name}-poster.jpg`,
@@ -112,6 +113,51 @@ const STIRN_7S_CROP = {
   // Stirn mit Markierungen bei 15-45 %
   focusY: 0.32,
   captionZones: [[0.61, 0.87]] as Array<[number, number]>,
+};
+
+// Vermessen am 01.10.2026 wie #206: Einzelbilder alle 0,5 s, Texterkennung
+// (Apple Vision) fuer die Untertitel-Zeilen, Gesichtserkennung fuer den
+// Fokus; Zonen = gemessene Zeilen plus ~0,03 Rand. Das Logo oben ("MY
+// HEALTH & BEAUTY", neues Logo) zaehlt nicht als Untertitel.
+const KRAEHEN_7S_CROP = {
+  // Gesicht 31-69 %, in der Nahaufnahme (1,5-4 s) Augen bei ~20 %
+  focusY: 0.33,
+  // Untertitel 74-82 %
+  captionZones: [[0.71, 0.85]] as Array<[number, number]>,
+};
+const LIPFLIP_5S_CROP = {
+  // Gesicht 19-36 %, Lippen bei ~30 %
+  focusY: 0.3,
+  // Aufkleber "Top Beratung" 15-19 % (ab 4 s), Untertitel 74-82 %
+  captionZones: [
+    [0.12, 0.2],
+    [0.71, 0.85],
+  ] as Array<[number, number]>,
+};
+const MASSETER_1_CROP = {
+  // Gesicht 34-65 %, Kieferwinkel/Kaumuskel bei ~55 %; kein Text im Bild
+  focusY: 0.5,
+  captionZones: [] as Array<[number, number]>,
+};
+const KINN_1_CROP = {
+  // Gesicht 32-53 %, Kinn bei ~50 %
+  focusY: 0.45,
+  // "KINNAUFBAU, KAISERSLAUTERN" 65-68 % (ganze Laufzeit), Untertitel 69-76 %
+  captionZones: [[0.62, 0.79]] as Array<[number, number]>,
+  city: "kaiserslautern",
+};
+const JAW_1_CROP = {
+  // Gesicht 30-46 %, Kieferlinie bei ~44 %
+  focusY: 0.4,
+  // "JAWLIN BEHANDLUNG, KÖLN" 66-71 % (ganze Laufzeit), Untertitel 76-79 %
+  captionZones: [[0.63, 0.82]] as Array<[number, number]>,
+  city: "koeln",
+};
+const WANGEN_7S_CROP = {
+  // Gesicht 38-58 %, Wangen bei ~48 %
+  focusY: 0.47,
+  // Untertitel 75-80 % (Wandbild "Happy Place" 20-31 % ist kein Untertitel)
+  captionZones: [[0.72, 0.83]] as Array<[number, number]>,
 };
 
 
@@ -146,21 +192,20 @@ const CLIPS: Record<string, AdsClipSet> = {
       clip("lippen-karussell-9", 1073, "Zwei Cousinen erzählen"),
     ],
   },
-  // Vorrat (Seiten noch nicht in ADS_TEMPLATE_V2_PAGES):
   "muskelrelaxans/zornesfalte": {
     hero: heroClip("hero-stirn-zornesfalte-7s", STIRN_7S_CROP),
     carousel: [MR.zornesMan, MR.marking, MR.firstTime, MR.zornesKoeln, MR.threeZones, MR.koeln],
   },
   "muskelrelaxans/kraehenfuesse": {
-    hero: heroClip("hero-kraehenfuesse-7s"),
+    hero: heroClip("hero-kraehenfuesse-7s", KRAEHEN_7S_CROP),
     carousel: [MR.marking, MR.patricia, MR.threeZones, MR.koeln, MR.trio],
   },
   "muskelrelaxans/lipflip": {
-    hero: heroClip("hero-lipflip-5s"),
+    hero: heroClip("hero-lipflip-5s", LIPFLIP_5S_CROP),
     carousel: [clip("lipflip-karussell-1", 1053, "Lip Flip in Berlin", "berlin")],
   },
   "muskelrelaxans/zaehneknirschen-bruxismus": {
-    hero: heroClip("hero-masseter-1"),
+    hero: heroClip("hero-masseter-1", MASSETER_1_CROP),
     carousel: [
       clip("masseter-karussell-5", 1052, "Kundin in den Köln Arcaden", "koeln"),
       clip("masseter-karussell-3", 521, "Aufklärung vor der Behandlung"),
@@ -168,11 +213,11 @@ const CLIPS: Record<string, AdsClipSet> = {
     ],
   },
   "hyaluron/kinnkorrektur": {
-    hero: heroClip("hero-kinn-1"),
+    hero: heroClip("hero-kinn-1", KINN_1_CROP),
     carousel: [clip("kinn-karussell-1", 523, "Kundin in Recklinghausen", "recklinghausen")],
   },
   "hyaluron/jawline": {
-    hero: heroClip("hero-jaw-1"),
+    hero: heroClip("hero-jaw-1", JAW_1_CROP),
     carousel: [
       clip("jaw-karussell-1", 215, "Kundin in Köln", "koeln"),
       clip("jaw-karussell-3", 1078, "Behandlung durch Ärztinnen und Ärzte"),
@@ -180,7 +225,7 @@ const CLIPS: Record<string, AdsClipSet> = {
     ],
   },
   "hyaluron/wangenaufbau": {
-    hero: heroClip("hero-wangenaufbau-7s"),
+    hero: heroClip("hero-wangenaufbau-7s", WANGEN_7S_CROP),
     carousel: [clip("wangen-karussell-1", 859, "Wangenaufbau mit 0,5 ml Hyaluron")],
   },
   "skinbooster/profhilo": {
@@ -226,8 +271,15 @@ export function adsClipsFor(
   const set = CLIPS[baseKey(pathKey)];
   if (!set) return { carousel: [] };
   const city = String(citySlug ?? "").toLowerCase();
+  // Hero nur mit vermessenem Ausschnitt (focusY) und ohne fremden Stadtnamen.
+  const hero =
+    adsClipAllowed(set.hero) &&
+    typeof set.hero.focusY === "number" &&
+    (!set.hero.city || set.hero.city.toLowerCase() === city)
+      ? set.hero
+      : undefined;
   return {
-    hero: adsClipAllowed(set.hero) ? set.hero : undefined,
+    hero,
     carousel: set.carousel
       .filter(adsClipAllowed)
       .filter((c) => !c.city || c.city.toLowerCase() === city)
