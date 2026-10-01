@@ -64,7 +64,7 @@
     <UiLayoutSectionBlock v-if="terms">
       <div class="v2-card" data-track-placement="v2_how">
         <h2 class="v2-h2">{{ H.how }}</h2>
-        <div class="v2-how">
+        <div class="v2-how" :class="{ 'v2-how--text': !zoneImage }">
           <img
             v-if="zoneImage"
             class="v2-how__img"
@@ -134,7 +134,7 @@
           </li>
         </ul>
         <ul class="v2-notes" role="list">
-          <li>Inklusive Beratung und Nachkontrolle.</li>
+          <li>{{ priceInclusion }}</li>
           <li v-if="productNote">{{ productNote }}</li>
           <li>{{ ADS_V2_PAYMENT_NOTE }}</li>
         </ul>
@@ -150,7 +150,7 @@
       <div class="v2-card" data-track-placement="v2_zones">
         <h2 class="v2-h2">{{ H.zones }}</h2>
         <p v-if="zoneHint" class="v2-lead">{{ zoneHint }}</p>
-        <ul class="v2-zones" role="list">
+        <ul class="v2-zones" :class="{ 'v2-zones--text': !zoneTilesHaveImages }" role="list">
           <li v-for="tile in zoneTiles" :key="tile.key">
             <a class="v2-zone" :href="tile.href" data-track-placement="v2_zone_tile">
               <img
@@ -163,7 +163,7 @@
                 loading="lazy"
                 decoding="async"
               />
-              <span v-else class="v2-zone__img v2-zone__img--empty" aria-hidden="true" />
+              <span v-else-if="zoneTilesHaveImages" class="v2-zone__img v2-zone__img--empty" aria-hidden="true" />
               <span class="v2-zone__label">{{ tile.label }}</span>
             </a>
           </li>
@@ -183,7 +183,7 @@
             <strong class="v2-doctor__name">{{ doc.name }}</strong>
           </li>
         </ul>
-        <p class="v2-lead">Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle.</p>
+        <p class="v2-lead">{{ doctorsLead }}</p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
         </div>
@@ -332,6 +332,8 @@ import {
   adsV2ZoneHint,
   adsV2ZoneImage,
   adsV2ZoneTiles,
+  adsV2PriceInclusion,
+  adsV2HasGuarantee,
 } from "#shared/adsTemplateV2Content";
 import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT } from "#shared/newCustomerOffer";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
@@ -409,7 +411,8 @@ function keepAmount(text: string | null | undefined): string {
 }
 
 const clips = computed(() => adsClipsFor(pathKey.value, citySlug));
-const trustItems = adsV2TrustItems();
+const trustItems = computed(() => adsV2TrustItems(pathKey.value));
+const priceInclusion = computed(() => adsV2PriceInclusion(pathKey.value));
 function trustIcon(key: string) {
   if (key === "garantie") return IconShieldCheck;
   if (key === "walkin") return IconWalk;
@@ -455,6 +458,13 @@ const timeline = computed(() => adsV2Timeline(pathKey.value));
 const aftercare = computed(() => adsV2Aftercare(pathKey.value));
 const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
 const zoneTiles = computed(() => adsV2ZoneTiles(pathKey.value, citySlug, locSlug));
+// Ohne ein einziges Zonenbild (Skinbooster, Infusionen): schlichte Textkacheln.
+const zoneTilesHaveImages = computed(() => zoneTiles.value.some((t) => !!t.image));
+const doctorsLead = computed(() =>
+  adsV2HasGuarantee(pathKey.value)
+    ? "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle."
+    : "Das Vorgespräch zu deiner Infusion führt bei uns eine Ärztin oder ein Arzt.",
+);
 const zoneHint = computed(() => adsV2ZoneHint(priceCards.value));
 const consultPhoto = computed(() => adsV2ConsultPhoto(pathKey.value));
 const priceCards = computed(() =>
@@ -594,6 +604,17 @@ const routeHref = computed(() => {
 .v2-how__img {
   width: 112px;
   height: auto;
+}
+
+/* ohne Zonenbild: Text ueber die ganze Breite */
+.v2-how.v2-how--text {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Kacheln ohne Bilder: nur Text, niedriger */
+.v2-zones--text .v2-zone {
+  justify-content: center;
+  min-height: 64px;
 }
 
 .v2-how__text {

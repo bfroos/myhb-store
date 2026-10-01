@@ -12,6 +12,10 @@ import {
   adsV2ZoneHint,
   adsV2ZoneImage,
   adsV2ZoneTiles,
+  adsV2ContentKeys,
+  adsV2HasGuarantee,
+  adsV2PriceInclusion,
+  adsV2Zones,
 } from "./adsTemplateV2Content.ts";
 import { adsClipEntries } from "./adsClips.ts";
 
@@ -41,8 +45,8 @@ test("Musterseiten: Begriffe, 6 Steckbrief-Zeilen, 4 Zeitachsen-Schritte, 7-8 FA
     const n = adsV2Aftercare(key).length;
     assert.ok(n >= 5 && n <= 6, `${key}: ${n}`);
   }
-  assert.equal(adsV2Terms("hyaluron/hylase"), null);
-  assert.deepEqual(adsV2Facts("hyaluron/hylase"), []);
+  assert.equal(adsV2Terms("fettwegspritze"), null);
+  assert.deepEqual(adsV2Facts("fettwegspritze"), []);
 });
 
 test("Steckbrief-Werte nach Benjamin", () => {
@@ -100,8 +104,8 @@ test("Weitere Zonen: gegenseitig, gleicher Standort, echte go.-Seite", () => {
   assert.deepEqual(tiles.map((t) => t.key), ["zornesfalte", "kraehenfuesse", "browlift"]);
   assert.equal(tiles[0]!.href, "/standorte/koeln/koeln-arcaden/muskelrelaxans/zornesfalte");
   assert.equal(tiles[2]!.image?.src, "/images/go/zonen/zone-browlift.svg");
-  assert.deepEqual(adsV2ZoneTiles(LIPPEN, "koeln", "koeln-arcaden"), []);
-  assert.deepEqual(adsV2ZoneTiles("muskelrelaxans/masseter", "koeln", "koeln-arcaden"), []);
+  assert.deepEqual(adsV2ZoneTiles(LIPPEN, "koeln", "koeln-arcaden").map((t) => t.key), ["lippenkorrektur", "lipflip", "nasolabialfalte"]);
+  assert.deepEqual(adsV2ZoneTiles("fettwegspritze", "koeln", "koeln-arcaden"), []);
   assert.equal(adsV2ZoneHint([{ note: "89,99 € je Zone" }, { note: "79,99 € je Zone" }, {}]), "ab 2 Zonen 79,99 € pro Zone*");
   assert.equal(adsV2ZoneHint([{}]), null);
 });
@@ -134,4 +138,87 @@ test("Clips: Dateien im Repo, Groessen, neutraler Name, Poster", () => {
       assert.ok(statSync(f).size <= max, `${f} ${statSync(f).size}`);
     }
   }
+});
+
+// ---------------------------------------------------------------- alle Behandlungen (01.10.2026)
+
+const ALL = adsV2ContentKeys();
+const STRICT = /botox|btx|botulinum|vorher.{0,5}nachher|before|kostenlos absagen|ärztlich geprüft|paket|garantiert|heilt|heilung|schmerzfrei|stärkt (das|dein) immun|entgift/i;
+
+test("Alle Behandlungen: Begriffe, Steckbrief, Zeitachse, 7 FAQ, Nachsorge, Kacheln", () => {
+  assert.equal(ALL.length, 39);
+  for (const key of ALL) {
+    const t = adsV2Terms(key)!;
+    assert.ok(t, key);
+    const sentences = t.howItWorks.split(/(?<=\.)\s/).length;
+    assert.ok(sentences >= 2 && sentences <= 3, `${key}: Wirkweise ${sentences} Saetze`);
+    const facts = adsV2Facts(key);
+    assert.ok(facts.length >= 6 && facts.length <= 7, `${key}: ${facts.length} Steckbrief-Zeilen`);
+    assert.equal(adsV2Timeline(key).length, 4, key);
+    assert.equal(adsV2FaqsV2(key).length, 7, key);
+    const questions = adsV2FaqsV2(key).map((f) => f.question);
+    assert.equal(new Set(questions).size, 7, `${key}: doppelte Frage`);
+    assert.ok(questions.some((q) => /Nebenwirkungen/.test(q)), `${key}: Nebenwirkungen`);
+    const n = adsV2Aftercare(key).length;
+    assert.ok(n >= 5 && n <= 7, `${key}: ${n} Nachsorge`);
+    const tiles = adsV2ZoneTiles(key, "berlin", "gesundbrunnencenter");
+    assert.ok(tiles.length >= 1 && tiles.length <= 3, `${key}: ${tiles.length} Kacheln`);
+    for (const tile of tiles) {
+      assert.match(tile.href, /^\/standorte\/berlin\/gesundbrunnencenter\/[a-z-]+\/[a-z0-9-]+$/);
+      assert.ok(ALL.includes(tile.href.split("/").slice(4).join("/")), tile.href);
+    }
+    for (const text of allTexts(key)) assert.doesNotMatch(text, STRICT, `${key}: ${text}`);
+  }
+});
+
+test("Behandlungsbegriff in jeder H2, alle Behandlungen", () => {
+  for (const key of ALL) {
+    const t = adsV2Terms(key)!;
+    const h = adsV2Headings(t, "Forum Duisburg");
+    const words = [t.label, t.treatment, t.object].join(" ").split(/[\s-]+/).filter((w) => w.length > 3);
+    for (const [k, v] of Object.entries(h)) {
+      assert.ok(words.some((w) => v.includes(w)), `${key} ${k}: ${v}`);
+    }
+  }
+});
+
+test("Infusionen: keine Wirkversprechen, keine Nachbehandlung, kein Steckbrief zur Wirkung", () => {
+  for (const key of ALL.filter((k) => k.startsWith("infusionen/"))) {
+    const keys = adsV2Facts(key).map((f) => f.key);
+    assert.ok(!keys.includes("wirkung") && !keys.includes("haltbarkeit"), key);
+    assert.doesNotMatch(allTexts(key).join(" "), /Nachbehandlung|Zufriedenheitsgarantie|Immunsystem|Abwehr/, key);
+    assert.equal(adsV2HasGuarantee(key), false);
+    assert.equal(adsV2PriceInclusion(key), "Inklusive ärztlichem Vorgespräch.");
+  }
+  assert.equal(adsV2PriceInclusion(STIRN), "Inklusive Beratung und Nachkontrolle.");
+});
+
+test("Behandlungsspezifische Angaben", () => {
+  const f = (key: string) => Object.fromEntries(adsV2Facts(key).map((x) => [x.key, x.value]));
+  assert.equal(f("muskelrelaxans/masseter").haltbarkeit, "ca. 4–6 Monate");
+  assert.equal(f("muskelrelaxans/lipflip").haltbarkeit, "ca. 2–3 Monate");
+  assert.equal(f("hyaluron/jawline").haltbarkeit, "ca. 9–12 Monate");
+  assert.equal(f("hyaluron/full-face-hyaluron").dauer, "60–90 Minuten");
+  assert.match(String(f("skinbooster/profhilo").sitzungen), /2/);
+  assert.match(String(f("anti-haarausfall/prp-haartherapie").dauer), /Blutabnahme/);
+  assert.match(adsV2FaqsV2("hyaluron/hylase").map((x) => x.answer).join(" "), /allergisch/);
+  assert.doesNotMatch(allTexts("hyaluron/hylase").join(" "), /Hylase/);
+  assert.match(adsV2FaqsV2("muskelrelaxans/masseter").map((x) => x.answer).join(" "), /Kauen/);
+  assert.match(adsV2FaqsV2("skinbooster/polynukleotide-lachssperma").map((x) => x.answer).join(" "), /Fisch/);
+});
+
+test("Neue Zonenbilder: vorhanden, < 15 KB, title/desc, je Behandlung passend", () => {
+  for (const z of adsV2Zones()) {
+    const img = adsV2ZoneImage(z)!;
+    const file = `public${img.src}`;
+    assert.ok(existsSync(file), file);
+    const svg = readFileSync(file, "utf8");
+    assert.ok(svg.length < 15_000, file);
+    assert.match(svg, /<title id="t">[^<]+<\/title><desc id="d">[^<]+<\/desc>/, file);
+    assert.doesNotMatch(svg, /botox|btx/i);
+  }
+  assert.equal(adsV2Terms("hyaluron/jawline")!.zone, "jawline");
+  assert.equal(adsV2Terms("muskelrelaxans/masseter")!.zone, "masseter");
+  assert.equal(adsV2Terms("skinbooster/profhilo")!.zone, undefined);
+  assert.equal(adsV2Terms("infusionen/relax-infusion")!.zone, undefined);
 });

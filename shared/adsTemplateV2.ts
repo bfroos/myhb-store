@@ -18,14 +18,85 @@ import {
 } from "./newCustomerOffer.ts";
 
 /**
+ * Standorte mit Vorlage v2 (alle 9 Staedte mit Google-Ads-Kampagne, Stand
+ * 01.10.2026; Duisburg vorsorglich, Kampagne noch pausiert).
+ */
+export const ADS_TEMPLATE_V2_LOCATIONS: readonly string[] = [
+  "koeln/koeln-arcaden",
+  "berlin/gesundbrunnencenter",
+  "duesseldorf/duesseldorf-arcaden",
+  "recklinghausen/palais-vest",
+  "moenchengladbach/minto",
+  "kaiserslautern/k-in-lautern",
+  "leipzig/hoefe-am-bruehl",
+  "aachen/aquis-plaza",
+  "duisburg/forum",
+];
+
+/**
+ * Behandlungen mit Vorlage v2 (pathKey ohne "-rabatt"): alle, die Ziel einer
+ * aktiven Anzeige sind, plus die am 01.10.2026 neu beworbenen. Jede hat einen
+ * Inhalts-Eintrag in shared/adsTemplateV2Content.ts (Test prueft das) und
+ * existiert an allen Standorten oben (gegen Strapi geprueft, 351 Seiten).
+ * Nicht dabei: fettwegspritze (eigene Freigabe noetig), Schoenheits-OPs.
+ */
+export const ADS_TEMPLATE_V2_TREATMENTS: readonly string[] = [
+  "muskelrelaxans/stirnfalte",
+  "muskelrelaxans/zornesfalte",
+  "muskelrelaxans/kraehenfuesse",
+  "muskelrelaxans/browlift",
+  "muskelrelaxans/lachfalten",
+  "muskelrelaxans/lipflip",
+  "muskelrelaxans/bunny-lines",
+  "muskelrelaxans/erdbeerkinn",
+  "muskelrelaxans/full-face-muskelrelaxans",
+  "muskelrelaxans/masseter",
+  "muskelrelaxans/zaehneknirschen-bruxismus",
+  "muskelrelaxans/barbie-muskelrelaxans",
+  "muskelrelaxans/halsfalten-platysma",
+  "muskelrelaxans/hyperhidrose-starkes-schwitzen",
+  "hyaluron/lippen-aufspritzen",
+  "hyaluron/lippenkorrektur",
+  "hyaluron/nasolabialfalte",
+  "hyaluron/marionettenfalten",
+  "hyaluron/plisseefalten",
+  "hyaluron/kinnkorrektur",
+  "hyaluron/jawline",
+  "hyaluron/wangenaufbau",
+  "hyaluron/full-face-hyaluron",
+  "hyaluron/augenringe-unterspritzen",
+  "hyaluron/hylase",
+  "skinbooster/profhilo",
+  "skinbooster/lumi-eyes-polynukleotide",
+  "skinbooster/polynukleotide-lachssperma",
+  "skinbooster/mesotherapie-nctf-135-ha",
+  "skinbooster/vampir-lifting-prp",
+  "anti-haarausfall/mesotherapie-haare",
+  "anti-haarausfall/prp-haartherapie",
+  "infusionen/vitamin-c-infusion",
+  "infusionen/b-komplex-infusion",
+  "infusionen/immun-infusion",
+  "infusionen/power-infusion-glutathion",
+  "infusionen/regenerations-infusion",
+  "infusionen/relax-infusion",
+  "infusionen/anti-aging-infusion",
+];
+
+/**
  * Seiten mit Vorlage v2, als "stadt/standort/pathKey". Jedes Segment darf
  * "*" sein; ein pathKey "hyaluron/*" meint alle Hyaluron-Seiten, "*" alle.
- * Beispiel spaeter: "*\/*\/*" = alle Standort-Behandlungsseiten auf go.
+ * Seit 01.10.2026 (Benjamin: "heute schon die Seiten auf die neue Vorlage
+ * umstellen") Standorte x Behandlungen oben, live auf den echten URLs.
  */
-export const ADS_TEMPLATE_V2_PAGES: readonly string[] = [
-  "koeln/koeln-arcaden/muskelrelaxans/stirnfalte",
-  "koeln/koeln-arcaden/hyaluron/lippen-aufspritzen",
-];
+export const ADS_TEMPLATE_V2_PAGES: readonly string[] = ADS_TEMPLATE_V2_LOCATIONS.flatMap(
+  (loc) => ADS_TEMPLATE_V2_TREATMENTS.map((key) => `${loc}/${key}`),
+);
+
+/**
+ * v2 auch auf den echten Anzeigen-Ziel-URLs /standorte/... (nicht nur in der
+ * Vorschau). Notschalter: false = v2 nur noch unter /vorschau-v2/.
+ */
+export const ADS_TEMPLATE_V2_LIVE = true;
 
 function basePathKey(pathKey: string | null | undefined): string {
   return String(pathKey ?? "")
@@ -60,6 +131,24 @@ export function isAdsTemplateV2Page(
   // Schoenheits-OPs haben andere Preise, Ablaeufe und Einwaende.
   if (key.startsWith("schoenheitsoperationen")) return false;
   return pages.some((p) => matchesPattern(p, city, loc, key));
+}
+
+/**
+ * Echte Seite /standorte/<stadt>/<standort>/<pathKey> mit v2? Wie
+ * isAdsTemplateV2Page, aber ohne die "-rabatt"-Adressen: die sind kein
+ * Anzeigenziel und bleiben bei der bisherigen Seite (die Vorschau zeigt sie).
+ */
+export function isAdsTemplateV2LivePage(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  pages: readonly string[] = ADS_TEMPLATE_V2_PAGES,
+  live: boolean = ADS_TEMPLATE_V2_LIVE,
+): boolean {
+  if (!live) return false;
+  const key = String(pathKey ?? "").replace(/^\/+|\/+$/g, "");
+  if (key.endsWith("-rabatt")) return false;
+  return isAdsTemplateV2Page(city, loc, key, pages);
 }
 
 /** Hat der Standort mindestens eine v2-Seite? (Endpunkt der Zusatzdaten) */
@@ -113,8 +202,9 @@ export const ADS_V2_CTA = {
 
 export type AdsV2TrustItem = { key: string; title: string; text?: string };
 
-export function adsV2TrustItems(): AdsV2TrustItem[] {
-  return [
+/** Ohne Zufriedenheitsgarantie bei Infusionen (keine Nachbehandlung). */
+export function adsV2TrustItems(pathKey?: string | null): AdsV2TrustItem[] {
+  const items: AdsV2TrustItem[] = [
     {
       key: "garantie",
       title: "Zufriedenheitsgarantie",
@@ -131,6 +221,9 @@ export function adsV2TrustItems(): AdsV2TrustItem[] {
       text: "Behandlung nur durch Ärztinnen und Ärzte",
     },
   ];
+  return basePathKey(pathKey).startsWith("infusionen/")
+    ? items.filter((i) => i.key !== "garantie")
+    : items;
 }
 
 export type AdsV2Step = { title: string; text: string };
@@ -190,11 +283,16 @@ export function adsV2Steps(
   ];
 }
 
-/** Hersteller, soweit auf go. erlaubt (Benjamin, 30.09.2026). */
+/**
+ * Hersteller, soweit auf go. erlaubt (Benjamin, 30.09.2026): Aliaxin fuer
+ * Hyaluron-Filler, Profhilo nur auf der Profhilo-Seite. Hyaluron aufloesen,
+ * Polynukleotide, Mesotherapie, PRP: kein Hersteller.
+ */
 export function adsV2ProductNote(pathKey: string | null | undefined): string | null {
-  const cat = adsV2Category(pathKey);
-  if (cat === "hyaluron") return "Wir verwenden Hyaluron von Aliaxin® (IBSA).";
-  if (cat === "skinbooster") return "Wir verwenden Profhilo® (IBSA).";
+  const key = basePathKey(pathKey);
+  const cat = adsV2Category(key);
+  if (cat === "hyaluron") return key.endsWith("/hylase") ? null : "Wir verwenden Hyaluron von Aliaxin® (IBSA).";
+  if (key === "skinbooster/profhilo") return "Wir verwenden Profhilo® (IBSA).";
   return null;
 }
 
@@ -320,6 +418,41 @@ function variantLabel(v: VariantLike): string | null {
   return name || null;
 }
 
+/** Muskelrelaxans-Seiten mit Zonenpreisen (1-3 Zonen). */
+const ZONE_PRICE_KEYS = new Set([
+  "muskelrelaxans/stirnfalte",
+  "muskelrelaxans/zornesfalte",
+  "muskelrelaxans/kraehenfuesse",
+  "muskelrelaxans/browlift",
+  "muskelrelaxans/lachfalten",
+  "muskelrelaxans/lipflip",
+  "muskelrelaxans/bunny-lines",
+  "muskelrelaxans/erdbeerkinn",
+]);
+
+/**
+ * Welche Strapi-Varianten als Preiskarten erscheinen. An vielen Behandlungen
+ * haengen Produkte mit Varianten, die nicht zur Seite passen (Lippenkorrektur:
+ * Muskelrelaxans-Zonen; Nasolabialfalte: zwei "1,0 ml" mit 199,99/299,99 €,
+ * waehrend der Hero "ab 199,99 €" sagt). Dort zaehlt nur der Grundpreis der
+ * Behandlung - derselbe wie im Hero (useNewCustomerOffer).
+ * - "zones": Muskelrelaxans-Zonen 1-3 (Stirn & Co.)
+ * - "ml": Lippen aufspritzen (0,5 ml / 1,0 ml, wie bisher)
+ * - "variant:<slug>": genau eine Variante (Masseter, Zaehneknirschen)
+ * - "base": nur der Grundpreis
+ * Seiten ohne v2-Eintrag behalten das alte Verhalten (Muskelrelaxans: Zonen,
+ * sonst alle Varianten).
+ */
+export function adsV2PriceMode(pathKey: string | null | undefined): string {
+  const key = basePathKey(pathKey);
+  if (ZONE_PRICE_KEYS.has(key)) return "zones";
+  if (key === "hyaluron/lippen-aufspritzen") return "ml";
+  if (key === "muskelrelaxans/masseter") return "variant:masseter";
+  if (key === "muskelrelaxans/zaehneknirschen-bruxismus") return "variant:bruxismus";
+  if (ADS_TEMPLATE_V2_TREATMENTS.includes(key)) return "base";
+  return adsV2Category(key) === "muskelrelaxans" ? "zones" : "all";
+}
+
 /**
  * Preiskarten aus den Strapi-Varianten der Behandlung: Neukundenpreis* gross,
  * regulaer klein. Muskelrelaxans: nur Zonen (1-3), ohne Masseter & Co., die
@@ -334,15 +467,17 @@ export function adsV2PriceCards(
   pct: number = DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT,
   max = 3,
 ): AdsV2PriceCard[] {
-  const cat = adsV2Category(pathKey);
+  const mode = adsV2PriceMode(pathKey);
   const seen = new Set<string>();
   const cards: AdsV2PriceCard[] = [];
-  const variants = (treatment?.products ?? []).flatMap((p) => p?.variants ?? []);
+  const variants = mode === "base" ? [] : (treatment?.products ?? []).flatMap((p) => p?.variants ?? []);
   for (const v of variants) {
     if (!v || v.isActive === false || !v.priceInEuroCent) continue;
     const slug = String(v.slug ?? "");
-    if (cat === "muskelrelaxans" && !/^[123]-zonen?$/.test(slug)) continue;
-    const label = variantLabel(v);
+    if (mode === "zones" && !/^[123]-zonen?$/.test(slug)) continue;
+    if (mode === "ml" && !/^\d+(?:-\d+)?-ml$/.test(slug)) continue;
+    if (mode.startsWith("variant:") && slug !== mode.slice("variant:".length)) continue;
+    const label = mode.startsWith("variant:") ? "Behandlung" : variantLabel(v);
     if (!label || seen.has(label)) continue;
     seen.add(label);
     const nk = newCustomerPriceCent(v.priceInEuroCent, pct);

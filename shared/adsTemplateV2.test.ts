@@ -6,7 +6,13 @@ import {
   adsV2Steps,
   adsV2TrustItems,
   isAdsTemplateV2Page,
+  isAdsTemplateV2LivePage,
   isAdsTemplateV2Location,
+  adsV2PriceMode,
+  adsV2ProductNote,
+  ADS_TEMPLATE_V2_LOCATIONS,
+  ADS_TEMPLATE_V2_PAGES,
+  ADS_TEMPLATE_V2_TREATMENTS,
   isAdsTemplateV2PreviewPath,
   stripAdsTemplateV2Preview,
   openingHoursSummary,
@@ -23,14 +29,68 @@ import {
   adsClipsFor,
   heroObjectPositionY,
 } from "./adsClips.ts";
+import { adsV2ContentKeys } from "./adsTemplateV2Content.ts";
 
-test("Vorlage v2 nur auf den zwei Musterseiten", () => {
+test("Vorlage v2: 9 Standorte x 39 Behandlungen, live ohne -rabatt", () => {
+  assert.equal(ADS_TEMPLATE_V2_LOCATIONS.length, 9);
+  assert.equal(ADS_TEMPLATE_V2_TREATMENTS.length, 39);
+  assert.equal(ADS_TEMPLATE_V2_PAGES.length, 351);
   assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte"), true);
   assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte-rabatt"), true);
-  assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), true);
-  assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "muskelrelaxans/zornesfalte"), false);
-  assert.equal(isAdsTemplateV2Page("berlin", "gesundbrunnencenter", "muskelrelaxans/stirnfalte"), false);
+  assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "muskelrelaxans/zornesfalte"), true);
+  assert.equal(isAdsTemplateV2Page("berlin", "gesundbrunnencenter", "muskelrelaxans/stirnfalte"), true);
+  assert.equal(isAdsTemplateV2Page("duisburg", "forum", "infusionen/vitamin-c-infusion"), true);
+  assert.equal(isAdsTemplateV2Page("leipzig", "hoefe-am-bruehl", "anti-haarausfall/prp-haartherapie"), true);
+  // nicht beworben bzw. andere Standorte
   assert.equal(isAdsTemplateV2Page("koeln", "mediapark-klinik", "hyaluron/lippen-aufspritzen"), false);
+  assert.equal(isAdsTemplateV2Page("koblenz", "loehr-center", "hyaluron/lippen-aufspritzen"), false);
+  assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "fettwegspritze"), false);
+  assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "muskelrelaxans"), false);
+  assert.equal(isAdsTemplateV2Page("koeln", "koeln-arcaden", "muskelrelaxans/migraenebehandlung"), false);
+  // echte Seiten: ohne -rabatt, mit Notschalter
+  assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte"), true);
+  assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "muskelrelaxans/lachfalten"), true);
+  assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte-rabatt"), false);
+  assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte", ADS_TEMPLATE_V2_PAGES, false), false);
+});
+
+test("Jede v2-Behandlung hat Inhalte", () => {
+  assert.deepEqual([...ADS_TEMPLATE_V2_TREATMENTS].sort(), adsV2ContentKeys().sort());
+});
+
+test("Preiskarten je Behandlung passend zum Hero-Preis", () => {
+  const mrProducts = {
+    priceInEuroCent: 34999,
+    isStartingPrice: true,
+    products: [{ variants: [
+      { slug: "1-zone", priceInEuroCent: 14999 },
+      { slug: "2-zonen", priceInEuroCent: 19999 },
+      { slug: "masseter", priceInEuroCent: 34999 },
+      { slug: "bruxismus", priceInEuroCent: 34999 },
+    ] }],
+  };
+  assert.deepEqual(adsV2PriceCards("muskelrelaxans/masseter", mrProducts).map((c) => [c.label, c.regular]), [["Behandlung", "regulär 349,99 €"]]);
+  // Lippenkorrektur haengt an Muskelrelaxans-Zonen -> nur Grundpreis
+  const korr = adsV2PriceCards("hyaluron/lippenkorrektur", { ...mrProducts, priceInEuroCent: 34999 });
+  assert.deepEqual(korr.map((c) => [c.label, c.offer]), [["Behandlung", "ab 279,99 €*"]]);
+  // Nasolabialfalte: zwei "1,0 ml" mit verschiedenen Preisen -> nur Grundpreis
+  const naso = adsV2PriceCards("hyaluron/nasolabialfalte", {
+    priceInEuroCent: 19999,
+    isStartingPrice: true,
+    products: [{ variants: [{ slug: "1-0-ml", priceInEuroCent: 29999 }, { slug: "0-5-ml", priceInEuroCent: 14999 }] }],
+  });
+  assert.deepEqual(naso.map((c) => c.regular), ["regulär ab 199,99 €"]);
+  assert.equal(adsV2PriceMode("muskelrelaxans/lipflip"), "zones");
+  assert.equal(adsV2PriceMode("infusionen/relax-infusion"), "base");
+});
+
+test("Infusionen ohne Zufriedenheitsgarantie, Hersteller nur wo freigegeben", () => {
+  assert.equal(adsV2TrustItems("infusionen/vitamin-c-infusion").some((i) => i.key === "garantie"), false);
+  assert.equal(adsV2TrustItems("hyaluron/jawline").some((i) => i.key === "garantie"), true);
+  assert.equal(adsV2ProductNote("hyaluron/hylase"), null);
+  assert.match(String(adsV2ProductNote("hyaluron/jawline")), /Aliaxin/);
+  assert.match(String(adsV2ProductNote("skinbooster/profhilo")), /Profhilo/);
+  assert.equal(adsV2ProductNote("skinbooster/polynukleotide-lachssperma"), null);
 });
 
 test("Platzhalter fuer die spaetere Erweiterung, OPs nie", () => {
@@ -158,6 +218,19 @@ test("Clips: nur ungesperrte, Hero-Clip nur wo tauglich", () => {
   assert.deepEqual(adsClipsFor("nix/da"), { carousel: [] });
 });
 
+test("Hero-Clip nur vermessen und ohne fremden Stadtnamen", () => {
+  for (const [key, set] of adsClipEntries()) {
+    if (set.hero) assert.equal(typeof set.hero.focusY, "number", `${key}: Hero nicht vermessen`);
+  }
+  // Jawline-Hero zeigt "KÖLN", Kinn-Hero "KAISERSLAUTERN"
+  assert.ok(adsClipsFor("hyaluron/jawline", "koeln").hero);
+  assert.equal(adsClipsFor("hyaluron/jawline", "berlin").hero, undefined);
+  assert.ok(adsClipsFor("hyaluron/kinnkorrektur", "kaiserslautern").hero);
+  assert.equal(adsClipsFor("hyaluron/kinnkorrektur", "koeln").hero, undefined);
+  assert.ok(adsClipsFor("muskelrelaxans/kraehenfuesse", "berlin").hero);
+  assert.equal(adsClipsFor("skinbooster/profhilo", "koeln").hero, undefined);
+});
+
 test("Bewertungen: doppelte Eintraege nur einmal", () => {
   const t = "Alle Mitarbeiter sowie besonders die Aerztin waren aeusserst freundlich, Behandlung mit Hyaluron.";
   const picked = pickAdsV2Reviews(
@@ -199,9 +272,9 @@ test("Hero-Ausschnitt: Untertitel ganz drin oder ganz draussen", () => {
   const sizes: Array<[number, number]> = [
     [284, 98], [312, 130], [336, 199], [353, 384], [398, 420], [700, 400], [560, 620],
   ];
-  for (const key of ["hyaluron/lippen-aufspritzen", "muskelrelaxans/stirnfalte"]) {
-    const hero = adsClipsFor(key, "koeln").hero!;
-    assert.ok(hero.captionZones?.length, key);
+  for (const [key, set] of adsClipEntries()) {
+    const hero = set.hero;
+    if (!hero) continue;
     for (const [w, h] of sizes) {
       const p = heroObjectPositionY(w, h, hero) / 100;
       const r = h / (w / (hero.aspect ?? 9 / 16));
@@ -236,5 +309,6 @@ test("Vorschau nur unter /vorschau-v2, Canonical auf die echte Seite", () => {
   assert.equal(stripAdsTemplateV2Preview(real), real);
   assert.equal(stripAdsTemplateV2Preview("/p/vorschau-v2-x"), "/p/vorschau-v2-x");
   assert.equal(isAdsTemplateV2Location("koeln", "koeln-arcaden"), true);
-  assert.equal(isAdsTemplateV2Location("berlin", "gesundbrunnencenter"), false);
+  assert.equal(isAdsTemplateV2Location("berlin", "gesundbrunnencenter"), true);
+  assert.equal(isAdsTemplateV2Location("koblenz", "loehr-center"), false);
 });
