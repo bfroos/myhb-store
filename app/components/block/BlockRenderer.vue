@@ -65,6 +65,7 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
     () => import("./LocationDirections.vue"),
   ),
   "blocks.employee": defineAsyncComponent(() => import("./EmployeeBlock.vue")),
+  "blocks.doctor-team": defineAsyncComponent(() => import("./DoctorTeam.vue")),
   "blocks.employee-list": defineAsyncComponent(
     () => import("./EmployeeList.vue"),
   ),
