@@ -16,7 +16,7 @@
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
     Behandlung: shared/adsTemplateV2Content.ts.
   -->
-  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--desk': desktopLayout }">
+  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--desk': desktopLayout }">
     <BlockTreatmentHero
       v-bind="hero"
       :subline="terms?.subline ?? hero.subline"
@@ -240,6 +240,21 @@
       </div>
     </UiLayoutSectionBlock>
 
+    <!-- Lounge-Galerie des Standorts (Benjamin, 02.10.2026, nach Parya's
+         Strapi-Seite Profhilo Duesseldorf): Galerie-Block der Seite aus
+         Strapi; fehlt er, entfaellt der Abschnitt. Mobil Wischreihe, ab
+         1024 px Raster. Alt-Texte eigene, nicht die aus Strapi. -->
+    <UiLayoutSectionBlock v-if="lounge">
+      <div class="v2-card" :class="tone('lounge')" data-track-placement="v2_lounge">
+        <h2 class="v2-h2">{{ lounge.headline }}</h2>
+        <ul class="v2-lounge" role="list">
+          <li v-for="(img, i) in lounge.images" :key="img.id ?? i" class="v2-lounge__item">
+            <UiAtomMediaPicture :media="img" :default-format="ImageFormat.MEDIUM" />
+          </li>
+        </ul>
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- 8. Beratungsfoto (leer = aus) -->
     <UiLayoutSectionBlock v-if="consultPhoto">
       <div class="v2-card v2-split" :class="tone('consult')" data-track-placement="v2_consult">
@@ -339,6 +354,27 @@
         <div v-if="wayClip" class="v2-way" data-track-placement="v2_way_video">
           <PagesTreatmentAdsV2ClipCarousel :clips="[wayClip]" placement="v2_way" silent />
         </div>
+        <!-- Anfahrt mit Lageplan (Standort-Feld "directions" in Strapi):
+             Lageplan, Wegbeschreibung, Zu Fuss / Nahverkehr / Auto. -->
+        <div v-if="directions" class="v2-directions" data-track-placement="v2_directions">
+          <div v-if="directions.plan" class="v2-directions__plan">
+            <UiAtomMediaPicture :media="directions.plan" :default-format="ImageFormat.MEDIUM" />
+          </div>
+          <div class="v2-directions__body">
+            <div v-if="directions.intro" class="v2-directions__intro">
+              <UiLayoutRichText :blocks="directions.intro" />
+            </div>
+            <details v-for="item in directions.items" :key="item.key" class="v2-directions__item">
+              <summary class="v2-directions__q">
+                <component :is="item.icon" size="20" aria-hidden="true" />
+                <span>{{ t(item.titleKey) }}</span>
+              </summary>
+              <div class="v2-directions__a">
+                <UiLayoutRichText :blocks="item.content" />
+              </div>
+            </details>
+          </div>
+        </div>
         <div class="v2-actions v2-actions--row">
           <UiAtomBaseButton v-if="phoneHref" as="a" :href="phoneHref" variant="secondary" size="lg" class="v2-btn" @click="trackPhoneClick(phoneNumber ?? undefined)">
             <IconPhone size="18" aria-hidden="true" /> Anrufen
@@ -391,6 +427,8 @@
 import {
   IconArmchair,
   IconArrowRight,
+  IconBus,
+  IconCar,
   IconCalendarCheck,
   IconCircleCheck,
   IconClock,
@@ -411,7 +449,8 @@ import {
 } from "@tabler/icons-vue";
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import type { LocationDto, TreatmentPageDto } from "~/lib/strapi/dto/collections";
-import { SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
+import { ImageFormat, SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
+import { isBlockedAdsImageFile } from "#shared/adsMedia";
 import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
@@ -483,7 +522,7 @@ const design = computed(() =>
 type AdsV2Tone = "light" | "soft" | "neutral" | "strong";
 type AdsV2Section =
   | "clips" | "facts" | "how" | "mid" | "steps" | "prices" | "zones" | "doctors"
-  | "consult" | "reviews" | "objections" | "location" | "faq" | "final";
+  | "lounge" | "consult" | "reviews" | "objections" | "location" | "faq" | "final";
 /**
  * Flaechen wie auf www (UiLayoutCardSurface: theme-light/-soft/-neutral/
  * -strong). Option 1 "ci": weisse und schwarze Abschnitte im Wechsel;
@@ -492,20 +531,22 @@ type AdsV2Section =
 const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
   ci: {
     clips: "light", facts: "strong", how: "light", mid: "strong", steps: "soft",
-    prices: "light", zones: "light", doctors: "neutral", consult: "light",
+    prices: "light", zones: "light", doctors: "neutral", lounge: "light", consult: "light",
     reviews: "light", objections: "light", location: "strong", faq: "soft", final: "strong",
   },
   "ci-hell": {
     clips: "light", facts: "light", how: "light", mid: "strong", steps: "soft",
-    prices: "light", zones: "light", doctors: "soft", consult: "light",
+    prices: "light", zones: "light", doctors: "soft", lounge: "light", consult: "light",
     reviews: "light", objections: "light", location: "light", faq: "soft", final: "strong",
   },
 };
-/** Klassen der Abschnittskarte; in "v2" die bisherigen Modifier. */
+/** Klassen der Abschnittskarte; in "v2" die bisherigen Modifier.
+ *  "ci-rot" (Option R2) nutzt die Flaechen von "ci", nur mit den roten
+ *  Akzenten von heute. */
 function tone(section: AdsV2Section, v2Class = ""): string {
   const d = design.value;
   if (d === "v2") return v2Class;
-  const t = TONES[d][section];
+  const t = TONES[d === "ci-rot" ? "ci" : d][section];
   return `theme-${t} v2-card--${t}`;
 }
 
@@ -515,6 +556,49 @@ function tone(section: AdsV2Section, v2Class = ""): string {
 const desktopLayout = computed(() =>
   isAdsV2DesktopLayout(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
 );
+
+const { t } = useI18n();
+
+/**
+ * Lounge-Galerie: erster Galerie-Block der Seite in Strapi mit Bildern
+ * (bei Parya's Profhilo Duesseldorf "MY Lounge Duesseldorf"). Bilder aus der
+ * Sperrliste (shared/adsMedia.ts: Begriff in der URL, alter Schriftzug)
+ * fallen weg - der Strapi-Proxy blendet sie ohnehin schon aus. Alt-Texte
+ * eigene: die aus Strapi nennen teils das Praeparat.
+ */
+// Beide Bausteine (Lounge, Anfahrt) zunaechst nur, wo die CI-Gestaltung an
+// ist (ADS_TEMPLATE_V2_DESIGN); die Daten kommen fuer jeden Standort aus Strapi.
+const lounge = computed(() => {
+  if (design.value === "v2") return null;
+  const blocks: any[] = ((props.treatmentPage as any)?.blocks ?? []) as any[];
+  const g = blocks.find((b) => b?.__component === "blocks.gallery" && (b.images?.length ?? 0) > 0);
+  if (!g) return null;
+  const city = props.location?.city?.name ?? "";
+  const raw = String(g.headline ?? "").trim();
+  const headline = /lounge/i.test(raw) ? raw : city ? `MY Lounge ${city}` : "Unsere Lounge";
+  const images = (g.images as any[])
+    .filter((m) => m && String(m.mime ?? "").startsWith("image/") && !isBlockedAdsImageFile(m))
+    .map((m, i) => ({ ...m, alternativeText: `${headline} – Bild ${i + 1}`, caption: null }));
+  return images.length ? { headline, images } : null;
+});
+
+/** Anfahrt aus dem Standort-Feld "directions"; leer = kein Baustein. */
+const directions = computed(() => {
+  const d: any = (props.location as any)?.directions;
+  if (!d || design.value === "v2") return null;
+  const plan =
+    d.image && String(d.image.mime ?? "image/").startsWith("image/") && !isBlockedAdsImageFile(d.image)
+      ? { ...d.image, alternativeText: `Lageplan ${props.location?.name ?? ""}`.trim() }
+      : null;
+  const intro = (d.content?.length ?? 0) > 0 ? d.content : null;
+  const items = [
+    { key: "walk", icon: IconWalk, titleKey: "blocks.directions.walk", content: d.walkDirections },
+    { key: "bus", icon: IconBus, titleKey: "blocks.directions.publicTransport", content: d.publicTransportDirections },
+    { key: "car", icon: IconCar, titleKey: "blocks.directions.car", content: d.carDirections },
+  ].filter((item) => (item.content?.length ?? 0) > 0);
+  if (!plan && !intro && !items.length) return null;
+  return { plan, intro, items };
+});
 
 const globals = useGlobals();
 const { trackPhoneClick, trackEvent } = useGoogleAnalytics();
@@ -2060,6 +2144,172 @@ const routeHref = computed(() => {
     grid-column: 2;
     grid-row: span 2;
     margin-top: 0;
+  }
+}
+/* =====================================================================
+   Option R2 ("ci-rot"): Flaechen wie "ci", Rot-Akzente wie heute live
+   (Neukundenpreis, Icons im Blick-Raster, Zeitachse, Preise). Auf
+   schwarzen/dunkelgrauen Flaechen helleres Rot #f87171 (Kontrast), sonst
+   #b91c1c. Knoepfe bleiben schwarz bzw. weiss auf Schwarz.
+   ===================================================================== */
+.v2--rot {
+  --v2-accent: #b91c1c;
+}
+
+.v2--rot .theme-strong,
+.v2--rot .theme-neutral,
+.v2--rot .v2-objection {
+  --v2-accent: #f87171;
+}
+
+.v2--ci.v2--rot .v2-trust__icon,
+.v2--ci.v2--rot .v2-facts__icon,
+.v2--ci.v2--rot .v2-pay__icon,
+.v2--ci.v2--rot .v2-objection__icon,
+.v2--ci.v2--rot .v2-facts__row--price dd,
+.v2--ci.v2--rot .v2-price__offer,
+.v2--ci.v2--rot .v2-final__price,
+.v2--ci.v2--rot .v2-timeline__when {
+  color: var(--v2-accent);
+}
+
+.v2--ci.v2--rot .v2-timeline__item::before {
+  background: var(--v2-accent);
+}
+
+.v2--ci.v2--rot .v2-timeline {
+  border-color: #f1c9c9;
+}
+
+.v2--ci.v2--rot .v2-trust__icon--star,
+.v2--ci.v2--rot .v2-star,
+.v2--ci.v2--rot .v2-review__stars {
+  color: #f5a623;
+}
+
+.v2--ci.v2--rot .v2-how__img,
+.v2--ci.v2--rot .v2-zone__img {
+  filter: none;
+}
+
+.v2--ci.v2--rot .v2-price--package {
+  box-shadow: inset 0 0 0 2px var(--v2-accent);
+}
+
+/* Lounge-Galerie: mobil Wischreihe (wie die Zonen), ab 1024 px Raster */
+.v2-lounge {
+  display: flex;
+  gap: var(--space-300);
+  margin: 0 calc(-1 * var(--space-card-pad));
+  padding: 0 var(--space-card-pad) var(--space-200);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-card-pad);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.v2-lounge__item {
+  flex: 0 0 82%;
+  scroll-snap-align: start;
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: var(--border-radius-200, 12px);
+  background: var(--color-gray-200);
+}
+
+.v2-lounge__item :deep(img) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 1024px) {
+  .v2-lounge {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+/* Anfahrt im Standortblock: Lageplan, Wegbeschreibung, Akkordeon */
+.v2-directions {
+  display: grid;
+  gap: var(--space-400);
+  margin-top: var(--space-500);
+}
+
+.v2-directions__plan {
+  overflow: hidden;
+  border-radius: var(--border-radius-200, 12px);
+  background: #fff;
+}
+
+.v2-directions__plan :deep(img) {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.v2-directions__intro {
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+  overflow-wrap: break-word;
+}
+
+.v2-directions__intro :deep(p),
+.v2-directions__a :deep(p) {
+  margin: 0 0 var(--space-200);
+}
+
+.v2-directions__intro :deep(ul),
+.v2-directions__a :deep(ul) {
+  margin: 0 0 var(--space-200);
+  padding-left: 1.1rem;
+}
+
+.v2-directions__item {
+  border-top: 1px solid var(--color-border-mute);
+}
+
+.v2-directions__item:last-child {
+  border-bottom: 1px solid var(--color-border-mute);
+}
+
+.v2-directions__q {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+  padding: var(--space-400) 0;
+  font-weight: var(--font-bold);
+  cursor: pointer;
+}
+
+.v2-directions__a {
+  padding-bottom: var(--space-300);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 1024px) {
+  .v2--desk [data-track-placement="v2_location"] > .v2-directions {
+    grid-column: 1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-way {
+    grid-row: span 3;
   }
 }
 </style>

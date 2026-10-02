@@ -36,7 +36,7 @@
             'hero--ads-compact': isAdsMode,
             'hero--ads-long-title': isAdsMode && (headline?.length ?? 0) > 26,
             'hero--v2': templateV2,
-            'hero--ci': templateV2 && v2Design !== 'v2',
+            'hero--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'),
             'hero--desk': templateV2 && v2Desktop,
           }"
         >
@@ -204,7 +204,7 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && v2Design !== 'v2' }">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell') }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong
@@ -323,8 +323,9 @@ const props = withDefaults(
       /**
        * go.-Vorlage v2: Gestaltung (shared/adsTemplateV2.ts, adsV2Design).
        * "ci"/"ci-hell": Preiszeile schwarz statt rot; rot nur die Leiste.
+       * "ci-rot": Preiszeile rot wie heute.
        */
-      v2Design?: "v2" | "ci" | "ci-hell";
+      v2Design?: "v2" | "ci" | "ci-hell" | "ci-rot";
       /**
        * go.-Vorlage v2: Desktop-Layout ab 1024 px (shared/adsTemplateV2.ts,
        * isAdsV2DesktopLayout): Text linksbuendig, Hero nicht bildschirmhoch.

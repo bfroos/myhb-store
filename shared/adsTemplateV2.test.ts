@@ -366,10 +366,12 @@ test("Vorschau nur unter /vorschau-v2, Canonical auf die echte Seite", () => {
   assert.equal(isAdsTemplateV2Location("koblenz", "loehr-center"), false);
 });
 
-test("adsV2Design: CI-Gestaltung nur fuer die Lippen-Seite Koeln Arcaden", () => {
-  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "ci");
+test("adsV2Design: CI-Gestaltung nur fuer Lippen und Profhilo Koeln Arcaden", () => {
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "ci-rot");
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "skinbooster/profhilo"), "ci-rot");
+  assert.equal(adsV2Design("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), "v2");
   // "-rabatt"-Variante und fuehrende/abschliessende Schraegstriche: dieselbe Seite
-  assert.equal(adsV2Design("koeln", "koeln-arcaden", "/hyaluron/lippen-aufspritzen-rabatt/"), "ci");
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "/hyaluron/lippen-aufspritzen-rabatt/"), "ci-rot");
   assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), "v2");
   assert.equal(adsV2Design("berlin", "gesundbrunnencenter", "hyaluron/lippen-aufspritzen"), "v2");
   assert.equal(adsV2Design(null, "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "v2");

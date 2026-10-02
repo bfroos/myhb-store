@@ -200,15 +200,20 @@ export function isAdsTemplateV2Excluded(
  *              Abschnitte im Wechsel, Icons/Preise schwarz-weiss, Rot nur
  *              auf dem Buchungsknopf
  * - "ci-hell": Option 2 - wie "ci", aber nur die beiden Aufrufe schwarz
+ * - "ci-rot":  Option R2 (02.10.2026) - Flaechen wie "ci", Rot-Akzente wie
+ *              heute live (Neukundenpreis, Icons, Zeitachse, Leiste);
+ *              "ci" ist Option R1 (Rot nur auf dem Knopf der Leiste)
  *
  * Nur Gestaltung: Inhalte, Reihenfolge, Tracking und A/B-Weiche bleiben.
  * Schluessel wie ADS_TEMPLATE_V2_PAGES ("stadt/standort/pathKey", "*" je
  * Segment erlaubt); der erste Treffer gilt. Ausrollen = Eintrag "*\/*\/*".
  */
-export type AdsV2Design = "v2" | "ci" | "ci-hell";
+export type AdsV2Design = "v2" | "ci" | "ci-hell" | "ci-rot";
 
 export const ADS_TEMPLATE_V2_DESIGN: ReadonlyArray<readonly [string, AdsV2Design]> = [
-  ["koeln/koeln-arcaden/hyaluron/lippen-aufspritzen", "ci"],
+  // Benjamin, 02.10.2026: "Das Rot bleibt so wie heute live" -> R2
+  ["koeln/koeln-arcaden/hyaluron/lippen-aufspritzen", "ci-rot"],
+  ["koeln/koeln-arcaden/skinbooster/profhilo", "ci-rot"],
 ];
 
 export function adsV2Design(
