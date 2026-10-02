@@ -36,6 +36,8 @@
             'hero--ads-compact': isAdsMode,
             'hero--ads-long-title': isAdsMode && (headline?.length ?? 0) > 26,
             'hero--v2': templateV2,
+            'hero--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'),
+            'hero--desk': templateV2 && v2Desktop,
           }"
         >
           <div v-if="hasCover || heroClip" class="hero__media">
@@ -202,7 +204,7 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2 }">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell') }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong
@@ -318,6 +320,17 @@ const props = withDefaults(
       v2Note?: string | null;
       /** go.-Vorlage v2: Preis in der mitlaufenden Leiste. */
       v2StickyPrice?: string | null;
+      /**
+       * go.-Vorlage v2: Gestaltung (shared/adsTemplateV2.ts, adsV2Design).
+       * "ci"/"ci-hell": Preiszeile schwarz statt rot; rot nur die Leiste.
+       * "ci-rot": Preiszeile rot wie heute.
+       */
+      v2Design?: "v2" | "ci" | "ci-hell" | "ci-rot";
+      /**
+       * go.-Vorlage v2: Desktop-Layout ab 1024 px (shared/adsTemplateV2.ts,
+       * isAdsV2DesktopLayout): Text linksbuendig, Hero nicht bildschirmhoch.
+       */
+      v2Desktop?: boolean;
     }
   >(),
   {
@@ -329,6 +342,8 @@ const props = withDefaults(
     v2PriceLine: null,
     v2Note: null,
     v2StickyPrice: null,
+    v2Design: "v2",
+    v2Desktop: false,
   },
 );
 
@@ -1176,6 +1191,75 @@ const discountLabel = computed(() => {
 @media (min-width: 900px) {
   .floating-cta__reviews {
     display: flex;
+  }
+}
+/* go.-Vorlage v2, Gestaltung "ci"/"ci-hell" (Feedback 02.10.2026): Preis
+   schwarz, Rabatt-Zusatz grau; Knopf schwarz wie auf www. Rot bleibt nur
+   der Buchungsknopf der mitlaufenden Leiste (#dc2626, weiss darauf 4,8:1). */
+.hero--ci .hero__price {
+  color: var(--color-text);
+}
+
+.hero--ci .hero__price-extra {
+  color: var(--color-text-light);
+  font-weight: var(--font-regular);
+}
+
+.floating-cta--ci .floating-cta__price--offer {
+  color: var(--color-text);
+}
+
+/* go.-Vorlage v2, Desktop-Layout ab 1024 px (Feedback 02.10.2026): Text
+   linksbuendig mit grossem Titel, Hero nicht mehr bildschirmhoch, damit
+   darunter der naechste Abschnitt anschaut. Mobil unveraendert. */
+@media (min-width: 1024px) {
+  .hero-card:has(.hero--desk) {
+    min-height: 0;
+  }
+
+  .hero--desk {
+    min-height: min(620px, calc(100svh - 200px));
+  }
+
+  .hero--desk .hero__body {
+    flex: 1 1 46%;
+  }
+
+  .hero--desk .hero__media {
+    flex: 1 1 54%;
+  }
+
+  .hero--desk .hero__main {
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 0;
+    padding: var(--space-1000) var(--space-900);
+    text-align: left;
+  }
+
+  .hero--desk .hero__title {
+    max-width: 14ch;
+    font-size: var(--font-5xl);
+    line-height: var(--line-5xl);
+  }
+
+  .hero--desk .hero__subline--ads {
+    max-width: 40ch;
+    font-size: var(--font-lg);
+    line-height: var(--line-lg);
+  }
+
+  .hero--desk .hero__price--v2 {
+    justify-content: flex-start;
+    font-size: var(--font-2xl);
+  }
+
+  .hero--desk .hero__cta {
+    justify-content: flex-start;
+  }
+
+  .hero--desk .hero__reviews {
+    margin-top: var(--space-300);
   }
 }
 </style>

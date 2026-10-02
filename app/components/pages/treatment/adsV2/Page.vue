@@ -16,7 +16,7 @@
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
     Behandlung: shared/adsTemplateV2Content.ts.
   -->
-  <div class="v2">
+  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--desk': desktopLayout }">
     <BlockTreatmentHero
       v-bind="hero"
       :subline="terms?.subline ?? hero.subline"
@@ -28,12 +28,14 @@
       :v2-price-line="heroPriceLine"
       :v2-sticky-price="stickyPrice"
       :v2-note="heroNote"
+      :v2-design="design"
+      :v2-desktop="desktopLayout"
     />
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
          uns aus", noch vor der Vertrauenszeile) -->
     <UiLayoutSectionBlock v-if="clips.carousel.length" spacing="sibling">
-      <div class="v2-card" data-track-placement="v2_clips">
+      <div class="v2-card" :class="tone('clips')" data-track-placement="v2_clips">
         <h2 class="v2-h2">{{ H.clips }}</h2>
         <PagesTreatmentAdsV2ClipCarousel :clips="clips.carousel" />
       </div>
@@ -61,7 +63,7 @@
 
     <!-- 1. Steckbrief: Icon, Bezeichnung klein, Kernwert fett -->
     <UiLayoutSectionBlock v-if="facts.length">
-      <div class="v2-card" data-track-placement="v2_facts">
+      <div class="v2-card" :class="tone('facts')" data-track-placement="v2_facts">
         <h2 class="v2-h2">{{ H.facts }}</h2>
         <dl class="v2-facts">
           <div v-for="f in facts" :key="f.key" class="v2-facts__row" :class="{ 'v2-facts__row--price': f.key === 'preis' }">
@@ -75,7 +77,7 @@
 
     <!-- 2. Wirkweise mit Zonenbild -->
     <UiLayoutSectionBlock v-if="terms">
-      <div class="v2-card" data-track-placement="v2_how">
+      <div class="v2-card v2-split" :class="tone('how')" data-track-placement="v2_how">
         <h2 class="v2-h2">{{ H.how }}</h2>
         <div class="v2-how" :class="{ 'v2-how--text': !zoneImage }">
           <img
@@ -95,7 +97,7 @@
 
     <!-- Aufruf auch direkt ueber dem Ablauf (Agentur-Feedback 01.10.2026) -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_cta_mid">
+      <div class="v2-card v2-final" :class="tone('mid', 'v2-card--accent')" data-track-placement="v2_cta_mid">
         <p class="v2-h2 v2-final__title">{{ H.final }}</p>
         <p v-if="finalPrice" class="v2-final__price">
           {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
@@ -108,7 +110,7 @@
 
     <!-- Ablauf (5. Zeitachse) -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--soft" data-track-placement="v2_steps">
+      <div class="v2-card" :class="tone('steps', 'v2-card--soft')" data-track-placement="v2_steps">
         <h2 class="v2-h2">{{ H.steps }}</h2>
         <ol v-if="timeline.length" class="v2-timeline">
           <li v-for="item in timeline" :key="item.when" class="v2-timeline__item">
@@ -134,7 +136,7 @@
 
     <!-- Preise -->
     <UiLayoutSectionBlock v-if="priceCards.length">
-      <div class="v2-card" data-track-placement="v2_prices">
+      <div class="v2-card v2-prices-card" :class="tone('prices')" data-track-placement="v2_prices">
         <h2 class="v2-h2">{{ H.prices }}</h2>
         <p v-if="offerShown" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
@@ -181,7 +183,7 @@
 
     <!-- 7. Weitere Zonen: mobil Wischreihe, ab 900 px Raster -->
     <UiLayoutSectionBlock v-if="zoneTiles.length">
-      <div class="v2-card" data-track-placement="v2_zones">
+      <div class="v2-card v2-split" :class="tone('zones')" data-track-placement="v2_zones">
         <h2 class="v2-h2">{{ H.zones }}</h2>
         <p v-if="zoneHint" class="v2-lead">{{ zoneHint }}</p>
         <!-- Jede Kachel mit Bild: Poster des Behandlungsclips, sonst Zonenbild -->
@@ -218,7 +220,7 @@
 
     <!-- Aerzt:innen des Centers -->
     <UiLayoutSectionBlock v-if="doctors.length">
-      <div class="v2-card v2-card--soft" data-track-placement="v2_doctors">
+      <div class="v2-card v2-split" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
         <h2 class="v2-h2">{{ H.doctors }}</h2>
         <ul class="v2-doctors" role="list">
           <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
@@ -238,9 +240,24 @@
       </div>
     </UiLayoutSectionBlock>
 
+    <!-- Lounge-Galerie des Standorts (Benjamin, 02.10.2026, nach Parya's
+         Strapi-Seite Profhilo Duesseldorf): Galerie-Block der Seite aus
+         Strapi; fehlt er, entfaellt der Abschnitt. Mobil Wischreihe, ab
+         1024 px Raster. Alt-Texte eigene, nicht die aus Strapi. -->
+    <UiLayoutSectionBlock v-if="lounge">
+      <div class="v2-card" :class="tone('lounge')" data-track-placement="v2_lounge">
+        <h2 class="v2-h2">{{ lounge.headline }}</h2>
+        <ul class="v2-lounge" role="list" :style="{ '--cols': String(Math.min(lounge.images.length, 3)) }">
+          <li v-for="(img, i) in lounge.images" :key="img.id ?? i" class="v2-lounge__item">
+            <UiAtomMediaPicture :media="img" :default-format="ImageFormat.MEDIUM" />
+          </li>
+        </ul>
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- 8. Beratungsfoto (leer = aus) -->
     <UiLayoutSectionBlock v-if="consultPhoto">
-      <div class="v2-card" data-track-placement="v2_consult">
+      <div class="v2-card v2-split" :class="tone('consult')" data-track-placement="v2_consult">
         <h2 class="v2-h2">{{ H.consult }}</h2>
         <img
           class="v2-consult__img"
@@ -256,7 +273,7 @@
 
     <!-- Bewertungen des Standorts: Video mittig, Texte mobil als Wischreihe -->
     <UiLayoutSectionBlock v-if="reviews.length || clips.feedback.length">
-      <div class="v2-card" data-track-placement="v2_reviews">
+      <div class="v2-card v2-reviews-card" :class="tone('reviews')" data-track-placement="v2_reviews">
         <h2 class="v2-h2">{{ H.reviews }}</h2>
         <p v-if="rating" class="v2-lead">
           <IconStarFilled class="v2-star" size="18" aria-hidden="true" />
@@ -290,7 +307,7 @@
     <!-- Einwaende (Agentur-Feedback 01.10.2026): nur Aussagen, die schon auf
          der Seite stehen; Texte in shared/adsTemplateV2Content.ts -->
     <UiLayoutSectionBlock v-if="objections.length">
-      <div class="v2-card v2-card--soft" data-track-placement="v2_objections">
+      <div class="v2-card" :class="tone('objections', 'v2-card--soft')" data-track-placement="v2_objections">
         <h2 class="v2-h2">Noch unsicher?</h2>
         <p class="v2-lead">Das hören wir oft – und das antworten wir.</p>
         <ul class="v2-objections" role="list">
@@ -319,7 +336,7 @@
 
     <!-- Standort (Agentur-Feedback 01.10.2026: vor den Fragen) -->
     <UiLayoutSectionBlock>
-      <div id="standort" class="v2-card" data-track-placement="v2_location">
+      <div id="standort" class="v2-card" :class="tone('location')" data-track-placement="v2_location">
         <h2 class="v2-h2">{{ H.location }}</h2>
         <div class="v2-location">
           <div v-if="location?.buildingImage" class="v2-location__image">
@@ -337,6 +354,27 @@
         <div v-if="wayClip" class="v2-way" data-track-placement="v2_way_video">
           <PagesTreatmentAdsV2ClipCarousel :clips="[wayClip]" placement="v2_way" silent />
         </div>
+        <!-- Anfahrt mit Lageplan (Standort-Feld "directions" in Strapi):
+             Lageplan, Wegbeschreibung, Zu Fuss / Nahverkehr / Auto. -->
+        <div v-if="directions" class="v2-directions" data-track-placement="v2_directions">
+          <div v-if="directions.plan" class="v2-directions__plan">
+            <UiAtomMediaPicture :media="directions.plan" :default-format="ImageFormat.MEDIUM" />
+          </div>
+          <div class="v2-directions__body">
+            <div v-if="directions.intro" class="v2-directions__intro">
+              <UiLayoutRichText :blocks="directions.intro" />
+            </div>
+            <details v-for="item in directions.items" :key="item.key" class="v2-directions__item">
+              <summary class="v2-directions__q">
+                <component :is="item.icon" size="20" aria-hidden="true" />
+                <span>{{ t(item.titleKey) }}</span>
+              </summary>
+              <div class="v2-directions__a">
+                <UiLayoutRichText :blocks="item.content" />
+              </div>
+            </details>
+          </div>
+        </div>
         <div class="v2-actions v2-actions--row">
           <UiAtomBaseButton v-if="phoneHref" as="a" :href="phoneHref" variant="secondary" size="lg" class="v2-btn" @click="trackPhoneClick(phoneNumber ?? undefined)">
             <IconPhone size="18" aria-hidden="true" /> Anrufen
@@ -350,7 +388,7 @@
 
     <!-- Fragen + Nachsorge -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--soft" data-track-placement="v2_faq">
+      <div class="v2-card v2-split v2-split--rows" :class="tone('faq', 'v2-card--soft')" data-track-placement="v2_faq">
         <h2 class="v2-h2">{{ H.faq }}</h2>
         <div class="v2-faq">
           <details v-for="(faq, i) in faqs" :key="faq.question" class="v2-faq__item" :open="i === 0">
@@ -369,7 +407,7 @@
 
     <!-- Schlussaufruf -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_final">
+      <div class="v2-card v2-final" :class="tone('final', 'v2-card--accent')" data-track-placement="v2_final">
         <h2 class="v2-h2">{{ H.final }}</h2>
         <p v-if="finalPrice" class="v2-final__price">
           {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
@@ -389,6 +427,8 @@
 import {
   IconArmchair,
   IconArrowRight,
+  IconBus,
+  IconCar,
   IconCalendarCheck,
   IconCircleCheck,
   IconClock,
@@ -409,7 +449,8 @@ import {
 } from "@tabler/icons-vue";
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import type { LocationDto, TreatmentPageDto } from "~/lib/strapi/dto/collections";
-import { SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
+import { ImageFormat, SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
+import { isBlockedAdsImageFile } from "#shared/adsMedia";
 import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
@@ -422,12 +463,14 @@ import {
   adsV2TreatmentSlug,
   adsV2TrustItems,
   adsV2VoucherUrl,
+  adsV2Design,
   employeeDisplayName,
+  isAdsV2DesktopLayout,
   openingHoursSummary,
   pickAdsV2Reviews,
   shortenText,
 } from "#shared/adsTemplateV2";
-import { adsClipsFor, adsWayClipFor } from "#shared/adsClips";
+import { ADS_LOUNGE_NEUTRAL_HEADLINE, adsClipsFor, adsLoungeGalleryFor, adsWayClipFor } from "#shared/adsClips";
 import {
   adsV2Aftercare,
   adsV2ConsultPhoto,
@@ -468,6 +511,112 @@ const { data: extras } = await useFetch<{ reviews?: any[]; doctors?: any[] }>(
   `/api/ads-template-v2/${encodeURIComponent(citySlug)}/${encodeURIComponent(locSlug)}`,
   { key: `ads-template-v2:${citySlug}:${locSlug}`, default: () => ({}) },
 );
+
+// Gestaltung je Seite (shared/adsTemplateV2.ts, ADS_TEMPLATE_V2_DESIGN):
+// "v2" = heutige Gestaltung; "ci"/"ci-hell" = an die bisherigen Strapi-Seiten
+// angelehnt (Feedback Benjamin, 02.10.2026). Aendert nur Klassen, keine
+// Inhalte, Reihenfolge, Knoepfe oder Tracking.
+const design = computed(() =>
+  adsV2Design(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
+);
+type AdsV2Tone = "light" | "soft" | "neutral" | "strong";
+type AdsV2Section =
+  | "clips" | "facts" | "how" | "mid" | "steps" | "prices" | "zones" | "doctors"
+  | "lounge" | "consult" | "reviews" | "objections" | "location" | "faq" | "final";
+/**
+ * Flaechen wie auf www (UiLayoutCardSurface: theme-light/-soft/-neutral/
+ * -strong). Option 1 "ci": weisse und schwarze Abschnitte im Wechsel;
+ * Option 2 "ci-hell": nur die beiden Aufrufe schwarz.
+ */
+const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
+  ci: {
+    clips: "light", facts: "strong", how: "light", mid: "strong", steps: "soft",
+    prices: "light", zones: "light", doctors: "neutral", lounge: "light", consult: "light",
+    reviews: "light", objections: "light", location: "strong", faq: "soft", final: "strong",
+  },
+  "ci-hell": {
+    clips: "light", facts: "light", how: "light", mid: "strong", steps: "soft",
+    prices: "light", zones: "light", doctors: "soft", lounge: "light", consult: "light",
+    reviews: "light", objections: "light", location: "light", faq: "soft", final: "strong",
+  },
+};
+/** Klassen der Abschnittskarte; in "v2" die bisherigen Modifier.
+ *  "ci-rot" (Option R2) nutzt die Flaechen von "ci", nur mit den roten
+ *  Akzenten von heute. */
+function tone(section: AdsV2Section, v2Class = ""): string {
+  const d = design.value;
+  if (d === "v2") return v2Class;
+  const t = TONES[d === "ci-rot" ? "ci" : d][section];
+  return `theme-${t} v2-card--${t}`;
+}
+
+// Desktop-Layout ab 1024 px (shared/adsTemplateV2.ts,
+// ADS_TEMPLATE_V2_DESKTOP_PAGES; Feedback Benjamin 02.10.2026). Nur Klassen;
+// alle Regeln stehen in @media (min-width: 1024px), mobil bleibt gleich.
+const desktopLayout = computed(() =>
+  isAdsV2DesktopLayout(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
+);
+
+const { t } = useI18n();
+
+/**
+ * Lounge-Galerie: erster Galerie-Block der Seite in Strapi mit Bildern
+ * (bei Parya's Profhilo Duesseldorf "MY Lounge Duesseldorf"). Bilder aus der
+ * Sperrliste (shared/adsMedia.ts: Begriff in der URL, alter Schriftzug)
+ * fallen weg - der Strapi-Proxy blendet sie ohnehin schon aus. Alt-Texte
+ * eigene: die aus Strapi nennen teils das Praeparat.
+ */
+// Beide Bausteine (Lounge, Anfahrt) zunaechst nur, wo die CI-Gestaltung an
+// ist (ADS_TEMPLATE_V2_DESIGN); die Daten kommen fuer jeden Standort aus Strapi.
+const lounge = computed(() => {
+  if (design.value === "v2") return null;
+  const blocks: any[] = ((props.treatmentPage as any)?.blocks ?? []) as any[];
+  // Bevorzugt der Galerie-Block der Seite in Strapi, sonst die Auswahl je
+  // Standort im Code (shared/adsClips.ts): sicher eigene Fotos mit
+  // "MY Lounge <Stadt>", sonst neutrale Ueberschrift und Alt-Texte ohne Ort.
+  const city = props.location?.city?.name ?? "";
+  const block = blocks.find((b) => b?.__component === "blocks.gallery" && (b.images?.length ?? 0) > 0);
+  let headline: string;
+  let rawImages: any[];
+  let own: boolean;
+  if (block) {
+    const raw = String(block.headline ?? "").trim();
+    headline = /lounge/i.test(raw) ? raw : city ? `MY Lounge ${city}` : ADS_LOUNGE_NEUTRAL_HEADLINE;
+    rawImages = block.images as any[];
+    own = true;
+  } else {
+    const sel = adsLoungeGalleryFor(locSlug);
+    own = sel.own && !!city;
+    headline = own ? `MY Lounge ${city}` : ADS_LOUNGE_NEUTRAL_HEADLINE;
+    rawImages = [...sel.images];
+  }
+  const images = rawImages
+    .filter((m) => m && String(m.mime ?? "").startsWith("image/") && !isBlockedAdsImageFile(m))
+    .map((m, i) => ({
+      ...m,
+      alternativeText: own ? `${headline} – Bild ${i + 1}` : `Einblick in eine MY Lounge – Bild ${i + 1}`,
+      caption: null,
+    }));
+  return images.length ? { headline, images } : null;
+});
+
+/** Anfahrt aus dem Standort-Feld "directions"; leer = kein Baustein. */
+const directions = computed(() => {
+  const d: any = (props.location as any)?.directions;
+  if (!d || design.value === "v2") return null;
+  const plan =
+    d.image && String(d.image.mime ?? "image/").startsWith("image/") && !isBlockedAdsImageFile(d.image)
+      ? { ...d.image, alternativeText: `Lageplan ${props.location?.name ?? ""}`.trim() }
+      : null;
+  const intro = (d.content?.length ?? 0) > 0 ? d.content : null;
+  const items = [
+    { key: "walk", icon: IconWalk, titleKey: "blocks.directions.walk", content: d.walkDirections },
+    { key: "bus", icon: IconBus, titleKey: "blocks.directions.publicTransport", content: d.publicTransportDirections },
+    { key: "car", icon: IconCar, titleKey: "blocks.directions.car", content: d.carDirections },
+  ].filter((item) => (item.content?.length ?? 0) > 0);
+  if (!plan && !intro && !items.length) return null;
+  return { plan, intro, items };
+});
 
 const globals = useGlobals();
 const { trackPhoneClick, trackEvent } = useGoogleAnalytics();
@@ -1621,6 +1770,564 @@ const routeHref = computed(() => {
     margin: 0;
     padding: 0;
     overflow: visible;
+  }
+}
+/* =====================================================================
+   Gestaltung "ci" / "ci-hell" (Feedback Benjamin, 02.10.2026): an die
+   bisherigen Strapi-Seiten angelehnt. Flaechen ueber die globalen
+   theme-*-Klassen (weiss, hellgrau #e8e7e8, dunkelgrau #46454a, schwarz
+   #0d0d0e), Inter 500 fuer Ueberschriften, Icons und Preise schwarz-weiss,
+   kein Rosa. Rot (#dc2626) nur auf dem Buchungsknopf der mitlaufenden
+   Leiste. Das Bento-Raster bleibt, nur in CI-Farben.
+   ===================================================================== */
+.v2--ci .v2-card {
+  background: var(--card-color-bg);
+  color: var(--color-text);
+}
+
+/* Ueberschriften groesser, naeher an den H2 auf www (mobil 24 px statt
+   22 px - 27 px braeche die langen v2-Ueberschriften in vier Zeilen -,
+   ab 900 px 33 px statt 22 px) */
+.v2--ci .v2-h2 {
+  margin-bottom: var(--space-500);
+  font-size: 1.5rem;
+  line-height: var(--line-3xl);
+}
+
+.v2--ci .v2-h2--sub {
+  font-size: var(--font-lg);
+}
+
+@media (min-width: 900px) {
+  .v2--ci .v2-h2 {
+    font-size: var(--font-3xl);
+  }
+
+  .v2--ci .v2-h2--sub {
+    font-size: var(--font-2xl);
+  }
+}
+
+/* Knoepfe wie auf www: schwarz auf hellen Flaechen, auf schwarzen und
+   dunkelgrauen Flaechen weiss mit schwarzer Schrift (kommt aus theme-*).
+   Rot nur noch auf dem Knopf der mitlaufenden Leiste (Benjamin, 02.10.2026). */
+
+/* Icons, Sterne, Preise: Textfarbe der Flaeche statt Rot/Orange */
+.v2--ci .v2-trust__icon,
+.v2--ci .v2-trust__icon--star,
+.v2--ci .v2-facts__icon,
+.v2--ci .v2-pay__icon,
+.v2--ci .v2-objection__icon,
+.v2--ci .v2-star,
+.v2--ci .v2-review__stars,
+.v2--ci .v2-facts__row--price dd,
+.v2--ci .v2-price__offer,
+.v2--ci .v2-final__price {
+  color: var(--color-text);
+}
+
+.v2--ci .v2-final__price {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .v2--ci .v2-final__price {
+    font-size: 1.75rem;
+  }
+}
+
+/* Zonenbilder: rote Einstichpunkte und rosa Grund grau */
+.v2--ci .v2-how__img,
+.v2--ci .v2-zone__img {
+  filter: grayscale(1);
+}
+
+.v2--ci .v2-zone__photo,
+.v2--ci .v2-zone__img--empty {
+  background: var(--color-gray-100);
+}
+
+/* Steckbrief: auf Schwarz feine Linien; ab 900 px Bento-Kacheln in
+   #292a2c (schwarze Flaeche) bzw. schwarz (helle Flaeche) mit weisser Schrift */
+.v2--ci .v2-facts dt {
+  font-size: var(--font-sm);
+}
+
+@media (min-width: 900px) {
+  .v2--ci .v2-facts__row,
+  .v2--ci .v2-facts__row:first-child {
+    --color-text: var(--strong-color-text);
+    --color-text-light: var(--strong-color-text-light);
+    color: var(--color-text);
+    background: var(--color-card-bg-strong);
+  }
+
+  .v2--ci .theme-strong .v2-facts__row {
+    background: var(--color-gray-900);
+  }
+}
+
+/* Zeitachse schwarz-grau */
+.v2--ci .v2-timeline {
+  border-left-color: var(--color-gray-400);
+}
+
+.v2--ci .v2-timeline__item::before {
+  background: var(--color-text);
+}
+
+.v2--ci .v2-timeline__when {
+  color: var(--color-text);
+}
+
+/* Preise: Kacheln hellgrau statt Rahmen, Betrag gross und schwarz */
+.v2--ci .v2-price {
+  border: 0;
+  background: var(--card-color-bg-sub);
+}
+
+.v2--ci .v2-price--package {
+  box-shadow: inset 0 0 0 2px var(--color-text);
+}
+
+.v2--ci .v2-price__offer {
+  font-size: 1.25rem;
+}
+
+.v2--ci .v2-pay {
+  background: var(--card-color-bg-sub);
+}
+
+/* Bewertungen: Kacheln hellgrau statt Rahmen */
+.v2--ci .v2-review {
+  border: 0;
+  background: var(--card-color-bg-sub);
+}
+
+/* Einwaende: schwarze Bento-Kacheln mit weisser Schrift */
+.v2--ci .v2-objection {
+  --color-text: var(--strong-color-text);
+  --color-text-light: var(--strong-color-text-light);
+  color: var(--color-text);
+  background: var(--color-card-bg-strong);
+}
+
+/* Aerzt:innen auf Dunkelgrau: Fotogrund passend */
+.v2--ci .theme-neutral .v2-doctor__photo {
+  background: var(--color-gray-700);
+}
+
+/* Fragen: Trennlinien wie auf www */
+.v2--ci .theme-soft .v2-faq__item {
+  border-color: var(--color-gray-300);
+}
+
+/* =====================================================================
+   Desktop-Layout ab 1024 px (.v2--desk, Feedback Benjamin 02.10.2026):
+   mobil ist v2 gut, auf dem Desktop wirkte die zentrierte Einspalte leer.
+   Farben, Inhalte, Reihenfolge und Tracking bleiben; nur die Anordnung
+   aendert sich. Unter 1024 px greift hier nichts.
+   ===================================================================== */
+@media (min-width: 1024px) {
+  /* Ueberschriften links und groesser wie auf den bisherigen Seiten */
+  .v2--desk .v2-h2 {
+    margin-bottom: var(--space-600);
+    font-size: var(--font-3xl);
+    line-height: var(--line-3xl);
+    text-align: left;
+  }
+
+  .v2--desk .v2-h2--sub {
+    font-size: var(--font-xl);
+  }
+
+  .v2--desk .v2-lead,
+  .v2--desk .v2-center {
+    text-align: left;
+  }
+
+  .v2--desk .v2-actions {
+    justify-content: flex-start;
+  }
+
+  /* Zweispaltig: links Ueberschrift, Einleitung, Knopf; rechts der Inhalt */
+  .v2--desk .v2-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-rows: auto auto auto 1fr;
+    grid-auto-flow: row dense;
+    column-gap: var(--space-1000);
+    align-items: start;
+  }
+
+  .v2--desk .v2-split > .v2-h2,
+  .v2--desk .v2-split > .v2-lead,
+  .v2--desk .v2-split > .v2-actions {
+    grid-column: 1;
+  }
+
+  .v2--desk .v2-split > :not(.v2-h2):not(.v2-lead):not(.v2-actions) {
+    grid-column: 2;
+    grid-row: 1 / -1;
+  }
+
+  /* Fragen + Nachsorge: je Zeile Ueberschrift links, Inhalt rechts */
+  .v2--desk .v2-split--rows {
+    grid-template-rows: none;
+  }
+
+  .v2--desk .v2-split--rows > :not(.v2-h2):not(.v2-lead):not(.v2-actions) {
+    grid-row: auto;
+  }
+
+  .v2--desk .v2-split--rows > .v2-h2--sub {
+    margin-top: var(--space-600);
+  }
+
+  .v2--desk .v2-split--rows > .v2-aftercare {
+    margin-top: var(--space-600);
+  }
+
+  /* Fliesstext: begrenzte Zeilenlaenge */
+  .v2--desk .v2-how__text,
+  .v2--desk .v2-faq__a {
+    max-width: 68ch;
+  }
+
+  .v2--desk .v2-how:not(.v2-how--text) {
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: var(--space-700);
+  }
+
+  .v2--desk .v2-how__img {
+    width: 160px;
+  }
+
+  .v2--desk .v2-how__text {
+    font-size: var(--font-lg);
+    line-height: var(--line-lg);
+  }
+
+  .v2--desk .v2-zones {
+    max-width: none;
+    margin: 0;
+  }
+
+  .v2--desk .v2-doctors {
+    margin: 0;
+  }
+
+  /* Clips: ganze Breite, vier nebeneinander, linksbuendig */
+  .v2--desk [data-track-placement="v2_clips"] :deep(.clips) {
+    justify-content: flex-start;
+  }
+
+  .v2--desk [data-track-placement="v2_clips"] :deep(.clips__item) {
+    width: calc((100% - 3 * var(--space-400)) / 4);
+  }
+
+  /* Auf einen Blick: vier Spalten ueber die ganze Breite */
+  .v2--desk .v2-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Aufrufe als Leiste: Titel + Preis links, Knopf rechts */
+  .v2--desk .v2-final {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-700);
+    align-items: center;
+    text-align: left;
+  }
+
+  .v2--desk .v2-final > .v2-h2 {
+    margin: 0;
+  }
+
+  .v2--desk .v2-final > .v2-final__price {
+    grid-column: 1;
+  }
+
+  .v2--desk .v2-final > .v2-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+  }
+
+  /* Ablauf als waagerechte Zeitachse */
+  .v2--desk .v2-timeline {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--space-600);
+    padding: var(--space-600) 0 0;
+    border-left: 0;
+    border-top: 2px solid #f1c9c9;
+  }
+
+  .v2--desk .v2-timeline__item::before {
+    left: 0;
+    top: calc(-1 * var(--space-600) - 6px);
+  }
+
+  .v2--desk .v2-steps {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--space-600);
+  }
+
+  /* Preise links, Ratenbox rechts daneben */
+  .v2--desk .v2-prices-card {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-auto-flow: row dense;
+    column-gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk .v2-prices-card > .v2-h2,
+  .v2--desk .v2-prices-card > .v2-lead {
+    grid-column: 1 / -1;
+  }
+
+  .v2--desk .v2-prices-card > .v2-prices,
+  .v2--desk .v2-prices-card > .v2-notes,
+  .v2--desk .v2-prices-card > .v2-actions {
+    grid-column: 1;
+  }
+
+  .v2--desk .v2-prices-card > .v2-pay {
+    grid-column: 2;
+    grid-row: span 3;
+    margin-top: 0;
+    padding: var(--space-600);
+  }
+
+  .v2--desk .v2-price {
+    padding: var(--space-500) var(--space-300);
+  }
+
+  .v2--desk .v2-price__offer {
+    font-size: var(--font-xl);
+  }
+
+  /* Bewertungen: Kundenvideo links, Texte rechts */
+  .v2--desk .v2-reviews-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk .v2-reviews-card > * {
+    grid-column: 1 / -1;
+  }
+
+  .v2--desk .v2-reviews-card > .v2-feedback {
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+
+  .v2--desk .v2-reviews-card > .v2-feedback + .v2-reviews {
+    grid-column: 2;
+  }
+
+  .v2--desk .v2-feedback :deep(.clips__item:first-child) {
+    margin-left: 0;
+  }
+
+  /* Standort: Knoepfe nicht ueber die ganze Breite */
+  .v2--desk .v2-actions--row .v2-btn {
+    flex: 0 0 auto;
+  }
+
+  /* Standort: Foto + Adresse links, Weg-Video rechts daneben */
+  .v2--desk [data-track-placement="v2_location"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-auto-flow: row dense;
+    column-gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-h2 {
+    grid-column: 1 / -1;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-location,
+  .v2--desk [data-track-placement="v2_location"] > .v2-actions {
+    grid-column: 1;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-way {
+    grid-column: 2;
+    grid-row: span 2;
+    margin-top: 0;
+  }
+}
+/* =====================================================================
+   Option R2 ("ci-rot"): Flaechen wie "ci", Rot-Akzente wie heute live
+   (Neukundenpreis, Icons im Blick-Raster, Zeitachse, Preise). Auf
+   schwarzen/dunkelgrauen Flaechen helleres Rot #f87171 (Kontrast), sonst
+   #b91c1c. Knoepfe bleiben schwarz bzw. weiss auf Schwarz.
+   ===================================================================== */
+.v2--rot {
+  --v2-accent: #b91c1c;
+}
+
+.v2--rot .theme-strong,
+.v2--rot .theme-neutral,
+.v2--rot .v2-objection {
+  --v2-accent: #f87171;
+}
+
+.v2--ci.v2--rot .v2-trust__icon,
+.v2--ci.v2--rot .v2-facts__icon,
+.v2--ci.v2--rot .v2-pay__icon,
+.v2--ci.v2--rot .v2-objection__icon,
+.v2--ci.v2--rot .v2-facts__row--price dd,
+.v2--ci.v2--rot .v2-price__offer,
+.v2--ci.v2--rot .v2-final__price,
+.v2--ci.v2--rot .v2-timeline__when {
+  color: var(--v2-accent);
+}
+
+.v2--ci.v2--rot .v2-timeline__item::before {
+  background: var(--v2-accent);
+}
+
+.v2--ci.v2--rot .v2-timeline {
+  border-color: #f1c9c9;
+}
+
+.v2--ci.v2--rot .v2-trust__icon--star,
+.v2--ci.v2--rot .v2-star,
+.v2--ci.v2--rot .v2-review__stars {
+  color: #f5a623;
+}
+
+.v2--ci.v2--rot .v2-how__img,
+.v2--ci.v2--rot .v2-zone__img {
+  filter: none;
+}
+
+.v2--ci.v2--rot .v2-price--package {
+  box-shadow: inset 0 0 0 2px var(--v2-accent);
+}
+
+/* Lounge-Galerie: mobil Wischreihe (wie die Zonen), ab 1024 px Raster */
+.v2-lounge {
+  display: flex;
+  gap: var(--space-300);
+  margin: 0 calc(-1 * var(--space-card-pad));
+  padding: 0 var(--space-card-pad) var(--space-200);
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--space-card-pad);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.v2-lounge__item {
+  flex: 0 0 82%;
+  scroll-snap-align: start;
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: var(--border-radius-200, 12px);
+  background: var(--color-gray-200);
+}
+
+.v2-lounge__item :deep(img) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 1024px) {
+  .v2-lounge {
+    display: grid;
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+}
+
+/* Anfahrt im Standortblock: Lageplan, Wegbeschreibung, Akkordeon */
+.v2-directions {
+  display: grid;
+  gap: var(--space-400);
+  margin-top: var(--space-500);
+}
+
+.v2-directions__plan {
+  overflow: hidden;
+  border-radius: var(--border-radius-200, 12px);
+  background: #fff;
+}
+
+.v2-directions__plan :deep(img) {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.v2-directions__intro {
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+  overflow-wrap: break-word;
+}
+
+.v2-directions__intro :deep(p),
+.v2-directions__a :deep(p) {
+  margin: 0 0 var(--space-200);
+}
+
+.v2-directions__intro :deep(ul),
+.v2-directions__a :deep(ul) {
+  margin: 0 0 var(--space-200);
+  padding-left: 1.1rem;
+}
+
+.v2-directions__item {
+  border-top: 1px solid var(--color-border-mute);
+}
+
+.v2-directions__item:last-child {
+  border-bottom: 1px solid var(--color-border-mute);
+}
+
+.v2-directions__q {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+  padding: var(--space-400) 0;
+  font-weight: var(--font-bold);
+  cursor: pointer;
+}
+
+.v2-directions__a {
+  padding-bottom: var(--space-300);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+  overflow-wrap: break-word;
+}
+
+@media (min-width: 1024px) {
+  .v2--desk [data-track-placement="v2_location"] > .v2-directions {
+    grid-column: 1;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-way {
+    grid-row: span 3;
   }
 }
 </style>

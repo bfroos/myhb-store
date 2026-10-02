@@ -190,6 +190,68 @@ export function isAdsTemplateV2Excluded(
   return exclude.some((p) => matchesPattern(p, city, loc, key));
 }
 
+/**
+ * Gestaltung der v2-Seiten (Feedback Benjamin, 02.10.2026: v2 wirkt "zu
+ * AI-maessig" - rote Icons und Preise, rosa Flaechen, Bento-Kacheln, keine
+ * schwarzen Abschnitte wie auf den bisherigen Strapi-Seiten).
+ *
+ * - "v2":      heutige Gestaltung (Standard)
+ * - "ci":      Option 1 - CI der bisherigen Seiten: weisse und schwarze
+ *              Abschnitte im Wechsel, Icons/Preise schwarz-weiss, Rot nur
+ *              auf dem Buchungsknopf
+ * - "ci-hell": Option 2 - wie "ci", aber nur die beiden Aufrufe schwarz
+ * - "ci-rot":  Option R2 (02.10.2026) - Flaechen wie "ci", Rot-Akzente wie
+ *              heute live (Neukundenpreis, Icons, Zeitachse, Leiste);
+ *              "ci" ist Option R1 (Rot nur auf dem Knopf der Leiste)
+ *
+ * Nur Gestaltung: Inhalte, Reihenfolge, Tracking und A/B-Weiche bleiben.
+ * Schluessel wie ADS_TEMPLATE_V2_PAGES ("stadt/standort/pathKey", "*" je
+ * Segment erlaubt); der erste Treffer gilt. Ausrollen = Eintrag "*\/*\/*".
+ */
+export type AdsV2Design = "v2" | "ci" | "ci-hell" | "ci-rot";
+
+export const ADS_TEMPLATE_V2_DESIGN: ReadonlyArray<readonly [string, AdsV2Design]> = [
+  // Benjamin, 02.10.2026: "Das Rot bleibt so wie heute live" -> R2
+  ["koeln/koeln-arcaden/hyaluron/lippen-aufspritzen", "ci-rot"],
+  ["koeln/koeln-arcaden/skinbooster/profhilo", "ci-rot"],
+];
+
+export function adsV2Design(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  table: ReadonlyArray<readonly [string, AdsV2Design]> = ADS_TEMPLATE_V2_DESIGN,
+): AdsV2Design {
+  const key = basePathKey(pathKey);
+  if (!city || !loc || !key) return "v2";
+  const hit = table.find(([p]) => matchesPattern(p, city, loc, key));
+  return hit ? hit[1] : "v2";
+}
+
+/**
+ * Desktop-Layout der v2-Seiten (Feedback Benjamin, 02.10.2026): mobil ist v2
+ * gut und bleibt unveraendert; ab 1024 px wirkt die mobile Einspalte mit
+ * allem zentriert leer. Mit diesem Schalter bekommt die Seite ab 1024 px ein
+ * eigenes Layout (Hero linksbuendig, Abschnitte zweispaltig, Zeitachse
+ * waagerecht, Preise neben der Ratenbox). Unter 1024 px greift keine Regel.
+ * Muster wie ADS_TEMPLATE_V2_PAGES; Ausrollen = "*\/*\/*".
+ */
+export const ADS_TEMPLATE_V2_DESKTOP_PAGES: readonly string[] = [
+  "koeln/koeln-arcaden/hyaluron/lippen-aufspritzen",
+  "koeln/koeln-arcaden/skinbooster/profhilo",
+];
+
+export function isAdsV2DesktopLayout(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  pages: readonly string[] = ADS_TEMPLATE_V2_DESKTOP_PAGES,
+): boolean {
+  const key = basePathKey(pathKey);
+  if (!city || !loc || !key) return false;
+  return pages.some((p) => matchesPattern(p, city, loc, key));
+}
+
 /** Hat der Standort mindestens eine v2-Seite? (Endpunkt der Zusatzdaten) */
 export function isAdsTemplateV2Location(
   city: string | null | undefined,

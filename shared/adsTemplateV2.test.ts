@@ -24,6 +24,8 @@ import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
   adsV2VoucherUrl,
+  adsV2Design,
+  isAdsV2DesktopLayout,
 } from "./adsTemplateV2.ts";
 import {
   adsClipAllowed,
@@ -362,4 +364,53 @@ test("Vorschau nur unter /vorschau-v2, Canonical auf die echte Seite", () => {
   assert.equal(isAdsTemplateV2Location("koeln", "koeln-arcaden"), true);
   assert.equal(isAdsTemplateV2Location("berlin", "gesundbrunnencenter"), true);
   assert.equal(isAdsTemplateV2Location("koblenz", "loehr-center"), false);
+});
+
+test("adsV2Design: CI-Gestaltung nur fuer Lippen und Profhilo Koeln Arcaden", () => {
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "ci-rot");
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "skinbooster/profhilo"), "ci-rot");
+  assert.equal(adsV2Design("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), "v2");
+  // "-rabatt"-Variante und fuehrende/abschliessende Schraegstriche: dieselbe Seite
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "/hyaluron/lippen-aufspritzen-rabatt/"), "ci-rot");
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), "v2");
+  assert.equal(adsV2Design("berlin", "gesundbrunnencenter", "hyaluron/lippen-aufspritzen"), "v2");
+  assert.equal(adsV2Design(null, "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "v2");
+  // Ausrollen per Muster
+  const all = [["*/*/*", "ci-hell"]] as const;
+  assert.equal(adsV2Design("aachen", "aquis-plaza", "skinbooster/profhilo", all), "ci-hell");
+  const first = [["koeln/*/hyaluron/*", "ci"], ["*/*/*", "v2"]] as const;
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/jawline", first), "ci");
+  assert.equal(adsV2Design("aachen", "aquis-plaza", "hyaluron/jawline", first), "v2");
+});
+
+test("isAdsV2DesktopLayout: zunaechst nur Lippen und Profhilo Koeln Arcaden", () => {
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), true);
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "/skinbooster/profhilo/"), true);
+  assert.equal(isAdsV2DesktopLayout("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), false);
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), false);
+  assert.equal(isAdsV2DesktopLayout("aachen", "aquis-plaza", "hyaluron/jawline", ["*/*/*"]), true);
+});
+
+test("ADS_LOUNGE_GALLERY: nur Bilder ohne Sperrbegriff/Sperrdatei, Koeln vorerst unbestaetigt", async () => {
+  const { ADS_LOUNGE_GALLERY, adsLoungeGalleryFor } = await import("./adsClips.ts");
+  const { isBlockedAdsImageFile } = await import("./adsMedia.ts");
+  for (const [loc, g] of Object.entries(ADS_LOUNGE_GALLERY)) {
+    assert.ok(g.images.length > 0, loc);
+    for (const img of g.images) {
+      assert.equal(isBlockedAdsImageFile(img), false, `${loc} ${img.url}`);
+      assert.doesNotMatch(img.url, /botox|btx/i);
+    }
+  }
+  // Koeln unbestaetigt: neutrale Galerie (ohne Ortsnamen), 114/79 zuerst
+  assert.equal(ADS_LOUNGE_GALLERY["koeln-arcaden"]?.confirmed, false);
+  const koeln = adsLoungeGalleryFor("koeln-arcaden");
+  assert.equal(koeln.own, false);
+  assert.deepEqual(koeln.images.slice(0, 2).map((i) => i.id), [114, 79]);
+  assert.equal(koeln.images.length, 7);
+  // Duesseldorf: sicher eigene Fotos
+  assert.equal(adsLoungeGalleryFor("duesseldorf-arcaden").own, true);
+  // Standort ohne Eintrag: nur die allgemeinen, neutral
+  const forum = adsLoungeGalleryFor("forum");
+  assert.equal(forum.own, false);
+  assert.equal(forum.images.length, 5);
 });
