@@ -73,13 +73,16 @@
                 </span>
                 {{ headline }}
                 <span
-                  v-if="headlineSuffix && !isAdsMode"
+                  v-if="headlineSuffix && (!isAdsMode || strapiMode)"
                   class="hero__title-suffix"
                 >
                   {{ headlineSuffix }}
                 </span>
               </h1>
-              <template v-if="isAdsMode">
+              <!-- go., in Strapi gebaute Seite (ADS_TEMPLATE_V2_EXCLUDE):
+                   Unterzeile und Text wie in Strapi, ohne zusaetzliche rote
+                   Preiszeile (Redaktion, 02.10.2026). -->
+              <template v-if="isAdsMode && !strapiMode">
                 <p v-if="adsSubline" class="hero__subline hero__subline--ads">
                   {{ adsSubline }}
                 </p>
@@ -345,9 +348,22 @@ const globals = useGlobals();
 // showBookingButton/showDiscount gelten dort nicht, auch nicht auf den
 // "-rabatt"-Seiten, die bisher nur den Rabatt-Knopf hatten. Ohne `cta` (Standort
 // nimmt keine Buchungen an) bleibt es beim Strapi-Stand. www unveraendert.
-const forceBothButtons = computed(() => isAdsMode.value && !!props.cta);
+// Ausnahme: in Strapi fuer go. gebaute Seiten (ADS_TEMPLATE_V2_EXCLUDE,
+// `strapiHero`) - dort gelten die Strapi-Schalter (Redaktion, 02.10.2026).
+const strapiMode = computed(
+  () => isAdsMode.value && !!props.strapiHero && !props.templateV2,
+);
+const forceBothButtons = computed(
+  () => isAdsMode.value && !!props.cta && !strapiMode.value,
+);
+// "Termin buchen" bleibt auf go. auch dort fest (Hero und Leiste): Der
+// Strapi-Schalter showBookingButton stand am 02.10.2026 auf aus, ohne dass
+// das als Wunsch belegt ist - Entscheidung liegt bei Benjamin.
 const bookingButtonVisible = computed(
-  () => forceBothButtons.value || props.showBookingButton,
+  () =>
+    forceBothButtons.value ||
+    (strapiMode.value && !!props.cta) ||
+    props.showBookingButton,
 );
 const discountButtonVisible = computed(
   () => forceBothButtons.value || !!props.showGlobalDiscount,
