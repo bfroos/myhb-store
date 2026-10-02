@@ -1666,8 +1666,8 @@ const routeHref = computed(() => {
    bisherigen Strapi-Seiten angelehnt. Flaechen ueber die globalen
    theme-*-Klassen (weiss, hellgrau #e8e7e8, dunkelgrau #46454a, schwarz
    #0d0d0e), Inter 500 fuer Ueberschriften, Icons und Preise schwarz-weiss,
-   kein Rosa. Rot (#dc2626, wie der Buchungsknopf der Leiste) NUR auf dem
-   Buchungsknopf. Das Bento-Raster bleibt, nur in CI-Farben.
+   kein Rosa. Rot (#dc2626) nur auf dem Buchungsknopf der mitlaufenden
+   Leiste. Das Bento-Raster bleibt, nur in CI-Farben.
    ===================================================================== */
 .v2--ci .v2-card {
   background: var(--card-color-bg);
@@ -1697,13 +1697,9 @@ const routeHref = computed(() => {
   }
 }
 
-/* Buchungsknopf: einziges Rot der Seite, auch auf schwarzen Flaechen.
-   Weiss auf #dc2626 = 4,8:1 (AA), Hover #b91c1c = 6,5:1. */
-.v2--ci .v2-btn {
-  --button-primary-color-bg: #dc2626;
-  --button-primary-color-bg-hover: #b91c1c;
-  --button-primary-color-text: #fff;
-}
+/* Knoepfe wie auf www: schwarz auf hellen Flaechen, auf schwarzen und
+   dunkelgrauen Flaechen weiss mit schwarzer Schrift (kommt aus theme-*).
+   Rot nur noch auf dem Knopf der mitlaufenden Leiste (Benjamin, 02.10.2026). */
 
 /* Icons, Sterne, Preise: Textfarbe der Flaeche statt Rot/Orange */
 .v2--ci .v2-trust__icon,
