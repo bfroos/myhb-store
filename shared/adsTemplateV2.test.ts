@@ -401,6 +401,16 @@ test("ADS_LOUNGE_GALLERY: nur Bilder ohne Sperrbegriff/Sperrdatei, Koeln vorerst
       assert.doesNotMatch(img.url, /botox|btx/i);
     }
   }
-  assert.equal(adsLoungeGalleryFor("koeln-arcaden")?.confirmed, false);
-  assert.equal(adsLoungeGalleryFor("forum"), null);
+  // Koeln unbestaetigt: neutrale Galerie (ohne Ortsnamen), 114/79 zuerst
+  assert.equal(ADS_LOUNGE_GALLERY["koeln-arcaden"]?.confirmed, false);
+  const koeln = adsLoungeGalleryFor("koeln-arcaden");
+  assert.equal(koeln.own, false);
+  assert.deepEqual(koeln.images.slice(0, 2).map((i) => i.id), [114, 79]);
+  assert.equal(koeln.images.length, 7);
+  // Duesseldorf: sicher eigene Fotos
+  assert.equal(adsLoungeGalleryFor("duesseldorf-arcaden").own, true);
+  // Standort ohne Eintrag: nur die allgemeinen, neutral
+  const forum = adsLoungeGalleryFor("forum");
+  assert.equal(forum.own, false);
+  assert.equal(forum.images.length, 5);
 });

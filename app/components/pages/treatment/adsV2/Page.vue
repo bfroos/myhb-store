@@ -470,7 +470,7 @@ import {
   pickAdsV2Reviews,
   shortenText,
 } from "#shared/adsTemplateV2";
-import { adsClipsFor, adsLoungeGalleryFor, adsWayClipFor } from "#shared/adsClips";
+import { ADS_LOUNGE_NEUTRAL_HEADLINE, adsClipsFor, adsLoungeGalleryFor, adsWayClipFor } from "#shared/adsClips";
 import {
   adsV2Aftercare,
   adsV2ConsultPhoto,
@@ -571,21 +571,32 @@ const { t } = useI18n();
 const lounge = computed(() => {
   if (design.value === "v2") return null;
   const blocks: any[] = ((props.treatmentPage as any)?.blocks ?? []) as any[];
-  // Bevorzugt der Galerie-Block der Seite in Strapi, sonst die Zuordnung je
-  // Standort im Code (shared/adsClips.ts, ADS_LOUNGE_GALLERY).
-  const g =
-    blocks.find((b) => b?.__component === "blocks.gallery" && (b.images?.length ?? 0) > 0) ??
-    (() => {
-      const code = adsLoungeGalleryFor(locSlug);
-      return code ? { headline: "", images: code.images } : null;
-    })();
-  if (!g) return null;
+  // Bevorzugt der Galerie-Block der Seite in Strapi, sonst die Auswahl je
+  // Standort im Code (shared/adsClips.ts): sicher eigene Fotos mit
+  // "MY Lounge <Stadt>", sonst neutrale Ueberschrift und Alt-Texte ohne Ort.
   const city = props.location?.city?.name ?? "";
-  const raw = String(g.headline ?? "").trim();
-  const headline = /lounge/i.test(raw) ? raw : city ? `MY Lounge ${city}` : "Unsere Lounge";
-  const images = (g.images as any[])
+  const block = blocks.find((b) => b?.__component === "blocks.gallery" && (b.images?.length ?? 0) > 0);
+  let headline: string;
+  let rawImages: any[];
+  let own: boolean;
+  if (block) {
+    const raw = String(block.headline ?? "").trim();
+    headline = /lounge/i.test(raw) ? raw : city ? `MY Lounge ${city}` : ADS_LOUNGE_NEUTRAL_HEADLINE;
+    rawImages = block.images as any[];
+    own = true;
+  } else {
+    const sel = adsLoungeGalleryFor(locSlug);
+    own = sel.own && !!city;
+    headline = own ? `MY Lounge ${city}` : ADS_LOUNGE_NEUTRAL_HEADLINE;
+    rawImages = [...sel.images];
+  }
+  const images = rawImages
     .filter((m) => m && String(m.mime ?? "").startsWith("image/") && !isBlockedAdsImageFile(m))
-    .map((m, i) => ({ ...m, alternativeText: `${headline} – Bild ${i + 1}`, caption: null }));
+    .map((m, i) => ({
+      ...m,
+      alternativeText: own ? `${headline} – Bild ${i + 1}` : `Einblick in eine MY Lounge – Bild ${i + 1}`,
+      caption: null,
+    }));
   return images.length ? { headline, images } : null;
 });
 

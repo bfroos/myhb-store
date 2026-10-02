@@ -662,6 +662,34 @@ export const ADS_LOUNGE_GALLERY: Record<string, AdsLoungeGallery> = {
   },
 };
 
-export function adsLoungeGalleryFor(locationSlug: string | null | undefined): AdsLoungeGallery | null {
-  return ADS_LOUNGE_GALLERY[String(locationSlug ?? "")] ?? null;
+/** Ueberschrift, wenn der Standort keine sicher eigenen Fotos hat. */
+export const ADS_LOUNGE_NEUTRAL_HEADLINE = "Einblicke in unsere MY Lounges";
+
+/**
+ * Allgemeine Lounge-/Team-Fotos (Benjamin, 02.10.2026: fuer Standorte ohne
+ * sicher eigene Fotos ok, dann mit neutraler Ueberschrift und Alt-Texten
+ * ohne Ort). Aus Parya's Duesseldorfer Auswahl, ohne sichtbaren Ortsnamen.
+ */
+const ADS_LOUNGE_GENERAL_IDS: readonly number[] = [1040, 1035, 1022, 1009, 985];
+
+export type AdsLoungeSelection = {
+  images: readonly AdsLoungeImage[];
+  /** true = sicher eigene Fotos des Standorts ("MY Lounge <Stadt>"). */
+  own: boolean;
+};
+
+/**
+ * Galerie fuer den Standort: sicher eigene Fotos (confirmed) mit Ortsnamen;
+ * sonst neutral - zuerst die wahrscheinlichen eigenen Bilder (z. B. Koeln
+ * 114/79, unbestaetigt), dann die allgemeinen, zusammen hoechstens 7.
+ */
+export function adsLoungeGalleryFor(locationSlug: string | null | undefined): AdsLoungeSelection {
+  const g = ADS_LOUNGE_GALLERY[String(locationSlug ?? "")] ?? null;
+  if (g?.confirmed) return { images: g.images, own: true };
+  const general = (ADS_LOUNGE_GALLERY["duesseldorf-arcaden"]?.images ?? []).filter((img) =>
+    ADS_LOUNGE_GENERAL_IDS.includes(img.id),
+  );
+  const seen = new Set<number>();
+  const images = [...(g?.images ?? []), ...general].filter((img) => !seen.has(img.id) && seen.add(img.id)).slice(0, 7);
+  return { images, own: false };
 }
