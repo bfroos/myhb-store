@@ -27,6 +27,19 @@ const GESPIEGELT = new Set([
   "booking_confirmed",
 ]);
 
+/**
+ * Datenschicht-Name → Name in `funnel_events`, wo beide Flaechen denselben
+ * Schritt meinen (bfroos/myhb-store#227). Calendly meldet die gewaehlte
+ * Uhrzeit (`calendly.date_and_time_selected`) als `booking_datetime_selected`;
+ * in der Tabelle heisst derselbe Schritt der App `slot_selected`. So rechnet
+ * die Auswertung je Arm Klick → Uhrzeit gewaehlt → gebucht mit einem Namen.
+ * Die Nachricht des unsichtbaren, vorgewaermten Rahmens kommt gar nicht bis
+ * hierher (isPrewarmSource in CalendlyDialog).
+ */
+const UMBENANNT: Record<string, string> = {
+  booking_datetime_selected: "slot_selected",
+};
+
 let sidImSpeicher: string | undefined;
 
 const neueSid = (): string => {
@@ -56,8 +69,9 @@ const text = (v: unknown): string | undefined =>
 /** Spiegelt ein Datenschicht-Ereignis, wenn es zum Trichter gehoert. */
 export function mirrorFunnelEvent(payload: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
-  const event = text(payload.event);
-  if (!event || !GESPIEGELT.has(event)) return;
+  const dlEvent = text(payload.event);
+  if (!dlEvent || !(GESPIEGELT.has(dlEvent) || dlEvent in UMBENANNT)) return;
+  const event = UMBENANNT[dlEvent] ?? dlEvent;
   try {
     const body = JSON.stringify({
       event,
