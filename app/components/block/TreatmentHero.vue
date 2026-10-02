@@ -325,7 +325,7 @@ const props = withDefaults(
        * "ci"/"ci-hell": Preiszeile schwarz statt rot; rot nur die Leiste.
        * "ci-rot": Preiszeile rot wie heute.
        */
-      v2Design?: "v2" | "ci" | "ci-hell" | "ci-rot";
+      v2Design?: "v2" | "ci" | "ci-hell" | "ci-rot" | "ci-preis";
       /**
        * go.-Vorlage v2: Desktop-Layout ab 1024 px (shared/adsTemplateV2.ts,
        * isAdsV2DesktopLayout): Text linksbuendig, Hero nicht bildschirmhoch.

@@ -16,7 +16,7 @@
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
     Behandlung: shared/adsTemplateV2Content.ts.
   -->
-  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--desk': desktopLayout }">
+  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--preis': design === 'ci-preis', 'v2--desk': desktopLayout }">
     <BlockTreatmentHero
       v-bind="hero"
       :subline="terms?.subline ?? hero.subline"
@@ -212,6 +212,7 @@
               />
               <span v-else-if="zoneTilesHaveImages" class="v2-zone__img v2-zone__img--empty" aria-hidden="true" />
               <span class="v2-zone__label">{{ tile.label }}</span>
+              <span v-if="tile.price" class="v2-zone__price">{{ tile.price }}</span>
             </a>
           </li>
         </ul>
@@ -488,7 +489,7 @@ import {
   adsV2HowParts,
   adsV2Objections,
 } from "#shared/adsTemplateV2Content";
-import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT, formatEuroCent } from "#shared/newCustomerOffer";
+import { DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT, formatEuroCent, newCustomerPriceCent } from "#shared/newCustomerOffer";
 import {
   adsOfferBPath,
   adsOfferRegularCards,
@@ -546,7 +547,7 @@ const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
 function tone(section: AdsV2Section, v2Class = ""): string {
   const d = design.value;
   if (d === "v2") return v2Class;
-  const t = TONES[d === "ci-rot" ? "ci" : d][section];
+  const t = TONES[d === "ci-rot" || d === "ci-preis" ? "ci" : d][section];
   return `theme-${t} v2-card--${t}`;
 }
 
@@ -835,10 +836,29 @@ const aftercare = computed(() => adsV2Aftercare(pathKey.value));
 const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
 // Variante B bleibt beim Wechsel auf eine andere Zone in B.
 const zoneTiles = computed(() =>
-  adsV2ZoneTiles(pathKey.value, citySlug, locSlug).map((t) =>
-    isB.value ? { ...t, href: adsOfferBPath(t.href) } : t,
-  ),
+  adsV2ZoneTiles(pathKey.value, citySlug, locSlug).map((t) => ({
+    ...(isB.value ? { ...t, href: adsOfferBPath(t.href) } : t),
+    price: zonePrice(t.href),
+  })),
 );
+/**
+ * Preis je Kachel "weitere Behandlungen" (CI-Gestaltung, nach Parya's
+ * "Passende Behandlungen"): aus den in Strapi verknuepften Behandlungen
+ * der Seite (relatedTreatments), A mit Neukundenpreis*, B regulaer. Ohne
+ * Treffer kein Preis.
+ */
+function zonePrice(href: string): string | null {
+  if (design.value === "v2") return null;
+  const key = href.replace(/^.*\/standorte\/[^/]+\/[^/]+\//, "");
+  const pages: any[] = (props.treatmentPage as any)?.relatedTreatments?.treatmentAdsPages ?? [];
+  const tr = pages.find((p) => p?.pathKey === key || p?.pathKey === `${key}-rabatt`)?.treatment;
+  const cent = Number(tr?.priceInEuroCent ?? 0);
+  if (!cent) return null;
+  const ab = tr?.isStartingPrice === false ? "" : "ab ";
+  if (isB.value) return `${ab}${formatEuroCent(cent)}`;
+  const nc = newCustomerPriceCent(cent, discountPct.value);
+  return nc ? `${ab}${formatEuroCent(nc)}*` : `${ab}${formatEuroCent(cent)}`;
+}
 // Ohne ein einziges Zonenbild (Skinbooster, Infusionen): schlichte Textkacheln.
 const zoneTilesHaveImages = computed(() => zoneTiles.value.some((t) => !!t.image));
 const doctorsLead = "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle.";
@@ -2329,5 +2349,269 @@ const routeHref = computed(() => {
   .v2--desk [data-track-placement="v2_location"] > .v2-way {
     grid-row: span 3;
   }
+}
+/* =====================================================================
+   Runde 2 (Benjamin, 02.10.2026 abends), nur CI-Gestaltung (.v2--ci):
+   "ci-preis" = R1 + roter Neukundenpreis; Preise, weitere Behandlungen und
+   "Noch unsicher?" als Bento-Kacheln.
+   ===================================================================== */
+.v2--preis {
+  --v2-accent: #b91c1c;
+}
+
+.v2--preis .theme-strong,
+.v2--preis .theme-neutral {
+  --v2-accent: #f87171;
+}
+
+.v2--ci.v2--preis .v2-facts__row--price dd,
+.v2--ci.v2--preis .v2-price__offer,
+.v2--ci.v2--preis .v2-final__price {
+  color: var(--v2-accent);
+}
+
+/* Preise als Bento: Preis-Kacheln gross, Inklusivleistungen und Raten je
+   eine eigene Kachel */
+.v2--ci .v2-prices-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-300);
+}
+
+.v2--ci .v2-prices-card > .v2-h2,
+.v2--ci .v2-prices-card > .v2-lead {
+  margin-bottom: var(--space-200);
+}
+
+.v2--ci .v2-prices {
+  gap: var(--space-300);
+}
+
+.v2--ci .v2-price {
+  justify-content: center;
+  gap: var(--space-200);
+  padding: var(--space-600) var(--space-400);
+  border-radius: var(--border-radius-500);
+}
+
+.v2--ci .v2-price__label {
+  font-size: var(--font-sm);
+  color: var(--color-text-light);
+}
+
+.v2--ci .v2-price__offer {
+  font-size: 1.625rem;
+}
+
+.v2--ci .v2-notes {
+  display: grid;
+  gap: var(--space-200);
+  margin: 0;
+  padding: var(--space-500);
+  border-radius: var(--border-radius-500);
+  background: var(--color-card-bg-soft);
+  color: var(--color-text);
+}
+
+.v2--ci .v2-notes li {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.v2--ci .v2-notes li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  font-weight: var(--font-bold);
+}
+
+.v2--ci .v2-pay {
+  --color-text: var(--strong-color-text);
+  --color-text-light: var(--strong-color-text-light);
+  margin: 0;
+  padding: var(--space-500);
+  border-radius: var(--border-radius-500);
+  background: var(--color-card-bg-strong);
+  color: var(--color-text);
+}
+
+.v2--ci .v2-pay__icon {
+  color: currentColor;
+}
+
+.v2--ci .v2-pay__cta {
+  border-color: #fff;
+}
+
+.v2--ci .v2-pay__cta:hover {
+  background: var(--color-gray-200);
+  color: #000;
+}
+
+.v2--ci .v2-prices-card > .v2-actions {
+  margin-top: var(--space-300);
+}
+
+@media (min-width: 1024px) {
+  .v2--ci.v2--desk .v2-prices-card {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    column-gap: var(--space-300);
+  }
+
+  .v2--ci.v2--desk .v2-prices-card > .v2-prices {
+    grid-column: 1;
+    grid-row: span 2;
+    height: 100%;
+  }
+
+  .v2--ci.v2--desk .v2-prices-card > .v2-notes {
+    grid-column: 2;
+  }
+
+  .v2--ci.v2--desk .v2-prices-card > .v2-pay {
+    grid-column: 2;
+    grid-row: auto;
+  }
+
+  .v2--ci.v2--desk .v2-price {
+    padding: var(--space-800) var(--space-500);
+  }
+
+  .v2--ci.v2--desk .v2-price__offer {
+    font-size: var(--font-4xl);
+  }
+}
+
+/* Weitere Behandlungen: grosse dunkle Bildkacheln mit Name und Preis
+   (wie "Passende Behandlungen" auf Parya's Strapi-Seite) */
+.v2--ci .v2-zones__item {
+  flex: 0 0 74%;
+  min-width: 0;
+}
+
+.v2--ci .v2-zone--photo {
+  --color-text: var(--strong-color-text);
+  position: relative;
+  align-items: flex-start;
+  gap: var(--space-200);
+  padding: 0 0 var(--space-400);
+  border: 0;
+  border-radius: var(--border-radius-500);
+  background: var(--color-card-bg-strong);
+  color: var(--color-text);
+  text-align: left;
+}
+
+.v2--ci .v2-zone--photo .v2-zone__photo {
+  aspect-ratio: 4 / 5;
+}
+
+.v2--ci .v2-zone--photo .v2-zone__label {
+  padding: 0 var(--space-400);
+  font-size: var(--font-md);
+}
+
+.v2--ci .v2-zone__price {
+  margin: 0 var(--space-400);
+  padding: var(--space-100) var(--space-300);
+  border-radius: 999px;
+  background: #fff;
+  color: #000;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  white-space: nowrap;
+}
+
+.v2--ci .v2-zone:not(.v2-zone--photo) .v2-zone__price {
+  background: var(--color-black);
+  color: #fff;
+}
+
+@media (min-width: 1024px) {
+  .v2--ci.v2--desk [data-track-placement="v2_zones"] {
+    display: block;
+  }
+
+  .v2--ci.v2--desk [data-track-placement="v2_zones"] > .v2-zones {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-400);
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .v2--ci.v2--desk .v2-zone--photo .v2-zone__photo {
+    aspect-ratio: 4 / 3;
+  }
+
+  .v2--ci.v2--desk .v2-zone--photo .v2-zone__label {
+    font-size: var(--font-lg);
+  }
+}
+
+/* "Noch unsicher?" als Bento: Kacheln in Schwarz, Dunkelgrau, Hellgrau,
+   unterschiedlich gross; Icons in Textfarbe, kein Rot */
+.v2--ci .v2-objections {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.v2--ci .v2-objection {
+  grid-column: span 2;
+  padding: var(--space-500);
+  border-radius: var(--border-radius-500);
+}
+
+.v2--ci .v2-objection__icon,
+.v2--ci.v2--rot .v2-objection__icon {
+  color: currentColor;
+}
+
+.v2--ci .v2-objection:nth-child(3n + 2) {
+  --color-text: var(--neutral-color-text);
+  --color-text-light: var(--neutral-color-text-light);
+  background: var(--color-card-bg-neutral);
+}
+
+.v2--ci .v2-objection:nth-child(3n + 3) {
+  --color-text: var(--soft-color-text);
+  --color-text-light: var(--soft-color-text-light);
+  color: var(--color-text);
+  background: var(--color-card-bg-soft);
+}
+
+.v2--ci .v2-objection__q {
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
+}
+
+@media (min-width: 1024px) {
+  .v2--ci .v2-objections {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: var(--space-300);
+  }
+
+  .v2--ci .v2-objection {
+    grid-column: span 3;
+    min-height: 180px;
+    padding: var(--space-700);
+  }
+
+  .v2--ci .v2-objection:nth-child(5n + 1) {
+    grid-column: span 4;
+  }
+
+  .v2--ci .v2-objection:nth-child(5n + 2) {
+    grid-column: span 2;
+  }
+
+  .v2--ci .v2-objection:nth-child(5n + 5) {
+    grid-column: span 6;
+  }
+}
+/* Zeitachse ohne Rot: auch die waagerechte Linie (Desktop) grau */
+.v2--ci:not(.v2--rot) .v2-timeline {
+  border-color: var(--color-gray-400);
 }
 </style>
