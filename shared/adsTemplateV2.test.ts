@@ -390,3 +390,17 @@ test("isAdsV2DesktopLayout: zunaechst nur Lippen und Profhilo Koeln Arcaden", ()
   assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), false);
   assert.equal(isAdsV2DesktopLayout("aachen", "aquis-plaza", "hyaluron/jawline", ["*/*/*"]), true);
 });
+
+test("ADS_LOUNGE_GALLERY: nur Bilder ohne Sperrbegriff/Sperrdatei, Koeln vorerst unbestaetigt", async () => {
+  const { ADS_LOUNGE_GALLERY, adsLoungeGalleryFor } = await import("./adsClips.ts");
+  const { isBlockedAdsImageFile } = await import("./adsMedia.ts");
+  for (const [loc, g] of Object.entries(ADS_LOUNGE_GALLERY)) {
+    assert.ok(g.images.length > 0, loc);
+    for (const img of g.images) {
+      assert.equal(isBlockedAdsImageFile(img), false, `${loc} ${img.url}`);
+      assert.doesNotMatch(img.url, /botox|btx/i);
+    }
+  }
+  assert.equal(adsLoungeGalleryFor("koeln-arcaden")?.confirmed, false);
+  assert.equal(adsLoungeGalleryFor("forum"), null);
+});

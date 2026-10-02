@@ -247,7 +247,7 @@
     <UiLayoutSectionBlock v-if="lounge">
       <div class="v2-card" :class="tone('lounge')" data-track-placement="v2_lounge">
         <h2 class="v2-h2">{{ lounge.headline }}</h2>
-        <ul class="v2-lounge" role="list">
+        <ul class="v2-lounge" role="list" :style="{ '--cols': String(Math.min(lounge.images.length, 3)) }">
           <li v-for="(img, i) in lounge.images" :key="img.id ?? i" class="v2-lounge__item">
             <UiAtomMediaPicture :media="img" :default-format="ImageFormat.MEDIUM" />
           </li>
@@ -470,7 +470,7 @@ import {
   pickAdsV2Reviews,
   shortenText,
 } from "#shared/adsTemplateV2";
-import { adsClipsFor, adsWayClipFor } from "#shared/adsClips";
+import { adsClipsFor, adsLoungeGalleryFor, adsWayClipFor } from "#shared/adsClips";
 import {
   adsV2Aftercare,
   adsV2ConsultPhoto,
@@ -571,7 +571,14 @@ const { t } = useI18n();
 const lounge = computed(() => {
   if (design.value === "v2") return null;
   const blocks: any[] = ((props.treatmentPage as any)?.blocks ?? []) as any[];
-  const g = blocks.find((b) => b?.__component === "blocks.gallery" && (b.images?.length ?? 0) > 0);
+  // Bevorzugt der Galerie-Block der Seite in Strapi, sonst die Zuordnung je
+  // Standort im Code (shared/adsClips.ts, ADS_LOUNGE_GALLERY).
+  const g =
+    blocks.find((b) => b?.__component === "blocks.gallery" && (b.images?.length ?? 0) > 0) ??
+    (() => {
+      const code = adsLoungeGalleryFor(locSlug);
+      return code ? { headline: "", images: code.images } : null;
+    })();
   if (!g) return null;
   const city = props.location?.city?.name ?? "";
   const raw = String(g.headline ?? "").trim();
@@ -2231,7 +2238,7 @@ const routeHref = computed(() => {
 @media (min-width: 1024px) {
   .v2-lounge {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
     margin: 0;
     padding: 0;
     overflow: visible;

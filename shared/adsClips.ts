@@ -604,3 +604,64 @@ export function adsWayClipFor(locationSlug: string | null | undefined): AdsClip 
   const clip = ADS_WAY_CLIPS[String(locationSlug ?? "")];
   return clip && adsClipAllowed(clip) ? clip : null;
 }
+
+/**
+ * Lounge-Galerie je Standort (locationSlug), wenn die Seite in Strapi keinen
+ * eigenen Galerie-Block hat (der Strapi-Block bleibt die bevorzugte Quelle,
+ * Page.vue). Gesucht am 02.10.2026 in der ganzen Strapi-Medienbibliothek
+ * (974 Bilder) und im Material der Sitzung. Das Fotoshooting
+ * "2026_MYHB_Tag1-3" (112 Bilder) hat keine Standortangabe; die Alt-Texte
+ * nennen Staedte nur als SEO-Zusatz und widersprechen sich. Zuordnung
+ * deshalb nur ueber den Bildinhalt gegen das Weg-Video des Standorts.
+ * Jedes Bild angesehen: aktuelles Logo bzw. keins, kein "MYH&B", keine Nadel.
+ */
+export type AdsLoungeImage = {
+  id: number;
+  url: string;
+  width: number;
+  height: number;
+  mime: string;
+};
+
+export type AdsLoungeGallery = {
+  images: readonly AdsLoungeImage[];
+  /** Woher die Zuordnung zum Standort stammt. */
+  source: string;
+  /** false = Zuordnung nur wahrscheinlich, vor dem Merge bestaetigen lassen. */
+  confirmed: boolean;
+};
+
+export const ADS_LOUNGE_GALLERY: Record<string, AdsLoungeGallery> = {
+  // Strapi 79 + 114: dunkelgraue Grossfliesen mit hellem Rand, Alcove-Sofa,
+  // schwarzes USM-Sideboard, weisser USM-Empfang unter offener Decke mit
+  // schwarzen Strahlern - wie am Ende des Koelner Weg-Videos (Strapi 257).
+  // UNBESTAETIGT (Benjamin fragen): Dateinamen ohne Standort.
+  "koeln-arcaden": {
+    images: [
+      { id: 114, url: "https://media.myhealthandbeauty.app/my_lounge_empfang_ba7558d52c.jpg", width: 1309, height: 1077, mime: "image/jpeg" },
+      { id: 79, url: "https://media.myhb.app/sofa_my_lounge_8abdcf62d3.jpg", width: 3024, height: 4032, mime: "image/jpeg" },
+    ],
+    source: "Bildinhalt gegen Weg-Video Strapi 257",
+    confirmed: false,
+  },
+  // Parya's Galerie "MY Lounge Duesseldorf" (Strapi-Block auf Profhilo
+  // Duesseldorf Arcaden, Stand 02.10.2026 nachmittags; inzwischen dort
+  // entfernt). Zuordnung von Parya.
+  "duesseldorf-arcaden": {
+    images: [
+      { id: 1040, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_01_1_e0b49e246f.webp", width: 7216, height: 4806, mime: "image/webp" },
+      { id: 1035, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag3_44_7376ce11f2.webp", width: 8144, height: 5424, mime: "image/webp" },
+      { id: 1022, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag3_34_ebf7060f7d.webp", width: 8144, height: 5424, mime: "image/webp" },
+      { id: 1014, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_114_5f7edfd46f.webp", width: 8368, height: 5584, mime: "image/webp" },
+      { id: 1009, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_105_03ed4c1626.webp", width: 8368, height: 5584, mime: "image/webp" },
+      { id: 985, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_18_c8f564feac.webp", width: 8144, height: 5424, mime: "image/webp" },
+      { id: 981, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag1_78_4436aca9ab.webp", width: 4649, height: 6974, mime: "image/webp" },
+    ],
+    source: "Strapi-Galerieblock von Parya (Profhilo Duesseldorf)",
+    confirmed: true,
+  },
+};
+
+export function adsLoungeGalleryFor(locationSlug: string | null | undefined): AdsLoungeGallery | null {
+  return ADS_LOUNGE_GALLERY[String(locationSlug ?? "")] ?? null;
+}
