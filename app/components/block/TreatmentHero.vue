@@ -321,7 +321,7 @@ const props = withDefaults(
       v2StickyPrice?: string | null;
       /**
        * go.-Vorlage v2: Gestaltung (shared/adsTemplateV2.ts, adsV2Design).
-       * "ci"/"ci-hell": Preiszeile schwarz statt rot, Buchungsknopf rot.
+       * "ci"/"ci-hell": Preiszeile schwarz statt rot; rot nur die Leiste.
        */
       v2Design?: "v2" | "ci" | "ci-hell";
     }
@@ -1186,8 +1186,8 @@ const discountLabel = computed(() => {
   }
 }
 /* go.-Vorlage v2, Gestaltung "ci"/"ci-hell" (Feedback 02.10.2026): Preis
-   schwarz, Rabatt-Zusatz grau; Rot nur auf dem Buchungsknopf (wie in der
-   Leiste, #dc2626; weiss darauf 4,8:1). */
+   schwarz, Rabatt-Zusatz grau; Knopf schwarz wie auf www. Rot bleibt nur
+   der Buchungsknopf der mitlaufenden Leiste (#dc2626, weiss darauf 4,8:1). */
 .hero--ci .hero__price {
   color: var(--color-text);
 }
@@ -1195,12 +1195,6 @@ const discountLabel = computed(() => {
 .hero--ci .hero__price-extra {
   color: var(--color-text-light);
   font-weight: var(--font-regular);
-}
-
-.hero--ci .hero-cta-btn {
-  --button-primary-color-bg: #dc2626;
-  --button-primary-color-bg-hover: #b91c1c;
-  --button-primary-color-text: #fff;
 }
 
 .floating-cta--ci .floating-cta__price--offer {
