@@ -190,6 +190,39 @@ export function isAdsTemplateV2Excluded(
   return exclude.some((p) => matchesPattern(p, city, loc, key));
 }
 
+/**
+ * Gestaltung der v2-Seiten (Feedback Benjamin, 02.10.2026: v2 wirkt "zu
+ * AI-maessig" - rote Icons und Preise, rosa Flaechen, Bento-Kacheln, keine
+ * schwarzen Abschnitte wie auf den bisherigen Strapi-Seiten).
+ *
+ * - "v2":      heutige Gestaltung (Standard)
+ * - "ci":      Option 1 - CI der bisherigen Seiten: weisse und schwarze
+ *              Abschnitte im Wechsel, Icons/Preise schwarz-weiss, Rot nur
+ *              auf dem Buchungsknopf
+ * - "ci-hell": Option 2 - wie "ci", aber nur die beiden Aufrufe schwarz
+ *
+ * Nur Gestaltung: Inhalte, Reihenfolge, Tracking und A/B-Weiche bleiben.
+ * Schluessel wie ADS_TEMPLATE_V2_PAGES ("stadt/standort/pathKey", "*" je
+ * Segment erlaubt); der erste Treffer gilt. Ausrollen = Eintrag "*\/*\/*".
+ */
+export type AdsV2Design = "v2" | "ci" | "ci-hell";
+
+export const ADS_TEMPLATE_V2_DESIGN: ReadonlyArray<readonly [string, AdsV2Design]> = [
+  ["koeln/koeln-arcaden/hyaluron/lippen-aufspritzen", "ci"],
+];
+
+export function adsV2Design(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  table: ReadonlyArray<readonly [string, AdsV2Design]> = ADS_TEMPLATE_V2_DESIGN,
+): AdsV2Design {
+  const key = basePathKey(pathKey);
+  if (!city || !loc || !key) return "v2";
+  const hit = table.find(([p]) => matchesPattern(p, city, loc, key));
+  return hit ? hit[1] : "v2";
+}
+
 /** Hat der Standort mindestens eine v2-Seite? (Endpunkt der Zusatzdaten) */
 export function isAdsTemplateV2Location(
   city: string | null | undefined,

@@ -16,7 +16,7 @@
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
     Behandlung: shared/adsTemplateV2Content.ts.
   -->
-  <div class="v2">
+  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell' }">
     <BlockTreatmentHero
       v-bind="hero"
       :subline="terms?.subline ?? hero.subline"
@@ -28,12 +28,13 @@
       :v2-price-line="heroPriceLine"
       :v2-sticky-price="stickyPrice"
       :v2-note="heroNote"
+      :v2-design="design"
     />
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
          uns aus", noch vor der Vertrauenszeile) -->
     <UiLayoutSectionBlock v-if="clips.carousel.length" spacing="sibling">
-      <div class="v2-card" data-track-placement="v2_clips">
+      <div class="v2-card" :class="tone('clips')" data-track-placement="v2_clips">
         <h2 class="v2-h2">{{ H.clips }}</h2>
         <PagesTreatmentAdsV2ClipCarousel :clips="clips.carousel" />
       </div>
@@ -61,7 +62,7 @@
 
     <!-- 1. Steckbrief: Icon, Bezeichnung klein, Kernwert fett -->
     <UiLayoutSectionBlock v-if="facts.length">
-      <div class="v2-card" data-track-placement="v2_facts">
+      <div class="v2-card" :class="tone('facts')" data-track-placement="v2_facts">
         <h2 class="v2-h2">{{ H.facts }}</h2>
         <dl class="v2-facts">
           <div v-for="f in facts" :key="f.key" class="v2-facts__row" :class="{ 'v2-facts__row--price': f.key === 'preis' }">
@@ -75,7 +76,7 @@
 
     <!-- 2. Wirkweise mit Zonenbild -->
     <UiLayoutSectionBlock v-if="terms">
-      <div class="v2-card" data-track-placement="v2_how">
+      <div class="v2-card" :class="tone('how')" data-track-placement="v2_how">
         <h2 class="v2-h2">{{ H.how }}</h2>
         <div class="v2-how" :class="{ 'v2-how--text': !zoneImage }">
           <img
@@ -95,7 +96,7 @@
 
     <!-- Aufruf auch direkt ueber dem Ablauf (Agentur-Feedback 01.10.2026) -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_cta_mid">
+      <div class="v2-card v2-final" :class="tone('mid', 'v2-card--accent')" data-track-placement="v2_cta_mid">
         <p class="v2-h2 v2-final__title">{{ H.final }}</p>
         <p v-if="finalPrice" class="v2-final__price">
           {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
@@ -108,7 +109,7 @@
 
     <!-- Ablauf (5. Zeitachse) -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--soft" data-track-placement="v2_steps">
+      <div class="v2-card" :class="tone('steps', 'v2-card--soft')" data-track-placement="v2_steps">
         <h2 class="v2-h2">{{ H.steps }}</h2>
         <ol v-if="timeline.length" class="v2-timeline">
           <li v-for="item in timeline" :key="item.when" class="v2-timeline__item">
@@ -134,7 +135,7 @@
 
     <!-- Preise -->
     <UiLayoutSectionBlock v-if="priceCards.length">
-      <div class="v2-card" data-track-placement="v2_prices">
+      <div class="v2-card" :class="tone('prices')" data-track-placement="v2_prices">
         <h2 class="v2-h2">{{ H.prices }}</h2>
         <p v-if="offerShown" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
@@ -181,7 +182,7 @@
 
     <!-- 7. Weitere Zonen: mobil Wischreihe, ab 900 px Raster -->
     <UiLayoutSectionBlock v-if="zoneTiles.length">
-      <div class="v2-card" data-track-placement="v2_zones">
+      <div class="v2-card" :class="tone('zones')" data-track-placement="v2_zones">
         <h2 class="v2-h2">{{ H.zones }}</h2>
         <p v-if="zoneHint" class="v2-lead">{{ zoneHint }}</p>
         <!-- Jede Kachel mit Bild: Poster des Behandlungsclips, sonst Zonenbild -->
@@ -218,7 +219,7 @@
 
     <!-- Aerzt:innen des Centers -->
     <UiLayoutSectionBlock v-if="doctors.length">
-      <div class="v2-card v2-card--soft" data-track-placement="v2_doctors">
+      <div class="v2-card" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
         <h2 class="v2-h2">{{ H.doctors }}</h2>
         <ul class="v2-doctors" role="list">
           <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
@@ -240,7 +241,7 @@
 
     <!-- 8. Beratungsfoto (leer = aus) -->
     <UiLayoutSectionBlock v-if="consultPhoto">
-      <div class="v2-card" data-track-placement="v2_consult">
+      <div class="v2-card" :class="tone('consult')" data-track-placement="v2_consult">
         <h2 class="v2-h2">{{ H.consult }}</h2>
         <img
           class="v2-consult__img"
@@ -256,7 +257,7 @@
 
     <!-- Bewertungen des Standorts: Video mittig, Texte mobil als Wischreihe -->
     <UiLayoutSectionBlock v-if="reviews.length || clips.feedback.length">
-      <div class="v2-card" data-track-placement="v2_reviews">
+      <div class="v2-card" :class="tone('reviews')" data-track-placement="v2_reviews">
         <h2 class="v2-h2">{{ H.reviews }}</h2>
         <p v-if="rating" class="v2-lead">
           <IconStarFilled class="v2-star" size="18" aria-hidden="true" />
@@ -290,7 +291,7 @@
     <!-- Einwaende (Agentur-Feedback 01.10.2026): nur Aussagen, die schon auf
          der Seite stehen; Texte in shared/adsTemplateV2Content.ts -->
     <UiLayoutSectionBlock v-if="objections.length">
-      <div class="v2-card v2-card--soft" data-track-placement="v2_objections">
+      <div class="v2-card" :class="tone('objections', 'v2-card--soft')" data-track-placement="v2_objections">
         <h2 class="v2-h2">Noch unsicher?</h2>
         <p class="v2-lead">Das hören wir oft – und das antworten wir.</p>
         <ul class="v2-objections" role="list">
@@ -319,7 +320,7 @@
 
     <!-- Standort (Agentur-Feedback 01.10.2026: vor den Fragen) -->
     <UiLayoutSectionBlock>
-      <div id="standort" class="v2-card" data-track-placement="v2_location">
+      <div id="standort" class="v2-card" :class="tone('location')" data-track-placement="v2_location">
         <h2 class="v2-h2">{{ H.location }}</h2>
         <div class="v2-location">
           <div v-if="location?.buildingImage" class="v2-location__image">
@@ -350,7 +351,7 @@
 
     <!-- Fragen + Nachsorge -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--soft" data-track-placement="v2_faq">
+      <div class="v2-card" :class="tone('faq', 'v2-card--soft')" data-track-placement="v2_faq">
         <h2 class="v2-h2">{{ H.faq }}</h2>
         <div class="v2-faq">
           <details v-for="(faq, i) in faqs" :key="faq.question" class="v2-faq__item" :open="i === 0">
@@ -369,7 +370,7 @@
 
     <!-- Schlussaufruf -->
     <UiLayoutSectionBlock>
-      <div class="v2-card v2-card--accent v2-final" data-track-placement="v2_final">
+      <div class="v2-card v2-final" :class="tone('final', 'v2-card--accent')" data-track-placement="v2_final">
         <h2 class="v2-h2">{{ H.final }}</h2>
         <p v-if="finalPrice" class="v2-final__price">
           {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
@@ -422,6 +423,7 @@ import {
   adsV2TreatmentSlug,
   adsV2TrustItems,
   adsV2VoucherUrl,
+  adsV2Design,
   employeeDisplayName,
   openingHoursSummary,
   pickAdsV2Reviews,
@@ -468,6 +470,42 @@ const { data: extras } = await useFetch<{ reviews?: any[]; doctors?: any[] }>(
   `/api/ads-template-v2/${encodeURIComponent(citySlug)}/${encodeURIComponent(locSlug)}`,
   { key: `ads-template-v2:${citySlug}:${locSlug}`, default: () => ({}) },
 );
+
+// Gestaltung je Seite (shared/adsTemplateV2.ts, ADS_TEMPLATE_V2_DESIGN):
+// "v2" = heutige Gestaltung; "ci"/"ci-hell" = an die bisherigen Strapi-Seiten
+// angelehnt (Feedback Benjamin, 02.10.2026). Aendert nur Klassen, keine
+// Inhalte, Reihenfolge, Knoepfe oder Tracking.
+const design = computed(() =>
+  adsV2Design(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
+);
+type AdsV2Tone = "light" | "soft" | "neutral" | "strong";
+type AdsV2Section =
+  | "clips" | "facts" | "how" | "mid" | "steps" | "prices" | "zones" | "doctors"
+  | "consult" | "reviews" | "objections" | "location" | "faq" | "final";
+/**
+ * Flaechen wie auf www (UiLayoutCardSurface: theme-light/-soft/-neutral/
+ * -strong). Option 1 "ci": weisse und schwarze Abschnitte im Wechsel;
+ * Option 2 "ci-hell": nur die beiden Aufrufe schwarz.
+ */
+const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
+  ci: {
+    clips: "light", facts: "strong", how: "light", mid: "strong", steps: "soft",
+    prices: "light", zones: "light", doctors: "neutral", consult: "light",
+    reviews: "light", objections: "light", location: "strong", faq: "soft", final: "strong",
+  },
+  "ci-hell": {
+    clips: "light", facts: "light", how: "light", mid: "strong", steps: "soft",
+    prices: "light", zones: "light", doctors: "soft", consult: "light",
+    reviews: "light", objections: "light", location: "light", faq: "soft", final: "strong",
+  },
+};
+/** Klassen der Abschnittskarte; in "v2" die bisherigen Modifier. */
+function tone(section: AdsV2Section, v2Class = ""): string {
+  const d = design.value;
+  if (d === "v2") return v2Class;
+  const t = TONES[d][section];
+  return `theme-${t} v2-card--${t}`;
+}
 
 const globals = useGlobals();
 const { trackPhoneClick, trackEvent } = useGoogleAnalytics();
@@ -1622,5 +1660,158 @@ const routeHref = computed(() => {
     padding: 0;
     overflow: visible;
   }
+}
+/* =====================================================================
+   Gestaltung "ci" / "ci-hell" (Feedback Benjamin, 02.10.2026): an die
+   bisherigen Strapi-Seiten angelehnt. Flaechen ueber die globalen
+   theme-*-Klassen (weiss, hellgrau #e8e7e8, dunkelgrau #46454a, schwarz
+   #0d0d0e), Inter 500 fuer Ueberschriften, Icons und Preise schwarz-weiss,
+   kein Rosa. Rot (#dc2626, wie der Buchungsknopf der Leiste) NUR auf dem
+   Buchungsknopf. Das Bento-Raster bleibt, nur in CI-Farben.
+   ===================================================================== */
+.v2--ci .v2-card {
+  background: var(--card-color-bg);
+  color: var(--color-text);
+}
+
+/* Ueberschriften groesser, naeher an den H2 auf www (mobil 24 px statt
+   22 px - 27 px braeche die langen v2-Ueberschriften in vier Zeilen -,
+   ab 900 px 33 px statt 22 px) */
+.v2--ci .v2-h2 {
+  margin-bottom: var(--space-500);
+  font-size: 1.5rem;
+  line-height: var(--line-3xl);
+}
+
+.v2--ci .v2-h2--sub {
+  font-size: var(--font-lg);
+}
+
+@media (min-width: 900px) {
+  .v2--ci .v2-h2 {
+    font-size: var(--font-3xl);
+  }
+
+  .v2--ci .v2-h2--sub {
+    font-size: var(--font-2xl);
+  }
+}
+
+/* Buchungsknopf: einziges Rot der Seite, auch auf schwarzen Flaechen.
+   Weiss auf #dc2626 = 4,8:1 (AA), Hover #b91c1c = 6,5:1. */
+.v2--ci .v2-btn {
+  --button-primary-color-bg: #dc2626;
+  --button-primary-color-bg-hover: #b91c1c;
+  --button-primary-color-text: #fff;
+}
+
+/* Icons, Sterne, Preise: Textfarbe der Flaeche statt Rot/Orange */
+.v2--ci .v2-trust__icon,
+.v2--ci .v2-trust__icon--star,
+.v2--ci .v2-facts__icon,
+.v2--ci .v2-pay__icon,
+.v2--ci .v2-objection__icon,
+.v2--ci .v2-star,
+.v2--ci .v2-review__stars,
+.v2--ci .v2-facts__row--price dd,
+.v2--ci .v2-price__offer,
+.v2--ci .v2-final__price {
+  color: var(--color-text);
+}
+
+.v2--ci .v2-final__price {
+  font-size: 1.5rem;
+}
+
+@media (min-width: 900px) {
+  .v2--ci .v2-final__price {
+    font-size: 1.75rem;
+  }
+}
+
+/* Zonenbilder: rote Einstichpunkte und rosa Grund grau */
+.v2--ci .v2-how__img,
+.v2--ci .v2-zone__img {
+  filter: grayscale(1);
+}
+
+.v2--ci .v2-zone__photo,
+.v2--ci .v2-zone__img--empty {
+  background: var(--color-gray-100);
+}
+
+/* Steckbrief: auf Schwarz feine Linien; ab 900 px Bento-Kacheln in
+   #292a2c (schwarze Flaeche) bzw. schwarz (helle Flaeche) mit weisser Schrift */
+.v2--ci .v2-facts dt {
+  font-size: var(--font-sm);
+}
+
+@media (min-width: 900px) {
+  .v2--ci .v2-facts__row,
+  .v2--ci .v2-facts__row:first-child {
+    --color-text: var(--strong-color-text);
+    --color-text-light: var(--strong-color-text-light);
+    color: var(--color-text);
+    background: var(--color-card-bg-strong);
+  }
+
+  .v2--ci .theme-strong .v2-facts__row {
+    background: var(--color-gray-900);
+  }
+}
+
+/* Zeitachse schwarz-grau */
+.v2--ci .v2-timeline {
+  border-left-color: var(--color-gray-400);
+}
+
+.v2--ci .v2-timeline__item::before {
+  background: var(--color-text);
+}
+
+.v2--ci .v2-timeline__when {
+  color: var(--color-text);
+}
+
+/* Preise: Kacheln hellgrau statt Rahmen, Betrag gross und schwarz */
+.v2--ci .v2-price {
+  border: 0;
+  background: var(--card-color-bg-sub);
+}
+
+.v2--ci .v2-price--package {
+  box-shadow: inset 0 0 0 2px var(--color-text);
+}
+
+.v2--ci .v2-price__offer {
+  font-size: 1.25rem;
+}
+
+.v2--ci .v2-pay {
+  background: var(--card-color-bg-sub);
+}
+
+/* Bewertungen: Kacheln hellgrau statt Rahmen */
+.v2--ci .v2-review {
+  border: 0;
+  background: var(--card-color-bg-sub);
+}
+
+/* Einwaende: schwarze Bento-Kacheln mit weisser Schrift */
+.v2--ci .v2-objection {
+  --color-text: var(--strong-color-text);
+  --color-text-light: var(--strong-color-text-light);
+  color: var(--color-text);
+  background: var(--color-card-bg-strong);
+}
+
+/* Aerzt:innen auf Dunkelgrau: Fotogrund passend */
+.v2--ci .theme-neutral .v2-doctor__photo {
+  background: var(--color-gray-700);
+}
+
+/* Fragen: Trennlinien wie auf www */
+.v2--ci .theme-soft .v2-faq__item {
+  border-color: var(--color-gray-300);
 }
 </style>

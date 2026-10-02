@@ -36,6 +36,7 @@
             'hero--ads-compact': isAdsMode,
             'hero--ads-long-title': isAdsMode && (headline?.length ?? 0) > 26,
             'hero--v2': templateV2,
+            'hero--ci': templateV2 && v2Design !== 'v2',
           }"
         >
           <div v-if="hasCover || heroClip" class="hero__media">
@@ -202,7 +203,7 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2 }">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && v2Design !== 'v2' }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong
@@ -318,6 +319,11 @@ const props = withDefaults(
       v2Note?: string | null;
       /** go.-Vorlage v2: Preis in der mitlaufenden Leiste. */
       v2StickyPrice?: string | null;
+      /**
+       * go.-Vorlage v2: Gestaltung (shared/adsTemplateV2.ts, adsV2Design).
+       * "ci"/"ci-hell": Preiszeile schwarz statt rot, Buchungsknopf rot.
+       */
+      v2Design?: "v2" | "ci" | "ci-hell";
     }
   >(),
   {
@@ -329,6 +335,7 @@ const props = withDefaults(
     v2PriceLine: null,
     v2Note: null,
     v2StickyPrice: null,
+    v2Design: "v2",
   },
 );
 
@@ -1177,5 +1184,26 @@ const discountLabel = computed(() => {
   .floating-cta__reviews {
     display: flex;
   }
+}
+/* go.-Vorlage v2, Gestaltung "ci"/"ci-hell" (Feedback 02.10.2026): Preis
+   schwarz, Rabatt-Zusatz grau; Rot nur auf dem Buchungsknopf (wie in der
+   Leiste, #dc2626; weiss darauf 4,8:1). */
+.hero--ci .hero__price {
+  color: var(--color-text);
+}
+
+.hero--ci .hero__price-extra {
+  color: var(--color-text-light);
+  font-weight: var(--font-regular);
+}
+
+.hero--ci .hero-cta-btn {
+  --button-primary-color-bg: #dc2626;
+  --button-primary-color-bg-hover: #b91c1c;
+  --button-primary-color-text: #fff;
+}
+
+.floating-cta--ci .floating-cta__price--offer {
+  color: var(--color-text);
 }
 </style>
