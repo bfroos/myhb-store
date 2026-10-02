@@ -66,7 +66,7 @@
             <IconPlayerPlayFilled v-else size="18" aria-hidden="true" />
           </button>
           <button
-            v-if="state[i]?.started"
+            v-if="state[i]?.started && !silent"
             type="button"
             class="clips__btn"
             :data-track-placement="`${placement}_sound`"
@@ -100,8 +100,10 @@ const props = withDefaults(
     tapToPlay?: boolean;
     /** Praefix fuer data-track-placement der Knoepfe. */
     placement?: string;
+    /** Clip ohne Tonspur (Weg-Videos): kein Ton-Knopf. */
+    silent?: boolean;
   }>(),
-  { tapToPlay: false, placement: "v2_clip" },
+  { tapToPlay: false, placement: "v2_clip", silent: false },
 );
 
 type ClipState = {

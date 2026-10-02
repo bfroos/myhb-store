@@ -515,6 +515,7 @@ function handleLocationBook(location: {
       treatment_context: !!params.value?.treatmentContext,
       booking_value: params.value?.bookingValue,
       offer: params.value?.offer,
+      via_modal: params.value?.viaModal || undefined,
     });
     params.value = { ...params.value, deferCheckout: false };
   }

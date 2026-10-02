@@ -7,7 +7,9 @@
     Standort -> Fragen + Nachsorge -> Schlussaufruf, dazu die mitlaufende
     Leiste des Heros. Kein SEO-Langtext.
     Agentur-Feedback 01.10.2026 (Beispielseite Lippen): eine Preis-/Angebots-
-    zeile + ein Knopf im Hero, Leiste "Kostenlose Beratung" + "Anrufen",
+    zeile + ein Knopf im Hero, Leiste mit Knopf + "Anrufen" (02.10.2026:
+    A = "20 % Rabatt sichern" ueber den Rabatt-Dialog, B = "Kostenlose
+    Beratung buchen" direkt),
     Steckbrief mit Icons, Hervorhebungen in Fliesstexten, Zonen und
     Bewertungen mobil als Wischreihe, Standort vor den Fragen, Aufruf auch
     ueber dem Ablauf, Ueberschriften zentriert, Einwand-Abschnitt.
@@ -22,7 +24,7 @@
       show-floating-cta
       template-v2
       :hero-clip="clips.hero ?? null"
-      :sticky-cta-label="ADS_V2_CTA.sticky"
+      :sticky-cta-label="stickyLabel"
       :v2-price-line="heroPriceLine"
       :v2-sticky-price="stickyPrice"
       :v2-note="heroNote"
@@ -100,7 +102,6 @@
         </p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
-          <SharedButton v-if="discountButton" :button="discountButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'secondary' }" class="v2-btn" />
         </div>
       </div>
     </UiLayoutSectionBlock>
@@ -174,7 +175,6 @@
         </div>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
-          <SharedButton v-if="discountButton" :button="discountButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'secondary' }" class="v2-btn" />
         </div>
       </div>
     </UiLayoutSectionBlock>
@@ -333,6 +333,10 @@
             <span class="v2-location__muted">Auch ohne Termin – komm vorbei und frag, ob gerade Zeit ist.</span>
           </div>
         </div>
+        <!-- Weg vom Eingang des Centers zu uns (stumm, Poster, laedt erst sichtbar) -->
+        <div v-if="wayClip" class="v2-way" data-track-placement="v2_way_video">
+          <PagesTreatmentAdsV2ClipCarousel :clips="[wayClip]" placement="v2_way" silent />
+        </div>
         <div class="v2-actions v2-actions--row">
           <UiAtomBaseButton v-if="phoneHref" as="a" :href="phoneHref" variant="secondary" size="lg" class="v2-btn" @click="trackPhoneClick(phoneNumber ?? undefined)">
             <IconPhone size="18" aria-hidden="true" /> Anrufen
@@ -372,7 +376,6 @@
         </p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
-          <SharedButton v-if="discountButton" :button="discountButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'secondary' }" class="v2-btn" />
         </div>
       </div>
     </UiLayoutSectionBlock>
@@ -424,7 +427,7 @@ import {
   pickAdsV2Reviews,
   shortenText,
 } from "#shared/adsTemplateV2";
-import { adsClipsFor } from "#shared/adsClips";
+import { adsClipsFor, adsWayClipFor } from "#shared/adsClips";
 import {
   adsV2Aftercare,
   adsV2ConsultPhoto,
@@ -466,7 +469,6 @@ const { data: extras } = await useFetch<{ reviews?: any[]; doctors?: any[] }>(
   { key: `ads-template-v2:${citySlug}:${locSlug}`, default: () => ({}) },
 );
 
-const { t } = useI18n();
 const globals = useGlobals();
 const { trackPhoneClick, trackEvent } = useGoogleAnalytics();
 
@@ -496,30 +498,36 @@ const bookingData = computed(() => ({
   appTreatmentSlug: props.hero.appTreatmentSlug,
   treatmentType: props.hero.treatment?.type,
 }));
-const heroCta = computed(() =>
-  props.hero.cta ? { ...props.hero.cta, label: ADS_V2_CTA.primary } : props.hero.cta,
-);
-const bookingButton = computed(() =>
-  props.hero.cta
+// Angebots-Test (Benjamin, 02.10.2026):
+// - A: Hauptknopf ueberall "20 % Rabatt sichern" -> erst der Rabatt-Dialog
+//   (Mailchimp, newsletter_signup), danach direkt dieselbe Buchung
+//   (click_booking mit via_modal). Kein zweiter Knopf daneben.
+// - B: "Kostenlose Beratung buchen" -> direkt die Buchung (wie bisher).
+// Der Calendly-/App-Split (#100) entscheidet in beiden Faellen beim Oeffnen.
+const discountLabel = computed(() => `${discountPct.value}\u00a0% Rabatt sichern`);
+const primaryButton = computed(() =>
+  isB.value
     ? {
         label: ADS_V2_CTA.primary,
         method: SharedButtonMethod.ACTION,
         action: SharedButtonAction.APPOINTMENT_BOOKING,
       }
-    : null,
-);
-const discountLabel = computed(() =>
-  t("blocks.treatmentHero.discountCta", { pct: discountPct.value }),
-);
-const discountButton = computed(() =>
-  props.hero.cta && offerVariant.value !== "b"
-    ? {
+    : {
         label: discountLabel.value,
         method: SharedButtonMethod.ACTION,
         action: SharedButtonAction.NEWSLETTER_SIGN_UP,
-      }
-    : null,
+      },
 );
+const heroCta = computed(() =>
+  props.hero.cta ? { ...props.hero.cta, ...primaryButton.value } : props.hero.cta,
+);
+const bookingButton = computed(() => (props.hero.cta ? primaryButton.value : null));
+/** Leiste, eine Zeile bis 320 px neben "Anrufen". */
+const stickyLabel = computed(() =>
+  isB.value ? ADS_V2_CTA.sticky : `${discountPct.value}\u00a0% sichern`,
+);
+// Den frueheren zweiten Knopf "20 % Rabatt sichern" neben "Kostenlose
+// Beratung buchen" gibt es nicht mehr: in A ist er der Hauptknopf.
 
 const offer = useNewCustomerOffer(
   () => props.hero.treatment,
@@ -584,6 +592,7 @@ function keepAmount(text: string | null | undefined): string {
 }
 
 const clips = computed(() => adsClipsFor(pathKey.value, citySlug));
+const wayClip = computed(() => adsWayClipFor(locSlug));
 const trustItems = computed(() => adsV2TrustItems(pathKey.value));
 const priceInclusion = computed(() => adsV2PriceInclusion(pathKey.value));
 function trustIcon(key: string) {
@@ -1552,6 +1561,16 @@ const routeHref = computed(() => {
   display: flex;
   flex-direction: column;
   gap: var(--space-100);
+}
+
+.v2-way {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-400);
+}
+
+.v2-way :deep(.clips) {
+  overflow: visible;
 }
 
 .v2-location__muted {

@@ -28,6 +28,12 @@ export type BookingAlternatives = {
  */
 export type BookingDialogOptions = {
   offer?: string;
+  /**
+   * go. Variante A (02.10.2026): Buchung kommt aus dem Rabatt-Dialog (nach
+   * der Anmeldung, nach gescheiterter Anmeldung oder ueber "ohne Code direkt
+   * Termin buchen"). Geht als `via_modal: true` an `click_booking`.
+   */
+  viaModal?: boolean;
 };
 
 export function useCalendlyDialog() {
@@ -70,6 +76,7 @@ export function useCalendlyDialog() {
     const bookingUrl =
       withAppTreatmentSlug(targetUrl, appTreatmentSlug) ?? targetUrl;
     const offer = options?.offer;
+    const viaModal = !!options?.viaModal;
     const clickType = isAppBookingUrl(bookingUrl)
       ? "app"
       : bookingUrl
@@ -102,6 +109,7 @@ export function useCalendlyDialog() {
         treatment_context: !!treatmentContext,
         booking_value: bookingValue,
         offer,
+        via_modal: viaModal || undefined,
       });
     }
 
@@ -138,6 +146,7 @@ export function useCalendlyDialog() {
           abFallback,
           abSource,
           offer,
+          viaModal,
           deferCheckout,
           bookingValue,
           // #141: Ab hier laeuft die Uhr, die `booking_embed_ready` misst —

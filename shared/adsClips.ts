@@ -536,3 +536,40 @@ export function heroObjectPositionY(
 export function adsClipEntries(): Array<[string, AdsClipSet]> {
   return Object.entries(CLIPS);
 }
+
+/**
+ * "Komm, ich nehme dich mit ins Center" (Benjamin, 02.10.2026): Weg vom
+ * Mall-Eingang bis zur Lounge, je Standort (locationSlug). Stumme Kurzclips
+ * aus dem Anfang der Standortvideos geschnitten (nur der Weg, ohne die
+ * Behandlung danach), fuer "So findest du uns". Geprueft: aktuelles Logo
+ * "MY HEALTH & BEAUTY", kein Adventskalender. Fehlende Standorte: siehe
+ * Bericht vom 02.10.2026 (kein Material gefunden).
+ */
+export const ADS_WAY_CLIPS: Record<string, AdsClip> = {
+  // Strapi 34, 0,2-14,2 s: Haupteingang Aquis Plaza -> Untergeschoss -> Empfang
+  "aquis-plaza": {
+    url: "/videos/go/weg-aachen-aquis-plaza.mp4",
+    posterUrl: "/videos/go/weg-aachen-aquis-plaza-poster.jpg",
+    caption: "Vom Haupteingang zu uns ins Untergeschoss",
+    source: 34,
+  },
+  // Strapi 206, 0,2-9,6 s: Eingang K in Lautern -> Untergeschoss
+  "k-in-lautern": {
+    url: "/videos/go/weg-kaiserslautern-k-in-lautern.mp4",
+    posterUrl: "/videos/go/weg-kaiserslautern-k-in-lautern-poster.jpg",
+    caption: "Vom Eingang zu uns ins Untergeschoss",
+    source: 206,
+  },
+  // Strapi 211, 0,2-12,2 s: Rundgang ab dem Eingang der Lounge im Palais Vest
+  "palais-vest": {
+    url: "/videos/go/weg-recklinghausen-palais-vest.mp4",
+    posterUrl: "/videos/go/weg-recklinghausen-palais-vest-poster.jpg",
+    caption: "Ein Blick in unser Center im Palais Vest",
+    source: 211,
+  },
+};
+
+export function adsWayClipFor(locationSlug: string | null | undefined): AdsClip | null {
+  const clip = ADS_WAY_CLIPS[String(locationSlug ?? "")];
+  return clip && adsClipAllowed(clip) ? clip : null;
+}
