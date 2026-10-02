@@ -95,8 +95,8 @@ const props = withDefaults(defineProps<{
   phone?: string;
   whatsapp?: string;
   hours?: Hours;
-  /** Required for live Google Maps; without it, a styled placeholder is shown. */
-  googleMapsApiKey?: string;
+  /** Optional; leer = Website-Schluessel (NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY). Ohne beide nur Platzhalter. */
+  googleMapsApiKey?: string | null;
   /** Map zoom level */
   zoom?: number;
   elevated?: boolean;
@@ -115,6 +115,14 @@ const props = withDefaults(defineProps<{
     sunday:    { open: null,    close: null    },
   }),
 });
+
+// Der Schluessel gehoert nicht in den CMS-Block: Ist das Feld leer, nimmt die
+// Karte den Schluessel und die Map-ID der Website (wie LocationMap.vue).
+const runtimeConfig = useRuntimeConfig();
+const mapsApiKey = computed(
+  () => props.googleMapsApiKey || (runtimeConfig.public.googleMapsKey as string | undefined) || "",
+);
+const mapsMapId = runtimeConfig.public.googleMapsMapId as string | undefined;
 
 const mapEl = ref<HTMLElement | null>(null);
 const mapRoot = ref<HTMLElement | null>(null);
@@ -189,10 +197,10 @@ function loadGoogleMaps(apiKey: string) {
 }
 
 async function initMap() {
-  if (!props.googleMapsApiKey) return;
+  if (!mapsApiKey.value) return;
   if (!mapEl.value) return;
   try {
-    const google = await loadGoogleMaps(props.googleMapsApiKey);
+    const google = await loadGoogleMaps(mapsApiKey.value);
     let center: { lat: number; lng: number };
     if (props.lat != null && props.lng != null) {
       center = { lat: props.lat, lng: props.lng };
@@ -214,10 +222,16 @@ async function initMap() {
       zoomControl: true,
       gestureHandling: "cooperative",
       backgroundColor: "#ececec",
-      styles: [
-        { featureType: "poi", stylers: [{ visibility: "off" }] },
-        { featureType: "transit", stylers: [{ visibility: "simplified" }] },
-      ],
+      // AdvancedMarkerElement braucht eine Map-ID; mit Map-ID kommt der Stil
+      // aus der Cloud-Konfiguration, `styles` wuerde ignoriert.
+      ...(mapsMapId
+        ? { mapId: mapsMapId }
+        : {
+            styles: [
+              { featureType: "poi", stylers: [{ visibility: "off" }] },
+              { featureType: "transit", stylers: [{ visibility: "simplified" }] },
+            ],
+          }),
     });
     // Custom MY pin
     const pin = document.createElement("div");
@@ -247,7 +261,7 @@ function startMapLoad() {
 }
 
 onMounted(() => {
-  if (!props.googleMapsApiKey) return;
+  if (!mapsApiKey.value) return;
 
   // Fallback: ohne IntersectionObserver-Support direkt laden.
   if (typeof IntersectionObserver === "undefined" || !mapRoot.value) {
@@ -270,7 +284,7 @@ onMounted(() => {
 // Reagiert auf spätere Prop-Änderungen, aber nur wenn die Karte bereits
 // initialisiert wurde (sonst übernimmt der IntersectionObserver das Laden).
 watch(
-  () => [props.googleMapsApiKey, props.lat, props.lng],
+  () => [mapsApiKey.value, props.lat, props.lng],
   () => {
     if (hasStartedMapLoad.value) void initMap();
   },
