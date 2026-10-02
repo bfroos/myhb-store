@@ -25,6 +25,7 @@ const GESPIEGELT = new Set([
   "click_booking",
   "booking_location_selected",
   "booking_confirmed",
+  "slot_selected",
 ]);
 
 /**
@@ -70,8 +71,9 @@ const text = (v: unknown): string | undefined =>
 export function mirrorFunnelEvent(payload: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
   const dlEvent = text(payload.event);
-  if (!dlEvent || !(GESPIEGELT.has(dlEvent) || dlEvent in UMBENANNT)) return;
-  const event = UMBENANNT[dlEvent] ?? dlEvent;
+  if (!dlEvent) return;
+  const event = Object.prototype.hasOwnProperty.call(UMBENANNT, dlEvent) ? UMBENANNT[dlEvent] : dlEvent;
+  if (!GESPIEGELT.has(event)) return;
   try {
     const body = JSON.stringify({
       event,
