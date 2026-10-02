@@ -11378,5 +11378,10 @@
     "from": "/nl/p/karriere-aerzte",
     "to": "/nl/carriere/artsen",
     "code": 301
+  },
+  {
+    "from": "/p/botox-meta-rabatt-moenchengladbach",
+    "to": "/p/botox-meta-moenchengladbach",
+    "code": 301
   }
 ]
