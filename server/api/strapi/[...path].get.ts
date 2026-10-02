@@ -3,6 +3,7 @@ import { sanitizeAdsContent } from "#shared/adsTerms";
 import { rewriteAdsLinksDeep, type AdsLinkContext } from "#shared/adsLinks";
 import { isAdsPricePage, prepareAdsPricePage } from "#shared/adsPricePages";
 import { stripBlockedAdsVideos } from "#shared/adsMedia";
+import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
 import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
@@ -212,14 +213,21 @@ async function fetchFromStrapi(
   if ((!locale || locale === 'de') && restPath.startsWith('/treatment-pages/')) {
     const data = (sanitized as any)?.data;
     if (data?.treatmentPage) {
+      // In Strapi fuer go. gebaute Seiten (ADS_TEMPLATE_V2_EXCLUDE) nennen
+      // den Neukundenpreis schon selbst: Saetze mit "Neukunde" bleiben.
+      const tp = /^\/treatment-pages\/([^/]+)\/([^/]+)\/(.+)$/.exec(restPath);
+      const priceOpts = {
+        keepNewCustomerSentences:
+          !!tp && tp[1] !== 'by-path' && isAdsTemplateV2Excluded(tp[1], tp[2], tp[3]),
+      };
       return {
         ...(sanitized as any),
         data: {
           ...data,
-          treatmentPage: applyNewCustomerPricesDeep(data.treatmentPage),
+          treatmentPage: applyNewCustomerPricesDeep(data.treatmentPage, undefined, priceOpts),
           // SEO-Felder der Seite (Title/Description) liegen daneben.
           ...(data.seo && !isSurgeryPathKey(data.treatmentPage.pathKey)
-            ? { seo: applyNewCustomerPricesDeep(data.seo) }
+            ? { seo: applyNewCustomerPricesDeep(data.seo, undefined, priceOpts) }
             : {}),
         },
       };

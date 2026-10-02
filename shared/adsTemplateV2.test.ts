@@ -8,9 +8,11 @@ import {
   isAdsTemplateV2Page,
   isAdsTemplateV2LivePage,
   isAdsTemplateV2Location,
+  isAdsTemplateV2Excluded,
   adsV2PriceMode,
   adsV2ProductNote,
   ADS_TEMPLATE_V2_LOCATIONS,
+  ADS_TEMPLATE_V2_EXCLUDE,
   ADS_TEMPLATE_V2_PAGES,
   ADS_TEMPLATE_V2_TREATMENTS,
   isAdsTemplateV2PreviewPath,
@@ -53,6 +55,27 @@ test("Vorlage v2: 9 Standorte x 39 Behandlungen, live ohne -rabatt", () => {
   assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "muskelrelaxans/lachfalten"), true);
   assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte-rabatt"), false);
   assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte", ADS_TEMPLATE_V2_PAGES, false), false);
+});
+
+test("Ausnahme: Profhilo Duesseldorf Arcaden zeigt die Strapi-Fassung", () => {
+  assert.deepEqual([...ADS_TEMPLATE_V2_EXCLUDE], ["duesseldorf/duesseldorf-arcaden/skinbooster/profhilo"]);
+  // echte Seite: nicht v2 (auch mit Schraegstrichen)
+  assert.equal(isAdsTemplateV2LivePage("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), false);
+  assert.equal(isAdsTemplateV2LivePage("duesseldorf", "duesseldorf-arcaden", "/skinbooster/profhilo/"), false);
+  // Vorschau behaelt v2 zum Vergleich
+  assert.equal(isAdsTemplateV2Page("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), true);
+  // Profhilo an anderen Standorten und andere Duesseldorfer Seiten bleiben v2
+  assert.equal(isAdsTemplateV2LivePage("koeln", "koeln-arcaden", "skinbooster/profhilo"), true);
+  assert.equal(isAdsTemplateV2LivePage("berlin", "gesundbrunnencenter", "skinbooster/profhilo"), true);
+  assert.equal(isAdsTemplateV2LivePage("duesseldorf", "duesseldorf-arcaden", "skinbooster/lumi-eyes-polynukleotide"), true);
+  assert.equal(isAdsTemplateV2LivePage("duesseldorf", "duesseldorf-arcaden", "muskelrelaxans/stirnfalte"), true);
+  // Standort hat weiter v2-Seiten (Zusatzdaten-Endpunkt)
+  assert.equal(isAdsTemplateV2Location("duesseldorf", "duesseldorf-arcaden"), true);
+  assert.equal(isAdsTemplateV2Excluded("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), true);
+  assert.equal(isAdsTemplateV2Excluded("koeln", "koeln-arcaden", "skinbooster/profhilo"), false);
+  assert.equal(isAdsTemplateV2Excluded("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo-rabatt"), false);
+  // Ausnahmeliste ist ueberschreibbar
+  assert.equal(isAdsTemplateV2LivePage("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo", ADS_TEMPLATE_V2_PAGES, true, []), true);
 });
 
 test("Jede v2-Behandlung hat Inhalte", () => {

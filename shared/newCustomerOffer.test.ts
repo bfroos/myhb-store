@@ -247,3 +247,28 @@ test("Label fuer Zahlenpreise", () => {
   assert.equal(newCustomerPriceLabel(22999), "183,99 €*");
   assert.equal(newCustomerPriceLabel(129900, "ab"), null);
 });
+
+test("Strapi-Fassung fuer go.: Saetze mit Neukunden-Preis bleiben (kein doppelter Rabatt)", () => {
+  const opts = { keepNewCustomerSentences: true };
+  assert.equal(
+    applyNewCustomerPricesToText("Neukunden ab 239,99 € ·inkl. 20 % Neukundenrabatt", 20, opts),
+    "Neukunden ab 239,99 € ·inkl. 20 % Neukundenrabatt",
+  );
+  assert.equal(
+    applyNewCustomerPricesToText(
+      "Bei MY startet Profhilo für Neukunden bei 239,99 € statt regulär 299,99 €. Ein Termin kostet ab 299,99 €.",
+      20,
+      opts,
+    ),
+    "Bei MY startet Profhilo für Neukunden bei 239,99 € statt regulär 299,99 €. Ein Termin kostet ab 239,99 €*.",
+  );
+  assert.equal(
+    applyNewCustomerPricesToText("*Neukundenpreise inkl. 20 % Neukundenrabatt, regulär ab 1.299,99 €.", 20, opts),
+    "*Neukundenpreise inkl. 20 % Neukundenrabatt, regulär ab 1.299,99 €.",
+  );
+  // ohne Neukunden-Bezug wie bisher; ohne Option wie bisher
+  assert.equal(applyNewCustomerPricesToText("Browlift ab 99,99 € pro Zone", 20, opts), "Browlift ab 79,99 €* pro Zone");
+  assert.equal(applyNewCustomerPricesToText("Neukunden ab 239,99 €"), "Neukunden ab 191,99 €*");
+  const deep = applyNewCustomerPricesDeep({ a: "Neukunden ab 239,99 €", b: "ab 299,99 €", url: "/x-299,99 €" }, 20, opts);
+  assert.deepEqual(deep, { a: "Neukunden ab 239,99 €", b: "ab 239,99 €*", url: "/x-299,99 €" });
+});

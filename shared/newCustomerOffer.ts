@@ -198,11 +198,32 @@ const TEXT_PRICE =
  * ",99"-Preis und werden nur umgestellt, wenn sie auf 9 enden; alles andere
  * bleibt, wie es ist.
  */
+export type NewCustomerPriceTextOptions = {
+  /**
+   * Saetze, die "Neukunde..." enthalten, bleiben unveraendert: Ihre Preise
+   * sind schon Neukundenpreise bzw. ausdruecklich "regulär" (Seiten, die in
+   * Strapi fuer go. gebaut wurden, ADS_TEMPLATE_V2_EXCLUDE in
+   * shared/adsTemplateV2.ts). Sonst wird doppelt rabattiert.
+   */
+  keepNewCustomerSentences?: boolean;
+};
+
+// Satzweise: bis einschliesslich ".", "!", "?" oder Zeilenende. Ein Punkt
+// zwischen Ziffern ("1.499,00 €") trennt keinen Satz.
+const SENTENCE = /(?:[^.!?\n]|(?<=\d)\.(?=\d))+(?:[.!?]+|\n|$)/g;
+const NEW_CUSTOMER_WORD = /neukunde/i;
+
 export function applyNewCustomerPricesToText(
   value: string,
   pct: number = DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT,
+  options: NewCustomerPriceTextOptions = {},
 ): string {
   if (!value.includes("€")) return value;
+  if (options.keepNewCustomerSentences && NEW_CUSTOMER_WORD.test(value)) {
+    return value.replace(SENTENCE, (sentence) =>
+      NEW_CUSTOMER_WORD.test(sentence) ? sentence : applyNewCustomerPricesToText(sentence, pct),
+    );
+  }
   return value.replace(TEXT_PRICE, (match, whole: string, cents?: string) => {
     const euros = Number(whole.replace(/\./g, ""));
     if (!Number.isFinite(euros)) return match;
@@ -227,11 +248,12 @@ const PRICE_SKIP_KEY =
 export function applyNewCustomerPricesDeep<T>(
   input: T,
   pct: number = DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT,
+  options: NewCustomerPriceTextOptions = {},
 ): T {
   const walk = (value: any, key?: string): any => {
     if (typeof value === "string") {
       if (key && PRICE_SKIP_KEY.test(key)) return value;
-      return applyNewCustomerPricesToText(value, pct);
+      return applyNewCustomerPricesToText(value, pct, options);
     }
     if (Array.isArray(value)) return value.map((item) => walk(item, key));
     if (value !== null && typeof value === "object") {
