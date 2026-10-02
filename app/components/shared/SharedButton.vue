@@ -17,7 +17,12 @@
 import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import type { SharedButtonDto } from "~/lib/strapi/dto/components";
-import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
+import {
+  useCalendlyDialog,
+  type BookingDialogOptions,
+} from "~/composables/useCalendlyDialog";
+import { hasNewsletterSignup } from "~/composables/useNewsletterSignup";
+import { NEUKUNDEN_OFFER } from "~/lib/checkoutAttempt";
 import {
   APP_BOOKING_URL,
   useAppBookingDialog,
@@ -223,9 +228,15 @@ const bookingUrl = computed(() =>
 // Vorwaermen nach, waehrend die Seite gelesen wird. Es laeuft nur einmal je
 // Seite; weitere Buchungsknoepfe zeigen auf dieselbe URL. #180: Gestartet wird
 // erst nach dem ersten Screen (load + LCP, dann Regung oder 4 s Ruhe).
+// go. Variante A (02.10.2026): "20 % Rabatt sichern" ist dort der Hauptknopf
+// und fuehrt nach dem Rabatt-Dialog in dieselbe Buchung - also auch vorwaermen.
 onMounted(() => {
   if (button.value?.method !== "action") return;
-  if (button.value?.action !== SharedButtonAction.APPOINTMENT_BOOKING) return;
+  const action = button.value?.action;
+  const booksAfterSignup =
+    action === SharedButtonAction.NEWSLETTER_SIGN_UP && isAdsMode.value;
+  if (action !== SharedButtonAction.APPOINTMENT_BOOKING && !booksAfterSignup)
+    return;
   prewarmBookingWhenIdle(bookingUrl.value);
 });
 
@@ -248,11 +259,26 @@ const handleClick = () => {
     openCalendlyDialogForButton();
   }
   if (button.value.action === SharedButtonAction.NEWSLETTER_SIGN_UP) {
+    // go. (02.10.2026): Schon angemeldet (Marke aus dem Rabatt-Dialog in
+    // diesem Browser) -> kein zweites Formular, gleich die Buchung mit
+    // Rabattkennung. Ohne Buchungsdaten bleibt es beim Formular.
+    if (isAdsMode.value && hasNewsletterSignup() && hasBookingTarget()) {
+      openCalendlyDialogForButton({ offer: NEUKUNDEN_OFFER });
+      return;
+    }
     openNewsletterSignUpDialog();
   }
 };
 
-function openCalendlyDialogForButton() {
+function hasBookingTarget(): boolean {
+  return !!(
+    bookingUrl.value ||
+    knopfBehandlung.value.treatmentType ||
+    knopfBehandlung.value.appTreatmentSlug
+  );
+}
+
+function openCalendlyDialogForButton(options?: BookingDialogOptions) {
   const url = bookingUrl.value;
   // #66/#78: Behandlungstyp, App-Slug (`?treatment=`) und Kontextzeile —
   // eigene Daten des Knopfes oder die Behandlung der Seite.
@@ -268,6 +294,7 @@ function openCalendlyDialogForButton() {
     appTreatmentSlug,
     { appBookingUrl, locationSlug },
     kontext,
+    options,
   );
 }
 
@@ -287,6 +314,13 @@ const openNewsletterSignUpDialog = () => {
       data: {
         ...button.value?.data,
         ...props.data,
+        // 02.10.2026: Buchung nach dem Dialog = Buchung per Knopf - dieselbe
+        // Calendly-URL (#148, Behandlungstermin statt Terminart-Auswahl) und
+        // derselbe Standort (#78, auch geerbt). Vorher ging hier die rohe
+        // Standort-URL durch.
+        calendlyUrl: bookingUrl.value,
+        appBookingUrl: knopfStandort.value.appBookingUrl,
+        locationSlug: knopfStandort.value.locationSlug,
         // #78: Behandlung der Seite, falls der Knopf selbst keine traegt.
         treatmentType: knopfBehandlung.value.treatmentType,
         appTreatmentSlug: knopfBehandlung.value.appTreatmentSlug,

@@ -45,6 +45,36 @@ async function validateEmailAddress(
   }
 }
 
+// go. Variante A (02.10.2026): Wer sich schon angemeldet hat, bekommt beim
+// naechsten "20 % Rabatt sichern" nicht noch einmal das Formular, sondern
+// gleich die Buchung. Gemerkt wird nur, DASS angemeldet wurde (kein E-Mail,
+// keine Telefonnummer) - eine reine Komfortmarke im Browser.
+const SIGNED_UP_KEY = "myhb_newsletter_signed_up";
+
+export function rememberNewsletterSignup(): void {
+  if (!import.meta.client) return;
+  try {
+    localStorage.setItem(SIGNED_UP_KEY, new Date().toISOString().slice(0, 10));
+  } catch {}
+}
+
+export function hasNewsletterSignup(): boolean {
+  if (!import.meta.client) return false;
+  try {
+    return !!localStorage.getItem(SIGNED_UP_KEY);
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Warum `submit` false lieferte: "validation" = Eingabe korrigierbar
+ * (leer, Tippfehler-Vorschlag, ungueltige Adresse), "server" = Anmeldung
+ * selbst gescheitert (Mailchimp/Netz). Der Rabatt-Dialog oeffnet bei
+ * "server" trotzdem die Buchung.
+ */
+export type NewsletterSignupFailure = "validation" | "server";
+
 export function useNewsletterSignup(
   source: NewsletterSignupSource = "newsletter_footer",
 ) {
@@ -56,6 +86,7 @@ export function useNewsletterSignup(
   const loading = ref(false);
   const success = ref<string | null>(null);
   const error = ref<string | null>(null);
+  const failure = ref<NewsletterSignupFailure | null>(null);
   // Vorschlag bei erkanntem Tippfehler, z. B. "max@gmail.com" statt
   // "max@gmial.com". Wird der Nutzerin einmal angeboten; schickt sie
   // dieselbe Adresse erneut ab, wird sie akzeptiert.
@@ -95,7 +126,9 @@ export function useNewsletterSignup(
   async function submit(overrideEmail?: string): Promise<boolean> {
     const emailToUse = overrideEmail ?? email.value;
 
+    failure.value = null;
     if (!emailToUse?.trim()) {
+      failure.value = "validation";
       error.value = t("newsletter.errors.generic");
       return false;
     }
@@ -113,6 +146,7 @@ export function useNewsletterSignup(
         suggestion.value = check.suggestion ?? null;
         suggestionShownFor.value = normalized;
         error.value = invalidEmailMessage();
+        failure.value = "validation";
         return false;
       }
 
@@ -127,6 +161,7 @@ export function useNewsletterSignup(
       ) {
         suggestion.value = check.suggestion;
         suggestionShownFor.value = normalized;
+        failure.value = "validation";
         return false;
       }
 
@@ -148,10 +183,12 @@ export function useNewsletterSignup(
       phone.value = "";
       suggestionShownFor.value = null;
       success.value = "ok";
+      rememberNewsletterSignup();
       trackSignup();
       return true;
     } catch (e: any) {
       const code = e?.data?.errorCode ?? e?.statusMessage ?? "generic";
+      failure.value = code === "invalid_email" ? "validation" : "server";
       const key = `newsletter.errors.${code}`;
       error.value = te(key) ? t(key) : t("newsletter.errors.generic");
       return false;
@@ -166,6 +203,7 @@ export function useNewsletterSignup(
     loading,
     success,
     error,
+    failure,
     suggestion,
     applySuggestion,
     submit,

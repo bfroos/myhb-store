@@ -194,6 +194,11 @@ export const useGoogleAnalytics = () => {
        * schon der Neukundenpreis.
        */
       offer?: string;
+      /**
+       * go. Variante A (02.10.2026): Buchungsdialog kam aus dem Rabatt-Dialog
+       * statt direkt vom Knopf. Nur `true`; sonst null.
+       */
+      via_modal?: boolean;
     },
   ) => {
     // #400: ein Klick = ein Buchungsversuch. Dieselbe event_id traegt die App
@@ -212,6 +217,8 @@ export const useGoogleAnalytics = () => {
       booking_currency: extra?.booking_value ? 'EUR' : null,
       // Ebenso: das Angebot des vorigen Versuchs darf nicht kleben.
       offer: extra?.offer ?? null,
+      // Ebenso: "via_modal" des vorigen Klicks darf nicht kleben.
+      via_modal: extra?.via_modal ? true : null,
     });
   };
 
