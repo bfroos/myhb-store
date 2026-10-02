@@ -16,7 +16,7 @@
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
     Behandlung: shared/adsTemplateV2Content.ts.
   -->
-  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell' }">
+  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--desk': desktopLayout }">
     <BlockTreatmentHero
       v-bind="hero"
       :subline="terms?.subline ?? hero.subline"
@@ -29,6 +29,7 @@
       :v2-sticky-price="stickyPrice"
       :v2-note="heroNote"
       :v2-design="design"
+      :v2-desktop="desktopLayout"
     />
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
@@ -76,7 +77,7 @@
 
     <!-- 2. Wirkweise mit Zonenbild -->
     <UiLayoutSectionBlock v-if="terms">
-      <div class="v2-card" :class="tone('how')" data-track-placement="v2_how">
+      <div class="v2-card v2-split" :class="tone('how')" data-track-placement="v2_how">
         <h2 class="v2-h2">{{ H.how }}</h2>
         <div class="v2-how" :class="{ 'v2-how--text': !zoneImage }">
           <img
@@ -135,7 +136,7 @@
 
     <!-- Preise -->
     <UiLayoutSectionBlock v-if="priceCards.length">
-      <div class="v2-card" :class="tone('prices')" data-track-placement="v2_prices">
+      <div class="v2-card v2-prices-card" :class="tone('prices')" data-track-placement="v2_prices">
         <h2 class="v2-h2">{{ H.prices }}</h2>
         <p v-if="offerShown" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
@@ -182,7 +183,7 @@
 
     <!-- 7. Weitere Zonen: mobil Wischreihe, ab 900 px Raster -->
     <UiLayoutSectionBlock v-if="zoneTiles.length">
-      <div class="v2-card" :class="tone('zones')" data-track-placement="v2_zones">
+      <div class="v2-card v2-split" :class="tone('zones')" data-track-placement="v2_zones">
         <h2 class="v2-h2">{{ H.zones }}</h2>
         <p v-if="zoneHint" class="v2-lead">{{ zoneHint }}</p>
         <!-- Jede Kachel mit Bild: Poster des Behandlungsclips, sonst Zonenbild -->
@@ -219,7 +220,7 @@
 
     <!-- Aerzt:innen des Centers -->
     <UiLayoutSectionBlock v-if="doctors.length">
-      <div class="v2-card" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
+      <div class="v2-card v2-split" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
         <h2 class="v2-h2">{{ H.doctors }}</h2>
         <ul class="v2-doctors" role="list">
           <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
@@ -241,7 +242,7 @@
 
     <!-- 8. Beratungsfoto (leer = aus) -->
     <UiLayoutSectionBlock v-if="consultPhoto">
-      <div class="v2-card" :class="tone('consult')" data-track-placement="v2_consult">
+      <div class="v2-card v2-split" :class="tone('consult')" data-track-placement="v2_consult">
         <h2 class="v2-h2">{{ H.consult }}</h2>
         <img
           class="v2-consult__img"
@@ -257,7 +258,7 @@
 
     <!-- Bewertungen des Standorts: Video mittig, Texte mobil als Wischreihe -->
     <UiLayoutSectionBlock v-if="reviews.length || clips.feedback.length">
-      <div class="v2-card" :class="tone('reviews')" data-track-placement="v2_reviews">
+      <div class="v2-card v2-reviews-card" :class="tone('reviews')" data-track-placement="v2_reviews">
         <h2 class="v2-h2">{{ H.reviews }}</h2>
         <p v-if="rating" class="v2-lead">
           <IconStarFilled class="v2-star" size="18" aria-hidden="true" />
@@ -351,7 +352,7 @@
 
     <!-- Fragen + Nachsorge -->
     <UiLayoutSectionBlock>
-      <div class="v2-card" :class="tone('faq', 'v2-card--soft')" data-track-placement="v2_faq">
+      <div class="v2-card v2-split v2-split--rows" :class="tone('faq', 'v2-card--soft')" data-track-placement="v2_faq">
         <h2 class="v2-h2">{{ H.faq }}</h2>
         <div class="v2-faq">
           <details v-for="(faq, i) in faqs" :key="faq.question" class="v2-faq__item" :open="i === 0">
@@ -425,6 +426,7 @@ import {
   adsV2VoucherUrl,
   adsV2Design,
   employeeDisplayName,
+  isAdsV2DesktopLayout,
   openingHoursSummary,
   pickAdsV2Reviews,
   shortenText,
@@ -506,6 +508,13 @@ function tone(section: AdsV2Section, v2Class = ""): string {
   const t = TONES[d][section];
   return `theme-${t} v2-card--${t}`;
 }
+
+// Desktop-Layout ab 1024 px (shared/adsTemplateV2.ts,
+// ADS_TEMPLATE_V2_DESKTOP_PAGES; Feedback Benjamin 02.10.2026). Nur Klassen;
+// alle Regeln stehen in @media (min-width: 1024px), mobil bleibt gleich.
+const desktopLayout = computed(() =>
+  isAdsV2DesktopLayout(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
+);
 
 const globals = useGlobals();
 const { trackPhoneClick, trackEvent } = useGoogleAnalytics();
@@ -1809,5 +1818,248 @@ const routeHref = computed(() => {
 /* Fragen: Trennlinien wie auf www */
 .v2--ci .theme-soft .v2-faq__item {
   border-color: var(--color-gray-300);
+}
+
+/* =====================================================================
+   Desktop-Layout ab 1024 px (.v2--desk, Feedback Benjamin 02.10.2026):
+   mobil ist v2 gut, auf dem Desktop wirkte die zentrierte Einspalte leer.
+   Farben, Inhalte, Reihenfolge und Tracking bleiben; nur die Anordnung
+   aendert sich. Unter 1024 px greift hier nichts.
+   ===================================================================== */
+@media (min-width: 1024px) {
+  /* Ueberschriften links und groesser wie auf den bisherigen Seiten */
+  .v2--desk .v2-h2 {
+    margin-bottom: var(--space-600);
+    font-size: var(--font-3xl);
+    line-height: var(--line-3xl);
+    text-align: left;
+  }
+
+  .v2--desk .v2-h2--sub {
+    font-size: var(--font-xl);
+  }
+
+  .v2--desk .v2-lead,
+  .v2--desk .v2-center {
+    text-align: left;
+  }
+
+  .v2--desk .v2-actions {
+    justify-content: flex-start;
+  }
+
+  /* Zweispaltig: links Ueberschrift, Einleitung, Knopf; rechts der Inhalt */
+  .v2--desk .v2-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    grid-template-rows: auto auto auto 1fr;
+    grid-auto-flow: row dense;
+    column-gap: var(--space-1000);
+    align-items: start;
+  }
+
+  .v2--desk .v2-split > .v2-h2,
+  .v2--desk .v2-split > .v2-lead,
+  .v2--desk .v2-split > .v2-actions {
+    grid-column: 1;
+  }
+
+  .v2--desk .v2-split > :not(.v2-h2):not(.v2-lead):not(.v2-actions) {
+    grid-column: 2;
+    grid-row: 1 / -1;
+  }
+
+  /* Fragen + Nachsorge: je Zeile Ueberschrift links, Inhalt rechts */
+  .v2--desk .v2-split--rows {
+    grid-template-rows: none;
+  }
+
+  .v2--desk .v2-split--rows > :not(.v2-h2):not(.v2-lead):not(.v2-actions) {
+    grid-row: auto;
+  }
+
+  .v2--desk .v2-split--rows > .v2-h2--sub {
+    margin-top: var(--space-600);
+  }
+
+  .v2--desk .v2-split--rows > .v2-aftercare {
+    margin-top: var(--space-600);
+  }
+
+  /* Fliesstext: begrenzte Zeilenlaenge */
+  .v2--desk .v2-how__text,
+  .v2--desk .v2-faq__a {
+    max-width: 68ch;
+  }
+
+  .v2--desk .v2-how:not(.v2-how--text) {
+    grid-template-columns: 160px minmax(0, 1fr);
+    gap: var(--space-700);
+  }
+
+  .v2--desk .v2-how__img {
+    width: 160px;
+  }
+
+  .v2--desk .v2-how__text {
+    font-size: var(--font-lg);
+    line-height: var(--line-lg);
+  }
+
+  .v2--desk .v2-zones {
+    max-width: none;
+    margin: 0;
+  }
+
+  .v2--desk .v2-doctors {
+    margin: 0;
+  }
+
+  /* Clips: ganze Breite, vier nebeneinander, linksbuendig */
+  .v2--desk [data-track-placement="v2_clips"] :deep(.clips) {
+    justify-content: flex-start;
+  }
+
+  .v2--desk [data-track-placement="v2_clips"] :deep(.clips__item) {
+    width: calc((100% - 3 * var(--space-400)) / 4);
+  }
+
+  /* Auf einen Blick: vier Spalten ueber die ganze Breite */
+  .v2--desk .v2-facts {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  /* Aufrufe als Leiste: Titel + Preis links, Knopf rechts */
+  .v2--desk .v2-final {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: var(--space-700);
+    align-items: center;
+    text-align: left;
+  }
+
+  .v2--desk .v2-final > .v2-h2 {
+    margin: 0;
+  }
+
+  .v2--desk .v2-final > .v2-final__price {
+    grid-column: 1;
+  }
+
+  .v2--desk .v2-final > .v2-actions {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    margin-top: 0;
+  }
+
+  /* Ablauf als waagerechte Zeitachse */
+  .v2--desk .v2-timeline {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--space-600);
+    padding: var(--space-600) 0 0;
+    border-left: 0;
+    border-top: 2px solid #f1c9c9;
+  }
+
+  .v2--desk .v2-timeline__item::before {
+    left: 0;
+    top: calc(-1 * var(--space-600) - 6px);
+  }
+
+  .v2--desk .v2-steps {
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: var(--space-600);
+  }
+
+  /* Preise links, Ratenbox rechts daneben */
+  .v2--desk .v2-prices-card {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    grid-auto-flow: row dense;
+    column-gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk .v2-prices-card > .v2-h2,
+  .v2--desk .v2-prices-card > .v2-lead {
+    grid-column: 1 / -1;
+  }
+
+  .v2--desk .v2-prices-card > .v2-prices,
+  .v2--desk .v2-prices-card > .v2-notes,
+  .v2--desk .v2-prices-card > .v2-actions {
+    grid-column: 1;
+  }
+
+  .v2--desk .v2-prices-card > .v2-pay {
+    grid-column: 2;
+    grid-row: span 3;
+    margin-top: 0;
+    padding: var(--space-600);
+  }
+
+  .v2--desk .v2-price {
+    padding: var(--space-500) var(--space-300);
+  }
+
+  .v2--desk .v2-price__offer {
+    font-size: var(--font-xl);
+  }
+
+  /* Bewertungen: Kundenvideo links, Texte rechts */
+  .v2--desk .v2-reviews-card {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk .v2-reviews-card > * {
+    grid-column: 1 / -1;
+  }
+
+  .v2--desk .v2-reviews-card > .v2-feedback {
+    grid-column: 1;
+    margin-bottom: 0;
+  }
+
+  .v2--desk .v2-reviews-card > .v2-feedback + .v2-reviews {
+    grid-column: 2;
+  }
+
+  .v2--desk .v2-feedback :deep(.clips__item:first-child) {
+    margin-left: 0;
+  }
+
+  /* Standort: Knoepfe nicht ueber die ganze Breite */
+  .v2--desk .v2-actions--row .v2-btn {
+    flex: 0 0 auto;
+  }
+
+  /* Standort: Foto + Adresse links, Weg-Video rechts daneben */
+  .v2--desk [data-track-placement="v2_location"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-auto-flow: row dense;
+    column-gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-h2 {
+    grid-column: 1 / -1;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-location,
+  .v2--desk [data-track-placement="v2_location"] > .v2-actions {
+    grid-column: 1;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-way {
+    grid-column: 2;
+    grid-row: span 2;
+    margin-top: 0;
+  }
 }
 </style>

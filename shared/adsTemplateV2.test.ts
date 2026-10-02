@@ -25,6 +25,7 @@ import {
   ADS_V2_PAYMENT_NOTE,
   adsV2VoucherUrl,
   adsV2Design,
+  isAdsV2DesktopLayout,
 } from "./adsTemplateV2.ts";
 import {
   adsClipAllowed,
@@ -378,4 +379,12 @@ test("adsV2Design: CI-Gestaltung nur fuer die Lippen-Seite Koeln Arcaden", () =>
   const first = [["koeln/*/hyaluron/*", "ci"], ["*/*/*", "v2"]] as const;
   assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/jawline", first), "ci");
   assert.equal(adsV2Design("aachen", "aquis-plaza", "hyaluron/jawline", first), "v2");
+});
+
+test("isAdsV2DesktopLayout: zunaechst nur Lippen und Profhilo Koeln Arcaden", () => {
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), true);
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "/skinbooster/profhilo/"), true);
+  assert.equal(isAdsV2DesktopLayout("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), false);
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), false);
+  assert.equal(isAdsV2DesktopLayout("aachen", "aquis-plaza", "hyaluron/jawline", ["*/*/*"]), true);
 });
