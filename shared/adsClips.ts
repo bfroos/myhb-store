@@ -553,12 +553,13 @@ export const ADS_WAY_CLIPS: Record<string, AdsClip> = {
     caption: "Vom Haupteingang zu uns ins Untergeschoss",
     source: 34,
   },
-  // Strapi 206, 0,2-9,6 s: Eingang K in Lautern -> Untergeschoss
+  // Strapi 522, 10,0-24,5 s: Fussgaengerzone -> Eingang K in Lautern -> Gang ->
+  // Rolltreppe ins Untergeschoss -> Empfang (ersetzt 206, das nur bis zum Gang reichte)
   "k-in-lautern": {
     url: "/videos/go/weg-kaiserslautern-k-in-lautern.mp4",
     posterUrl: "/videos/go/weg-kaiserslautern-k-in-lautern-poster.jpg",
     caption: "Vom Eingang zu uns ins Untergeschoss",
-    source: 206,
+    source: 522,
   },
   // Strapi 211, 0,2-12,2 s: Rundgang ab dem Eingang der Lounge im Palais Vest
   "palais-vest": {
@@ -566,6 +567,36 @@ export const ADS_WAY_CLIPS: Record<string, AdsClip> = {
     posterUrl: "/videos/go/weg-recklinghausen-palais-vest-poster.jpg",
     caption: "Ein Blick in unser Center im Palais Vest",
     source: 211,
+  },
+  // Strapi 257, 9,0-19,0 s: Koeln Arcaden -> Rolltreppe ein Stockwerk tiefer -> Empfang
+  // (nicht laenger: ab 29 s steht im Quellvideo das alte Logo im Bild)
+  "koeln-arcaden": {
+    url: "/videos/go/weg-koeln-arcaden.mp4",
+    posterUrl: "/videos/go/weg-koeln-arcaden-poster.jpg",
+    caption: "Vom Eingang zu uns ein Stockwerk tiefer",
+    source: 257,
+  },
+  // Strapi 224 (Datei aus der Dublette 521), 0-11,5 s: Hoefe am Bruehl -> Rolltreppe
+  // ins Untergeschoss -> Empfang links
+  "hoefe-am-bruehl": {
+    url: "/videos/go/weg-leipzig-hoefe-am-bruehl.mp4",
+    posterUrl: "/videos/go/weg-leipzig-hoefe-am-bruehl-poster.jpg",
+    caption: "Vom Eingang zu uns ins Untergeschoss",
+    source: 224,
+  },
+  // Strapi 520, 0-11,0 s: Gesundbrunnencenter -> Rolltreppe ins Obergeschoss -> Empfang
+  gesundbrunnencenter: {
+    url: "/videos/go/weg-berlin-gesundbrunnencenter.mp4",
+    posterUrl: "/videos/go/weg-berlin-gesundbrunnencenter-poster.jpg",
+    caption: "Vom Eingang zu uns ins Obergeschoss",
+    source: 520,
+  },
+  // Strapi 217, 3,0-10,5 s: Minto -> durch die Mall -> Empfang
+  minto: {
+    url: "/videos/go/weg-moenchengladbach-minto.mp4",
+    posterUrl: "/videos/go/weg-moenchengladbach-minto-poster.jpg",
+    caption: "Vom Eingang durch das Minto zu uns",
+    source: 217,
   },
 };
 
