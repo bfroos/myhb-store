@@ -151,6 +151,30 @@ export function isAdsTemplateV2LivePage(
   return isAdsTemplateV2Page(city, loc, key, pages);
 }
 
+/**
+ * Desktop-Layout der v2-Seiten (Feedback Benjamin, 02.10.2026): mobil ist v2
+ * gut und bleibt unveraendert; ab 1024 px wirkt die mobile Einspalte mit
+ * allem zentriert leer. Mit diesem Schalter bekommt die Seite ab 1024 px ein
+ * eigenes Layout (Hero linksbuendig, Abschnitte zweispaltig, Zeitachse
+ * waagerecht, Preise neben der Ratenbox). Unter 1024 px greift keine Regel.
+ * Muster wie ADS_TEMPLATE_V2_PAGES; Ausrollen = "*\/*\/*".
+ */
+export const ADS_TEMPLATE_V2_DESKTOP_PAGES: readonly string[] = [
+  "koeln/koeln-arcaden/hyaluron/lippen-aufspritzen",
+  "koeln/koeln-arcaden/skinbooster/profhilo",
+];
+
+export function isAdsV2DesktopLayout(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  pages: readonly string[] = ADS_TEMPLATE_V2_DESKTOP_PAGES,
+): boolean {
+  const key = basePathKey(pathKey);
+  if (!city || !loc || !key) return false;
+  return pages.some((p) => matchesPattern(p, city, loc, key));
+}
+
 /** Hat der Standort mindestens eine v2-Seite? (Endpunkt der Zusatzdaten) */
 export function isAdsTemplateV2Location(
   city: string | null | undefined,

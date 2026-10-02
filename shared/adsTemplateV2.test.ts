@@ -22,6 +22,7 @@ import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
   adsV2VoucherUrl,
+  isAdsV2DesktopLayout,
 } from "./adsTemplateV2.ts";
 import {
   adsClipAllowed,
@@ -339,4 +340,12 @@ test("Vorschau nur unter /vorschau-v2, Canonical auf die echte Seite", () => {
   assert.equal(isAdsTemplateV2Location("koeln", "koeln-arcaden"), true);
   assert.equal(isAdsTemplateV2Location("berlin", "gesundbrunnencenter"), true);
   assert.equal(isAdsTemplateV2Location("koblenz", "loehr-center"), false);
+});
+
+test("isAdsV2DesktopLayout: zunaechst nur Lippen und Profhilo Koeln Arcaden", () => {
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), true);
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "/skinbooster/profhilo/"), true);
+  assert.equal(isAdsV2DesktopLayout("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), false);
+  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), false);
+  assert.equal(isAdsV2DesktopLayout("aachen", "aquis-plaza", "hyaluron/jawline", ["*/*/*"]), true);
 });
