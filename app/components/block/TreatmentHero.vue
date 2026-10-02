@@ -687,6 +687,19 @@ const discountLabel = computed(() => {
     white-space: nowrap;
   }
 
+  /* 320er-Handys: "Termin buchen" + "20% Rabatt sichern" passen nicht
+     nebeneinander (Text lief uebereinander) - untereinander, volle Breite. */
+  @media (max-width: 359px) {
+    .hero--ads-buttons .hero__cta {
+      flex-direction: column;
+    }
+
+    .hero--ads-buttons .hero-cta-btn {
+      flex: 0 0 auto;
+      width: 100%;
+    }
+  }
+
   /* v2: "Kostenlose Beratung buchen" ist zu lang fuer zwei Knoepfe in
      einer Zeile - untereinander, volle Breite. */
   .hero--v2.hero--ads-buttons .hero__cta {

@@ -98,6 +98,30 @@ export const ADS_TEMPLATE_V2_PAGES: readonly string[] = ADS_TEMPLATE_V2_LOCATION
  */
 export const ADS_TEMPLATE_V2_LIVE = true;
 
+/**
+ * Ausnahmen von v2 auf den echten URLs (gleiches Muster wie
+ * ADS_TEMPLATE_V2_PAGES, "stadt/standort/pathKey"): Diese Seiten zeigen auf
+ * go. die in Strapi gebaute Fassung (Strapi-Bloecke wie vor v2, mit
+ * Neukundenpreisen, Botox-Ersetzung und Video-Sperrliste des Strapi-Proxys).
+ *
+ * - duesseldorf/duesseldorf-arcaden/skinbooster/profhilo: eigene Bloecke von
+ *   Parya in Strapi (Benjamin, 02.10.2026). Profhilo an anderen Standorten
+ *   bleibt v2.
+ *
+ * Die Texte dieser Seiten nennen den Neukundenpreis schon selbst ("Neukunden
+ * ab 239,99 € ... statt regulär 299,99 €"); der Strapi-Proxy laesst Saetze
+ * mit "Neukunde" deshalb unberuehrt (keepNewCustomerSentences in
+ * shared/newCustomerOffer.ts), sonst stuende dort ein doppelter Rabatt.
+ *
+ * Folgen: kein Umleitungsskript fuer `?angebot=beratung`, /ab-beratung/...
+ * leitet auf die echte Seite zurueck (302) - die Seite ist damit nicht im
+ * Angebots-Test (shared/adsOfferVariant.ts). Die Vorschau /vorschau-v2/...
+ * zeigt v2 weiter, zum Vergleich.
+ */
+export const ADS_TEMPLATE_V2_EXCLUDE: readonly string[] = [
+  "duesseldorf/duesseldorf-arcaden/skinbooster/profhilo",
+];
+
 function basePathKey(pathKey: string | null | undefined): string {
   return String(pathKey ?? "")
     .replace(/^\/+|\/+$/g, "")
@@ -137,6 +161,7 @@ export function isAdsTemplateV2Page(
  * Echte Seite /standorte/<stadt>/<standort>/<pathKey> mit v2? Wie
  * isAdsTemplateV2Page, aber ohne die "-rabatt"-Adressen: die sind kein
  * Anzeigenziel und bleiben bei der bisherigen Seite (die Vorschau zeigt sie).
+ * Ohne die Ausnahmen aus ADS_TEMPLATE_V2_EXCLUDE.
  */
 export function isAdsTemplateV2LivePage(
   city: string | null | undefined,
@@ -144,11 +169,25 @@ export function isAdsTemplateV2LivePage(
   pathKey: string | null | undefined,
   pages: readonly string[] = ADS_TEMPLATE_V2_PAGES,
   live: boolean = ADS_TEMPLATE_V2_LIVE,
+  exclude: readonly string[] = ADS_TEMPLATE_V2_EXCLUDE,
 ): boolean {
   if (!live) return false;
   const key = String(pathKey ?? "").replace(/^\/+|\/+$/g, "");
   if (key.endsWith("-rabatt")) return false;
+  if (isAdsTemplateV2Excluded(city, loc, key, exclude)) return false;
   return isAdsTemplateV2Page(city, loc, key, pages);
+}
+
+/** Steht die Seite in ADS_TEMPLATE_V2_EXCLUDE (Strapi-Fassung statt v2)? */
+export function isAdsTemplateV2Excluded(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  exclude: readonly string[] = ADS_TEMPLATE_V2_EXCLUDE,
+): boolean {
+  const key = String(pathKey ?? "").replace(/^\/+|\/+$/g, "");
+  if (!city || !loc || !key) return false;
+  return exclude.some((p) => matchesPattern(p, city, loc, key));
 }
 
 /** Hat der Standort mindestens eine v2-Seite? (Endpunkt der Zusatzdaten) */
