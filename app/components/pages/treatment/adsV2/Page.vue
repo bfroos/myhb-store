@@ -218,24 +218,19 @@
       </div>
     </UiLayoutSectionBlock>
 
-    <!-- Aerzt:innen des Centers -->
+    <!-- Aerzt:innen des Centers. Pflegbar ueber den Block blocks.doctor-team
+         der Seite in Strapi (Headline, Intro, Aerzt:innen, Trust-Text, CTA);
+         ohne Block bzw. leere Felder gilt das Bisherige (Employees des
+         Standorts, feste Texte, Termin-Knopf). shared/doctorTeam.ts -->
     <UiLayoutSectionBlock v-if="doctors.length">
       <div class="v2-card v2-split" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
-        <h2 class="v2-h2">{{ H.doctors }}</h2>
-        <ul class="v2-doctors" role="list">
-          <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
-            <div class="v2-doctor__photo">
-              <UiAtomMediaPicture :media="doc.photo" />
-            </div>
-            <span class="v2-doctor__name">
-              <span class="v2-doctor__title">{{ doc.title || "\u00a0" }}</span>
-              <strong class="v2-doctor__full">{{ doc.fullName }}</strong>
-            </span>
-          </li>
-        </ul>
+        <h2 class="v2-h2">{{ doctorsHeadline }}</h2>
+        <p v-if="doctorsIntro" class="v2-lead">{{ doctorsIntro }}</p>
+        <UiMoleculeDoctorTeamList :doctors="doctors" class="v2-doctors" />
         <p class="v2-lead">{{ doctorsLead }}</p>
-        <div class="v2-actions">
-          <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+        <div v-if="doctorsShowCta" class="v2-actions">
+          <SharedButton v-if="doctorTeamBlock?.cta" :button="doctorTeamBlock.cta" :data="bookingData" :button-props="{ size: 'lg' }" class="v2-btn" />
+          <SharedButton v-else-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
         </div>
       </div>
     </UiLayoutSectionBlock>
@@ -448,6 +443,9 @@ import {
   IconWalk,
 } from "@tabler/icons-vue";
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
+import type { BlockDoctorTeamDto } from "~/lib/strapi/dto/doctorTeam";
+import type { StrapiMedia } from "~/lib/strapi/dto/types";
+import { resolveDoctorCards, type ResolvedDoctorCard } from "#shared/doctorTeam";
 import type { LocationDto, TreatmentPageDto } from "~/lib/strapi/dto/collections";
 import { ImageFormat, SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
 import { isBlockedAdsImageFile } from "#shared/adsMedia";
@@ -464,7 +462,6 @@ import {
   adsV2TrustItems,
   adsV2VoucherUrl,
   adsV2Design,
-  employeeDisplayName,
   isAdsV2DesktopLayout,
   openingHoursSummary,
   pickAdsV2Reviews,
@@ -841,7 +838,17 @@ const zoneTiles = computed(() =>
 );
 // Ohne ein einziges Zonenbild (Skinbooster, Infusionen): schlichte Textkacheln.
 const zoneTilesHaveImages = computed(() => zoneTiles.value.some((t) => !!t.image));
-const doctorsLead = "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle.";
+const DOCTORS_LEAD_DEFAULT = "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle.";
+// Block "Doctor Team" der Seite in Strapi (Dynamic Zone), wie bei der Lounge.
+const doctorTeamBlock = computed<BlockDoctorTeamDto | null>(() => {
+  const blocks: any[] = ((props.treatmentPage as any)?.blocks ?? []) as any[];
+  return (blocks.find((b) => b?.__component === "blocks.doctor-team") as BlockDoctorTeamDto | undefined) ?? null;
+});
+const pick = (v: unknown, fallback: string) => (typeof v === "string" && v.trim() ? v.trim() : fallback);
+const doctorsHeadline = computed(() => pick(doctorTeamBlock.value?.headline, H.value.doctors));
+const doctorsIntro = computed(() => pick(doctorTeamBlock.value?.description, ""));
+const doctorsLead = computed(() => pick(doctorTeamBlock.value?.trustText, DOCTORS_LEAD_DEFAULT));
+const doctorsShowCta = computed(() => doctorTeamBlock.value?.showCta !== false);
 // "in den Köln Arcaden", "im Minto" (ohne Umbruch im Namen)
 const atLocation = computed(() => adsV2AtLocation(locationName.value));
 const zoneHint = computed(() => adsV2ZoneHint(priceCards.value));
@@ -853,25 +860,19 @@ const priceCards = computed(() => {
 const productNote = computed(() => adsV2ProductNote(pathKey.value));
 
 /**
- * Zwei feste Zeilen (Benjamin, 01.10.2026: "Arzt Wisam" einzeilig neben
- * "Arzt / Mamdoh" zweizeilig): oben die Anrede ("Arzt", "Ärztin", "Dr."),
- * darunter der Name. Die Anrede steht in Strapi teils im Vornamen.
+ * Gepflegte Karten aus dem Block, sonst die Employees des Standorts (wie
+ * bisher). Gezeigt wird nur, wer ein Foto hat, das nicht auf der Sperrliste
+ * steht (shared/adsMedia.ts). Zwei feste Zeilen je Karte - oben die Anrede
+ * ("Arzt", "Ärztin", "Dr."), darunter der Name (Benjamin, 01.10.2026):
+ * doctorLines in shared/doctorTeam.ts.
  */
-function doctorLines(display: string): { title: string; fullName: string } {
-  const m = /^((?:Dr\.\s*(?:med\.\s*)?(?:dent\.\s*)?)|Ärztin|Arzt|Prof\.\s*(?:Dr\.\s*)?)\s*(.+)$/.exec(display.trim());
-  return m ? { title: m[1]!.trim(), fullName: m[2]!.trim() } : { title: "", fullName: display.trim() };
-}
-
-const doctors = computed(() =>
-  (extras.value?.doctors ?? [])
-    .map((d: any) => ({
-      id: d.id,
-      name: employeeDisplayName(d),
-      ...doctorLines(employeeDisplayName(d)),
-      photo: d.photo,
-    }))
-    .filter((d) => d.name && d.photo),
-);
+const doctors = computed(() => {
+  const usable = (list: ResolvedDoctorCard<StrapiMedia>[]) =>
+    list.filter((d) => d.photo && !isBlockedAdsImageFile(d.photo));
+  const fromBlock = usable(resolveDoctorCards<StrapiMedia>(doctorTeamBlock.value?.doctors));
+  if (fromBlock.length) return fromBlock;
+  return usable(resolveDoctorCards<StrapiMedia>((extras.value?.doctors ?? []).map((employee: any) => ({ employee }))));
+});
 const reviews = computed(() =>
   pickAdsV2Reviews(extras.value?.reviews ?? [], props.location?.city?.name, pathKey.value).map(
     (r: any) => ({ ...r, text: shortenText(r.text, 220) }),
@@ -1401,68 +1402,11 @@ const routeHref = computed(() => {
   color: var(--color-text-light);
 }
 
-/* Aerzt:innen */
+/* Aerzt:innen: Karten und Raster in UiMoleculeDoctorTeamList; hier nur
+   Abstand und drei Spalten wie bisher (auch in der Desktop-Spalte). */
 .v2-doctors {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-300);
+  --doctor-team-cols: 3;
   margin: 0 0 var(--space-400);
-  padding: 0;
-  list-style: none;
-}
-
-.v2-doctor {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--space-200);
-  text-align: center;
-}
-
-.v2-doctor__photo {
-  position: relative;
-  width: 100%;
-  /* Tablet: drei Spalten waeren sonst ~200 px grosse Kreise */
-  max-width: 150px;
-  aspect-ratio: 1 / 1;
-  overflow: hidden;
-  border-radius: 999px;
-  background: var(--color-gray-200);
-}
-
-.v2-doctor__photo :deep(img) {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-}
-
-/* Zwei feste Zeilen (Titel / Name), damit alle Namen auf einer Hoehe stehen */
-.v2-doctor__name {
-  display: grid;
-  grid-template-rows: auto auto;
-  width: 100%;
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
-}
-
-.v2-doctor__title {
-  color: var(--color-text-light);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.v2-doctor__full {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
-  min-height: calc(2em * var(--line-sm, 1.5));
-  hyphens: auto;
 }
 
 /* Ratenzahlung ueber Gutschein */
@@ -1913,8 +1857,8 @@ const routeHref = computed(() => {
 }
 
 /* Aerzt:innen auf Dunkelgrau: Fotogrund passend */
-.v2--ci .theme-neutral .v2-doctor__photo {
-  background: var(--color-gray-700);
+.v2--ci .theme-neutral .v2-doctors {
+  --doctor-team-photo-bg: var(--color-gray-700);
 }
 
 /* Fragen: Trennlinien wie auf www */
