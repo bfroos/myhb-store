@@ -22,6 +22,7 @@ import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
   adsV2VoucherUrl,
+  adsV2Design,
 } from "./adsTemplateV2.ts";
 import {
   adsClipAllowed,
@@ -339,4 +340,19 @@ test("Vorschau nur unter /vorschau-v2, Canonical auf die echte Seite", () => {
   assert.equal(isAdsTemplateV2Location("koeln", "koeln-arcaden"), true);
   assert.equal(isAdsTemplateV2Location("berlin", "gesundbrunnencenter"), true);
   assert.equal(isAdsTemplateV2Location("koblenz", "loehr-center"), false);
+});
+
+test("adsV2Design: CI-Gestaltung nur fuer die Lippen-Seite Koeln Arcaden", () => {
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "ci");
+  // "-rabatt"-Variante und fuehrende/abschliessende Schraegstriche: dieselbe Seite
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "/hyaluron/lippen-aufspritzen-rabatt/"), "ci");
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), "v2");
+  assert.equal(adsV2Design("berlin", "gesundbrunnencenter", "hyaluron/lippen-aufspritzen"), "v2");
+  assert.equal(adsV2Design(null, "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "v2");
+  // Ausrollen per Muster
+  const all = [["*/*/*", "ci-hell"]] as const;
+  assert.equal(adsV2Design("aachen", "aquis-plaza", "skinbooster/profhilo", all), "ci-hell");
+  const first = [["koeln/*/hyaluron/*", "ci"], ["*/*/*", "v2"]] as const;
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/jawline", first), "ci");
+  assert.equal(adsV2Design("aachen", "aquis-plaza", "hyaluron/jawline", first), "v2");
 });
