@@ -673,7 +673,8 @@ export const ADS_LOUNGE_NEUTRAL_HEADLINE = "Einblicke in unsere MY Lounges";
  * sicher eigene Fotos ok, dann mit neutraler Ueberschrift und Alt-Texten
  * ohne Ort). Aus Parya's Duesseldorfer Auswahl, ohne sichtbaren Ortsnamen.
  */
-const ADS_LOUNGE_GENERAL_IDS: readonly number[] = [1040, 1035, 1022, 1009, 985];
+// Michael, 03.10.2026: der weisse Empfang mit Wandlogo (1022) zuerst.
+const ADS_LOUNGE_GENERAL_IDS: readonly number[] = [1022, 1040, 1035, 1009, 985];
 
 export type AdsLoungeSelection = {
   images: readonly AdsLoungeImage[];
@@ -689,9 +690,8 @@ export type AdsLoungeSelection = {
 export function adsLoungeGalleryFor(locationSlug: string | null | undefined): AdsLoungeSelection {
   const g = ADS_LOUNGE_GALLERY[String(locationSlug ?? "")] ?? null;
   if (g?.confirmed) return { images: g.images, own: true };
-  const general = (ADS_LOUNGE_GALLERY["duesseldorf-arcaden"]?.images ?? []).filter((img) =>
-    ADS_LOUNGE_GENERAL_IDS.includes(img.id),
-  );
+  const pool = ADS_LOUNGE_GALLERY["duesseldorf-arcaden"]?.images ?? [];
+  const general = ADS_LOUNGE_GENERAL_IDS.flatMap((id) => pool.filter((img) => img.id === id));
   const seen = new Set<number>();
   let images = [...(g?.images ?? []), ...general].filter((img) => !seen.has(img.id) && seen.add(img.id));
   const order = g?.order ?? [];
@@ -760,12 +760,40 @@ export function adsProcessImagesFor(pathKey: string | null | undefined) {
 /**
  * Grosses Aerztinnen-Foto je Standort fuer den Aerzte-Block (Benjamin,
  * 03.10.2026). Nur Aerzt:innen, die in Strapi diesem Standort zugeordnet
- * sind: Koeln = Aerztin Iqra (ihr Strapi-Foto stammt aus dem Shooting,
- * Tag1-55). Fehlt ein Eintrag: Block nur mit Text.
+ * sind (Strapi employees.locations, Stand 03.10.2026; bevorzugt nur diesem
+ * Standort zugeordnet), Foto jeweils das Strapi-Foto der Person, angesehen:
+ * aktuelles Logo, kein "MYH&B". Berlin und Leipzig: niemand mit Foto;
+ * Kaiserslautern: nur "Aerztin.png" (anderer Stil, nicht als Mariam
+ * belegt). Dort kein Eintrag - der Block steht nur mit Text.
  */
 export const ADS_DOCTOR_FEATURE: Record<string, { image: AdsLoungeImage; name: string }> = {
   "koeln-arcaden": {
     image: { id: 948, url: "https://media.myhealthandbeauty.app/98/2026_MYHB_Tag1_55_1_904a1c842f.webp", width: 5424, height: 5952, mime: "image/webp" },
     name: "Ärztin Iqra",
+  },
+  // Strapi employee 858, nur Duesseldorf
+  "duesseldorf-arcaden": {
+    image: { id: 949, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag1_63_1_07baed1afc.webp", width: 5395, height: 5732, mime: "image/webp" },
+    name: "Ärztin Noura",
+  },
+  // Strapi employee 855, nur Moenchengladbach
+  minto: {
+    image: { id: 941, url: "https://media.myhealthandbeauty.app/98/2026_MYHB_Tag1_50_1_70ce7e8386.webp", width: 5237, height: 5771, mime: "image/webp" },
+    name: "Ärztin Ricarda",
+  },
+  // Strapi employee 854, nur Recklinghausen
+  "palais-vest": {
+    image: { id: 1018, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag3_4_d36ef735c7.webp", width: 7805, height: 5198, mime: "image/webp" },
+    name: "Arzt Ruben",
+  },
+  // Strapi employee 760, Duisburg und Recklinghausen
+  forum: {
+    image: { id: 1019, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag3_6_1_ea6ad4569e.webp", width: 7882, height: 5249, mime: "image/webp" },
+    name: "Arzt Mirza-Haras",
+  },
+  // Strapi employee 756, nur Aachen
+  "aquis-plaza": {
+    image: { id: 969, url: "https://media.myhealthandbeauty.app/98/2026_MYHB_Tag2_21_1_9926822185.webp", width: 7676, height: 5112, mime: "image/webp" },
+    name: "Ärztin Avin",
   },
 };
