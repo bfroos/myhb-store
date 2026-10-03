@@ -366,16 +366,16 @@ test("Vorschau nur unter /vorschau-v2, Canonical auf die echte Seite", () => {
   assert.equal(isAdsTemplateV2Location("koblenz", "loehr-center"), false);
 });
 
-test("adsV2Design: CI-Gestaltung nur fuer Lippen und Profhilo Koeln Arcaden", () => {
+test("adsV2Design: CI-Gestaltung (ci-preis) auf allen v2-Seiten", () => {
   assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "ci-preis");
   assert.equal(adsV2Design("koeln", "koeln-arcaden", "skinbooster/profhilo"), "ci-preis");
-  assert.equal(adsV2Design("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), "v2");
   // "-rabatt"-Variante und fuehrende/abschliessende Schraegstriche: dieselbe Seite
   assert.equal(adsV2Design("koeln", "koeln-arcaden", "/hyaluron/lippen-aufspritzen-rabatt/"), "ci-preis");
-  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), "v2");
-  assert.equal(adsV2Design("berlin", "gesundbrunnencenter", "hyaluron/lippen-aufspritzen"), "v2");
+  assert.equal(adsV2Design("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), "ci-preis");
+  assert.equal(adsV2Design("berlin", "gesundbrunnencenter", "muskelrelaxans/stirnfalte"), "ci-preis");
+  assert.equal(adsV2Design("duisburg", "forum", "infusionen/vitamin-c"), "ci-preis");
   assert.equal(adsV2Design(null, "koeln-arcaden", "hyaluron/lippen-aufspritzen"), "v2");
-  // Ausrollen per Muster
+  // Muster: der erste Treffer gilt
   const all = [["*/*/*", "ci-hell"]] as const;
   assert.equal(adsV2Design("aachen", "aquis-plaza", "skinbooster/profhilo", all), "ci-hell");
   const first = [["koeln/*/hyaluron/*", "ci"], ["*/*/*", "v2"]] as const;
@@ -383,12 +383,12 @@ test("adsV2Design: CI-Gestaltung nur fuer Lippen und Profhilo Koeln Arcaden", ()
   assert.equal(adsV2Design("aachen", "aquis-plaza", "hyaluron/jawline", first), "v2");
 });
 
-test("isAdsV2DesktopLayout: zunaechst nur Lippen und Profhilo Koeln Arcaden", () => {
+test("isAdsV2DesktopLayout: auf allen v2-Seiten", () => {
   assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippen-aufspritzen"), true);
   assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "/skinbooster/profhilo/"), true);
-  assert.equal(isAdsV2DesktopLayout("duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo"), false);
-  assert.equal(isAdsV2DesktopLayout("koeln", "koeln-arcaden", "hyaluron/lippenkorrektur"), false);
-  assert.equal(isAdsV2DesktopLayout("aachen", "aquis-plaza", "hyaluron/jawline", ["*/*/*"]), true);
+  assert.equal(isAdsV2DesktopLayout("leipzig", "hoefe-am-bruehl", "hyaluron/lippenkorrektur"), true);
+  assert.equal(isAdsV2DesktopLayout(null, "koeln-arcaden", "hyaluron/lippenkorrektur"), false);
+  assert.equal(isAdsV2DesktopLayout("aachen", "aquis-plaza", "hyaluron/jawline", ["koeln/*/*"]), false);
 });
 
 test("ADS_LOUNGE_GALLERY: nur Bilder ohne Sperrbegriff/Sperrdatei, Koeln vorerst unbestaetigt", async () => {
@@ -411,8 +411,24 @@ test("ADS_LOUNGE_GALLERY: nur Bilder ohne Sperrbegriff/Sperrdatei, Koeln vorerst
   assert.equal(koeln.images.length, 6);
   // Duesseldorf: sicher eigene Fotos
   assert.equal(adsLoungeGalleryFor("duesseldorf-arcaden").own, true);
-  // Standort ohne Eintrag: nur die allgemeinen, neutral
+  // Standort ohne Eintrag: nur die allgemeinen, neutral, weisser Empfang (1022) zuerst
   const forum = adsLoungeGalleryFor("forum");
   assert.equal(forum.own, false);
   assert.equal(forum.images.length, 5);
+  assert.equal(forum.images[0]?.id, 1022);
+  assert.ok(!forum.images.some((i) => i.id === 114));
+});
+
+test("ADS_DOCTOR_FEATURE: je Standort nur eine Aerztin/ein Arzt dieses Standorts", async () => {
+  const { ADS_DOCTOR_FEATURE } = await import("./adsClips.ts");
+  const locs = ADS_TEMPLATE_V2_LOCATIONS.map((l) => l.split("/")[1]);
+  for (const [loc, f] of Object.entries(ADS_DOCTOR_FEATURE)) {
+    assert.ok(locs.includes(loc), loc);
+    assert.match(f.name, /^(Ärztin|Arzt) \S/, loc);
+    assert.doesNotMatch(f.image.url, /botox|btx/i);
+  }
+  assert.equal(ADS_DOCTOR_FEATURE["koeln-arcaden"]?.name, "Ärztin Iqra");
+  // ohne passendes Foto: kein Eintrag (Block nur mit Text), nie eine fremde Aerztin
+  assert.equal(ADS_DOCTOR_FEATURE["gesundbrunnencenter"], undefined);
+  assert.equal(ADS_DOCTOR_FEATURE["hoefe-am-bruehl"], undefined);
 });

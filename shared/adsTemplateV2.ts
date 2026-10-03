@@ -213,9 +213,10 @@ export function isAdsTemplateV2Excluded(
 export type AdsV2Design = "v2" | "ci" | "ci-hell" | "ci-rot" | "ci-preis";
 
 export const ADS_TEMPLATE_V2_DESIGN: ReadonlyArray<readonly [string, AdsV2Design]> = [
-  // Benjamin, 02.10.2026 abends: R1, nur der Neukundenpreis rot
-  ["koeln/koeln-arcaden/hyaluron/lippen-aufspritzen", "ci-preis"],
-  ["koeln/koeln-arcaden/skinbooster/profhilo", "ci-preis"],
+  // Benjamin, 02.10.2026 abends: R1, nur der Neukundenpreis rot. Erst Lippen
+  // und Profhilo Koeln Arcaden (#225-#233, Michaels Feedback 03.10.2026),
+  // seit 03.10.2026 abends auf allen v2-Seiten.
+  ["*/*/*", "ci-preis"],
 ];
 
 export function adsV2Design(
@@ -238,10 +239,7 @@ export function adsV2Design(
  * waagerecht, Preise neben der Ratenbox). Unter 1024 px greift keine Regel.
  * Muster wie ADS_TEMPLATE_V2_PAGES; Ausrollen = "*\/*\/*".
  */
-export const ADS_TEMPLATE_V2_DESKTOP_PAGES: readonly string[] = [
-  "koeln/koeln-arcaden/hyaluron/lippen-aufspritzen",
-  "koeln/koeln-arcaden/skinbooster/profhilo",
-];
+export const ADS_TEMPLATE_V2_DESKTOP_PAGES: readonly string[] = ["*/*/*"];
 
 export function isAdsV2DesktopLayout(
   city: string | null | undefined,
