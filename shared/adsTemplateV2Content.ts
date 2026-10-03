@@ -96,6 +96,11 @@ type Spec = AdsV2Terms & {
   firstText?: string;
   /** Zeitachse: Auffrischen, z. B. "nach ca. 4 Monaten" */
   refreshWhen?: string;
+  /**
+   * Skinbooster ohne "Quaddeln" in Zeitachse, Nebenwirkungen und Nachsorge
+   * (Michael, 03.10.2026, Profhilo: "kleinere Roetungen").
+   */
+  noQuaddeln?: boolean;
   refreshText?: string;
   /** FAQ-Antworten, die vom Standard der Art abweichen */
   faq?: Partial<Record<FaqSlot, { question?: string; answer: string }>>;
@@ -195,7 +200,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Stirnfalten-Behandlung",
     object: "die Stirnfalte",
     about: "zur Stirnfalte",
-    subline: "Entspannter, frischer Blick – ärztlich, ohne Ausfallzeit",
+    subline: "Entspannter, frischer Blick – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "stirn",
     howItWorks: `${MR_HOW} Gesetzt wird an wenigen Punkten in einer Reihe über den Augenbrauen.`,
     facts: MR_FACTS,
@@ -207,7 +212,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Zornesfalten-Behandlung",
     object: "die Zornesfalte",
     about: "zur Zornesfalte",
-    subline: "Entspannter Blick zwischen den Brauen – ärztlich, ohne Ausfallzeit",
+    subline: "Entspannter Blick zwischen den Brauen – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "zornesfalte",
     howItWorks: `${MR_HOW} Gesetzt wird an wenigen Punkten zwischen und über den inneren Augenbrauen.`,
     facts: MR_FACTS,
@@ -219,7 +224,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Krähenfüße-Behandlung",
     object: "die Krähenfüße",
     about: "zu Krähenfüßen",
-    subline: "Wacher, frischer Blick um die Augen – ärztlich, ohne Ausfallzeit",
+    subline: "Wacher, frischer Blick um die Augen – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "kraehenfuesse",
     howItWorks: `${MR_HOW} Gesetzt wird an je drei Punkten seitlich der Augen.`,
     facts: MR_FACTS,
@@ -231,7 +236,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Browlift-Behandlung",
     object: "den Browlift",
     about: "zum Browlift",
-    subline: "Offener, wacher Blick – ärztlich, ohne Ausfallzeit",
+    subline: "Offener, wacher Blick – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "browlift",
     howItWorks: `${MR_HOW} Gesetzt wird an je zwei Punkten am äußeren Ende der Augenbrauen, so kann sich die Braue leicht anheben.`,
     facts: MR_FACTS,
@@ -243,7 +248,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Lachfalten-Behandlung",
     object: "die Lachfalten",
     about: "zu Lachfalten",
-    subline: "Feine Linien um die Augen entspannen – ärztlich, ohne Ausfallzeit",
+    subline: "Feine Linien um die Augen entspannen – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "lachfalten",
     howItWorks: `${MR_HOW} Gesetzt wird an wenigen Punkten seitlich und unterhalb der äußeren Augenwinkel.`,
     facts: MR_FACTS,
@@ -278,7 +283,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Nasenfältchen-Behandlung",
     object: "die Nasenfältchen",
     about: "zu Nasenfältchen (Bunny Lines)",
-    subline: "Weniger Knitterfältchen am Nasenrücken – ärztlich, ohne Ausfallzeit",
+    subline: "Weniger Knitterfältchen am Nasenrücken – Behandlung durch Ärzte, ohne Ausfallzeit",
     howItWorks: `${MR_HOW} Gesetzt wird an je einem bis zwei Punkten seitlich am oberen Nasenrücken.`,
     facts: { ...MR_FACTS, dauer: "10–20 Minuten" },
     firstText: "Die Knitterfältchen an der Nase werden nach und nach weicher.",
@@ -293,7 +298,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Erdbeerkinn-Behandlung",
     object: "das Erdbeerkinn",
     about: "zum Erdbeerkinn",
-    subline: "Ruhigeres, glatteres Kinn – ärztlich, ohne Ausfallzeit",
+    subline: "Ruhigeres, glatteres Kinn – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "kinn",
     howItWorks: `${MR_HOW} Gesetzt wird an wenigen Punkten am Kinn, wo der Kinnmuskel die Haut zu kleinen Grübchen zieht.`,
     facts: MR_FACTS,
@@ -326,7 +331,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Masseter-Behandlung",
     object: "die Masseter-Behandlung",
     about: "zur Masseter-Behandlung",
-    subline: "Kaumuskel entspannen, Gesicht wirkt schmaler – ärztlich, ohne OP",
+    subline: "Kaumuskel entspannen, Gesicht wirkt schmaler – Behandlung durch Ärzte, ohne OP",
     zone: "masseter",
     howItWorks:
       "Ein Muskelrelaxans entspannt den großen Kaumuskel (Masseter) am seitlichen Unterkiefer. Mit der Zeit wird der Muskel schlanker, das Gesicht kann dadurch schmaler wirken. Gesetzt wird an wenigen Punkten je Seite.",
@@ -350,7 +355,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Behandlung gegen Zähneknirschen",
     object: "die Behandlung gegen Zähneknirschen",
     about: "zum Zähneknirschen",
-    subline: "Kaumuskel gezielt entspannen – ärztlich, in einem kurzen Termin",
+    subline: "Kaumuskel gezielt entspannen – Behandlung durch Ärzte, in einem kurzen Termin",
     zone: "masseter",
     howItWorks:
       "Ein Muskelrelaxans entspannt den Kaumuskel (Masseter), der beim Knirschen und Pressen arbeitet. Der Muskel kann dann weniger fest zubeißen. Gesetzt wird an wenigen Punkten je Seite.",
@@ -374,7 +379,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Barbie-Behandlung",
     object: "die Barbie-Behandlung",
     about: "zur Barbie-Behandlung",
-    subline: "Schultern wirken schlanker, der Nacken länger – ärztlich, ohne OP",
+    subline: "Schultern wirken schlanker, der Nacken länger – Behandlung durch Ärzte, ohne OP",
     howItWorks:
       "Ein Muskelrelaxans entspannt den oberen Teil des Trapezmuskels zwischen Nacken und Schulter. Wird der Muskel schlanker, wirken Schultern und Nacken gestreckter. Gesetzt wird an mehreren Punkten je Seite.",
     facts: { ...MR_FACTS, wirkung: "nach wenigen Tagen", ergebnis: "nach ca. 2–3 Wochen", haltbarkeit: "ca. 4–6 Monate", betaeubung: "auf Wunsch Betäubungscreme" },
@@ -397,7 +402,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Halsfalten-Behandlung",
     object: "die Halsfalten",
     about: "zu Halsfalten",
-    subline: "Hals wirkt glatter und entspannter – ärztlich, ohne OP",
+    subline: "Hals wirkt glatter und entspannter – Behandlung durch Ärzte, ohne OP",
     howItWorks:
       "Ein Muskelrelaxans entspannt den flachen Halsmuskel (Platysma), der beim Anspannen Bänder und Falten am Hals zieht. Die Haut darüber kann sich glätten. Gesetzt wird an mehreren Punkten entlang der Muskelstränge.",
     facts: { ...MR_FACTS, wirkung: "nach ca. 4–7 Tagen" },
@@ -416,7 +421,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Behandlung gegen starkes Schwitzen",
     object: "die Behandlung gegen starkes Schwitzen",
     about: "zum starken Schwitzen",
-    subline: "Mehr Trockenheit unter den Achseln – ärztlich, in einem Termin",
+    subline: "Mehr Trockenheit unter den Achseln – Behandlung durch Ärzte, in einem Termin",
     howItWorks:
       "Ein Muskelrelaxans hemmt die Nervensignale an den Schweißdrüsen. Die Drüsen in der behandelten Haut bilden dann weniger Schweiß. Gesetzt wird mit sehr feinen Nadeln an vielen kleinen Punkten in der Achsel.",
     facts: { ...MR_FACTS, wirkung: "nach 2–4 Tagen", ergebnis: "nach ca. 2 Wochen", haltbarkeit: "ca. 4–6 Monate" },
@@ -535,7 +540,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Kinnbehandlung",
     object: "das Kinn",
     about: "zur Kinnbehandlung",
-    subline: "Mehr Balance im Profil – ärztlich, ohne OP",
+    subline: "Mehr Balance im Profil – Behandlung durch Ärzte, ohne OP",
     zone: "kinn",
     howItWorks: `${HA_HOW} Am Kinn gesetzt, gibt es mehr Form und Länge. Das Profil kann ausgewogener wirken, kleine Asymmetrien lassen sich ausgleichen.`,
     facts: { ...HA_FACTS, dauer: "20–30 Minuten", ergebnis: "nach wenigen Tagen", haltbarkeit: "ca. 6–9 Monate" },
@@ -551,7 +556,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Jawline-Behandlung",
     object: "die Jawline",
     about: "zur Jawline",
-    subline: "Klarere Kieferlinie – ärztlich, ohne OP",
+    subline: "Klarere Kieferlinie – Behandlung durch Ärzte, ohne OP",
     zone: "jawline",
     howItWorks: `${HA_HOW} Entlang der Kieferlinie vom Kieferwinkel bis zum Kinn gesetzt, betont es die Kontur. Der Übergang von Gesicht zu Hals wirkt klarer.`,
     facts: { ...HA_FACTS, dauer: "30–40 Minuten", haltbarkeit: "ca. 9–12 Monate" },
@@ -618,7 +623,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Hyaluron-Auflösung",
     object: "das Auflösen von Hyaluron",
     about: "zum Auflösen von Hyaluron",
-    subline: "Altes Hyaluron gezielt auflösen – ärztlich, in einem kurzen Termin",
+    subline: "Altes Hyaluron gezielt auflösen – Behandlung durch Ärzte, in einem kurzen Termin",
     howItWorks:
       "Ein Enzym (Hyaluronidase) spaltet Hyaluron gezielt auf, der Körper baut es dann ab. So lassen sich ungleichmäßige oder verrutschte Ergebnisse früherer Behandlungen zurücknehmen.",
     facts: {
@@ -640,11 +645,13 @@ const SPECS: Record<string, Spec> = {
     treatment: "Profhilo-Behandlung",
     object: "Profhilo",
     about: "zu Profhilo",
-    subline: "Frischere, straffer wirkende Haut – ärztlich, ohne Ausfallzeit",
+    subline: "Frischere, straffer wirkende Haut – Behandlung durch Ärzte, ohne Ausfallzeit",
     howItWorks:
-      "Profhilo ist ein Skinbooster aus Hyaluron, der sich in der Haut verteilt, statt Volumen aufzubauen. Er versorgt die Haut mit Feuchtigkeit, sie kann straffer und frischer wirken. Gesetzt wird an wenigen Punkten je Gesichtsseite.",
+      "Profhilo ist ein Skinbooster aus Hyaluron, der sich in der Haut verteilt, statt Volumen aufzubauen. Er versorgt die Haut mit Feuchtigkeit, sie kann straffer und frischer wirken. Injiziert wird an 5 speziellen Profhilo-Punkten je Gesichtshälfte.",
+    noQuaddeln: true,
     facts: {
       ...SB_FACTS,
+      ausfall: "keine",
       ergebnis: "ca. 4 Wochen nach der zweiten Sitzung",
       haltbarkeit: "ca. 6 Monate, je nach Haut",
       sitzungen: "meist 2 im Abstand von ca. 4 Wochen",
@@ -657,7 +664,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Lumi-Eyes-Behandlung",
     object: "Lumi Eyes",
     about: "zu Lumi Eyes",
-    subline: "Erholter wirkende Augenpartie – ärztlich, ohne Ausfallzeit",
+    subline: "Erholter wirkende Augenpartie – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "traenenrinne",
     howItWorks:
       "Lumi Eyes ist ein Skinbooster mit Polynukleotiden für die dünne Haut unter den Augen. Er wird in kleinen Mengen gesetzt und soll die Haut dort unterstützen. Er füllt kein Volumen auf.",
@@ -674,7 +681,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Polynukleotide-Behandlung",
     object: "die Polynukleotide-Behandlung",
     about: "zu Polynukleotiden",
-    subline: "Erholter wirkende Haut – ärztlich, ohne Ausfallzeit",
+    subline: "Erholter wirkende Haut – Behandlung durch Ärzte, ohne Ausfallzeit",
     howItWorks:
       "Polynukleotide sind ein Skinbooster aus aufbereiteten DNA-Bausteinen aus Lachs. Sie werden in kleinen Mengen in die Haut gesetzt und sollen sie unterstützen. Volumen füllen sie nicht auf.",
     facts: { ...SB_FACTS, ergebnis: "nach ca. 4–6 Wochen", haltbarkeit: "mehrere Monate, Auffrischen nach Absprache" },
@@ -689,7 +696,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Mesotherapie",
     object: "die Mesotherapie",
     about: "zur Mesotherapie",
-    subline: "Frischeres Hautbild mit Vitaminen und Hyaluron – ärztlich",
+    subline: "Frischeres Hautbild mit Vitaminen und Hyaluron – Behandlung durch Ärzte",
     howItWorks:
       "Bei der Mesotherapie wird eine Mischung aus Vitaminen, Aminosäuren und Hyaluron mit sehr feinen Nadeln in die obere Hautschicht gesetzt. Die Haut bekommt Feuchtigkeit und kann frischer wirken. Sie baut kein Volumen auf.",
     facts: {
@@ -709,7 +716,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Vampir-Lifting-Behandlung",
     object: "das Vampir-Lifting",
     about: "zum Vampir-Lifting",
-    subline: "Frischeres Hautbild mit Eigenblut (PRP) – ärztlich",
+    subline: "Frischeres Hautbild mit Eigenblut (PRP) – Behandlung durch Ärzte",
     howItWorks:
       "Beim Vampir-Lifting wird dir etwas Blut abgenommen und aufbereitet. Das gewonnene Plasma (PRP) wird mit feinen Nadeln in die Haut gesetzt. Die Haut kann frischer und ebenmäßiger wirken.",
     facts: {
@@ -730,7 +737,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Mesotherapie für die Haare",
     object: "die Mesotherapie für die Haare",
     about: "zur Mesotherapie für die Haare",
-    subline: "Pflege direkt an die Kopfhaut – ärztlich, in kurzen Terminen",
+    subline: "Pflege direkt an die Kopfhaut – Behandlung durch Ärzte, in kurzen Terminen",
     howItWorks:
       "Bei der Mesotherapie für die Haare wird eine Nährstoffmischung mit sehr feinen Nadeln in die Kopfhaut gesetzt, dorthin, wo die Haarwurzeln sitzen. Sie soll Kopfhaut und Haarwurzeln unterstützen. Wie gut das wirkt, ist von Mensch zu Mensch verschieden.",
     facts: {
@@ -757,7 +764,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "PRP-Haartherapie",
     object: "die PRP-Haartherapie",
     about: "zur PRP-Haartherapie",
-    subline: "Eigenblut (PRP) für die Kopfhaut – ärztlich, in kurzen Terminen",
+    subline: "Eigenblut (PRP) für die Kopfhaut – Behandlung durch Ärzte, in kurzen Terminen",
     howItWorks:
       "Bei der PRP-Haartherapie wird dir etwas Blut abgenommen und aufbereitet. Das gewonnene Plasma (PRP) wird mit feinen Nadeln in die Kopfhaut gesetzt. Es soll die Haarwurzeln unterstützen – wie gut das wirkt, ist von Mensch zu Mensch verschieden.",
     facts: {
@@ -781,31 +788,31 @@ const SPECS: Record<string, Spec> = {
   // ---------------------------------------------------------- Infusionen
   "infusionen/vitamin-c-infusion": infusion(
     "infusionen/vitamin-c-infusion", "Vitamin-C-Infusion", "Vitamin-C-Infusion", "mit Vitamin C",
-    "Vitamin C als Infusion – ärztlich begleitet, in 30–45 Minuten",
+    "Vitamin C als Infusion – Behandlung durch Ärzte, in 30–45 Minuten",
   ),
   "infusionen/b-komplex-infusion": infusion(
     "infusionen/b-komplex-infusion", "Vitamin-B-Infusion", "Vitamin-B-Infusion", "mit B-Vitaminen",
-    "B-Vitamine als Infusion – ärztlich begleitet, in 30–45 Minuten",
+    "B-Vitamine als Infusion – Behandlung durch Ärzte, in 30–45 Minuten",
   ),
   "infusionen/immun-infusion": infusion(
     "infusionen/immun-infusion", "Immun-Infusion", "Immun-Infusion", "mit Vitaminen und Mineralstoffen",
-    "Vitamine und Mineralstoffe als Infusion – ärztlich begleitet",
+    "Vitamine und Mineralstoffe als Infusion – Behandlung durch Ärzte",
   ),
   "infusionen/power-infusion-glutathion": infusion(
     "infusionen/power-infusion-glutathion", "Power-Infusion", "Power-Infusion", "mit Vitaminen, Mineralstoffen und Glutathion",
-    "Vitamine, Mineralstoffe und Glutathion als Infusion – ärztlich begleitet",
+    "Vitamine, Mineralstoffe und Glutathion als Infusion – Behandlung durch Ärzte",
   ),
   "infusionen/regenerations-infusion": infusion(
     "infusionen/regenerations-infusion", "Regenerations-Infusion", "Regenerations-Infusion", "mit Vitaminen und Mineralstoffen",
-    "Vitamine und Mineralstoffe als Infusion – ärztlich begleitet",
+    "Vitamine und Mineralstoffe als Infusion – Behandlung durch Ärzte",
   ),
   "infusionen/relax-infusion": infusion(
     "infusionen/relax-infusion", "Relax-Infusion", "Relax-Infusion", "mit Mineralstoffen und Vitaminen",
-    "Mineralstoffe und Vitamine als Infusion – ärztlich begleitet",
+    "Mineralstoffe und Vitamine als Infusion – Behandlung durch Ärzte",
   ),
   "infusionen/anti-aging-infusion": infusion(
     "infusionen/anti-aging-infusion", "Anti-Aging-Infusion", "Anti-Aging-Infusion", "mit Vitaminen und Antioxidantien",
-    "Vitamine und Antioxidantien als Infusion – ärztlich begleitet",
+    "Vitamine und Antioxidantien als Infusion – Behandlung durch Ärzte",
   ),
 };
 
@@ -1084,7 +1091,9 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
   }
   return [
     start,
-    { when: "Tag 1–3", title: "Quaddeln klingen ab", text: "Kleine Erhebungen und Rötungen sind normal und gehen meist nach ein bis zwei Tagen zurück." },
+    s.noQuaddeln
+      ? { when: "Tag 1–3", title: "Kleinere Rötungen klingen ab", text: "Kleine Rötungen sind normal und gehen meist nach ein bis zwei Tagen zurück." }
+      : { when: "Tag 1–3", title: "Quaddeln klingen ab", text: "Kleine Erhebungen und Rötungen sind normal und gehen meist nach ein bis zwei Tagen zurück." },
     sessions,
     refresh,
   ];
@@ -1186,7 +1195,9 @@ function defaultFaqs(s: Spec, pathKey: string): Record<FaqSlot, AdsV2FaqItem> {
       question: "Welche Nebenwirkungen kann es geben?",
       answer: blood
         ? `Möglich sind ein blauer Fleck an der Blutabnahme, Rötungen, kleine Schwellungen oder eine empfindliche Haut für ein bis zwei Tage. ${RISK}`
-        : `Kleine Quaddeln, Rötungen oder blaue Flecken sind möglich und gehen meist nach ein bis zwei Tagen zurück. ${RISK}`,
+        : s.noQuaddeln
+          ? `Kleinere Rötungen oder blaue Flecken sind möglich und gehen meist nach ein bis zwei Tagen zurück. ${RISK}`
+          : `Kleine Quaddeln, Rötungen oder blaue Flecken sind möglich und gehen meist nach ein bis zwei Tagen zurück. ${RISK}`,
     },
     undo: {
       question: "Für wen ist das nicht geeignet?",
@@ -1270,10 +1281,10 @@ export function adsV2Aftercare(pathKey: string | null | undefined): string[] {
           ]
         : [
             "24 Stunden kein Sport, keine Sauna, kein Solarium",
-            "Die kleinen Quaddeln nicht massieren oder drücken",
+            s.noQuaddeln ? "Die Einstichstellen nicht massieren oder drücken" : "Die kleinen Quaddeln nicht massieren oder drücken",
             "Make-up frühestens am nächsten Tag",
             "In den Tagen danach gut vor Sonne schützen",
-            "Rötungen und Quaddeln sind normal und gehen schnell zurück",
+            s.noQuaddeln ? "Kleinere Rötungen sind normal und gehen schnell zurück" : "Rötungen und Quaddeln sind normal und gehen schnell zurück",
           ];
     }
   }
@@ -1533,7 +1544,7 @@ export function adsV2Objections(
     {
       key: "time",
       question: "Ich habe keine Zeit.",
-      answer: `${s.kind === "infusion" ? "Die Infusion" : "Die Behandlung"} dauert ${dauer}${noDowntime ? ", danach kannst du meist direkt weitermachen" : ""}. Du kannst auch ohne Termin vorbeikommen und fragen, ob gerade Zeit ist.`,
+      answer: `${s.kind === "infusion" ? "Die Infusion" : "Die Behandlung"} dauert ${dauer}${noDowntime ? ", danach kannst du meist direkt weitermachen" : ""}. Du kannst auch ohne Termin vorbeikommen.`,
     },
     {
       key: "info",

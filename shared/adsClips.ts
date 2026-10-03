@@ -629,20 +629,23 @@ export type AdsLoungeGallery = {
   source: string;
   /** false = Zuordnung nur wahrscheinlich, vor dem Merge bestaetigen lassen. */
   confirmed: boolean;
+  /** Bilder (ids) in dieser Reihenfolge zuerst, der Rest danach. */
+  order?: readonly number[];
 };
 
 export const ADS_LOUNGE_GALLERY: Record<string, AdsLoungeGallery> = {
-  // Strapi 79 + 114: dunkelgraue Grossfliesen mit hellem Rand, Alcove-Sofa,
-  // schwarzes USM-Sideboard, weisser USM-Empfang unter offener Decke mit
-  // schwarzen Strahlern - wie am Ende des Koelner Weg-Videos (Strapi 257).
-  // UNBESTAETIGT (Benjamin fragen): Dateinamen ohne Standort.
+  // Strapi 79: dunkelgraue Grossfliesen mit hellem Rand, Alcove-Sofa,
+  // schwarzes USM-Sideboard - wie am Ende des Koelner Weg-Videos (Strapi
+  // 257). UNBESTAETIGT, darum nur in der neutralen Galerie. Strapi 114
+  // (Empfang unter offener Decke) seit 03.10.2026 raus (Michael).
   "koeln-arcaden": {
     images: [
-      { id: 114, url: "https://media.myhealthandbeauty.app/my_lounge_empfang_ba7558d52c.jpg", width: 1309, height: 1077, mime: "image/jpeg" },
       { id: 79, url: "https://media.myhb.app/sofa_my_lounge_8abdcf62d3.jpg", width: 3024, height: 4032, mime: "image/jpeg" },
     ],
     source: "Bildinhalt gegen Weg-Video Strapi 257",
     confirmed: false,
+    // Michael, 03.10.2026: der weisse Empfang mit Wandlogo (1022) zuerst
+    order: [1022, 79],
   },
   // Parya's Galerie "MY Lounge Duesseldorf" (Strapi-Block auf Profhilo
   // Duesseldorf Arcaden, Stand 02.10.2026 nachmittags; inzwischen dort
@@ -690,7 +693,13 @@ export function adsLoungeGalleryFor(locationSlug: string | null | undefined): Ad
     ADS_LOUNGE_GENERAL_IDS.includes(img.id),
   );
   const seen = new Set<number>();
-  const images = [...(g?.images ?? []), ...general].filter((img) => !seen.has(img.id) && seen.add(img.id)).slice(0, 7);
+  let images = [...(g?.images ?? []), ...general].filter((img) => !seen.has(img.id) && seen.add(img.id));
+  const order = g?.order ?? [];
+  if (order.length) {
+    const rank = (id: number) => (order.includes(id) ? order.indexOf(id) : order.length);
+    images = [...images].sort((a, b) => rank(a.id) - rank(b.id));
+  }
+  images = images.slice(0, 7);
   return { images, own: false };
 }
 

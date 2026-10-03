@@ -374,7 +374,7 @@ export function adsV2TrustItems(pathKey?: string | null): AdsV2TrustItem[] {
     {
       key: "walkin",
       title: "Auch ohne Termin",
-      text: "Komm vorbei und frag, ob gerade Zeit ist. Mit Termin bist du auf der sicheren Seite.",
+      text: "Komm vorbei. Mit Termin bist du auf der sicheren Seite.",
     },
   ];
 }

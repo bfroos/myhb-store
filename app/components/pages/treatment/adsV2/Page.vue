@@ -56,6 +56,8 @@
           <span>
             <strong>{{ item.title }}</strong>
             <span v-if="item.text" class="v2-trust__text">{{ item.text }}</span>
+            <!-- Michael, 03.10.2026: Oeffnungszeiten aus Strapi unter "Auch ohne Termin" -->
+            <span v-if="item.key === 'walkin' && hours" class="v2-trust__text v2-trust__hours">{{ hours }}</span>
           </span>
         </li>
       </ul>
@@ -384,7 +386,7 @@
             <span v-if="addressLine">{{ addressLine }}</span>
             <span v-if="location?.directions?.headline" class="v2-location__muted">{{ location.directions.headline }}</span>
             <span v-if="hours" class="v2-location__muted">{{ hours }}</span>
-            <span class="v2-location__muted">Auch ohne Termin – komm vorbei und frag, ob gerade Zeit ist.</span>
+            <span class="v2-location__muted">Auch ohne Termin – komm einfach vorbei.</span>
           </div>
         </div>
         <!-- Weg vom Eingang des Centers zu uns (stumm, Poster, laedt erst sichtbar) -->
@@ -2953,5 +2955,41 @@ const routeHref = computed(() => {
   .v2--ci.v2--desk .v2-review__stars {
     color: currentColor;
   }
+}
+/* =====================================================================
+   Runde 4 (Michael, 03.10.2026), nur Koelner CI-Seiten ("ci-preis"):
+   kraeftiges Rot ueberall - #dc2626 (wie der Knopf der Leiste) auf hellen
+   Flaechen, Signalrot #ff3b30 auf Schwarz/Dunkelgrau; Preise fett.
+   ===================================================================== */
+.v2--preis {
+  --v2-accent: #dc2626;
+}
+
+.v2--preis .theme-strong,
+.v2--preis .theme-neutral {
+  --v2-accent: #ff3b30;
+}
+
+.v2--ci.v2--preis .v2-facts__row--price dd,
+.v2--ci.v2--preis .v2-price__offer,
+.v2--ci.v2--preis .v2-final__price {
+  font-weight: 700;
+}
+
+/* Steckbrief-Preis als grosser Text (19 px fett): auf der Kachel #292a2c
+   reicht so AA fuer grossen Text */
+.v2--ci.v2--preis .v2-facts__row--price dd {
+  font-size: 1.1875rem;
+  line-height: 1.3;
+}
+
+/* Aerzte-Block mobil: Hochformat wie auf dem Desktop, Gesicht und
+   Oberkoerper ganz im Bild */
+.v2-docfeature__photo {
+  aspect-ratio: 4 / 5;
+}
+
+.v2-docfeature__photo :deep(img) {
+  object-position: center 35%;
 }
 </style>

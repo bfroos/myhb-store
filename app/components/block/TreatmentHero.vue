@@ -38,6 +38,7 @@
             'hero--v2': templateV2,
             'hero--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'),
             'hero--desk': templateV2 && v2Desktop,
+            'hero--preis': templateV2 && v2Design === 'ci-preis',
           }"
         >
           <div v-if="hasCover || heroClip" class="hero__media">
@@ -204,7 +205,7 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell') }">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'), 'floating-cta--preis': templateV2 && v2Design === 'ci-preis' }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong
@@ -1260,6 +1261,25 @@ const discountLabel = computed(() => {
 
   .hero--desk .hero__reviews {
     margin-top: var(--space-300);
+  }
+}
+/* Koelner CI-Seiten ("ci-preis", Michael 03.10.2026): Neukundenpreis fett
+   und im kraeftigen Rot der Leiste (#dc2626, weiss: 4,8:1) */
+.hero--preis .hero__price {
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.floating-cta--preis .floating-cta__price--offer {
+  color: #dc2626;
+}
+/* v2 (03.10.2026): Unterzeilen mit "Behandlung durch Aerzte" sind laenger -
+   bis zu drei Zeilen statt zwei, damit nichts abgeschnitten wird; das Bild
+   darueber gibt den Platz ab (flex). */
+@media (max-width: 899px) {
+  .hero--v2.hero--ads-compact .hero__subline--ads {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 }
 </style>
