@@ -693,3 +693,70 @@ export function adsLoungeGalleryFor(locationSlug: string | null | undefined): Ad
   const images = [...(g?.images ?? []), ...general].filter((img) => !seen.has(img.id) && seen.add(img.id)).slice(0, 7);
   return { images, own: false };
 }
+
+/**
+ * Kundinnen-Video als Kachel im "Noch unsicher?"-Bento (Benjamin,
+ * 03.10.2026; nur CI-Gestaltung). Es laeuft dann nicht zusaetzlich in der
+ * Clip-Reihe oben bzw. bei den Bewertungen (Page.vue filtert es dort heraus).
+ * - Profhilo: Strapi 253 "Endlich wieder frisch" (Kundin erzaehlt)
+ * - Lippen: Strapi 1073 "Zwei Cousinen erzaehlen" (Lippen-Feedback)
+ */
+const OBJECTION_CLIP_URLS: Record<string, string> = {
+  "skinbooster/profhilo": "/videos/go/profhilo-karussell-1.mp4",
+  "hyaluron/lippen-aufspritzen": "/videos/go/lippen-karussell-9.mp4",
+};
+
+export function adsObjectionClipFor(
+  pathKey: string | null | undefined,
+  citySlug?: string | null,
+): AdsClip | null {
+  const key = baseKey(pathKey);
+  const url = OBJECTION_CLIP_URLS[key];
+  const set = CLIPS[key];
+  if (!url || !set) return null;
+  const c = [...set.carousel, ...(set.feedback ?? [])].find((x) => x.url === url);
+  if (!c || !adsClipAllowed(c) || !forCity(String(citySlug ?? "").toLowerCase())(c)) return null;
+  return c;
+}
+
+/**
+ * Bilder fuer "So laeuft deine Behandlung ab" in drei Schritten (Vor /
+ * Waehrend / Nachsorge), Benjamin 03.10.2026: Parya's Bilder (Profhilo
+ * Duesseldorf) bzw. dasselbe Shooting "2026_MYHB_Tag1-3". Jedes Bild
+ * angesehen: aktuelles Logo, kein "MYH&B", keine Nadel/kein Einstich im Bild.
+ * Alt-Texte eigene, ohne Ort.
+ */
+const PI = (id: number, url: string, width: number, height: number, alt: string): AdsLoungeImage & { alt: string } => ({
+  id, url, width, height, mime: "image/webp", alt,
+});
+const PROCESS_VOR = PI(1033, "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_110_1f5ec7c29b.webp", 8368, 5584, "Beratungsgespräch in der Lounge");
+const ADS_PROCESS_IMAGES: Record<string, ReadonlyArray<AdsLoungeImage & { alt: string }>> = {
+  // Parya: Beratung (1033), Team (985); Waehrend: Haut wird abgetastet (996)
+  default: [
+    PROCESS_VOR,
+    PI(996, "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_120_6e84fb584d.webp", 8368, 5584, "Arzt tastet vor der Behandlung die Haut ab"),
+    PI(985, "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_18_c8f564feac.webp", 8144, 5424, "Ärztinnen und Arzt von MY HEALTH & BEAUTY"),
+  ],
+  "hyaluron/lippen-aufspritzen": [
+    PROCESS_VOR,
+    PI(1049, "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_130_1_50aeef5683.webp", 7816, 5216, "Ärztin und Kundin prüfen die Lippen im Spiegel"),
+    PI(999, "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_134_4d5a9103df.webp", 8368, 5584, "Kundin und Ärztin nach der Behandlung"),
+  ],
+};
+
+export function adsProcessImagesFor(pathKey: string | null | undefined) {
+  return ADS_PROCESS_IMAGES[baseKey(pathKey)] ?? ADS_PROCESS_IMAGES.default!;
+}
+
+/**
+ * Grosses Aerztinnen-Foto je Standort fuer den Aerzte-Block (Benjamin,
+ * 03.10.2026). Nur Aerzt:innen, die in Strapi diesem Standort zugeordnet
+ * sind: Koeln = Aerztin Iqra (ihr Strapi-Foto stammt aus dem Shooting,
+ * Tag1-55). Fehlt ein Eintrag: Block nur mit Text.
+ */
+export const ADS_DOCTOR_FEATURE: Record<string, { image: AdsLoungeImage; name: string }> = {
+  "koeln-arcaden": {
+    image: { id: 948, url: "https://media.myhealthandbeauty.app/98/2026_MYHB_Tag1_55_1_904a1c842f.webp", width: 5424, height: 5952, mime: "image/webp" },
+    name: "Ärztin Iqra",
+  },
+};

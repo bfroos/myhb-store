@@ -112,7 +112,26 @@
     <UiLayoutSectionBlock>
       <div class="v2-card" :class="tone('steps', 'v2-card--soft')" data-track-placement="v2_steps">
         <h2 class="v2-h2">{{ H.steps }}</h2>
-        <ol v-if="timeline.length" class="v2-timeline">
+        <!-- CI-Gestaltung (Benjamin, 03.10.2026): drei Schritte mit Bild
+             (Vor / Waehrend / Nachsorge) statt der Zeitachse -->
+        <ol v-if="processSteps" class="v2-process">
+          <li v-for="(st, i) in processSteps" :key="st.key" class="v2-process__item">
+            <div class="v2-process__img">
+              <UiAtomMediaPicture :media="st.image" :default-format="ImageFormat.MEDIUM" />
+              <span class="v2-process__num" aria-hidden="true">{{ i + 1 }}</span>
+            </div>
+            <div class="v2-process__body">
+              <strong class="v2-process__title">{{ st.title }}</strong>
+              <p v-if="st.text" class="v2-process__text">{{ st.text }}</p>
+              <ul v-if="st.list.length" class="v2-process__list" role="list">
+                <li v-for="row in st.list" :key="row.when">
+                  <span class="v2-process__when">{{ row.when }}</span> {{ row.title }}
+                </li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+        <ol v-else-if="timeline.length" class="v2-timeline">
           <li v-for="item in timeline" :key="item.when" class="v2-timeline__item">
             <span class="v2-timeline__when">{{ item.when }}</span>
             <strong class="v2-steps__title">{{ item.title }}</strong>
@@ -223,6 +242,18 @@
     <UiLayoutSectionBlock v-if="doctors.length">
       <div class="v2-card v2-split" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
         <h2 class="v2-h2">{{ H.doctors }}</h2>
+        <div class="v2-doctors-wrap">
+        <!-- CI-Gestaltung (Benjamin, 03.10.2026): grosses Foto einer
+             Aerztin des Standorts + kurzer Text, darunter die Aerzte-Reihe -->
+        <div v-if="doctorFeature" class="v2-docfeature" data-track-placement="v2_doctor_feature">
+          <figure v-if="doctorFeature.image" class="v2-docfeature__photo">
+            <UiAtomMediaPicture :media="doctorFeature.image" :default-format="ImageFormat.MEDIUM" />
+            <figcaption>{{ doctorFeature.name }}</figcaption>
+          </figure>
+          <div class="v2-docfeature__text">
+            <p v-for="t in doctorFeature.text" :key="t">{{ t }}</p>
+          </div>
+        </div>
         <ul class="v2-doctors" role="list">
           <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
             <div class="v2-doctor__photo">
@@ -234,7 +265,8 @@
             </span>
           </li>
         </ul>
-        <p class="v2-lead">{{ doctorsLead }}</p>
+        </div>
+        <p v-if="!doctorFeature" class="v2-lead">{{ doctorsLead }}</p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
         </div>
@@ -311,8 +343,12 @@
       <div class="v2-card" :class="tone('objections', 'v2-card--soft')" data-track-placement="v2_objections">
         <h2 class="v2-h2">Noch unsicher?</h2>
         <p class="v2-lead">Das hören wir oft – und das antworten wir.</p>
-        <ul class="v2-objections" role="list">
-          <li v-for="o in objections" :key="o.key" class="v2-objection">
+        <ul class="v2-objections" :class="{ 'v2-objections--video': !!objectionClip }" role="list">
+          <!-- Kundinnen-Video als Bento-Kachel (Benjamin, 03.10.2026) -->
+          <li v-if="objectionClip" class="v2-objection-video" data-track-placement="v2_objection_video">
+            <PagesTreatmentAdsV2ClipCarousel :clips="[objectionClip]" tap-to-play placement="v2_objection_video" />
+          </li>
+          <li v-for="(o, oi) in objections" :key="o.key" class="v2-objection" :class="[`v2-objection--t${oi % 3}`, `v2-objection--n${oi}`]">
             <component :is="objectionIcon(o.key)" class="v2-objection__icon" size="22" aria-hidden="true" />
             <div class="v2-objection__body">
               <strong class="v2-objection__q">{{ o.question }}</strong>
@@ -471,7 +507,15 @@ import {
   pickAdsV2Reviews,
   shortenText,
 } from "#shared/adsTemplateV2";
-import { ADS_LOUNGE_NEUTRAL_HEADLINE, adsClipsFor, adsLoungeGalleryFor, adsWayClipFor } from "#shared/adsClips";
+import {
+  ADS_DOCTOR_FEATURE,
+  ADS_LOUNGE_NEUTRAL_HEADLINE,
+  adsClipsFor,
+  adsLoungeGalleryFor,
+  adsObjectionClipFor,
+  adsProcessImagesFor,
+  adsWayClipFor,
+} from "#shared/adsClips";
 import {
   adsV2Aftercare,
   adsV2ConsultPhoto,
@@ -741,7 +785,72 @@ function keepAmount(text: string | null | undefined): string {
   return String(text ?? "").replace(/(\d) (€)/g, "$1\u00a0$2");
 }
 
-const clips = computed(() => adsClipsFor(pathKey.value, citySlug));
+// Kundinnen-Video im "Noch unsicher?"-Bento (nur CI-Gestaltung); es laeuft
+// dann nicht zusaetzlich in der Clip-Reihe bzw. bei den Bewertungen.
+const objectionClip = computed(() =>
+  design.value === "v2" ? null : adsObjectionClipFor(pathKey.value, citySlug),
+);
+const clips = computed(() => {
+  const c = adsClipsFor(pathKey.value, citySlug);
+  const oc = objectionClip.value;
+  if (!oc) return c;
+  return {
+    ...c,
+    carousel: c.carousel.filter((x) => x.url !== oc.url),
+    feedback: c.feedback.filter((x) => x.url !== oc.url),
+  };
+});
+/**
+ * Ablauf in drei Schritten mit Bild (CI-Gestaltung, Benjamin 03.10.2026):
+ * Vor = Beratung, Waehrend = Dauer/Betaeubung aus dem Steckbrief,
+ * Nachsorge = die weiteren Punkte der Zeitachse. Texte nur aus vorhandenen
+ * Inhalten, Bilder aus shared/adsClips.ts.
+ */
+const processSteps = computed(() => {
+  if (design.value === "v2" || !timeline.value.length) return null;
+  const imgs = adsProcessImagesFor(pathKey.value);
+  const pic = (i: number) => ({ ...imgs[i]!, alternativeText: imgs[i]!.alt });
+  const fact = (k: string) => facts.value.find((f) => f.key === k)?.value;
+  const dauer = fact("dauer");
+  const betaeubung = fact("betaeubung");
+  const during = [
+    dauer ? `Die Behandlung dauert ${dauer}.` : "",
+    betaeubung ? `Betäubung: ${betaeubung}.` : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const none: Array<{ when: string; title: string }> = [];
+  return [
+    {
+      key: "vor",
+      image: pic(0),
+      title: "Vor der Behandlung",
+      text: "Kostenloses Beratungsgespräch mit deiner Ärztin oder deinem Arzt: Ihr besprecht Wunsch, Ausgangslage und Ablauf – danach entscheidest du in Ruhe.",
+      list: none,
+    },
+    { key: "waehrend", image: pic(1), title: "Während der Behandlung", text: during || timeline.value[0]!.text, list: none },
+    {
+      key: "nach",
+      image: pic(2),
+      title: "Nachsorge und Ergebnis",
+      text: "",
+      list: timeline.value.slice(1).map((t) => ({ when: t.when, title: t.title })),
+    },
+  ];
+});
+/** Aerzte-Block mit grossem Foto + Text (CI-Gestaltung, Benjamin 03.10.2026). */
+const doctorFeature = computed(() => {
+  if (design.value === "v2") return null;
+  const f = ADS_DOCTOR_FEATURE[locSlug];
+  return {
+    image: f ? { ...f.image, alternativeText: f.name } : null,
+    name: f?.name ?? "",
+    text: [
+      "Bei uns behandeln ausschließlich approbierte Ärztinnen und Ärzte.",
+      "Vor jeder Behandlung steht ein kostenloses Beratungsgespräch: Deine Ärztin oder dein Arzt schaut sich deine Ausgangslage an und erstellt mit dir einen individuellen Behandlungsplan.",
+    ],
+  };
+});
 const wayClip = computed(() => adsWayClipFor(locSlug));
 const trustItems = computed(() => adsV2TrustItems(pathKey.value));
 const priceInclusion = computed(() => adsV2PriceInclusion(pathKey.value));
@@ -2568,13 +2677,13 @@ const routeHref = computed(() => {
   color: currentColor;
 }
 
-.v2--ci .v2-objection:nth-child(3n + 2) {
+.v2--ci .v2-objection--t1 {
   --color-text: var(--neutral-color-text);
   --color-text-light: var(--neutral-color-text-light);
   background: var(--color-card-bg-neutral);
 }
 
-.v2--ci .v2-objection:nth-child(3n + 3) {
+.v2--ci .v2-objection--t2 {
   --color-text: var(--soft-color-text);
   --color-text-light: var(--soft-color-text-light);
   color: var(--color-text);
@@ -2598,20 +2707,251 @@ const routeHref = computed(() => {
     padding: var(--space-700);
   }
 
-  .v2--ci .v2-objection:nth-child(5n + 1) {
+  .v2--ci .v2-objection--n0 {
     grid-column: span 4;
   }
 
-  .v2--ci .v2-objection:nth-child(5n + 2) {
+  .v2--ci .v2-objection--n1 {
     grid-column: span 2;
   }
 
-  .v2--ci .v2-objection:nth-child(5n + 5) {
+  .v2--ci .v2-objection--n4 {
     grid-column: span 6;
   }
 }
 /* Zeitachse ohne Rot: auch die waagerechte Linie (Desktop) grau */
 .v2--ci:not(.v2--rot) .v2-timeline {
   border-color: var(--color-gray-400);
+}
+/* =====================================================================
+   Runde 3 (Benjamin, 03.10.2026), nur CI-Gestaltung
+   ===================================================================== */
+/* "Noch unsicher?": Kundinnen-Video als Kachel */
+.v2-objection-video {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  padding: var(--space-400);
+  border-radius: var(--border-radius-500);
+  background: var(--color-card-bg-soft);
+}
+
+.v2-objection-video :deep(.clips) {
+  justify-content: center;
+  overflow: visible;
+}
+
+@media (min-width: 1024px) {
+  .v2--ci .v2-objections--video {
+    grid-auto-flow: row dense;
+  }
+
+  .v2--ci .v2-objections--video .v2-objection-video {
+    grid-column: span 2;
+    grid-row: span 2;
+    align-items: center;
+  }
+
+  .v2--ci .v2-objections--video .v2-objection--n0 {
+    grid-column: span 4;
+  }
+
+  .v2--ci .v2-objections--video .v2-objection--n1,
+  .v2--ci .v2-objections--video .v2-objection--n2 {
+    grid-column: span 2;
+  }
+
+  .v2--ci .v2-objections--video .v2-objection--n3,
+  .v2--ci .v2-objections--video .v2-objection--n4 {
+    grid-column: span 3;
+  }
+}
+
+/* Ablauf in drei Schritten mit Bild */
+.v2-process {
+  display: grid;
+  gap: var(--space-400);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.v2-process__item {
+  overflow: hidden;
+  border-radius: var(--border-radius-500);
+  background: var(--color-card-bg-light, #fff);
+}
+
+.v2-process__img {
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--color-gray-200);
+}
+
+.v2-process__img :deep(img) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.v2-process__num {
+  position: absolute;
+  top: var(--space-300);
+  left: var(--space-300);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--color-black);
+  color: #fff;
+  font-weight: var(--font-bold);
+}
+
+.v2-process__body {
+  padding: var(--space-500);
+}
+
+.v2-process__title {
+  display: block;
+  margin-bottom: var(--space-200);
+  font-size: var(--font-lg);
+  line-height: var(--line-lg);
+}
+
+.v2-process__text {
+  margin: 0;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+}
+
+.v2-process__list {
+  display: grid;
+  gap: var(--space-200);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+}
+
+.v2-process__when {
+  display: block;
+  font-size: var(--font-xs);
+  font-weight: var(--font-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-light);
+}
+
+@media (min-width: 768px) {
+  .v2-process {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Aerzte: grosses Foto + Text, darunter die Reihe */
+.v2-docfeature {
+  display: grid;
+  gap: var(--space-400);
+  margin-bottom: var(--space-600);
+}
+
+.v2-docfeature__photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: var(--border-radius-500);
+  background: var(--color-gray-700);
+}
+
+.v2-docfeature__photo :deep(img) {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+.v2-docfeature__photo figcaption {
+  position: absolute;
+  left: var(--space-300);
+  bottom: var(--space-300);
+  padding: var(--space-100) var(--space-300);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+}
+
+.v2-docfeature__text p {
+  margin: 0 0 var(--space-300);
+  color: var(--color-text);
+}
+
+.v2-docfeature__text p + p {
+  color: var(--color-text-light);
+}
+
+@media (min-width: 1024px) {
+  .v2-docfeature {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+    gap: var(--space-700);
+  }
+
+  .v2-docfeature__photo {
+    aspect-ratio: 4 / 5;
+  }
+
+  .v2-docfeature__text p:first-child {
+    font-size: var(--font-xl);
+    line-height: var(--line-xl);
+  }
+}
+
+/* Bewertungen: Desktop als Bento-Raster (mobil bleibt die Wischreihe) */
+@media (min-width: 1024px) {
+  .v2--ci.v2--desk .v2-reviews {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-flow: row dense;
+  }
+
+  .v2--ci.v2--desk .v2-review {
+    grid-column: span 2;
+    padding: var(--space-600);
+  }
+
+  .v2--ci.v2--desk .v2-review:nth-child(3n + 1) {
+    --color-text: var(--strong-color-text);
+    --color-text-light: var(--strong-color-text-light);
+    grid-row: span 2;
+    color: var(--color-text);
+    background: var(--color-card-bg-strong);
+  }
+
+  .v2--ci.v2--desk .v2-review:nth-child(3n + 1) .v2-review__text {
+    font-size: var(--font-lg);
+    line-height: var(--line-lg);
+  }
+
+  .v2--ci.v2--desk .v2-review:nth-child(3n + 3) {
+    --color-text: var(--neutral-color-text);
+    --color-text-light: var(--neutral-color-text-light);
+    color: var(--color-text);
+    background: var(--color-card-bg-neutral);
+  }
+
+  .v2--ci.v2--desk .v2-review__stars {
+    color: currentColor;
+  }
 }
 </style>
