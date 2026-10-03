@@ -405,8 +405,10 @@ test("ADS_LOUNGE_GALLERY: nur Bilder ohne Sperrbegriff/Sperrdatei, Koeln vorerst
   assert.equal(ADS_LOUNGE_GALLERY["koeln-arcaden"]?.confirmed, false);
   const koeln = adsLoungeGalleryFor("koeln-arcaden");
   assert.equal(koeln.own, false);
-  assert.deepEqual(koeln.images.slice(0, 2).map((i) => i.id), [114, 79]);
-  assert.equal(koeln.images.length, 7);
+  // Michael, 03.10.2026: 114 raus, weisser Empfang (1022) zuerst
+  assert.deepEqual(koeln.images.slice(0, 2).map((i) => i.id), [1022, 79]);
+  assert.ok(!koeln.images.some((i) => i.id === 114));
+  assert.equal(koeln.images.length, 6);
   // Duesseldorf: sicher eigene Fotos
   assert.equal(adsLoungeGalleryFor("duesseldorf-arcaden").own, true);
   // Standort ohne Eintrag: nur die allgemeinen, neutral
