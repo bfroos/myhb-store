@@ -212,7 +212,14 @@ export function istNachBuchungsSeite(
  * zaehlte ein App-Arm-Besucher, der hier Calendly bekommt, im Wochenbericht
  * als Leckage des App-Arms.
  */
-const NUR_CALENDLY_PFADE = ["/p/botox-meta-rabatt", "/p/lippen-meta-rabatt"];
+// Dazu die neuen Gegenstuecke im v2-Design (app/pages/aktion, 04.10.2026),
+// damit der Seitentest nicht zusaetzlich Calendly gegen App vergleicht.
+const NUR_CALENDLY_PFADE = [
+  "/p/botox-meta-rabatt",
+  "/p/lippen-meta-rabatt",
+  "/aktion/botox",
+  "/aktion/lippen",
+];
 
 export function istNurCalendlySeite(
   pathname: string | undefined = typeof window === "undefined"

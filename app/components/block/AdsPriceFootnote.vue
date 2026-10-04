@@ -18,11 +18,14 @@ import type { TreatmentDto } from "~/lib/strapi/dto/collections";
 const props = defineProps<{
   treatment?: TreatmentDto | null;
   treatmentPathKey?: string | null;
+  /** Auch auf www (bundesweite v2-Seiten fuer Meta, app/pages/aktion). */
+  force?: boolean;
 }>();
 
 const offer = useNewCustomerOffer(
   () => props.treatment,
   () => props.treatmentPathKey,
+  () => props.force,
 );
 </script>
 
