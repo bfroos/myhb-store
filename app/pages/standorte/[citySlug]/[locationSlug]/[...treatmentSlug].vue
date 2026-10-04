@@ -12,6 +12,7 @@
       :fixed-blocks="fixedBlocks"
       :dynamic-blocks="treatmentPage?.blocks"
       :order="blockOrder"
+      :hidden-blocks="(treatmentPage as any)?.hiddenBlocks"
     />
     <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
     <BlockAdsPriceFootnote

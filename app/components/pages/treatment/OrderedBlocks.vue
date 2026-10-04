@@ -1,8 +1,13 @@
 <template>
   <template v-for="key in order" :key="key">
     <BlockRenderer
-      v-if="key === 'blocks' && dynamicBlocks?.length"
-      :blocks="dynamicBlocks"
+      v-if="key === 'blocks' && remainingDynamicBlocks.length"
+      :blocks="remainingDynamicBlocks"
+      :anchor-of="dynamicAnchorOf"
+    />
+    <BlockRenderer
+      v-else-if="dynamicBlockAt(key)"
+      :blocks="[dynamicBlockAt(key)!]"
       :anchor-of="dynamicAnchorOf"
     />
     <component
@@ -26,7 +31,27 @@ const props = defineProps<{
   fixedBlocks?: Record<string, any>;
   dynamicBlocks?: StrapiBlock[];
   order: string[];
+  hiddenBlocks?: unknown;
 }>();
+
+function dynamicBlockIndex(key: unknown): number | null {
+  const match = typeof key === "string" ? /^dynamicBlock(\d+)$/.exec(key) : null;
+  return match ? Number(match[1]) - 1 : null;
+}
+
+function dynamicBlockAt(key: string): StrapiBlock | undefined {
+  const index = dynamicBlockIndex(key);
+  return index === null ? undefined : props.dynamicBlocks?.[index];
+}
+
+const remainingDynamicBlocks = computed(() => {
+  const taken = new Set(
+    [...props.order, ...(Array.isArray(props.hiddenBlocks) ? props.hiddenBlocks : [])]
+      .map(dynamicBlockIndex)
+      .filter((index): index is number => index !== null),
+  );
+  return (props.dynamicBlocks ?? []).filter((_, index) => !taken.has(index));
+});
 
 const TOC_EXCLUDED_DYNAMIC_BLOCKS = new Set([
   "blocks.landing-hero",
@@ -55,8 +80,9 @@ const tocIndex = computed<SharedKeyValueDto[]>(() => {
   const items: SharedKeyValueDto[] = [];
 
   for (const key of props.order) {
-    if (key === "blocks") {
-      for (const block of props.dynamicBlocks ?? []) {
+    if (key === "blocks" || dynamicBlockAt(key)) {
+      const dynamic = key === "blocks" ? remainingDynamicBlocks.value : [dynamicBlockAt(key)!];
+      for (const block of dynamic) {
         const anchor = dynamicAnchorOf(block);
         if (anchor) items.push({ key: anchor, value: dynamicTocLabel(block)! });
       }
