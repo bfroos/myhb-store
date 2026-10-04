@@ -39,6 +39,17 @@
   "rewrites": [],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "myhb-store.vercel.app"
+        }
+      ],
+      "destination": "https://www.myhealthandbeauty.com/:path*",
+      "statusCode": 301
+    },
+    {
       "source": "/",
       "has": [
         {
