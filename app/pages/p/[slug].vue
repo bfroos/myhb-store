@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { META_PAGE_SPLIT_ENABLED, META_PAGE_SPLIT_SCRIPT, metaSplitTarget } from "#shared/metaPageSplit";
 const { fetchGeneralPage, seo, blocks, localizations } = useGeneralPage();
 const { isAdsMode } = useSiteModeFlags();
 const priceHero = computed(() =>
@@ -25,6 +26,15 @@ const priceHero = computed(() =>
 useBookingThankYouTracking();
 
 const pageLoaded = await fetchGeneralPage();
+
+// Meta-Seitentest (shared/metaPageSplit.ts): ein Teil der Besucher der alten
+// Meta-Seiten geht vor dem ersten Zeichnen auf das v2-Gegenstueck. Nur www.
+const route = useRoute();
+if (!isAdsMode.value && META_PAGE_SPLIT_ENABLED && metaSplitTarget(route.path)) {
+  useHead({
+    script: [{ key: "meta-page-split", innerHTML: META_PAGE_SPLIT_SCRIPT, tagPosition: "head", tagPriority: "critical" }],
+  });
+}
 
 if (pageLoaded) {
   // Reihenfolge zaehlt: setPageSeo liest die von usePageI18nParams gemeldete
