@@ -1,8 +1,12 @@
 <template>
   <template v-for="key in order" :key="key">
     <BlockRenderer
-      v-if="key === 'blocks' && dynamicBlocks?.length"
-      :blocks="dynamicBlocks"
+      v-if="key === 'blocks' && remainingDynamicBlocks.length"
+      :blocks="remainingDynamicBlocks"
+    />
+    <BlockRenderer
+      v-else-if="dynamicBlockAt(key)"
+      :blocks="[dynamicBlockAt(key)!]"
     />
     <component
       v-else-if="BLOCK_MAP[key] && fixedBlocks?.[key]"
@@ -19,11 +23,31 @@
 <script setup lang="ts">
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
 
-defineProps<{
+const props = defineProps<{
   fixedBlocks?: Record<string, any>;
   dynamicBlocks?: StrapiBlock[];
   order: string[];
+  hiddenBlocks?: unknown;
 }>();
+
+function dynamicBlockIndex(key: unknown): number | null {
+  const match = typeof key === "string" ? /^dynamicBlock(\d+)$/.exec(key) : null;
+  return match ? Number(match[1]) - 1 : null;
+}
+
+function dynamicBlockAt(key: string): StrapiBlock | undefined {
+  const index = dynamicBlockIndex(key);
+  return index === null ? undefined : props.dynamicBlocks?.[index];
+}
+
+const remainingDynamicBlocks = computed(() => {
+  const taken = new Set(
+    [...props.order, ...(Array.isArray(props.hiddenBlocks) ? props.hiddenBlocks : [])]
+      .map(dynamicBlockIndex)
+      .filter((index): index is number => index !== null),
+  );
+  return (props.dynamicBlocks ?? []).filter((_, index) => !taken.has(index));
+});
 
 const BLOCK_MAP: Record<
   string,
