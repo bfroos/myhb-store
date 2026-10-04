@@ -264,6 +264,7 @@ const { treatmentEventUrl } = useCalendlyTreatmentEvent();
 const { resolveBooking } = useBookingAbTest();
 const {
   trackEvent,
+  trackBookingClick,
   trackBookingLocationSelected,
   trackCalendlyDateTimeSelected,
   trackCalendlyBookingConfirmed,
@@ -427,7 +428,11 @@ useCalendlyEventListener({
     if (!isFromCalendly(e)) return;
     markWidgetReady(e);
     trackCalendlyDateTimeSelected(trackingContext());
-    writeBookingHandoff({ ...trackingContext(), fired: false });
+    writeBookingHandoff({
+      ...trackingContext(),
+      booking_value: params.value?.bookingValue,
+      fired: false,
+    });
   },
   onEventScheduled: (e: MessageEvent) => {
     if (!isFromCalendly(e)) return;
@@ -443,6 +448,7 @@ useCalendlyEventListener({
     const inviteeUuid = inviteeUuidFromUri(inviteeUri);
     writeBookingHandoff({
       ...trackingContext(),
+      booking_value: params.value?.bookingValue,
       invitee_uuid: inviteeUuid,
       fired: true,
     });
@@ -497,6 +503,22 @@ function handleLocationBook(location: {
       : {}),
   });
   bookedLocationSlug.value = location.slug;
+  // Rabattweg (useCalendlyDialog): Erst hier beginnt der Buchungsversuch.
+  // Vor openAppBookingDialog, damit die App dieselbe checkout_id bekommt.
+  if (params.value?.deferCheckout) {
+    trackBookingClick(isApp ? "app" : "calendly", {
+      treatment_type: params.value?.treatmentType,
+      location_slug: location.slug,
+      ab_variant: abVariant,
+      ab_fallback: abFallback,
+      ab_source: abSource,
+      treatment_context: !!params.value?.treatmentContext,
+      booking_value: params.value?.bookingValue,
+      offer: params.value?.offer,
+      via_modal: params.value?.viaModal || undefined,
+    });
+    params.value = { ...params.value, deferCheckout: false };
+  }
   // Der Dialog wurde ohne Standort geoeffnet; erst die Auswahl hier bringt die
   // Variante in den Kontext der folgenden Ereignisse.
   // #141: Und hier faengt das Warten des Besuchers an — neue Uhr fuer
@@ -518,6 +540,7 @@ function handleLocationBook(location: {
     openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, {
       abVariant,
       treatmentContext: params.value?.treatmentContext,
+      offer: params.value?.offer,
     });
     return;
   }

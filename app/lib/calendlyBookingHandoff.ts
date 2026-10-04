@@ -40,6 +40,12 @@ export type CalendlyBookingHandoff = {
   ab_fallback?: boolean;
   /** Deployment der Zuweisung (ads|seo) — die Dankesseite liegt immer auf www. */
   ab_source?: "ads" | "seo";
+  /**
+   * Preis der Behandlung aus dem Buchungsdialog (im Rabattweg schon −20 %).
+   * Die Dankesseite gibt ihn als `value` an `booking_thank_you`; GTM rechnet
+   * daraus den DB1 fuer die Google-Ads-Conversion der Dankesseite.
+   */
+  booking_value?: number;
   /** true, sobald der Dialog `booking_confirmed` dafür gepusht hat. */
   fired?: boolean;
   /** ISO-Zeitstempel des letzten Schreibvorgangs. */

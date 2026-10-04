@@ -13,6 +13,7 @@ import {
   newCustomerPriceLabel,
 } from "#shared/newCustomerOffer";
 import { adsTreatmentHeadline } from "~/lib/strapi/mapper/adsTreatmentHeadline";
+import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
 
 export function useLocationTreatmentPage() {
   const { locale, fallbackLocale, localeProperties, t } = useI18n();
@@ -153,6 +154,14 @@ export function useLocationTreatmentPage() {
     return true;
   }
 
+  // go.: In Strapi fuer go. gebaute Seiten (ADS_TEMPLATE_V2_EXCLUDE) zeigen
+  // den Hero wie in Strapi gepflegt. Die Vorschau /vorschau-v2/ zeigt fuer
+  // dieselbe Seite weiter v2 und bleibt unberuehrt.
+  const adsStrapiHero =
+    isAdsMode.value &&
+    !route.path.startsWith("/vorschau-v2/") &&
+    isAdsTemplateV2Excluded(citySlug, locationSlug, treatmentPathKey);
+
   const fixedBlocks = computed(() =>
     mapLocationTreatmentPageFixedBlocks(
       treatmentPage.value as TreatmentPageDto,
@@ -163,6 +172,7 @@ export function useLocationTreatmentPage() {
       localeProperties.value?.iso as string | undefined,
       isAdsMode.value,
       availableTreatmentPathKeys.value,
+      adsStrapiHero,
     ),
   );
 

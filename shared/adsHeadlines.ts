@@ -173,6 +173,46 @@ const HEADLINES: Record<string, AdsHeadline> = {
     subline: "Lachs-DNA-Skinbooster für eine erholte, glattere Haut",
   },
 
+  // Haare (01.10.2026, Vorlage v2)
+  "anti-haarausfall/mesotherapie-haare": {
+    h1: "Mesotherapie für die Haare",
+    subline: "Nährstoffe direkt an die Kopfhaut – ärztlich, in kurzen Terminen",
+  },
+  "anti-haarausfall/prp-haartherapie": {
+    h1: "PRP-Haartherapie",
+    subline: "Eigenblut (PRP) für die Kopfhaut – ärztlich",
+  },
+
+  // Infusionen (01.10.2026, Vorlage v2): nur Inhalt, keine Wirkversprechen
+  "infusionen/vitamin-c-infusion": {
+    h1: "Vitamin-C-Infusion",
+    subline: "Vitamin C als Infusion – ärztlich begleitet",
+  },
+  "infusionen/b-komplex-infusion": {
+    h1: "Vitamin-B-Infusion",
+    subline: "B-Vitamine als Infusion – ärztlich begleitet",
+  },
+  "infusionen/immun-infusion": {
+    h1: "Immun-Infusion",
+    subline: "Vitamine und Mineralstoffe als Infusion – ärztlich begleitet",
+  },
+  "infusionen/power-infusion-glutathion": {
+    h1: "Power-Infusion mit Glutathion",
+    subline: "Vitamine, Mineralstoffe und Glutathion – ärztlich begleitet",
+  },
+  "infusionen/regenerations-infusion": {
+    h1: "Regenerations-Infusion",
+    subline: "Vitamine und Mineralstoffe als Infusion – ärztlich begleitet",
+  },
+  "infusionen/relax-infusion": {
+    h1: "Relax-Infusion",
+    subline: "Eine ruhige Auszeit mit Infusion – ärztlich begleitet",
+  },
+  "infusionen/anti-aging-infusion": {
+    h1: "Anti-Aging-Infusion",
+    subline: "Vitamine und Antioxidantien als Infusion – ärztlich begleitet",
+  },
+
   // Fettwegspritze
   fettwegspritze: {
     h1: "Fettwegspritze",

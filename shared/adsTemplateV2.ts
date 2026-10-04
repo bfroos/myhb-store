@@ -18,13 +18,108 @@ import {
 } from "./newCustomerOffer.ts";
 
 /**
+ * Standorte mit Vorlage v2 (alle 9 Staedte mit Google-Ads-Kampagne, Stand
+ * 01.10.2026; Duisburg vorsorglich, Kampagne noch pausiert).
+ */
+export const ADS_TEMPLATE_V2_LOCATIONS: readonly string[] = [
+  "koeln/koeln-arcaden",
+  "berlin/gesundbrunnencenter",
+  "duesseldorf/duesseldorf-arcaden",
+  "recklinghausen/palais-vest",
+  "moenchengladbach/minto",
+  "kaiserslautern/k-in-lautern",
+  "leipzig/hoefe-am-bruehl",
+  "aachen/aquis-plaza",
+  "duisburg/forum",
+];
+
+/**
+ * Behandlungen mit Vorlage v2 (pathKey ohne "-rabatt"): alle, die Ziel einer
+ * aktiven Anzeige sind, plus die am 01.10.2026 neu beworbenen. Jede hat einen
+ * Inhalts-Eintrag in shared/adsTemplateV2Content.ts (Test prueft das) und
+ * existiert an allen Standorten oben (gegen Strapi geprueft, 351 Seiten).
+ * Nicht dabei: fettwegspritze (eigene Freigabe noetig), Schoenheits-OPs.
+ */
+export const ADS_TEMPLATE_V2_TREATMENTS: readonly string[] = [
+  "muskelrelaxans/stirnfalte",
+  "muskelrelaxans/zornesfalte",
+  "muskelrelaxans/kraehenfuesse",
+  "muskelrelaxans/browlift",
+  "muskelrelaxans/lachfalten",
+  "muskelrelaxans/lipflip",
+  "muskelrelaxans/bunny-lines",
+  "muskelrelaxans/erdbeerkinn",
+  "muskelrelaxans/full-face-muskelrelaxans",
+  "muskelrelaxans/masseter",
+  "muskelrelaxans/zaehneknirschen-bruxismus",
+  "muskelrelaxans/barbie-muskelrelaxans",
+  "muskelrelaxans/halsfalten-platysma",
+  "muskelrelaxans/hyperhidrose-starkes-schwitzen",
+  "hyaluron/lippen-aufspritzen",
+  "hyaluron/lippenkorrektur",
+  "hyaluron/nasolabialfalte",
+  "hyaluron/marionettenfalten",
+  "hyaluron/plisseefalten",
+  "hyaluron/kinnkorrektur",
+  "hyaluron/jawline",
+  "hyaluron/wangenaufbau",
+  "hyaluron/full-face-hyaluron",
+  "hyaluron/augenringe-unterspritzen",
+  "hyaluron/hylase",
+  "skinbooster/profhilo",
+  "skinbooster/lumi-eyes-polynukleotide",
+  "skinbooster/polynukleotide-lachssperma",
+  "skinbooster/mesotherapie-nctf-135-ha",
+  "skinbooster/vampir-lifting-prp",
+  "anti-haarausfall/mesotherapie-haare",
+  "anti-haarausfall/prp-haartherapie",
+  "infusionen/vitamin-c-infusion",
+  "infusionen/b-komplex-infusion",
+  "infusionen/immun-infusion",
+  "infusionen/power-infusion-glutathion",
+  "infusionen/regenerations-infusion",
+  "infusionen/relax-infusion",
+  "infusionen/anti-aging-infusion",
+];
+
+/**
  * Seiten mit Vorlage v2, als "stadt/standort/pathKey". Jedes Segment darf
  * "*" sein; ein pathKey "hyaluron/*" meint alle Hyaluron-Seiten, "*" alle.
- * Beispiel spaeter: "*\/*\/*" = alle Standort-Behandlungsseiten auf go.
+ * Seit 01.10.2026 (Benjamin: "heute schon die Seiten auf die neue Vorlage
+ * umstellen") Standorte x Behandlungen oben, live auf den echten URLs.
  */
-export const ADS_TEMPLATE_V2_PAGES: readonly string[] = [
-  "koeln/koeln-arcaden/muskelrelaxans/stirnfalte",
-  "koeln/koeln-arcaden/hyaluron/lippen-aufspritzen",
+export const ADS_TEMPLATE_V2_PAGES: readonly string[] = ADS_TEMPLATE_V2_LOCATIONS.flatMap(
+  (loc) => ADS_TEMPLATE_V2_TREATMENTS.map((key) => `${loc}/${key}`),
+);
+
+/**
+ * v2 auch auf den echten Anzeigen-Ziel-URLs /standorte/... (nicht nur in der
+ * Vorschau). Notschalter: false = v2 nur noch unter /vorschau-v2/.
+ */
+export const ADS_TEMPLATE_V2_LIVE = true;
+
+/**
+ * Ausnahmen von v2 auf den echten URLs (gleiches Muster wie
+ * ADS_TEMPLATE_V2_PAGES, "stadt/standort/pathKey"): Diese Seiten zeigen auf
+ * go. die in Strapi gebaute Fassung (Strapi-Bloecke wie vor v2, mit
+ * Neukundenpreisen, Botox-Ersetzung und Video-Sperrliste des Strapi-Proxys).
+ *
+ * - duesseldorf/duesseldorf-arcaden/skinbooster/profhilo: eigene Bloecke von
+ *   Parya in Strapi (Benjamin, 02.10.2026). Profhilo an anderen Standorten
+ *   bleibt v2.
+ *
+ * Die Texte dieser Seiten nennen den Neukundenpreis schon selbst ("Neukunden
+ * ab 239,99 € ... statt regulär 299,99 €"); der Strapi-Proxy laesst Saetze
+ * mit "Neukunde" deshalb unberuehrt (keepNewCustomerSentences in
+ * shared/newCustomerOffer.ts), sonst stuende dort ein doppelter Rabatt.
+ *
+ * Folgen: kein Umleitungsskript fuer `?angebot=beratung`, /ab-beratung/...
+ * leitet auf die echte Seite zurueck (302) - die Seite ist damit nicht im
+ * Angebots-Test (shared/adsOfferVariant.ts). Die Vorschau /vorschau-v2/...
+ * zeigt v2 weiter, zum Vergleich.
+ */
+export const ADS_TEMPLATE_V2_EXCLUDE: readonly string[] = [
+  "duesseldorf/duesseldorf-arcaden/skinbooster/profhilo",
 ];
 
 function basePathKey(pathKey: string | null | undefined): string {
@@ -59,6 +154,101 @@ export function isAdsTemplateV2Page(
   if (!city || !loc || !key) return false;
   // Schoenheits-OPs haben andere Preise, Ablaeufe und Einwaende.
   if (key.startsWith("schoenheitsoperationen")) return false;
+  return pages.some((p) => matchesPattern(p, city, loc, key));
+}
+
+/**
+ * Echte Seite /standorte/<stadt>/<standort>/<pathKey> mit v2? Wie
+ * isAdsTemplateV2Page, aber ohne die "-rabatt"-Adressen: die sind kein
+ * Anzeigenziel und bleiben bei der bisherigen Seite (die Vorschau zeigt sie).
+ * Ohne die Ausnahmen aus ADS_TEMPLATE_V2_EXCLUDE.
+ */
+export function isAdsTemplateV2LivePage(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  pages: readonly string[] = ADS_TEMPLATE_V2_PAGES,
+  live: boolean = ADS_TEMPLATE_V2_LIVE,
+  exclude: readonly string[] = ADS_TEMPLATE_V2_EXCLUDE,
+): boolean {
+  if (!live) return false;
+  const key = String(pathKey ?? "").replace(/^\/+|\/+$/g, "");
+  if (key.endsWith("-rabatt")) return false;
+  if (isAdsTemplateV2Excluded(city, loc, key, exclude)) return false;
+  return isAdsTemplateV2Page(city, loc, key, pages);
+}
+
+/** Steht die Seite in ADS_TEMPLATE_V2_EXCLUDE (Strapi-Fassung statt v2)? */
+export function isAdsTemplateV2Excluded(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  exclude: readonly string[] = ADS_TEMPLATE_V2_EXCLUDE,
+): boolean {
+  const key = String(pathKey ?? "").replace(/^\/+|\/+$/g, "");
+  if (!city || !loc || !key) return false;
+  return exclude.some((p) => matchesPattern(p, city, loc, key));
+}
+
+/**
+ * Gestaltung der v2-Seiten (Feedback Benjamin, 02.10.2026: v2 wirkt "zu
+ * AI-maessig" - rote Icons und Preise, rosa Flaechen, Bento-Kacheln, keine
+ * schwarzen Abschnitte wie auf den bisherigen Strapi-Seiten).
+ *
+ * - "v2":      heutige Gestaltung (Standard)
+ * - "ci":      Option 1 - CI der bisherigen Seiten: weisse und schwarze
+ *              Abschnitte im Wechsel, Icons/Preise schwarz-weiss, Rot nur
+ *              auf dem Buchungsknopf
+ * - "ci-hell": Option 2 - wie "ci", aber nur die beiden Aufrufe schwarz
+ * - "ci-preis": (Benjamin, 02.10.2026 abends) wie "ci" (R1), nur der
+ *              Neukundenpreis bleibt rot (Hero, Steckbrief, Preise, Aufrufe)
+ * - "ci-rot":  Option R2 (02.10.2026) - Flaechen wie "ci", Rot-Akzente wie
+ *              heute live (Neukundenpreis, Icons, Zeitachse, Leiste);
+ *              "ci" ist Option R1 (Rot nur auf dem Knopf der Leiste)
+ *
+ * Nur Gestaltung: Inhalte, Reihenfolge, Tracking und A/B-Weiche bleiben.
+ * Schluessel wie ADS_TEMPLATE_V2_PAGES ("stadt/standort/pathKey", "*" je
+ * Segment erlaubt); der erste Treffer gilt. Ausrollen = Eintrag "*\/*\/*".
+ */
+export type AdsV2Design = "v2" | "ci" | "ci-hell" | "ci-rot" | "ci-preis";
+
+export const ADS_TEMPLATE_V2_DESIGN: ReadonlyArray<readonly [string, AdsV2Design]> = [
+  // Benjamin, 02.10.2026 abends: R1, nur der Neukundenpreis rot. Erst Lippen
+  // und Profhilo Koeln Arcaden (#225-#233, Michaels Feedback 03.10.2026),
+  // seit 03.10.2026 abends auf allen v2-Seiten.
+  ["*/*/*", "ci-preis"],
+];
+
+export function adsV2Design(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  table: ReadonlyArray<readonly [string, AdsV2Design]> = ADS_TEMPLATE_V2_DESIGN,
+): AdsV2Design {
+  const key = basePathKey(pathKey);
+  if (!city || !loc || !key) return "v2";
+  const hit = table.find(([p]) => matchesPattern(p, city, loc, key));
+  return hit ? hit[1] : "v2";
+}
+
+/**
+ * Desktop-Layout der v2-Seiten (Feedback Benjamin, 02.10.2026): mobil ist v2
+ * gut und bleibt unveraendert; ab 1024 px wirkt die mobile Einspalte mit
+ * allem zentriert leer. Mit diesem Schalter bekommt die Seite ab 1024 px ein
+ * eigenes Layout (Hero linksbuendig, Abschnitte zweispaltig, Zeitachse
+ * waagerecht, Preise neben der Ratenbox). Unter 1024 px greift keine Regel.
+ * Muster wie ADS_TEMPLATE_V2_PAGES; Ausrollen = "*\/*\/*".
+ */
+export const ADS_TEMPLATE_V2_DESKTOP_PAGES: readonly string[] = ["*/*/*"];
+
+export function isAdsV2DesktopLayout(
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  pages: readonly string[] = ADS_TEMPLATE_V2_DESKTOP_PAGES,
+): boolean {
+  const key = basePathKey(pathKey);
+  if (!city || !loc || !key) return false;
   return pages.some((p) => matchesPattern(p, city, loc, key));
 }
 
@@ -107,28 +297,82 @@ export function adsV2Category(pathKey: string | null | undefined): AdsV2Category
 export const ADS_V2_CTA = {
   /** Hauptknopf (oeffnet denselben Buchungsdialog wie "Termin buchen"). */
   primary: "Kostenlose Beratung buchen",
-  /** Mitlaufende Leiste, eine Zeile. */
-  sticky: "Beratung buchen",
+  /**
+   * Mitlaufende Leiste, eine Zeile (Agentur-Feedback 01.10.2026: "Kostenlose
+   * Beratung" statt "Beratung buchen"; daneben "Anrufen").
+   */
+  sticky: "Kostenlose Beratung",
 };
 
 export type AdsV2TrustItem = { key: string; title: string; text?: string };
 
-export function adsV2TrustItems(): AdsV2TrustItem[] {
+/**
+ * Zufriedenheitsgarantie je Kategorie (Benjamin, 01.10.2026: gilt fuer alles).
+ * - Muskelrelaxans: Nachkontrolle mit kostenloser Nachbehandlung (am staerksten).
+ * - Hyaluron: Nachkontrolle und Korrektur der Form ja; wer nach dem
+ *   Abschwellen mehr Volumen (weitere ml) moechte, zahlt das Material.
+ * - Hyaluron aufloesen, Skinbooster, Mesotherapie, PRP, Infusionen:
+ *   Nachkontrolle und Beratung (kein Heilversprechen).
+ */
+export type AdsV2GuaranteeKind = "mr" | "hyaluron" | "check";
+
+export function adsV2GuaranteeKind(pathKey: string | null | undefined): AdsV2GuaranteeKind {
+  const key = basePathKey(pathKey);
+  const cat = adsV2Category(key);
+  if (cat === "muskelrelaxans") return "mr";
+  if (cat === "hyaluron" && !key.endsWith("/hylase")) return "hyaluron";
+  return "check";
+}
+
+export const ADS_V2_GUARANTEE: Readonly<
+  Record<AdsV2GuaranteeKind, { short: string; timeline: string; faq: string }>
+> = {
+  mr: {
+    short: "Kostenlose Nachkontrolle nach 14 Tagen inkl. kostenloser Nachbehandlung",
+    timeline:
+      "Nach 14 Tagen schauen wir gemeinsam auf das Ergebnis. Ist eine Nachbehandlung nötig, ist sie kostenlos (Zufriedenheitsgarantie).",
+    faq: "Dann sag es uns: Nach 14 Tagen gibt es eine kostenlose Nachkontrolle, eine Nachbehandlung ist dabei inklusive und kostenlos (Zufriedenheitsgarantie).",
+  },
+  hyaluron: {
+    short:
+      "Kostenlose Nachkontrolle nach 14 Tagen; Korrekturen der Form inklusive – zusätzliches Volumen (weitere ml) wird nach Preisliste berechnet",
+    timeline:
+      "Nach 14 Tagen prüfen wir das Ergebnis kostenlos. Korrekturen der Form sind inklusive; möchtest du nach dem Abschwellen mehr Volumen, werden die weiteren ml nach Preisliste berechnet (Zufriedenheitsgarantie).",
+    faq: "Nach 14 Tagen gibt es eine kostenlose Nachkontrolle. Korrekturen der Form sind inklusive (Zufriedenheitsgarantie). Möchtest du nach dem Abschwellen mehr Volumen, also weitere ml, wird das zusätzliche Material nach Preisliste berechnet.",
+  },
+  check: {
+    short: "Kostenlose Nachkontrolle und Beratung innerhalb von 14 Tagen",
+    timeline:
+      "Innerhalb von 14 Tagen schauen wir uns das Ergebnis kostenlos an und beraten dich zum weiteren Vorgehen (Zufriedenheitsgarantie).",
+    faq: "Innerhalb von 14 Tagen gibt es eine kostenlose Nachkontrolle und Beratung (Zufriedenheitsgarantie). Ärztin oder Arzt schauen sich das Ergebnis an und besprechen mit dir, wie es weitergeht.",
+  },
+};
+
+export function adsV2Guarantee(pathKey: string | null | undefined) {
+  return ADS_V2_GUARANTEE[adsV2GuaranteeKind(pathKey)];
+}
+
+/**
+ * Vertrauenszeile (Benjamin, 01.10.2026): nach der Google-Bewertung (steht in
+ * der Seite davor) Garantie -> nur Aerztinnen und Aerzte -> auch ohne Termin.
+ * Die Garantie gilt fuer alle Kategorien, Text je Kategorie.
+ */
+export function adsV2TrustItems(pathKey?: string | null): AdsV2TrustItem[] {
   return [
     {
       key: "garantie",
       title: "Zufriedenheitsgarantie",
-      text: "Kostenlose ärztliche Nachkontrolle mit Nachbehandlung innerhalb von 14 Tagen",
-    },
-    {
-      key: "walkin",
-      title: "Auch ohne Termin",
-      text: "Komm vorbei und frag, ob gerade Zeit ist. Mit Termin bist du auf der sicheren Seite.",
+      text: adsV2Guarantee(pathKey).short,
     },
     {
       key: "aerzte",
       title: "Nur Ärztinnen und Ärzte",
       text: "Behandlung nur durch Ärztinnen und Ärzte",
+    },
+    {
+      key: "walkin",
+      title: "Auch ohne Termin",
+      text: "Komm vorbei. Mit Termin bist du auf der sicheren Seite.",
     },
   ];
 }
@@ -155,7 +399,7 @@ export function adsV2Steps(
   };
   const control = {
     title: "Nachkontrolle",
-    text: "Innerhalb von 14 Tagen schauen wir gemeinsam auf das Ergebnis und behandeln bei Bedarf kostenlos nach.",
+    text: adsV2Guarantee(pathKey).timeline,
   };
   if (cat === "muskelrelaxans") {
     const d = shortDuration(strapiDuration, "20–30 Minuten");
@@ -174,7 +418,7 @@ export function adsV2Steps(
       consult,
       {
         title: `Behandlung in ${d}`,
-        text: "Nach der Betäubung wird das Hyaluron behutsam eingebracht. Leichte Schwellungen gehen meist nach wenigen Tagen zurück.",
+        text: "Nach der Betäubung wird das Hyaluron an den besprochenen Stellen eingebracht. Leichte Schwellungen gehen meist nach wenigen Tagen zurück.",
       },
       control,
     ];
@@ -190,16 +434,57 @@ export function adsV2Steps(
   ];
 }
 
-/** Hersteller, soweit auf go. erlaubt (Benjamin, 30.09.2026). */
+/**
+ * Hersteller, soweit auf go. erlaubt (Benjamin, 30.09.2026): Aliaxin fuer
+ * Hyaluron-Filler, Profhilo nur auf der Profhilo-Seite. Hyaluron aufloesen,
+ * Polynukleotide, Mesotherapie, PRP: kein Hersteller.
+ */
 export function adsV2ProductNote(pathKey: string | null | undefined): string | null {
-  const cat = adsV2Category(pathKey);
-  if (cat === "hyaluron") return "Wir verwenden Hyaluron von Aliaxin® (IBSA).";
-  if (cat === "skinbooster") return "Wir verwenden Profhilo® (IBSA).";
+  const key = basePathKey(pathKey);
+  const cat = adsV2Category(key);
+  if (cat === "hyaluron") return key.endsWith("/hylase") ? null : "Wir verwenden Hyaluron von Aliaxin® (IBSA).";
+  if (key === "skinbooster/profhilo") return "Wir verwenden Profhilo® (IBSA).";
   return null;
 }
 
+/**
+ * Ratenzahlung (Benjamin, 01.10.2026): Raten gibt es nur ueber einen vorab
+ * gekauften Gutschein, beim Gutscheinkauf mit Klarna oder PayPal. Der Knopf
+ * fuehrt auf den Geschenkgutschein im Shop.
+ */
+export const ADS_V2_PAYMENT_TITLE = "Lieber in Raten?";
 export const ADS_V2_PAYMENT_NOTE =
-  "Vorab bezahlen oder in Raten mit Klarna oder PayPal.";
+  "Gutschein vorab kaufen und mit Klarna oder PayPal in Raten zahlen.";
+export const ADS_V2_VOUCHER_LABEL = "Gutschein kaufen\u00a0– in Raten zahlen";
+export const ADS_V2_VOUCHER_URL = "https://shop.myhealthandbeauty.com/products/myh-b-geschenkgutschein";
+
+const BLOCKED_UTM_TERM = /botox|btx|botulinum/gi;
+
+function utmSlug(v: string | null | undefined): string {
+  return String(v ?? "")
+    .toLowerCase()
+    .replace(BLOCKED_UTM_TERM, "muskelrelaxans")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+/** Behandlungs-Slug fuer Tracking und utm_content: letztes Segment des Pfads. */
+export function adsV2TreatmentSlug(pathKey: string | null | undefined): string {
+  const key = basePathKey(pathKey);
+  return utmSlug(key.split("/").pop());
+}
+
+/** Gutschein-Link mit Kampagnenwerten; utm_content = <behandlung>-<stadt>. */
+export function adsV2VoucherUrl(pathKey: string | null | undefined, citySlug: string | null | undefined): string {
+  const content = [adsV2TreatmentSlug(pathKey), utmSlug(citySlug)].filter(Boolean).join("-");
+  const params = new URLSearchParams({
+    utm_source: "go",
+    utm_medium: "landingpage",
+    utm_campaign: "gutschein_raten",
+  });
+  if (content) params.set("utm_content", content);
+  return `${ADS_V2_VOUCHER_URL}?${params.toString()}`;
+}
 
 export type AdsV2Faq = { question: string; answer: string };
 
@@ -209,8 +494,7 @@ export function adsV2Faqs(
 ): AdsV2Faq[] {
   const cat = adsV2Category(pathKey);
   const clean = (v?: string | null) => (v ?? "").replace(/\s+/g, " ").trim();
-  const guarantee =
-    "Innerhalb von 14 Tagen gibt es eine kostenlose ärztliche Nachkontrolle, bei Bedarf mit Nachbehandlung.";
+  const guarantee = adsV2Guarantee(pathKey).faq;
   const who =
     "Ausschließlich Ärztinnen und Ärzte. Sie beraten dich vorher und sagen dir ehrlich, wenn eine Behandlung nicht zu dir passt.";
 
@@ -229,7 +513,7 @@ export function adsV2Faqs(
       {
         question: "Sieht das natürlich aus?",
         answer:
-          "Ziel ist ein entspannter Ausdruck, kein starres Gesicht. Die Menge wird an deine Mimik angepasst. Lieber behutsam starten und bei der Nachkontrolle ergänzen.",
+          "Ziel ist ein entspannter Ausdruck, kein starres Gesicht. Die Menge wird an deine Mimik angepasst. Lieber mit weniger starten und bei der Nachkontrolle ergänzen.",
       },
       { question: "Wie lange hält das?", answer: duration },
       {
@@ -252,7 +536,7 @@ export function adsV2Faqs(
     {
       question: "Sieht das natürlich aus?",
       answer:
-        "Wir arbeiten mit kleinen Mengen und passend zu deinem Gesicht. Lieber behutsam starten – bei der Nachkontrolle kann ergänzt werden.",
+        "Wir arbeiten mit kleinen Mengen und passend zu deinem Gesicht. Lieber mit weniger starten – bei der Nachkontrolle kann ergänzt werden.",
     },
     { question: "Wie lange hält das?", answer: duration },
     {
@@ -320,6 +604,41 @@ function variantLabel(v: VariantLike): string | null {
   return name || null;
 }
 
+/** Muskelrelaxans-Seiten mit Zonenpreisen (1-3 Zonen). */
+const ZONE_PRICE_KEYS = new Set([
+  "muskelrelaxans/stirnfalte",
+  "muskelrelaxans/zornesfalte",
+  "muskelrelaxans/kraehenfuesse",
+  "muskelrelaxans/browlift",
+  "muskelrelaxans/lachfalten",
+  "muskelrelaxans/lipflip",
+  "muskelrelaxans/bunny-lines",
+  "muskelrelaxans/erdbeerkinn",
+]);
+
+/**
+ * Welche Strapi-Varianten als Preiskarten erscheinen. An vielen Behandlungen
+ * haengen Produkte mit Varianten, die nicht zur Seite passen (Lippenkorrektur:
+ * Muskelrelaxans-Zonen; Nasolabialfalte: zwei "1,0 ml" mit 199,99/299,99 €,
+ * waehrend der Hero "ab 199,99 €" sagt). Dort zaehlt nur der Grundpreis der
+ * Behandlung - derselbe wie im Hero (useNewCustomerOffer).
+ * - "zones": Muskelrelaxans-Zonen 1-3 (Stirn & Co.)
+ * - "ml": Lippen aufspritzen (0,5 ml / 1,0 ml, wie bisher)
+ * - "variant:<slug>": genau eine Variante (Masseter, Zaehneknirschen)
+ * - "base": nur der Grundpreis
+ * Seiten ohne v2-Eintrag behalten das alte Verhalten (Muskelrelaxans: Zonen,
+ * sonst alle Varianten).
+ */
+export function adsV2PriceMode(pathKey: string | null | undefined): string {
+  const key = basePathKey(pathKey);
+  if (ZONE_PRICE_KEYS.has(key)) return "zones";
+  if (key === "hyaluron/lippen-aufspritzen") return "ml";
+  if (key === "muskelrelaxans/masseter") return "variant:masseter";
+  if (key === "muskelrelaxans/zaehneknirschen-bruxismus") return "variant:bruxismus";
+  if (ADS_TEMPLATE_V2_TREATMENTS.includes(key)) return "base";
+  return adsV2Category(key) === "muskelrelaxans" ? "zones" : "all";
+}
+
 /**
  * Preiskarten aus den Strapi-Varianten der Behandlung: Neukundenpreis* gross,
  * regulaer klein. Muskelrelaxans: nur Zonen (1-3), ohne Masseter & Co., die
@@ -334,15 +653,17 @@ export function adsV2PriceCards(
   pct: number = DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT,
   max = 3,
 ): AdsV2PriceCard[] {
-  const cat = adsV2Category(pathKey);
+  const mode = adsV2PriceMode(pathKey);
   const seen = new Set<string>();
   const cards: AdsV2PriceCard[] = [];
-  const variants = (treatment?.products ?? []).flatMap((p) => p?.variants ?? []);
+  const variants = mode === "base" ? [] : (treatment?.products ?? []).flatMap((p) => p?.variants ?? []);
   for (const v of variants) {
     if (!v || v.isActive === false || !v.priceInEuroCent) continue;
     const slug = String(v.slug ?? "");
-    if (cat === "muskelrelaxans" && !/^[123]-zonen?$/.test(slug)) continue;
-    const label = variantLabel(v);
+    if (mode === "zones" && !/^[123]-zonen?$/.test(slug)) continue;
+    if (mode === "ml" && !/^\d+(?:-\d+)?-ml$/.test(slug)) continue;
+    if (mode.startsWith("variant:") && slug !== mode.slice("variant:".length)) continue;
+    const label = mode.startsWith("variant:") ? "Behandlung" : variantLabel(v);
     if (!label || seen.has(label)) continue;
     seen.add(label);
     const nk = newCustomerPriceCent(v.priceInEuroCent, pct);

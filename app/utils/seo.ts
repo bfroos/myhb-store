@@ -2,6 +2,7 @@ import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
 import { stripAdsTemplateV2Preview } from "#shared/adsTemplateV2";
+import { stripAdsOfferB } from "#shared/adsOfferVariant";
 
 /**
  * Fallback share image (Open Graph / Twitter) used when a page has neither a
@@ -62,7 +63,8 @@ export async function setPageSeo(
   const coverage = usePageI18nCoverage();
   // go.-Vorschau /vorschau-v2/... (Seitenvorlage v2): Canonical bleibt die
   // echte Seite. Alle anderen Pfade unveraendert.
-  const canonicalUrl = `${config.public.publicUrl}${stripAdsTemplateV2Preview(route.path)}`;
+  // Ebenso Variante B des Angebots-Tests /ab-beratung/... (adsOfferVariant).
+  const canonicalUrl = `${config.public.publicUrl}${stripAdsOfferB(stripAdsTemplateV2Preview(route.path))}`;
 
   const robots = computed(() => {
     if (pageSeo?.metaRobots) return pageSeo.metaRobots;

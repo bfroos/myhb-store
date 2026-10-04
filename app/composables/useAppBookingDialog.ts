@@ -219,6 +219,12 @@ export type AppBookingUrlOptions = {
   /** Rabattcode (z. B. Neukundenrabatt nach Newsletter-Anmeldung, #82/#74). */
   promo?: string | null;
   /**
+   * Buchung nach „20 % Rabatt sichern" (`nk20`, lib/checkoutAttempt). Geht
+   * als `offer=` an die App; GTM setzt damit den Schedule-Wert auf den
+   * Neukundenpreis. Anders als `promo` zeigt die App dazu nichts an.
+   */
+  offer?: string | null;
+  /**
    * Variante des A/B-Splits (#100). Geht als `ab_variant` an die App mit: Die
    * Buchung wird im iframe auf app.myhealthandbeauty.com abgeschlossen, das
    * abschliessende `booking_confirmed` pusht also die App in ihre eigene
@@ -259,6 +265,9 @@ export function buildBookingUrl(
     }
     if (options?.promo && !url.searchParams.has("promo")) {
       url.searchParams.set("promo", options.promo);
+    }
+    if (options?.offer && !url.searchParams.has("offer")) {
+      url.searchParams.set("offer", options.offer);
     }
     if (options?.abVariant && !url.searchParams.has("ab_variant")) {
       url.searchParams.set("ab_variant", options.abVariant);

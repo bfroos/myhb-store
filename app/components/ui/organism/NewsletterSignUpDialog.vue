@@ -91,6 +91,17 @@
           {{ $t("cta.subscribe") }}
         </UiAtomBaseButton>
       </div>
+      <!-- go. Variante A (02.10.2026): niemand bleibt am Formular haengen -->
+      <button
+        v-if="hasBooking"
+        type="button"
+        class="newsletterSignUpDialog__skip"
+        data-track-placement="newsletter_skip_to_booking"
+        :disabled="loading"
+        @click="skipToBooking"
+      >
+        {{ skipLabel }}
+      </button>
     </form>
   </div>
 </template>
@@ -102,7 +113,11 @@ import {
 } from "@tabler/icons-vue";
 import { inject } from "vue";
 import InputText from "primevue/inputtext";
-import { useCalendlyDialog } from "~/composables/useCalendlyDialog";
+import {
+  useCalendlyDialog,
+  type BookingDialogOptions,
+} from "~/composables/useCalendlyDialog";
+import { NEUKUNDEN_OFFER } from "~/lib/checkoutAttempt";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 
@@ -118,6 +133,7 @@ const {
   phone,
   loading,
   error,
+  failure,
   success,
   suggestion,
   applySuggestion,
@@ -160,6 +176,18 @@ const suggestionPrefixByLocale: Record<string, string> = {
   fr: "Vouliez-vous dire",
   nl: "Bedoelde je",
 };
+// "ohne Code direkt Termin buchen" (Benjamin, 02.10.2026)
+const skipLabelByLocale: Record<string, string> = {
+  de: "Ohne Code direkt Termin buchen",
+  en: "Book an appointment without the code",
+  tr: "Kod olmadan doğrudan randevu al",
+  ar: "احجز موعدًا مباشرةً بدون الرمز",
+  fr: "Réserver directement sans code",
+  nl: "Direct een afspraak maken zonder code",
+};
+const skipLabel = computed(
+  () => skipLabelByLocale[locale.value] ?? skipLabelByLocale.de,
+);
 const phoneLabel = computed(
   () => phoneLabelByLocale[locale.value] ?? phoneLabelByLocale.de,
 );
@@ -179,6 +207,59 @@ const handleClose = () => {
   }
 };
 
+type BookingData = {
+  calendlyUrl?: string;
+  appBookingUrl?: string;
+  locationSlug?: string;
+  treatmentType?: TreatmentType;
+  appTreatmentSlug?: string;
+  /** #78: Kontextzeile der Behandlungsseite, von der der Knopf kam. */
+  treatmentContext?: BookingTreatmentContext;
+};
+
+// Buchungsdaten (calendlyUrl/treatmentType) kommen ueber die Dialog-Daten
+// (siehe SharedButton.openNewsletterSignUpDialog). Ohne sie (z. B. Footer-
+// Knopf ohne Standort) bleibt es bei der Erfolgsmeldung.
+const booking = computed<BookingData | undefined>(
+  () => dialogRef?.value?.data as BookingData | undefined,
+);
+const hasBooking = computed(
+  () =>
+    !!booking.value &&
+    !!(
+      booking.value.calendlyUrl ||
+      booking.value.treatmentType ||
+      booking.value.appTreatmentSlug
+    ),
+);
+
+/**
+ * Rabatt-Dialog schliessen und denselben Buchungsdialog oeffnen, den der
+ * "Termin buchen"-Knopf der Seite verwendet (A/B-Split #100 unveraendert).
+ * Immer `via_modal`; `offer` nur nach erfolgreicher Anmeldung.
+ */
+function openBooking(options: BookingDialogOptions): boolean {
+  const b = booking.value;
+  if (!b || !hasBooking.value) return false;
+  if (dialogRef) dialogRef.value.close();
+  openCalendlyDialog(
+    b.calendlyUrl,
+    b.treatmentType,
+    b.appTreatmentSlug,
+    {
+      appBookingUrl: b.appBookingUrl,
+      locationSlug: b.locationSlug,
+    },
+    b.treatmentContext,
+    { ...options, viaModal: true },
+  );
+  return true;
+}
+
+function skipToBooking() {
+  openBooking({});
+}
+
 async function handleSubmit() {
   // Handynummer ist jetzt Pflicht (nur in diesem Dialog, nicht im
   // Footer-Formular, das dasselbe Composable ohne Telefonfeld nutzt).
@@ -188,39 +269,18 @@ async function handleSubmit() {
   }
 
   const ok = await submitNewsletter();
-  if (!ok) return;
-
-  // Nach erfolgreicher Anmeldung direkt den Terminbuchungs-Dialog oeffnen –
-  // denselben, den der "Termin buchen"-Button der Seite verwendet. Die
-  // Buchungsdaten (calendlyUrl/treatmentType) werden ueber die Dialog-Daten
-  // durchgereicht (siehe SharedButton.openNewsletterSignUpDialog).
-  const booking = dialogRef?.value?.data as
-    | {
-        calendlyUrl?: string;
-        appBookingUrl?: string;
-        locationSlug?: string;
-        treatmentType?: TreatmentType;
-        appTreatmentSlug?: string;
-        /** #78: Kontextzeile der Behandlungsseite, von der der Knopf kam. */
-        treatmentContext?: BookingTreatmentContext;
-      }
-    | undefined;
-  if (
-    booking &&
-    (booking.calendlyUrl || booking.treatmentType || booking.appTreatmentSlug)
-  ) {
-    if (dialogRef) dialogRef.value.close();
-    openCalendlyDialog(
-      booking.calendlyUrl,
-      booking.treatmentType,
-      booking.appTreatmentSlug,
-      {
-        appBookingUrl: booking.appBookingUrl,
-        locationSlug: booking.locationSlug,
-      },
-      booking.treatmentContext,
-    );
+  if (!ok) {
+    // Anmeldung selbst gescheitert (Mailchimp/Netz, nicht die Eingabe):
+    // trotzdem buchen lassen (Benjamin, 02.10.2026). Ohne Rabattkennung,
+    // der Code ist ja nicht unterwegs.
+    if (failure.value === "server") openBooking({});
+    return;
   }
+
+  // Nach erfolgreicher Anmeldung direkt den Terminbuchungs-Dialog oeffnen.
+  // Buchung mit Neukundenrabatt: Wert −20 %, InitiateCheckout erst bei der
+  // Standortwahl (useCalendlyDialog).
+  openBooking({ offer: NEUKUNDEN_OFFER });
 }
 </script>
 <style scoped>
@@ -260,6 +320,24 @@ async function handleSubmit() {
   color: inherit;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.newsletterSignUpDialog__skip {
+  align-self: center;
+  background: none;
+  border: none;
+  padding: var(--space-200);
+  font: inherit;
+  font-size: var(--font-sm);
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.newsletterSignUpDialog__skip:disabled {
+  opacity: 0.6;
+  cursor: default;
 }
 
 .newsletterSignUpDialog__benefits {

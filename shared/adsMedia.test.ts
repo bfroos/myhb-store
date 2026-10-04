@@ -58,3 +58,24 @@ test("#199: Bild mit dem Begriff in der Datei-URL wird ausgeblendet, Alt-Text al
   assert.deepEqual(out.gallery, [altOnly]);
   assert.equal(out.other, altOnly);
 });
+
+test("Altes Logo MYH&B im Bild (01.10.2026): Bild faellt weg, alle Groessen", () => {
+  const ruppert = {
+    id: 37,
+    url: "https://media.myhb.app/6/dr_gero_ruppert_54fc7b563a.png",
+    mime: "image/png",
+    formats: { small: { url: "https://media.myhb.app/6/small_dr_gero_ruppert_54fc7b563a.png" } },
+  };
+  const thumbOnly = { id: 5, url: "https://m/x.jpg", mime: "image/jpeg", hash: "Infusion1_bad8f18c9b" };
+  const fine = { id: 6, url: "https://m/MY_Centerplan_Duesseldorf_db462cd549.jpg", mime: "image/jpeg" };
+  const out: any = stripBlockedAdsVideos({
+    employee: { firstName: "Gero", photo: ruppert },
+    steps: [{ image: thumbOnly }, { image: fine }],
+    location: { media: { url: "https://media.myhb.app/MY_Centerplan_Berlin_0efebc457a.jpg", mime: "image/jpeg" } },
+  });
+  assert.equal(out.employee.photo, null);
+  assert.equal(out.employee.firstName, "Gero");
+  assert.equal(out.steps[0].image, null);
+  assert.equal(out.steps[1].image, fine);
+  assert.equal(out.location.media, null);
+});

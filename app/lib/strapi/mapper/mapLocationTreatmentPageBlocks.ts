@@ -30,6 +30,12 @@ export function mapLocationTreatmentPageFixedBlocks(
   localeIso?: string,
   isAdsMode = false,
   availableTreatmentPathKeys?: string[],
+  /**
+   * go.: In Strapi fuer go. gebaute Seite (ADS_TEMPLATE_V2_EXCLUDE). Der Hero
+   * zeigt Titel, Titelzusatz und Unterzeile aus Strapi statt der Suchsprache
+   * aus shared/adsHeadlines.ts.
+   */
+  adsStrapiHero = false,
 ) {
   if (!treatmentPage || !location) {
     return;
@@ -83,19 +89,29 @@ export function mapLocationTreatmentPageFixedBlocks(
       treatmentPage.name ?? treatmentPage.hero?.headline ?? "";
     // go.: H1 in Suchsprache, wie gesucht wird ("Stirnfalte glätten in
     // Köln" statt "Stirnfalte Köln"; shared/adsHeadlines.ts).
-    const adsSearchHeadline = isAdsMode
+    const strapiHeadline = adsStrapiHero
+      ? (treatmentPage.hero?.headline ?? "").trim() || null
+      : null;
+    const adsSearchHeadline = isAdsMode && !strapiHeadline
       ? adsTreatmentHeadline(treatmentPage.pathKey, city, localeCode)
       : null;
     const heroHeadline =
+      strapiHeadline ??
       adsSearchHeadline ??
       (city ? `${treatmentKeyword} ${city}` : treatmentKeyword);
 
     return {
       eyebrow: fullLocationName,
       headline: heroHeadline,
+      ...(adsStrapiHero
+        ? {
+            headlineSuffix: treatmentPage.hero?.headlineSuffix || undefined,
+            strapiHero: true,
+          }
+        : {}),
       // go.: generische Strapi-Unterzeile ("Erfahrene Ärzte & Premium
       // Produkte") -> konkrete Unterzeile der Behandlung.
-      subline: isAdsMode
+      subline: isAdsMode && !adsStrapiHero
         ? adsTreatmentSubline(
             treatmentPage.pathKey,
             treatmentPage.hero?.subline,

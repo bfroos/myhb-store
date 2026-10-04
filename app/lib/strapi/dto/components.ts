@@ -315,6 +315,11 @@ export type BlockTreatmentHeroDto = {
   treatmentPathKey?: string;
   /** Telefon des Standorts, nur go.: Knopf in der mitlaufenden Leiste (#181). */
   phoneNumber?: string | null;
+  /**
+   * go.: Seite aus ADS_TEMPLATE_V2_EXCLUDE (in Strapi fuer go. gebaut). Der
+   * Hero zeigt die Strapi-Inhalte und -Schalter statt der go.-Vorgaben.
+   */
+  strapiHero?: boolean;
 };
 
 export type BlockTreatmentPlanDto = {

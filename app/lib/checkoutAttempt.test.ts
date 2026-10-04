@@ -7,6 +7,9 @@ import assert from "node:assert/strict";
 import {
   checkoutEventId,
   currentCheckoutId,
+  leadEventId,
+  NEUKUNDEN_OFFER,
+  offerValue,
   priceFromLabel,
   startCheckoutAttempt,
 } from "./checkoutAttempt.ts";
@@ -39,4 +42,21 @@ test("ohne Preis kein Wert, auch nicht 0", () => {
   assert.equal(priceFromLabel(""), undefined);
   assert.equal(priceFromLabel("auf Anfrage"), undefined);
   assert.equal(priceFromLabel("0 €"), undefined);
+});
+
+test("offerValue zieht im Rabattweg 20 % ab", () => {
+  assert.equal(offerValue(149.99, NEUKUNDEN_OFFER), 119.99);
+  assert.equal(offerValue(299, NEUKUNDEN_OFFER), 239.2);
+});
+
+test("offerValue laesst den Wert ohne Angebot stehen und erfindet keinen", () => {
+  assert.equal(offerValue(149.99, undefined), 149.99);
+  assert.equal(offerValue(149.99, "anderes"), 149.99);
+  assert.equal(offerValue(undefined, NEUKUNDEN_OFFER), undefined);
+});
+
+test("leadEventId ist je Anmeldung neu", () => {
+  const a = leadEventId();
+  assert.match(a, /^lead_[a-z0-9]+$/);
+  assert.notEqual(leadEventId(), a);
 });

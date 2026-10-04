@@ -9,6 +9,8 @@
     Von selbst laufen nur die geschnittenen Kurzclips (public/videos/go/,
     ~0,5 MB). Volle Strapi-Videos (2,5-8,5 MB) zeigen ihr Poster und laden
     erst, wenn jemand auf Abspielen tippt (preload=none, keine Quelle vorher).
+    `tap-to-play` (Kundenfeedback im Bewertungsabschnitt): nichts laeuft von
+    selbst, Poster mit grossem Abspielknopf; auf Tippen mit Ton.
   -->
   <ul class="clips" role="list">
     <li v-for="(clip, i) in clips" :key="clip.url + i" class="clips__item">
@@ -41,10 +43,10 @@
         />
         <!-- Volles Video: grosse Flaeche zum Antippen, bis es laeuft. -->
         <button
-          v-if="!isShort(clip) && !state[i]?.started"
+          v-if="(!isShort(clip) || tapToPlay) && !state[i]?.started"
           type="button"
           class="clips__start"
-          data-track-placement="v2_clip_play"
+          :data-track-placement="`${placement}_play`"
           :aria-label="`Video abspielen: ${clip.caption || 'Behandlungsclip'}`"
           @click="toggle(i)"
         >
@@ -56,7 +58,7 @@
           <button
             type="button"
             class="clips__btn"
-            data-track-placement="v2_clip_play"
+            :data-track-placement="`${placement}_play`"
             :aria-label="state[i]?.playing ? 'Video anhalten' : 'Video abspielen'"
             @click="toggle(i)"
           >
@@ -64,10 +66,10 @@
             <IconPlayerPlayFilled v-else size="18" aria-hidden="true" />
           </button>
           <button
-            v-if="state[i]?.started"
+            v-if="state[i]?.started && !silent"
             type="button"
             class="clips__btn"
-            data-track-placement="v2_clip_sound"
+            :data-track-placement="`${placement}_sound`"
             :aria-label="state[i]?.muted === false ? 'Ton aus' : 'Ton an'"
             @click="toggleSound(i)"
           >
@@ -91,7 +93,18 @@ import {
 import { adsClipIsShort, type AdsClip } from "#shared/adsClips";
 import { whenFirstScreenDone } from "~/lib/firstScreen";
 
-const props = defineProps<{ clips: AdsClip[] }>();
+const props = withDefaults(
+  defineProps<{
+    clips: AdsClip[];
+    /** Nichts laeuft von selbst; erster Tipp spielt mit Ton ab. */
+    tapToPlay?: boolean;
+    /** Praefix fuer data-track-placement der Knoepfe. */
+    placement?: string;
+    /** Clip ohne Tonspur (Weg-Videos): kein Ton-Knopf. */
+    silent?: boolean;
+  }>(),
+  { tapToPlay: false, placement: "v2_clip", silent: false },
+);
 
 type ClipState = {
   src?: string;
@@ -168,6 +181,11 @@ function toggle(i: number) {
     v.pause();
   } else {
     s.userPaused = false;
+    // Kundenfeedback: der Tipp ist die Geste, die Ton erlaubt
+    if (props.tapToPlay && !s.started && v) {
+      v.muted = false;
+      s.muted = false;
+    }
     play(i);
   }
 }
@@ -182,7 +200,7 @@ function toggleSound(i: number) {
 }
 
 function autoplayVisible() {
-  if (!autoplay || !firstScreen) return;
+  if (!autoplay || !firstScreen || props.tapToPlay) return;
   for (const i of visible) {
     // volle Videos nie von selbst laden
     if (!adsClipIsShort(props.clips[i])) continue;

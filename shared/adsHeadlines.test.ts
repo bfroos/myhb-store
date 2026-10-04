@@ -20,7 +20,7 @@ test("-rabatt-Variante nimmt die Grundseite", () => {
 });
 
 test("unbekannte Seite: kein Sondertitel", () => {
-  assert.equal(adsH1("infusionen/relax-infusion", "Köln"), null);
+  assert.equal(adsH1("infusionen/gibt-es-nicht", "Köln"), null);
   assert.equal(adsH1(null, "Köln"), null);
 });
 
@@ -45,7 +45,7 @@ test("generische Unterzeile wird ersetzt, konkrete bleibt", () => {
     "Für eine wunderbar geformte Kieferlinie",
   );
   assert.equal(
-    adsSubline("infusionen/relax-infusion", "Erfahrene Ärzte & Premium Produkte"),
+    adsSubline("infusionen/gibt-es-nicht", "Erfahrene Ärzte & Premium Produkte"),
     "Erfahrene Ärzte & Premium Produkte",
   );
 });

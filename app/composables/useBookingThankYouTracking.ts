@@ -30,7 +30,7 @@ import {
  */
 export function useBookingThankYouTracking() {
   const route = useRoute();
-  const { trackCalendlyBookingConfirmed } = useGoogleAnalytics();
+  const { trackCalendlyBookingConfirmed, trackEvent } = useGoogleAnalytics();
 
   const slug = route.params.slug;
   const isThankYouPage =
@@ -63,13 +63,27 @@ export function useBookingThankYouTracking() {
       : `calendly:${eventTypeUuid ?? "unknown"}:${new Date().toISOString().slice(0, 16)}`;
     if (hasFiredBookingConfirmed(dedupeId)) return;
 
-    // Dialog hat diese Buchung schon gemeldet → nur aufräumen.
     const sameBooking =
       !!handoff &&
       (handoff.invitee_uuid && inviteeUuid
         ? handoff.invitee_uuid === inviteeUuid
         : // Ohne IDs: eine frische Übergabe gehört zu dieser Buchung.
           true);
+
+    // Google-Ads-Conversion „Dankesseite Calendly" (GTM, 01.10.2026): genau
+    // einmal je Buchung, auch wenn der Dialog `booking_confirmed` schon
+    // gemeldet hat — jede Calendly-Buchung landet hier, das Embed nicht immer.
+    // `value` ist der Seitenpreis aus dem Dialog; GTM rechnet den DB1.
+    // Bewusst nicht an `booking_confirmed` (das faellt im Embed-Fall hier aus).
+    trackEvent("booking_thank_you", {
+      event_category: "conversion",
+      booking_type: "calendly",
+      event_id: inviteeUuid ?? dedupeId,
+      value: sameBooking ? handoff?.booking_value : undefined,
+      currency: "EUR",
+    });
+
+    // Dialog hat diese Buchung schon gemeldet → nur aufräumen.
     if (handoff?.fired && sameBooking) {
       markBookingConfirmedFired(dedupeId);
       clearBookingHandoff();
