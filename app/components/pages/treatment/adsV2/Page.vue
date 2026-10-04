@@ -162,7 +162,7 @@
         <p v-if="offerShown" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
         </p>
-        <ul class="v2-prices" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
+        <ul class="v2-prices" :class="{ 'v2-prices--many': priceCards.length >= 3 }" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
           <li v-for="card in priceCards" :key="card.key" class="v2-price" :class="{ 'v2-price--package': card.isPackage }">
             <span class="v2-price__label">{{ card.label }}</span>
             <strong v-if="card.offer" class="v2-price__offer">{{ card.offer }}</strong>
@@ -308,7 +308,7 @@
 
     <!-- Bewertungen des Standorts: Video mittig, Texte mobil als Wischreihe -->
     <UiLayoutSectionBlock v-if="reviews.length || clips.feedback.length">
-      <div class="v2-card v2-reviews-card" :class="tone('reviews')" data-track-placement="v2_reviews">
+      <div class="v2-card v2-reviews-card" :class="[tone('reviews'), { 'v2-reviews-card--multi': clips.feedback.length > 1 }]" data-track-placement="v2_reviews">
         <h2 class="v2-h2">{{ H.reviews }}</h2>
         <p v-if="rating" class="v2-lead">
           <IconStarFilled class="v2-star" size="18" aria-hidden="true" />
@@ -1497,29 +1497,62 @@ const routeHref = computed(() => {
   color: var(--color-text-light);
 }
 
-/* Unter 375 px passen drei Preiskarten nicht nebeneinander ("239,99 €*" lief
-   ueber den Kartenrand): untereinander, Name links, Preis rechts. */
+/* Untereinander statt nebeneinander: unter 375 px immer, unter 640 px ab
+   drei Preisen (der fette 26-px-Preis "239,99 €*" lief in einem Drittel der
+   Breite ueber den Kartenrand und in die Nachbarkachel, Benjamin 04.10.2026).
+   Name links, Preis rechts; reicht die Breite nicht, rutscht der Preis in die
+   naechste Zeile statt den Namen zu ueberdecken. */
 @media (max-width: 374px) {
-  .v2-prices {
+  .v2 .v2-prices {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .v2-price {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+  .v2 .v2-prices .v2-price {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
     align-items: baseline;
     column-gap: var(--space-300);
-    padding: var(--space-300) var(--space-400);
+    row-gap: var(--space-100);
+    padding: var(--space-400);
     text-align: left;
   }
 
-  .v2-price__offer {
+  .v2 .v2-prices .v2-price__offer {
+    margin-left: auto;
     text-align: right;
   }
 
-  .v2-price__regular,
-  .v2-price__note {
-    grid-column: 1 / -1;
+  .v2 .v2-prices .v2-price__regular,
+  .v2 .v2-prices .v2-price__note {
+    flex-basis: 100%;
+  }
+}
+
+@media (min-width: 375px) and (max-width: 639px) {
+  .v2 .v2-prices--many {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .v2 .v2-prices--many .v2-price {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    column-gap: var(--space-300);
+    row-gap: var(--space-100);
+    padding: var(--space-400) var(--space-500);
+    text-align: left;
+  }
+
+  .v2 .v2-prices--many .v2-price__offer {
+    margin-left: auto;
+    text-align: right;
+  }
+
+  .v2 .v2-prices--many .v2-price__regular,
+  .v2 .v2-prices--many .v2-price__note {
+    flex-basis: 100%;
   }
 }
 
@@ -2981,6 +3014,31 @@ const routeHref = computed(() => {
 .v2--ci.v2--preis .v2-facts__row--price dd {
   font-size: 1.1875rem;
   line-height: 1.3;
+}
+
+/* Desktop-Ueberlauf (Benjamin, 04.10.2026):
+   - Bewertungen: "Video links, Texte rechts" passt nur fuer ein Video. Mit
+     mehreren Videos belegte die Reihe links 714 px, das Bento wurde auf
+     128 px gequetscht und lief aus der Karte. Dann Videos ueber dem Bento.
+   - Preise: drei fette Preise passten bei 1024 px nicht in ihre Kacheln
+     ("159,99 €*" lief in "239,99 €*"); Schrift waechst mit der Breite. */
+@media (min-width: 1024px) {
+  .v2--desk .v2-reviews-card--multi > .v2-feedback,
+  .v2--desk .v2-reviews-card--multi > .v2-feedback + .v2-reviews {
+    grid-column: 1 / -1;
+  }
+
+  .v2--desk .v2-reviews-card--multi > .v2-feedback {
+    margin-bottom: var(--space-500);
+  }
+
+  .v2--ci.v2--desk .v2-prices--many .v2-price {
+    padding-inline: var(--space-200);
+  }
+
+  .v2--ci.v2--desk .v2-prices--many .v2-price__offer {
+    font-size: clamp(1.25rem, 1.9vw, 1.625rem);
+  }
 }
 
 /* Aerzte-Block mobil: Hochformat wie auf dem Desktop, Gesicht und
