@@ -241,7 +241,7 @@
     </UiLayoutSectionBlock>
 
     <!-- Aerzt:innen des Centers -->
-    <UiLayoutSectionBlock v-if="doctors.length">
+    <UiLayoutSectionBlock v-if="doctors.length || bundesweit">
       <div class="v2-card v2-split" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
         <h2 class="v2-h2">{{ H.doctors }}</h2>
         <div class="v2-doctors-wrap">
@@ -256,7 +256,7 @@
             <p v-for="t in doctorFeature.text" :key="t">{{ t }}</p>
           </div>
         </div>
-        <ul class="v2-doctors" role="list">
+        <ul v-if="doctors.length" class="v2-doctors" role="list">
           <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
             <div class="v2-doctor__photo">
               <UiAtomMediaPicture :media="doc.photo" />
@@ -373,8 +373,23 @@
       </div>
     </UiLayoutSectionBlock>
 
+    <!-- Bundesweit (Meta-Seiten auf www): Standorte statt eines Standorts,
+         die Wahl kommt beim Buchen -->
+    <UiLayoutSectionBlock v-if="bundesweit">
+      <div id="standort" class="v2-card" :class="tone('location')" data-track-placement="v2_locations">
+        <h2 class="v2-h2">Deutschlandweit für dich da</h2>
+        <p class="v2-lead">{{ standorteLead }}</p>
+        <ul class="v2-cities" role="list">
+          <li v-for="c in standorte" :key="c" class="v2-cities__item"><IconMapPin size="16" aria-hidden="true" /> {{ c }}</li>
+        </ul>
+        <div class="v2-actions">
+          <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+        </div>
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- Standort (Agentur-Feedback 01.10.2026: vor den Fragen) -->
-    <UiLayoutSectionBlock>
+    <UiLayoutSectionBlock v-else>
       <div id="standort" class="v2-card" :class="tone('location')" data-track-placement="v2_location">
         <h2 class="v2-h2">{{ H.location }}</h2>
         <div class="v2-location">
@@ -458,7 +473,7 @@
     </UiLayoutSectionBlock>
 
     <!-- Variante B ohne Sternchen-Preise: keine Fussnote -->
-    <BlockAdsPriceFootnote v-if="!isB" :treatment="hero.treatment" :treatment-path-key="hero.treatmentPathKey" />
+    <BlockAdsPriceFootnote v-if="!isB" :treatment="hero.treatment" :treatment-path-key="hero.treatmentPathKey" :force="bundesweit" />
   </div>
 </template>
 
@@ -511,6 +526,7 @@ import {
 } from "#shared/adsTemplateV2";
 import {
   ADS_DOCTOR_FEATURE,
+  ADS_TEAM_FEATURE,
   ADS_LOUNGE_NEUTRAL_HEADLINE,
   adsClipsFor,
   adsLoungeGalleryFor,
@@ -541,12 +557,26 @@ import {
   adsOfferRegularCards,
   adsOfferRegularPriceLine,
 } from "#shared/adsOfferVariant";
-import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
+import { getGoogleReviewAggregate, getGoogleReviewForPlace } from "~/utils/schemaLocation";
+import type { AdsV2Terms } from "#shared/adsTemplateV2Content";
 
 const props = defineProps<{
   hero: BlockTreatmentHeroDto;
   treatmentPage?: TreatmentPageDto | null;
   location?: LocationDto | null;
+  /**
+   * Bundesweite Fassung ohne Standort (Meta-Seiten auf www,
+   * app/pages/aktion/[slug].vue, Benjamin 04.10.2026): Bewertungen aller
+   * Standorte, Standortwahl erst beim Buchen, CI-Gestaltung und Desktop-Layout
+   * immer an.
+   */
+  bundesweit?: boolean;
+  /** Begriffe der Seite statt der Behandlung (z. B. "Botox" statt "Stirnfalte"). */
+  termsOverride?: Partial<AdsV2Terms> | null;
+  /** Woerter in allen Texten ersetzen (www darf "Botox" sagen, go. nicht). */
+  wording?: ReadonlyArray<readonly [string, string]> | null;
+  /** Staedte fuer "Deutschlandweit für dich da" (nur bundesweit). */
+  standorte?: readonly string[];
 }>();
 
 // Bewertungen und Aerzt:innen des Standorts: eigener Endpunkt, nur hier
@@ -555,16 +585,38 @@ const route = useRoute();
 const citySlug = String(route.params.citySlug ?? "");
 const locSlug = String(route.params.locationSlug ?? "");
 const { data: extras } = await useFetch<{ reviews?: any[]; doctors?: any[] }>(
-  `/api/ads-template-v2/${encodeURIComponent(citySlug)}/${encodeURIComponent(locSlug)}`,
-  { key: `ads-template-v2:${citySlug}:${locSlug}`, default: () => ({}) },
+  props.bundesweit
+    ? "/api/ads-template-v2/bundesweit"
+    : `/api/ads-template-v2/${encodeURIComponent(citySlug)}/${encodeURIComponent(locSlug)}`,
+  {
+    key: props.bundesweit ? "ads-template-v2:bundesweit" : `ads-template-v2:${citySlug}:${locSlug}`,
+    default: () => ({}),
+  },
 );
+
+/** Woerter ersetzen (props.wording) in Texten, Listen und einfachen Objekten. */
+function withWording(x: any, w: ReadonlyArray<readonly [string, string]>): any {
+  if (typeof x === "string") return w.reduce((acc, [a, b]) => acc.split(a).join(b), x);
+  if (Array.isArray(x)) return x.map((v) => withWording(v, w));
+  if (x && typeof x === "object" && Object.getPrototypeOf(x) === Object.prototype) {
+    const o: Record<string, any> = {};
+    for (const k of Object.keys(x)) o[k] = withWording(x[k], w);
+    return o;
+  }
+  return x;
+}
+function W<T>(x: T): T {
+  return props.wording?.length ? withWording(x, props.wording) : x;
+}
 
 // Gestaltung je Seite (shared/adsTemplateV2.ts, ADS_TEMPLATE_V2_DESIGN):
 // "v2" = heutige Gestaltung; "ci"/"ci-hell" = an die bisherigen Strapi-Seiten
 // angelehnt (Feedback Benjamin, 02.10.2026). Aendert nur Klassen, keine
 // Inhalte, Reihenfolge, Knoepfe oder Tracking.
 const design = computed(() =>
-  adsV2Design(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
+  props.bundesweit
+    ? "ci-preis"
+    : adsV2Design(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
 );
 type AdsV2Tone = "light" | "soft" | "neutral" | "strong";
 type AdsV2Section =
@@ -601,7 +653,7 @@ function tone(section: AdsV2Section, v2Class = ""): string {
 // ADS_TEMPLATE_V2_DESKTOP_PAGES; Feedback Benjamin 02.10.2026). Nur Klassen;
 // alle Regeln stehen in @media (min-width: 1024px), mobil bleibt gleich.
 const desktopLayout = computed(() =>
-  isAdsV2DesktopLayout(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
+  !!props.bundesweit || isAdsV2DesktopLayout(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
 );
 
 const { t } = useI18n();
@@ -673,7 +725,11 @@ const locationName = computed(() => props.location?.name ?? "");
 
 // Gutschein fuer Ratenzahlung: eigenes Ereignis, bewusst (noch) nicht in der
 // GTM-Ereignisliste; nur Behandlung, Standort, Vorlage, keine Personendaten.
-const voucherUrl = computed(() => adsV2VoucherUrl(pathKey.value, citySlug));
+const voucherUrl = computed(() =>
+  props.bundesweit
+    ? adsV2VoucherUrl(pathKey.value, "bundesweit").replace("utm_source=go", "utm_source=www")
+    : adsV2VoucherUrl(pathKey.value, citySlug),
+);
 function trackVoucherClick() {
   trackEvent("click_voucher", {
     treatment: adsV2TreatmentSlug(pathKey.value),
@@ -728,6 +784,7 @@ const stickyLabel = computed(() =>
 const offer = useNewCustomerOffer(
   () => props.hero.treatment,
   () => props.hero.treatmentPathKey,
+  () => !!props.bundesweit,
 );
 
 // Angebots-Test (shared/adsOfferVariant.ts): Variante B unter
@@ -843,7 +900,8 @@ const processSteps = computed(() => {
 /** Aerzte-Block mit grossem Foto + Text (CI-Gestaltung, Benjamin 03.10.2026). */
 const doctorFeature = computed(() => {
   if (design.value === "v2") return null;
-  const f = ADS_DOCTOR_FEATURE[locSlug];
+  // Bundesweit: Beratungsfoto (shared/adsClips.ts) statt einer Aerztin
+  const f = props.bundesweit ? ADS_TEAM_FEATURE : ADS_DOCTOR_FEATURE[locSlug];
   return {
     image: f ? { ...f.image, alternativeText: f.name } : null,
     name: f?.name ?? "",
@@ -854,7 +912,7 @@ const doctorFeature = computed(() => {
   };
 });
 const wayClip = computed(() => adsWayClipFor(locSlug));
-const trustItems = computed(() => adsV2TrustItems(pathKey.value));
+const trustItems = computed(() => W(adsV2TrustItems(pathKey.value)));
 const priceInclusion = computed(() => adsV2PriceInclusion(pathKey.value));
 function trustIcon(key: string) {
   if (key === "garantie") return IconShieldCheck;
@@ -862,7 +920,13 @@ function trustIcon(key: string) {
   return IconStethoscope;
 }
 
-const rating = computed(() => getGoogleReviewForPlace(props.location?.googlePlaceId));
+// Bundesweit: gewichteter Schnitt aller Standorte mit Google-Daten
+const ratingAggregate = props.bundesweit ? getGoogleReviewAggregate() : null;
+const rating = computed(() => {
+  if (!props.bundesweit) return getGoogleReviewForPlace(props.location?.googlePlaceId);
+  const agg = ratingAggregate;
+  return agg ? { rating: agg.rating, userRatingsTotal: agg.userRatingsTotal, placeUrl: "" } : null;
+});
 const ratingLabel = computed(() =>
   rating.value
     ? rating.value.rating.toLocaleString("de-DE", { minimumFractionDigits: 1, maximumFractionDigits: 1 })
@@ -873,19 +937,23 @@ const ratingCountLabel = computed(() =>
 );
 
 const details = computed(() => (props.treatmentPage as any)?.treatmentDetails ?? null);
-const steps = computed(() => adsV2Steps(pathKey.value, details.value?.duration));
+const steps = computed(() => W(adsV2Steps(pathKey.value, details.value?.duration)));
 const faqs = computed(() => {
   const v2 = adsV2FaqsV2(pathKey.value);
-  if (v2.length) return v2;
-  return adsV2Faqs(pathKey.value, {
+  if (v2.length) return W(v2);
+  return W(adsV2Faqs(pathKey.value, {
     effectDuration: details.value?.effectDuration,
     initialResults: details.value?.initialResults,
-  });
+  }));
 });
 
 // Glowtox-Punkte 1-8 (shared/adsTemplateV2Content.ts); ohne Eintrag fuer die
 // Behandlung bleiben die bisherigen Texte.
-const terms = computed(() => adsV2Terms(pathKey.value));
+const terms = computed(() => {
+  const base = adsV2Terms(pathKey.value);
+  if (!base) return null;
+  return W(props.termsOverride ? { ...base, ...props.termsOverride } : base);
+});
 const H = computed(() => {
   if (terms.value) return adsV2Headings(terms.value, locationName.value);
   const at = locationName.value ? ` in ${locationName.value}` : "";
@@ -899,7 +967,7 @@ const H = computed(() => {
 // Steckbrief + Preis (Agentur-Feedback 01.10.2026: Kernwerte wie Dauer,
 // Wirkung, Preis auf einen Blick). Preis = dieselbe Zeile wie im Hero.
 const facts = computed(() => {
-  const rows = adsV2Facts(pathKey.value, details.value?.duration);
+  const rows = W(adsV2Facts(pathKey.value, details.value?.duration));
   if (rows.length && shortPrice.value) {
     rows.splice(1, 0, { key: "preis", label: "Preis", value: shortPrice.value });
   }
@@ -920,17 +988,23 @@ const FACT_ICONS: Record<string, any> = {
 function factIcon(key: string) {
   return FACT_ICONS[key] ?? IconCircleCheck;
 }
-const howParts = computed(() => adsV2HowParts(pathKey.value));
+const howParts = computed(() =>
+  W(
+    props.termsOverride?.howItWorks
+      ? adsV2Emphasize(props.termsOverride.howItWorks, { minChars: 0 })
+      : adsV2HowParts(pathKey.value),
+  ),
+);
 /** Fliesstext mit fetten Schluesselwoertern (ab ca. drei Zeilen). */
 function emph(text: string, minChars?: number) {
   return adsV2Emphasize(text, minChars === undefined ? {} : { minChars });
 }
 const objections = computed(() =>
-  adsV2Objections(pathKey.value, {
+  W(adsV2Objections(pathKey.value, {
     price: shortPrice.value,
     discountPct: offerShown.value ? discountPct.value : null,
     strapiDuration: details.value?.duration,
-  }),
+  })),
 );
 const OBJECTION_ICONS: Record<string, any> = {
   result: IconMoodSmile,
@@ -942,15 +1016,18 @@ const OBJECTION_ICONS: Record<string, any> = {
 function objectionIcon(key: string) {
   return OBJECTION_ICONS[key] ?? IconCircleCheck;
 }
-const timeline = computed(() => adsV2Timeline(pathKey.value));
-const aftercare = computed(() => adsV2Aftercare(pathKey.value));
+const timeline = computed(() => W(adsV2Timeline(pathKey.value)));
+const aftercare = computed(() => W(adsV2Aftercare(pathKey.value)));
 const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
 // Variante B bleibt beim Wechsel auf eine andere Zone in B.
+// Bundesweit keine Kacheln: sie verlinken Standortseiten.
 const zoneTiles = computed(() =>
-  adsV2ZoneTiles(pathKey.value, citySlug, locSlug).map((t) => ({
-    ...(isB.value ? { ...t, href: adsOfferBPath(t.href) } : t),
-    price: zonePrice(t.href),
-  })),
+  props.bundesweit
+    ? []
+    : adsV2ZoneTiles(pathKey.value, citySlug, locSlug).map((t) => ({
+        ...(isB.value ? { ...t, href: adsOfferBPath(t.href) } : t),
+        price: zonePrice(t.href),
+      })),
 );
 /**
  * Preis je Kachel "weitere Behandlungen" (CI-Gestaltung, nach Parya's
@@ -974,7 +1051,15 @@ function zonePrice(href: string): string | null {
 const zoneTilesHaveImages = computed(() => zoneTiles.value.some((t) => !!t.image));
 const doctorsLead = "Bei uns behandeln nur Ärztinnen und Ärzte – von der Beratung bis zur Nachkontrolle.";
 // "in den Köln Arcaden", "im Minto" (ohne Umbruch im Namen)
-const atLocation = computed(() => adsV2AtLocation(locationName.value));
+const atLocation = computed(() =>
+  props.bundesweit
+    ? `an ${ratingAggregate?.locations ?? standorte.value.length} Standorten`
+    : adsV2AtLocation(locationName.value),
+);
+const standorte = computed(() => props.standorte ?? []);
+const standorteLead = computed(
+  () => `${standorte.value.length} MY Lounges in ganz Deutschland – beim Buchen wählst du deinen Standort.`,
+);
 const zoneHint = computed(() => adsV2ZoneHint(priceCards.value));
 const consultPhoto = computed(() => adsV2ConsultPhoto(pathKey.value));
 const priceCards = computed(() => {
@@ -3039,6 +3124,29 @@ const routeHref = computed(() => {
   .v2--ci.v2--desk .v2-prices--many .v2-price__offer {
     font-size: clamp(1.25rem, 1.9vw, 1.625rem);
   }
+}
+
+/* Bundesweit: Staedte der MY Lounges */
+.v2-cities {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-200);
+  margin: 0 0 var(--space-200);
+  padding: 0;
+  list-style: none;
+}
+
+.v2-cities__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-100);
+  padding: var(--space-200) var(--space-400);
+  border-radius: 999px;
+  background: var(--color-card-bg-neutral, #46454a);
+  color: #fff;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
 }
 
 /* Aerzte-Block mobil: Hochformat wie auf dem Desktop, Gesicht und

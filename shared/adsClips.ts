@@ -766,6 +766,16 @@ export function adsProcessImagesFor(pathKey: string | null | undefined) {
  * Kaiserslautern: nur "Aerztin.png" (anderer Stil, nicht als Mariam
  * belegt). Dort kein Eintrag - der Block steht nur mit Text.
  */
+/**
+ * Bundesweite Seiten (www, Meta): Beratungsgespraech aus dem Shooting
+ * (Parya, 1009; Aerztin und Kundin, kein Ort, keine einzelne Aerztin
+ * benannt). Das Teamfoto 985 steht dort schon im Ablauf.
+ */
+export const ADS_TEAM_FEATURE: { image: AdsLoungeImage; name: string } = {
+  image: { id: 1009, url: "https://media.myhealthandbeauty.app/2026_MYHB_Tag2_105_03ed4c1626.webp", width: 8368, height: 5584, mime: "image/webp" },
+  name: "Kostenlose Beratung",
+};
+
 export const ADS_DOCTOR_FEATURE: Record<string, { image: AdsLoungeImage; name: string }> = {
   "koeln-arcaden": {
     image: { id: 948, url: "https://media.myhealthandbeauty.app/98/2026_MYHB_Tag1_55_1_904a1c842f.webp", width: 5424, height: 5952, mime: "image/webp" },

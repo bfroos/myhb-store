@@ -300,7 +300,7 @@ import { IconAsterisk, IconPhone } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
 import type { AdsClip } from "#shared/adsClips";
 
-const { isAdsMode } = useSiteModeFlags();
+const { isAdsMode: siteIsAdsMode } = useSiteModeFlags();
 
 const props = withDefaults(
   defineProps<
@@ -348,6 +348,10 @@ const props = withDefaults(
   },
 );
 
+// Vorlage v2 verhaelt sich auch auf www wie go. (bundesweite Meta-Seiten,
+// app/pages/aktion/[slug].vue); sonst gilt der Modus der Seite.
+const isAdsMode = computed(() => siteIsAdsMode.value || props.templateV2);
+
 // Gleicher Knopf (gleiche Aktion, gleiche Daten -> gleiches click_booking),
 // nur kuerzer beschriftet.
 const stickyCta = computed(() =>
@@ -390,6 +394,7 @@ const discountButtonVisible = computed(
 const newCustomerOffer = useNewCustomerOffer(
   () => props.treatment,
   () => props.treatmentPathKey,
+  () => props.templateV2,
 );
 
 // v2: "Neukunden " + "ab 239,99 €*" - der Betrag mit "ab" und "€*" bricht
