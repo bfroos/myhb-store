@@ -355,15 +355,26 @@
             <div class="v2-objection__body">
               <strong class="v2-objection__q">{{ o.question }}</strong>
               <p class="v2-objection__a"><PagesTreatmentAdsV2Emph :parts="emph(o.answer, 0)" /></p>
-              <a
-                v-if="o.action === 'voucher'"
-                class="v2-objection__link"
-                :href="voucherUrl"
-                target="_blank"
-                rel="noopener"
-                data-track-placement="v2_objection_voucher"
-                @click="trackVoucherClick"
-              >{{ ADS_V2_VOUCHER_LABEL }}<IconArrowRight size="16" aria-hidden="true" /></a>
+              <!-- Zelgai, 05.10.2026: kein unterstrichener Zweit-Link, sondern
+                   aufklappbar erklaert; der Shop-Link steht erst darin -->
+              <details v-if="o.action === 'voucher'" class="v2-raten">
+                <summary class="v2-raten__q" data-track-placement="v2_raten_info">
+                  <IconInfoCircle size="18" aria-hidden="true" /> So funktioniert die Ratenzahlung
+                </summary>
+                <ol class="v2-raten__steps">
+                  <li>Gutschein im Online-Shop kaufen</li>
+                  <li>Im Shop mit Klarna oder PayPal in Raten bezahlen</li>
+                  <li>Termin buchen und den Gutschein beim Termin einlösen</li>
+                </ol>
+                <a
+                  class="v2-objection__link"
+                  :href="voucherUrl"
+                  target="_blank"
+                  rel="noopener"
+                  data-track-placement="v2_objection_voucher"
+                  @click="trackVoucherClick"
+                >{{ ADS_V2_VOUCHER_LABEL }}<IconArrowRight size="16" aria-hidden="true" /></a>
+              </details>
             </div>
           </li>
         </ul>
@@ -488,6 +499,7 @@ import {
   IconClock,
   IconCreditCard,
   IconHourglass,
+  IconInfoCircle,
   IconMapPin,
   IconMessageCircle,
   IconMoodSmile,
@@ -1874,7 +1886,39 @@ const routeHref = computed(() => {
   color: var(--color-text-light);
 }
 
+.v2-raten {
+  margin-top: var(--space-300);
+}
+
+.v2-raten__q {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-100);
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  color: inherit;
+  cursor: pointer;
+  list-style: none;
+}
+
+.v2-raten__q::-webkit-details-marker {
+  display: none;
+}
+
+.v2-raten__steps li {
+  display: list-item;
+}
+
+.v2-raten__steps {
+  margin: var(--space-200) 0 0;
+  padding-left: 1.25rem;
+  list-style: decimal;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+}
+
 .v2-objection__link {
+  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: var(--space-100);

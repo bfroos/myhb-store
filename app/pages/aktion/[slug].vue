@@ -74,6 +74,9 @@ const STANDORTE = [
   "Köln", "Leipzig", "Mönchengladbach", "Recklinghausen",
 ] as const;
 
+// Schlanker Rahmen ohne Menue/Footer-Navigation (app/layouts/landing.vue)
+definePageMeta({ layout: "landing" });
+
 const route = useRoute();
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();

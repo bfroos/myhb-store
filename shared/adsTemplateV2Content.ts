@@ -1529,10 +1529,11 @@ export function adsV2Objections(
   const priceAnswer = [
     price
       ? pct
-        ? `Als Neukundin oder Neukunde bekommst du ${pct} % Rabatt – ${price} ist schon der Preis mit Rabatt.`
+        ? // Zelgai, 05.10.2026: "reibungsloser" - Preis zuerst, Rabatt als Nebensatz
+          `Als Neukundin oder Neukunde zahlst du ${price} – die ${pct} % Rabatt sind darin schon abgezogen.`
         : `Den Preis kennst du vorher: ${price}. In der kostenlosen Beratung besprecht ihr, was bei dir sinnvoll ist.`
       : null,
-    "Lieber in Raten? Kauf vorab einen Gutschein und zahl ihn mit Klarna oder PayPal in Raten.",
+    "Lieber in Raten zahlen? Das geht über einen Gutschein.",
   ]
     .filter(Boolean)
     .join(" ");
