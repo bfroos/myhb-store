@@ -272,6 +272,9 @@ const FB = {
   lippen1: clip("lippen-karussell-9", 1073, "Zwei Cousinen erzählen"),
   lippen2: clip("fio-lippen-2-karussell-12s", "fio-lippen-2", "Ärztin ihres Vertrauens gefunden"),
   prpLeipzig: clip("feedback-leipzig-prp-1", 808, "Kundin in Leipzig", "leipzig"),
+  // Strapi 874, 0-10,1 s: endet vor "... originales Botox verwendet", nennt
+  // also keine Behandlung - passt auf jede Seite (Benjamin 05.10.2026)
+  allgemein: clip("feedback-allgemein-1", 874, "Erster Eindruck: sehr professionell"),
 };
 const FEEDBACK_MR = [FB.mrKoeln, FB.mrRecklinghausen, FB.mr1, FB.mrTrio, FB.mr2];
 const FEEDBACK_LIPPEN = [FB.lippen1, FB.lippen2];
@@ -399,7 +402,12 @@ const CLIPS: Record<string, AdsClipSet> = {
     carousel: [
       clip("profhilo-karussell-3", 823, "Beratung und Behandlung"),
       clip("profhilo-karussell-2", 268, "Frischekick für die Haut"),
+      // Benjamin 05.10.2026: am Desktop vier nebeneinander. Strapi 823,
+      // 23,8-36,0 s: nach der Behandlung erzaehlt (ohne Nadel im Bild)
+      clip("profhilo-karussell-4", 823, "Direkt nach der Behandlung"),
+      // laeuft im "Noch unsicher?"-Bento, nicht in der Reihe
       clip("profhilo-karussell-1", 253, "Endlich wieder frisch fühlen"),
+      FB.allgemein,
     ],
   },
   "skinbooster/lumi-eyes-polynukleotide": { heroes: [H.lumiEyes], carousel: LUMI },
@@ -455,6 +463,13 @@ const forCity = (city: string) => (c: AdsClip) => !c.city || c.city.toLowerCase(
  * dem Tippen laden muessen, um ein Bild zu zeigen). Kundenfeedback ohne die
  * Clips, die schon im Karussell laufen.
  */
+/**
+ * Allgemeines Kundenvideo (Strapi 874, ohne Behandlungsbezug): fuellt am
+ * Desktop kurze Clip-Reihen auf (Benjamin 05.10.2026: lieber vier Videos
+ * nebeneinander als eine halb leere Karte), siehe adsV2/Page.vue.
+ */
+export const ADS_GENERAL_FEEDBACK_CLIP: AdsClip = FB.allgemein;
+
 export function adsClipsFor(
   pathKey: string | null | undefined,
   citySlug?: string | null,
