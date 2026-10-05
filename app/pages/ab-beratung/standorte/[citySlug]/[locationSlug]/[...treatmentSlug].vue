@@ -67,7 +67,7 @@ if (pageLoaded) {
       fix(s.openGraph, ["ogTitle", "ogDescription"]);
     }
   }
-  await setPageSeo(s);
+  await setPageSeo(s, (fixedBlocks.value?.hero as any)?.cover ?? null);
 }
 
 useHead({
