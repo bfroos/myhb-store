@@ -39,6 +39,7 @@
             'hero--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'),
             'hero--desk': templateV2 && v2Desktop,
             'hero--preis': templateV2 && v2Design === 'ci-preis',
+            'hero--edit': templateV2 && v2Editorial,
           }"
         >
           <div v-if="hasCover || heroClip" class="hero__media">
@@ -67,7 +68,11 @@
               <p v-if="eyebrow && !isAdsMode" class="hero__eyebrow">
                 {{ eyebrow }}
               </p>
-              <h1 v-if="headline" class="hero__title">
+              <p v-if="templateV2 && v2Editorial && v2Eyebrow" class="hero__v2-eyebrow">{{ v2Eyebrow }}</p>
+              <h1 v-if="templateV2 && v2Editorial && v2HeadlineLines?.length" class="hero__title hero__title--edit">
+                <span v-for="(line, li) in v2HeadlineLines" :key="li" class="hero__title-line" :class="{ 'hero__title-line--soft': li === v2HeadlineLines.length - 1 }">{{ line }}</span>
+              </h1>
+              <h1 v-else-if="headline" class="hero__title">
                 <span
                   v-if="headlinePrefix && !isAdsMode"
                   class="hero__title-prefix"
@@ -162,7 +167,9 @@
                      Preiszeile; "20 % Rabatt sichern" gibt es weiter unten
                      (Preise, Schlussaufruf). -->
               </div>
-              <p v-if="templateV2 && v2Note" class="hero__v2-note">{{ v2Note }}</p>
+              <p v-if="templateV2 && v2Note" class="hero__v2-note">
+                <IconShieldCheck v-if="v2Editorial" size="16" aria-hidden="true" /> {{ v2Note }}
+              </p>
               <template v-if="showReviews">
                 <UiMoleculeReviewsBadge
                   v-if="googlePlaceId"
@@ -296,7 +303,7 @@ import {
   SharedButtonAction,
 } from "~/lib/strapi/dto/enums";
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
-import { IconAsterisk, IconPhone } from "@tabler/icons-vue";
+import { IconAsterisk, IconPhone, IconShieldCheck } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
 import type { AdsClip } from "#shared/adsClips";
 
@@ -332,6 +339,12 @@ const props = withDefaults(
        * isAdsV2DesktopLayout): Text linksbuendig, Hero nicht bildschirmhoch.
        */
       v2Desktop?: boolean;
+      /** Prototyp "editorial" (nur Vorschau): Text zuerst, linksbuendig. */
+      v2Editorial?: boolean;
+      /** Prototyp: Ueberzeile, z. B. "PROFHILO® · DÜSSELDORF". */
+      v2Eyebrow?: string | null;
+      /** Prototyp: H1 in Zeilen, die letzte hell. */
+      v2HeadlineLines?: string[] | null;
     }
   >(),
   {
@@ -345,6 +358,9 @@ const props = withDefaults(
     v2StickyPrice: null,
     v2Design: "v2",
     v2Desktop: false,
+    v2Editorial: false,
+    v2Eyebrow: null,
+    v2HeadlineLines: null,
   },
 );
 
@@ -1278,6 +1294,126 @@ const discountLabel = computed(() => {
 .floating-cta--preis .floating-cta__price--offer {
   color: #dc2626;
 }
+/* Prototyp "editorial" (Paryas Entwurf, nur Vorschau): Text zuerst,
+   linksbuendig, grosse Ueberschrift mit heller letzter Zeile, Preis mit
+   Marke statt Zusatzzeile, Bild/Video darunter. */
+.hero--edit {
+  flex-direction: column;
+}
+
+.hero--edit .hero__body {
+  order: 1;
+}
+
+.hero--edit .hero__media {
+  order: 2;
+  margin-top: var(--space-500);
+  border-radius: var(--border-radius-500, 24px);
+  overflow: hidden;
+}
+
+.hero--edit .hero__main {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hero__v2-eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+.hero--edit .hero__title--edit {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(2.25rem, 9vw, 3.5rem);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.hero__title-line--soft {
+  color: var(--color-text-light);
+}
+
+.hero--edit .hero__subline--ads {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--color-text-light);
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  display: block !important;
+}
+
+.hero--edit .hero__price--v2 {
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: var(--space-300);
+  row-gap: var(--space-100);
+}
+
+.hero--edit .hero__price-extra {
+  padding: 0.2em 0.65em;
+  border-radius: 999px;
+  background: var(--color-card-bg-soft, #ececec);
+  color: var(--color-text);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.hero--edit .hero__cta {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.hero--edit .hero__v2-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-100);
+  margin-top: 0;
+}
+
+@media (max-width: 899px) {
+  .hero--edit.hero--ads-compact .hero__media {
+    flex: 0 0 auto;
+    aspect-ratio: 4 / 5;
+    min-height: 0;
+  }
+
+  .hero--edit.hero--ads-compact .hero__main {
+    gap: var(--space-400);
+    padding-top: var(--space-400);
+  }
+
+  .hero--edit.hero--ads-compact .hero__title {
+    font-size: clamp(1.875rem, 8.6vw, 2.5rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero--edit.hero--desk {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-900);
+  }
+
+  .hero--edit.hero--desk .hero__body {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .hero--edit.hero--desk .hero__media {
+    flex: 0 0 40%;
+    margin-top: 0;
+    aspect-ratio: 4 / 5;
+    max-height: 640px;
+  }
+}
+
 /* v2 (03.10.2026): Unterzeilen mit "Behandlung durch Aerzte" sind laenger -
    bis zu drei Zeilen statt zwei, damit nichts abgeschnitten wird; das Bild
    darueber gibt den Platz ab (flex). */
