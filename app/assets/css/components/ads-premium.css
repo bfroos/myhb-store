@@ -1,0 +1,173 @@
+/*
+ * go.-Vorlage v2 - Premium-Ebene (shared/adsPremium.ts).
+ *
+ * Nur wirksam unter .ads-premium (Huelle um die v2-Seite, heute nur in der
+ * Vorschau /vorschau-premium/...; Page.vue bleibt unveraendert). Baut auf der
+ * CI-Gestaltung "ci-preis" auf (weisse/schwarze Flaechen, Rot nur auf Knopf
+ * und Neukundenpreis) und fuegt KEINE Farben hinzu - nur Tiefe:
+ *
+ *   Ebene 1  Abschnittskarten, Bewertungen, Preiskarten     --ads-depth-1
+ *   Ebene 2  hervorgehobene Preiskarte, Aerzt:innen-Fotos   --ads-depth-2
+ *   Ebene 3  Hero-Bild (geschichtet), mitlaufende Leiste    --ads-depth-3
+ *
+ * Alle Schatten kommen aus den vorhandenen Tokens (--shadow-1..5,
+ * app/assets/css/variables.css). Bewegung nur ueber transform, nur ohne
+ * prefers-reduced-motion, die Parallaxe nur mit data-depth-motion="on"
+ * (app/composables/useAdsDepth.ts). Kein Glas, kein Blur, kein WebGL.
+ * Selektoren mit .ads-premium .v2.v2--ci (mind. drei Klassen), damit sie die
+ * scoped-Regeln aus Page.vue (Klasse + data-v) sicher ueberschreiben. Die
+ * CSS-Variablen sitzen an der Huelle und werden vererbt.
+ */
+
+.ads-premium {
+  --ads-depth-1: var(--shadow-2);
+  --ads-depth-2: var(--shadow-4);
+  --ads-depth-3: var(--shadow-5), 0 32px 64px -32px rgb(0 0 0 / 0.28);
+  --ads-depth-x: 0px;
+  --ads-depth-y: 0px;
+  --ads-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---------------------------------------------------------------- Ebene 1 */
+
+.ads-premium .v2.v2--ci .v2-card {
+  box-shadow: var(--ads-depth-1);
+}
+
+/* Dunkle Flaechen: feine Lichtkante oben statt hellem Schatten */
+.ads-premium .v2.v2--ci .v2-card.theme-strong,
+.ads-premium .v2.v2--ci .v2-card.theme-neutral {
+  box-shadow: var(--ads-depth-1), inset 0 1px 0 rgb(255 255 255 / 0.07);
+}
+
+.ads-premium .v2.v2--ci .v2-review,
+.ads-premium .v2.v2--ci .v2-objection {
+  box-shadow: var(--ads-depth-1);
+}
+
+/* ---------------------------------------------------------------- Preise */
+
+/* Flaeche bleibt die CI-Kachel (hellgrau), nur die Ebene kommt dazu */
+.ads-premium .v2.v2--ci .v2-price {
+  box-shadow: var(--ads-depth-1);
+}
+
+/* Paket: schwarzer Rahmen (inset) aus der CI bleibt erhalten */
+.ads-premium .v2.v2--ci .v2-price--package {
+  box-shadow: inset 0 0 0 2px var(--color-text), var(--ads-depth-2);
+}
+
+/* Einstiegspreis (Karten sind nach Preis sortiert, Pakete zuerst) eine
+   Ebene hoeher. Preis bleibt gleich gross - nur die Ebene aendert sich. */
+.ads-premium .v2.v2--ci .v2-price:first-child:not(.v2-price--package) {
+  box-shadow: var(--ads-depth-2);
+}
+
+@media (min-width: 900px) {
+  .ads-premium .v2.v2--ci .v2-prices--many .v2-price:first-child {
+    transform: translateY(calc(-1 * var(--space-200)));
+  }
+}
+
+/* ---------------------------------------------------------------- Ebene 2 */
+
+.ads-premium .v2.v2--ci .v2-doctor__photo,
+.ads-premium .v2.v2--ci .v2-docfeature__photo,
+.ads-premium .v2.v2--ci .v2-process__img,
+.ads-premium .v2.v2--ci .v2-consult__img {
+  box-shadow: var(--ads-depth-2);
+}
+
+/* ---------------------------------------------------------------- Hero */
+
+.ads-premium .v2.v2--ci .hero--v2 .hero__media-image {
+  border-radius: var(--border-radius-card-figure);
+  overflow: hidden;
+  box-shadow: var(--ads-depth-3);
+  /* eigene Ebene, damit die Parallaxe nichts neu layoutet */
+  isolation: isolate;
+}
+
+/* Geschichtetes Foto: Rueckplatte hinter dem Bild (nur Desktop, damit mobil
+   nichts ueber den Rand ragt und der erste Screen gleich bleibt). */
+@media (min-width: 1024px) {
+  .ads-premium .v2.v2--ci .hero--v2 .hero__media::before {
+    content: "";
+    position: absolute;
+    z-index: 0;
+    /* schmaler als das Foto und nach unten versetzt: ragt nur unten
+       heraus, nie seitlich (kein horizontaler Ueberlauf) */
+    top: calc(var(--space-card-figure-pad) + var(--space-700));
+    right: calc(var(--space-card-figure-pad) + var(--space-600));
+    bottom: calc(-1 * var(--space-400));
+    left: calc(var(--space-card-figure-pad) + var(--space-600));
+    border-radius: var(--border-radius-card-figure);
+    background: var(--color-gray-200);
+    box-shadow: var(--ads-depth-1);
+    pointer-events: none;
+  }
+
+  .ads-premium .v2.v2--ci .hero--v2 .hero__media-image {
+    z-index: 1;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ads-premium[data-depth-motion="on"] .v2.v2--ci .hero--v2 .hero__media-image :is(img, picture) {
+    transform: scale(1.04) translate3d(var(--ads-depth-x), var(--ads-depth-y), 0);
+    transition: transform 900ms var(--ads-ease);
+    will-change: transform;
+  }
+
+  .ads-premium[data-depth-motion="on"] .v2.v2--ci .hero--v2 .hero__media::before {
+    transform: translate3d(calc(var(--ads-depth-x) * -0.5), calc(var(--ads-depth-y) * -0.5), 0);
+    transition: transform 900ms var(--ads-ease);
+  }
+}
+
+/* ---------------------------------------------------------------- Aufrufe */
+
+/* Schwarze Aufruf-Karten (Mitte und Schluss): ruhiges, statisches
+   Tiefen-Objekt aus Kreisflaechen im Hintergrund - reine Verlaeufe in den
+   Grautoenen der CI, kein Bild, kein JS. */
+.ads-premium .v2.v2--ci .v2-final.theme-strong {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ads-premium .v2.v2--ci .v2-final.theme-strong::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background:
+    radial-gradient(circle at 88% 115%, rgb(255 255 255 / 0.08) 0 18%, transparent 18.5%),
+    radial-gradient(circle at 88% 115%, rgb(255 255 255 / 0.05) 0 30%, transparent 30.5%),
+    radial-gradient(circle at 88% 115%, rgb(255 255 255 / 0.03) 0 44%, transparent 44.5%),
+    radial-gradient(ellipse at 15% -10%, rgb(255 255 255 / 0.06), transparent 55%);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------- Leiste */
+
+.ads-premium .v2.v2--ci .floating-cta--v2 {
+  box-shadow: var(--ads-depth-3);
+}
+
+/* ---------------------------------------------------------------- Sicherheit */
+
+@media (prefers-reduced-motion: reduce) {
+  .ads-premium .v2.v2--ci *,
+  .ads-premium .v2.v2--ci *::before {
+    transition: none !important;
+  }
+}
+
+@media print {
+  .ads-premium .v2.v2--ci .v2-card,
+  .ads-premium .v2.v2--ci .v2-price,
+  .ads-premium .v2.v2--ci .hero--v2 .hero__media-image {
+    box-shadow: none;
+  }
+}
