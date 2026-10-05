@@ -1,0 +1,15 @@
+{
+  "contentType": "api::treatment-ads-page.treatment-ads-page",
+  "addAttributes": {
+    "adsOverrides": {
+      "type": "component",
+      "component": "ads.overrides",
+      "repeatable": false,
+      "pluginOptions": { "i18n": { "localized": true } }
+    }
+  },
+  "alsoRequired": [
+    "Custom-Controller GET /treatment-pages/:city/:location/:pathKey muss adsOverrides in data.treatmentPage mitliefern (populate: headlines, sectionOrder, hiddenSections).",
+    "Strapi-Proxy (server/api/strapi) darf das Feld nicht filtern."
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_ads_section_refs",
+  "info": {
+    "displayName": "Ads Section",
+    "description": "Abschnitt der Ads-Seite. Hero, Clips, Vertrauenszeile und Schlussaufruf sind fest; Vertrauenszeile, Preise und Schlussaufruf lassen sich nicht ausblenden.",
+    "icon": "layer"
+  },
+  "options": {},
+  "attributes": {
+    "section": {
+      "type": "enumeration",
+      "required": true,
+      "enum": ["facts", "how", "mid", "steps", "prices", "zones", "doctors", "lounge", "consult", "reviews", "objections", "location", "faq"]
+    }
+  }
+}

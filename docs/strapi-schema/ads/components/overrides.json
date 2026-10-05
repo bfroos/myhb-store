@@ -1,0 +1,37 @@
+{
+  "collectionName": "components_ads_overrides",
+  "info": {
+    "displayName": "Ads Overrides",
+    "description": "Optionale Texte, Reihenfolge und Sichtbarkeit für die go.-Vorlage v2. Leer = v2-Standard. Preise, Rabatt, Garantie, Buchungsknopf und Gestaltung kommen immer aus dem Code.",
+    "icon": "pencil"
+  },
+  "options": {},
+  "attributes": {
+    "heroHeadline": {
+      "type": "string",
+      "maxLength": 70
+    },
+    "heroSubline": {
+      "type": "string",
+      "maxLength": 140
+    },
+    "headlines": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ads.headline-override",
+      "max": 12
+    },
+    "sectionOrder": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ads.section-ref",
+      "max": 13
+    },
+    "hiddenSections": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ads.section-ref",
+      "max": 13
+    }
+  }
+}

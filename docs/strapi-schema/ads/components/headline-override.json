@@ -1,0 +1,21 @@
+{
+  "collectionName": "components_ads_headline_overrides",
+  "info": {
+    "displayName": "Ads Headline Override",
+    "description": "Ersetzt die Überschrift eines Abschnitts. Kein Markenname des Muskelrelaxans, keine Heil- oder Garantieversprechen (wird sonst ignoriert).",
+    "icon": "heading"
+  },
+  "options": {},
+  "attributes": {
+    "key": {
+      "type": "enumeration",
+      "required": true,
+      "enum": ["clips", "facts", "how", "steps", "prices", "zones", "doctors", "consult", "reviews", "faq", "location", "final"]
+    },
+    "text": {
+      "type": "string",
+      "required": true,
+      "maxLength": 70
+    }
+  }
+}
