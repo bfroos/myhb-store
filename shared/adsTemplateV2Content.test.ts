@@ -305,8 +305,10 @@ test("Agentur: Einwaende je Art, ohne Heilversprechen, Hyaluron ohne kostenloses
       assert.doesNotMatch(`${o.question} ${o.answer}`, STRICT, `${key}: ${o.answer}`);
       assert.doesNotMatch(o.answer, FLOSKELN, key);
     }
-    assert.match(a.find((o) => o.key === "price")!.answer, /20 % Rabatt – ab 119,99 €\*/);
-    assert.match(a.find((o) => o.key === "price")!.answer, /Klarna oder PayPal/);
+    // Zelgai 05.10.2026: Preis zuerst; Klarna/PayPal stehen im aufklappbaren
+    // "So funktioniert die Ratenzahlung" (Page.vue), nicht mehr im Satz
+    assert.match(a.find((o) => o.key === "price")!.answer, /zahlst du ab 119,99 €\* – die 20 % Rabatt sind darin schon abgezogen/);
+    assert.match(a.find((o) => o.key === "price")!.answer, /in Raten zahlen\? Das geht über einen Gutschein\./);
     assert.match(a.find((o) => o.key === "info")!.answer, /kostenlos und unverbindlich/);
     // Variante ohne Rabatt: keine Rabattbotschaft
     const b = adsV2Objections(key, { price: "ab 149,99 €", discountPct: null });
