@@ -163,8 +163,12 @@
                 <path d="M0 130c70-5 140 5 210 0s140-5 210 0" />
                 <path d="M0 168c70 5 140-5 210 0s140 5 210 0" />
               </g>
-              <rect class="v2-schema__band" x="0" y="84" width="420" height="96" fill="url(#v2s-band)" />
-              <ellipse v-for="x in [90, 210, 330]" :key="x" class="v2-schema__drop" :cx="x" cy="130" rx="22" ry="22" fill="url(#v2s-ha)" />
+              <rect class="v2-schema__band" x="0" y="104" width="420" height="96" fill="url(#v2s-band)" />
+              <!-- Injektionsebene laut IBSA-Anwendung (BAP-Technik): Bolus in
+                   die tiefe Lederhaut / obere Unterhaut, verteilt sich von dort -->
+              <line class="v2-schema__plane" x1="0" y1="192" x2="420" y2="192" />
+              <text x="406" y="184" text-anchor="end" class="v2-schema__lbl v2-schema__lbl--plane">Hier wird injiziert</text>
+              <ellipse v-for="x in [90, 210, 330]" :key="x" class="v2-schema__drop" :cx="x" cy="192" rx="22" ry="22" fill="url(#v2s-ha)" />
               <path class="v2-schema__surf v2-schema__surf--old" d="M0 44c30 0 44-3 62-2l8 16 8-16c40-2 70 2 100 0l9 18 9-18c50-2 80 2 100 0l8 14 8-14c40-2 72 2 108 0v22H0z" />
               <path class="v2-schema__surf v2-schema__surf--new" d="M0 40c100-5 320-5 420 0v26H0z" />
               <text x="14" y="58" class="v2-schema__lbl">Oberhaut</text>
@@ -173,8 +177,8 @@
             </svg>
           </div>
           <ol class="v2-schema__steps">
-            <li><span>1</span>Feine Depots an 5 Punkten je Gesichtshälfte</li>
-            <li><span>2</span>Das Hyaluron verteilt sich in der Haut</li>
+            <li><span>1</span>Kleine Depots an 5 Punkten je Gesichtshälfte, in die tiefe Lederhaut</li>
+            <li><span>2</span>Von dort verteilt sich das Hyaluron gleichmäßig in der Haut</li>
             <li><span>3</span>Mehr Feuchtigkeit – die Haut kann straffer und frischer wirken</li>
           </ol>
           <figcaption>Schematische Darstellung</figcaption>
@@ -3771,6 +3775,21 @@ const routeHref = computed(() => {
   fill: #46454a;
 }
 
+.v2-schema__lbl--plane {
+  font-weight: 600;
+  fill: #0d0d0e;
+  paint-order: stroke;
+  stroke: #e2cfc5;
+  stroke-width: 6px;
+  stroke-linejoin: round;
+}
+
+.v2-schema__plane {
+  stroke: #0d0d0e;
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+}
+
 .v2-schema__steps {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3831,8 +3850,8 @@ const routeHref = computed(() => {
   0%, 6% { opacity: 0; transform: scale(0.2); }
   16% { opacity: 1; transform: scale(0.7); }
   33% { opacity: 1; transform: scale(1); }
-  58% { opacity: 0.9; transform: scale(3.2, 1.7); }
-  72%, 100% { opacity: 0; transform: scale(3.8, 1.9); }
+  58% { opacity: 0.9; transform: translateY(-40px) scale(3.2, 1.7); }
+  72%, 100% { opacity: 0; transform: translateY(-48px) scale(3.8, 1.9); }
 }
 
 @keyframes v2s-band {
