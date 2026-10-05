@@ -121,27 +121,10 @@
         <!-- Prototyp editorial: Schaubild der Wirkweise (Zelgai 05.10.2026) -->
         <figure v-if="editorial && pathKey.startsWith('skinbooster/profhilo')" class="v2-schema">
           <!-- Wirkanimation (Parya/Zelgai 05.10.2026): ein Ablauf in drei
-               Phasen, Gesicht und Hautschnitt laufen im selben Takt wie die
-               Schrittliste darunter. Bewusst ohne Nadel. -->
+               Phasen, der Hautschnitt laeuft im selben Takt wie die
+               Schrittliste darunter. Bewusst ohne Nadel; das Strichgesicht
+               ist raus (Benjamin 05.10.: wirkte wie ein Mann mit Glatze). -->
           <div class="v2-schema__stage">
-            <svg class="v2-schema__face" viewBox="0 0 220 280" role="img" aria-label="Je Gesichtshälfte fünf Behandlungspunkte">
-              <g class="v2-schema__line">
-                <path d="M110 26C66 26 44 62 44 108c0 32 6 60 18 84 14 30 32 54 48 56 16-2 34-26 48-56 12-24 18-52 18-84 0-46-22-82-66-82z" />
-                <path d="M84 236c1 14 0 28-4 40M136 236c-1 14 0 28 4 40" />
-                <path d="M70 98c10-8 24-8 32-3M118 95c8-5 22-5 32 3" />
-                <path d="M74 117c8 6 18 6 26 0M120 117c8 6 18 6 26 0" />
-                <path d="M108 102c-2 26-8 44-10 52 6 8 18 8 24 0" />
-                <path d="M88 189c8-6 16-6 22-2 6-4 14-4 22 2-10 12-34 12-44 0z" />
-              </g>
-              <g class="v2-schema__pts">
-                <g v-for="(pt, i) in PROFHILO_POINTS" :key="i" :style="{ '--i': i }">
-                  <circle class="v2-schema__ring" :cx="pt[0]" :cy="pt[1]" r="6" />
-                  <circle class="v2-schema__ring" :cx="220 - pt[0]" :cy="pt[1]" r="6" />
-                  <circle class="v2-schema__pt" :cx="pt[0]" :cy="pt[1]" r="5" />
-                  <circle class="v2-schema__pt" :cx="220 - pt[0]" :cy="pt[1]" r="5" />
-                </g>
-              </g>
-            </svg>
             <svg class="v2-schema__skin" viewBox="0 0 420 280" role="img" aria-label="Hautschnitt: Profhilo verteilt sich in der Lederhaut">
               <defs>
                 <linearGradient id="v2s-derm" x1="0" y1="0" x2="0" y2="1">
@@ -795,10 +778,6 @@ const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
  *  "ci-rot" (Option R2) nutzt die Flaechen von "ci", nur mit den roten
  *  Akzenten von heute. */
 /** Prototyp "editorial": helle Flaechen, nur der Schlussaufruf dunkel. */
-// Profhilo-Punkte je Gesichtshaelfte (linke Seite; rechts gespiegelt):
-// Jochbein, Nasenbasis, vor dem Ohr, Kieferwinkel, Kinn. Schematisch.
-const PROFHILO_POINTS: [number, number][] = [[72, 138], [90, 158], [52, 130], [68, 192], [100, 226]];
-
 const EDITORIAL_TONES: Record<AdsV2Section, AdsV2Tone> = {
   clips: "light", facts: "light", how: "light", mid: "soft", steps: "soft",
   prices: "light", zones: "light", doctors: "soft", lounge: "light", consult: "light",
@@ -3736,10 +3715,8 @@ const routeHref = computed(() => {
 }
 
 .v2-schema__stage {
-  display: grid;
-  grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr);
-  gap: var(--space-400);
-  align-items: center;
+  max-width: 560px;
+  margin: 0 auto;
 }
 
 .v2-schema svg {
@@ -3752,36 +3729,6 @@ const routeHref = computed(() => {
   border-radius: 14px;
   overflow: hidden;
   background: #fbf8f6;
-}
-
-.v2-schema__line {
-  fill: none;
-  stroke: #46454a;
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.v2-schema__pt,
-.v2-schema__ring {
-  transform-box: fill-box;
-  transform-origin: center;
-}
-
-.v2-schema__pt {
-  fill: #0d0d0e;
-  opacity: 0;
-  animation: v2s-pt var(--v2s-t) ease-out infinite;
-  animation-delay: calc(var(--i) * 0.28s);
-}
-
-.v2-schema__ring {
-  fill: none;
-  stroke: #0d0d0e;
-  stroke-width: 1.2;
-  opacity: 0;
-  animation: v2s-ring var(--v2s-t) ease-out infinite;
-  animation-delay: calc(var(--i) * 0.28s);
 }
 
 .v2-schema__fat circle {
@@ -3870,14 +3817,6 @@ const routeHref = computed(() => {
     padding: var(--space-300);
   }
 
-  .v2-schema__stage {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .v2-schema__face {
-    max-width: 140px;
-    margin: 0 auto;
-  }
 }
 
 .v2-schema figcaption {
@@ -3887,21 +3826,7 @@ const routeHref = computed(() => {
   text-align: right;
 }
 
-/* Takt: 0-33 % Punkte setzen, 33-66 % verteilen, 66-100 % Wirkung */
-@keyframes v2s-pt {
-  0% { opacity: 0; transform: scale(0); }
-  4% { opacity: 1; transform: scale(1.35); }
-  8% { transform: scale(1); }
-  90% { opacity: 1; transform: scale(1); }
-  97%, 100% { opacity: 0; transform: scale(1); }
-}
-
-@keyframes v2s-ring {
-  0%, 3% { opacity: 0; transform: scale(1); }
-  5% { opacity: 0.7; }
-  22%, 100% { opacity: 0; transform: scale(3.4); }
-}
-
+/* Takt: 0-33 % Depots setzen, 33-66 % verteilen, 66-100 % Wirkung */
 @keyframes v2s-drop {
   0%, 6% { opacity: 0; transform: scale(0.2); }
   16% { opacity: 1; transform: scale(0.7); }
@@ -3940,7 +3865,6 @@ const routeHref = computed(() => {
     animation: none !important;
   }
 
-  .v2-schema__pt,
   .v2-schema__band,
   .v2-schema__fib--firm,
   .v2-schema__surf--new {
