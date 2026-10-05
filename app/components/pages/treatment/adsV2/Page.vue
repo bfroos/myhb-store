@@ -120,36 +120,80 @@
         <h2 class="v2-h2">{{ H.how }}</h2>
         <!-- Prototyp editorial: Schaubild der Wirkweise (Zelgai 05.10.2026) -->
         <figure v-if="editorial && pathKey.startsWith('skinbooster/profhilo')" class="v2-schema">
-          <div class="v2-schema__grid">
-            <svg viewBox="0 0 300 300" role="img" aria-label="5 Behandlungspunkte je Gesichtshälfte">
-              <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                <path d="M150 30c-56 0-92 44-92 104 0 74 42 128 92 128s92-54 92-128c0-60-36-104-92-104z" />
-                <path d="M122 124c6-4 15-4 21 0M157 124c6-4 15-4 21 0" />
-                <path d="M150 136v34c-4 4-10 6-15 6" />
-                <path d="M130 206c13 8 27 8 40 0" />
+          <!-- Wirkanimation (Parya/Zelgai 05.10.2026): ein Ablauf in drei
+               Phasen, Gesicht und Hautschnitt laufen im selben Takt wie die
+               Schrittliste darunter. Bewusst ohne Nadel. -->
+          <div class="v2-schema__stage">
+            <svg class="v2-schema__face" viewBox="0 0 220 280" role="img" aria-label="Je Gesichtshälfte fünf Behandlungspunkte">
+              <g class="v2-schema__line">
+                <path d="M110 26C66 26 44 62 44 108c0 32 6 60 18 84 14 30 32 54 48 56 16-2 34-26 48-56 12-24 18-52 18-84 0-46-22-82-66-82z" />
+                <path d="M84 236c1 14 0 28-4 40M136 236c-1 14 0 28 4 40" />
+                <path d="M70 98c10-8 24-8 32-3M118 95c8-5 22-5 32 3" />
+                <path d="M74 117c8 6 18 6 26 0M120 117c8 6 18 6 26 0" />
+                <path d="M108 102c-2 26-8 44-10 52 6 8 18 8 24 0" />
+                <path d="M88 189c8-6 16-6 22-2 6-4 14-4 22 2-10 12-34 12-44 0z" />
               </g>
               <g class="v2-schema__pts">
-                <circle cx="90" cy="112" r="6" /><circle cx="210" cy="112" r="6" />
-                <circle cx="108" cy="166" r="6" /><circle cx="192" cy="166" r="6" />
-                <circle cx="78" cy="160" r="6" /><circle cx="222" cy="160" r="6" />
-                <circle cx="92" cy="214" r="6" /><circle cx="208" cy="214" r="6" />
-                <circle cx="128" cy="244" r="6" /><circle cx="172" cy="244" r="6" />
+                <g v-for="(pt, i) in PROFHILO_POINTS" :key="i" :style="{ '--i': i }">
+                  <circle class="v2-schema__ring" :cx="pt[0]" :cy="pt[1]" r="6" />
+                  <circle class="v2-schema__ring" :cx="220 - pt[0]" :cy="pt[1]" r="6" />
+                  <circle class="v2-schema__pt" :cx="pt[0]" :cy="pt[1]" r="5" />
+                  <circle class="v2-schema__pt" :cx="220 - pt[0]" :cy="pt[1]" r="5" />
+                </g>
               </g>
-              <text x="150" y="292" text-anchor="middle" class="v2-schema__cap">5 Punkte je Gesichtshälfte</text>
             </svg>
-            <svg viewBox="0 0 300 300" role="img" aria-label="Hautschnitt: Hyaluron verteilt sich gleichmäßig in der Haut">
-              <rect x="0" y="20" width="300" height="40" rx="8" class="v2-schema__l1" />
-              <rect x="0" y="64" width="300" height="120" rx="8" class="v2-schema__l2" />
-              <rect x="0" y="188" width="300" height="70" rx="8" class="v2-schema__l3" />
-              <text x="12" y="46" class="v2-schema__lbl">Oberhaut</text>
-              <text x="12" y="88" class="v2-schema__lbl">Lederhaut</text>
-              <text x="12" y="212" class="v2-schema__lbl">Unterhaut</text>
-              <circle class="v2-schema__drop" cx="80" cy="132" r="11" />
-              <circle class="v2-schema__drop v2-schema__drop--2" cx="150" cy="132" r="11" />
-              <circle class="v2-schema__drop v2-schema__drop--3" cx="220" cy="132" r="11" />
-              <text x="150" y="292" text-anchor="middle" class="v2-schema__cap">verteilt sich gleichmäßig</text>
+            <svg class="v2-schema__skin" viewBox="0 0 420 280" role="img" aria-label="Hautschnitt: Profhilo verteilt sich in der Lederhaut">
+              <defs>
+                <linearGradient id="v2s-derm" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#eadbd3" />
+                  <stop offset="1" stop-color="#e2cfc5" />
+                </linearGradient>
+                <linearGradient id="v2s-sub" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#f4ead8" />
+                  <stop offset="1" stop-color="#efe2ca" />
+                </linearGradient>
+                <radialGradient id="v2s-ha">
+                  <stop offset="0" stop-color="#fff" stop-opacity="0.95" />
+                  <stop offset="0.55" stop-color="#fff" stop-opacity="0.55" />
+                  <stop offset="1" stop-color="#fff" stop-opacity="0" />
+                </radialGradient>
+                <linearGradient id="v2s-band" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#fff" stop-opacity="0" />
+                  <stop offset="0.5" stop-color="#fff" stop-opacity="0.7" />
+                  <stop offset="1" stop-color="#fff" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <rect x="0" y="62" width="420" height="132" fill="url(#v2s-derm)" />
+              <rect x="0" y="192" width="420" height="88" fill="url(#v2s-sub)" />
+              <g class="v2-schema__fat">
+                <circle cx="40" cy="226" r="20" /><circle cx="92" cy="240" r="24" /><circle cx="150" cy="222" r="19" />
+                <circle cx="204" cy="244" r="23" /><circle cx="262" cy="224" r="20" /><circle cx="318" cy="242" r="24" />
+                <circle cx="376" cy="224" r="19" /><circle cx="20" cy="268" r="14" /><circle cx="400" cy="268" r="14" />
+              </g>
+              <g class="v2-schema__fib v2-schema__fib--slack">
+                <path d="M0 92c30 14 50-14 80 0s50 14 80 0 50-14 80 0 50 14 80 0 50-14 100 0" />
+                <path d="M0 132c30-14 50 14 80 0s50-14 80 0 50 14 80 0 50-14 80 0 50 14 100 0" />
+                <path d="M0 170c30 12 50-12 80 0s50 12 80 0 50-12 80 0 50 12 80 0 50-12 100 0" />
+              </g>
+              <g class="v2-schema__fib v2-schema__fib--firm">
+                <path d="M0 90c70 5 140-5 210 0s140 5 210 0" />
+                <path d="M0 130c70-5 140 5 210 0s140-5 210 0" />
+                <path d="M0 168c70 5 140-5 210 0s140 5 210 0" />
+              </g>
+              <rect class="v2-schema__band" x="0" y="84" width="420" height="96" fill="url(#v2s-band)" />
+              <ellipse v-for="x in [90, 210, 330]" :key="x" class="v2-schema__drop" :cx="x" cy="130" rx="22" ry="22" fill="url(#v2s-ha)" />
+              <path class="v2-schema__surf v2-schema__surf--old" d="M0 44c30 0 44-3 62-2l8 16 8-16c40-2 70 2 100 0l9 18 9-18c50-2 80 2 100 0l8 14 8-14c40-2 72 2 108 0v22H0z" />
+              <path class="v2-schema__surf v2-schema__surf--new" d="M0 40c100-5 320-5 420 0v26H0z" />
+              <text x="14" y="58" class="v2-schema__lbl">Oberhaut</text>
+              <text x="14" y="86" class="v2-schema__lbl v2-schema__lbl--in">Lederhaut</text>
+              <text x="14" y="212" class="v2-schema__lbl v2-schema__lbl--in">Unterhaut</text>
             </svg>
           </div>
+          <ol class="v2-schema__steps">
+            <li><span>1</span>Feine Depots an 5 Punkten je Gesichtshälfte</li>
+            <li><span>2</span>Das Hyaluron verteilt sich in der Haut</li>
+            <li><span>3</span>Mehr Feuchtigkeit – die Haut kann straffer und frischer wirken</li>
+          </ol>
           <figcaption>Schematische Darstellung</figcaption>
         </figure>
         <div class="v2-how" :class="{ 'v2-how--text': !zoneImage }">
@@ -751,6 +795,10 @@ const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
  *  "ci-rot" (Option R2) nutzt die Flaechen von "ci", nur mit den roten
  *  Akzenten von heute. */
 /** Prototyp "editorial": helle Flaechen, nur der Schlussaufruf dunkel. */
+// Profhilo-Punkte je Gesichtshaelfte (linke Seite; rechts gespiegelt):
+// Jochbein, Nasenbasis, vor dem Ohr, Kieferwinkel, Kinn. Schematisch.
+const PROFHILO_POINTS: [number, number][] = [[72, 138], [90, 158], [52, 130], [68, 192], [100, 226]];
+
 const EDITORIAL_TONES: Record<AdsV2Section, AdsV2Tone> = {
   clips: "light", facts: "light", how: "light", mid: "soft", steps: "soft",
   prices: "light", zones: "light", doctors: "soft", lounge: "light", consult: "light",
@@ -3672,11 +3720,14 @@ const routeHref = computed(() => {
   }
 
   .v2--desk.v2--edit .v2-split[data-track-placement="v2_how"] > .v2-schema + .v2-how.v2-how {
-    grid-row: 4 / 5;
+    grid-column: 1;
+    grid-row: 2 / 5;
+    margin-top: var(--space-400);
   }
 }
 
 .v2-schema {
+  --v2s-t: 8s;
   margin: 0 0 var(--space-500);
   padding: var(--space-400);
   border-radius: var(--border-radius-500, 24px);
@@ -3684,10 +3735,11 @@ const routeHref = computed(() => {
   color: #0d0d0e;
 }
 
-.v2-schema__grid {
+.v2-schema__stage {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 0.5fr) minmax(0, 1fr);
   gap: var(--space-400);
+  align-items: center;
 }
 
 .v2-schema svg {
@@ -3696,13 +3748,134 @@ const routeHref = computed(() => {
   height: auto;
 }
 
+.v2-schema__skin {
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fbf8f6;
+}
+
+.v2-schema__line {
+  fill: none;
+  stroke: #46454a;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.v2-schema__pt,
+.v2-schema__ring {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.v2-schema__pt {
+  fill: #0d0d0e;
+  opacity: 0;
+  animation: v2s-pt var(--v2s-t) ease-out infinite;
+  animation-delay: calc(var(--i) * 0.28s);
+}
+
+.v2-schema__ring {
+  fill: none;
+  stroke: #0d0d0e;
+  stroke-width: 1.2;
+  opacity: 0;
+  animation: v2s-ring var(--v2s-t) ease-out infinite;
+  animation-delay: calc(var(--i) * 0.28s);
+}
+
+.v2-schema__fat circle {
+  fill: rgba(255, 255, 255, 0.35);
+  stroke: rgba(205, 180, 140, 0.55);
+  stroke-width: 1.2;
+}
+
+.v2-schema__fib path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.75);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.v2-schema__fib--slack { animation: v2s-out var(--v2s-t) ease-in-out infinite; }
+.v2-schema__fib--firm { opacity: 0; animation: v2s-in var(--v2s-t) ease-in-out infinite; }
+.v2-schema__surf--old { fill: #f1e4dc; animation: v2s-out var(--v2s-t) ease-in-out infinite; }
+.v2-schema__surf--new { fill: #f6ebe4; opacity: 0; animation: v2s-in var(--v2s-t) ease-in-out infinite; }
+
+.v2-schema__band {
+  opacity: 0;
+  animation: v2s-band var(--v2s-t) ease-in-out infinite;
+}
+
+.v2-schema__drop {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: v2s-drop var(--v2s-t) ease-out infinite;
+}
+
+.v2-schema__lbl {
+  font-size: 15px;
+  font-weight: 500;
+  fill: #646368;
+}
+
+.v2-schema__lbl--in {
+  fill: #46454a;
+}
+
+.v2-schema__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-300);
+  margin: var(--space-400) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.v2-schema__steps li {
+  display: flex;
+  gap: var(--space-200);
+  align-items: flex-start;
+  font-size: var(--font-sm);
+  line-height: 1.35;
+  color: #9e9da2;
+  animation: v2s-step var(--v2s-t) ease-in-out infinite;
+}
+
+.v2-schema__steps li:nth-child(2) { animation-delay: calc(var(--v2s-t) / -3 * 2); }
+.v2-schema__steps li:nth-child(3) { animation-delay: calc(var(--v2s-t) / -3); }
+
+.v2-schema__steps span {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (max-width: 599px) {
+  .v2-schema__steps {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-200);
+  }
+}
+
 @media (max-width: 479px) {
-  .v2-schema__grid {
+  .v2-schema {
+    padding: var(--space-300);
+  }
+
+  .v2-schema__stage {
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .v2-schema svg {
-    max-width: 300px;
+  .v2-schema__face {
+    max-width: 140px;
     margin: 0 auto;
   }
 }
@@ -3714,46 +3887,73 @@ const routeHref = computed(() => {
   text-align: right;
 }
 
-.v2-schema__pts circle {
-  fill: #0d0d0e;
+/* Takt: 0-33 % Punkte setzen, 33-66 % verteilen, 66-100 % Wirkung */
+@keyframes v2s-pt {
+  0% { opacity: 0; transform: scale(0); }
+  4% { opacity: 1; transform: scale(1.35); }
+  8% { transform: scale(1); }
+  90% { opacity: 1; transform: scale(1); }
+  97%, 100% { opacity: 0; transform: scale(1); }
 }
 
-.v2-schema__l1 { fill: #ece6e1; }
-.v2-schema__l2 { fill: #e2d8d1; }
-.v2-schema__l3 { fill: #f3ecd9; }
-
-.v2-schema__lbl {
-  font-size: 16px;
-  fill: #6b6b70;
+@keyframes v2s-ring {
+  0%, 3% { opacity: 0; transform: scale(1); }
+  5% { opacity: 0.7; }
+  22%, 100% { opacity: 0; transform: scale(3.4); }
 }
 
-.v2-schema__cap {
-  font-size: 18px;
-  font-weight: 600;
-  fill: #0d0d0e;
+@keyframes v2s-drop {
+  0%, 6% { opacity: 0; transform: scale(0.2); }
+  16% { opacity: 1; transform: scale(0.7); }
+  33% { opacity: 1; transform: scale(1); }
+  58% { opacity: 0.9; transform: scale(3.2, 1.7); }
+  72%, 100% { opacity: 0; transform: scale(3.8, 1.9); }
 }
 
-.v2-schema__drop {
-  fill: rgba(110, 160, 220, 0.55);
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: v2-spread 3.6s ease-out infinite;
+@keyframes v2s-band {
+  0%, 42% { opacity: 0; }
+  64%, 90% { opacity: 1; }
+  98%, 100% { opacity: 0; }
 }
 
-.v2-schema__drop--2 { animation-delay: 0.6s; }
-.v2-schema__drop--3 { animation-delay: 1.2s; }
+@keyframes v2s-out {
+  0%, 64% { opacity: 1; }
+  78%, 90% { opacity: 0; }
+  98%, 100% { opacity: 1; }
+}
 
-@keyframes v2-spread {
-  0% { transform: scale(0.4); opacity: 0.9; }
-  70% { transform: scale(3.2, 2.2); opacity: 0.45; }
-  100% { transform: scale(3.6, 2.4); opacity: 0; }
+@keyframes v2s-in {
+  0%, 64% { opacity: 0; }
+  78%, 90% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
+@keyframes v2s-step {
+  0%, 31% { color: #0d0d0e; }
+  35%, 98% { color: #9e9da2; }
+  100% { color: #0d0d0e; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .v2-schema__drop {
-    animation: none;
-    transform: scale(2.6, 1.9);
-    opacity: 0.5;
+  .v2-schema *,
+  .v2-schema__steps li {
+    animation: none !important;
+  }
+
+  .v2-schema__pt,
+  .v2-schema__band,
+  .v2-schema__fib--firm,
+  .v2-schema__surf--new {
+    opacity: 1;
+  }
+
+  .v2-schema__fib--slack,
+  .v2-schema__surf--old {
+    opacity: 0;
+  }
+
+  .v2-schema__steps li {
+    color: #0d0d0e;
   }
 }
 
