@@ -4,6 +4,7 @@ import {
   isAdsTemplateV2PreviewPath,
 } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, isAdsOfferBPath } from "#shared/adsOfferVariant";
+import { isAdsPremiumPreviewPath } from "#shared/adsPremium";
 
 /**
  * go.* (Ads-Modus): Laeuft die aktuelle Standort-Behandlungsseite mit der
@@ -31,7 +32,9 @@ export function useAdsTemplateV2() {
         : "";
     const city = typeof p.citySlug === "string" ? p.citySlug : "";
     const loc = typeof p.locationSlug === "string" ? p.locationSlug : "";
-    if (isAdsTemplateV2PreviewPath(route.path)) {
+    // Premium-Vorschau /vorschau-premium/... (shared/adsPremium.ts): dieselben
+    // Seiten wie die v2-Vorschau.
+    if (isAdsTemplateV2PreviewPath(route.path) || isAdsPremiumPreviewPath(route.path)) {
       return isAdsTemplateV2Page(city, loc, pathKey);
     }
     // A/B-Variante B des Angebots (shared/adsOfferVariant.ts): dieselben

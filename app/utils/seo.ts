@@ -1,7 +1,7 @@
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
-import { stripAdsTemplateV2Preview } from "#shared/adsTemplateV2";
+import { stripAdsAnyPreview } from "#shared/adsPremium";
 import { stripAdsOfferB } from "#shared/adsOfferVariant";
 
 /**
@@ -61,10 +61,10 @@ export async function setPageSeo(
   const globalsSeo = globals.value?.seo;
   const { brandName } = useBrand();
   const coverage = usePageI18nCoverage();
-  // go.-Vorschau /vorschau-v2/... (Seitenvorlage v2): Canonical bleibt die
+  // go.-Vorschauen /vorschau-v2/... und /vorschau-premium/...: Canonical bleibt die
   // echte Seite. Alle anderen Pfade unveraendert.
   // Ebenso Variante B des Angebots-Tests /ab-beratung/... (adsOfferVariant).
-  const canonicalUrl = `${config.public.publicUrl}${stripAdsOfferB(stripAdsTemplateV2Preview(route.path))}`;
+  const canonicalUrl = `${config.public.publicUrl}${stripAdsOfferB(stripAdsAnyPreview(route.path))}`;
 
   const robots = computed(() => {
     if (pageSeo?.metaRobots) return pageSeo.metaRobots;
