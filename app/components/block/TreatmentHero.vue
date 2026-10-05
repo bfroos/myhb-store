@@ -170,7 +170,19 @@
               <p v-if="templateV2 && v2Note" class="hero__v2-note">
                 <IconShieldCheck v-if="v2Editorial" size="16" aria-hidden="true" /> {{ v2Note }}
               </p>
-              <template v-if="showReviews">
+              <!-- Prototyp editorial: hochwertigeres Google-Badge (Zelgai 05.10.2026) -->
+              <div v-if="templateV2 && v2Editorial && v2Rating" class="hero__gbadge">
+                <ImageGoogleG class="hero__gbadge-g" />
+                <span class="hero__gbadge-body">
+                  <span class="hero__gbadge-label">Google-Bewertung</span>
+                  <span class="hero__gbadge-score">
+                    <strong>{{ v2Rating.rating }}</strong>
+                    <span class="hero__gbadge-stars" role="img" :aria-label="`${v2Rating.rating} von 5 Sternen`">★★★★★</span>
+                  </span>
+                  <span class="hero__gbadge-count">{{ v2Rating.count }}</span>
+                </span>
+              </div>
+              <template v-else-if="showReviews">
                 <UiMoleculeReviewsBadge
                   v-if="googlePlaceId"
                   show-text
@@ -212,7 +224,7 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'), 'floating-cta--preis': templateV2 && v2Design === 'ci-preis' }">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'), 'floating-cta--preis': templateV2 && v2Design === 'ci-preis', 'floating-cta--edit': templateV2 && v2Editorial }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
             <strong
@@ -345,6 +357,8 @@ const props = withDefaults(
       v2Eyebrow?: string | null;
       /** Prototyp: H1 in Zeilen, die letzte hell. */
       v2HeadlineLines?: string[] | null;
+      /** Prototyp: Google-Note fuers Badge, z. B. { rating: "4,9", count: "190 Bewertungen" }. */
+      v2Rating?: { rating: string; count: string } | null;
     }
   >(),
   {
@@ -361,6 +375,7 @@ const props = withDefaults(
     v2Editorial: false,
     v2Eyebrow: null,
     v2HeadlineLines: null,
+    v2Rating: null,
   },
 );
 
@@ -1350,19 +1365,91 @@ const discountLabel = computed(() => {
 }
 
 .hero--edit .hero__price--v2 {
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
   column-gap: var(--space-300);
   row-gap: var(--space-100);
 }
 
+.hero__gbadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-300);
+  margin-top: var(--space-200);
+  padding: var(--space-300) var(--space-400);
+  border: 1px solid var(--color-border-mute);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.35);
+}
+
+.hero__gbadge-g {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+}
+
+.hero__gbadge-body {
+  display: grid;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.hero__gbadge-label,
+.hero__gbadge-count {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+.hero__gbadge-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-200);
+}
+
+.hero__gbadge-score strong {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.hero__gbadge-stars {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: #fbbc05;
+}
+
+@media (max-width: 359px) {
+  .hero--edit .hero__price--v2 {
+    flex-wrap: wrap;
+  }
+
+  .hero--edit .hero-cta-btn,
+  .hero--edit .hero-cta-btn :deep(.button__label) {
+    white-space: normal;
+    height: auto;
+  }
+}
+
+/* Sticky-Knopf: Text fett (Zelgai 05.10.2026) */
+.floating-cta--edit :deep(.button__label) {
+  font-weight: 700;
+}
+
+.hero--edit .hero__price--v2 {
+  font-size: clamp(1.125rem, 4.9vw, 1.5rem);
+  column-gap: var(--space-200);
+}
+
 .hero--edit .hero__price-extra {
-  padding: 0.2em 0.65em;
+  white-space: nowrap;
+  padding: 0.25em 0.6em;
   border-radius: 999px;
   background: var(--color-card-bg-soft, #ececec);
   color: var(--color-text);
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: clamp(0.625rem, 2.7vw, 0.8125rem);
+  font-weight: 600;
 }
 
 .hero--edit .hero__cta {

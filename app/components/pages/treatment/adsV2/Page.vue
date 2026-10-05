@@ -19,7 +19,7 @@
   <div class="v2" :class="{ 'v2--edit': editorial, 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--preis': design === 'ci-preis', 'v2--desk': desktopLayout }">
     <BlockTreatmentHero
       v-bind="hero"
-      :subline="terms?.subline ?? hero.subline"
+      :subline="editorialSubline ?? terms?.subline ?? hero.subline"
       :cta="heroCta"
       show-floating-cta
       template-v2
@@ -33,6 +33,7 @@
       :v2-editorial="editorial"
       :v2-eyebrow="editorialEyebrow"
       :v2-headline-lines="editorialHeadline"
+      :v2-rating="editorial && rating ? { rating: ratingLabel, count: ratingCountLabel } : null"
     />
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
@@ -44,8 +45,31 @@
       </div>
     </UiLayoutSectionBlock>
 
+    <!-- Prototyp editorial (Zelgai 05.10.2026): suggestive Ueberschrift,
+         Bewertungskarte ueber die ganze Breite, darunter die Gruende -->
+    <UiLayoutSectionBlock v-if="editorial" spacing="sibling">
+      <div class="v2-card v2-why" :class="tone('how')" data-track-placement="v2_trust">
+        <h2 class="v2-h2">Warum sich Frauen für eine {{ terms?.treatment ?? "Behandlung" }} bei uns entscheiden</h2>
+        <div v-if="rating" class="v2-why__rating">
+          <ImageGoogleG class="v2-why__g" />
+          <span>
+            <span class="v2-why__score"><strong>{{ ratingLabel }}</strong> von 5 Sternen <span class="v2-why__stars" aria-hidden="true">★★★★★</span></span>
+            <span class="v2-why__count">{{ ratingCountLabel }} bei Google {{ atLocation }}</span>
+          </span>
+        </div>
+        <ol class="v2-why__list" role="list">
+          <li v-for="(item, ii) in trustItems" :key="item.key" class="v2-why__item">
+            <span class="v2-why__num">{{ String(ii + 1).padStart(2, "0") }}</span>
+            <strong>{{ item.title }}</strong>
+            <span v-if="item.text" class="v2-why__text">{{ item.text }}</span>
+            <span v-if="item.key === 'walkin' && hours" class="v2-why__text">{{ hours }}</span>
+          </li>
+        </ol>
+      </div>
+    </UiLayoutSectionBlock>
+
     <!-- Vertrauenszeile: Google -> Garantie -> Aerzt:innen -> ohne Termin -->
-    <UiLayoutSectionBlock spacing="sibling">
+    <UiLayoutSectionBlock v-else spacing="sibling">
       <ul class="v2-trust" role="list" data-track-placement="v2_trust">
         <!-- Prototyp "editorial": Note als Aussage statt "Google 4,9" (Benjamin 05.10.2026) -->
         <li v-if="rating && editorial" class="v2-trust__item v2-trust__item--score">
@@ -94,9 +118,43 @@
     <UiLayoutSectionBlock v-if="terms">
       <div class="v2-card v2-split" :class="tone('how')" data-track-placement="v2_how">
         <h2 class="v2-h2">{{ H.how }}</h2>
+        <!-- Prototyp editorial: Schaubild der Wirkweise (Zelgai 05.10.2026) -->
+        <figure v-if="editorial && pathKey.startsWith('skinbooster/profhilo')" class="v2-schema">
+          <div class="v2-schema__grid">
+            <svg viewBox="0 0 300 300" role="img" aria-label="5 Behandlungspunkte je Gesichtshälfte">
+              <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                <path d="M150 30c-56 0-92 44-92 104 0 74 42 128 92 128s92-54 92-128c0-60-36-104-92-104z" />
+                <path d="M122 124c6-4 15-4 21 0M157 124c6-4 15-4 21 0" />
+                <path d="M150 136v34c-4 4-10 6-15 6" />
+                <path d="M130 206c13 8 27 8 40 0" />
+              </g>
+              <g class="v2-schema__pts">
+                <circle cx="90" cy="112" r="6" /><circle cx="210" cy="112" r="6" />
+                <circle cx="108" cy="166" r="6" /><circle cx="192" cy="166" r="6" />
+                <circle cx="78" cy="160" r="6" /><circle cx="222" cy="160" r="6" />
+                <circle cx="92" cy="214" r="6" /><circle cx="208" cy="214" r="6" />
+                <circle cx="128" cy="244" r="6" /><circle cx="172" cy="244" r="6" />
+              </g>
+              <text x="150" y="292" text-anchor="middle" class="v2-schema__cap">5 Punkte je Gesichtshälfte</text>
+            </svg>
+            <svg viewBox="0 0 300 300" role="img" aria-label="Hautschnitt: Hyaluron verteilt sich gleichmäßig in der Haut">
+              <rect x="0" y="20" width="300" height="40" rx="8" class="v2-schema__l1" />
+              <rect x="0" y="64" width="300" height="120" rx="8" class="v2-schema__l2" />
+              <rect x="0" y="188" width="300" height="70" rx="8" class="v2-schema__l3" />
+              <text x="12" y="46" class="v2-schema__lbl">Oberhaut</text>
+              <text x="12" y="88" class="v2-schema__lbl">Lederhaut</text>
+              <text x="12" y="212" class="v2-schema__lbl">Unterhaut</text>
+              <circle class="v2-schema__drop" cx="80" cy="132" r="11" />
+              <circle class="v2-schema__drop v2-schema__drop--2" cx="150" cy="132" r="11" />
+              <circle class="v2-schema__drop v2-schema__drop--3" cx="220" cy="132" r="11" />
+              <text x="150" y="292" text-anchor="middle" class="v2-schema__cap">verteilt sich gleichmäßig</text>
+            </svg>
+          </div>
+          <figcaption>Schematische Darstellung</figcaption>
+        </figure>
         <div class="v2-how" :class="{ 'v2-how--text': !zoneImage }">
           <img
-            v-if="zoneImage"
+            v-if="zoneImage && !editorial"
             class="v2-how__img"
             :src="zoneImage.src"
             :alt="zoneImage.alt"
@@ -191,7 +249,7 @@
             <li><IconCheck size="18" aria-hidden="true" /> Individueller Behandlungsplan</li>
             <li><IconCheck size="18" aria-hidden="true" /> Behandlung durch Ärzte</li>
           </ul>
-          <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+          <SharedButton v-if="bookingButton" :button="{ ...bookingButton, label: discountLabel }" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
         </div>
         <ul v-else class="v2-prices" :class="{ 'v2-prices--many': priceCards.length >= 3 }" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
           <li v-for="card in priceCards" :key="card.key" class="v2-price" :class="{ 'v2-price--package': card.isPackage }">
@@ -825,7 +883,8 @@ const primaryButton = computed(() =>
         action: SharedButtonAction.APPOINTMENT_BOOKING,
       }
     : {
-        label: discountLabel.value,
+        // Prototyp: "Termin buchen & 20 % Rabatt sichern" (Zelgai 05.10.2026)
+        label: editorial.value ? `Termin buchen & ${discountLabel.value}` : discountLabel.value,
         method: SharedButtonMethod.ACTION,
         action: SharedButtonAction.NEWSLETTER_SIGN_UP,
       },
@@ -836,7 +895,11 @@ const heroCta = computed(() =>
 const bookingButton = computed(() => (props.hero.cta ? primaryButton.value : null));
 /** Leiste, eine Zeile bis 320 px neben "Anrufen". */
 const stickyLabel = computed(() =>
-  isB.value ? ADS_V2_CTA.sticky : `${discountPct.value}\u00a0% sichern`,
+  isB.value
+    ? ADS_V2_CTA.sticky
+    : editorial.value
+      ? discountLabel.value // Prototyp: laengerer Text (Zelgai)
+      : `${discountPct.value}\u00a0% sichern`,
 );
 // Den frueheren zweiten Knopf "20 % Rabatt sichern" neben "Kostenlose
 // Beratung buchen" gibt es nicht mehr: in A ist er der Hauptknopf.
@@ -859,26 +922,43 @@ const regularLine = computed(() =>
 );
 // Prototyp: Ueberzeile + Ueberschrift in Zeilen (Paryas Wortlaut fuer
 // Profhilo; sonst die normale H1).
-const EDITORIAL_HEADLINES: Record<string, string[]> = {
-  "skinbooster/profhilo": ["Mehr Feuchtigkeit.", "Mehr Ausstrahlung.", "Ganz du."],
+// Zwei Varianten (Zelgai 05.10.2026): "klar" (Standard) und "nutzen"
+// (?ueberschrift=nutzen, nur im Browser umgeschaltet).
+const EDITORIAL_HEADLINES: Record<string, Record<"klar" | "nutzen", { lines: string[]; subline: string }>> = {
+  "skinbooster/profhilo": {
+    klar: {
+      lines: ["Profhilo in Düsseldorf", "Skinbooster für mehr Feuchtigkeit"],
+      subline: "Behandlung durch Ärzte – ohne Ausfallzeit.",
+    },
+    nutzen: {
+      lines: ["Frischere, straffer", "wirkende Haut."],
+      subline: "Profhilo in Düsseldorf – Behandlung durch Ärzte.",
+    },
+  },
 };
+const editorialVariant = ref<"klar" | "nutzen">("klar");
+onMounted(() => {
+  if (new URLSearchParams(window.location.search).get("ueberschrift") === "nutzen") editorialVariant.value = "nutzen";
+});
+const editorialCopy = computed(() =>
+  editorial.value
+    ? EDITORIAL_HEADLINES[String(pathKey.value).replace(/-rabatt$/, "")]?.[editorialVariant.value] ?? null
+    : null,
+);
+const editorialSubline = computed(() => editorialCopy.value?.subline ?? null);
 const editorialEyebrow = computed(() => {
   if (!editorial.value) return null;
   const label = terms.value?.label ?? "";
   const city = props.location?.city?.name ?? "";
   return [label, city].filter(Boolean).join(" · ") || null;
 });
-const editorialHeadline = computed(() =>
-  editorial.value ? EDITORIAL_HEADLINES[String(pathKey.value).replace(/-rabatt$/, "")] ?? null : null,
-);
+const editorialHeadline = computed(() => editorialCopy.value?.lines ?? null);
 const heroNote = computed(() =>
   isB.value
     ? ["Nur Ärztinnen und Ärzte", "Zufriedenheitsgarantie", "auch ohne Termin"]
         .map((v) => v.replace(/ /g, "\u00a0"))
         .join(" · ")
-    : editorial.value
-      ? "Kostenlose Beratung · Behandlung durch Ärzte"
-      : null,
+    : null,
 );
 
 /** "ab 119,99 €*" / "ab 79,99 € pro Zone*" (ohne "Neukunden"); B: "ab 149,99 €". */
@@ -1112,7 +1192,7 @@ const zoneImage = computed(() => adsV2ZoneImage(terms.value?.zone));
 // Variante B bleibt beim Wechsel auf eine andere Zone in B.
 // Bundesweit keine Kacheln: sie verlinken Standortseiten.
 const zoneTiles = computed(() =>
-  props.bundesweit
+  props.bundesweit || editorial.value // Prototyp: verwirrt eher (Zelgai)
     ? []
     : adsV2ZoneTiles(pathKey.value, citySlug, locSlug).map((t) => ({
         ...(isB.value ? { ...t, href: adsOfferBPath(t.href) } : t),
@@ -3453,6 +3533,14 @@ const routeHref = computed(() => {
   letter-spacing: -0.02em;
 }
 
+@media (max-width: 374px) {
+  .v2--edit .v2-btn :deep(.button__label),
+  .v2--edit .v2-btn {
+    white-space: normal;
+    height: auto;
+  }
+}
+
 @media (max-width: 399px) {
   .v2--edit .v2-trust {
     grid-template-columns: minmax(0, 1fr);
@@ -3492,11 +3580,189 @@ const routeHref = computed(() => {
   }
 }
 
+/* "Warum sich Frauen ... entscheiden" (Zelgai 05.10.2026) */
+.v2--edit [data-track-placement="v2_trust"] > .v2-h2::before { content: none; }
+
+.v2-why__rating {
+  display: flex;
+  align-items: center;
+  gap: var(--space-400);
+  padding: var(--space-400) var(--space-500);
+  margin-bottom: var(--space-500);
+  border: 1px solid var(--color-border-mute);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 10px 30px -20px rgba(0, 0, 0, 0.35);
+}
+
+.v2-why__g {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+}
+
+.v2-why__score {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-200);
+  font-size: var(--font-md);
+}
+
+.v2-why__score strong {
+  font-size: 1.75rem;
+  line-height: 1.1;
+  font-weight: 700;
+}
+
+.v2-why__stars {
+  color: #fbbc05;
+  letter-spacing: 1px;
+}
+
+.v2-why__count {
+  display: block;
+  font-size: var(--font-sm);
+  color: var(--color-text-light);
+}
+
+.v2-why__list {
+  display: grid;
+  gap: var(--space-500);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.v2-why__item {
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: var(--space-300);
+  row-gap: var(--space-100);
+}
+
+.v2-why__num {
+  grid-row: span 3;
+  font-size: var(--font-sm);
+  font-weight: 600;
+  color: var(--color-text-light);
+}
+
+.v2-why__item strong {
+  font-size: var(--font-md);
+}
+
+.v2-why__text {
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
+}
+
+@media (min-width: 900px) {
+  .v2-why__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Schaubild Wirkweise; am Desktop Schaubild oben, Text darunter (sonst
+   lagen beide in derselben Zelle des v2-split-Rasters) */
+@media (min-width: 1024px) {
+  .v2--desk.v2--edit .v2-split[data-track-placement="v2_how"] > .v2-schema.v2-schema {
+    grid-row: 1 / 4;
+  }
+
+  .v2--desk.v2--edit .v2-split[data-track-placement="v2_how"] > .v2-schema + .v2-how.v2-how {
+    grid-row: 4 / 5;
+  }
+}
+
+.v2-schema {
+  margin: 0 0 var(--space-500);
+  padding: var(--space-400);
+  border-radius: var(--border-radius-500, 24px);
+  background: var(--color-card-bg-soft, #f2f1ef);
+  color: #0d0d0e;
+}
+
+.v2-schema__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-400);
+}
+
+.v2-schema svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 479px) {
+  .v2-schema__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .v2-schema svg {
+    max-width: 300px;
+    margin: 0 auto;
+  }
+}
+
+.v2-schema figcaption {
+  margin-top: var(--space-200);
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+  text-align: right;
+}
+
+.v2-schema__pts circle {
+  fill: #0d0d0e;
+}
+
+.v2-schema__l1 { fill: #ece6e1; }
+.v2-schema__l2 { fill: #e2d8d1; }
+.v2-schema__l3 { fill: #f3ecd9; }
+
+.v2-schema__lbl {
+  font-size: 16px;
+  fill: #6b6b70;
+}
+
+.v2-schema__cap {
+  font-size: 18px;
+  font-weight: 600;
+  fill: #0d0d0e;
+}
+
+.v2-schema__drop {
+  fill: rgba(110, 160, 220, 0.55);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: v2-spread 3.6s ease-out infinite;
+}
+
+.v2-schema__drop--2 { animation-delay: 0.6s; }
+.v2-schema__drop--3 { animation-delay: 1.2s; }
+
+@keyframes v2-spread {
+  0% { transform: scale(0.4); opacity: 0.9; }
+  70% { transform: scale(3.2, 2.2); opacity: 0.45; }
+  100% { transform: scale(3.6, 2.4); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v2-schema__drop {
+    animation: none;
+    transform: scale(2.6, 1.9);
+    opacity: 0.5;
+  }
+}
+
 /* Angebotskarte "Dein erster Besuch bei MY" */
 .v2-firstvisit {
   position: relative;
   z-index: 0;
   min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
   margin-right: 6px;
   display: grid;
   gap: var(--space-200);
