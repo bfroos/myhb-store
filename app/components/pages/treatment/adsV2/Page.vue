@@ -34,7 +34,7 @@
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
          uns aus", noch vor der Vertrauenszeile) -->
-    <UiLayoutSectionBlock v-if="clips.carousel.length" spacing="sibling">
+    <UiLayoutSectionBlock v-if="clips.carousel.length" spacing="sibling" :class="{ 'v2-clips--few': clips.carousel.length < 3 }">
       <div class="v2-card" :class="tone('clips')" data-track-placement="v2_clips">
         <h2 class="v2-h2">{{ H.clips }}</h2>
         <PagesTreatmentAdsV2ClipCarousel :clips="clips.carousel" />
@@ -244,7 +244,7 @@
     <UiLayoutSectionBlock v-if="doctors.length || bundesweit">
       <div class="v2-card v2-split" :class="tone('doctors', 'v2-card--soft')" data-track-placement="v2_doctors">
         <h2 class="v2-h2">{{ H.doctors }}</h2>
-        <div class="v2-doctors-wrap">
+        <div class="v2-doctors-wrap" :class="{ 'v2-doctors-wrap--photo': !!doctorFeature?.image && doctors.length > 0 }">
         <!-- CI-Gestaltung (Benjamin, 03.10.2026): grosses Foto einer
              Aerztin des Standorts + kurzer Text, darunter die Aerzte-Reihe -->
         <div v-if="doctorFeature" class="v2-docfeature" data-track-placement="v2_doctor_feature">
@@ -3191,6 +3191,73 @@ const routeHref = computed(() => {
   color: #fff;
   font-size: var(--font-sm);
   font-weight: var(--font-bold);
+}
+
+/* Desktop-Feinschliff (Benjamin, 05.10.2026):
+   - Clips: mit nur ein, zwei Videos blieb rechts die halbe Karte leer ->
+     Abschnitt am Desktop weg (das Hero-Video bleibt; mobil Wischreihe).
+   - Aerzte: grosses Foto links, Text und die kleinen Fotos rechts als ein
+     Block (vorher drei Kreise verteilt unter dem Foto).
+   - Standort: Gebaeudefoto und Lageplan gleich breit, Texte buendig. */
+@media (min-width: 1024px) {
+  .v2--desk .v2-clips--few {
+    display: none;
+  }
+
+  .v2--desk .v2-doctors-wrap--photo {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-700);
+    row-gap: var(--space-500);
+  }
+
+  .v2--desk .v2-doctors-wrap--photo > .v2-docfeature {
+    display: contents;
+  }
+
+  .v2--desk .v2-doctors-wrap--photo .v2-docfeature__photo {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  .v2--desk .v2-doctors-wrap--photo .v2-docfeature__text {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+  }
+
+  .v2--desk .v2-doctors-wrap--photo > .v2-doctors {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    grid-template-columns: repeat(3, minmax(0, 96px));
+    justify-content: start;
+    gap: var(--space-300);
+  }
+
+  /* Seitliche Ueberschriften (Arzteteam, weitere Behandlungen, Beratung):
+     der Standortname bricht bewusst nicht um ("Düsseldorf Arcaden"); bei
+     1024 px war die linke Spalte dafuer zu schmal und das Wort wurde
+     zerschnitten ("Arca-den"). Schrift waechst mit der Breite. */
+  .v2--desk .v2-split > .v2-h2 {
+    font-size: clamp(1.375rem, 2.1vw, var(--font-3xl));
+    line-height: 1.2;
+  }
+
+  .v2--desk .v2-doctors-wrap--photo .v2-doctor__photo {
+    max-width: 96px;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-location {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: var(--space-700);
+    align-items: start;
+  }
+
+  .v2--desk [data-track-placement="v2_location"] > .v2-directions {
+    column-gap: var(--space-700);
+  }
 }
 
 /* Aerzte-Block mobil: Hochformat wie auf dem Desktop, Gesicht und
