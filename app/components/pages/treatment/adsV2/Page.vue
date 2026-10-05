@@ -50,6 +50,16 @@
     <UiLayoutSectionBlock v-if="editorial" spacing="sibling">
       <div class="v2-card v2-why" :class="tone('how')" data-track-placement="v2_trust">
         <h2 class="v2-h2">Warum sich Frauen für eine {{ terms?.treatment ?? "Behandlung" }} bei uns entscheiden</h2>
+        <img
+          v-if="editorialImages"
+          class="v2-photo v2-photo--wide"
+          :src="editorialImages.why.src(1200)"
+          :srcset="`${editorialImages.why.src(600)} 600w, ${editorialImages.why.src(1200)} 1200w`"
+          sizes="(min-width: 1024px) 960px, 100vw"
+          :alt="editorialImages.why.alt"
+          loading="lazy"
+          decoding="async"
+        />
         <div v-if="rating" class="v2-why__rating">
           <ImageGoogleG class="v2-why__g" />
           <span>
@@ -104,6 +114,16 @@
     <UiLayoutSectionBlock v-if="facts.length">
       <div class="v2-card" :class="tone('facts')" data-track-placement="v2_facts">
         <h2 class="v2-h2">{{ H.facts }}</h2>
+        <img
+          v-if="editorialImages"
+          class="v2-photo v2-photo--facts"
+          :src="editorialImages.facts.src(900)"
+          :srcset="`${editorialImages.facts.src(500)} 500w, ${editorialImages.facts.src(900)} 900w`"
+          sizes="(min-width: 1024px) 420px, 100vw"
+          :alt="editorialImages.facts.alt"
+          loading="lazy"
+          decoding="async"
+        />
         <dl class="v2-facts">
           <div v-for="f in facts" :key="f.key" class="v2-facts__row" :class="{ 'v2-facts__row--price': f.key === 'preis' }">
             <component :is="factIcon(f.key)" class="v2-facts__icon" size="22" aria-hidden="true" />
@@ -782,6 +802,21 @@ const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
  *  "ci-rot" (Option R2) nutzt die Flaechen von "ci", nur mit den roten
  *  Akzenten von heute. */
 /** Prototyp "editorial": helle Flaechen, nur der Schlussaufruf dunkel. */
+// Prototyp editorial: Shooting-Bilder aus Strapi in den Textabschnitten
+// (Benjamin 05.10.2026). Keine Aerztin im Gesicht, keine Nadel.
+const EDITORIAL_IMAGE_BASE = "https://media.myhealthandbeauty.app/cdn-cgi/image";
+function editorialImage(file: string, alt: string) {
+  return { alt, src: (w: number) => `${EDITORIAL_IMAGE_BASE}/width=${w},quality=82,format=auto/${file}` };
+}
+const editorialImages = computed(() =>
+  editorial.value && pathKey.value.startsWith("skinbooster/profhilo")
+    ? {
+        why: editorialImage("2026_MYHB_Tag2_100_5c2a5e929e.webp", "Kundin am Empfang der MY Lounge"),
+        facts: editorialImage("2026_MYHB_Tag1_56_7d86e2abf4.webp", "Beratungsgespräch in der MY Lounge Düsseldorf"),
+      }
+    : null,
+);
+
 const EDITORIAL_TONES: Record<AdsV2Section, AdsV2Tone> = {
   clips: "light", facts: "light", how: "light", mid: "soft", steps: "soft",
   prices: "light", zones: "light", doctors: "soft", lounge: "light", consult: "light",
@@ -3655,6 +3690,57 @@ const routeHref = computed(() => {
   display: block;
   font-size: var(--font-sm);
   color: var(--color-text-light);
+}
+
+.v2-photo {
+  display: block;
+  width: 100%;
+  margin: 0 0 var(--space-500);
+  border-radius: var(--border-radius-500, 24px);
+  object-fit: cover;
+}
+
+.v2-photo--wide {
+  aspect-ratio: 4 / 3;
+  object-position: 50% 30%;
+}
+
+.v2-photo--facts {
+  aspect-ratio: 4 / 3;
+  object-position: 50% 38%;
+}
+
+@media (min-width: 1024px) {
+  .v2-photo--wide {
+    aspect-ratio: 21 / 9;
+    object-position: 50% 28%;
+  }
+
+  .v2--edit [data-track-placement="v2_facts"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-1000);
+  }
+
+  .v2--edit [data-track-placement="v2_facts"] > .v2-h2,
+  .v2--edit [data-track-placement="v2_facts"] > .v2-facts {
+    grid-column: 1;
+  }
+
+  /* neben dem Bild zwei statt vier Kachelspalten */
+  .v2--desk.v2--edit [data-track-placement="v2_facts"] > .v2-facts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .v2--edit [data-track-placement="v2_facts"] > .v2-photo--facts {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    height: 100%;
+    max-height: 560px;
+    aspect-ratio: auto;
+    margin: 0;
+  }
 }
 
 .v2-why__list {
