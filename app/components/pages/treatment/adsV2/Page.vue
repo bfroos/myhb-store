@@ -47,7 +47,17 @@
     <!-- Vertrauenszeile: Google -> Garantie -> Aerzt:innen -> ohne Termin -->
     <UiLayoutSectionBlock spacing="sibling">
       <ul class="v2-trust" role="list" data-track-placement="v2_trust">
-        <li v-if="rating" class="v2-trust__item">
+        <!-- Prototyp "editorial": Note als Aussage statt "Google 4,9" (Benjamin 05.10.2026) -->
+        <li v-if="rating && editorial" class="v2-trust__item v2-trust__item--score">
+          <span>
+            <strong class="v2-trust__score">{{ ratingLabel }}&nbsp;von&nbsp;5</strong>
+            <span class="v2-trust__stars" role="img" :aria-label="`${ratingLabel} von 5 Sternen`">
+              <IconStarFilled v-for="n in 5" :key="n" size="16" aria-hidden="true" />
+            </span>
+            <span class="v2-trust__text">Sternen bei Google – aus {{ ratingCountLabel }} {{ atLocation }}</span>
+          </span>
+        </li>
+        <li v-else-if="rating" class="v2-trust__item">
           <IconStarFilled class="v2-trust__icon v2-trust__icon--star" size="22" aria-hidden="true" />
           <span>
             <strong>Google {{ ratingLabel }}</strong>
@@ -3428,9 +3438,15 @@ const routeHref = computed(() => {
   display: none;
 }
 
-.v2--edit .v2-trust__item:first-child strong {
+.v2-trust__stars {
+  display: flex;
+  gap: 2px;
+  margin: var(--space-100) 0 var(--space-200);
+  color: var(--color-text);
+}
+
+.v2--edit .v2-trust__score {
   display: block;
-  margin-bottom: var(--space-100);
   font-size: 1.75rem;
   line-height: 1;
   font-weight: 500;
