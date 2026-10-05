@@ -16,7 +16,7 @@
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
     Behandlung: shared/adsTemplateV2Content.ts.
   -->
-  <div class="v2" :class="{ 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--preis': design === 'ci-preis', 'v2--desk': desktopLayout }">
+  <div class="v2" :class="{ 'v2--edit': editorial, 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--preis': design === 'ci-preis', 'v2--desk': desktopLayout }">
     <BlockTreatmentHero
       v-bind="hero"
       :subline="terms?.subline ?? hero.subline"
@@ -30,6 +30,9 @@
       :v2-note="heroNote"
       :v2-design="design"
       :v2-desktop="desktopLayout"
+      :v2-editorial="editorial"
+      :v2-eyebrow="editorialEyebrow"
+      :v2-headline-lines="editorialHeadline"
     />
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
@@ -162,7 +165,25 @@
         <p v-if="offerShown" class="v2-lead">
           Neukundenpreis mit {{ discountPct }} % Rabatt – so sicherst du ihn dir: „{{ discountLabel }}“ antippen.
         </p>
-        <ul class="v2-prices" :class="{ 'v2-prices--many': priceCards.length >= 3 }" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
+        <!-- Prototyp "editorial" (Paryas Entwurf): eine Angebotskarte -->
+        <div v-if="editorial && priceCards.length === 1 && priceCards[0]!.offer" class="v2-firstvisit" data-track-placement="v2_firstvisit">
+          <div class="v2-firstvisit__head">
+            <span>Dein erster Besuch bei MY</span>
+            <IconCircleCheck size="22" aria-hidden="true" />
+          </div>
+          <p class="v2-firstvisit__name">{{ terms?.label ?? hero.headline }}</p>
+          <p class="v2-firstvisit__loc">{{ locationName }}</p>
+          <p class="v2-firstvisit__regular">{{ keepAmount(priceCards[0]!.regular) }}</p>
+          <p class="v2-firstvisit__offer"><strong>{{ priceCards[0]!.offer }}</strong></p>
+          <p class="v2-firstvisit__sub">{{ priceCards[0]!.label }} · {{ discountPct }}&nbsp;% Neukunden-Vorteil</p>
+          <ul class="v2-firstvisit__list" role="list">
+            <li><IconCheck size="18" aria-hidden="true" /> Kostenloses ärztliches Beratungsgespräch</li>
+            <li><IconCheck size="18" aria-hidden="true" /> Individueller Behandlungsplan</li>
+            <li><IconCheck size="18" aria-hidden="true" /> Behandlung durch Ärzte</li>
+          </ul>
+          <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+        </div>
+        <ul v-else class="v2-prices" :class="{ 'v2-prices--many': priceCards.length >= 3 }" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
           <li v-for="card in priceCards" :key="card.key" class="v2-price" :class="{ 'v2-price--package': card.isPackage }">
             <span class="v2-price__label">{{ card.label }}</span>
             <strong v-if="card.offer" class="v2-price__offer">{{ card.offer }}</strong>
@@ -495,6 +516,7 @@ import {
   IconBus,
   IconCar,
   IconCalendarCheck,
+  IconCheck,
   IconCircleCheck,
   IconClock,
   IconCreditCard,
@@ -517,6 +539,7 @@ import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
 import type { LocationDto, TreatmentPageDto } from "~/lib/strapi/dto/collections";
 import { ImageFormat, SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
 import { isBlockedAdsImageFile } from "#shared/adsMedia";
+import { isAdsV2EditorialPreview } from "#shared/adsTemplateV2";
 import {
   ADS_V2_CTA,
   ADS_V2_PAYMENT_NOTE,
@@ -631,6 +654,10 @@ const design = computed(() =>
     ? "ci-preis"
     : adsV2Design(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
 );
+// Prototyp "editorial" (nur /vorschau-v2/... der gelisteten Seiten)
+const editorial = computed(() =>
+  isAdsV2EditorialPreview(route.path, citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
+);
 type AdsV2Tone = "light" | "soft" | "neutral" | "strong";
 type AdsV2Section =
   | "clips" | "facts" | "how" | "mid" | "steps" | "prices" | "zones" | "doctors"
@@ -655,7 +682,17 @@ const TONES: Record<"ci" | "ci-hell", Record<AdsV2Section, AdsV2Tone>> = {
 /** Klassen der Abschnittskarte; in "v2" die bisherigen Modifier.
  *  "ci-rot" (Option R2) nutzt die Flaechen von "ci", nur mit den roten
  *  Akzenten von heute. */
+/** Prototyp "editorial": helle Flaechen, nur der Schlussaufruf dunkel. */
+const EDITORIAL_TONES: Record<AdsV2Section, AdsV2Tone> = {
+  clips: "light", facts: "light", how: "light", mid: "soft", steps: "soft",
+  prices: "light", zones: "light", doctors: "soft", lounge: "light", consult: "light",
+  reviews: "light", objections: "soft", location: "light", faq: "soft", final: "strong",
+};
 function tone(section: AdsV2Section, v2Class = ""): string {
+  if (editorial.value) {
+    const t = EDITORIAL_TONES[section];
+    return `theme-${t} v2-card--${t}`;
+  }
   const d = design.value;
   if (d === "v2") return v2Class;
   const t = TONES[d === "ci-rot" || d === "ci-preis" ? "ci" : d][section];
@@ -810,12 +847,28 @@ const offerShown = computed(() => (isB.value ? null : offer.value));
 const regularLine = computed(() =>
   adsOfferRegularPriceLine(props.hero.treatment as any, formatEuroCent),
 );
+// Prototyp: Ueberzeile + Ueberschrift in Zeilen (Paryas Wortlaut fuer
+// Profhilo; sonst die normale H1).
+const EDITORIAL_HEADLINES: Record<string, string[]> = {
+  "skinbooster/profhilo": ["Mehr Feuchtigkeit.", "Mehr Ausstrahlung.", "Ganz du."],
+};
+const editorialEyebrow = computed(() => {
+  if (!editorial.value) return null;
+  const label = terms.value?.label ?? "";
+  const city = props.location?.city?.name ?? "";
+  return [label, city].filter(Boolean).join(" · ") || null;
+});
+const editorialHeadline = computed(() =>
+  editorial.value ? EDITORIAL_HEADLINES[String(pathKey.value).replace(/-rabatt$/, "")] ?? null : null,
+);
 const heroNote = computed(() =>
   isB.value
     ? ["Nur Ärztinnen und Ärzte", "Zufriedenheitsgarantie", "auch ohne Termin"]
         .map((v) => v.replace(/ /g, "\u00a0"))
         .join(" · ")
-    : null,
+    : editorial.value
+      ? "Kostenlose Beratung · Behandlung durch Ärzte"
+      : null,
 );
 
 /** "ab 119,99 €*" / "ab 79,99 € pro Zone*" (ohne "Neukunden"); B: "ab 149,99 €". */
@@ -833,7 +886,11 @@ const heroPriceLine = computed(() => {
   if (!p) return null;
   return {
     main: `${p[0]!.toUpperCase()}${p.slice(1)}`.replace(/\s/g, "\u00a0"),
-    extra: isB.value ? null : `– mit ${discountPct.value}\u00a0% Neukundenrabatt`,
+    extra: isB.value
+      ? null
+      : editorial.value
+        ? `${discountPct.value}\u00a0% Neukunden-Vorteil`
+        : `– mit ${discountPct.value}\u00a0% Neukundenrabatt`,
   };
 });
 const stickyPrice = computed(() => shortPrice.value);
@@ -3289,6 +3346,238 @@ const routeHref = computed(() => {
 
   .v2--desk [data-track-placement="v2_location"] > .v2-directions {
     column-gap: var(--space-700);
+  }
+}
+
+/* =====================================================================
+   Prototyp "editorial" (Benjamin 05.10.2026, Ideen aus Paryas Entwurf;
+   nur /vorschau-v2/... aus ADS_V2_EDITORIAL_PREVIEW)
+   ===================================================================== */
+.v2--edit {
+  counter-reset: v2edit;
+}
+
+/* Ueberschriften linksbuendig, gross, eng gesetzt */
+.v2--edit .v2-h2 {
+  text-align: left;
+  font-size: clamp(1.625rem, 6.4vw, 2.5rem);
+  line-height: 1.08;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.v2--edit .v2-lead {
+  text-align: left;
+}
+
+/* nummerierte Ueberzeilen "01 / DIE BEHANDLUNG" */
+.v2--edit [data-track-placement] > .v2-h2::before {
+  display: block;
+  margin-bottom: var(--space-300);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+.v2--edit [data-track-placement="v2_clips"],
+.v2--edit [data-track-placement="v2_how"],
+.v2--edit [data-track-placement="v2_steps"],
+.v2--edit [data-track-placement="v2_prices"],
+.v2--edit [data-track-placement="v2_doctors"],
+.v2--edit [data-track-placement="v2_reviews"],
+.v2--edit [data-track-placement="v2_objections"],
+.v2--edit [data-track-placement="v2_location"],
+.v2--edit [data-track-placement="v2_faq"] {
+  counter-increment: v2edit;
+}
+
+.v2--edit [data-track-placement="v2_clips"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Einblicke"; }
+.v2--edit [data-track-placement="v2_how"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Die Behandlung"; }
+.v2--edit [data-track-placement="v2_steps"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Dein Ablauf"; }
+.v2--edit [data-track-placement="v2_prices"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Dein Neukunden-Vorteil"; }
+.v2--edit [data-track-placement="v2_doctors"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Dein Ärzteteam"; }
+.v2--edit [data-track-placement="v2_reviews"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Erfahrungen"; }
+.v2--edit [data-track-placement="v2_objections"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Noch unsicher?"; }
+.v2--edit [data-track-placement="v2_location"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Anfahrt"; }
+.v2--edit [data-track-placement="v2_faq"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Häufige Fragen"; }
+
+/* Vertrauensraster: grosse Note, darunter drei Aussagen mit Trennlinien */
+.v2--edit .v2-trust {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: var(--space-500);
+  border-radius: var(--border-radius-card);
+  background: var(--color-card-bg-light, #fff);
+}
+
+.v2--edit .v2-trust__item {
+  padding: var(--space-400);
+  border-left: 1px solid var(--color-border-mute);
+}
+
+.v2--edit .v2-trust__item:nth-child(odd) {
+  border-left: 0;
+  padding-left: 0;
+}
+
+.v2--edit .v2-trust__icon {
+  display: none;
+}
+
+.v2--edit .v2-trust__item:first-child strong {
+  display: block;
+  margin-bottom: var(--space-100);
+  font-size: 1.75rem;
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 399px) {
+  .v2--edit .v2-trust {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .v2--edit .v2-trust__item,
+  .v2--edit .v2-trust__item:nth-child(odd) {
+    padding: var(--space-300) 0;
+    border-left: 0;
+    border-top: 1px solid var(--color-border-mute);
+  }
+
+  .v2--edit .v2-trust__item:first-child {
+    border-top: 0;
+  }
+
+  .v2-firstvisit {
+    margin-right: 0;
+    padding: var(--space-500) var(--space-300);
+  }
+
+}
+
+@media (min-width: 900px) {
+  .v2--edit .v2-trust {
+    grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr));
+  }
+
+  .v2--edit .v2-trust__item:nth-child(odd) {
+    border-left: 1px solid var(--color-border-mute);
+    padding-left: var(--space-400);
+  }
+
+  .v2--edit .v2-trust__item:first-child {
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
+/* Angebotskarte "Dein erster Besuch bei MY" */
+.v2-firstvisit {
+  position: relative;
+  z-index: 0;
+  min-width: 0;
+  margin-right: 6px;
+  display: grid;
+  gap: var(--space-200);
+  padding: var(--space-600);
+  border-radius: var(--border-radius-500, 24px);
+  background: #fff;
+  /* zweite, versetzte Karte dahinter (Paryas Entwurf) als Schatten */
+  box-shadow: 8px 10px 0 -2px var(--color-card-bg-soft, #ececec), 0 18px 50px -24px rgba(0, 0, 0, 0.35);
+  color: #0d0d0e;
+}
+
+
+
+.v2-firstvisit__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--space-400);
+  margin-bottom: var(--space-300);
+  border-bottom: 1px solid var(--color-border-mute);
+  font-size: var(--font-sm);
+  color: #6b6b70;
+}
+
+.v2-firstvisit__name {
+  margin: 0;
+  font-size: 1.75rem;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.v2-firstvisit__loc,
+.v2-firstvisit__sub {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: #6b6b70;
+}
+
+.v2-firstvisit__regular {
+  margin: var(--space-400) 0 0;
+  font-size: var(--font-sm);
+  color: #6b6b70;
+  text-decoration: line-through;
+}
+
+.v2-firstvisit__offer {
+  display: flex;
+  align-items: baseline;
+  gap: 0.2em;
+  margin: 0;
+  font-size: 1.125rem;
+  color: #dc2626;
+}
+
+.v2-firstvisit__offer strong {
+  font-size: clamp(1.75rem, 9.5vw, 3.25rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.v2-firstvisit__list {
+  display: grid;
+  gap: var(--space-300);
+  margin: var(--space-400) 0 var(--space-500);
+  padding: 0;
+  list-style: none;
+}
+
+.v2-firstvisit__list li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-300);
+  font-size: var(--font-sm);
+}
+
+.v2--edit .v2-prices-card > .v2-actions {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .v2--desk.v2--edit .v2-prices-card > .v2-firstvisit {
+    grid-column: 1;
+    grid-row: 3 / span 2;
+  }
+
+  .v2--desk.v2--edit .v2-prices-card > .v2-notes {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .v2--desk.v2--edit .v2-prices-card > .v2-pay {
+    grid-column: 2;
+    grid-row: 4;
+    align-self: start;
   }
 }
 

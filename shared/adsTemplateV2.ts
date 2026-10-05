@@ -252,6 +252,30 @@ export function isAdsV2DesktopLayout(
   return pages.some((p) => matchesPattern(p, city, loc, key));
 }
 
+/**
+ * Prototyp "editorial" (Benjamin, 05.10.2026): Ideen aus Paryas Entwurf fuer
+ * Profhilo Duesseldorf (Text-zuerst-Hero, Vertrauensraster, nummerierte
+ * Ueberzeilen, Preiskarte "Dein erster Besuch", helle Flaechen) - erst als
+ * Beispiel, NUR unter /vorschau-v2/... der hier gelisteten Seiten. Echte
+ * Seiten und Tests bleiben unberuehrt.
+ */
+export const ADS_V2_EDITORIAL_PREVIEW: readonly string[] = [
+  "duesseldorf/duesseldorf-arcaden/skinbooster/profhilo",
+];
+
+export function isAdsV2EditorialPreview(
+  path: string | null | undefined,
+  city: string | null | undefined,
+  loc: string | null | undefined,
+  pathKey: string | null | undefined,
+  pages: readonly string[] = ADS_V2_EDITORIAL_PREVIEW,
+): boolean {
+  if (!isAdsTemplateV2PreviewPath(path)) return false;
+  const key = basePathKey(pathKey);
+  if (!city || !loc || !key) return false;
+  return pages.some((p) => matchesPattern(p, city, loc, key));
+}
+
 /** Hat der Standort mindestens eine v2-Seite? (Endpunkt der Zusatzdaten) */
 export function isAdsTemplateV2Location(
   city: string | null | undefined,
