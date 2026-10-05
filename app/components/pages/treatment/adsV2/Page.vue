@@ -34,8 +34,8 @@
 
     <!-- Clips direkt nach dem Hero (Benjamin, 01.10.2026: "so sieht es bei
          uns aus", noch vor der Vertrauenszeile) -->
-    <UiLayoutSectionBlock v-if="clips.carousel.length" spacing="sibling" :class="{ 'v2-clips--few': clips.carousel.length < 3 }">
-      <div class="v2-card" :class="tone('clips')" data-track-placement="v2_clips">
+    <UiLayoutSectionBlock v-if="clips.carousel.length" spacing="sibling">
+      <div class="v2-card" :class="[tone('clips'), { 'v2-clips--side': clips.carousel.length < 4, [`v2-clips--n${clips.carousel.length}`]: clips.carousel.length < 4 }]" data-track-placement="v2_clips">
         <h2 class="v2-h2">{{ H.clips }}</h2>
         <PagesTreatmentAdsV2ClipCarousel :clips="clips.carousel" />
       </div>
@@ -538,6 +538,7 @@ import {
 } from "#shared/adsTemplateV2";
 import {
   ADS_DOCTOR_FEATURE,
+  ADS_GENERAL_FEEDBACK_CLIP,
   ADS_TEAM_FEATURE,
   ADS_LOUNGE_NEUTRAL_HEADLINE,
   adsClipsFor,
@@ -864,11 +865,21 @@ const objectionClip = computed(() =>
 const clips = computed(() => {
   const c = adsClipsFor(pathKey.value, citySlug);
   const oc = objectionClip.value;
-  if (!oc) return c;
+  const carousel = oc ? c.carousel.filter((x) => x.url !== oc.url) : c.carousel;
+  const feedback = oc ? c.feedback.filter((x) => x.url !== oc.url) : c.feedback;
+  // Kurze Reihen (1-3 Clips) mit dem allgemeinen Kundenvideo auffuellen
+  // (Benjamin 05.10.2026). Laeuft dieselbe Kundin (gleiche Strapi-Quelle)
+  // sonst bei den Bewertungen, faellt sie dort weg statt doppelt zu laufen.
+  const g = ADS_GENERAL_FEEDBACK_CLIP;
+  const fill =
+    design.value !== "v2" &&
+    carousel.length > 0 &&
+    carousel.length < 4 &&
+    !carousel.some((x) => x.url === g.url || x.source === g.source);
   return {
     ...c,
-    carousel: c.carousel.filter((x) => x.url !== oc.url),
-    feedback: c.feedback.filter((x) => x.url !== oc.url),
+    carousel: fill ? [...carousel, g] : carousel,
+    feedback: fill ? feedback.filter((x) => x.source !== g.source) : feedback,
   };
 });
 /**
@@ -3194,14 +3205,35 @@ const routeHref = computed(() => {
 }
 
 /* Desktop-Feinschliff (Benjamin, 05.10.2026):
-   - Clips: mit nur ein, zwei Videos blieb rechts die halbe Karte leer ->
-     Abschnitt am Desktop weg (das Hero-Video bleibt; mobil Wischreihe).
+   - Clips: kurze Reihen werden aufgefuellt (allgemeines Kundenvideo) und
+     stehen rechts neben der Ueberschrift (siehe .v2-clips--side).
    - Aerzte: grosses Foto links, Text und die kleinen Fotos rechts als ein
      Block (vorher drei Kreise verteilt unter dem Foto).
    - Standort: Gebaeudefoto und Lageplan gleich breit, Texte buendig. */
 @media (min-width: 1024px) {
-  .v2--desk .v2-clips--few {
-    display: none;
+  /* Weniger als vier Clips: Ueberschrift links, Videos fuellen rechts die
+     Breite (vorher links gereiht, rechts leer). */
+  .v2--desk .v2-clips--side {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: var(--space-1000);
+    align-items: start;
+  }
+
+  .v2--desk .v2-clips--side > .v2-h2 {
+    margin-bottom: 0;
+  }
+
+  .v2--desk .v2-clips--n3 :deep(.clips__item) {
+    width: calc((100% - 2 * var(--space-400)) / 3);
+  }
+
+  .v2--desk .v2-clips--n2 :deep(.clips__item) {
+    width: calc((100% - var(--space-400)) / 2);
+  }
+
+  .v2--desk .v2-clips--n1 :deep(.clips__item) {
+    width: calc((100% - var(--space-400)) / 2);
   }
 
   .v2--desk .v2-doctors-wrap--photo {
