@@ -132,4 +132,18 @@ useHead({
   title: `${cfg.title} | MY HEALTH & BEAUTY`,
   meta: [{ name: "robots", content: "noindex, nofollow" }],
 });
+// Vorschau beim Teilen (WhatsApp, Instagram, Facebook): Titelbild der
+// Behandlung, sonst der neutrale Empfang.
+const shareCover = (treatmentPage.value as any)?.hero?.cover?.url as string | undefined;
+const shareImage = shareCover && /^https:\/\/media\.myhealthandbeauty\.app\//.test(shareCover)
+  ? shareCover.replace("https://media.myhealthandbeauty.app/", "https://media.myhealthandbeauty.app/cdn-cgi/image/width=1200,height=630,fit=cover,quality=85,format=jpeg/")
+  : "https://media.myhealthandbeauty.app/cdn-cgi/image/width=1200,height=630,fit=cover,quality=85,format=jpeg/2026_MYHB_Tag3_34_ebf7060f7d.webp";
+useSeoMeta({
+  ogType: "website",
+  ogTitle: `${cfg.title} | MY HEALTH & BEAUTY`,
+  ogDescription: cfg.terms?.subline ?? "Behandlung durch Ärzte – 20 % Rabatt für Neukundinnen und Neukunden.",
+  ogImage: shareImage,
+  twitterCard: "summary_large_image",
+  twitterImage: shareImage,
+});
 </script>

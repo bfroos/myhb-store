@@ -3,6 +3,7 @@ import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
 import { stripAdsTemplateV2Preview } from "#shared/adsTemplateV2";
 import { stripAdsOfferB } from "#shared/adsOfferVariant";
+import { isBlockedAdsImageFile } from "#shared/adsMedia";
 
 /**
  * Fallback share image (Open Graph / Twitter) used when a page has neither a
@@ -10,13 +11,36 @@ import { stripAdsOfferB } from "#shared/adsOfferVariant";
  * Prevents pages like the homepage, category, doctors and blog index from
  * shipping without a social preview image. Landscape JPEG (~1100x643).
  */
+// Benjamin 05.10.2026: vorher das Aussenfoto der Mediapark-Klinik - stand
+// beim Teilen jeder Seite (auch Duesseldorf, Berlin ...). Jetzt neutral: der
+// weisse Empfang mit Logo (Strapi 1022), zugeschnitten auf 1200 x 630.
 const DEFAULT_OG_IMAGE =
-  "https://media.myhb.app/MY_Mediapark_Klinik_ab8eb15667.jpg";
+  "https://media.myhealthandbeauty.app/cdn-cgi/image/width=1200,height=630,fit=cover,quality=85,format=jpeg/2026_MYHB_Tag3_34_ebf7060f7d.webp";
 
 function toOgImageValue(
   media: StrapiMedia | null | undefined,
 ): string | undefined {
   return media?.url ?? undefined;
+}
+
+/**
+ * Inhaltsbild als Vorschaubild: nur Bilder, auf go. ohne Sperrbegriff/
+ * Sperrdatei; vom MY-Medienserver auf 1200 x 630 zugeschnitten (Teilen-
+ * Format von WhatsApp, Facebook & Co.).
+ */
+/** Titelbilder, die nicht als Vorschau taugen (05.10.2026 angesehen: Spritze im Bild). */
+const SHARE_IMAGE_BLOCKED = ["Zornesfalte_Behandlung_2d84ae9f35"];
+
+function toShareImage(media: StrapiMedia | null | undefined, adsMode: boolean): string | undefined {
+  const url = media?.url;
+  if (!url) return undefined;
+  if (!String((media as any)?.mime ?? "image/").startsWith("image/")) return undefined;
+  if (adsMode && (isBlockedAdsImageFile(media) || /botox|btx/i.test(url))) return undefined;
+  if (SHARE_IMAGE_BLOCKED.some((name) => url.includes(name))) return undefined;
+  const m = /^https:\/\/media\.myhealthandbeauty\.app\/(?!cdn-cgi\/)(.+)$/.exec(url);
+  return m
+    ? `https://media.myhealthandbeauty.app/cdn-cgi/image/width=1200,height=630,fit=cover,quality=85,format=jpeg/${m[1]}`
+    : url;
 }
 
 /**
@@ -158,15 +182,15 @@ export async function setPageSeo(
           .filter(Boolean)
           .join(" ");
 
-    const ogImage =
-      toOgImageValue(pageSeo?.openGraph?.ogImage) ??
-      toOgImageValue(fallbackOgImage) ??
-      DEFAULT_OG_IMAGE;
-
     // Ads-Modus (go.*): Meta-Texte stammen teils aus i18n (z. B. Standortseite
     // "Botox & Hyaluron") und laufen nicht durch den Strapi-Proxy. Google
     // prueft sie wie sichtbaren Text (RESTRICTED_DRUG_TERMS).
     const { isAdsMode } = useSiteModeFlags();
+
+    const ogImage =
+      toOgImageValue(pageSeo?.openGraph?.ogImage) ??
+      toShareImage(fallbackOgImage, isAdsMode.value) ??
+      DEFAULT_OG_IMAGE;
     const clean = (value?: string | null) =>
       value && isAdsMode.value
         ? replaceRestrictedDrugTerms(value, currentLocale)

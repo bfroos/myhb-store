@@ -115,7 +115,8 @@ if (pageLoaded) {
       paramName: "treatmentSlug",
     },
   ]);
-  await setPageSeo(seo.value);
+  // Vorschaubild beim Teilen: Titelbild der Seite statt des allgemeinen
+  await setPageSeo(seo.value, (fixedBlocks.value?.hero as any)?.cover ?? null);
 }
 
 // Schema.org MedicalProcedure

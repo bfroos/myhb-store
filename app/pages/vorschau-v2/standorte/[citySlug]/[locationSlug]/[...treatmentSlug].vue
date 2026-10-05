@@ -44,7 +44,8 @@ if (pageLoaded) {
     { localizations: cityLocalizations.value ?? [], key: "slug", paramName: "citySlug" },
     { localizations: treatmentPageLocalizations.value ?? [], key: "pathKey", paramName: "treatmentSlug" },
   ]);
-  await setPageSeo(seo.value);
+  // Vorschaubild beim Teilen: Titelbild der Seite statt des allgemeinen
+  await setPageSeo(seo.value, (fixedBlocks.value?.hero as any)?.cover ?? null);
 }
 
 // Vorschau nie in den Index, egal was Strapi als metaRobots pflegt.
