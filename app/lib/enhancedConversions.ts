@@ -102,3 +102,32 @@ export const hashedUserData = async (contact: {
   if (phone) out.sha256_phone_number = await sha256Hex(phone);
   return out;
 };
+
+type FensterMitConsent = {
+  dataLayer?: unknown[];
+  Cookiebot?: { hasResponse?: boolean; consent?: { marketing?: boolean } };
+};
+
+/**
+ * Dankesseite nach Calendly: gehashte Kontaktdaten als `ec_user_data` in die
+ * Datenschicht — nur mit Marketing-Einwilligung, sonst wird ein frueherer
+ * Stand geleert. Wartet hoechstens `maxWarteMs` auf Cookiebots Antwort, weil
+ * die Dankesseite schneller laden kann als Cookiebot.
+ */
+export const pushErweiterteConversions = async (
+  w: FensterMitConsent,
+  kontakt: { email?: string | null; phone?: string | null },
+  maxWarteMs = 1500,
+): Promise<HashedUserData | undefined> => {
+  w.dataLayer = w.dataLayer || [];
+  for (let warte = 0; warte < maxWarteMs && w.Cookiebot?.hasResponse !== true; warte += 100) {
+    await new Promise((r) => setTimeout(r, 100));
+  }
+  let ec: HashedUserData | undefined;
+  if (w.Cookiebot?.consent?.marketing === true) {
+    const hashes = await hashedUserData(kontakt);
+    if (Object.keys(hashes).length) ec = hashes;
+  }
+  w.dataLayer.push({ ec_user_data: ec });
+  return ec;
+};

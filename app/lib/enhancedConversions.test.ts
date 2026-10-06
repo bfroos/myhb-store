@@ -5,7 +5,7 @@
  */
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { hashedUserData, normalizeEmail, normalizePhone, sha256Hex } from "./enhancedConversions.ts";
+import { hashedUserData, normalizeEmail, normalizePhone, pushErweiterteConversions, sha256Hex } from "./enhancedConversions.ts";
 
 test("E-Mail: klein, ohne Leerraum, unplausibles faellt weg", () => {
   assert.equal(normalizeEmail("  Kundin@Example.DE "), "kundin@example.de");
@@ -29,4 +29,27 @@ test("hashedUserData: nur plausible Felder", async () => {
   assert.equal(beide.sha256_email_address, await sha256Hex("kundin@example.de"));
   assert.equal(beide.sha256_phone_number, await sha256Hex("+4917655224067"));
   assert.deepEqual(await hashedUserData({ email: "quatsch", phone: "" }), {});
+});
+
+const KONTAKT = { email: " Kundin@Example.DE ", phone: "+49 176 55224067" };
+
+test("Dankesseite mit Einwilligung: nur Hashes in der Datenschicht", async () => {
+  const w = { dataLayer: [] as unknown[], Cookiebot: { hasResponse: true, consent: { marketing: true } } };
+  await pushErweiterteConversions(w, KONTAKT, 0);
+  assert.deepEqual(w.dataLayer, [{ ec_user_data: await hashedUserData(KONTAKT) }]);
+  const roh = JSON.stringify(w.dataLayer).toLowerCase();
+  assert.ok(!roh.includes("kundin@example") && !roh.includes("55224067"), "keine Klardaten");
+});
+
+test("Dankesseite ohne Einwilligung: ec_user_data wird geleert", async () => {
+  const w = { dataLayer: [] as unknown[], Cookiebot: { hasResponse: true, consent: { marketing: false } } };
+  await pushErweiterteConversions(w, KONTAKT, 0);
+  assert.deepEqual(w.dataLayer, [{ ec_user_data: undefined }]);
+});
+
+test("Dankesseite: wartet auf eine spaete Cookiebot-Antwort", async () => {
+  const w: { dataLayer: unknown[]; Cookiebot?: { hasResponse?: boolean; consent?: { marketing?: boolean } } } = { dataLayer: [] };
+  setTimeout(() => { w.Cookiebot = { hasResponse: true, consent: { marketing: true } }; }, 250);
+  const ec = await pushErweiterteConversions(w, KONTAKT, 1500);
+  assert.ok(ec?.sha256_email_address && ec?.sha256_phone_number);
 });

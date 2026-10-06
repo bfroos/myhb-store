@@ -5,7 +5,7 @@ import {
   readBookingHandoff,
   clearBookingHandoff,
 } from "~/lib/calendlyBookingHandoff";
-import { hashedUserData } from "~/lib/enhancedConversions";
+import { pushErweiterteConversions } from "~/lib/enhancedConversions";
 
 /**
  * `booking_confirmed` auf der Dankesseite nach einer Calendly-Buchung
@@ -51,27 +51,11 @@ export function useBookingThankYouTracking() {
    * Ads-Tag 44 liest sie ueber "Vom Nutzer bereitgestellte Daten". Ohne
    * Einwilligung wird ein frueherer Stand geleert.
    */
-  const setzeErweiterteConversions = async () => {
-    const w = window as unknown as {
-      dataLayer?: unknown[];
-      Cookiebot?: { hasResponse?: boolean; consent?: { marketing?: boolean } };
-    };
-    w.dataLayer = w.dataLayer || [];
-    // Cookiebot liest die Einwilligung beim Laden aus dem Cookie; kommt die
-    // Dankesseite schneller, hoechstens 1,5 s darauf warten.
-    for (let i = 0; i < 15 && w.Cookiebot?.hasResponse !== true; i++) {
-      await new Promise((r) => setTimeout(r, 100));
-    }
-    let ec: Record<string, string> | undefined;
-    if (w.Cookiebot?.consent?.marketing === true) {
-      const hashes = await hashedUserData({
-        email: firstString(route.query.invitee_email),
-        phone: firstString(route.query.answer_1),
-      });
-      if (Object.keys(hashes).length) ec = hashes as Record<string, string>;
-    }
-    w.dataLayer.push({ ec_user_data: ec });
-  };
+  const setzeErweiterteConversions = () =>
+    pushErweiterteConversions(window as unknown as Parameters<typeof pushErweiterteConversions>[0], {
+      email: firstString(route.query.invitee_email),
+      phone: firstString(route.query.answer_1),
+    });
 
   const track = async () => {
     try {
