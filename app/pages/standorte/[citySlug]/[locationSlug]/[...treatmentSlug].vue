@@ -57,8 +57,13 @@ const pageLoaded = await fetchPage();
 // Standort-Konsolidierung: Die Behandlung gehoert in dieser Stadt zu einem
 // anderen Standort (Köln: OPs -> MediaPark, nichtoperativ -> Köln Arcaden).
 // Serverseitig ein direkter 301 auf die finale URL, ohne Zwischenschritt.
+// Query (utm_*, gclid) geht mit, wie bei den Redirects der Middleware.
 if (redirectTarget.value) {
-  await navigateTo(redirectTarget.value, { redirectCode: 301, replace: true });
+  const { query, hash } = useRoute();
+  await navigateTo(
+    { path: redirectTarget.value, query, hash },
+    { redirectCode: 301, replace: true },
+  );
 }
 
 // Tracking: Ereignisse auf v2-Seiten tragen `template: "v2"` (Vorschau:

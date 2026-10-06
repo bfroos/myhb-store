@@ -73,7 +73,8 @@ Redirects sollen mindestens 12 Monate, möglichst dauerhaft bestehen. Die Stando
 
 ## Offene Punkte / Freigaben
 
-- `PRÜFEN`: `/en|tr/pages/ohh-de-cologne` (vorläufig Arcaden-Standortseite), `/pages/ohh-de-cologne` (404, keine passende Zielseite bekannt), Strapi #254 `mediapark-klinik/botox-rabatt` → `koeln-arcaden/botox`.
+- Entschieden (Benjamin, 06.10.2026): `/pages/ohh-de-cologne` und `/en|tr/pages/ohh-de-cologne` → Arcaden-Standortseite; Strapi #254 `mediapark-klinik/botox-rabatt` → `koeln-arcaden/botox`; Behandlungstypen Facelift → `operational`, Kategorie „Schönheits-OPs“ → `abulatory` (`--typen`).
+- **Die Regel gilt in jeder Stadt automatisch.** Sobald eine Stadt einen zweiten, geöffneten Standort anderen Typs bekommt (z. B. ein Center neben einer Lounge), übernimmt der kleinste passende Standorttyp die Behandlungsart, die anderen Standorte leiten per 301 dorthin um und verlieren die Kacheln. Beim Anlegen eines neuen Standorts in einer Stadt mit bestehendem Standort deshalb vorher `check-koeln-konsolidierung.mts` sinngemäß für die Stadt laufen lassen und Redirects/Ads-Ziele prüfen.
 - Sprachversionen `/en|tr|ar|fr|nl/…/koeln/...` werden über dieselbe Regel lokalisiert umgeleitet; hreflang-Alternates der finalen Seiten zeigen auf finale Seiten.
 - Schema- und Kachel-Änderungen sind Code-Logik und wirken technisch für alle Städte; inhaltlich ändern sie außerhalb Kölns nur Auszeichnung/Markup, keine URLs.
 - Navigation/Header/Footer verlinken bewusst national (`/behandlungen/...`) – das ist keine Köln-Verlinkung und nicht Teil der Abnahme Kriterium 11.

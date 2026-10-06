@@ -244,7 +244,7 @@ Existing URL;Status;Seitentyp;Richtiger Standort;Final Target URL;Maßnahme;Hops
 /en/pages/mesotherapy-hair-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
 /en/pages/migraine-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
 /en/pages/oberlidstraffung-kaiserslautern;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
-/en/pages/ohh-de-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher Startseite; PRÜFEN"
+/en/pages/ohh-de-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher Startseite; Ziel Arcaden-Standortseite (Benjamin, 06.10.)"
 /en/pages/platysma-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;301 unverändert;1;redirects.json;200;
 /en/pages/pleated-wrinkles-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;301 unverändert;1;redirects.json;200;
 /en/pages/polynucleotide-skinbooster-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
@@ -353,7 +353,7 @@ Existing URL;Status;Seitentyp;Richtiger Standort;Final Target URL;Maßnahme;Hops
 /pages/oberlidstraffung-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
 /pages/oberlidstraffung-moenchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
 /pages/oberlidstraffung-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
-/pages/ohh-de-cologne;404;Alt-URL Shopify;–;/pages/ohh-de-cologne;404 belassen (PRÜFEN);0;–;404;PRÜFEN
+/pages/ohh-de-cologne;404;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher 410; Ziel Arcaden-Standortseite (Benjamin, 06.10.)"
 /pages/platysma-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;301 unverändert;1;redirects.json;200;
 /pages/plisseefalten-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;301 unverändert;1;redirects.json;200;
 /pages/polynukleotide-skinbooster-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma;301 unverändert;1;redirects.json;200;
@@ -407,7 +407,7 @@ Existing URL;Status;Seitentyp;Richtiger Standort;Final Target URL;Maßnahme;Hops
 /tr/pages/migren-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 unverändert;1;redirects.json;200;
 /tr/pages/oberarmstraffung-koeln;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
 /tr/pages/oberarmstraffung-recklinghausen;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
-/tr/pages/ohh-de-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher Startseite; PRÜFEN"
+/tr/pages/ohh-de-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher Startseite; Ziel Arcaden-Standortseite (Benjamin, 06.10.)"
 /tr/pages/plisse-cizgileri-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;301 unverändert;1;redirects.json;200;
 /tr/pages/profhilo-tedavi-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/profhilo;301 unverändert;1;redirects.json;200;
 /tr/pages/prp-sac-terapisi-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/prp-haartherapie;301 unverändert;1;redirects.json;200;

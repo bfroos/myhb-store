@@ -10,6 +10,11 @@
     "code": 301
   },
   {
+    "from": "/pages/ohh-de-cologne",
+    "to": "/standorte/koeln/koeln-arcaden",
+    "code": 301
+  },
+  {
     "from": "/en/pages/lemon-bottle-cheek-cologne",
     "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen",
     "code": 301
