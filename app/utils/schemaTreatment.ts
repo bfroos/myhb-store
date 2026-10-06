@@ -22,6 +22,11 @@ type TreatmentSchemaContext = SchemaOrgContext & {
   omitOffer?: boolean;
 };
 
+/** @id der MedicalProcedure einer Seite. */
+export function medicalProcedureId(publicUrl: string, path: string): string {
+  return `${toAbsoluteUrl(publicUrl, path)}#procedure`;
+}
+
 /**
  * Schema.org MedicalProcedure für Behandlungsseiten.
  * Kombiniert Behandlung mit Location-Informationen.
@@ -52,6 +57,9 @@ export function buildMedicalProcedureSchema(
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "MedicalProcedure",
+    // Eigene @id, damit die Einrichtung (LocalBusiness/MedicalClinic des
+    // Standorts) sie per availableService referenzieren kann.
+    "@id": medicalProcedureId(ctx.publicUrl, ctx.path),
     name: treatmentPage.name,
     url: pageUrl,
     ...(description && { description }),
