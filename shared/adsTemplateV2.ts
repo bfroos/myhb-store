@@ -263,17 +263,25 @@ export const ADS_V2_EDITORIAL_PREVIEW: readonly string[] = [
   "duesseldorf/duesseldorf-arcaden/skinbooster/profhilo",
 ];
 
+/**
+ * Seit 06.10.2026 (Benjamin: "fuer alle Go-Seiten uebernehmen") laeuft der
+ * editorial-Aufbau auf allen v2-Seiten. Profhilo-Eigenes (Hautschnitt,
+ * Ueberschriften) entscheidet die Seite selbst ueber den pathKey.
+ */
+export const ADS_V2_EDITORIAL_PAGES: readonly string[] = ["*/*/*"];
+
 export function isAdsV2EditorialPreview(
   path: string | null | undefined,
   city: string | null | undefined,
   loc: string | null | undefined,
   pathKey: string | null | undefined,
   pages: readonly string[] = ADS_V2_EDITORIAL_PREVIEW,
+  livePages: readonly string[] = ADS_V2_EDITORIAL_PAGES,
 ): boolean {
-  if (!isAdsTemplateV2PreviewPath(path)) return false;
   const key = basePathKey(pathKey);
   if (!city || !loc || !key) return false;
-  return pages.some((p) => matchesPattern(p, city, loc, key));
+  const list = isAdsTemplateV2PreviewPath(path) ? pages : livePages;
+  return list.some((p) => matchesPattern(p, city, loc, key));
 }
 
 /** Hat der Standort mindestens eine v2-Seite? (Endpunkt der Zusatzdaten) */

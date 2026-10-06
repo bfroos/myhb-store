@@ -16,6 +16,7 @@ import {
   ADS_TEMPLATE_V2_PAGES,
   ADS_TEMPLATE_V2_TREATMENTS,
   isAdsTemplateV2PreviewPath,
+  isAdsV2EditorialPreview,
   stripAdsTemplateV2Preview,
   openingHoursSummary,
   pickAdsV2Doctors,
@@ -431,4 +432,23 @@ test("ADS_DOCTOR_FEATURE: je Standort nur eine Aerztin/ein Arzt dieses Standorts
   // ohne passendes Foto: kein Eintrag (Block nur mit Text), nie eine fremde Aerztin
   assert.equal(ADS_DOCTOR_FEATURE["gesundbrunnencenter"], undefined);
   assert.equal(ADS_DOCTOR_FEATURE["hoefe-am-bruehl"], undefined);
+});
+
+test("editorial: live auf allen v2-Seiten, in der Vorschau nur die gelisteten", () => {
+  const live = "/standorte/koeln/koeln-arcaden/muskelrelaxans/stirnfalte";
+  assert.equal(isAdsV2EditorialPreview(live, "koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte"), true);
+  assert.equal(isAdsV2EditorialPreview("/ab-beratung" + live, "koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte"), true);
+  assert.equal(
+    isAdsV2EditorialPreview("/vorschau-v2" + live, "koeln", "koeln-arcaden", "muskelrelaxans/stirnfalte"),
+    false,
+  );
+  assert.equal(
+    isAdsV2EditorialPreview(
+      "/vorschau-v2/standorte/duesseldorf/duesseldorf-arcaden/skinbooster/profhilo",
+      "duesseldorf", "duesseldorf-arcaden", "skinbooster/profhilo",
+    ),
+    true,
+  );
+  // bundesweite /aktion-Seiten haben keinen Standort
+  assert.equal(isAdsV2EditorialPreview("/aktion/botox", null, null, "muskelrelaxans/stirnfalte"), false);
 });
