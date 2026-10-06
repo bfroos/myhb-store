@@ -135,9 +135,11 @@ const priceLabel = computed(() => {
 .treatment__link:focus-visible {
   outline: none;
 }
-.treatment__card:has(.treatment__link:focus-visible) {
-  outline: 2px solid var(--color-black);
-  outline-offset: 2px;
+/* Fokus auf der obersten Ebene (der Klickflaeche), weiss und innen wie bei
+   VideoTile: sichtbar auch in dunklen Sektionen, und Bild/Overlay liegen
+   nicht darueber. */
+.treatment__link:focus-visible::after {
+  box-shadow: inset 0 0 0 2px var(--color-white);
 }
 
 .treatment__overlayCTA {
