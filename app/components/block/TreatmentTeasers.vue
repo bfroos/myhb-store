@@ -40,8 +40,15 @@ import {
   buildNewCustomerOffer,
   newCustomerFootnote,
 } from "#shared/newCustomerOffer";
+import { resolveTreatmentTilePath } from "#shared/locationTreatmentLinks";
+import type { CityTreatmentLocations } from "~/lib/strapi/dto/locationSiblings";
 
-const props = defineProps<BlockTreatmentTeasersDto>();
+const props = defineProps<
+  BlockTreatmentTeasersDto & {
+    /** Standort-Konsolidierung: Behandlungen eines Geschwister-Standorts. */
+    cityTreatmentLocations?: CityTreatmentLocations;
+  }
+>();
 const { t, locale } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
 const globals = useGlobals();
@@ -156,15 +163,16 @@ function getTopCategoryLabel(page: TreatmentItem, fallbackKey: string): string {
   return page.topCategory?.name ?? page.name ?? fallbackKey;
 }
 
-// Link to the location only if that location offers the treatment.
+// Link to the location only if that location offers the treatment; otherwise
+// to the sibling location in the same city that does (Köln: Arcaden <->
+// MediaPark), and only then to /behandlungen (shared/locationTreatmentLinks).
 function getTilePath(page: TreatmentPageDto | TreatmentAdsPageDto): string {
-  const isAvailableAtLocation =
-    !props.locationTreatmentPathKeys ||
-    props.locationTreatmentPathKeys.includes(page.pathKey ?? "");
-
-  return props.locationPathKey && isAvailableAtLocation
-    ? `/standorte/${props.locationPathKey}/${page.pathKey}`
-    : `/behandlungen/${page.pathKey}`;
+  return resolveTreatmentTilePath({
+    pathKey: page.pathKey,
+    locationPathKey: props.locationPathKey,
+    locationTreatmentPathKeys: props.locationTreatmentPathKeys,
+    cityTreatmentLocations: props.cityTreatmentLocations,
+  });
 }
 
 function getTileProps(

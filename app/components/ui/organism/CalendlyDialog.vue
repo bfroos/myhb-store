@@ -156,6 +156,7 @@ const { t, locale } = useI18n();
 const dialogRef = inject("dialogRef") as any;
 const params = ref<any>({});
 const { $decorateBookingUrl } = useNuxtApp();
+const { seitenBehandlung } = useSeitenBehandlung();
 
 /**
  * Die Buchungs-URL mit den Kampagnenwerten — fertig, bevor das iFrame entsteht.
@@ -699,8 +700,17 @@ onMounted(async () => {
 
   if (!params.value?.url) {
     showResults.value = false;
+    // pathKey nur, wenn der Dialog fuer die Behandlung DIESER Seite offen ist
+    // (gleicher Typ). Dann blendet myhb-cms Standorte aus, die die Behandlung
+    // in ihrer Stadt abgeben (Köln: Facelift nur MediaPark, Botox nur Arcaden).
+    const seite = seitenBehandlung.value;
+    const pathKey =
+      seite?.pathKey && seite.treatmentType === params.value?.treatmentType
+        ? seite.pathKey
+        : undefined;
     await fetchLocations({
       treatmentType: params.value?.treatmentType as TreatmentType,
+      pathKey,
       force: true,
     });
     showResults.value = true;

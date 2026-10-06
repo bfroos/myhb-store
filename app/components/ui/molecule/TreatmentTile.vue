@@ -1,6 +1,14 @@
 <template>
+  <!--
+    Ticket "Standortarchitektur Köln" (Punkt 6): Der Link-Text ist nur der
+    Behandlungsname. Vorher war die ganze Kachel ein <a> mit Titel, Kurztext
+    und Preis als Ankertext und einem zweiten <a> darin (verschachtelte Links,
+    ungueltiges HTML). Jetzt: ein Link im <h3>, dessen ::after die ganze
+    Kachel klickbar macht ("stretched link"); Preis und Pfeil liegen ausserhalb
+    des Links und sind rein visuell.
+  -->
   <article class="treatment">
-    <NuxtLinkLocale :to="path" class="treatment__card theme-light">
+    <div class="treatment__card theme-light">
       <UiAtomMediaPicture
         v-if="image && isMediaImage(image)"
         :media="image"
@@ -13,7 +21,9 @@
       <div class="treatment__overlay">
         <div class="treatment__overlayContent">
           <h3>
-            {{ title }}
+            <NuxtLinkLocale :to="path" class="treatment__link">
+              {{ title }}
+            </NuxtLinkLocale>
           </h3>
           <p v-if="shortDescription">{{ shortDescription }}</p>
           <div class="treatment__overlayCTA">
@@ -21,8 +31,8 @@
               <UiAtomBaseButton
                 icon-only
                 size="sm"
-                :to="path"
-                :aria-label="$t('navigation.treatmentTile.goToTreatment')"
+                tabindex="-1"
+                aria-hidden="true"
               >
                 <IconArrowRight />
               </UiAtomBaseButton>
@@ -31,15 +41,15 @@
               v-else
               icon-only
               size="sm"
-              :to="path"
-              :aria-label="$t('navigation.treatmentTile.goToTreatment')"
+              tabindex="-1"
+              aria-hidden="true"
             >
               <IconArrowRight />
             </UiAtomBaseButton>
           </div>
         </div>
       </div>
-    </NuxtLinkLocale>
+    </div>
     <div v-if="description" class="treatment__description">
       <p>{{ description }}</p>
     </div>
@@ -109,6 +119,27 @@ const priceLabel = computed(() => {
 .treatment__overlay {
   z-index: 1;
   cursor: pointer;
+}
+
+/* Stretched link: der Titel-Link deckt die ganze Kachel ab. */
+.treatment__link {
+  color: inherit;
+  text-decoration: none;
+}
+.treatment__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.treatment__link:focus-visible {
+  outline: none;
+}
+/* Fokus auf der obersten Ebene (der Klickflaeche), weiss und innen wie bei
+   VideoTile: sichtbar auch in dunklen Sektionen, und Bild/Overlay liegen
+   nicht darueber. */
+.treatment__link:focus-visible::after {
+  box-shadow: inset 0 0 0 2px var(--color-white);
 }
 
 .treatment__overlayCTA {

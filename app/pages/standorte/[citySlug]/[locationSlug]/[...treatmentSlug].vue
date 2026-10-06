@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
+import { medicalProcedureId } from "~/utils/schemaTreatment";
 import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
@@ -46,12 +47,24 @@ const {
   treatmentPage,
   location,
   treatmentPrice, // Expose for schema
+  redirectTarget,
 } = useLocationTreatmentPage();
 
 const { isAdsMode } = useSiteModeFlags();
 // go.: Seitenvorlage v2 fuer die Seiten aus ADS_TEMPLATE_V2_PAGES.
 const isV2 = useAdsTemplateV2();
 const pageLoaded = await fetchPage();
+// Standort-Konsolidierung: Die Behandlung gehoert in dieser Stadt zu einem
+// anderen Standort (Köln: OPs -> MediaPark, nichtoperativ -> Köln Arcaden).
+// Serverseitig ein direkter 301 auf die finale URL, ohne Zwischenschritt.
+// Query (utm_*, gclid) geht mit, wie bei den Redirects der Middleware.
+if (redirectTarget.value) {
+  const { query, hash } = useRoute();
+  await navigateTo(
+    { path: redirectTarget.value, query, hash },
+    { redirectCode: 301, replace: true },
+  );
+}
 
 // Tracking: Ereignisse auf v2-Seiten tragen `template: "v2"` (Vorschau:
 // "v2-preview"), damit sich vorher/nachher trennen laesst
@@ -187,6 +200,13 @@ const localBusinessSchema = computed(() =>
     isAdsMode: isAdsMode.value,
     offerCatalogTreatmentName:
       treatmentPage.value?.treatment?.name ?? treatmentPage.value?.name ?? null,
+    // Klinik (MediaPark): Katalog nur mit der Behandlung dieser Seite.
+    offerCatalogNames: treatmentPage.value?.name ? [treatmentPage.value.name] : [],
+    // Behandlung -> ausfuehrende Einrichtung dieses Standorts.
+    availableServiceId: medicalProcedureId(
+      (config.public.publicUrl as string) || "",
+      route.path,
+    ),
   }),
 );
 

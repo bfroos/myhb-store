@@ -28,6 +28,13 @@ import { treatmentPriceLabel } from "~/utils/treatmentPriceLabel";
  */
 export type SeitenBehandlung = {
   treatmentType?: TreatmentType;
+  /**
+   * pathKey der Behandlungsseite. Der Buchungsdialog gibt ihn an
+   * `/locations/bookable` weiter, damit myhb-cms den effektiven Typ der Seite
+   * nimmt (Köln-Konsolidierung: Facelift steht in Strapi auf
+   * minimally-invasive, wird aber nur in der MediaPark Klinik angeboten).
+   */
+  pathKey?: string;
   appTreatmentSlug?: string;
   kontext: BookingTreatmentContext;
 };
@@ -61,6 +68,7 @@ export function useSeitenBehandlung() {
     gemerkt.value = {
       pfad: route.path,
       treatmentType: page.treatment?.type,
+      pathKey: page.pathKey ?? undefined,
       appTreatmentSlug: resolveAppTreatmentSlug(page),
       kontext: { name, priceLabel: priceLabel || undefined, value: preisInEuro(page) },
     };

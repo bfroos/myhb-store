@@ -36,6 +36,8 @@ export function mapLocationTreatmentPageFixedBlocks(
    * aus shared/adsHeadlines.ts.
    */
   adsStrapiHero = false,
+  /** pathKey -> "city/location": Behandlungen eines Geschwister-Standorts. */
+  cityTreatmentLocations?: Record<string, string>,
 ) {
   if (!treatmentPage || !location) {
     return;
@@ -59,6 +61,7 @@ export function mapLocationTreatmentPageFixedBlocks(
         : "",
     },
     availableTreatmentPathKeys,
+    cityTreatmentLocations,
   );
 
   const fixed = {

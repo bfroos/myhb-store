@@ -15,6 +15,11 @@
     v-if="fixedBlocks?.treatmentTeasers"
     v-bind="fixedBlocks.treatmentTeasers"
   />
+  <BlockLocationSiblingHint
+    v-if="!isAdsMode && siblingLocations?.length"
+    :city-name="location?.city?.name ?? ''"
+    :siblings="siblingLocations"
+  />
   <BlockReviewsBlock v-if="fixedBlocks?.reviews" v-bind="fixedBlocks.reviews" />
   <BlockJobTeasers
     v-if="fixedBlocks?.jobTeasers"
@@ -41,6 +46,7 @@ const {
   location,
   locationLocalizations,
   cityLocalizations,
+  siblingLocations,
   seo,
 } = useLocationPage();
 
@@ -95,6 +101,13 @@ const localBusinessSchema = computed(() =>
     // Ads mode: location overview has no single treatment focus, so drop the
     // generic offer catalog entirely (no Botox/Hyaluron/PRP/... in go.* HTML).
     isAdsMode: isAdsMode.value,
+    // Klinik: Katalog aus den hier tatsaechlich angebotenen Behandlungen
+    // (MediaPark: nur OPs), siehe schemaLocation.ts.
+    offerCatalogNames: (
+      ((fixedBlocks.value?.treatmentTeasers as any)?.treatmentPages ?? []) as any[]
+    )
+      .filter((page) => (page?.ancestorSlugs?.length ?? 0) > 0)
+      .map((page) => page?.name as string),
   }),
 );
 

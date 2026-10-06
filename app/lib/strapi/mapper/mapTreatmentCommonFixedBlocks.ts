@@ -32,6 +32,8 @@ export function mapTreatmentCommonFixedBlocks(
   location?: LocationDto,
   placeholderContext?: PlaceholderContext,
   locationTreatmentPathKeys?: string[],
+  /** pathKey -> "city/location" der Geschwister-Standorte (myhb-cms). */
+  cityTreatmentLocations?: Record<string, string>,
 ) {
   const city = placeholderContext?.city ?? "";
   const cityPhrase = placeholderContext?.cityPhrase ?? "";
@@ -425,6 +427,11 @@ export function mapTreatmentCommonFixedBlocks(
       locationTreatmentPathKeys: useLocationLinks
         ? locationTreatmentPathKeys
         : undefined,
+      // Köln: OPs von der Arcaden-Seite direkt auf MediaPark und
+      // nichtoperative Behandlungen von MediaPark direkt auf die Arcaden,
+      // statt auf /behandlungen (shared/locationTreatmentLinks.ts).
+      cityTreatmentLocations:
+        useLocationLinks && !isAdsMode ? cityTreatmentLocations : undefined,
       hideUnavailableAtLocation: isAdsMode && useLocationLinks,
       cardSettings: {
         colorTheme: ColorTheme.STRONG,

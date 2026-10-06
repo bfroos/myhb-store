@@ -86,7 +86,10 @@ const treatmentPageLoaded = await fetchTreatment();
 
 if (treatmentPageLoaded) {
   if (treatmentType.value) {
-    await fetchLocations({ treatmentType: treatmentType.value });
+    await fetchLocations({
+      treatmentType: treatmentType.value,
+      pathKey: treatmentPage.value?.pathKey,
+    });
   }
   usePageI18nParams(localizations.value, "pathKey");
   await setPageSeo(seo.value);

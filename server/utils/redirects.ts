@@ -3,6 +3,11 @@ import { isAbsolute, resolve as resolvePath } from "node:path";
 import qs from "qs";
 
 import bundledRedirects from "../assets/redirects.json";
+// Standort-Konsolidierung Köln (docs/koeln-konsolidierung): korrigierte Ziele
+// fuer Köln-Alt-URLs (vorher Startseite, Botox-Hub, falsche Behandlung oder
+// Redirect-Kette). Ueberschreibt gleichnamige Eintraege aus redirects.json;
+// Strapi-Redirects haben weiterhin Vorrang vor beiden Dateien.
+import koelnRedirects from "../assets/redirects-koeln.json";
 
 type StrapiPagination = {
   page: number;
@@ -174,7 +179,11 @@ const loadLocalRedirects = async (): Promise<
     !isAbsolute(filePath) && filePath.endsWith("redirects.json");
 
   if (useBundled) {
-    return parseRedirectItems(bundledRedirects);
+    const map = parseRedirectItems(bundledRedirects);
+    for (const [key, value] of parseRedirectItems(koelnRedirects)) {
+      map.set(key, value);
+    }
+    return map;
   }
 
   let raw = "";
