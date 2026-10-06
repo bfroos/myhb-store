@@ -1364,8 +1364,10 @@ const discountLabel = computed(() => {
   display: block !important;
 }
 
+/* Badge neben den Preis, wenn Platz ist; sonst in die naechste Zeile
+   (Sergej 06.10.2026: "pro Zone" + Badge lief auf dem iPhone ueber den Rand) */
 .hero--edit .hero__price--v2 {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
   justify-content: flex-start;
   align-items: center;
   column-gap: var(--space-300);
