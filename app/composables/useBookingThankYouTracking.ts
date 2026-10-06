@@ -5,6 +5,7 @@ import {
   readBookingHandoff,
   clearBookingHandoff,
 } from "~/lib/calendlyBookingHandoff";
+import { pushErweiterteConversions } from "~/lib/enhancedConversions";
 
 /**
  * `booking_confirmed` auf der Dankesseite nach einer Calendly-Buchung
@@ -42,7 +43,26 @@ export function useBookingThankYouTracking() {
     return typeof x === "string" && x.trim() ? x.trim() : undefined;
   };
 
-  const track = () => {
+  /**
+   * Erweiterte Conversions (myhb-app/myhb-os#637): Calendly gibt E-Mail
+   * (`invitee_email`) und die erste Frage "Telefonnummer" (`answer_1`) an die
+   * Dankesseite. Nur mit Marketing-Einwilligung und nur gehasht als
+   * `ec_user_data` in die Datenschicht, BEVOR `booking_thank_you` kommt — der
+   * Ads-Tag 44 liest sie ueber "Vom Nutzer bereitgestellte Daten". Ohne
+   * Einwilligung wird ein frueherer Stand geleert.
+   */
+  const setzeErweiterteConversions = () =>
+    pushErweiterteConversions(window as unknown as Parameters<typeof pushErweiterteConversions>[0], {
+      email: firstString(route.query.invitee_email),
+      phone: firstString(route.query.answer_1),
+    });
+
+  const track = async () => {
+    try {
+      await setzeErweiterteConversions();
+    } catch (err) {
+      console.error("[ads] erweiterte Conversions", err);
+    }
     const inviteeUuid = firstString(route.query.invitee_uuid);
     const eventTypeUuid = firstString(route.query.event_type_uuid);
     const assignedTo = firstString(route.query.assigned_to);
@@ -115,7 +135,7 @@ export function useBookingThankYouTracking() {
 
   onMounted(() => {
     if (!isThankYouPage || !import.meta.client) return;
-    track();
+    void track();
   });
 
   return { isThankYouPage };
