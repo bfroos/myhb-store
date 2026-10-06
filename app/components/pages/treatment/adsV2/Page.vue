@@ -49,7 +49,7 @@
          Bewertungskarte ueber die ganze Breite, darunter die Gruende -->
     <UiLayoutSectionBlock v-if="editorial" spacing="sibling">
       <div class="v2-card v2-why" :class="tone('how')" data-track-placement="v2_trust">
-        <h2 class="v2-h2">Warum sich Frauen für eine {{ terms?.treatment ?? "Behandlung" }} bei uns entscheiden</h2>
+        <h2 class="v2-h2">Warum sich {{ whyWho }} für eine {{ terms?.treatment ?? "Behandlung" }} bei uns entscheiden</h2>
         <img
           v-if="editorialImages"
           class="v2-photo v2-photo--wide"
@@ -139,7 +139,7 @@
       <div class="v2-card v2-split" :class="tone('how')" data-track-placement="v2_how">
         <h2 class="v2-h2">{{ H.how }}</h2>
         <!-- Prototyp editorial: Schaubild der Wirkweise (Zelgai 05.10.2026) -->
-        <figure v-if="editorial && pathKey.startsWith('skinbooster/profhilo')" class="v2-schema">
+        <figure v-if="hasSchema" class="v2-schema">
           <!-- Wirkanimation (Parya/Zelgai 05.10.2026): ein Ablauf in drei
                Phasen, der Hautschnitt laeuft im selben Takt wie die
                Schrittliste darunter. Bewusst ohne Nadel; das Strichgesicht
@@ -205,7 +205,7 @@
         </figure>
         <div class="v2-how" :class="{ 'v2-how--text': !zoneImage }">
           <img
-            v-if="zoneImage && !editorial"
+            v-if="zoneImage && !hasSchema"
             class="v2-how__img"
             :src="zoneImage.src"
             :alt="zoneImage.alt"
@@ -773,7 +773,8 @@ const design = computed(() =>
     ? "ci-preis"
     : adsV2Design(citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
 );
-// Prototyp "editorial" (nur /vorschau-v2/... der gelisteten Seiten)
+// "editorial" (Paryas Entwurf + Zelgai): seit 06.10.2026 auf allen v2-Seiten,
+// unter /vorschau-v2/ weiter nur fuer die gelisteten Seiten
 const editorial = computed(() =>
   isAdsV2EditorialPreview(route.path, citySlug, locSlug, props.hero.treatmentPathKey ?? props.treatmentPage?.pathKey),
 );
@@ -809,12 +810,23 @@ function editorialImage(file: string, alt: string) {
   return { alt, src: (w: number) => `${EDITORIAL_IMAGE_BASE}/width=${w},quality=82,format=auto/${file}` };
 }
 const editorialImages = computed(() =>
-  editorial.value && pathKey.value.startsWith("skinbooster/profhilo")
+  editorial.value
     ? {
         why: editorialImage("2026_MYHB_Tag2_100_5c2a5e929e.webp", "Kundin am Empfang der MY Lounge"),
-        facts: editorialImage("2026_MYHB_Tag1_56_7d86e2abf4.webp", "Beratungsgespräch in der MY Lounge Düsseldorf"),
+        facts: editorialImage("2026_MYHB_Tag1_56_7d86e2abf4.webp", "Beratungsgespräch in der MY Lounge"),
       }
     : null,
+);
+// Hautschnitt-Animation gibt es nur fuer Profhilo; sonst bleibt das Zonenbild.
+const hasSchema = computed(() => editorial.value && pathKey.value.startsWith("skinbooster/profhilo"));
+// "Warum sich Frauen ..." (Zelgai) passt nicht zu Behandlungen, die viele
+// Maenner buchen: dort neutral.
+const WHY_NEUTRAL = [
+  "anti-haarausfall/", "infusionen/", "muskelrelaxans/masseter",
+  "muskelrelaxans/zaehneknirschen", "muskelrelaxans/hyperhidrose",
+];
+const whyWho = computed(() =>
+  WHY_NEUTRAL.some((k) => pathKey.value.startsWith(k)) ? "Kundinnen und Kunden" : "Frauen",
 );
 
 const EDITORIAL_TONES: Record<AdsV2Section, AdsV2Tone> = {
@@ -993,12 +1005,12 @@ const regularLine = computed(() =>
 const EDITORIAL_HEADLINES: Record<string, Record<"klar" | "nutzen", { lines: string[]; subline: string }>> = {
   "skinbooster/profhilo": {
     klar: {
-      lines: ["Profhilo in Düsseldorf", "Skinbooster für mehr Feuchtigkeit"],
+      lines: ["Profhilo in {stadt}", "Skinbooster für mehr Feuchtigkeit"],
       subline: "Behandlung durch Ärzte – ohne Ausfallzeit.",
     },
     nutzen: {
       lines: ["Frischere, straffer", "wirkende Haut."],
-      subline: "Profhilo in Düsseldorf – Behandlung durch Ärzte.",
+      subline: "Profhilo in {stadt} – Behandlung durch Ärzte.",
     },
   },
 };
@@ -1011,14 +1023,17 @@ const editorialCopy = computed(() =>
     ? EDITORIAL_HEADLINES[String(pathKey.value).replace(/-rabatt$/, "")]?.[editorialVariant.value] ?? null
     : null,
 );
-const editorialSubline = computed(() => editorialCopy.value?.subline ?? null);
+const withCity = (v: string) => v.replace("{stadt}", props.location?.city?.name ?? "deiner Nähe");
+const editorialSubline = computed(() =>
+  editorialCopy.value ? withCity(editorialCopy.value.subline) : null,
+);
 const editorialEyebrow = computed(() => {
   if (!editorial.value) return null;
   const label = terms.value?.label ?? "";
   const city = props.location?.city?.name ?? "";
   return [label, city].filter(Boolean).join(" · ") || null;
 });
-const editorialHeadline = computed(() => editorialCopy.value?.lines ?? null);
+const editorialHeadline = computed(() => editorialCopy.value?.lines.map(withCity) ?? null);
 const heroNote = computed(() =>
   isB.value
     ? ["Nur Ärztinnen und Ärzte", "Zufriedenheitsgarantie", "auch ohne Termin"]
