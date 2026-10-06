@@ -6,6 +6,7 @@ import type { BreadcrumbItem } from "~/lib/ui/types";
 import { mapLocationFixedBlocks } from "~/lib/strapi/mapper/mapLocationPageBlocks";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
 import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
+import type { LocationSiblingHintDto } from "~/lib/strapi/dto/locationSiblings";
 
 export function useLocationPage() {
   const { locale, fallbackLocale, localeProperties, t } = useI18n();
@@ -23,6 +24,9 @@ export function useLocationPage() {
   const cityLocalizations = ref<LocalizationDto[]>([]);
   const locationOpenStatus = ref<LocationOpenStatus>();
   const treatmentPages = ref<TreatmentPageDto[]>([]);
+  // Standort-Konsolidierung: Geschwister-Standort der Stadt (Köln Arcaden <->
+  // MediaPark) fuer den Hinweis unter den Behandlungskacheln.
+  const siblingLocations = ref<LocationSiblingHintDto[]>([]);
 
   const breadcrumbItems = computed<BreadcrumbItem[]>(() => [
     {
@@ -69,6 +73,7 @@ export function useLocationPage() {
     // Standortwaehler zu oeffnen.
     setzeSeitenStandort(data.value.data.location);
     treatmentPages.value = data.value.data.treatmentPages;
+    siblingLocations.value = data.value.data.siblingLocations ?? [];
     locationLocalizations.value = data.value.data.location?.localizations ?? [];
     cityLocalizations.value =
       data.value.data.location?.city?.localizations ?? [];
@@ -122,6 +127,7 @@ export function useLocationPage() {
     breadcrumbItems,
     locationLocalizations,
     cityLocalizations,
+    siblingLocations,
     seo,
   };
 }
