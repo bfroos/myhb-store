@@ -1,0 +1,327 @@
+[
+  {
+    "from": "/tr/pages/ohh-de-cologne",
+    "to": "/standorte/koeln/koeln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/ohh-de-cologne",
+    "to": "/standorte/koeln/koeln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-cheek-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/sac-ekimi-moenchengladbach",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-thigh-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberschenkel",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/migraine-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/botox/migraenebehandlung",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-arms-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vitamin-b-complex-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/infusionen/b-komplex-infusion",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/masseter",
+    "to": "/standorte/koeln/koeln-arcaden/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/baby-btx",
+    "to": "/standorte/koeln/koeln-arcaden/botox/baby-botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/fettabsaugung-koln-1",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/location-koln-arcaden",
+    "to": "/standorte/koeln/koeln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/hyperhidrose-starkes-schwitzen",
+    "to": "/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/barbie-btx",
+    "to": "/standorte/koeln/koeln-arcaden/botox/barbie-botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/lipflip",
+    "to": "/standorte/koeln/koeln-arcaden/botox/lipflip",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/polynucleotide-skinbooster-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/mesotherapy-face-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/skinbooster/mesotherapie-nctf-135-ha",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/dudak-duzeltme-koln",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/oberarmstraffung-koeln",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/face-lift-koeln",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/face-lift-cologne",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-fett-weg-spritze-doppelkinn-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/mediapark-klinik/btx/lachfalten",
+    "to": "/standorte/koeln/koeln-arcaden/botox/lachfalten",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/zornesfalte",
+    "to": "/standorte/koeln/koeln-arcaden/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/crows-feet-botox-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/kraehenfuesse",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/zaehneknirschen-bruxismus",
+    "to": "/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lipflip-botox-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/lipflip",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/bunny-lines",
+    "to": "/standorte/koeln/koeln-arcaden/botox/bunny-lines",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/erdbeerkinn",
+    "to": "/standorte/koeln/koeln-arcaden/botox/erdbeerkinn",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/bachdeckenstraffung-koln-1",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/full-face-tedavi-koln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/full-face-botox",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/power-infusion-koln",
+    "to": "/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lemon-bottle-wange-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/mesotherapy-hair-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/full-face-hyaluron-koln",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/vitamin-c-infusion-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/brustvergrosserung-koln",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/full-face-behandlung-koln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/full-face-botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/full-face-treatment-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/botox/full-face-botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/stirnfalte",
+    "to": "/standorte/koeln/koeln-arcaden/botox/stirnfalte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lemon-bottle-arme-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/breast-enlargement-cologne",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lachfalten-koln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/lachfalten",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/kraehenfuesse",
+    "to": "/standorte/koeln/koeln-arcaden/botox/kraehenfuesse",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-fat-away-injection-double-chin-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/lumi-eyes-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/mesoterapi-sac-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lemon-bottle-stomach-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-bauch",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/masseter-botox-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/face-lift-koeln",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/marionet-cizgileri-koln",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/marionettenfalten",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lumi-eyes-cologne",
+    "to": "/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/location-cologne-arcaden",
+    "to": "/standorte/koeln/koeln-arcaden",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/halsfalten-platysma",
+    "to": "/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/browlift",
+    "to": "/standorte/koeln/koeln-arcaden/botox/browlift",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/fettabsaugung-koln",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/koeln-arcaden/btx/migraenebehandlung",
+    "to": "/standorte/koeln/koeln-arcaden/botox/migraenebehandlung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/mediapark-klinik/btx/zornesfalte",
+    "to": "/standorte/koeln/koeln-arcaden/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/hiperhidroz-ter-bezleri-botox-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/lumi-gozler-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/zornesfalte-botox-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/botox/zornesfalte",
+    "code": 301
+  },
+  {
+    "from": "/ar/pages/augenringe-mit-hyaluron-entfernen-koeln",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/augenringe-unterspritzen",
+    "code": 301
+  },
+  {
+    "from": "/blogs/news/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/tr/blogs/haberler/botoks-tedavileri-randevusuz-my-health-beauty-de-koln-arcaden-de",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/blogs/news/botox-treatments-without-appointment-at-my-health-beauty-in-the-cologne-arcaden",
+    "to": "/standorte/koeln/koeln-arcaden/botox",
+    "code": 301
+  }
+]
