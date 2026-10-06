@@ -5,6 +5,7 @@ import {
   readBookingHandoff,
   clearBookingHandoff,
 } from "~/lib/calendlyBookingHandoff";
+import { hashedUserData } from "~/lib/enhancedConversions";
 
 /**
  * `booking_confirmed` auf der Dankesseite nach einer Calendly-Buchung
@@ -42,7 +43,42 @@ export function useBookingThankYouTracking() {
     return typeof x === "string" && x.trim() ? x.trim() : undefined;
   };
 
-  const track = () => {
+  /**
+   * Erweiterte Conversions (myhb-app/myhb-os#637): Calendly gibt E-Mail
+   * (`invitee_email`) und die erste Frage "Telefonnummer" (`answer_1`) an die
+   * Dankesseite. Nur mit Marketing-Einwilligung und nur gehasht als
+   * `ec_user_data` in die Datenschicht, BEVOR `booking_thank_you` kommt — der
+   * Ads-Tag 44 liest sie ueber "Vom Nutzer bereitgestellte Daten". Ohne
+   * Einwilligung wird ein frueherer Stand geleert.
+   */
+  const setzeErweiterteConversions = async () => {
+    const w = window as unknown as {
+      dataLayer?: unknown[];
+      Cookiebot?: { hasResponse?: boolean; consent?: { marketing?: boolean } };
+    };
+    w.dataLayer = w.dataLayer || [];
+    // Cookiebot liest die Einwilligung beim Laden aus dem Cookie; kommt die
+    // Dankesseite schneller, hoechstens 1,5 s darauf warten.
+    for (let i = 0; i < 15 && w.Cookiebot?.hasResponse !== true; i++) {
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    let ec: Record<string, string> | undefined;
+    if (w.Cookiebot?.consent?.marketing === true) {
+      const hashes = await hashedUserData({
+        email: firstString(route.query.invitee_email),
+        phone: firstString(route.query.answer_1),
+      });
+      if (Object.keys(hashes).length) ec = hashes as Record<string, string>;
+    }
+    w.dataLayer.push({ ec_user_data: ec });
+  };
+
+  const track = async () => {
+    try {
+      await setzeErweiterteConversions();
+    } catch (err) {
+      console.error("[ads] erweiterte Conversions", err);
+    }
     const inviteeUuid = firstString(route.query.invitee_uuid);
     const eventTypeUuid = firstString(route.query.event_type_uuid);
     const assignedTo = firstString(route.query.assigned_to);
@@ -115,7 +151,7 @@ export function useBookingThankYouTracking() {
 
   onMounted(() => {
     if (!isThankYouPage || !import.meta.client) return;
-    track();
+    void track();
   });
 
   return { isThankYouPage };
