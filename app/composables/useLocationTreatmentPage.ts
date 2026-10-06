@@ -31,6 +31,14 @@ export function useLocationTreatmentPage() {
   const treatmentPageLocalizations = ref<LocalizationDto[]>([]);
   const locationOpenStatus = ref<LocationOpenStatus>();
   const availableTreatmentPathKeys = ref<string[] | undefined>();
+  // Standort-Konsolidierung (myhb-cms): Behandlungen, die in derselben Stadt
+  // ein anderer Standort bedient -> "citySlug/locationSlug" je pathKey.
+  const cityTreatmentLocations = ref<Record<string, string> | undefined>();
+  // Gesetzt, wenn die API statt der Seite ein Ziel liefert (die Behandlung
+  // gehoert in dieser Stadt zu einem anderen Standort). Die Seite antwortet
+  // darauf mit einem 301 (siehe [...treatmentSlug].vue).
+  const redirectTarget = ref<string | null>(null);
+  const localePath = useLocalePath();
   const strapiSeo = ref<SharedSeoDto | null>(null);
 
   const treatmentPathKey = (route.params.treatmentSlug as string[])
@@ -134,6 +142,16 @@ export function useLocationTreatmentPage() {
       throw handleNotFound(t);
     }
 
+    const redirect = data.value.data.redirect as
+      | { citySlug?: string; locationSlug?: string; treatmentPathKey?: string }
+      | undefined;
+    if (redirect?.citySlug && redirect.locationSlug && redirect.treatmentPathKey) {
+      redirectTarget.value = localePath(
+        `/standorte/${redirect.citySlug}/${redirect.locationSlug}/${redirect.treatmentPathKey}`,
+      );
+      return false;
+    }
+
     treatmentPage.value = data.value.data.treatmentPage;
     location.value = data.value.data.location;
     // #78: siehe useLocationPage — der Standort der Seite traegt alle
@@ -149,6 +167,8 @@ export function useLocationTreatmentPage() {
     locationOpenStatus.value = data.value.data.locationOpenStatus;
     availableTreatmentPathKeys.value =
       data.value.data.availableTreatmentPathKeys ?? undefined;
+    cityTreatmentLocations.value =
+      data.value.data.cityTreatmentLocations ?? undefined;
     strapiSeo.value = (data.value.data.seo ?? null) as SharedSeoDto | null;
 
     return true;
@@ -173,6 +193,7 @@ export function useLocationTreatmentPage() {
       isAdsMode.value,
       availableTreatmentPathKeys.value,
       adsStrapiHero,
+      cityTreatmentLocations.value,
     ),
   );
 
@@ -327,5 +348,6 @@ export function useLocationTreatmentPage() {
     location,
     seo: seoWithFallback,
     treatmentPrice, // Expose for schema
+    redirectTarget,
   };
 }
