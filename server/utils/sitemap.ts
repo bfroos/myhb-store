@@ -44,10 +44,10 @@ type StrapiListResponse<T> = {
   };
 };
 
-const LOCALES = ["de", "en", "tr", "ar", "fr", "nl"] as const;
-const DEFAULT_LOCALE = "de";
+export const LOCALES = ["de", "en", "tr", "ar", "fr", "nl"] as const;
+export const DEFAULT_LOCALE = "de";
 
-const ROUTE_MAP: Record<
+export const ROUTE_MAP: Record<
   string,
   { base: string; locales?: Partial<Record<(typeof LOCALES)[number], string>> }
 > = {
@@ -183,7 +183,7 @@ const ROUTE_MAP: Record<
   general: { base: "/p/[slug]" },
 };
 
-type Locale = (typeof LOCALES)[number];
+export type Locale = (typeof LOCALES)[number];
 
 type PathParams = Partial<{
   slug: string;
@@ -257,7 +257,7 @@ const fillPath = (template: string, params: PathParams) => {
   return filled.replace(/\/+/g, "/");
 };
 
-const getLocalizedPath = (
+export const getLocalizedPath = (
   routeKey: keyof typeof ROUTE_MAP,
   locale: Locale,
   params: PathParams = {},
