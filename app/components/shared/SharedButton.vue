@@ -47,6 +47,7 @@ const props = defineProps<{
 }>();
 
 const { t } = useI18n();
+const globals = useGlobals();
 const { isAdsMode } = useSiteModeFlags();
 const button = computed(() => props.button ?? null);
 
@@ -332,10 +333,15 @@ const openNewsletterSignUpDialog = () => {
         // Mit Buchungsziel ist der Dialog der Rabatt-Schritt vor der
         // Buchung, nicht die Newsletter-Anmeldung (07.10.2026).
         header: hasBookingTarget()
-          ? t("dialogs.newsletterSignUp.headerDiscount")
+          ? t("dialogs.newsletterSignUp.headerDiscount", {
+              newsletterDiscountPercentage:
+                globals.value?.ecommerce?.newsletterDiscountPercentage ?? 20,
+            })
           : t("dialogs.newsletterSignUp.header"),
         style: {
-          width: "25rem",
+          // Die Ueberschrift "20 % Neukunden-Rabatt sichern" stiess bei 25rem
+          // an das Schliessen-X (07.10.2026).
+          width: hasBookingTarget() ? "28rem" : "25rem",
         },
         breakpoints: {
           "960px": "75vw",
