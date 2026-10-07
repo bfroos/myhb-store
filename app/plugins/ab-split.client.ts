@@ -31,6 +31,7 @@
  * Testhandlung, die nicht auf das Banner wartet.
  */
 import {
+  alignAbBucketToApp,
   assignAbBucket,
   forcedAbVariant,
   istNurCalendlySeite,
@@ -47,6 +48,25 @@ export default defineNuxtPlugin((nuxtApp) => {
   const siteMode: AbSource = config.public.siteMode === "ads" ? "ads" : "seo";
 
   const abConfig = readAbBookingConfig(config.public as any);
+
+  // 07.10.2026: Test beendet, alle buchen ueber die App (lib/bookingAbTest).
+  // Keine Zuweisung, kein `ab_assigned` mehr; die Variable im Datenmodell
+  // steht fuer alle auf `app`, damit Tags, die sie lesen, dasselbe sehen wie
+  // die Klick-Ereignisse. Ein alter Calendly-Bucket wird umgeschrieben.
+  if (abConfig.appOnly) {
+    const setzeApp = () => {
+      const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+      w.dataLayer = w.dataLayer || [];
+      w.dataLayer.push({ ab_variant: "app", ab_source: siteMode });
+    };
+    nuxtApp.hook("app:mounted", () => {
+      alignAbBucketToApp();
+      setzeApp();
+    });
+    nuxtApp.hook("page:finish", setzeApp);
+    return;
+  }
+
   // Aus ohne Anteil — ausser jemand erzwingt eine Variante zum Testen.
   if (abConfig.splitPercent <= 0 && !forcedAbVariant()) return;
 

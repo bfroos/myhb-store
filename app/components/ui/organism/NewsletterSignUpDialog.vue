@@ -149,6 +149,7 @@ import { NEUKUNDEN_OFFER } from "~/lib/checkoutAttempt";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import type { BookingPrefill } from "~/lib/bookingPrefill";
+import { createBookingLead } from "~/lib/bookingLead";
 
 const globals = useGlobals();
 const { brandNameShort } = useBrand();
@@ -257,6 +258,7 @@ const hasBooking = computed(
     !!booking.value &&
     !!(
       booking.value.calendlyUrl ||
+      booking.value.appBookingUrl ||
       booking.value.treatmentType ||
       booking.value.appTreatmentSlug
     ),
@@ -304,12 +306,24 @@ async function handleSubmit() {
     phone: phone.value?.trim() || undefined,
   };
 
+  // 07.10.2026: Die App-Buchung fuellt E-Mail und Handynummer nur ueber einen
+  // Lead-Token vor (lib/bookingLead.ts). Parallel zur Anmeldung angefragt,
+  // damit die Buchung nicht spuerbar spaeter aufgeht; ohne Token (Fehler,
+  // Zeitlimit) oeffnet sie wie bisher ohne Vorbefuellung.
+  const leadAnfrage = hasBooking.value
+    ? createBookingLead(prefill)
+    : Promise.resolve(undefined);
+
   const ok = await submitNewsletter();
+  if (!ok && failure.value !== "server") return;
+  const leadToken = await leadAnfrage;
+  if (leadToken) prefill.leadToken = leadToken;
+
   if (!ok) {
     // Anmeldung selbst gescheitert (Mailchimp/Netz, nicht die Eingabe):
     // trotzdem buchen lassen (Benjamin, 02.10.2026). Ohne Rabattkennung,
     // der Code ist ja nicht unterwegs.
-    if (failure.value === "server") openBooking({ prefill });
+    openBooking({ prefill });
     return;
   }
 

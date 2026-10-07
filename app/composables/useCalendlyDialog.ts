@@ -132,6 +132,7 @@ export function useCalendlyDialog() {
         abVariant,
         treatmentContext,
         offer,
+        lead: options?.prefill?.leadToken,
       });
       return;
     }

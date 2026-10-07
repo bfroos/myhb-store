@@ -35,6 +35,14 @@ export function useBookingAbTest() {
   const siteMode: AbSource = config.public.siteMode === "ads" ? "ads" : "seo";
 
   function resolveBooking(urls: BookingUrls): AppliedBooking {
+    // 07.10.2026: Test beendet, alle buchen wie der App-Arm — auch auf den
+    // frueheren Nur-Calendly-Seiten. Ohne `appBookingUrl` faellt der Standort
+    // sichtbar (`ab_fallback`) auf Calendly zurueck. Quelle ist das
+    // Deployment, nicht mehr das Cookie der Testzeit.
+    if (abConfig.appOnly) {
+      const resolved = resolveBookingTarget(urls, "app");
+      return { ...resolved, abSource: siteMode };
+    }
     // Die Meta-Rabatt-Seiten buchen immer ueber Calendly (NUR_CALENDLY_PFADE).
     const aktiv =
       (abConfig.splitPercent > 0 || !!forcedAbVariant()) &&
@@ -46,5 +54,5 @@ export function useBookingAbTest() {
       : resolved;
   }
 
-  return { resolveBooking };
+  return { resolveBooking, appOnly: abConfig.appOnly };
 }

@@ -483,7 +483,8 @@ function handleLocationBook(location: {
   appBookingUrl?: string;
   slug?: string;
 }) {
-  if (!location.calendlyUrl) return;
+  // 07.10.2026: Ein Standort mit App-Link bucht auch ohne Calendly-URL.
+  if (!location.calendlyUrl && !location.appBookingUrl) return;
   // #100: Auf den Meta-Landingpages steht der Standort erst hier fest — der
   // Bucket dagegen schon seit dem Seitenaufruf. Hier wird er angewendet.
   // #78: `bookingUrlsOf` wertet die Sperre der Redaktion aus. Der Knopf dazu
@@ -503,7 +504,8 @@ function handleLocationBook(location: {
   // Standorts, damit die Behandlung in der App vorausgewaehlt ist.
   const bookingUrl =
     withAppTreatmentSlug(targetUrl, params.value?.appTreatmentSlug) ??
-    location.calendlyUrl;
+    erlaubt.calendlyUrl;
+  if (!bookingUrl) return;
   const isApp = isAppBookingUrl(bookingUrl);
   // Conversion-Audit #67: Standortwahl im Dialog tracken, aufgeteilt nach
   // Buchungssystem (Calendly vs. App), damit die Migration messbar ist.
@@ -558,6 +560,7 @@ function handleLocationBook(location: {
       abVariant,
       treatmentContext: params.value?.treatmentContext,
       offer: params.value?.offer,
+      lead: params.value?.prefill?.leadToken,
     });
     return;
   }

@@ -530,6 +530,10 @@ export default defineNuxtConfig({
       // Calendly; das ist der Auslieferungszustand. Wirkt nur im
       // Ads-Deployment, siehe app/lib/bookingAbTest.ts.
       abBookingSplit: process.env.NUXT_PUBLIC_AB_BOOKING_SPLIT,
+      // 07.10.2026: Test beendet, nur noch App-Buchung (go. und www.). Leer =
+      // an; "off" stellt den Split oben wieder her (Notbremse ohne Deploy),
+      // siehe app/lib/bookingAbTest.ts.
+      bookingAppOnly: process.env.NUXT_PUBLIC_BOOKING_APP_ONLY,
       // #141: Abschalter fuer das Vorwaermen des Buchungsfensters. Leer =
       // eingeschaltet, "off" = aus. Das Vorwaermen laedt calendly.com ohne
       // Zutun des Besuchers; wer das aus Einwilligungsgruenden nicht will,
