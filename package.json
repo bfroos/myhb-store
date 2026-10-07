@@ -28,6 +28,7 @@
     "@primeuix/themes": "^2.0.2",
     "@tabler/icons-vue": "^3.36.0",
     "@unhead/vue": "^2.1.2",
+    "@vercel/functions": "^3.9.11",
     "nuxt": "^4.2.2",
     "nuxt-calendly": "^0.1.21",
     "primevue": "^4.5.4",
