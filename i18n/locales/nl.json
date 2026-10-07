@@ -139,6 +139,11 @@
     }
   },
   "blog": {
+    "pagination": "Pagina's",
+    "firstPage": "Eerste pagina",
+    "previousPage": "Vorige pagina",
+    "nextPage": "Volgende pagina",
+    "lastPage": "Laatste pagina",
     "pageTitle": "Pagina {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
