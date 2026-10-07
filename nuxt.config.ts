@@ -343,7 +343,7 @@ export default defineNuxtConfig({
         fr: "/blog/[slug]",
         nl: "/blog/[slug]",
       },
-      "blog/c/[slug]": {
+      "blog/c/[slug]/index": {
         en: "/blog/c/[slug]",
         tr: "/blog/c/[slug]",
         ar: "/mudawwana/c/[slug]",
