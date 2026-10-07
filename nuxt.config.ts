@@ -86,15 +86,11 @@ export default defineNuxtConfig({
   },
 
   // 🔍 Google Analytics 4 Setup
-  scripts: {
-    registry: {
-      googleAnalytics: {
-        load: true,
-        src: 'https://www.googletagmanager.com/gtag/js',
-        async: true,
-      },
-    },
-  },
+  // TSEO-13: Der fruehere Eintrag scripts.registry.googleAnalytics lud
+  // gtag/js ohne Mess-ID - eine zweite, wirkungslose Kopie neben der aus GTM
+  // (G-PB2XDTTPKZ ueber engine.myhealthandbeauty.com), und das vor der
+  // Einwilligung. window.gtag stellt app/plugins/ga4.client.ts als Stub bereit,
+  // GTMs Google-Tag verarbeitet die Aufrufe.
 
   // 3. Font-Optimierung: Weights + metrisch angepasster Fallback gegen CLS
   fonts: {

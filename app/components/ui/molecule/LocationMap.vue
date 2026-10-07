@@ -1,5 +1,5 @@
 <template>
-  <div class="locationMap">
+  <div ref="rootEl" class="locationMap">
     <div v-if="!isReady && !didTimeout" class="locationMap__loading">
       <UiLayoutIconWrapper :size="40" rotate>
         <IconLoader />
@@ -276,6 +276,19 @@ async function initMap() {
   renderMarkers();
 }
 
+// TSEO-13: Google Maps (~30 Dateien plus Kacheln) erst laden, wenn die Karte
+// in die Naehe des Bildschirms kommt. Vorher lud sie auf jeder Standortseite
+// ~2 s nach dem Aufbau, auch ohne dass jemand zur Karte scrollte.
+const rootEl = ref<HTMLElement | null>(null);
+const isNearViewport = ref(false);
+
+async function initWhenAllowed() {
+  if (!isNearViewport.value || !isReady.value || !hasPreferencesConsent.value) {
+    return;
+  }
+  await initMap();
+}
+
 onMounted(async () => {
   if (!import.meta.client || !mapEl.value) return;
 
@@ -283,11 +296,25 @@ onMounted(async () => {
     console.warn("Google Maps: mapId fehlt");
   }
 
-  if (!isReady.value) return;
-  if (!hasPreferencesConsent.value) return;
+  if (typeof IntersectionObserver === "undefined" || !rootEl.value) {
+    isNearViewport.value = true;
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          isNearViewport.value = true;
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "300px 0px" },
+    );
+    observer.observe(rootEl.value);
+  }
 
-  await initMap();
+  await initWhenAllowed();
 });
+
+watch(isNearViewport, () => initWhenAllowed());
 
 watch(
   () => [props.locations, props.fitBoundsLocations],
@@ -297,7 +324,7 @@ watch(
 
 watch(hasPreferencesConsent, async (hasConsent) => {
   if (hasConsent) {
-    await initMap();
+    await initWhenAllowed();
   } else {
     teardownMap();
   }
@@ -306,9 +333,7 @@ watch(hasPreferencesConsent, async (hasConsent) => {
 watch(isReady, async (ready) => {
   if (!ready) return;
   // If consent was already granted before Cookiebot finished loading, init now.
-  if (hasPreferencesConsent.value) {
-    await initMap();
-  }
+  await initWhenAllowed();
 });
 </script>
 <style scoped>
