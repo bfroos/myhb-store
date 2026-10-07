@@ -32,7 +32,14 @@ const globals = useGlobals();
 const appConfig = useAppConfig();
 const route = useRoute();
 
-const reviewer = DEFAULT_MEDICAL_REVIEWER;
+// TSEO-12: Autor aus Strapi, falls gepflegt, sonst Dr. Ruppert; Pruefer
+// ebenso (resolveMedicalReviewer). Beide Felder gibt es in Strapi noch nicht.
+const author = computed(() =>
+  resolveMedicalReviewer((article.value as any)?.author),
+);
+const reviewer = computed(() =>
+  resolveMedicalReviewer((article.value as any)?.medicalReviewer),
+);
 
 const blogPostingSchema = computed(() => {
   const logoUrl = appConfig.seo?.organization?.logo?.url
@@ -48,20 +55,13 @@ const blogPostingSchema = computed(() => {
     brandName,
     logoUrl,
     author:
-      buildReviewerPersonSchema(reviewer, publicUrl, brandName) ?? undefined,
+      buildReviewerPersonSchema(author.value, publicUrl, brandName) ?? undefined,
+    reviewedBy: buildReviewerPersonSchema(reviewer.value, publicUrl, brandName),
   });
 });
 
 useSchemaOrg(blogPostingSchema);
 
-// Schema.org BreadcrumbList (Blog > Kategorie > Artikel)
-const breadcrumbSchema = computed(() =>
-  buildBreadcrumbSchema(
-    breadcrumbItems.value,
-    (config.public.publicUrl as string) || "",
-  ),
-);
-useSchemaOrg(breadcrumbSchema);
 
 // Schema.org FAQPage (nur wenn FAQ-Block im Artikel vorhanden)
 const faqSchema = computed(() => {

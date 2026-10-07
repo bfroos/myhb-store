@@ -5,6 +5,8 @@ import { normalizeSchemaDateTime, toAbsoluteUrl } from "~/utils/schemaShared";
 type BlogSchemaContext = SchemaOrgContext & {
   logoUrl?: string;
   author?: Record<string, unknown>;
+  /** Medizinischer Pruefer (Person); landet am WebPage-Knoten (TSEO-12). */
+  reviewedBy?: Record<string, unknown> | null;
 };
 
 /**
@@ -29,6 +31,14 @@ export function buildBlogPostingSchema(
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": pageUrl,
+      // TSEO-12: Pruefer getrennt vom Autor ausweisen. lastReviewed folgt
+      // der letzten Aenderung (Entscheidung Benjamin 07.10.2026).
+      ...(ctx.reviewedBy
+        ? {
+            reviewedBy: ctx.reviewedBy,
+            ...(dateModified ? { lastReviewed: dateModified.slice(0, 10) } : {}),
+          }
+        : {}),
     },
     ...(datePublished && { datePublished }),
     ...(dateModified && { dateModified }),
@@ -43,6 +53,7 @@ export function buildBlogPostingSchema(
   if (ctx.brandName) {
     schema.publisher = {
       "@type": "Organization",
+      "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
       name: ctx.brandName,
       ...(ctx.logoUrl && {
         logo: {

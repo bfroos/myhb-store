@@ -40,20 +40,6 @@ const websiteSchema = computed(() =>
   }),
 );
 
-const organizationSchema = computed(() =>
-  buildOrganizationSchema({
-    publicUrl: (config.public.publicUrl as string) || "",
-    path: "/",
-    brandName: brandName.value,
-    logoUrl,
-    // Ads mode (go.*): force a neutral Organization description so generic
-    // treatment names (Botox®, ...) never appear in the homepage JSON-LD.
-    description: isAdsMode.value
-      ? "Ästhetische Medizin & Behandlungen an mehreren Standorten in Deutschland."
-      : (globals.value?.seo?.defaultDescription ?? undefined),
-  }),
-);
 
 useSchemaOrg(websiteSchema);
-useSchemaOrg(organizationSchema);
 </script>

@@ -150,10 +150,7 @@ const medicalProcedureSchema = computed(() =>
   }),
 );
 
-// Schema.org BreadcrumbList
-const breadcrumbSchema = computed(() =>
-  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
-);
+// Schema.org BreadcrumbList: kommt aus BaseBreadcrumb (TSEO-12)
 
 // Schema.org FAQPage (nur wenn FAQ-Block sichtbar ist)
 const faqSchema = computed(() => {
@@ -211,7 +208,6 @@ const localBusinessSchema = computed(() =>
 );
 
 useSchemaOrg(medicalProcedureSchema);
-useSchemaOrg(breadcrumbSchema);
 useSchemaOrg(faqSchema);
 useSchemaOrg(videoSchema);
 useSchemaOrg(localBusinessSchema); // NEW: Address + Stars in SERPs

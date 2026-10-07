@@ -68,6 +68,7 @@ export function buildMedicalProcedureSchema(
     ...(ctx.brandName && {
       performer: {
         "@type": "Organization",
+        "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
         name: ctx.brandName,
       },
     }),
@@ -119,6 +120,7 @@ export function buildGeneralMedicalProcedureSchema(
     ...(ctx.brandName && {
       performer: {
         "@type": "Organization",
+        "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
         name: ctx.brandName,
       },
     }),

@@ -228,8 +228,10 @@ export function buildLocalBusinessSchema(
       sameAs: mapsUrl,
       hasMap: mapsUrl,
     }),
-    // Medical specialty for MedicalClinic type
-    medicalSpecialty: "PlasticSurgery",
+    // TSEO-12: Plastische Chirurgie nur fuer die Klinik. Lounges (Botox,
+    // Hyaluron, Infusionen) operieren nicht; eine andere Fachrichtung waere
+    // ebenso eine Behauptung, deshalb dort ohne Angabe.
+    ...(isClinic && { medicalSpecialty: "PlasticSurgery" }),
     // Note: priceRange removed - we use concrete prices per treatment in MedicalProcedure schema
     // Currencies and payment
     currenciesAccepted: "EUR",
@@ -362,7 +364,7 @@ function appendParentOrganization(
     const baseUrl = ctx.publicUrl?.replace(/\/+$/, "") ?? "";
     schema.parentOrganization = {
       "@type": "Organization",
-      // Gleiche @id wie buildOrganizationSchema: beide Standorte haengen an
+      // Gleiche @id wie die Organization in app.vue: beide Standorte haengen an
       // derselben Organisation, bleiben aber eigene Einrichtungen (@id je
       // Standort-URL).
       "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
@@ -370,7 +372,7 @@ function appendParentOrganization(
       url: baseUrl,
       logo: {
         "@type": "ImageObject",
-        url: `${baseUrl}/favicon/favicon.svg`,
+        url: `${baseUrl}/favicon/web-app-manifest-512x512.png`,
       },
     };
   }
