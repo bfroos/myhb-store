@@ -582,6 +582,9 @@ export default defineNuxtConfig({
                 "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
             },
           },
+          // Teil-Sitemaps (TSEO-05): kein ISR, damit ein 503 bei Strapi-Ausfall
+          // nie im Cache landet; das CDN cached per Vercel-CDN-Cache-Control.
+          "/sitemaps/**": { isr: false },
           // Homepages 15 minutes
           "/": { isr: 900 },
           "/en": { isr: 900 },
