@@ -152,6 +152,24 @@ export function useLocationTreatmentPage() {
       return false;
     }
 
+    // TSEO-02: Strapi rendert jede nationale Behandlung an jeder Filiale,
+    // auch wenn sie dort nicht angeboten wird (z. B. Schoenheits-OPs an den
+    // Lounges: 67 Seiten mit 200 und index, Audit 06.10.2026). Was nicht in
+    // availableTreatmentPathKeys steht, ist eine 404. Nur auf www und auf
+    // Deutsch: go. hat eigene Pfade (-rabatt-Rueckfall oben), und die
+    // Standortseiten in anderen Sprachen leiten nach TSEO-01 auf Deutsch um.
+    const offered = data.value.data.availableTreatmentPathKeys as
+      | string[]
+      | undefined;
+    if (
+      !isAdsMode.value &&
+      currentLocale === "de" &&
+      Array.isArray(offered) &&
+      !offered.includes(treatmentPathKey)
+    ) {
+      throw handleNotFound(t);
+    }
+
     treatmentPage.value = data.value.data.treatmentPage;
     location.value = data.value.data.location;
     // #78: siehe useLocationPage — der Standort der Seite traegt alle
@@ -331,6 +349,11 @@ export function useLocationTreatmentPage() {
   // Gepflegtes CMS-SEO gewinnt feldweise, sonst bleibt es beim generierten Text.
   const seoWithFallback = computed(() => ({
     ...(strapiSeo.value ?? {}),
+    // TSEO-04: Behandlungsseiten einer Filiale ohne Eroeffnungsdatum ebenso.
+    ...(location.value &&
+    getLocationStatus(location.value.newOpeningDate) === "comingSoon"
+      ? { metaRobots: "noindex, follow" }
+      : {}),
     metaTitle: strapiSeo.value?.metaTitle || generatedSeo.value.metaTitle,
     metaDescription:
       strapiSeo.value?.metaDescription || generatedSeo.value.metaDescription,

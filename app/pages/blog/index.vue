@@ -5,7 +5,7 @@
     :categories="categories"
   />
   <PagesBlogPageArticles
-    @page-change="handlePageChange"
+    base-path="/blog"
     :articles="articles"
     :pagination="pagination"
     spacing="sibling"
@@ -32,11 +32,4 @@ if (pageLoaded) {
   await setPageSeo(seo.value);
 }
 
-function handlePageChange(page: number) {
-  if (page === 1) {
-    router.push({ path: "/blog" });
-  } else {
-    router.push({ path: `/blog/p/${page}` });
-  }
-}
 </script>

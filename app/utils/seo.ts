@@ -91,9 +91,11 @@ export async function setPageSeo(
   const canonicalUrl = `${config.public.publicUrl}${stripAdsOfferB(stripAdsTemplateV2Preview(route.path))}`;
 
   const robots = computed(() => {
-    if (pageSeo?.metaRobots) return pageSeo.metaRobots;
     const { isAdsMode } = useSiteModeFlags();
-    return isAdsMode.value ? "noindex, nofollow" : "index, follow";
+    // TSEO-10: auf go. gewinnt nie der Strapi-Wert. /lp/lippen-aachen stand
+    // dort per metaRobots auf index (Audit 06.10.2026).
+    if (isAdsMode.value) return "noindex, nofollow";
+    return pageSeo?.metaRobots || "index, follow";
   });
 
   nuxtApp.runWithContext(() => {
@@ -157,10 +159,9 @@ export async function setPageSeo(
     // go. (#186): Strapi-Titel enden teils auf "| MY"; mit dem angehaengten
     // "| MY HEALTH & BEAUTY" stand die Marke doppelt im Tab.
     const rawMetaTitle = pageSeo?.metaTitle || globalsSeo?.defaultTitle || "";
-    const metaTitle =
-      useRuntimeConfig().public.siteMode === "ads"
-        ? rawMetaTitle.replace(/\s*[|–-]\s*MY\s*$/, "")
-        : rawMetaTitle;
+    // TSEO-14: auf www genauso - 90 indexierte Titel endeten auf
+    // "| MY | MY HEALTH & BEAUTY" (Audit 06.10.2026).
+    const metaTitle = rawMetaTitle.replace(/\s*[|–-]\s*MY\s*$/, "");
     const titleSuffix = globalsSeo?.titleSuffix || "";
     const titleSeparator = globalsSeo?.titleSeparator || "";
     

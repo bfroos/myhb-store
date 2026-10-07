@@ -364,7 +364,7 @@ export default defineNuxtConfig({
         fr: "/blog/[slug]",
         nl: "/blog/[slug]",
       },
-      "blog/c/[slug]": {
+      "blog/c/[slug]/index": {
         en: "/blog/c/[slug]",
         tr: "/blog/c/[slug]",
         ar: "/mudawwana/c/[slug]",
@@ -567,6 +567,12 @@ export default defineNuxtConfig({
             // 5. Security & Performance Headers
             headers: {
               "x-content-type-options": "nosniff",
+              // TSEO-10: go. (Ads) darf nie in den Index, auch nicht, wenn in
+              // Strapi jemand metaRobots auf index stellt. Als Header gilt es
+              // fuer jede Antwort, auch XML, TXT und statische Dateien.
+              ...(process.env.NUXT_PUBLIC_SITE_MODE === "ads"
+                ? { "x-robots-tag": "noindex, nofollow" }
+                : {}),
               // x-frame-options intentionally omitted: CSP frame-ancestors in
               // csp-headers.ts handles iframe embedding for Strapi Live Preview.
               // SAMEORIGIN here would block the preview iframe in Strapi admin.
@@ -603,6 +609,9 @@ export default defineNuxtConfig({
                 "public, max-age=0, s-maxage=3600, stale-while-revalidate=86400",
             },
           },
+          // Teil-Sitemaps (TSEO-05): kein ISR, damit ein 503 bei Strapi-Ausfall
+          // nie im Cache landet; das CDN cached per Vercel-CDN-Cache-Control.
+          "/sitemaps/**": { isr: false },
           // Homepages 15 minutes
           "/": { isr: isr(900) },
           "/en": { isr: isr(900) },

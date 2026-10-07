@@ -84,6 +84,32 @@ export function useBlogPage() {
     categories.value = data.value.data.categories;
     pagination.value = data.value.data.pagination;
 
+    // TSEO-09: unbekannte Kategorien und Seiten hinter der letzten waren
+    // Soft-404s (200, index, self-canonical; Audit 06.10.2026).
+    if (
+      categorySlug &&
+      !categories.value?.some((category) => category.slug === categorySlug)
+    ) {
+      throw handleNotFound(t);
+    }
+    if (page > Math.max(1, pagination.value?.pageCount ?? 1)) {
+      throw handleNotFound(t);
+    }
+
+    // TSEO-14: Kategorien und Folgeseiten hatten alle den Titel von /blog
+    // (45 gleiche Titel im Audit). Eigener Titel je Kategorie und Seite.
+    const category = categorySlug
+      ? categories.value?.find((c) => c.slug === categorySlug)
+      : undefined;
+    const parts = [
+      category?.name,
+      seo.value?.metaTitle || t("blog.headline"),
+      page > 1 ? t("blog.pageTitle", { page }) : undefined,
+    ].filter(Boolean);
+    if (category || page > 1) {
+      seo.value = { ...(seo.value ?? {}), metaTitle: parts.join(" – ") };
+    }
+
     return true;
   }
 

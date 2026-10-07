@@ -11,8 +11,11 @@
         <div v-if="hasEmployees" class="employees__list-wrapper">
           <ul class="employees__list" role="list">
             <li v-for="emp in employees" :key="emp.id" class="employees__item">
-              <NuxtLinkLocale
-                :to="`/aerzte/${emp.slug}`"
+              <!-- TSEO-08: ohne Slug (z. B. fehlende Uebersetzung) kein Link
+                   statt /en/doctors/undefined -->
+              <component
+                :is="emp.slug ? NuxtLinkLocale : 'div'"
+                :to="emp.slug ? `/aerzte/${emp.slug}` : undefined"
                 class="employees__figure"
                 :aria-label="
                   $t('blocks.employeeList.showProfile', {
@@ -33,7 +36,7 @@
                   class="employees__placeholder"
                   aria-hidden="true"
                 />
-              </NuxtLinkLocale>
+              </component>
               <div class="employees__body">
                 <p class="employees__meta">
                   <strong class="employees__name">{{
@@ -44,6 +47,7 @@
                   </span>
                 </p>
                 <UiAtomBaseButton
+                  v-if="emp.slug"
                   as="nuxt-link-locale"
                   :to="`/aerzte/${emp.slug}`"
                   size="sm"
@@ -68,6 +72,7 @@ import type { EmployeeDto } from "~/lib/strapi/dto/collections";
 import { isMediaImage } from "~/utils/media";
 
 const props = defineProps<BlockEmployeeListDto>();
+const NuxtLinkLocale = resolveComponent("NuxtLinkLocale");
 const { t } = useI18n();
 
 const imageSources = {

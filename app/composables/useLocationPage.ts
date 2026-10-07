@@ -102,6 +102,11 @@ export function useLocationPage() {
       ? t(`locations.location.locationType.${loc.type}`)
       : "";
     return {
+      // TSEO-04: Filialen ohne Eroeffnungsdatum ("coming soon") nicht in den
+      // Index, wie in der Sitemap. Mit Datum (openSoon) bleiben sie drin.
+      ...(loc && getLocationStatus(loc.newOpeningDate) === "comingSoon"
+        ? { metaRobots: "noindex, follow" }
+        : {}),
       metaTitle: t("locations.location.seo.title", {
         brandNameShort: brandNameShort.value,
         locationType,

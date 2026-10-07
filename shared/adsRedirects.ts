@@ -51,9 +51,21 @@ export function normalizeRedirectPath(input: string): string {
 }
 
 /** Beide Domains: entfernte Aachen-Lippenseite. */
+/**
+ * Geloeschte Einzel-Landingpages (TSEO-04): Platzhalter-Testimonials bzw.
+ * Platzhalter-og:image, auf www indexierbar. Statt 404 auf die echte Seite,
+ * falls alte Anzeigen oder Links darauf zeigen. Auf go. gilt fuer die
+ * Botox-Seite vorher ADS_FIXED (Muskelrelaxans).
+ */
+const REMOVED_LANDING_PAGES: Record<string, string> = {
+  "/lp/lippen-aachen": AACHEN_LIPS_TARGET,
+  "/lp/botox-zornesfalte-koeln": "/standorte/koeln/koeln-arcaden/botox/zornesfalte",
+};
+
 export function legacyPageRedirect(pathname: string): string | null {
   const path = normalizeRedirectPath(pathname);
-  return LIP_FILLER.test(path) ? AACHEN_LIPS_TARGET : null;
+  if (LIP_FILLER.test(path)) return AACHEN_LIPS_TARGET;
+  return REMOVED_LANDING_PAGES[path.toLowerCase()] ?? null;
 }
 
 export type AdsRedirectData = {
@@ -73,7 +85,12 @@ export function locationTreatmentParts(path: string): [string, string, string] |
 export function needsAdsRedirect(pathname: string): boolean {
   const path = normalizeRedirectPath(pathname);
   if (SKIP.test(path)) return false;
-  return LIP_FILLER.test(path) || BLOG.test(path) || RESTRICTED_PATH.test(path);
+  return (
+    LIP_FILLER.test(path) ||
+    path.toLowerCase() in REMOVED_LANDING_PAGES ||
+    BLOG.test(path) ||
+    RESTRICTED_PATH.test(path)
+  );
 }
 
 function clean(target: string): string {
@@ -87,13 +104,15 @@ function clean(target: string): string {
 export function adsRedirectTarget(pathname: string, data: AdsRedirectData = {}): string | null {
   const path = normalizeRedirectPath(pathname);
   if (SKIP.test(path)) return null;
+  // Feste go.-Ziele zuerst: sonst fuehrte die geloeschte Botox-Landingpage
+  // ueber legacyPageRedirect auf eine .../botox/...-Adresse und von dort in
+  // eine zweite Weiterleitung.
+  const fixed = ADS_FIXED[path.toLowerCase()];
+  if (fixed) return fixed;
   const legacy = legacyPageRedirect(path);
   if (legacy) return legacy;
   if (BLOG.test(path)) return ADS_BLOG_TARGET;
   if (!RESTRICTED_PATH.test(path)) return null;
-
-  const fixed = ADS_FIXED[path.toLowerCase()];
-  if (fixed) return fixed;
 
   const unprefixed = path.replace(LOCALE_PREFIX, "") || "/";
   if (unprefixed !== path) return ADS_MR_OVERVIEW;

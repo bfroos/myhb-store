@@ -133,6 +133,12 @@
   },
 
   "blog": {
+    "pagination": "الصفحات",
+    "firstPage": "الصفحة الأولى",
+    "previousPage": "الصفحة السابقة",
+    "nextPage": "الصفحة التالية",
+    "lastPage": "الصفحة الأخيرة",
+    "pageTitle": "الصفحة {page}",
     "breadcrumbTitle": "المدونة",
     "headline": "المدونة",
     "intro": "المعرفة والأخبار وكل ما يتعلق بالصحة والجمال.",

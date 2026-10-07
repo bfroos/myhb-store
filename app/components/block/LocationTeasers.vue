@@ -2,6 +2,7 @@
   <UiLayoutSectionBlock v-if="hasContent">
     <UiOrganismLocationsCard
       :headline="headline"
+      :heading-level="headingLevel"
       :show-filters="showFilter"
       :card-settings="cardSettings"
       :selected-federal-state="selectedFederalState"

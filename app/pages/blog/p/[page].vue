@@ -5,7 +5,7 @@
     :categories="categories"
   />
   <PagesBlogPageArticles
-    @page-change="handlePageChange"
+    base-path="/blog"
     :articles="articles"
     :pagination="pagination"
     spacing="sibling"
@@ -17,10 +17,16 @@
 const route = useRoute();
 const router = useRouter();
 
-const pageParam = computed(() => {
-  const p = Number(route.params.page) || 1;
-  return Math.max(1, p);
-});
+// TSEO-09: nur ganze Zahlen ab 2. Seite 1 ist die Uebersicht selbst (301),
+// alles andere (0, abc, -1) eine 404 statt einer Kopie der ersten Seite.
+const rawPage = String(route.params.page ?? "");
+if (!/^[1-9]\d*$/.test(rawPage)) {
+  throw handleNotFound(useI18n().t);
+}
+if (rawPage === "1") {
+  await navigateTo(useLocalePath()("/blog"), { redirectCode: 301 });
+}
+const pageParam = computed(() => Number(rawPage));
 
 const {
   fetchPage,
@@ -38,11 +44,4 @@ if (pageLoaded) {
   await setPageSeo(seo.value);
 }
 
-function handlePageChange(page: number) {
-  if (page === 1) {
-    router.push({ path: "/blog" });
-  } else {
-    router.push({ path: `/blog/p/${page}` });
-  }
-}
 </script>

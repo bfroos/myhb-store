@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   ADS_OFFER_REDIRECT_SCRIPT,
+  ADS_OFFER_AUTO_SPLIT,
+  buildAdsOfferScript,
   adsOfferBPath,
   adsOfferRegularCards,
   adsOfferRegularPriceLine,
@@ -27,18 +29,44 @@ test("Angebots-Test: Pfade und Parameter", () => {
   assert.equal(wantsAdsOfferB({}), false);
 });
 
-function runScript(pathname: string, search: string) {
+function runScript(pathname: string, search: string, opts: { script?: string; cookie?: string; rnd?: number; ua?: string } = {}) {
   let target: string | null = null;
-  const location = { pathname, search, hash: "", replace: (u: string) => { target = u; } };
-  new Function("location", "URLSearchParams", ADS_OFFER_REDIRECT_SCRIPT)(location, URLSearchParams);
-  return target;
+  const location = { pathname, search, hash: "", hostname: "go.myhealthandbeauty.com", replace: (u: string) => { target = u; } };
+  const document = { cookie: opts.cookie ?? "" };
+  const navigator = { userAgent: opts.ua ?? "Mozilla/5.0 (iPhone)" };
+  const math = { random: () => opts.rnd ?? 0.9 };
+  new Function("location", "URLSearchParams", "document", "navigator", "Math", opts.script ?? ADS_OFFER_REDIRECT_SCRIPT)(
+    location, URLSearchParams, document, navigator, math,
+  );
+  return { target, cookie: document.cookie };
 }
 
 test("Angebots-Test: Kopf-Skript leitet nur mit ?angebot=beratung um, Query bleibt", () => {
-  assert.equal(runScript(P, "?angebot=beratung&gclid=abc"), `/ab-beratung${P}?angebot=beratung&gclid=abc`);
-  assert.equal(runScript(P, "?gclid=abc"), null);
-  assert.equal(runScript(P, ""), null);
-  assert.equal(runScript(`/ab-beratung${P}`, "?angebot=beratung"), null);
+  assert.equal(runScript(P, "?angebot=beratung&gclid=abc").target, `/ab-beratung${P}?angebot=beratung&gclid=abc`);
+  assert.equal(runScript(`/ab-beratung${P}`, "?angebot=beratung").target, null);
+  // ausgeschaltet (Stand bis zum Go): ohne Parameter keine Umleitung, kein Cookie
+  assert.equal(ADS_OFFER_AUTO_SPLIT, false);
+  assert.deepEqual(runScript(P, "?gclid=abc", { rnd: 0.1 }), { target: null, cookie: "" });
+});
+
+test("Angebots-Test: automatische Aufteilung (wenn eingeschaltet)", () => {
+  const S = buildAdsOfferScript(true, 0.5);
+  const b = runScript(P, "?gclid=abc", { script: S, rnd: 0.1 });
+  assert.equal(b.target, `/ab-beratung${P}?gclid=abc`);
+  assert.match(b.cookie, /^myhb_offer_ab=b;.*domain=\.myhealthandbeauty\.com/);
+  const a = runScript(P, "?gclid=abc", { script: S, rnd: 0.9 });
+  assert.equal(a.target, null);
+  assert.match(a.cookie, /^myhb_offer_ab=a;/);
+  // Wiederkehrer bleiben in ihrer Gruppe, Cookie wird nicht neu gesetzt
+  assert.deepEqual(runScript(P, "", { script: S, rnd: 0.1, cookie: "x=1; myhb_offer_ab=a" }), { target: null, cookie: "x=1; myhb_offer_ab=a" });
+  assert.equal(runScript(P, "", { script: S, rnd: 0.9, cookie: "myhb_offer_ab=b" }).target, `/ab-beratung${P}`);
+  // erzwingen und Crawler
+  assert.equal(runScript(P, "?angebot=rabatt", { script: S, rnd: 0.1 }).target, null);
+  assert.equal(runScript(P, "", { script: S, rnd: 0.1, ua: "AdsBot-Google (+http://www.google.com/adsbot.html)" }).target, null);
+  assert.equal(runScript(P, "", { script: S, rnd: 0.1, ua: "Mozilla/5.0 (compatible; Googlebot/2.1)" }).target, null);
+  // B-Seiten und fremde Pfade nie umleiten
+  assert.equal(runScript(`/ab-beratung${P}`, "", { script: S, rnd: 0.1 }).target, null);
+  assert.equal(runScript("/p/agb", "", { script: S, rnd: 0.1 }).target, null);
 });
 
 test("Angebots-Test: regulaere Preise aus Strapi, kein Sternchen, keine Zonen-Rechnung", () => {
