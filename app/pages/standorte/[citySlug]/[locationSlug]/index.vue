@@ -64,7 +64,7 @@ if (locationLoaded) {
       key: "slug",
       paramName: "citySlug",
     },
-  ]);
+  ], { hreflangLocales: ["de"] }); // TSEO-01: nur de + x-default
   await setPageSeo(seo.value);
 }
 

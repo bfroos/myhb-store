@@ -62,7 +62,17 @@ export function usePageI18nParams(
 /**
  * Setzt i18n-Params für mehrere Route-Parameter gleichzeitig (z.B. citySlug + locationSlug).
  */
-export function usePageI18nParamsFromSources(sources: I18nParamSource[]): void {
+export function usePageI18nParamsFromSources(
+  sources: I18nParamSource[],
+  options: {
+    /**
+     * Nur diese Sprachen duerfen als hreflang-Alternate erscheinen, auch wenn
+     * es Uebersetzungen gibt. Standortseiten: nur "de" (TSEO-01), die anderen
+     * Sprachen leiten per 301 auf Deutsch um.
+     */
+    hreflangLocales?: string[];
+  } = {},
+): void {
   const setI18nParams = useSetI18nParams();
   const route = useRoute();
   const coverage = usePageI18nCoverage();
@@ -85,8 +95,10 @@ export function usePageI18nParamsFromSources(sources: I18nParamSource[]): void {
   // hat. Die Params selbst bleiben unverändert (der Sprachumschalter soll sich
   // weiter wie bisher verhalten) - gefiltert wird nur der hreflang-Block.
   const paramNames = Array.from(new Set(sources.map((s) => s.paramName)));
-  const completeLocales = Object.keys(params).filter((locale) =>
-    paramNames.every((paramName) => !!params[locale]?.[paramName])
+  const completeLocales = Object.keys(params).filter(
+    (locale) =>
+      paramNames.every((paramName) => !!params[locale]?.[paramName]) &&
+      (!options.hreflangLocales || options.hreflangLocales.includes(locale)),
   );
 
   coverage.value = { path: route.path, locales: completeLocales };
