@@ -24,6 +24,28 @@ export const config = {
   matcher: ["/((?!_nuxt/|__nuxt|_fonts/|_ipx/|_vercel|api/|favicon).*)"],
 };
 
+/**
+ * Ergebnis je Pfad fuer einige Minuten merken. Ohne das kostete jeder
+ * Anzeigenklick (immer mit gclid) einen zusaetzlichen Pruef-Request:
+ * Preview 07.10. Median 254 ms statt 100 ms. Anzeigen landen fast immer auf
+ * denselben wenigen Seiten, also faellt die Pruefung praktisch nur beim
+ * ersten Klick je Instanz an. Weiterleitungen aendern sich selten; nach
+ * einem Deploy startet ohnehin eine neue Instanz.
+ */
+const TTL_MS = 5 * 60 * 1000;
+const MAX_ENTRIES = 2000;
+type Probe = { at: number; status: number; location: string | null };
+const probes = new Map<string, Probe>();
+
+function remember(key: string, probe: Probe) {
+  if (probes.size >= MAX_ENTRIES) {
+    // Aeltesten Eintrag verwerfen (Map behaelt die Einfuegereihenfolge).
+    const oldest = probes.keys().next().value;
+    if (oldest !== undefined) probes.delete(oldest);
+  }
+  probes.set(key, probe);
+}
+
 /** Markiert den eigenen Pruef-Request, damit er nicht hier landet. */
 const PROBE_HEADER = "x-myhb-redirect-probe";
 const REDIRECT = new Set([301, 302, 303, 307, 308]);
@@ -36,31 +58,41 @@ export default async function middleware(request: Request) {
   // Dateien (robots.txt, sitemap.xml, Bilder) leiten nicht weiter.
   if (/\.[a-z0-9]{2,5}$/i.test(url.pathname)) return next();
 
-  let probe: Response;
-  try {
-    probe = await fetch(new URL(url.pathname, url.origin), {
-      method: "HEAD",
-      redirect: "manual",
-      headers: {
-        [PROBE_HEADER]: "1",
-        // Preview-Deployments sind geschuetzt; das Login-Cookie muss mit.
-        cookie: request.headers.get("cookie") ?? "",
-        "user-agent": request.headers.get("user-agent") ?? "",
-      },
-    });
-  } catch {
-    return next();
+  const key = `${url.host}${url.pathname}`;
+  let probe = probes.get(key);
+  if (!probe || Date.now() - probe.at > TTL_MS) {
+    try {
+      const res = await fetch(new URL(url.pathname, url.origin), {
+        method: "HEAD",
+        redirect: "manual",
+        headers: {
+          [PROBE_HEADER]: "1",
+          // Preview-Deployments sind geschuetzt; das Login-Cookie muss mit.
+          cookie: request.headers.get("cookie") ?? "",
+          "user-agent": request.headers.get("user-agent") ?? "",
+        },
+      });
+      probe = {
+        at: Date.now(),
+        status: res.status,
+        location: res.headers.get("location"),
+      };
+      // Nur eindeutige Antworten merken, keine Fehler oder Checkpoints.
+      if (res.status < 400) remember(key, probe);
+    } catch {
+      return next();
+    }
   }
 
-  const location = probe.headers.get("location");
+  const location = probe.location;
   if (!REDIRECT.has(probe.status) || !location) return next();
 
   const target = new URL(location, url.origin);
   // Nur eigene Weiterleitungen, nie z. B. das Vercel-Login einer Preview.
   if (target.origin !== url.origin) return next();
 
-  for (const [key, value] of url.searchParams) {
-    if (!target.searchParams.has(key)) target.searchParams.append(key, value);
+  for (const [name, value] of url.searchParams) {
+    if (!target.searchParams.has(name)) target.searchParams.append(name, value);
   }
 
   return new Response(null, {
