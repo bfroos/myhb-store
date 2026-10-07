@@ -53,15 +53,46 @@ export function wantsAdsOfferB(query: Record<string, unknown> | URLSearchParams 
 }
 
 /**
- * Skript fuer den <head> der echten v2-Seite: `?angebot=beratung` ->
- * /ab-beratung/... vor dem ersten Zeichnen (location.replace, kein
- * Verlaufseintrag). Ohne den Parameter tut es nichts.
+ * Automatische Aufteilung A/B fuer Google Ads (Benjamin 07.10.2026: beide
+ * Seiten gegeneinander testen, nicht nur ueber `?angebot=beratung`). AUS,
+ * bis Benjamin das Go fuer den Kampagnenstart gibt - dann hier auf true.
+ *
+ * Wer kommt, wird einmal zufaellig zugeteilt; die Zuteilung haelt 30 Tage im
+ * Cookie `myhb_offer_ab` (Domain .myhealthandbeauty.com), damit Wiederkehrer
+ * dieselbe Seite sehen. Crawler (Googlebot, AdsBot ...) werden nie
+ * umgeleitet. Zum Pruefen: `?angebot=beratung` erzwingt B, `?angebot=rabatt` A
+ * (beide ohne Cookie zu setzen).
  */
-export const ADS_OFFER_REDIRECT_SCRIPT = `(function(){try{var q=new URLSearchParams(location.search);if(q.get(${JSON.stringify(
-  ADS_OFFER_QUERY_KEY,
-)})===${JSON.stringify(ADS_OFFER_QUERY_B)}&&/^\\/standorte\\//.test(location.pathname)){location.replace(${JSON.stringify(
-  ADS_OFFER_B_PREFIX,
-)}+location.pathname+location.search+location.hash)}}catch(e){}})();`;
+export const ADS_OFFER_AUTO_SPLIT = false;
+
+/** Anteil Variante B bei automatischer Aufteilung. */
+export const ADS_OFFER_B_SHARE = 0.5;
+
+export const ADS_OFFER_COOKIE = "myhb_offer_ab";
+
+const BOT_RE = "bot|crawl|spider|slurp|adsbot|mediapartners|lighthouse|headless";
+
+/**
+ * Skript fuer den <head> der echten v2-Seite, laeuft vor dem ersten Zeichnen
+ * (location.replace, kein Verlaufseintrag; Query und gclid bleiben dran).
+ */
+export function buildAdsOfferScript(auto: boolean, share: number): string {
+  const B = JSON.stringify(ADS_OFFER_B_PREFIX);
+  const K = JSON.stringify(ADS_OFFER_QUERY_KEY);
+  const VB = JSON.stringify(ADS_OFFER_QUERY_B);
+  const C = JSON.stringify(ADS_OFFER_COOKIE);
+  const go = `location.replace(${B}+location.pathname+location.search+location.hash)`;
+  const autoPart = auto
+    ? `if(q.get(${K})==="rabatt")return;` +
+      `if(new RegExp(${JSON.stringify(BOT_RE)},"i").test(navigator.userAgent||""))return;` +
+      `var m=document.cookie.match(new RegExp("(?:^|; )"+${C}+"=([ab])"));var v=m?m[1]:(Math.random()<${share}?"b":"a");` +
+      `if(!m){var d=/myhealthandbeauty\\.com$/.test(location.hostname)?";domain=.myhealthandbeauty.com":"";document.cookie=${C}+"="+v+";path=/;max-age=2592000;samesite=lax"+d}` +
+      `if(v==="b")${go};`
+    : "";
+  return `(function(){try{if(!/^\\/standorte\\//.test(location.pathname))return;var q=new URLSearchParams(location.search);if(q.get(${K})===${VB}){${go};return}${autoPart}}catch(e){}})();`;
+}
+
+export const ADS_OFFER_REDIRECT_SCRIPT = buildAdsOfferScript(ADS_OFFER_AUTO_SPLIT, ADS_OFFER_B_SHARE);
 
 /**
  * Variante B: regulaerer Preis statt Neukundenpreis, z. B. "ab 149,99 €".
