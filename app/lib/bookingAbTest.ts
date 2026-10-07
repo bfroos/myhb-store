@@ -1,6 +1,24 @@
 /**
  * A/B-Split Calendly vs. App-Buchung (#100, Zuschnitt aus elanagency/myhb-os#87).
  *
+ * ## Beendet am 07.10.2026: nur noch App
+ *
+ * Entscheidung Benjamin: Gebucht wird ab sofort nur noch ueber die App, auf
+ * go. und www. Der Test ist damit zu. Statt den Split auszubauen, steht er
+ * hinter dem Schalter `NUXT_PUBLIC_BOOKING_APP_ONLY` (Default: an). Solange er
+ * an ist,
+ *
+ * - wird kein Bucket mehr gezogen und kein `ab_assigned` mehr gesendet,
+ * - bucht jeder Knopf wie der bisherige App-Arm: `appBookingUrl` des
+ *   Standorts, `ab_variant: "app"` an den Ereignissen und an der App-URL,
+ * - gilt das auch fuer die frueheren Nur-Calendly-Seiten (NUR_CALENDLY_PFADE),
+ * - faellt ein Standort ohne `appBookingUrl` sichtbar auf Calendly zurueck
+ *   (`ab_fallback: true`, wie bisher im App-Arm).
+ *
+ * `NUXT_PUBLIC_BOOKING_APP_ONLY=off` stellt den alten Split
+ * (`NUXT_PUBLIC_AB_BOOKING_SPLIT`) unveraendert wieder her — Notbremse ohne
+ * Code-Deploy, falls die App ausfaellt.
+ *
  * ## Zuweisung und Anwendung sind zwei Zeitpunkte
  *
  * **Zugewiesen** wird beim ersten Seitenaufruf im Ads-Deployment
@@ -61,6 +79,11 @@ const TTL_DAYS = 30;
 export type AbBookingConfig = {
   /** Anteil der Besucher in Prozent, die die App-Buchung bekommen (0–100). */
   splitPercent: number;
+  /**
+   * 07.10.2026: Test beendet, alle buchen ueber die App. Schlaegt den Split.
+   * Aus nur mit `NUXT_PUBLIC_BOOKING_APP_ONLY=off|0|false`.
+   */
+  appOnly: boolean;
 };
 
 export type BookingUrls = {
@@ -107,11 +130,24 @@ function readCookie(name: string): string | null {
  */
 export function readAbBookingConfig(publicConfig: {
   abBookingSplit?: unknown;
+  bookingAppOnly?: unknown;
 }): AbBookingConfig {
   const raw = Number(publicConfig?.abBookingSplit ?? 0);
   return {
     splitPercent: Number.isFinite(raw) && raw > 0 && raw <= 100 ? raw : 0,
+    appOnly: isAppOnlyValue(publicConfig?.bookingAppOnly),
   };
+}
+
+/**
+ * Leer/unbekannt = an. Nur ein ausdrueckliches "off"/"0"/"false"/"no" schaltet
+ * zurueck auf den Split — ein Tippfehler im Env soll nicht still Calendly
+ * zurueckbringen.
+ */
+export function isAppOnlyValue(value: unknown): boolean {
+  if (value === false || value === 0) return false;
+  const v = String(value ?? "").trim().toLowerCase();
+  return !["off", "0", "false", "no", "aus"].includes(v);
 }
 
 /**
@@ -318,4 +354,20 @@ export function resolveBookingTarget(
   }
 
   return { url: appBookingUrl, abVariant: "app" };
+}
+
+/**
+ * Nur-App-Betrieb (07.10.2026): Ein noch liegender Bucket `calendly` aus der
+ * Testzeit wird auf `app` umgeschrieben. Sonst trugen die eigenen
+ * Trichter-Ereignisse (lib/firstPartyFunnel liest das Cookie) bis zu 30 Tage
+ * lang `ab_variant: calendly`, obwohl der Besucher die App bekommt. Neu
+ * geschrieben wird nur, was schon da ist — das Cookie entstand mit
+ * Einwilligung; ohne Cookie bleibt es dabei.
+ */
+export function alignAbBucketToApp(): void {
+  if (typeof window === "undefined") return;
+  if (readAbBucket() !== "calendly") return;
+  try {
+    writeCookie(AB_BOOKING_COOKIE, "app", TTL_DAYS);
+  } catch {}
 }

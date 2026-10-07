@@ -77,7 +77,8 @@ function handleCityInputUpdate(val: string | CitySuggestion | null) {
 }
 
 function handleLocationBook(location: MoleculeLocationItem) {
-  if (!location.calendlyUrl) return;
+  // 07.10.2026: Ein Standort mit App-Link bucht auch ohne Calendly-URL.
+  if (!location.calendlyUrl && !location.appBookingUrl) return;
   // #97/#100: zweiter Buchungsweg des Standorts; der Split entscheidet beim
   // Klick, sofern der Standort dafuer freigegeben ist.
   // #78: Auf einer Behandlungsseite reist die Behandlung mit — Behandlungstyp,

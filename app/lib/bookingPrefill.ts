@@ -8,8 +8,9 @@
  * Die Werte leben nur im Speicher (Dialogdaten) und gehen ausschliesslich in
  * die Calendly-URL des Widgets bzw. den Notausgang "In neuem Tab oeffnen" —
  * nie in dataLayer/GTM, nie in Storage. Die App-Buchung (app.myhealthandbeauty
- * .com/book-appointment) kennt keine Klartext-Vorbefuellung per Query
- * (nur `?lead=<token>`), sie bekommt deshalb nichts.
+ * .com/book-appointment) kennt keine Klartext-Vorbefuellung per Query, nur
+ * `?lead=<token>`; den Token legt lib/bookingLead.ts an und er reist hier als
+ * `leadToken` mit.
  *
  * Laeuft mit `npm run test:unit` (keine Nuxt-Importe).
  */
@@ -17,6 +18,8 @@
 export type BookingPrefill = {
   email?: string;
   phone?: string;
+  /** Token fuer `?lead=` an der App-URL (lib/bookingLead.ts), sonst leer. */
+  leadToken?: string;
 };
 
 /**

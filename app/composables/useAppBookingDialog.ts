@@ -6,6 +6,7 @@ import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
 import { currentCheckoutId } from "~/lib/checkoutAttempt";
 import { markBookingDialogOpened } from "~/composables/useBookingPrewarm";
+import { withLeadToken, withoutLeadToken } from "~/lib/bookingLead";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -244,6 +245,12 @@ export type AppBookingUrlOptions = {
    * URL-Parameter — die App bekommt die Behandlung ueber `treatment=` (#66).
    */
   treatmentContext?: BookingTreatmentContext | null;
+  /**
+   * 07.10.2026: Token aus dem Rabatt-Dialog (lib/bookingLead.ts). Geht als
+   * `lead=` an die App, die damit E-Mail und Handynummer vorbefuellt. Nur der
+   * Token, nie die Daten selbst.
+   */
+  lead?: string | null;
 };
 
 /**
@@ -287,6 +294,10 @@ export function buildBookingUrl(
     if (checkoutId && !url.searchParams.has("checkout_id")) {
       url.searchParams.set("checkout_id", checkoutId);
     }
+    if (options?.lead) {
+      const mitLead = new URL(withLeadToken(url.toString(), options.lead));
+      url.search = mitLead.search;
+    }
     if (hatAbgelehnt() && !url.searchParams.has("consent")) {
       url.searchParams.set("consent", "necessary");
     }
@@ -316,13 +327,17 @@ export function useAppBookingDialog() {
   ) {
     // #180: Ein spaeter geplantes Calendly-Vorwaermen waere jetzt nur Ballast.
     markBookingDialogOpened();
+    const bookingUrl = buildBookingUrl(url, options);
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/AppBookingDialog.vue"),
       ),
       {
         data: {
-          url: buildBookingUrl(url, options),
+          url: bookingUrl,
+          // Fuer das `href` des Notausgangs: ohne Lead-Token, weil das
+          // Klick-Tracking (#155) `href` als `link_url` mitschreibt.
+          linkUrl: withoutLeadToken(bookingUrl),
           // Messung zu elanagency/myhb-os#205 (Abbruch Klick -> App geladen):
           // ab hier laeuft die Uhr fuer `booking_embed_ready` und
           // `booking_dialog_closed`, analog zum Calendly-Dialog (#141).

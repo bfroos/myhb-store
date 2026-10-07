@@ -197,7 +197,11 @@ const googleReview = computed(() => {
  * gesperrt ist (#141: 70 Klicks in zwei Wochen, null Buchungen). Jetzt
  * bekommt sie den Kontaktweg darunter statt eines Knopfes ins Leere.
  */
-const buchbar = computed(() => !!bookingUrlsOf(props.item as any).calendlyUrl);
+// 07.10.2026 (nur noch App): Ein App-Link allein reicht auch.
+const buchbar = computed(() => {
+  const urls = bookingUrlsOf(props.item as any);
+  return !!(urls.calendlyUrl || urls.appBookingUrl);
+});
 
 const phoneHref = computed(() => {
   const phone = props.item.contact?.phoneNumber?.trim();

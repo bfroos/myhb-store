@@ -15,7 +15,11 @@
         loading="eager"
         @load="onIframeLoad"
       />
-      <UiMoleculeBookingEmbedStatus :ready="appReady" :url="params.url" />
+      <UiMoleculeBookingEmbedStatus
+        :ready="appReady"
+        :url="params.linkUrl || params.url"
+        :open-url="params.url"
+      />
     </div>
   </div>
 </template>

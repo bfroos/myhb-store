@@ -163,6 +163,7 @@ const { openCalendlyDialog } = useCalendlyDialog();
 const { openAppBookingDialog } = useAppBookingDialog();
 const { trackBookingClick } = useGoogleAnalytics();
 const { prewarmBookingWhenIdle } = useBookingPrewarm();
+const { resolveBooking } = useBookingAbTest();
 const { treatmentEventUrl } = useCalendlyTreatmentEvent();
 const { seitenStandort } = useSeitenStandort();
 const { seitenBehandlung } = useSeitenBehandlung();
@@ -238,6 +239,14 @@ onMounted(() => {
     action === SharedButtonAction.NEWSLETTER_SIGN_UP && isAdsMode.value;
   if (action !== SharedButtonAction.APPOINTMENT_BOOKING && !booksAfterSignup)
     return;
+  // 07.10.2026 (nur noch App): Vorgewaermt wird nur, was der Klick wirklich
+  // oeffnet. Bucht der Standort ueber die App, laedt calendly.com hier nicht
+  // mehr im Hintergrund; nur ein Standort ohne App-Link waermt noch Calendly.
+  const ziel = resolveBooking({
+    calendlyUrl: bookingUrl.value,
+    appBookingUrl: knopfStandort.value.appBookingUrl,
+  });
+  if (ziel.url !== bookingUrl.value) return;
   prewarmBookingWhenIdle(bookingUrl.value);
 });
 
@@ -274,6 +283,7 @@ const handleClick = () => {
 function hasBookingTarget(): boolean {
   return !!(
     bookingUrl.value ||
+    knopfStandort.value.appBookingUrl ||
     knopfBehandlung.value.treatmentType ||
     knopfBehandlung.value.appTreatmentSlug
   );
