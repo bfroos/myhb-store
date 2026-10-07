@@ -127,7 +127,7 @@ if (pageLoaded) {
       key: "pathKey",
       paramName: "treatmentSlug",
     },
-  ]);
+  ], { hreflangLocales: ["de"] }); // TSEO-01: nur de + x-default
   // Vorschaubild beim Teilen: Titelbild der Seite statt des allgemeinen
   await setPageSeo(seo.value, (fixedBlocks.value?.hero as any)?.cover ?? null);
 }

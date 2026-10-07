@@ -42,7 +42,11 @@ const {
 const cityLoaded = await fetchWithLocations();
 
 if (cityLoaded) {
-  usePageI18nParams(localizations.value, "slug", "citySlug");
+  // TSEO-01: Standortseiten nur auf Deutsch, hreflang nur de + x-default.
+  usePageI18nParamsFromSources(
+    [{ localizations: localizations.value ?? [], key: "slug", paramName: "citySlug" }],
+    { hreflangLocales: ["de"] },
+  );
   await setPageSeo(seo.value);
 }
 </script>
