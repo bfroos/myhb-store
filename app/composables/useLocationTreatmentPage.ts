@@ -14,6 +14,7 @@ import {
 } from "#shared/newCustomerOffer";
 import { adsTreatmentHeadline } from "~/lib/strapi/mapper/adsTreatmentHeadline";
 import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
+import { TREATMENT_LINK_CONTEXT } from "~/lib/treatmentLinkContext";
 
 export function useLocationTreatmentPage() {
   const { locale, fallbackLocale, localeProperties, t } = useI18n();
@@ -212,6 +213,22 @@ export function useLocationTreatmentPage() {
       availableTreatmentPathKeys.value,
       adsStrapiHero,
       cityTreatmentLocations.value,
+    ),
+  );
+
+  // Dynamische Bloecke (Preis-Teaser) verlinken wie die Kacheln: erst hier,
+  // dann am Geschwister-Standort, dann national. go. bleibt national, und
+  // ohne Liste der Behandlungen am Standort auch (wie relatedTreatments).
+  provide(
+    TREATMENT_LINK_CONTEXT,
+    computed(() =>
+      isAdsMode.value || !location.value || !availableTreatmentPathKeys.value
+        ? undefined
+        : {
+            locationPathKey: `${location.value.city?.slug ?? citySlug}/${location.value.slug ?? locationSlug}`,
+            locationTreatmentPathKeys: availableTreatmentPathKeys.value,
+            cityTreatmentLocations: cityTreatmentLocations.value,
+          },
     ),
   );
 
