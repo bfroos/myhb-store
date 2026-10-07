@@ -2,6 +2,7 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <UiMoleculeReviewsBadgeSprite />
 </template>
 
 <script setup lang="ts">
