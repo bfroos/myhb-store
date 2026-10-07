@@ -139,6 +139,7 @@
     }
   },
   "blog": {
+    "pageTitle": "Page {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Informations utiles, actualités et tout sur la santé et la beauté.",

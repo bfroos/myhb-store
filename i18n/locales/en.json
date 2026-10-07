@@ -145,6 +145,7 @@
   },
 
   "blog": {
+    "pageTitle": "Page {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Knowledge, news and everything about health and beauty.",

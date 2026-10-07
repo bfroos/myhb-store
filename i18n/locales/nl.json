@@ -139,6 +139,7 @@
     }
   },
   "blog": {
+    "pageTitle": "Pagina {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Interessante informatie, actueel nieuws en alles over gezondheid en schoonheid.",

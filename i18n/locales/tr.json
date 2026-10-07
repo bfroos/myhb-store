@@ -133,6 +133,7 @@
   },
 
   "blog": {
+    "pageTitle": "Sayfa {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Sağlık ve güzellik konusunda bilgi, haberler ve her şey.",

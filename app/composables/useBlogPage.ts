@@ -96,6 +96,20 @@ export function useBlogPage() {
       throw handleNotFound(t);
     }
 
+    // TSEO-14: Kategorien und Folgeseiten hatten alle den Titel von /blog
+    // (45 gleiche Titel im Audit). Eigener Titel je Kategorie und Seite.
+    const category = categorySlug
+      ? categories.value?.find((c) => c.slug === categorySlug)
+      : undefined;
+    const parts = [
+      category?.name,
+      seo.value?.metaTitle || t("blog.headline"),
+      page > 1 ? t("blog.pageTitle", { page }) : undefined,
+    ].filter(Boolean);
+    if (category || page > 1) {
+      seo.value = { ...(seo.value ?? {}), metaTitle: parts.join(" – ") };
+    }
+
     return true;
   }
 
