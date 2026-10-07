@@ -173,7 +173,8 @@ async function fetchFromStrapi(
   const config = useRuntimeConfig(event);
   const siteMode = config.siteMode || config.public.siteMode;
   const raw = await fetchFromStrapiRaw(event, preview, previewStatus);
-  if (siteMode !== 'ads') return raw;
+  // TSEO-08: eigene Links mit Weiterleitung gleich aufs Ziel (www).
+  if (siteMode !== 'ads') return rewriteRedirectedLinks(raw);
   const url = getRequestURL(event);
   const locale = url.searchParams.get('locale');
   // go.-Standortseite: Behandlungskacheln und Bewertungen zurueck (Inhaber,
