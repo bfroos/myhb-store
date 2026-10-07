@@ -17,6 +17,9 @@ const FALLBACK_LOCALE = 'de';
 const NO_FALLBACK_PATHS = [/^\/menu(?:\/|$)/];
 
 function isPreviewRequest(event: any): boolean {
+  // Ohne gueltiges Bypass-Cookie kaeme ein Entwurf in den oeffentlichen
+  // ISR-Cache, siehe server/utils/previewBypass.ts.
+  if (!hasPrerenderBypass(event)) return false;
   const cookie = getCookie(event, '__NUXT_PREVIEW');
   if (cookie === 'true') return true;
   const raw = getRequestHeader(event, 'cookie') || '';
