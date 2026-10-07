@@ -9,6 +9,11 @@ export default defineNuxtRouteMiddleware(async (to) => {
       query: { path },
     });
 
+    if (response?.redirect?.code === 410) {
+      return abortNavigation(
+        createError({ statusCode: 410, statusMessage: "Gone" }),
+      );
+    }
     if (response?.redirect?.target) {
       return navigateTo(response.redirect.target, { replace: true });
     }

@@ -16,5 +16,10 @@ export default defineEventHandler(async (event) => {
 
   const result = await resolveRedirect(pathname, search);
   if (!result) return;
+  // TSEO-11: entfernte Seiten mit 410 statt 404, damit Google sie schneller
+  // aus dem Index nimmt.
+  if (result.code === 410) {
+    throw createError({ statusCode: 410, statusMessage: "Gone" });
+  }
   return sendRedirect(event, result.target, result.code);
 });
