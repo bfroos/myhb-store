@@ -131,6 +131,8 @@ export type BlockLocationMapDto = {
 
 export type BlockLocationTeasersDto = {
   headline?: string;
+  /** Nicht aus Strapi: Stadtseite setzt 1 fuer den ersten Block (TSEO-14). */
+  headingLevel?: 1 | 2;
   locations?: LocationDto[];
   cardSettings?: CardSettingsDto;
   showFilters?: boolean;

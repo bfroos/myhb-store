@@ -139,6 +139,7 @@
     }
   },
   "blog": {
+    "pageTitle": "Seite {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
