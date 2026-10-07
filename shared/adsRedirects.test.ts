@@ -27,7 +27,21 @@ test("Aachen-Lippenseite auf beiden Domains", () => {
     assert.equal(adsRedirectTarget(p), AACHEN_LIPS_TARGET, p);
   }
   assert.equal(legacyPageRedirect("/standorte/aachen/aquis-plaza/hyaluron/lippen-aufspritzen"), null);
-  assert.equal(legacyPageRedirect("/lp/lippen-aachen"), null);
+});
+
+test("Geloeschte Landingpages (TSEO-04) auf die echte Seite", () => {
+  assert.equal(legacyPageRedirect("/lp/lippen-aachen"), AACHEN_LIPS_TARGET);
+  assert.equal(adsRedirectTarget("/lp/lippen-aachen"), AACHEN_LIPS_TARGET);
+  assert.equal(needsAdsRedirect("/lp/lippen-aachen"), true);
+  assert.equal(
+    legacyPageRedirect("/lp/botox-zornesfalte-koeln"),
+    "/standorte/koeln/koeln-arcaden/botox/zornesfalte",
+  );
+  // go.: direkt auf Muskelrelaxans, keine zweite Weiterleitung
+  assert.equal(
+    adsRedirectTarget("/lp/botox-zornesfalte-koeln"),
+    "/standorte/koeln/koeln-arcaden/muskelrelaxans/zornesfalte",
+  );
 });
 
 test("Blog auf go. aus, alle Sprachen", () => {

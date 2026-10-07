@@ -349,6 +349,11 @@ export function useLocationTreatmentPage() {
   // Gepflegtes CMS-SEO gewinnt feldweise, sonst bleibt es beim generierten Text.
   const seoWithFallback = computed(() => ({
     ...(strapiSeo.value ?? {}),
+    // TSEO-04: Behandlungsseiten einer Filiale ohne Eroeffnungsdatum ebenso.
+    ...(location.value &&
+    getLocationStatus(location.value.newOpeningDate) === "comingSoon"
+      ? { metaRobots: "noindex, follow" }
+      : {}),
     metaTitle: strapiSeo.value?.metaTitle || generatedSeo.value.metaTitle,
     metaDescription:
       strapiSeo.value?.metaDescription || generatedSeo.value.metaDescription,
