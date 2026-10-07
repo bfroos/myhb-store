@@ -18,7 +18,11 @@
  * Auswertung: Landepfad (Calendly `lp:` in salesforce_uuid, GA4
  * page_location/template "v2-meta"), Rabatt-Anmeldungen und Buchungen je Arm.
  */
-export const META_PAGE_SPLIT_ENABLED = true;
+// Beendet 07.10.2026 (Benjamin: "nur allererste Daten sammeln"). Stand bis
+// dahin seit 04.10. 19:40 UTC: alt 275 Sitzungen / 24 mit Buchung, neu 21 / 4
+// (funnel_events) - zu wenig fuer ein Urteil. Alle Meta-Besucher bleiben
+// wieder auf den bisherigen Rabattseiten; /aktion/* bleibt erreichbar.
+export const META_PAGE_SPLIT_ENABLED = false;
 
 /** Anteil, der auf die neue Seite geht (Benjamin: 20 %). */
 export const META_PAGE_SPLIT_SHARE = 0.2;
