@@ -546,6 +546,12 @@ export default defineNuxtConfig({
             // 5. Security & Performance Headers
             headers: {
               "x-content-type-options": "nosniff",
+              // TSEO-10: go. (Ads) darf nie in den Index, auch nicht, wenn in
+              // Strapi jemand metaRobots auf index stellt. Als Header gilt es
+              // fuer jede Antwort, auch XML, TXT und statische Dateien.
+              ...(process.env.NUXT_PUBLIC_SITE_MODE === "ads"
+                ? { "x-robots-tag": "noindex, nofollow" }
+                : {}),
               // x-frame-options intentionally omitted: CSP frame-ancestors in
               // csp-headers.ts handles iframe embedding for Strapi Live Preview.
               // SAMEORIGIN here would block the preview iframe in Strapi admin.

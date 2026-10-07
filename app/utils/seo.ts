@@ -91,9 +91,11 @@ export async function setPageSeo(
   const canonicalUrl = `${config.public.publicUrl}${stripAdsOfferB(stripAdsTemplateV2Preview(route.path))}`;
 
   const robots = computed(() => {
-    if (pageSeo?.metaRobots) return pageSeo.metaRobots;
     const { isAdsMode } = useSiteModeFlags();
-    return isAdsMode.value ? "noindex, nofollow" : "index, follow";
+    // TSEO-10: auf go. gewinnt nie der Strapi-Wert. /lp/lippen-aachen stand
+    // dort per metaRobots auf index (Audit 06.10.2026).
+    if (isAdsMode.value) return "noindex, nofollow";
+    return pageSeo?.metaRobots || "index, follow";
   });
 
   nuxtApp.runWithContext(() => {
