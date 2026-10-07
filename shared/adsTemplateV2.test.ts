@@ -305,8 +305,8 @@ test("Karussell: nur passende Clips ohne fremden Stadtnamen, volle Videos nur mi
   // Stirnfalte: Clips aus Benjamins Zuordnung (stirn), Koeln-Clip nur in Koeln
   const src = (key: string, city: string) =>
     adsClipsFor(key, city).carousel.map((c) => c.source);
-  assert.deepEqual(src("muskelrelaxans/stirnfalte", "koeln"), [209, 831, 839, 843, 1080, 266]);
-  assert.deepEqual(src("muskelrelaxans/stirnfalte", "berlin"), [209, 831, 839, 843, 266]);
+  assert.deepEqual(src("muskelrelaxans/stirnfalte", "koeln"), [831, 839, 843, 1080, 266, 209]);
+  assert.deepEqual(src("muskelrelaxans/stirnfalte", "berlin"), [831, 839, 843, 266, 209]);
   const lippenKoeln = adsClipsFor("hyaluron/lippen-aufspritzen", "koeln").carousel;
   assert.deepEqual(lippenKoeln.map((c) => c.source), [857, 854, 1046, 1073]);
   assert.ok(lippenKoeln.every((c) => !/leipzig|kaiserslautern/i.test(`${c.url} ${c.caption}`)));

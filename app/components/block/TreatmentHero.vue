@@ -1459,11 +1459,17 @@ const discountLabel = computed(() => {
   justify-content: flex-start;
 }
 
+/* Zweite Zeile buendig unter der ersten, nicht eingerueckt neben dem Icon
+   (Benjamin 07.10.2026, Variante B) */
 .hero--edit .hero__v2-note {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-100);
+  display: block;
   margin-top: 0;
+}
+
+.hero--edit .hero__v2-note :deep(svg) {
+  display: inline-block;
+  vertical-align: -3px;
+  margin-right: var(--space-100);
 }
 
 @media (max-width: 899px) {

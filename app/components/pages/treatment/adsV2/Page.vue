@@ -3762,6 +3762,66 @@ const routeHref = computed(() => {
   }
 }
 
+/* Anfahrt am Desktop (Benjamin 07.10.2026: mittlere Spalte war leer):
+   Gebaeude | Adresse, Wegbeschreibung, Knoepfe | Weg-Clip */
+@media (min-width: 1024px) {
+  .v2--desk.v2--edit [data-track-placement="v2_location"] {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 280px);
+    grid-auto-flow: row;
+    column-gap: var(--space-700);
+    row-gap: var(--space-400);
+    align-items: start;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] > .v2-h2 {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] > .v2-location {
+    display: contents;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] .v2-location__image {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] .v2-location__body {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  /* Lageplan unter das Gebaeudebild, Wegbeschreibung in die Mitte */
+  .v2--desk.v2--edit [data-track-placement="v2_location"] > .v2-directions {
+    display: contents;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] .v2-directions__plan {
+    grid-column: 1;
+    grid-row: 3;
+    margin: 0;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] .v2-directions__body {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] > .v2-actions {
+    grid-column: 2;
+    grid-row: 4;
+    margin-top: 0;
+  }
+
+  .v2--desk.v2--edit [data-track-placement="v2_location"] > .v2-way {
+    grid-column: 3;
+    grid-row: 2 / span 3;
+    margin-top: 0;
+  }
+}
+
 /* Angebotskarte "Dein erster Besuch bei MY" */
 .v2-firstvisit {
   position: relative;

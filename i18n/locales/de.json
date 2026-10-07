@@ -510,7 +510,8 @@
       "fallbackCall": "{name} anrufen"
     },
     "newsletterSignUp": {
-      "header": "Newsletter abonnieren"
+      "header": "Newsletter abonnieren",
+      "headerDiscount": "Neukunden-Rabatt sichern"
     },
     "booking": {
       "loading": "Buchung wird geladen …",
@@ -525,7 +526,12 @@
       "headlineDiscount": "Für alle Neukunden: Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
       "exlusiveOffers": "Exklusive Angebote",
       "treatmentNews": "News zu Behandlungen",
-      "eventInvitations": "Einladungen zu Events"
+      "eventInvitations": "Einladungen zu Events",
+      "headlineFirstTreatment": "Sichere dir jetzt {newsletterDiscountPercentage} % Rabatt auf deine erste Behandlung",
+      "stepSecure": "E-Mail und Handynummer eintragen – damit ist dein Rabatt gesichert.",
+      "stepBook": "Direkt danach deinen Termin für die erste Behandlung buchen.",
+      "alsoNewsletter": "Mit der Anmeldung bekommst du außerdem unseren Newsletter:",
+      "submitAndBook": "Rabatt sichern & Termin wählen"
     },
     "success": "Willkommen bei {brandNameShort}! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
     "emailPlaceholder": "Deine E-Mail-Adresse",
