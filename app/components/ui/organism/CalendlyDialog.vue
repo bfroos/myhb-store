@@ -19,7 +19,8 @@
       <UiMoleculeBookingEmbedStatus
         :ready="widgetReady"
         :unbestaetigt="readyAusVorwaermen"
-        :url="embedUrl"
+        :url="embedUrlOhneDaten"
+        :open-url="embedUrl"
       />
     </div>
     <div v-else ref="contentRef" class="calendlyDialog__content">
@@ -140,6 +141,7 @@ import {
   writeBookingHandoff,
 } from "~/lib/calendlyBookingHandoff";
 import { PAGE_SETTINGS, withCalendlyLocale } from "~/lib/calendlyEmbedUrl";
+import { withBookingPrefill } from "~/lib/bookingPrefill";
 import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
 import {
   attachBookingPrewarm,
@@ -166,11 +168,23 @@ const { seitenBehandlung } = useSeitenBehandlung();
  * Ladevorgang: Der Besucher sah den Kreisel, waehrend Calendly von vorne anfing.
  * Dieselbe URL waermt `useBookingPrewarm` schon beim Seitenaufbau vor.
  */
-const embedUrl = computed(() => {
+const embedUrlOhneDaten = computed(() => {
   const url = params.value?.url;
   return url
     ? withCalendlyLocale($decorateBookingUrl(url), locale.value)
     : url;
+});
+
+/**
+ * Die Buchungs-URL, die das Widget laedt: nach dem Rabatt-Dialog mit `email`
+ * und `a1` (Handynummer) vorbefuellt (07.10.2026). Ohne Daten identisch mit
+ * `embedUrlOhneDaten`. Der Link "In neuem Tab oeffnen" zeigt die URL ohne
+ * Daten im `href` (das Klick-Tracking liest `href` mit) und oeffnet diese hier
+ * erst beim Klick.
+ */
+const embedUrl = computed(() => {
+  const url = embedUrlOhneDaten.value;
+  return url ? withBookingPrefill(url, params.value?.prefill) : url;
 });
 
 const { bookingEmbedSrc } = useBookingPrewarm();
@@ -201,7 +215,9 @@ function uebernimmVorgewaermtes() {
     nutztVorgewaermtes.value = false;
     return;
   }
-  const src = bookingEmbedSrc(url);
+  // Mit Vorbefuellung passt der vorgewaermte Rahmen nie (andere URL); er wird
+  // dann abgeraeumt und das Widget laedt mit den Daten neu.
+  const src = bookingEmbedSrc(withBookingPrefill(url, params.value?.prefill));
   prewarmErgebnis.value = prewarmVerdict(src);
   if (!prewarmMatches(src)) {
     nutztVorgewaermtes.value = false;

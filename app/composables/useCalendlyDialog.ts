@@ -12,6 +12,7 @@ import {
 } from "~/composables/useBookingPrewarm";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { offerValue, priceFromLabel } from "~/lib/checkoutAttempt";
+import type { BookingPrefill } from "~/lib/bookingPrefill";
 
 /**
  * Zweiter Buchungsweg desselben Standorts (#97) plus sein Slug fuer den
@@ -34,6 +35,12 @@ export type BookingDialogOptions = {
    * Termin buchen"). Geht als `via_modal: true` an `click_booking`.
    */
   viaModal?: boolean;
+  /**
+   * 07.10.2026: E-Mail/Handynummer aus dem Rabatt-Dialog, damit das
+   * Calendly-Formular sie nicht ein zweites Mal abfragt. Nur im Speicher und
+   * in der Calendly-URL — nie ins Tracking (siehe lib/bookingPrefill.ts).
+   */
+  prefill?: BookingPrefill;
 };
 
 export function useCalendlyDialog() {
@@ -147,6 +154,7 @@ export function useCalendlyDialog() {
           abSource,
           offer,
           viaModal,
+          prefill: options?.prefill,
           deferCheckout,
           bookingValue,
           // #141: Ab hier laeuft die Uhr, die `booking_embed_ready` misst —
