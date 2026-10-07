@@ -7,7 +7,7 @@
   <PagesBlogPageArticles
     :articles="articles"
     :pagination="pagination"
-    @page-change="handlePageChange"
+    :base-path="`/blog/c/${categorySlug}`"
     spacing="sibling"
   />
   <BlockRenderer v-if="blocks && blocks.length > 0" :blocks="blocks" />
@@ -45,13 +45,4 @@ if (pageLoaded) {
   await setPageSeo(seo.value);
 }
 
-function handlePageChange(page: number) {
-  if (page === 1) {
-    router.push({ path: `/blog/c/${categorySlug.value}` });
-  } else {
-    router.push({
-      path: `/blog/c/${categorySlug.value}/p/${page}`,
-    });
-  }
-}
 </script>

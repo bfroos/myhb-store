@@ -139,6 +139,11 @@
     }
   },
   "blog": {
+    "pagination": "Pages",
+    "firstPage": "Première page",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "lastPage": "Dernière page",
     "pageTitle": "Page {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",

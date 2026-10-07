@@ -133,6 +133,11 @@
   },
 
   "blog": {
+    "pagination": "Sayfalar",
+    "firstPage": "İlk sayfa",
+    "previousPage": "Önceki sayfa",
+    "nextPage": "Sonraki sayfa",
+    "lastPage": "Son sayfa",
     "pageTitle": "Sayfa {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
