@@ -50,6 +50,31 @@ const props = defineProps<{
   items?: BreadcrumbItem[];
 }>();
 
+// TSEO-12: Das Schema entsteht hier aus derselben Liste wie die sichtbare
+// Navigation - auf allen Seiten mit Breadcrumb, mit Startseite vorn und
+// lokalisierten Pfaden. Vorher fehlte es auf mehreren Templates, die
+// Startseite fehlte ganz und non-de-Seiten verwiesen auf deutsche Pfade.
+const localePath = useLocalePath();
+const config = useRuntimeConfig();
+const { brandName } = useBrand();
+const breadcrumbSchema = computed(() => {
+  const items = (props.items ?? []).filter(
+    (i) => i && typeof i.title === "string" && i.title.trim().length > 0,
+  );
+  if (!items.length) return null;
+  return buildBreadcrumbSchema(
+    [
+      { title: brandName.value, to: localePath("/") },
+      ...items.map((item) => ({
+        title: item.title,
+        to: item.to ? localePath(item.to) : undefined,
+      })),
+    ],
+    String(config.public.publicUrl || ""),
+  );
+});
+useSchemaOrg(breadcrumbSchema);
+
 const normalizedItems = computed(() => {
   return (props.items ?? [])
     .filter(

@@ -52,12 +52,8 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
-// Schema.org BreadcrumbList
+// Schema.org BreadcrumbList: kommt aus BaseBreadcrumb (TSEO-12)
 const config = useRuntimeConfig();
-const breadcrumbSchema = computed(() =>
-  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
-);
-useSchemaOrg(breadcrumbSchema);
 </script>
 <style scoped>
 .treatments-page__title {

@@ -22,6 +22,37 @@ export const DEFAULT_MEDICAL_REVIEWER: MedicalReviewer = {
   photoUrl: "https://media.myhb.app/6/dr_gero_ruppert_54fc7b563a.png",
 };
 
+/** Arzt-Eintrag aus Strapi (employees), soweit fuer die Nennung gebraucht. */
+export type ReviewerSource = {
+  slug?: string | null;
+  academicTitle?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  role?: string | null;
+  photo?: { url?: string | null } | null;
+} | null | undefined;
+
+/**
+ * Pruefer bzw. Autor einer Seite (TSEO-12, Entscheidung Benjamin 07.10.2026):
+ * Ist in Strapi ein Arzt gepflegt (z. B. Feld medicalReviewer auf der Seite
+ * oder author am Blogartikel), wird er genannt. Sonst Dr. Gero Ruppert als
+ * Standard. Die Strapi-Felder gibt es noch nicht; sobald sie angelegt und
+ * befuellt sind, greifen sie hier ohne weitere Code-Aenderung.
+ */
+export function resolveMedicalReviewer(source: ReviewerSource): MedicalReviewer {
+  const name = [source?.academicTitle, source?.firstName, source?.lastName]
+    .map((part) => (part ?? "").trim())
+    .filter(Boolean)
+    .join(" ");
+  if (!source?.slug || !name) return DEFAULT_MEDICAL_REVIEWER;
+  return {
+    name,
+    slug: source.slug,
+    ...(source.role ? { jobTitle: source.role } : {}),
+    ...(source.photo?.url ? { photoUrl: source.photo.url } : {}),
+  };
+}
+
 /**
  * schema.org Person node für author / reviewedBy.
  * WICHTIG: Person (nicht Physician) ist für Autorschaft korrekt –
@@ -42,7 +73,13 @@ export function buildReviewerPersonSchema(
       : {}),
     ...(reviewer.photoUrl ? { image: reviewer.photoUrl } : {}),
     ...(brandName
-      ? { worksFor: { "@type": "Organization", name: brandName } }
+      ? {
+          worksFor: {
+            "@type": "Organization",
+            "@id": `${toAbsoluteUrl(publicUrl, "/")}#organization`,
+            name: brandName,
+          },
+        }
       : {}),
   };
 }
