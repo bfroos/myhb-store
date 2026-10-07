@@ -2,13 +2,27 @@
   <div class="newsletterSignUpDialog">
     <h2>
       {{
-        $t("newsletter.marketingText.headlineDiscount", {
-          newsletterDiscountPercentage:
-            globals?.ecommerce?.newsletterDiscountPercentage,
-        })
+        $t(
+          hasBooking
+            ? "newsletter.marketingText.headlineFirstTreatment"
+            : "newsletter.marketingText.headlineDiscount",
+          {
+            newsletterDiscountPercentage:
+              globals?.ecommerce?.newsletterDiscountPercentage,
+          },
+        )
       }}
     </h2>
-    <ul class="newsletterSignUpDialog__benefits">
+    <!-- Mit Buchung (Behandlungsseiten): erst Rabatt sichern, dann direkt
+         die erste Behandlung buchen (Benjamin 07.10.2026) -->
+    <ol v-if="hasBooking && !success" class="newsletterSignUpDialog__steps">
+      <li>{{ $t("newsletter.marketingText.stepSecure") }}</li>
+      <li>{{ $t("newsletter.marketingText.stepBook") }}</li>
+    </ol>
+    <p v-if="hasBooking && !success" class="newsletterSignUpDialog__also">
+      {{ $t("newsletter.marketingText.alsoNewsletter") }}
+    </p>
+    <ul class="newsletterSignUpDialog__benefits" :class="{ 'newsletterSignUpDialog__benefits--small': hasBooking }">
       <li>
         <IconRosetteDiscount size="28" stroke="1.25" />
         {{ $t("newsletter.marketingText.exlusiveOffers") }}
@@ -83,12 +97,15 @@
         autocomplete="tel"
         required
       />
-      <div class="newsletterSignUpDialog__actions">
+      <div
+        class="newsletterSignUpDialog__actions"
+        :class="{ 'newsletterSignUpDialog__actions--stacked': hasBooking }"
+      >
         <UiAtomBaseButton variant="secondary" @click="handleClose">
           {{ $t("cta.cancel") }}
         </UiAtomBaseButton>
         <UiAtomBaseButton :disabled="loading" type="submit">
-          {{ $t("cta.subscribe") }}
+          {{ hasBooking ? $t("newsletter.marketingText.submitAndBook") : $t("cta.subscribe") }}
         </UiAtomBaseButton>
       </div>
       <!-- go. Variante A (02.10.2026): niemand bleibt am Formular haengen -->
@@ -290,6 +307,30 @@ async function handleSubmit() {
   gap: var(--space-500);
 }
 
+.newsletterSignUpDialog__steps {
+  display: grid;
+  gap: var(--space-200);
+  margin: calc(-1 * var(--space-200)) 0 0;
+  padding-left: 1.25em;
+  list-style: decimal;
+  font-size: var(--font-sm);
+  line-height: 1.4;
+}
+
+.newsletterSignUpDialog__steps li::marker {
+  font-weight: var(--font-bold);
+}
+
+.newsletterSignUpDialog__also {
+  margin: 0 0 calc(-1 * var(--space-300));
+  font-size: var(--font-xs);
+  color: var(--color-text-light);
+}
+
+.newsletterSignUpDialog__benefits--small {
+  font-size: var(--font-xs);
+}
+
 .newsletterSignUpDialog h2 {
   font-size: var(--font-md);
   line-height: var(--line-md);
@@ -359,5 +400,17 @@ async function handleSubmit() {
   gap: var(--space-300);
   justify-content: flex-end;
   margin-top: var(--space-400);
+}
+
+/* Langer Knopftext ("Rabatt sichern & Termin wählen"): untereinander,
+   der Hauptknopf oben, damit nichts aus dem Dialog ragt. */
+.newsletterSignUpDialog__actions--stacked {
+  flex-direction: column-reverse;
+  gap: var(--space-200);
+}
+
+.newsletterSignUpDialog__actions--stacked > :deep(*) {
+  width: 100%;
+  justify-content: center;
 }
 </style>

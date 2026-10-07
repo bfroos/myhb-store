@@ -262,7 +262,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Lip-Flip-Behandlung",
     object: "den Lip Flip",
     about: "zum Lip Flip",
-    subline: "Oberlippe wirkt voller – ohne Filler, in 15–20 Minuten",
+    subline: "Oberlippe wirkt voller, ohne Filler – Behandlung durch Ärzte",
     zone: "lipflip",
     howItWorks:
       "Beim Lip Flip wird eine sehr kleine Menge Muskelrelaxans knapp über der Oberlippe gesetzt. Der Ringmuskel um den Mund entspannt sich etwas, die Oberlippe dreht sich leicht nach außen und wirkt voller. Es wird kein Volumen aufgefüllt.",
@@ -314,7 +314,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Full-Face-Behandlung",
     object: "die Full-Face-Behandlung",
     about: "zur Full-Face-Behandlung",
-    subline: "Stirn, Zornesfalte und Krähenfüße in einem Termin – ohne Ausfallzeit",
+    subline: "Stirn, Zornesfalte und Krähenfüße in einem Termin – Behandlung durch Ärzte",
     howItWorks: `${MR_HOW} Bei Full Face werden mehrere Zonen in einer Sitzung behandelt, meist Stirn, Zornesfalte und Krähenfüße – die Menge je Zone passend zu deiner Mimik.`,
     facts: { ...MR_FACTS, dauer: "40–60 Minuten", wirkung: "nach 3–5 Tagen", ergebnis: "nach 10–14 Tagen" },
     firstWhen: "Tag 3–5",
@@ -473,7 +473,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Lippenkorrektur",
     object: "die Lippenkorrektur",
     about: "zur Lippenkorrektur",
-    subline: "Früheres Ergebnis korrigieren – auflösen, dann neu formen",
+    subline: "Früheres Ergebnis korrigieren – Behandlung durch Ärzte",
     zone: "lippen",
     howItWorks:
       "Bei einer Lippenkorrektur wird ein unschönes Ergebnis einer früheren Behandlung verbessert. Oft wird altes Hyaluron zuerst mit einem Enzym aufgelöst, dann werden die Lippen nach einer Pause neu geformt.",
@@ -505,7 +505,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Nasolabialfalten-Behandlung",
     object: "die Nasolabialfalte",
     about: "zur Nasolabialfalte",
-    subline: "Weichere Falte zwischen Nase und Mund – Ergebnis sofort sichtbar",
+    subline: "Weichere Falte zwischen Nase und Mund – Behandlung durch Ärzte",
     zone: "nasolabial",
     howItWorks: `${HA_HOW} Entlang der Falte von der Nase zum Mundwinkel gesetzt, polstert es sie auf. Oft hilft auch etwas Volumen an der Wange.`,
     facts: { ...HA_FACTS, dauer: "20–30 Minuten", ergebnis: "nach ca. 1–2 Wochen" },
@@ -517,7 +517,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Marionettenfalten-Behandlung",
     object: "die Marionettenfalten",
     about: "zu Marionettenfalten",
-    subline: "Mundwinkel wirken weniger nach unten gezogen – in 30–40 Minuten",
+    subline: "Mundwinkel wirken weniger nach unten gezogen – Behandlung durch Ärzte",
     zone: "marionette",
     howItWorks: `${HA_HOW} Unter den Mundwinkeln gesetzt, füllt es die Falten zum Kinn hin auf. Die Mundwinkel wirken dadurch weniger nach unten gezogen.`,
     facts: { ...HA_FACTS, dauer: "30–40 Minuten" },
@@ -529,7 +529,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Plisseefalten-Behandlung",
     object: "die Plisseefalten",
     about: "zu Plisseefalten",
-    subline: "Feine Linien über der Oberlippe mildern – die Lippe bleibt beweglich",
+    subline: "Feine Linien über der Oberlippe mildern – Behandlung durch Ärzte",
     howItWorks: `${HA_HOW} Ein feines, weiches Hyaluron wird in kleinen Mengen in die senkrechten Fältchen über der Oberlippe gesetzt. Die Haut wirkt glatter, die Lippe bleibt beweglich.`,
     facts: { ...HA_FACTS, dauer: "30–40 Minuten" },
     related: ["hyaluron/lippen-aufspritzen", "muskelrelaxans/lipflip", "hyaluron/nasolabialfalte", "hyaluron/marionettenfalten"],
@@ -572,7 +572,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Wangenbehandlung",
     object: "den Wangenaufbau",
     about: "zum Wangenaufbau",
-    subline: "Mehr Volumen auf dem Wangenknochen – Ergebnis sofort sichtbar",
+    subline: "Mehr Volumen auf dem Wangenknochen – Behandlung durch Ärzte",
     zone: "wangen",
     howItWorks: `${HA_HOW} Auf dem Wangenknochen gesetzt, gibt es Volumen und Halt zurück. Das Gesicht kann frischer wirken, oft werden auch die Falten darunter weicher.`,
     facts: { ...HA_FACTS, dauer: "20–30 Minuten", ergebnis: "nach wenigen Tagen", haltbarkeit: "ca. 6–9 Monate" },
@@ -588,7 +588,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Full-Face-Behandlung",
     object: "Full Face Hyaluron",
     about: "zu Full Face Hyaluron",
-    subline: "Wangen, Kinn und Kieferlinie in einem Termin aufeinander abgestimmt",
+    subline: "Wangen, Kinn und Kieferlinie abgestimmt – Behandlung durch Ärzte",
     howItWorks: `${HA_HOW} Bei Full Face werden mehrere Bereiche in einer Sitzung aufeinander abgestimmt, etwa Wangen, Kinn, Kieferlinie und Falten um den Mund. Ziel ist ein ausgewogenes Gesicht, nicht ein einzelner Punkt.`,
     facts: { ...HA_FACTS, dauer: "60–90 Minuten", haltbarkeit: "ca. 6–9 Monate" },
     refreshWhen: "nach ca. 6–9 Monaten",
@@ -604,7 +604,7 @@ const SPECS: Record<string, Spec> = {
     treatment: "Augenringe-Behandlung",
     object: "die Augenringe",
     about: "zu Augenringen",
-    subline: "Weniger Schatten unter den Augen – Ergebnis zum Teil sofort sichtbar",
+    subline: "Weniger Schatten unter den Augen – Behandlung durch Ärzte",
     zone: "traenenrinne",
     howItWorks: `${HA_HOW} Ein sehr weiches Hyaluron wird in kleinen Mengen in die Tränenrinne unter dem Auge gesetzt. Die Vertiefung wird flacher, der Schatten darüber weniger.`,
     facts: { ...HA_FACTS, dauer: "20–30 Minuten", ergebnis: "nach ca. 1–2 Wochen", haltbarkeit: "ca. 9–12 Monate, oft länger" },
@@ -900,9 +900,14 @@ const AT_LOCATION: Readonly<Record<string, string>> = {
   "MediaPark Klinik": "in der",
 };
 
-/** Standortname ohne Umbruch (Leerzeichen und Bindestrich geschuetzt). */
+/**
+ * Standortname ohne Umbruch an Leerzeichen. Am Bindestrich darf er brechen:
+ * "Gesundbrunnen-Center" war geschuetzt und passte auf schmalen Handys nicht
+ * in die Zeile, dann brach der Browser mitten im Wort ("Cente|r",
+ * Benjamin 07.10.2026).
+ */
 export function adsV2NoBreak(text: string): string {
-  return text.replace(/ /g, "\u00a0").replace(/-/g, "\u2011");
+  return text.replace(/ /g, "\u00a0");
 }
 
 export function adsV2AtLocation(locationName: string | null | undefined): string {

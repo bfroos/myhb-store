@@ -329,7 +329,11 @@ const openNewsletterSignUpDialog = () => {
       props: {
         modal: true,
         draggable: false,
-        header: t("dialogs.newsletterSignUp.header"),
+        // Mit Buchungsziel ist der Dialog der Rabatt-Schritt vor der
+        // Buchung, nicht die Newsletter-Anmeldung (07.10.2026).
+        header: hasBookingTarget()
+          ? t("dialogs.newsletterSignUp.headerDiscount")
+          : t("dialogs.newsletterSignUp.header"),
         style: {
           width: "25rem",
         },

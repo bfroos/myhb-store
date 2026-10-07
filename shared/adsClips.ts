@@ -305,12 +305,13 @@ const CLIPS: Record<string, AdsClipSet> = {
   // ---------------------------------------------------------- Muskelrelaxans
   "muskelrelaxans/stirnfalte": {
     heroes: [H.stirn],
-    carousel: [MR.injectionMan, MR.marking, MR.refresh, MR.threeZones, MR.koeln, MR.trio],
+    // Benjamin 07.10.2026: vor allem Frauen als Kundinnen -> Clip mit Mann ans Ende
+    carousel: [MR.marking, MR.refresh, MR.threeZones, MR.koeln, MR.trio, MR.injectionMan],
     feedback: FEEDBACK_MR,
   },
   "muskelrelaxans/zornesfalte": {
     heroes: [H.stirn],
-    carousel: [MR.zornesMan, MR.marking, MR.firstTime, MR.zornesKoeln, MR.threeZones, MR.koeln],
+    carousel: [MR.marking, MR.firstTime, MR.zornesKoeln, MR.threeZones, MR.koeln, MR.zornesMan],
     feedback: FEEDBACK_MR,
   },
   "muskelrelaxans/kraehenfuesse": {

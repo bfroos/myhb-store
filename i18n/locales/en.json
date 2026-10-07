@@ -519,7 +519,8 @@
       "locationDenied": "Location unavailable. Please enter a postcode or city."
     },
     "newsletterSignUp": {
-      "header": "Subscribe to our newsletter"
+      "header": "Subscribe to our newsletter",
+      "headerDiscount": "Secure your new-customer discount"
     },
     "booking": {
       "loading": "Loading booking …",
@@ -535,7 +536,12 @@
       "headlineDiscount": "For all new customers: Get {newsletterDiscountPercentage}% exclusive discount!",
       "exlusiveOffers": "Exclusive Offers",
       "treatmentNews": "News about treatments",
-      "eventInvitations": "Event invitations"
+      "eventInvitations": "Event invitations",
+      "headlineFirstTreatment": "Get {newsletterDiscountPercentage} % off your first treatment now",
+      "stepSecure": "Enter your email and mobile number – your discount is secured.",
+      "stepBook": "Right after that, book the appointment for your first treatment.",
+      "alsoNewsletter": "You'll also receive our newsletter:",
+      "submitAndBook": "Secure discount & pick a time"
     },
     "success": "Welcome to {brandNameShort}! If the address is not yet registered, you will receive a confirmation email shortly. If you are already registered, nothing will happen.",
     "emailPlaceholder": "Your email address",
