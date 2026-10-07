@@ -58,6 +58,15 @@ export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const strapiUrl = config.public.strapiUrl;
 
+  // TSEO-10: go. ist noindex; eine Video-Sitemap dort meldet Google Videos
+  // auf Seiten, die nicht in den Index sollen. Wie /sitemap.xml: 404.
+  if (config.public.siteMode === "ads") {
+    throw createError({
+      statusCode: 404,
+      statusMessage: "Video sitemap is disabled in ads mode",
+    });
+  }
+
   if (!strapiUrl) {
     throw createError({
       statusCode: 500,
