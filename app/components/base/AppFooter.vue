@@ -101,6 +101,14 @@
                       {{ $t("navigation.secondary.myClub") }}
                     </a>
                   </li>
+                  <li v-if="kontoLink.enabled.value">
+                    <a
+                      :href="kontoLink.href('footer')"
+                      @click="kontoLink.trackClick('footer')"
+                    >
+                      {{ $t("navigation.footer.myAccount") }}
+                    </a>
+                  </li>
                   <li v-if="locale === 'de'">
                     <NuxtLinkLocale to="/p/kunden-erfahrungen">
                       Kunden Erfahrungen
@@ -264,6 +272,8 @@ const { categories: adsCategories, overviewLinks: adsOverviewLinks } =
 const { openCookieSettings } = useCookiebot();
 const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
+// #282: "Mein Konto" zur Kunden-App, hinter NUXT_PUBLIC_KONTO_LINK.
+const kontoLink = useKontoLink();
 
 // Overrides for specific price categories that should link to a dedicated
 // page instead of the default /preise#<slug> anchor.

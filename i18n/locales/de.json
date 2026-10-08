@@ -56,7 +56,8 @@
   },
   "navigation": {
     "header": {
-      "languageSwitcher": "Sprache wechseln"
+      "languageSwitcher": "Sprache wechseln",
+      "myAccount": "Mein Konto"
     },
     "secondary": {
       "doctors": "Ärzte",
@@ -73,7 +74,8 @@
       "prices": "Preise",
       "careers": "Karriere",
       "blog": "Blog",
-      "aboutUs": "Über uns"
+      "aboutUs": "Über uns",
+      "myAccount": "Mein Konto / MY App"
     },
     "meta": {
       "privacyPolicy": "Datenschutz",

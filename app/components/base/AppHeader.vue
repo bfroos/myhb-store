@@ -65,7 +65,17 @@
             @hideSubnav="hideSubnav"
           />
         </div>
-        <div v-if="!isAdsMode" class="appHeader__mobile">
+        <div v-if="!isAdsMode" class="appHeader__mobile appHeader__mobileEnd">
+          <a
+            v-if="kontoLink.enabled.value"
+            :href="kontoLink.href('header')"
+            class="appHeader__konto appHeader__konto--iconOnly"
+            :aria-label="$t('navigation.header.myAccount')"
+            :title="$t('navigation.header.myAccount')"
+            @click="kontoLink.trackClick('header')"
+          >
+            <IconUserCircle :size="24" aria-hidden="true" />
+          </a>
           <UiMoleculeLanguageSwitcher />
         </div>
         <div class="appHeader__desktop appHeader__actions">
@@ -86,6 +96,15 @@
             }"
             ohne-seiten-kontext
           />
+          <a
+            v-if="kontoLink.enabled.value"
+            :href="kontoLink.href('header')"
+            class="appHeader__konto text-link"
+            @click="kontoLink.trackClick('header')"
+          >
+            <IconUserCircle :size="20" aria-hidden="true" />
+            {{ $t("navigation.header.myAccount") }}
+          </a>
         </div>
       </nav>
     </div>
@@ -99,7 +118,7 @@
   </header>
 </template>
 <script setup lang="ts">
-import { IconMenu2, IconPhone } from "@tabler/icons-vue";
+import { IconMenu2, IconPhone, IconUserCircle } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
@@ -115,6 +134,8 @@ const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 
 const isMobileMenuOpen = ref(false);
+// #282: "Mein Konto" zur Kunden-App, hinter NUXT_PUBLIC_KONTO_LINK.
+const kontoLink = useKontoLink();
 
 const secondaryNavItems = computed(() => [
   {
@@ -189,6 +210,7 @@ const mobileMenuItems = computed(() => {
     mainNavItems: treatmentPages.value,
     adsPhone: adsPhone.value,
     adsLocation: adsLocationLink.value,
+    kontoHref: kontoLink.enabled.value ? kontoLink.href("header") : null,
   };
 });
 
@@ -266,6 +288,26 @@ function closeMobileMenu() {
   gap: var(--space-200);
   font-weight: var(--font-bold);
   white-space: nowrap;
+}
+.appHeader__konto {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
+  margin-left: var(--space-500);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.appHeader__konto--iconOnly {
+  margin-left: 0;
+  padding: var(--space-200);
+  color: inherit;
+}
+.appHeader__mobileEnd {
+  display: flex;
+  align-items: center;
+  gap: var(--space-100);
 }
 .appHeader__secondaryNav {
   padding: var(--space-100) var(--space-card-pad);
