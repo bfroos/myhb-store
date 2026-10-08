@@ -1,4 +1,5 @@
 <template>
+  <slot v-if="!anchorKey" name="reviewer" :inline="false" />
   <template v-for="key in order" :key="key">
     <BlockRenderer
       v-if="key === 'blocks' && remainingDynamicBlocks.length"
@@ -19,6 +20,15 @@
         ...(BLOCK_MAP[key]!.id ? { id: BLOCK_MAP[key]!.id } : {}),
         ...(key === 'tableOfContents' ? { index: tocIndex } : {}),
       }"
+    >
+      <template v-if="key === 'tableOfContents'" #default>
+        <slot name="reviewer" :inline="true" />
+      </template>
+    </component>
+    <slot
+      v-if="key === anchorKey && key !== 'tableOfContents'"
+      name="reviewer"
+      :inline="false"
     />
   </template>
 </template>
@@ -102,6 +112,17 @@ const tocIndex = computed<SharedKeyValueDto[]>(() => {
   }
 
   return items;
+});
+
+const anchorKey = computed(() => {
+  const rendered = props.order.filter((key) =>
+    key === "blocks"
+      ? remainingDynamicBlocks.value.length > 0
+      : !!dynamicBlockAt(key) || !!(BLOCK_MAP[key] && props.fixedBlocks?.[key]),
+  );
+  if (rendered.includes("tableOfContents")) return "tableOfContents";
+  const heroIndex = rendered.indexOf("hero");
+  return rendered[heroIndex + 1] ?? rendered[heroIndex] ?? null;
 });
 
 const BLOCK_MAP: Record<

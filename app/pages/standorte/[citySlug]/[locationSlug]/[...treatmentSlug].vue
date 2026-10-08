@@ -13,7 +13,15 @@
       :dynamic-blocks="treatmentPage?.blocks"
       :order="blockOrder"
       :hidden-blocks="(treatmentPage as any)?.hiddenBlocks"
-    />
+    >
+      <template #reviewer="{ inline }">
+        <UiMoleculeMedicalReviewerSignature
+          v-if="!isAdsMode"
+          :reviewer="DEFAULT_MEDICAL_REVIEWER"
+          :inline="inline"
+        />
+      </template>
+    </PagesTreatmentOrderedBlocks>
     <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
     <BlockAdsPriceFootnote
       v-if="isAdsMode && fixedBlocks?.hero"
