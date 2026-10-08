@@ -23,16 +23,20 @@
     <div class="locationTile__content">
       <div class="locationTile__contactInfo">
         <div class="locationTitle__header">
-          <!-- D-02: Der Titel ist der Link der Kachel (sprechender Linktext,
-               z. B. "Lippen aufspritzen Berlin"). -->
+          <!-- D-02: Auf Behandlungsseiten ist der Titel der Link der Kachel
+               (sprechender Linktext, z. B. "Lippen aufspritzen Berlin").
+               Sonst (Buchungsdialog, Standortsuche, Standortseiten) bleibt er
+               reiner Text, damit ein Tipp auf den Namen nicht aus dem
+               Buchungsweg fuehrt. -->
           <NuxtLinkLocale
-            v-if="item.city"
+            v-if="item.city && treatmentName"
             :to="buildLocationPath(item)"
             class="locationTile__titleLink"
             @click="handleDetailsClick"
           >
             <b class="locationTile__title">{{ title }}</b>
           </NuxtLinkLocale>
+          <b v-else-if="item.city" class="locationTile__title">{{ title }}</b>
           <span
             v-if="
               item.distanceInKilometers &&
