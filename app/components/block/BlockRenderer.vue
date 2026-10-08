@@ -123,6 +123,7 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   "blocks.benefit-grid": defineAsyncComponent(() => import("./BenefitGridBlock.vue")),
   "blocks.seo-collapsible": defineAsyncComponent(() => import("./SeoCollapsibleBlock.vue")),
   "blocks.doctor": defineAsyncComponent(() => import("./DoctorBlock.vue")),
+  "blocks.doctor-team": defineAsyncComponent(() => import("./DoctorTeamBlock.vue")),
   "blocks.price-overview": defineAsyncComponent(() => import("./PriceOverviewBlock.vue")),
   "blocks.price-teaser": defineAsyncComponent(() => import("./PriceTeaserBlock.vue")),
   "blocks.faq-accordion": defineAsyncComponent(() => import("./FaqAccordionBlock.vue")),
