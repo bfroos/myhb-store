@@ -1,7 +1,7 @@
 import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import { readWireAttribution } from "~/lib/attribution";
-import type { BookingVariant } from "~/lib/bookingAbTest";
+import type { AbSource, BookingVariant } from "~/lib/bookingAbTest";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
 import { currentCheckoutId } from "~/lib/checkoutAttempt";
@@ -234,6 +234,12 @@ export type AppBookingUrlOptions = {
    */
   abVariant?: BookingVariant | null;
   /**
+   * Deployment des Klicks (ads = go., seo = www). Geht als `ab_source` an die
+   * App, die es an ihre Funnel-Ereignisse haengt. Ohne Einwilligung gibt es
+   * kein Quellen-Cookie, aus dem die App es sonst liest.
+   */
+  abSource?: AbSource | null;
+  /**
    * Knopf am Split vorbei (Strapi-Methode `app-booking`, #128). Geht als
    * `ab_bypass=1` an die App, die es an alle Funnel-Ereignisse haengt; die
    * Auswertung (elanagency/myhb-os scripts/ab-auswertung.mjs) nimmt solche
@@ -278,6 +284,9 @@ export function buildBookingUrl(
     }
     if (options?.abVariant && !url.searchParams.has("ab_variant")) {
       url.searchParams.set("ab_variant", options.abVariant);
+    }
+    if (options?.abSource && !url.searchParams.has("ab_source")) {
+      url.searchParams.set("ab_source", options.abSource);
     }
     if (options?.abBypass && !url.searchParams.has("ab_bypass")) {
       url.searchParams.set("ab_bypass", "1");

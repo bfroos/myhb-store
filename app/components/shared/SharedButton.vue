@@ -259,6 +259,7 @@ const handleClick = () => {
     trackBookingClick("app", { ab_bypass: true });
     openAppBookingDialog(button.value?.label, APP_BOOKING_URL, {
       abBypass: true,
+      abSource: isAdsMode.value ? "ads" : "seo",
     });
     return;
   }

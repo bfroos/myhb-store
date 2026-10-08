@@ -558,6 +558,7 @@ function handleLocationBook(location: {
     // #78: Die Kontextzeile wandert mit in den App-Dialog.
     openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, {
       abVariant,
+      abSource,
       treatmentContext: params.value?.treatmentContext,
       offer: params.value?.offer,
       lead: params.value?.prefill?.leadToken,
