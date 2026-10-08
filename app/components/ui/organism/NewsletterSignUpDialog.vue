@@ -101,6 +101,17 @@
         <UiAtomBaseButton :disabled="loading" type="submit">
           {{ $t("newsletter.marketingText.submitAndBook") }}
         </UiAtomBaseButton>
+        <!-- Wettbewerbsvergleich 08.10.2026: kein Wettbewerber fragt vor dem
+             Kalender Kontaktdaten ab. Der Weg ohne Code ist darum ein
+             richtiger zweiter Knopf, kein kleiner Link mehr. -->
+        <UiAtomBaseButton
+          variant="secondary"
+          data-track-placement="newsletter_skip_to_booking"
+          :disabled="loading"
+          @click="skipToBooking"
+        >
+          {{ skipLabel }}
+        </UiAtomBaseButton>
       </div>
       <div v-else class="newsletterSignUpDialog__actions">
         <UiAtomBaseButton variant="secondary" @click="handleClose">
@@ -110,19 +121,9 @@
           {{ $t("cta.subscribe") }}
         </UiAtomBaseButton>
       </div>
-      <!-- go. Variante A (02.10.2026): niemand bleibt am Formular haengen.
-           Darunter der Einwilligungshinweis: Inhalt des Newsletters,
+      <!-- Einwilligungshinweis: Inhalt des Newsletters,
            Abmeldung jederzeit, Datenschutz (07.10.2026). -->
       <p v-if="hasBooking" class="newsletterSignUpDialog__fine">
-        <button
-          type="button"
-          class="newsletterSignUpDialog__skip"
-          data-track-placement="newsletter_skip_to_booking"
-          :disabled="loading"
-          @click="skipToBooking"
-        >
-          {{ skipLabel }}
-        </button>
         <span class="newsletterSignUpDialog__consent">
           {{ $t("newsletter.marketingText.consentHint") }}
           <NuxtLinkLocale to="/p/datenschutz" target="_blank">
@@ -410,24 +411,7 @@ async function handleSubmit() {
   cursor: pointer;
 }
 
-.newsletterSignUpDialog__skip {
-  display: inline-block;
-  background: none;
-  border: none;
-  padding: var(--space-100) var(--space-200);
-  margin-bottom: var(--space-100);
-  font: inherit;
-  font-size: var(--font-sm);
-  color: var(--color-text);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  cursor: pointer;
-}
 
-.newsletterSignUpDialog__skip:disabled {
-  opacity: 0.6;
-  cursor: default;
-}
 
 .newsletterSignUpDialog__benefits {
   display: flex;
@@ -453,7 +437,7 @@ async function handleSubmit() {
 /* Langer Knopftext ("Rabatt sichern & Termin wählen"): untereinander,
    der Hauptknopf oben, damit nichts aus dem Dialog ragt. */
 .newsletterSignUpDialog__actions--stacked {
-  flex-direction: column-reverse;
+  flex-direction: column;
   gap: var(--space-200);
 }
 

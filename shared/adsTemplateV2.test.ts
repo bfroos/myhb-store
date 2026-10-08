@@ -278,11 +278,11 @@ test("Hero-Clip nur vermessen und ohne fremden Stadtnamen, fuer jede Behandlung"
 
 test("Kundenfeedback: nur passende Stadt, nichts doppelt zum Karussell", () => {
   const fb = (key: string, city: string) => adsClipsFor(key, city).feedback.map((c) => c.source);
-  assert.deepEqual(fb("muskelrelaxans/browlift", "koeln"), [801, 874, 266, 862]);
+  assert.deepEqual(fb("muskelrelaxans/browlift", "koeln"), [874, 266, 862]);
   assert.deepEqual(fb("muskelrelaxans/browlift", "berlin"), [874, 266, 862]);
   // 266 laeuft auf der Stirnfalte schon im Karussell
-  assert.deepEqual(fb("muskelrelaxans/stirnfalte", "recklinghausen"), [802, 874, 862]);
-  assert.deepEqual(fb("hyaluron/lippen-aufspritzen", "berlin"), ["fio-lippen-2"]);
+  assert.deepEqual(fb("muskelrelaxans/stirnfalte", "recklinghausen"), [874, 862]);
+  assert.deepEqual(fb("hyaluron/lippen-aufspritzen", "berlin"), [874]);
   assert.deepEqual(fb("skinbooster/vampir-lifting-prp", "leipzig"), [808]);
   assert.deepEqual(fb("skinbooster/vampir-lifting-prp", "berlin"), []);
 });
@@ -305,13 +305,13 @@ test("Karussell: nur passende Clips ohne fremden Stadtnamen, volle Videos nur mi
   // Stirnfalte: Clips aus Benjamins Zuordnung (stirn), Koeln-Clip nur in Koeln
   const src = (key: string, city: string) =>
     adsClipsFor(key, city).carousel.map((c) => c.source);
-  assert.deepEqual(src("muskelrelaxans/stirnfalte", "koeln"), [831, 839, 843, 1080, 266, 209]);
-  assert.deepEqual(src("muskelrelaxans/stirnfalte", "berlin"), [831, 839, 843, 266, 209]);
+  assert.deepEqual(src("muskelrelaxans/stirnfalte", "koeln"), [831, 839, 266, 209]);
+  assert.deepEqual(src("muskelrelaxans/stirnfalte", "berlin"), [831, 839, 266, 209]);
   const lippenKoeln = adsClipsFor("hyaluron/lippen-aufspritzen", "koeln").carousel;
-  assert.deepEqual(lippenKoeln.map((c) => c.source), [857, 854, 1046, 1073]);
+  assert.deepEqual(lippenKoeln.map((c) => c.source), [854, 1046, 1073]);
   assert.ok(lippenKoeln.every((c) => !/leipzig|kaiserslautern/i.test(`${c.url} ${c.caption}`)));
   // Leipzig-Clip nur auf Leipziger Seiten
-  assert.deepEqual(src("hyaluron/lippen-aufspritzen", "leipzig"), [857, 854, 221, 1046, 1073]);
+  assert.deepEqual(src("hyaluron/lippen-aufspritzen", "leipzig"), [854, 221, 1046, 1073]);
   for (const [key, set] of adsClipEntries()) {
     for (const c of set.carousel) {
       assert.ok(adsClipIsShort(c) || !!c.posterUrl, `${c.url}: volles Video braucht ein Poster`);
@@ -451,4 +451,16 @@ test("editorial: live auf allen v2-Seiten, in der Vorschau nur die gelisteten", 
   );
   // bundesweite /aktion-Seiten haben keinen Standort
   assert.equal(isAdsV2EditorialPreview("/aktion/botox", null, null, "muskelrelaxans/stirnfalte"), false);
+});
+
+test("Clips mit BOTOX-Schrift oder Ergebnisdarstellung bleiben draussen", () => {
+  const banned = /stirn-karussell-1[04]|feedback-(koeln|recklinghausen|mr)-1|hyperhidrose-karussell-1|lippen-karussell-7|fio-lippen-2/;
+  for (const city of ["aachen", "berlin", "duesseldorf", "duisburg", "kaiserslautern", "koeln", "leipzig", "moenchengladbach", "recklinghausen"]) {
+    for (const [key] of adsClipEntries()) {
+      const c = adsClipsFor(key, city);
+      for (const clip of [c.hero, ...c.carousel, ...c.feedback]) {
+        if (clip) assert.ok(!banned.test(clip.url), `${key} ${city}: ${clip.url}`);
+      }
+    }
+  }
 });
