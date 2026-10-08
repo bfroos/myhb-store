@@ -582,6 +582,16 @@ export default defineNuxtConfig({
               // SAMEORIGIN here would block the preview iframe in Strapi admin.
             },
           },
+          // Naechster freier Termin: 60 s am CDN, danach im Hintergrund neu
+          // (die Seite selbst ist ISR, die Zeit wird im Browser nachgeladen).
+          "/api/naechster-termin": {
+            isr: false,
+            headers: {
+              "cache-control": "public, max-age=0, s-maxage=60, stale-while-revalidate=120",
+              "cdn-cache-control": "public, s-maxage=60, stale-while-revalidate=120",
+              "vercel-cdn-cache-control": "public, s-maxage=60, stale-while-revalidate=120",
+            },
+          },
           "/api/**": {
             isr: false,
             headers: {
