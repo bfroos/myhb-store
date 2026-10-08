@@ -8,6 +8,7 @@ import {
   needsAdsRedirect,
   normalizeRedirectPath,
 } from '#shared/adsRedirects';
+import { adsChooserRedirectTarget } from '#shared/adsChooser';
 import { adsTreePathKeys, locationPathKeys } from './adsLocationData';
 
 export async function resolvePatternRedirect(
@@ -31,6 +32,14 @@ export async function resolvePatternRedirect(
       adsPathKeys,
       locationPathKeys: locKeys ? new Set(locKeys) : null,
     });
+    // Ziel ist selbst eine alte Uebersicht (/blog -> /behandlungen): gleich
+    // auf die Auswahl, ohne zweiten Sprung.
+    if (target) target = adsChooserRedirectTarget(normalizeRedirectPath(target)) ?? target;
+  } else {
+    // Alte Uebersichtsseiten -> Auswahlseiten im neuen Look (08.10.2026).
+    // 302: Die Seiten gibt es weiter, nur go. zeigt sie nicht mehr.
+    const chooser = adsChooserRedirectTarget(normalizeRedirectPath(pathname));
+    if (chooser) return { target: `${chooser}${search || ''}`, code: 302 };
   }
   if (!target || target === normalizeRedirectPath(pathname)) return null;
   return { target: `${target}${search || ''}`, code: 301 };
