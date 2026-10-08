@@ -209,8 +209,10 @@ export type NewCustomerPriceTextOptions = {
 };
 
 // Satzweise: bis einschliesslich ".", "!", "?" oder Zeilenende. Ein Punkt
-// zwischen Ziffern ("1.499,00 €") trennt keinen Satz.
-const SENTENCE = /(?:[^.!?\n]|(?<=\d)\.(?=\d))+(?:[.!?]+|\n|$)/g;
+// beendet den Satz nur am Ende oder vor Leerraum und Grossbuchstaben: weder
+// zwischen Ziffern ("1.499,00 €") noch nach Abkuerzungen ("ab 239,99 € ·inkl.
+// 20 % Neukundenrabatt" ist EIN Satz, sonst wird der Preis doppelt rabattiert).
+const SENTENCE = /(?:[^.!?\n]|\.(?!\s*$|\s+["„]?[A-ZÄÖÜ]))+(?:[.!?]+|\n|$)/g;
 const NEW_CUSTOMER_WORD = /neukunde/i;
 
 export function applyNewCustomerPricesToText(
