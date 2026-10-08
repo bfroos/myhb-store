@@ -262,6 +262,11 @@ test("Strapi-Fassung fuer go.: Saetze mit Neukunden-Preis bleiben (kein doppelte
     ),
     "Bei MY startet Profhilo für Neukunden bei 239,99 € statt regulär 299,99 €. Ein Termin kostet ab 239,99 €*.",
   );
+  // Hero-Zusatz der Duesseldorfer Profhilo-Seite: "inkl." beendet keinen Satz
+  assert.equal(
+    applyNewCustomerPricesToText("ab 239,99 € ·inkl. 20 % Neukundenrabatt", 20, opts),
+    "ab 239,99 € ·inkl. 20 % Neukundenrabatt",
+  );
   assert.equal(
     applyNewCustomerPricesToText("*Neukundenpreise inkl. 20 % Neukundenrabatt, regulär ab 1.299,99 €.", 20, opts),
     "*Neukundenpreise inkl. 20 % Neukundenrabatt, regulär ab 1.299,99 €.",
