@@ -12,10 +12,11 @@
     >
       <UiMoleculeLocationItem
         v-for="location in filteredLocations"
-        :key="location.slug"
+        :key="buildLocationPath(location)"
         :item="location"
         :to="buildLocationPath(location)"
         main-information="city"
+        :treatment-name="treatmentName"
         show-building-image
         :on-book="() => handleLocationBook(location)"
       />
@@ -26,8 +27,17 @@
 <script setup lang="ts">
 import type { BlockLocationTeasersDto } from "~/lib/strapi/dto/components";
 import type { LocationDto } from "~/lib/strapi/dto/collections";
+import {
+  locationTeaserPath,
+  uniqueTeaserLocations,
+} from "#shared/locationTeaserLinks";
 
-const props = defineProps<BlockLocationTeasersDto>();
+const props = defineProps<
+  BlockLocationTeasersDto & {
+    /** Nicht aus Strapi (D-02): Behandlungsname fuer die Kacheltitel. */
+    treatmentName?: string;
+  }
+>();
 const { openCalendlyDialog } = useCalendlyDialog();
 const { seitenBehandlung } = useSeitenBehandlung();
 
@@ -53,20 +63,19 @@ const showFilter = computed(
     availableFederalStates.value.length > 0,
 );
 
+// D-02: jeder Standort nur einmal, nur mit gueltiger Ziel-URL.
+const uniqueLocations = computed(() => uniqueTeaserLocations(props.locations));
+
 const filteredLocations = computed(() => {
-  if (!props.locations) return [];
-  if (!selectedFederalState.value) return props.locations;
-  return props.locations.filter(
+  if (!selectedFederalState.value) return uniqueLocations.value;
+  return uniqueLocations.value.filter(
     (loc) => loc.city?.federalState === selectedFederalState.value,
   );
 });
 
 function buildLocationPath(location: LocationDto): string {
-  if (!props.treatmentPathKey) {
-    return `/standorte/${location.city.slug}/${location.slug}`;
-  }
-
-  return `/standorte/${location.city.slug}/${location.slug}/${props.treatmentPathKey}`;
+  // uniqueTeaserLocations laesst nur Standorte mit Stadt- und Standort-Slug durch.
+  return locationTeaserPath(location, props.treatmentPathKey) as string;
 }
 
 function handleLocationBook(location: LocationDto) {
