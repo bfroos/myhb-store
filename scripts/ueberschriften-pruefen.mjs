@@ -13,11 +13,13 @@
  * Exit 1, wenn eine Seite einen Fehler hat.
  */
 
+import { pathToFileURL } from "node:url";
+
 const args = process.argv.slice(2);
 const hostIndex = args.indexOf("--host");
 const HOST = (hostIndex >= 0 ? args[hostIndex + 1] : "https://www.myhealthandbeauty.com").replace(/\/+$/, "");
 const SHOW_ALL = args.includes("--alle");
-const paths = args.filter((arg, i) => !arg.startsWith("--") && i !== hostIndex + 1);
+const paths = args.filter((arg, i) => !arg.startsWith("--") && !(hostIndex >= 0 && i === hostIndex + 1));
 
 const decode = (s) =>
   s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, " ");
@@ -43,7 +45,7 @@ export function findProblems(headings) {
   return problems;
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   let failed = 0;
   for (const path of paths) {
     const res = await fetch(HOST + path, { headers: { "user-agent": "myhb-ueberschriften-pruefung" } });
