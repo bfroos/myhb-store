@@ -539,6 +539,10 @@ export default defineNuxtConfig({
       // Zutun des Besuchers; wer das aus Einwilligungsgruenden nicht will,
       // stellt es je Deployment ab, ohne Code zu deployen.
       bookingPrewarm: process.env.NUXT_PUBLIC_BOOKING_PREWARM,
+      // #282: Link "Mein Konto" zur Kunden-App in Header und Footer. Leer =
+      // AUS; "on" schaltet ihn ein. Live erst nach den Schulungen Kunden-App
+      // und Behandlungsplan (myhb-os#905, #906, Reihenfolge in #908).
+      kontoLink: process.env.NUXT_PUBLIC_KONTO_LINK,
     },
   },
 

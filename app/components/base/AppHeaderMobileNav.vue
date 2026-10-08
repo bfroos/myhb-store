@@ -108,7 +108,7 @@
           </ul>
         </nav>
         <nav
-          v-if="props.items.secondaryNavItems.length > 0"
+          v-if="props.items.secondaryNavItems.length > 0 || props.items.kontoHref"
           class="mobileMenu__secondaryNav"
         >
           <ul>
@@ -120,6 +120,16 @@
               >
                 {{ item.name }}
               </NuxtLinkLocale>
+            </li>
+            <li v-if="props.items.kontoHref">
+              <a
+                :href="props.items.kontoHref"
+                class="mobileMenu__link"
+                @click="onKonto"
+              >
+                <span>{{ $t("navigation.header.myAccount") }}</span>
+                <IconUserCircle :size="24" aria-hidden="true" />
+              </a>
             </li>
           </ul>
         </nav>
@@ -134,6 +144,7 @@ import {
   IconChevronUp,
   IconMapPin,
   IconPhone,
+  IconUserCircle,
   IconX,
 } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
@@ -160,12 +171,20 @@ const props = defineProps<{
     }[];
     adsPhone?: { label: string; href: string } | null;
     adsLocation?: { label: string; to: string } | null;
+    /** #282: "Mein Konto" zur Kunden-App; null = Schalter aus. */
+    kontoHref?: string | null;
   };
 }>();
 
 const { trackPhoneClick } = useGoogleAnalytics();
 function onAdsPhone() {
   trackPhoneClick(props.items.adsPhone?.label);
+  closeMobileMenu();
+}
+
+const kontoLink = useKontoLink();
+function onKonto() {
+  kontoLink.trackClick("header");
   closeMobileMenu();
 }
 
