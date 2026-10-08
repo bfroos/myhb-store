@@ -3,6 +3,11 @@ import { isAbsolute, resolve as resolvePath } from "node:path";
 import qs from "qs";
 
 import bundledRedirects from "../assets/redirects.json";
+// Standort-Konsolidierung Köln (docs/koeln-konsolidierung): korrigierte Ziele
+// fuer Köln-Alt-URLs (vorher Startseite, Botox-Hub, falsche Behandlung oder
+// Redirect-Kette). Ueberschreibt gleichnamige Eintraege aus redirects.json;
+// Strapi-Redirects haben weiterhin Vorrang vor beiden Dateien.
+import koelnRedirects from "../assets/redirects-koeln.json";
 
 type StrapiPagination = {
   page: number;
@@ -125,8 +130,21 @@ const normalizeTo = (value: string) => {
 };
 
 const sanitizeStatusCode = (code?: number | null) => {
-  if (code === 302 || code === 307 || code === 308) return code;
+  if (code === 302 || code === 307 || code === 308 || code === 410) return code;
   return 301;
+};
+
+/**
+ * Ziel und eingehende Query zusammenfuehren (TSEO-11). Vorher entstand aus
+ * "/produkt?v=1-ml" + "?gclid=x" ein "/produkt?v=1-ml?gclid=x" (112 Ziele).
+ */
+export const mergeSearch = (target: string, search: string) => {
+  if (!search || search === "?") return target;
+  const extra = search.replace(/^\?/, "");
+  const hashIndex = target.indexOf("#");
+  const base = hashIndex >= 0 ? target.slice(0, hashIndex) : target;
+  const hash = hashIndex >= 0 ? target.slice(hashIndex) : "";
+  return `${base}${base.includes("?") ? "&" : "?"}${extra}${hash}`;
 };
 
 const isAbsoluteUrl = (value: string) =>
@@ -150,13 +168,19 @@ const parseRedirectItems = (
     const from =
       "from" in item && typeof item.from === "string" ? item.from : "";
     const to = "to" in item && typeof item.to === "string" ? item.to : "";
-    if (!from || !to) continue;
+    const code = "code" in item ? (item as { code?: number }).code : undefined;
+    // TSEO-11: 410 braucht kein Ziel (61 Eintraege ohne "to" fielen vorher
+    // weg und lieferten 404).
+    if (!from || (!to && code !== 410)) continue;
     const key = normalizeFrom(from);
     if (!key) continue;
+    // Abgeglichen wird nur der Pfad. Ein Eintrag mit Query in "from"
+    // (/collections/all?page=6) darf den Eintrag ohne Query nicht ersetzen.
+    if (from.includes("?") && map.has(key)) continue;
     map.set(key, {
       from,
       to,
-      code: "code" in item ? (item as { code?: number }).code : undefined,
+      code,
     });
   }
   return map;
@@ -174,7 +198,11 @@ const loadLocalRedirects = async (): Promise<
     !isAbsolute(filePath) && filePath.endsWith("redirects.json");
 
   if (useBundled) {
-    return parseRedirectItems(bundledRedirects);
+    const map = parseRedirectItems(bundledRedirects);
+    for (const [key, value] of parseRedirectItems(koelnRedirects)) {
+      map.set(key, value);
+    }
+    return map;
   }
 
   let raw = "";
@@ -334,7 +362,10 @@ export const resolveRedirect = async (
     const match = redirectMap.get(normalizedPath);
     if (!match) return null;
 
-    const target = normalizeTo(match.to);
+    const firstCode = sanitizeStatusCode(match.code ?? undefined);
+    if (firstCode === 410) return { target: "", code: 410 };
+
+    let target = normalizeTo(match.to);
     if (!target) return null;
     if (normalizePath(target) === normalizedPath) return null;
     if (
@@ -344,8 +375,20 @@ export const resolveRedirect = async (
       return null;
     }
 
-    const statusCode = sanitizeStatusCode(match.code ?? undefined);
-    return { target: `${target}${search || ""}`, code: statusCode };
+    // TSEO-11: Ketten gleich bis zum Endziel aufloesen (26 Zwei-Hop-Ketten im
+    // Audit). Fuehrt die Kette auf einen 410-Eintrag, ist die Seite weg.
+    for (let hop = 1; hop < MAX_REDIRECT_HOPS && !isAbsoluteUrl(target); hop += 1) {
+      const next = redirectMap.get(normalizePath(target));
+      if (!next) break;
+      if (sanitizeStatusCode(next.code ?? undefined) === 410) {
+        return { target: "", code: 410 };
+      }
+      const nextTarget = normalizeTo(next.to);
+      if (!nextTarget) break;
+      target = nextTarget;
+    }
+
+    return { target: mergeSearch(target, search), code: firstCode };
   } catch {
     // Fail-open: don't block site if redirects lookup fails.
     return null;

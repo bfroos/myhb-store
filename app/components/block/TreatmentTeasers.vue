@@ -18,6 +18,13 @@
           v-bind="getTileProps(page)"
         />
       </UiOrganismTilesCard>
+      <!-- go.: Die Kacheln zeigen Neukundenpreise mit Sternchen. -->
+      <p
+        v-if="showsNewCustomerPrice && !hideNewCustomerFootnote"
+        class="teasers__footnote"
+      >
+        {{ newCustomerFootnote(globals?.ecommerce?.newsletterDiscountPercentage ?? undefined) }}
+      </p>
     </div>
   </UiLayoutSectionBlock>
 </template>
@@ -29,10 +36,26 @@ import type {
   TreatmentPageDto,
 } from "~/lib/strapi/dto/collections";
 import type { MoleculeTreatmentTile } from "~/lib/ui/types";
+import {
+  buildNewCustomerOffer,
+  newCustomerFootnote,
+} from "#shared/newCustomerOffer";
+import { resolveTreatmentTilePath } from "#shared/locationTreatmentLinks";
+import type { CityTreatmentLocations } from "~/lib/strapi/dto/locationSiblings";
 
-const props = defineProps<BlockTreatmentTeasersDto>();
+const props = defineProps<
+  BlockTreatmentTeasersDto & {
+    /** Standort-Konsolidierung: Behandlungen eines Geschwister-Standorts. */
+    cityTreatmentLocations?: CityTreatmentLocations;
+  }
+>();
 const { t, locale } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
+const globals = useGlobals();
+const { showsNewCustomerPrice: newCustomerPriceMode } = useDisplayPrice();
+const showsNewCustomerPrice = computed(
+  () => newCustomerPriceMode.value && !!props.showPrices,
+);
 const selectedTopCategoryKey = ref<string | null>(null);
 const teasersRoot = ref<HTMLElement | null>(null);
 
@@ -45,8 +68,17 @@ const teasersRoot = ref<HTMLElement | null>(null);
 // gefunden"). Ist die Relation des aktiven Baums leer, bleibt der Block leer -
 // besser als ein kaputter interner Link.
 const treatmentItems = computed<Array<TreatmentPageDto | TreatmentAdsPageDto>>(
-  () =>
-    (isAdsMode.value ? props.treatmentAdsPages : props.treatmentPages) ?? [],
+  () => {
+    const items =
+      (isAdsMode.value ? props.treatmentAdsPages : props.treatmentPages) ?? [];
+    // go. (#184): keine Karte, die den Standort verlaesst.
+    if (!props.hideUnavailableAtLocation || !props.locationTreatmentPathKeys) {
+      return items;
+    }
+    return items.filter((page) =>
+      props.locationTreatmentPathKeys!.includes(page.pathKey ?? ""),
+    );
+  },
 );
 
 const hasItems = computed(() => treatmentItems.value.length > 0);
@@ -131,15 +163,16 @@ function getTopCategoryLabel(page: TreatmentItem, fallbackKey: string): string {
   return page.topCategory?.name ?? page.name ?? fallbackKey;
 }
 
-// Link to the location only if that location offers the treatment.
+// Link to the location only if that location offers the treatment; otherwise
+// to the sibling location in the same city that does (Köln: Arcaden <->
+// MediaPark), and only then to /behandlungen (shared/locationTreatmentLinks).
 function getTilePath(page: TreatmentPageDto | TreatmentAdsPageDto): string {
-  const isAvailableAtLocation =
-    !props.locationTreatmentPathKeys ||
-    props.locationTreatmentPathKeys.includes(page.pathKey ?? "");
-
-  return props.locationPathKey && isAvailableAtLocation
-    ? `/standorte/${props.locationPathKey}/${page.pathKey}`
-    : `/behandlungen/${page.pathKey}`;
+  return resolveTreatmentTilePath({
+    pathKey: page.pathKey,
+    locationPathKey: props.locationPathKey,
+    locationTreatmentPathKeys: props.locationTreatmentPathKeys,
+    cityTreatmentLocations: props.cityTreatmentLocations,
+  });
 }
 
 function getTileProps(
@@ -159,13 +192,34 @@ function getTileProps(
     isStartingPrice: props.showPrices
       ? page.treatment?.isStartingPrice
       : undefined,
+    priceLabel: zonePriceLabel(page),
   };
+}
+
+// go.: Muskelrelaxans ab 149,99 € (1 Zone) wird wie auf der Behandlungsseite
+// (#187) mit "ab 79,99 € pro Zone*" beworben, nicht mit 119,99 €.
+function zonePriceLabel(page: TreatmentItem): string | undefined {
+  if (!props.showPrices || !showsNewCustomerPrice.value) return undefined;
+  const offer = buildNewCustomerOffer({
+    pathKey: page.pathKey,
+    priceCent: page.treatment?.priceInEuroCent,
+    isStartingPrice: page.treatment?.isStartingPrice,
+    discountPct: globals.value?.ecommerce?.newsletterDiscountPercentage,
+  });
+  return offer?.kind === "zone" ? offer.heroLine : undefined;
 }
 </script>
 
 <style scoped>
 .teasers__heading {
   margin: 0;
+}
+
+.teasers__footnote {
+  margin: var(--space-300) 0 0;
+  font-size: var(--font-xs, 0.75rem);
+  color: var(--color-text-light);
+  text-align: center;
 }
 
 .teasers__filterArea {

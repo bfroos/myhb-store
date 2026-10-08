@@ -139,6 +139,12 @@
     }
   },
   "blog": {
+    "pagination": "Pages",
+    "firstPage": "Première page",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "lastPage": "Dernière page",
+    "pageTitle": "Page {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Informations utiles, actualités et tout sur la santé et la beauté.",
@@ -344,9 +350,7 @@
       "previousImage": "Image précédente",
       "nextImage": "Image suivante",
       "slideLabel": "Image {index} sur {total}",
-      "selectImage": "Afficher l'image {index}",
-      "before": "Avant",
-      "after": "Après"
+      "selectImage": "Afficher l'image {index}"
     },
     "jobTeasers": {
       "headline": "Offres d'emploi actuelles",

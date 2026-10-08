@@ -10,4 +10,11 @@
 export type BookingTreatmentContext = {
   name: string;
   priceLabel?: string;
+  /**
+   * Preis der Behandlung in Euro fuer die Messung (Meta „Schedule mit Wert").
+   * Unabhaengig vom Schalter „Preis zeigen": Bis 01.10.2026 wurde der Wert aus
+   * `priceLabel` gelesen und fehlte deshalb auf jeder Seite ohne sichtbaren
+   * Preis, z. B. /behandlungen/botox. Nie angezeigt.
+   */
+  value?: number;
 };

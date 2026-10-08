@@ -25,7 +25,26 @@
             "
           >
             <span class="price-card__label">{{ treatment.name }}</span>
-            <span class="price-card__price">
+            <span
+              v-if="treatmentOffer(treatment)"
+              class="price-card__price price-card__price--offer"
+            >
+              <span class="price-card__offer">
+                <span
+                  v-if="treatment.isStartingPrice"
+                  class="price-card__prefix"
+                >
+                  {{ $t("common.price.startingPrefix") }}
+                </span>
+                {{ formatEuroCent(treatmentOffer(treatment)!) }}*
+              </span>
+              <span class="price-card__regular">
+                regulär
+                {{ treatment.isStartingPrice ? $t("common.price.startingPrefix") : "" }}
+                {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+              </span>
+            </span>
+            <span v-else class="price-card__price">
               <template v-if="treatment.priceInEuroCent">
                 <span
                   v-if="treatment.isStartingPrice"
@@ -40,7 +59,26 @@
           </NuxtLinkLocale>
           <template v-else>
             <span class="price-card__label">{{ treatment.name }}</span>
-            <span class="price-card__price">
+            <span
+              v-if="treatmentOffer(treatment)"
+              class="price-card__price price-card__price--offer"
+            >
+              <span class="price-card__offer">
+                <span
+                  v-if="treatment.isStartingPrice"
+                  class="price-card__prefix"
+                >
+                  {{ $t("common.price.startingPrefix") }}
+                </span>
+                {{ formatEuroCent(treatmentOffer(treatment)!) }}*
+              </span>
+              <span class="price-card__regular">
+                regulär
+                {{ treatment.isStartingPrice ? $t("common.price.startingPrefix") : "" }}
+                {{ formatPriceInEuro(treatment.priceInEuroCent) }}
+              </span>
+            </span>
+            <span v-else class="price-card__price">
               <template v-if="treatment.priceInEuroCent">
                 <span
                   v-if="treatment.isStartingPrice"
@@ -107,7 +145,20 @@
                 "
               >
                 <span class="price-card__label">{{ variant.label }}</span>
-                <span class="price-card__price">
+                <span
+                  v-if="variantOffer(variant)"
+                  class="price-card__price price-card__price--offer"
+                >
+                  <span class="price-card__offer">
+                    <span class="price-card__prefix">{{ $t("common.price.startingPrefix") }}</span>
+                    {{ formatEuroCent(variantOffer(variant)!) }}*
+                  </span>
+                  <span class="price-card__regular">
+                    regulär {{ $t("common.price.startingPrefix") }}
+                    {{ formatPriceInEuro(variant.priceInEuroCent) }}
+                  </span>
+                </span>
+                <span v-else class="price-card__price">
                   <span class="price-card__prefix">{{ $t("common.price.startingPrefix") }}</span>
                   {{ formatPriceInEuro(variant.priceInEuroCent) }}
                 </span>
@@ -129,10 +180,36 @@ import type {
 import type { ProductVariantDto } from "~/lib/strapi/dto/components";
 import { ImageFormat } from "~/lib/strapi/dto/enums";
 import { IconArrowRight } from "@tabler/icons-vue";
+import { formatEuroCent } from "#shared/newCustomerOffer";
 
 const props = defineProps<{
   productCategory: ProductCategoryDto;
 }>();
+
+// go.* (Ads-Modus): Neukundenpreis mit Sternchen als Hauptpreis, regulaerer
+// Preis klein darunter (wie Hero/Kacheln aus #187). Schoenheits-OPs bleiben
+// beim regulaeren Preis. www: unveraendert (newCustomerCent -> null).
+const { newCustomerCent } = useDisplayPrice();
+
+const categoryIsSurgery = computed(() =>
+  /^schoenheit/.test(props.productCategory?.slug ?? ""),
+);
+
+function treatmentOffer(treatment: {
+  priceInEuroCent?: number | null;
+  treatmentPage?: { pathKey?: string } | null;
+}): number | null {
+  if (categoryIsSurgery.value) return null;
+  return newCustomerCent(
+    treatment.priceInEuroCent,
+    treatment.treatmentPage?.pathKey,
+  );
+}
+
+function variantOffer(variant: ProductVariantDto): number | null {
+  if (categoryIsSurgery.value) return null;
+  return newCustomerCent(variant.priceInEuroCent);
+}
 
 const hasTreatments = computed(
   () => (props.productCategory?.treatments?.length ?? 0) > 0,
@@ -142,8 +219,19 @@ const hasProducts = computed(
   () => (props.productCategory?.products?.length ?? 0) > 0,
 );
 
+const { isAdsMode } = useSiteModeFlags();
+
 function getTreatmentPath(treatment: { treatmentPage?: { pathKey: string } }) {
-  return `/behandlungen/${treatment.treatmentPage?.pathKey ?? ""}`;
+  const pathKey = treatment.treatmentPage?.pathKey ?? "";
+  // go. (#184): Der Ads-Baum heisst "muskelrelaxans"; die SEO-pathKeys
+  // ("botox/stirnfalte", "botox/baby-botox") liefen dort auf 404.
+  if (!isAdsMode.value) return `/behandlungen/${pathKey}`;
+  // Lemon Bottle Wangen heisst im Ads-Baum "-wangen", der SEO-pathKey
+  // "-backen" lief dort auf 404.
+  const adsPathKey = pathKey
+    .replace(/botox/g, "muskelrelaxans")
+    .replace(/lemon-bottle-backen$/, "lemon-bottle-wangen");
+  return `/behandlungen/${adsPathKey}`;
 }
 
 function getVariantPath(
@@ -151,6 +239,14 @@ function getVariantPath(
   variant: ProductVariantDto,
   category: ProductCategoryDto,
 ) {
+  // go.: Die Produktseite heisst /produkte/botox/botox - der Markenname in
+  // der Adresse kostet die Anzeigen-Freigabe. Dort auf die Kategorie zeigen.
+  if (
+    isAdsMode.value &&
+    /botox|btx/i.test(`${category.slug}/${product.slug}`)
+  ) {
+    return "/behandlungen/muskelrelaxans";
+  }
   return `/produkte/${category.slug}/${product.slug}?v=${variant.slug}`;
 }
 
@@ -242,6 +338,27 @@ function activeVariants(product: ProductDto) {
 .price-card__prefix {
   font-size: var(--font-xs);
   line-height: var(--line-xs);
+}
+
+/* go.: Neukundenpreis gross, regulaerer Preis klein darunter. */
+.price-card__price--offer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: end;
+}
+
+.price-card__offer {
+  font-weight: var(--font-bold);
+  color: #b91c1c;
+  white-space: nowrap;
+}
+
+.price-card__regular {
+  font-size: var(--font-xs);
+  line-height: var(--line-xs);
+  color: var(--color-text-light);
+  white-space: nowrap;
 }
 
 .price-card__icon {

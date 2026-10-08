@@ -13,10 +13,10 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "generate:posters": "node scripts/generate-video-posters.js",
     "update:ratings": "tsx scripts/update-google-ratings.ts",
     "check:ab-split": "tsx scripts/check-ab-split.mts",
-    "check:booking-slugs": "tsx scripts/check-booking-slugs.mts"
+    "check:booking-slugs": "tsx scripts/check-booking-slugs.mts",
+    "test:unit": "node --experimental-strip-types --test app/lib/checkoutAttempt.test.ts app/lib/bookingPrefill.test.ts app/lib/bookingLead.test.ts app/lib/bookingAbTest.test.ts app/lib/enhancedConversions.test.ts shared/adsTerms.test.ts shared/newCustomerOffer.test.ts shared/adsLinks.test.ts shared/adsPricePages.test.ts shared/adsMedia.test.ts shared/adsLocationTreatments.test.ts shared/adsHeadlines.test.ts shared/adsRedirects.test.ts shared/adsTemplateV2.test.ts shared/adsTemplateV2Content.test.ts shared/adsOfferVariant.test.ts shared/metaPageSplit.test.ts shared/locationTreatmentLinks.test.ts shared/ownLink.test.ts scripts/botox-sonde-go.test.mjs"
   },
   "dependencies": {
     "@googlemaps/js-api-loader": "^2.0.2",
@@ -28,6 +28,7 @@
     "@primeuix/themes": "^2.0.2",
     "@tabler/icons-vue": "^3.36.0",
     "@unhead/vue": "^2.1.2",
+    "@vercel/functions": "^3.9.11",
     "nuxt": "^4.2.2",
     "nuxt-calendly": "^0.1.21",
     "primevue": "^4.5.4",

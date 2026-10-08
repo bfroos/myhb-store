@@ -13,7 +13,19 @@ type TreatmentSchemaContext = SchemaOrgContext & {
   ratingValue?: number;
   reviewCount?: number;
   priceInEuroCent?: number | null; // Optional external price override
+  /**
+   * go.*: Kein Offer-Preis. Die Seite zeigt dort den Neukundenpreis; der
+   * regulaere Preis als Offer passte nicht zur Seite, der Neukundenpreis als
+   * Offer waere falsch ausgezeichnet (gilt nur mit Newsletter-Rabatt). go.*
+   * steht ohnehin auf noindex.
+   */
+  omitOffer?: boolean;
 };
+
+/** @id der MedicalProcedure einer Seite. */
+export function medicalProcedureId(publicUrl: string, path: string): string {
+  return `${toAbsoluteUrl(publicUrl, path)}#procedure`;
+}
 
 /**
  * Schema.org MedicalProcedure für Behandlungsseiten.
@@ -33,9 +45,11 @@ export function buildMedicalProcedureSchema(
 
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   // Use external price override if provided, otherwise fallback to treatment price
-  const priceInCent = parseEuroCent(
-    ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent
-  );
+  const priceInCent = ctx.omitOffer
+    ? undefined
+    : parseEuroCent(
+        ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent,
+      );
 
   // AggregateRating from context (passed from component)
   const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);
@@ -43,6 +57,9 @@ export function buildMedicalProcedureSchema(
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "MedicalProcedure",
+    // Eigene @id, damit die Einrichtung (LocalBusiness/MedicalClinic des
+    // Standorts) sie per availableService referenzieren kann.
+    "@id": medicalProcedureId(ctx.publicUrl, ctx.path),
     name: treatmentPage.name,
     url: pageUrl,
     ...(description && { description }),
@@ -51,6 +68,7 @@ export function buildMedicalProcedureSchema(
     ...(ctx.brandName && {
       performer: {
         "@type": "Organization",
+        "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
         name: ctx.brandName,
       },
     }),
@@ -82,9 +100,11 @@ export function buildGeneralMedicalProcedureSchema(
   const image = treatmentPage.hero?.cover?.url;
   const procedureType = mapTreatmentTypeToProcedureType(treatmentPage.treatment?.type);
   // Use external price override if provided, otherwise fallback to treatment price
-  const priceInCent = parseEuroCent(
-    ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent
-  );
+  const priceInCent = ctx.omitOffer
+    ? undefined
+    : parseEuroCent(
+        ctx.priceInEuroCent ?? treatmentPage.treatment?.priceInEuroCent,
+      );
 
   // AggregateRating from context (passed from component)
   const aggregateRating = buildAggregateRatingSchema(ctx.ratingValue, ctx.reviewCount);
@@ -100,6 +120,7 @@ export function buildGeneralMedicalProcedureSchema(
     ...(ctx.brandName && {
       performer: {
         "@type": "Organization",
+        "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
         name: ctx.brandName,
       },
     }),

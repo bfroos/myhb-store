@@ -100,13 +100,6 @@ export type BlockGalleryDto = {
   intro?: string;
   images?: StrapiMedia[];
   layout?: "grid" | "slider" | null;
-  mode?: "images" | "before-after" | null;
-  items?: {
-    id: number;
-    before?: StrapiMedia;
-    after?: StrapiMedia;
-    caption?: string;
-  }[];
   columns: "2" | "3" | "4";
   aspectRatio: "1-1" | "4-3" | "3-4" | "16-9" | "original";
   showCaptions: boolean;
@@ -138,6 +131,8 @@ export type BlockLocationMapDto = {
 
 export type BlockLocationTeasersDto = {
   headline?: string;
+  /** Nicht aus Strapi: Stadtseite setzt 1 fuer den ersten Block (TSEO-14). */
+  headingLevel?: 1 | 2;
   locations?: LocationDto[];
   cardSettings?: CardSettingsDto;
   showFilters?: boolean;
@@ -260,11 +255,15 @@ export type BlockTextContentDto = {
   cardSettings?: CardSettingsDto;
 };
 
+/** "auto" folgt der URL (Shorts werden hochkant), alles andere erzwingt das Format. */
+export type YouTubeAspectRatio = "auto" | "16-9" | "9-16";
+
 export type BlockYoutubeVideoDto = {
   headline?: string;
   intro?: string;
-  videoUrl?: string;
-  embedCode?: string;
+  /** YouTube-Link oder kompletter Embed-Code; parseYouTubeUrl nimmt beides. */
+  video?: string;
+  aspectRatio?: YouTubeAspectRatio | null;
   poster?: StrapiMedia;
   cardSettings?: CardSettingsDto;
 };
@@ -311,6 +310,18 @@ export type BlockTreatmentHeroDto = {
   /** Behandlungs-Slug fuer den App-Deeplink (`?treatment=`), siehe #66. */
   appTreatmentSlug?: string;
   googlePlaceId?: string;
+  /**
+   * pathKey der Behandlungsseite (z. B. "muskelrelaxans/stirnfalte"). Waehlt im
+   * Ads-Modus das Neukundenangebot (Zonenpreis bei Muskelrelaxans).
+   */
+  treatmentPathKey?: string;
+  /** Telefon des Standorts, nur go.: Knopf in der mitlaufenden Leiste (#181). */
+  phoneNumber?: string | null;
+  /**
+   * go.: Seite aus ADS_TEMPLATE_V2_EXCLUDE (in Strapi fuer go. gebaut). Der
+   * Hero zeigt die Strapi-Inhalte und -Schalter statt der go.-Vorgaben.
+   */
+  strapiHero?: boolean;
 };
 
 export type BlockTreatmentPlanDto = {
@@ -337,6 +348,10 @@ export type BlockTreatmentTeasersDto = {
   treatmentAdsPages?: TreatmentAdsPageDto[];
   locationPathKey?: string;
   locationTreatmentPathKeys?: string[];
+  /** go. (#184): Karten ohne Seite am Standort ausblenden. */
+  hideUnavailableAtLocation?: boolean;
+  /** go.: Neukunden-Fussnote nicht unter den Kacheln (steht am Seitenende). */
+  hideNewCustomerFootnote?: boolean;
   cardSettings?: CardSettingsDto;
 };
 

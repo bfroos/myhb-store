@@ -4,6 +4,9 @@ import { readWireAttribution } from "~/lib/attribution";
 import type { BookingVariant } from "~/lib/bookingAbTest";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
+import { currentCheckoutId } from "~/lib/checkoutAttempt";
+import { markBookingDialogOpened } from "~/composables/useBookingPrewarm";
+import { withLeadToken, withoutLeadToken } from "~/lib/bookingLead";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app).
@@ -217,6 +220,12 @@ export type AppBookingUrlOptions = {
   /** Rabattcode (z. B. Neukundenrabatt nach Newsletter-Anmeldung, #82/#74). */
   promo?: string | null;
   /**
+   * Buchung nach „20 % Rabatt sichern" (`nk20`, lib/checkoutAttempt). Geht
+   * als `offer=` an die App; GTM setzt damit den Schedule-Wert auf den
+   * Neukundenpreis. Anders als `promo` zeigt die App dazu nichts an.
+   */
+  offer?: string | null;
+  /**
    * Variante des A/B-Splits (#100). Geht als `ab_variant` an die App mit: Die
    * Buchung wird im iframe auf app.myhealthandbeauty.com abgeschlossen, das
    * abschliessende `booking_confirmed` pusht also die App in ihre eigene
@@ -236,6 +245,12 @@ export type AppBookingUrlOptions = {
    * URL-Parameter — die App bekommt die Behandlung ueber `treatment=` (#66).
    */
   treatmentContext?: BookingTreatmentContext | null;
+  /**
+   * 07.10.2026: Token aus dem Rabatt-Dialog (lib/bookingLead.ts). Geht als
+   * `lead=` an die App, die damit E-Mail und Handynummer vorbefuellt. Nur der
+   * Token, nie die Daten selbst.
+   */
+  lead?: string | null;
 };
 
 /**
@@ -258,6 +273,9 @@ export function buildBookingUrl(
     if (options?.promo && !url.searchParams.has("promo")) {
       url.searchParams.set("promo", options.promo);
     }
+    if (options?.offer && !url.searchParams.has("offer")) {
+      url.searchParams.set("offer", options.offer);
+    }
     if (options?.abVariant && !url.searchParams.has("ab_variant")) {
       url.searchParams.set("ab_variant", options.abVariant);
     }
@@ -268,6 +286,17 @@ export function buildBookingUrl(
     // funnel_events zusammengehoeren (elanagency/myhb-os#521).
     if (!url.searchParams.has("fp_sid")) {
       url.searchParams.set("fp_sid", getFunnelSessionId());
+    }
+    // Buchungsversuch des Klicks an die App geben (elanagency/myhb-os#400):
+    // `click_booking` hier und `booking_start` dort tragen dieselbe
+    // event_id, Meta zaehlt InitiateCheckout einmal.
+    const checkoutId = currentCheckoutId();
+    if (checkoutId && !url.searchParams.has("checkout_id")) {
+      url.searchParams.set("checkout_id", checkoutId);
+    }
+    if (options?.lead) {
+      const mitLead = new URL(withLeadToken(url.toString(), options.lead));
+      url.search = mitLead.search;
     }
     if (hatAbgelehnt() && !url.searchParams.has("consent")) {
       url.searchParams.set("consent", "necessary");
@@ -296,13 +325,19 @@ export function useAppBookingDialog() {
     url: string = APP_BOOKING_URL,
     options?: AppBookingUrlOptions,
   ) {
+    // #180: Ein spaeter geplantes Calendly-Vorwaermen waere jetzt nur Ballast.
+    markBookingDialogOpened();
+    const bookingUrl = buildBookingUrl(url, options);
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/AppBookingDialog.vue"),
       ),
       {
         data: {
-          url: buildBookingUrl(url, options),
+          url: bookingUrl,
+          // Fuer das `href` des Notausgangs: ohne Lead-Token, weil das
+          // Klick-Tracking (#155) `href` als `link_url` mitschreibt.
+          linkUrl: withoutLeadToken(bookingUrl),
           // Messung zu elanagency/myhb-os#205 (Abbruch Klick -> App geladen):
           // ab hier laeuft die Uhr fuer `booking_embed_ready` und
           // `booking_dialog_closed`, analog zum Calendly-Dialog (#141).

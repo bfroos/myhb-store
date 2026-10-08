@@ -11,7 +11,33 @@ type LocalBusinessSchemaContext = SchemaOrgContext & {
   // When provided in ads mode, the offer catalog lists only this treatment.
   // When omitted in ads mode, the offer catalog is dropped entirely.
   offerCatalogTreatmentName?: string | null;
+  /**
+   * Behandlungen, die DIESER Standort bedient (Namen der Hauptkategorien).
+   * Fuer Kliniken (type "clinic") ersetzt das den generischen Lounge-Katalog
+   * (Botox/Hyaluron/PRP/Fettwegspritze), damit die MediaPark Klinik nicht als
+   * Anbieter nichtoperativer Leistungen ausgezeichnet wird.
+   */
+  offerCatalogNames?: string[] | null;
+  /**
+   * @id der MedicalProcedure dieser Seite (Standort-Behandlungsseite). Wird
+   * als availableService verknuepft, damit die Behandlung eindeutig an dieser
+   * Einrichtung haengt (Köln: OPs -> MediaPark, nichtoperativ -> Arcaden).
+   */
+  availableServiceId?: string | null;
 };
+
+/**
+ * Stabile Entitaets-ID eines Standorts: immer die Standort-URL, unabhaengig
+ * davon, auf welcher Unterseite das Schema ausgegeben wird.
+ */
+export function locationEntityId(
+  publicUrl: string | undefined,
+  location: Pick<LocationDto, "slug" | "city"> | null | undefined,
+): string | null {
+  const citySlug = location?.city?.slug;
+  if (!location?.slug || !citySlug) return null;
+  return `${toAbsoluteUrl(publicUrl || "", `/standorte/${citySlug}/${location.slug}`)}#clinic`;
+}
 
 const WEEKDAY_TO_SCHEMA: Record<string, string> = {
   monday: "Mo",
@@ -30,31 +56,35 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJoct0O2RTqEcRZthU8Tn5dGs": {
     "rating": "4.8",
-    "count": "235"
+    "count": "237"
   },
   "ChIJYyPheE7LuEcRAIgZkPAOJyU": {
     "rating": "4.9",
-    "count": "188"
+    "count": "190"
   },
   "ChIJ_7Xx1HetuEcRUE0rtbPlvEQ": {
     "rating": "4.9",
-    "count": "180"
+    "count": "181"
   },
   "ChIJr60IH9PjuEcRdVPR8YiTgSo": {
     "rating": "4.9",
-    "count": "177"
+    "count": "180"
   },
   "ChIJf4C6OSkTlkcRpTMm00E5JLE": {
     "rating": "4.7",
-    "count": "96"
+    "count": "98"
   },
   "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": {
     "rating": "5.0",
-    "count": "163"
+    "count": "166"
   },
   "ChIJuVWkFmyZwEcRM9nuZ1SejT4": {
     "rating": "4.9",
     "count": "50"
+  },
+  "ChIJScBd156_uEcRPHWNSbioDlo": {
+    "rating": "4.8",
+    "count": "98"
   }
 };
 
@@ -138,6 +168,16 @@ export function buildLocalBusinessSchema(
   if (!location) return null;
 
   const pageUrl = toAbsoluteUrl(ctx.publicUrl, ctx.path);
+  // Standort-URL statt Seiten-URL: Auf Behandlungsseiten war "url" bisher die
+  // Behandlungs-URL - die Einrichtung ist aber die Standortseite.
+  const locationUrl =
+    location.slug && location.city?.slug
+      ? toAbsoluteUrl(
+          ctx.publicUrl,
+          `/standorte/${location.city.slug}/${location.slug}`,
+        )
+      : pageUrl;
+  const entityId = locationEntityId(ctx.publicUrl, location);
 
   const address = buildPostalAddress(location);
   const openingHours = buildOpeningHours(location.openingHours?.week);
@@ -161,18 +201,21 @@ export function buildLocalBusinessSchema(
     ? location.buildingImage.url
     : null;
 
-  // Shopping-Center-Standorte bekommen zusätzlich "HealthAndBeautyBusiness"
-  // Mediapark Köln (ChIJoiV6-12Z6hUcR3d5X8yL6b5Q) bleibt nur MedicalClinic
-  const isMediaparkClinic = location.googlePlaceId === "ChIJiV6-12Z6hUcR3d5X8yL6b5Q";
-  const schemaTypes = isMediaparkClinic
+  // Shopping-Center-Standorte bekommen zusätzlich "HealthAndBeautyBusiness".
+  // Kliniken (MediaPark Köln) bleiben reine MedicalClinic. Vorher hing das an
+  // einer falschen Place-ID (ChIJiV6-…), die MediaPark-Seite bekam dadurch
+  // ebenfalls HealthAndBeautyBusiness.
+  const isClinic = location.type === "clinic";
+  const schemaTypes = isClinic
     ? ["LocalBusiness", "MedicalClinic"]
     : ["LocalBusiness", "MedicalClinic", "HealthAndBeautyBusiness"];
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": schemaTypes,
+    ...(entityId && { "@id": entityId }),
     name: businessName,
-    url: pageUrl,
+    url: locationUrl,
     ...(address && { address }),
     ...(location.contact?.phoneNumber && {
       telephone: location.contact.phoneNumber,
@@ -185,8 +228,10 @@ export function buildLocalBusinessSchema(
       sameAs: mapsUrl,
       hasMap: mapsUrl,
     }),
-    // Medical specialty for MedicalClinic type
-    medicalSpecialty: "PlasticSurgery",
+    // TSEO-12: Plastische Chirurgie nur fuer die Klinik. Lounges (Botox,
+    // Hyaluron, Infusionen) operieren nicht; eine andere Fachrichtung waere
+    // ebenso eine Behauptung, deshalb dort ohne Angabe.
+    ...(isClinic && { medicalSpecialty: "PlasticSurgery" }),
     // Note: priceRange removed - we use concrete prices per treatment in MedicalProcedure schema
     // Currencies and payment
     currenciesAccepted: "EUR",
@@ -204,7 +249,10 @@ export function buildLocalBusinessSchema(
       },
     }),
     // Offer Catalog mit Hauptleistungen
-    ...buildOfferCatalog(ctx),
+    ...buildOfferCatalog(ctx, isClinic),
+    ...(ctx.availableServiceId && {
+      availableService: [{ "@id": ctx.availableServiceId }],
+    }),
   };
 
   appendParentOrganization(schema, ctx);
@@ -219,9 +267,34 @@ export function buildLocalBusinessSchema(
  * - Ads mode (go.*): only the page's own treatment, or no catalog at all,
  *   so generic treatment names never leak into an Ads landing page's HTML.
  */
+function offerCatalogOf(names: string[]): Record<string, unknown> {
+  return {
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Ästhetische Behandlungen",
+      itemListElement: names.map((name) => ({
+        "@type": "Offer",
+        itemOffered: {
+          "@type": "MedicalProcedure",
+          name,
+        },
+      })),
+    },
+  };
+}
+
 function buildOfferCatalog(
   ctx: LocalBusinessSchemaContext,
+  isClinic = false,
 ): Record<string, unknown> {
+  // Klinik: nur die tatsaechlich dort angebotenen Leistungen (Köln: OPs);
+  // ohne Liste lieber kein Katalog als ein falscher (Botox in der Klinik).
+  if (!ctx.isAdsMode && isClinic) {
+    const names = (ctx.offerCatalogNames ?? [])
+      .map((name) => name?.trim())
+      .filter((name): name is string => Boolean(name));
+    return names.length ? offerCatalogOf(Array.from(new Set(names))) : {};
+  }
   if (ctx.isAdsMode) {
     const name = ctx.offerCatalogTreatmentName?.trim();
     if (!name) {
@@ -291,11 +364,15 @@ function appendParentOrganization(
     const baseUrl = ctx.publicUrl?.replace(/\/+$/, "") ?? "";
     schema.parentOrganization = {
       "@type": "Organization",
+      // Gleiche @id wie die Organization in app.vue: beide Standorte haengen an
+      // derselben Organisation, bleiben aber eigene Einrichtungen (@id je
+      // Standort-URL).
+      "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
       name: ctx.brandName,
       url: baseUrl,
       logo: {
         "@type": "ImageObject",
-        url: `${baseUrl}/favicon/favicon.svg`,
+        url: `${baseUrl}/favicon/web-app-manifest-512x512.png`,
       },
     };
   }

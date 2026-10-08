@@ -18,7 +18,7 @@
 
       <!-- CONTACT COLUMN -->
       <div class="loc__contact">
-        <div class="loc__row">
+        <div v-if="address" class="loc__row">
           <span class="loc__icon">
             <IconMapPin :size="22" stroke="1.75" aria-hidden="true" />
           </span>
@@ -28,7 +28,7 @@
           </address>
         </div>
 
-        <div class="loc__row">
+        <div v-if="directionsUrl" class="loc__row">
           <span class="loc__icon">
             <IconRoute :size="22" stroke="1.75" aria-hidden="true" />
           </span>
@@ -88,15 +88,15 @@ interface Hours {
 }
 
 const props = withDefaults(defineProps<{
-  address: Address;
+  address?: Address | null;
   /** WGS84 coords; if omitted, the map is centered via address geocoding (requires Geocoding API) */
   lat?: number;
   lng?: number;
   phone?: string;
   whatsapp?: string;
   hours?: Hours;
-  /** Required for live Google Maps; without it, a styled placeholder is shown. */
-  googleMapsApiKey?: string;
+  /** Optional; leer = Website-Schluessel (NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY). Ohne beide nur Platzhalter. */
+  googleMapsApiKey?: string | null;
   /** Map zoom level */
   zoom?: number;
   elevated?: boolean;
@@ -116,6 +116,14 @@ const props = withDefaults(defineProps<{
   }),
 });
 
+// Der Schluessel gehoert nicht in den CMS-Block: Ist das Feld leer, nimmt die
+// Karte den Schluessel und die Map-ID der Website (wie LocationMap.vue).
+const runtimeConfig = useRuntimeConfig();
+const mapsApiKey = computed(
+  () => props.googleMapsApiKey || (runtimeConfig.public.googleMapsKey as string | undefined) || "",
+);
+const mapsMapId = runtimeConfig.public.googleMapsMapId as string | undefined;
+
 const mapEl = ref<HTMLElement | null>(null);
 const mapRoot = ref<HTMLElement | null>(null);
 const mapReady = ref(false);
@@ -123,17 +131,22 @@ const mapError = ref<string>("");
 
 const phoneClean = computed(() => (props.phone ?? "").replace(/[^\d+]/g, ""));
 
+const addressText = computed(() =>
+  props.address ? `${props.address.street}, ${props.address.zip} ${props.address.city}` : "",
+);
+
 const directionsUrl = computed(() => {
-  if (props.placeId) {
+  if (props.placeId && addressText.value) {
     return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-      `${props.address.street}, ${props.address.zip} ${props.address.city}`,
+      addressText.value,
     )}&destination_place_id=${props.placeId}`;
   }
   if (props.lat != null && props.lng != null) {
     return `https://www.google.com/maps/dir/?api=1&destination=${props.lat},${props.lng}`;
   }
+  if (!addressText.value) return "";
   return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-    `${props.address.street}, ${props.address.zip} ${props.address.city}`,
+    addressText.value,
   )}`;
 });
 
@@ -184,17 +197,18 @@ function loadGoogleMaps(apiKey: string) {
 }
 
 async function initMap() {
-  if (!props.googleMapsApiKey) return;
+  if (!mapsApiKey.value) return;
   if (!mapEl.value) return;
   try {
-    const google = await loadGoogleMaps(props.googleMapsApiKey);
+    const google = await loadGoogleMaps(mapsApiKey.value);
     let center: { lat: number; lng: number };
     if (props.lat != null && props.lng != null) {
       center = { lat: props.lat, lng: props.lng };
     } else {
+      if (!addressText.value) throw new Error("Adresse konnte nicht gefunden werden.");
       const geocoder = new google.maps.Geocoder();
       const res = await geocoder.geocode({
-        address: `${props.address.street}, ${props.address.zip} ${props.address.city}`,
+        address: addressText.value,
         region: "de",
       });
       const loc = res.results?.[0]?.geometry?.location;
@@ -208,17 +222,23 @@ async function initMap() {
       zoomControl: true,
       gestureHandling: "cooperative",
       backgroundColor: "#ececec",
-      styles: [
-        { featureType: "poi", stylers: [{ visibility: "off" }] },
-        { featureType: "transit", stylers: [{ visibility: "simplified" }] },
-      ],
+      // AdvancedMarkerElement braucht eine Map-ID; mit Map-ID kommt der Stil
+      // aus der Cloud-Konfiguration, `styles` wuerde ignoriert.
+      ...(mapsMapId
+        ? { mapId: mapsMapId }
+        : {
+            styles: [
+              { featureType: "poi", stylers: [{ visibility: "off" }] },
+              { featureType: "transit", stylers: [{ visibility: "simplified" }] },
+            ],
+          }),
     });
     // Custom MY pin
     const pin = document.createElement("div");
     pin.className = "myhb-gm-pin";
     pin.textContent = "MY";
     new google.maps.marker.AdvancedMarkerElement({
-      map, position: center, content: pin, title: `${props.address.street}, ${props.address.city}`,
+      map, position: center, content: pin, title: props.address ? `${props.address.street}, ${props.address.city}` : "MY HEALTH & BEAUTY",
     });
     mapReady.value = true;
   } catch (e: any) {
@@ -241,7 +261,7 @@ function startMapLoad() {
 }
 
 onMounted(() => {
-  if (!props.googleMapsApiKey) return;
+  if (!mapsApiKey.value) return;
 
   // Fallback: ohne IntersectionObserver-Support direkt laden.
   if (typeof IntersectionObserver === "undefined" || !mapRoot.value) {
@@ -264,7 +284,7 @@ onMounted(() => {
 // Reagiert auf spätere Prop-Änderungen, aber nur wenn die Karte bereits
 // initialisiert wurde (sonst übernimmt der IntersectionObserver das Laden).
 watch(
-  () => [props.googleMapsApiKey, props.lat, props.lng],
+  () => [mapsApiKey.value, props.lat, props.lng],
   () => {
     if (hasStartedMapLoad.value) void initMap();
   },

@@ -1,0 +1,418 @@
+Existing URL;Status;Seitentyp;Richtiger Standort;Final Target URL;Maßnahme;Hops;Regel;Status Ziel;Hinweis
+/standorte/koeln;200;Stadt-Hub;Köln;/standorte/koeln;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden;200;Standort-Hub;Arcaden;/standorte/koeln/koeln-arcaden;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/anti-haarausfall;200;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/anti-haarausfall/hair-boost-infusion4;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/hair-boost-infusion4;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/anti-haarausfall/kostenlose-haaranalyse;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/kostenlose-haaranalyse;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/anti-haarausfall/prp-haartherapie;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/prp-haartherapie;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox;200;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/botox;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/3-zonen-botox-preise;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/3-zonen-botox-preise;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/baby-botox;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/baby-botox;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/barbie-botox;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/barbie-botox;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/browlift;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/browlift;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/bunny-lines;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/bunny-lines;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/erdbeerkinn;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/erdbeerkinn;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/full-face-botox;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/full-face-botox;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/kraehenfuesse;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/kraehenfuesse;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/lachfalten;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/lachfalten;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/lipflip;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/lipflip;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/masseter;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/masseter;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/stirnfalte;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/stirnfalte;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/botox/zornesfalte;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/zornesfalte;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/btx;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects.json;200;
+/standorte/koeln/koeln-arcaden/btx/baby-btx;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/baby-botox;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/barbie-btx;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/barbie-botox;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/browlift;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/browlift;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/bunny-lines;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/bunny-lines;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/erdbeerkinn;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/erdbeerkinn;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/halsfalten-platysma;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/hyperhidrose-starkes-schwitzen;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/kraehenfuesse;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/kraehenfuesse;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/lipflip;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/lipflip;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/masseter;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/masseter;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/migraenebehandlung;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/stirnfalte;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/stirnfalte;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/zaehneknirschen-bruxismus;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/btx/zornesfalte;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/zornesfalte;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/koeln-arcaden/fettwegspritze;200;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-bauch;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-bauch;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-huefte;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-huefte;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-knie;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-knie;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberschenkel;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberschenkel;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron;200;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/augenringe-unterspritzen;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/augenringe-unterspritzen;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/dekolletee;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/dekolletee;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/haende;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/haende;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/hylase;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/hylase;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/jawline;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/jawline;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/kinnkorrektur;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/kinnkorrektur;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/marionettenfalten;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/marionettenfalten;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/nasolabialfalte;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/nasolabialfalte;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/russian-lips;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/russian-lips;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/hyaluron/wangenaufbau;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/wangenaufbau;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen;200;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/infusionen;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen/anti-aging-infusion;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/anti-aging-infusion;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen/b-komplex-infusion;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/b-komplex-infusion;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen/immun-infusion;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/immun-infusion;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen/regenerations-infusion;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/regenerations-infusion;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen/relax-infusion;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/relax-infusion;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen;200;Kategorie-Hub;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen;301 neu;1;standortregel;200;"Typ effektiv abulatory (Strapi minimally-invasive); vorher Duplikat 200"
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/bauchdeckenstraffung;301;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 Ziel korrigiert;1;Strapi #196;200;vorher national
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/bruststraffung;301;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;Strapi #193;200;
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/brustvergroesserung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/facelift;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 neu;1;standortregel;200;"Typ effektiv abulatory (Strapi minimally-invasive); vorher Duplikat 200"
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/fettabsaugung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/haartransplantation;301;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 Ziel korrigiert;1;Strapi #195;200;vorher national
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/lidstraffung;301;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 Ziel korrigiert;1;Strapi #197;200;vorher national
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/oberarmstraffung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/koeln-arcaden/schoenheitsoperationen/oberschenkelstraffung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberschenkelstraffung;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/koeln-arcaden/skinbooster;200;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/skinbooster/mesotherapie-nctf-135-ha;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/mesotherapie-nctf-135-ha;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/skinbooster/profhilo;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/profhilo;behalten;0;–;200;
+/standorte/koeln/koeln-arcaden/skinbooster/vampir-lifting-prp;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/vampir-lifting-prp;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik;200;Standort-Hub;MediaPark;/standorte/koeln/mediapark-klinik;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/anti-haarausfall;301;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall;301 unverändert;1;Strapi #382;200;
+/standorte/koeln/mediapark-klinik/anti-haarausfall/hair-boost-infusion4;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/hair-boost-infusion4;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/anti-haarausfall/kostenlose-haaranalyse;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/kostenlose-haaranalyse;301 unverändert;1;Strapi #213;200;
+/standorte/koeln/mediapark-klinik/anti-haarausfall/mesotherapie-haare;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;301 unverändert;1;Strapi #228;200;
+/standorte/koeln/mediapark-klinik/anti-haarausfall/prp-haartherapie;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/prp-haartherapie;301 unverändert;1;Strapi #229;200;
+/standorte/koeln/mediapark-klinik/botox;301;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;Strapi #246;200;
+/standorte/koeln/mediapark-klinik/botox-rabatt;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 Ziel korrigiert;1;Strapi #254;200;PRÜFEN
+/standorte/koeln/mediapark-klinik/botox/3-zonen-botox-preise;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/3-zonen-botox-preise;301 unverändert;1;Strapi #199;200;
+/standorte/koeln/mediapark-klinik/botox/baby-botox;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/baby-botox;301 unverändert;1;Strapi #205;200;
+/standorte/koeln/mediapark-klinik/botox/barbie-botox;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/barbie-botox;301 unverändert;1;Strapi #211;200;
+/standorte/koeln/mediapark-klinik/botox/browlift;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/browlift;301 unverändert;1;Strapi #200;200;
+/standorte/koeln/mediapark-klinik/botox/bunny-lines;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/bunny-lines;301 unverändert;1;Strapi #206;200;
+/standorte/koeln/mediapark-klinik/botox/erdbeerkinn;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/erdbeerkinn;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/botox/full-face-botox;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/full-face-botox;301 unverändert;1;Strapi #201;200;
+/standorte/koeln/mediapark-klinik/botox/halsfalten-platysma;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;301 unverändert;1;Strapi #207;200;
+/standorte/koeln/mediapark-klinik/botox/hyperhidrose-starkes-schwitzen;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;301 unverändert;1;Strapi #251;200;
+/standorte/koeln/mediapark-klinik/botox/kraehenfuesse;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/kraehenfuesse;301 unverändert;1;Strapi #250;200;
+/standorte/koeln/mediapark-klinik/botox/lachfalten;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/lachfalten;301 unverändert;1;Strapi #247;200;
+/standorte/koeln/mediapark-klinik/botox/lipflip;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/lipflip;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/botox/masseter;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/masseter;301 unverändert;1;Strapi #203;200;
+/standorte/koeln/mediapark-klinik/botox/migraenebehandlung;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 unverändert;1;Strapi #248;200;
+/standorte/koeln/mediapark-klinik/botox/stirnfalte;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/stirnfalte;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/botox/zaehneknirschen-bruxismus;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus;301 unverändert;1;Strapi #204;200;
+/standorte/koeln/mediapark-klinik/botox/zornesfalte;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/botox/zornesfalte;301 unverändert;1;Strapi #249;200;
+/standorte/koeln/mediapark-klinik/btx/lachfalten;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/lachfalten;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/mediapark-klinik/btx/zornesfalte;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/botox/zornesfalte;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Botox-Hub
+/standorte/koeln/mediapark-klinik/fettwegspritze;301;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze;301 unverändert;1;Strapi #238;200;
+/standorte/koeln/mediapark-klinik/fettwegspritze/lemon-bottle-backen;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen;301 unverändert;1;Strapi #241;200;
+/standorte/koeln/mediapark-klinik/fettwegspritze/lemon-bottle-bauch;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-bauch;301 unverändert;1;Strapi #239;200;
+/standorte/koeln/mediapark-klinik/fettwegspritze/lemon-bottle-doppelkinn;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn;301 unverändert;1;Strapi #242;200;
+/standorte/koeln/mediapark-klinik/fettwegspritze/lemon-bottle-huefte;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-huefte;301 unverändert;1;Strapi #244;200;
+/standorte/koeln/mediapark-klinik/fettwegspritze/lemon-bottle-knie;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-knie;301 unverändert;1;Strapi #240;200;
+/standorte/koeln/mediapark-klinik/fettwegspritze/lemon-bottle-oberarm;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm;301 neu;1;Strapi #243;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/fettwegspritze/lemon-bottle-oberschenkel;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberschenkel;301 unverändert;1;Strapi #245;200;
+/standorte/koeln/mediapark-klinik/hair-boost-infusion4;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/hair-boost-infusion4;301 Ziel korrigiert;1;Strapi #369;200;vorher national
+/standorte/koeln/mediapark-klinik/hyaluron;301;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron;301 unverändert;1;Strapi #215;200;
+/standorte/koeln/mediapark-klinik/hyaluron/augenringe-unterspritzen;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/augenringe-unterspritzen;301 unverändert;1;Strapi #380;200;
+/standorte/koeln/mediapark-klinik/hyaluron/dekolletee;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/dekolletee;301 neu;1;Strapi #220;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/hyaluron/full-face-hyaluron;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/hyaluron/haende;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/haende;301 Ziel korrigiert;1;Strapi #224;200;vorher national
+/standorte/koeln/mediapark-klinik/hyaluron/hylase;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/hylase;301 neu;1;Strapi #217;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/hyaluron/jawline;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/jawline;301 unverändert;1;Strapi #227;200;
+/standorte/koeln/mediapark-klinik/hyaluron/kinnkorrektur;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/kinnkorrektur;301 neu;1;Strapi #225;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/hyaluron/lippen-aufspritzen;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen;301 unverändert;1;Strapi #376;200;
+/standorte/koeln/mediapark-klinik/hyaluron/lippenkorrektur;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur;301 unverändert;1;Strapi #478;200;
+/standorte/koeln/mediapark-klinik/hyaluron/marionettenfalten;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/marionettenfalten;301 unverändert;1;Strapi #226;200;
+/standorte/koeln/mediapark-klinik/hyaluron/nasolabialfalte;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/nasolabialfalte;301 neu;1;Strapi #222;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/hyaluron/plisseefalten;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;301 unverändert;1;Strapi #214;200;
+/standorte/koeln/mediapark-klinik/hyaluron/russian-lips;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/russian-lips;301 unverändert;1;Strapi #223;200;
+/standorte/koeln/mediapark-klinik/hyaluron/wangenaufbau;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/wangenaufbau;301 unverändert;1;Strapi #263;200;
+/standorte/koeln/mediapark-klinik/infusionen;301;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/infusionen;301 unverändert;1;Strapi #230;200;
+/standorte/koeln/mediapark-klinik/infusionen/anti-aging-infusion;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/anti-aging-infusion;301 unverändert;1;Strapi #231;200;
+/standorte/koeln/mediapark-klinik/infusionen/b-komplex-infusion;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/b-komplex-infusion;301 unverändert;1;Strapi #232;200;
+/standorte/koeln/mediapark-klinik/infusionen/immun-infusion;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/immun-infusion;301 unverändert;1;Strapi #234;200;
+/standorte/koeln/mediapark-klinik/infusionen/power-infusion-glutathion;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion;301 unverändert;1;Strapi #236;200;
+/standorte/koeln/mediapark-klinik/infusionen/regenerations-infusion;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/regenerations-infusion;301 unverändert;1;Strapi #235;200;
+/standorte/koeln/mediapark-klinik/infusionen/relax-infusion;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/relax-infusion;301 unverändert;1;Strapi #233;200;
+/standorte/koeln/mediapark-klinik/infusionen/vitamin-c-infusion;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion;301 unverändert;1;Strapi #237;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen;200;Kategorie-Hub;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen;behalten;0;–;200;Typ effektiv abulatory (Strapi minimally-invasive)
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;behalten;0;–;200;Typ effektiv abulatory (Strapi minimally-invasive)
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberschenkelstraffung;200;Behandlung;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberschenkelstraffung;behalten;0;–;200;
+/standorte/koeln/mediapark-klinik/skinbooster;200;Kategorie-Hub;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/skinbooster/lumi-eyes-polynukleotide;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide;301 unverändert;1;Strapi #212;200;
+/standorte/koeln/mediapark-klinik/skinbooster/mesotherapie-nctf-135-ha;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/mesotherapie-nctf-135-ha;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/skinbooster/polynukleotide-lachssperma;200;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma;301 neu;1;standortregel;200;vorher Duplikat 200
+/standorte/koeln/mediapark-klinik/skinbooster/profhilo;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/profhilo;301 unverändert;1;Strapi #381;200;
+/standorte/koeln/mediapark-klinik/skinbooster/vampir-lifting-prp;301;Behandlung;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/vampir-lifting-prp;301 Ziel korrigiert;1;Strapi #378;200;vorher national
+/ar/pages/augenringe-mit-hyaluron-entfernen-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/augenringe-unterspritzen;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/bachdeckenstraffung-koln-1;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/bruststraffung-kaiserslautern;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/ar/pages/dekollete-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/dekolletee;301 unverändert;1;redirects.json;200;
+/ar/pages/face-lift-duesseldorf;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/ar/pages/face-lift-koeln;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/face-lift-leipzig;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/ar/pages/fettabsaugung-koln-1;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/fettabsaugung-leipzig;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/ar/pages/full-face-behandlung-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/full-face-botox;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/full-face-hyaluron-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/haartransplantation-recklinghausen;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/ar/pages/hyperhidrose-schweissdruesen-botox-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;301 unverändert;1;redirects.json;200;
+/ar/pages/immun-infusion-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/immun-infusion;301 unverändert;1;redirects.json;200;
+/ar/pages/infusion-regeneration-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/regenerations-infusion;301 unverändert;1;redirects.json;200;
+/ar/pages/jawline-und-kinnkorrektur-mit-hyaluron-in-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/jawline;301 unverändert;1;redirects.json;200;
+/ar/pages/kinnkorrektur-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/kinnkorrektur;301 unverändert;1;redirects.json;200;
+/ar/pages/lemon-bottle-arme-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm;301 unverändert;1;redirects.json;200;
+/ar/pages/lemon-bottle-fett-weg-spritze-doppelkinn-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/lemon-bottle-wange-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/lipflip-botox-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/lipflip;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/lippenkorrektur-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur;301 unverändert;1;redirects.json;200;
+/ar/pages/lumi-eyes-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/migraene-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 unverändert;1;redirects.json;200;
+/ar/pages/oberarmstraffung-berlin;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/ar/pages/oberarmstraffung-koeln;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/ar/pages/oberarmstraffung-monchengladbach;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/ar/pages/oberlidstraffung-berlin;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/ar/pages/oberlidstraffung-leipzig;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/ar/pages/power-infusion-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/vampirlifting-mit-prp-in-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/vampir-lifting-prp;301 unverändert;1;redirects.json;200;
+/ar/pages/wangenaufbau-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/wangenaufbau;301 unverändert;1;redirects.json;200;
+/ar/pages/zornesfalte-botox-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/zornesfalte;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/ar/pages/الأيدي-كولونيا;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/haende;301 unverändert;1;redirects.json;200;
+/ar/pages/بيبي-بوتوكس-كولونيا;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/baby-botox;301 unverändert;1;redirects.json;200;
+/ar/pages/تجاعيد-الضحك-كولن;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/lachfalten;301 unverändert;1;redirects.json;200;
+/ar/pages/حقن-خط-الطيات-الأنفية-الشفوية-بحمض-الهيالورونيك-كولونيا;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/nasolabialfalte;301 unverändert;1;redirects.json;200;
+/ar/pages/رفع-الحاجب-بوتوكس-كولن;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/browlift;301 unverändert;1;redirects.json;200;
+/ar/pages/علاج-بروفيلو-في-كولونيا;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/profhilo;301 unverändert;1;redirects.json;200;
+/ar/pages/فيتامين-سي-إنفيوجن-كولن;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion;301 unverändert;1;redirects.json;200;
+/ar/pages/ميزوثيرابي-الشعر-كولن;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;301 unverändert;1;redirects.json;200;
+/blog/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden;301;Blog-Altlink;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;Strapi #375;200;
+/blogs/news/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden;301;Blog-Altlink;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects-koeln.json;200;
+/blogs/news/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden;301;Blog-Altlink;–;/blog/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden;301 unverändert;1;redirects.json;200;
+/en/blogs/news/botox-treatments-without-appointment-at-my-health-beauty-in-the-cologne-arcaden;301;Blog-Altlink;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects-koeln.json;200;
+/en/locations/koeln/koeln-arcaden;200;Sprachversion EN;Arcaden;/en/locations/koeln/koeln-arcaden;behalten;0;–;200;
+/en/locations/koeln/koeln-arcaden/botox;200;Sprachversion EN;Arcaden;/en/locations/koeln/koeln-arcaden/botox;behalten;0;–;200;
+/en/locations/koeln/koeln-arcaden/schoenheitsoperationen/haartransplantation;200;Sprachversion EN;MediaPark;/en/locations/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 neu;1;standortregel;200;vorher Duplikat 200
+/en/locations/koeln/mediapark-klinik;200;Sprachversion EN;MediaPark;/en/locations/koeln/mediapark-klinik;behalten;0;–;200;
+/en/locations/koeln/mediapark-klinik/botox;200;Sprachversion EN;Arcaden;/en/locations/koeln/koeln-arcaden/botox;301 neu;1;standortregel;200;vorher Duplikat 200
+/en/locations/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;200;Sprachversion EN;MediaPark;/en/locations/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;behalten;0;–;200;
+/en/pages/barbie-botox-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/barbie-botox;301 unverändert;1;redirects.json;200;
+/en/pages/botox-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects.json;200;
+/en/pages/breast-enlargement-cologne;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/bruststraffung-leipzig;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/en/pages/bruxism-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus;301 unverändert;1;redirects.json;200;
+/en/pages/chin-correction-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/kinnkorrektur;301 unverändert;1;redirects.json;200;
+/en/pages/crows-feet-botox-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/kraehenfuesse;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/decollete-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/dekolletee;301 unverändert;1;redirects.json;200;
+/en/pages/face-lift-cologne;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/fettabsaugung-kaiserslautern;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/en/pages/frown-line-botox-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/zornesfalte;301 unverändert;1;redirects.json;200;
+/en/pages/full-face-hyaluron-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;301 unverändert;1;redirects.json;200;
+/en/pages/full-face-treatment-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/full-face-botox;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/hair-transplant-kaiserslautern;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/en/pages/hands-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/haende;301 unverändert;1;redirects.json;200;
+/en/pages/hylase-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/hylase;301 unverändert;1;redirects.json;200;
+/en/pages/hyperhidrosis-sweat-glands-botox-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;301 unverändert;1;redirects.json;200;
+/en/pages/laugh-lines-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/lachfalten;301 unverändert;1;redirects.json;200;
+/en/pages/lemon-bottle-arms-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/lemon-bottle-cheek-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher /standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-huefte
+/en/pages/lemon-bottle-fat-away-injection-double-chin-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/lemon-bottle-stomach-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-bauch;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/lemon-bottle-thigh-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberschenkel;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher /standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-knie
+/en/pages/lip-augmentation-and-russian-lips-in-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen;301 unverändert;1;redirects.json;200;
+/en/pages/lip-correction-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur;301 unverändert;1;redirects.json;200;
+/en/pages/location-cologne-arcaden;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/lumi-eyes-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/masseter-botox-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/masseter;301 unverändert;1;redirects.json;200;
+/en/pages/mesotherapy-face-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/mesotherapie-nctf-135-ha;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/mesotherapy-hair-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/migraine-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/oberlidstraffung-kaiserslautern;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/en/pages/ohh-de-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher Startseite; Ziel Arcaden-Standortseite (Benjamin, 06.10.)"
+/en/pages/platysma-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;301 unverändert;1;redirects.json;200;
+/en/pages/pleated-wrinkles-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;301 unverändert;1;redirects.json;200;
+/en/pages/polynucleotide-skinbooster-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/en/pages/power-infusion-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion;301 unverändert;1;redirects.json;200;
+/en/pages/profhilo-treatment-in-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/profhilo;301 unverändert;1;redirects.json;200;
+/en/pages/prp-hair-therapy-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/prp-haartherapie;301 unverändert;1;redirects.json;200;
+/en/pages/relax-infusion-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/relax-infusion;301 unverändert;1;redirects.json;200;
+/en/pages/upper-eyelid-lift-berlin;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/en/pages/vitamin-b-complex-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/b-komplex-infusion;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/koeln/hyaluron;301;Alt-Pfad;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron;301 unverändert;1;Strapi #264;200;
+/pages/anti-aging-fusion-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/anti-aging-infusion;301 unverändert;1;redirects.json;200;
+/pages/augenringe-mit-hyaluron-entfernen-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/augenringe-unterspritzen;301 unverändert;1;redirects.json;200;
+/pages/baby-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/baby-botox;301 unverändert;1;redirects.json;200;
+/pages/bachdeckenstraffung-koeln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/pages/barbie-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/barbie-botox;301 unverändert;1;redirects.json;200;
+/pages/bauchdeckenstraffung-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/pages/bauchdeckenstraffung-berlin-1;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/pages/bauchdeckenstraffung-dusseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/pages/bauchdeckenstraffung-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/pages/bauchdeckenstraffung-monchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/pages/bauchdeckenstraffung-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/pages/botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects.json;200;
+/pages/browlift-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/browlift;301 unverändert;1;redirects.json;200;
+/pages/bruststraffung-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/pages/bruststraffung-duesseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/pages/bruststraffung-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/pages/bruststraffung-koln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/pages/bruststraffung-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/pages/bruststraffung-moenchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/pages/bruststraffung-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung;301 unverändert;1;redirects.json;200;
+/pages/brustvergroesserung-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/pages/brustvergroesserung-duesseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/pages/brustvergroesserung-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/pages/brustvergroesserung-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/pages/brustvergroesserung-moenchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/pages/brustvergroesserung-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/pages/brustvergrosserung-koeln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/pages/bruxismus-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/zaehneknirschen-bruxismus;301 unverändert;1;redirects.json;200;
+/pages/bunny-lines-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/bunny-lines;301 unverändert;1;redirects.json;200;
+/pages/dekollete-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/dekolletee;301 unverändert;1;redirects.json;200;
+/pages/erdbeerkinn-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/erdbeerkinn;301 unverändert;1;redirects.json;200;
+/pages/face-lift-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/pages/face-lift-duesseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/pages/face-lift-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/pages/face-lift-koeln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/pages/face-lift-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/pages/face-lift-monchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/pages/face-lift-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 unverändert;1;redirects.json;200;
+/pages/fettabsaugung-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/pages/fettabsaugung-dusseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/pages/fettabsaugung-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/pages/fettabsaugung-koeln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/pages/fettabsaugung-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/pages/fettabsaugung-monchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/pages/fettabsaugung-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/pages/full-face-behandlung-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/full-face-botox;301 unverändert;1;redirects.json;200;
+/pages/full-face-hyaluron;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;301 unverändert;1;redirects.json;200;
+/pages/full-face-hyaluron-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;301 unverändert;1;redirects.json;200;
+/pages/haartransplantation-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/pages/haartransplantation-duesseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/pages/haartransplantation-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/pages/haartransplantation-koeln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/pages/haartransplantation-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/pages/haartransplantation-moenchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/pages/haartransplantation-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/pages/haende-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/haende;301 unverändert;1;redirects.json;200;
+/pages/hylase-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/hylase;301 unverändert;1;redirects.json;200;
+/pages/hyperhidrose-schweissdruesen-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;301 unverändert;1;redirects.json;200;
+/pages/immun-infusion-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/immun-infusion;301 unverändert;1;redirects.json;200;
+/pages/infusion-regeneration-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/regenerations-infusion;301 unverändert;1;redirects.json;200;
+/pages/jawline-und-kinnkorrektur-mit-hyaluron-in-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/jawline;301 unverändert;1;redirects.json;200;
+/pages/kinnkorrektur-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/kinnkorrektur;301 unverändert;1;redirects.json;200;
+/pages/kraehenfuesse-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/kraehenfuesse;301 unverändert;1;redirects.json;200;
+/pages/lachfalten-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/lachfalten;301 unverändert;1;redirects.json;200;
+/pages/lemon-bottle-arme-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm;301 unverändert;1;redirects.json;200;
+/pages/lemon-bottle-bauch-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-bauch;301 unverändert;1;redirects.json;200;
+/pages/lemon-bottle-fett-weg-spritze-doppelkinn-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn;301 unverändert;1;redirects.json;200;
+/pages/lemon-bottle-huefte-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-huefte;301 unverändert;1;redirects.json;200;
+/pages/lemon-bottle-knie-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-knie;301 unverändert;1;redirects.json;200;
+/pages/lemon-bottle-oberschenkel-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberschenkel;301 unverändert;1;redirects.json;200;
+/pages/lemon-bottle-wange-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-backen;301 unverändert;1;redirects.json;200;
+/pages/lipflip-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/lipflip;301 unverändert;1;redirects.json;200;
+/pages/lippen-aufspritzen-und-russian-lips-in-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen;301 unverändert;1;redirects.json;200;
+/pages/lippenkorrektur-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur;301 unverändert;1;redirects.json;200;
+/pages/location-koeln-arcaden;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden;301 unverändert;1;redirects.json;200;
+/pages/location-koln-arcaden;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden;301 unverändert;1;redirects.json;200;
+/pages/lumi-eyes-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide;301 unverändert;1;redirects.json;200;
+/pages/marionettenfalten-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/marionettenfalten;301 unverändert;1;redirects.json;200;
+/pages/masseter-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/masseter;301 unverändert;1;redirects.json;200;
+/pages/mesotherapie-gesicht-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/mesotherapie-nctf-135-ha;301 unverändert;1;redirects.json;200;
+/pages/mesotherapie-haare-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;301 unverändert;1;redirects.json;200;
+/pages/migraene-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 unverändert;1;redirects.json;200;
+/pages/nasolabialfalte-mit-hyaluron-unterspritzen-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/nasolabialfalte;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung-dusseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung-koeln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung-monchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberarmstraffung-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberlidstraffung-berlin;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberlidstraffung-duesseldorf;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberlidstraffung-kaiserslautern;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberlidstraffung-koeln;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberlidstraffung-leipzig;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberlidstraffung-moenchengladbach;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/pages/oberlidstraffung-recklinghausen;301;Alt-URL Shopify;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung;301 unverändert;1;redirects.json;200;
+/pages/ohh-de-cologne;404;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher 410; Ziel Arcaden-Standortseite (Benjamin, 06.10.)"
+/pages/platysma-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/halsfalten-platysma;301 unverändert;1;redirects.json;200;
+/pages/plisseefalten-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;301 unverändert;1;redirects.json;200;
+/pages/polynukleotide-skinbooster-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma;301 unverändert;1;redirects.json;200;
+/pages/power-infusion-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion;301 unverändert;1;redirects.json;200;
+/pages/profhilo-behandlung-in-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/profhilo;301 unverändert;1;redirects.json;200;
+/pages/prp-haar-therapie-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/prp-haartherapie;301 unverändert;1;redirects.json;200;
+/pages/relax-infusion-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/relax-infusion;301 unverändert;1;redirects.json;200;
+/pages/skinbooster-koln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster;301 unverändert;1;redirects.json;200;
+/pages/stirnfalte-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/stirnfalte;301 unverändert;1;redirects.json;200;
+/pages/vampirlifting-mit-prp-in-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/vampir-lifting-prp;301 unverändert;1;redirects.json;200;
+/pages/vitamin-b-komplex-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/b-komplex-infusion;301 unverändert;1;redirects.json;200;
+/pages/vitamin-c-infusion-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion;301 unverändert;1;redirects.json;200;
+/pages/wangenaufbau-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/wangenaufbau;301 unverändert;1;redirects.json;200;
+/pages/zornesfalte-botox-koeln;301;Alt-URL Shopify;Arcaden;/standorte/koeln/koeln-arcaden/botox/zornesfalte;301 unverändert;1;redirects.json;200;
+/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen;301;Alt-URL Leipzig-OP;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen;301 unverändert;1;redirects.json;200;
+/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/bauchdeckenstraffung;301;Alt-URL Leipzig-OP;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/brustvergroesserung;301;Alt-URL Leipzig-OP;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 unverändert;1;redirects.json;200;
+/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/fettabsaugung;301;Alt-URL Leipzig-OP;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;
+/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/haartransplantation;301;Alt-URL Leipzig-OP;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/oberschenkelstraffung;301;Alt-URL Leipzig-OP;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberschenkelstraffung;301 unverändert;1;redirects.json;200;
+/tr/blogs/haberler/botoks-tedavileri-randevusuz-my-health-beauty-de-koln-arcaden-de;301;Blog-Altlink;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects-koeln.json;200;
+/tr/pages/anti-aging-fusion-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/anti-aging-infusion;301 unverändert;1;redirects.json;200;
+/tr/pages/bagisiklik-infuzion-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/immun-infusion;301 unverändert;1;redirects.json;200;
+/tr/pages/bauchdeckenstraffung-monchengladbach;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung;301 unverändert;1;redirects.json;200;
+/tr/pages/brustvergrosserung-koln;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/bunny-lines-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/bunny-lines;301 unverändert;1;redirects.json;200;
+/tr/pages/cene-duzeltme-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/kinnkorrektur;301 unverändert;1;redirects.json;200;
+/tr/pages/danke-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 unverändert;1;redirects.json;200;
+/tr/pages/dekolte-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/dekolletee;301 unverändert;1;redirects.json;200;
+/tr/pages/dudak-dolgunlastirma-ve-rus-dudaklari-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen;301 unverändert;1;redirects.json;200;
+/tr/pages/dudak-duzeltme-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/lippenkorrektur;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/erdbeerkinn-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/erdbeerkinn;301 unverändert;1;redirects.json;200;
+/tr/pages/face-lift-koeln;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/fettabsaugung-koln;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/full-face-hyaluron-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/full-face-hyaluron;301 unverändert;1;redirects.json;200;
+/tr/pages/full-face-tedavi-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/full-face-botox;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/guc-infuzyon-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/power-infusion-glutathion;301 unverändert;1;redirects.json;200;
+/tr/pages/haartransplantation-kaiserslautern;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 unverändert;1;redirects.json;200;
+/tr/pages/hiperhidroz-ter-bezleri-botox-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/hyperhidrose-starkes-schwitzen;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/kas-kaldirma-botox-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/browlift;301 unverändert;1;redirects.json;200;
+/tr/pages/kraehenfuesse-botox-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/kraehenfuesse;301 unverändert;1;redirects.json;200;
+/tr/pages/lachfalten-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/lachfalten;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/lemon-bottle-arme-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-oberarm;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/lemon-bottle-diz-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-knie;301 unverändert;1;redirects.json;200;
+/tr/pages/lemon-bottle-fett-weg-spritze-doppelkinn-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/fettwegspritze/lemon-bottle-doppelkinn;301 unverändert;1;redirects.json;200;
+/tr/pages/location-koln-arcaden;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/lumi-gozler-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/marionet-cizgileri-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/marionettenfalten;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/masseter-botox-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/masseter;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/mesoterapi-sac-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/mesotherapie-haare;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/migren-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/migraenebehandlung;301 unverändert;1;redirects.json;200;
+/tr/pages/oberarmstraffung-koeln;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/oberarmstraffung-recklinghausen;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung;301 unverändert;1;redirects.json;200;
+/tr/pages/ohh-de-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden;301 Ziel korrigiert;1;redirects-koeln.json;200;"vorher Startseite; Ziel Arcaden-Standortseite (Benjamin, 06.10.)"
+/tr/pages/plisse-cizgileri-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/hyaluron/plisseefalten;301 unverändert;1;redirects.json;200;
+/tr/pages/profhilo-tedavi-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster/profhilo;301 unverändert;1;redirects.json;200;
+/tr/pages/prp-sac-terapisi-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/anti-haarausfall/prp-haartherapie;301 unverändert;1;redirects.json;200;
+/tr/pages/relax-infusion-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/relax-infusion;301 unverändert;1;redirects.json;200;
+/tr/pages/sac-ekimi-moenchengladbach;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher /standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift
+/tr/pages/skinbooster-koln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/skinbooster;301 unverändert;1;redirects.json;200;
+/tr/pages/vitamin-c-infusion-koeln;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite
+/tr/pages/yag-aldirma-dusseldorf;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung;301 unverändert;1;redirects.json;200;

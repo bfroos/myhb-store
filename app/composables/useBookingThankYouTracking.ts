@@ -5,6 +5,7 @@ import {
   readBookingHandoff,
   clearBookingHandoff,
 } from "~/lib/calendlyBookingHandoff";
+import { pushErweiterteConversions } from "~/lib/enhancedConversions";
 
 /**
  * `booking_confirmed` auf der Dankesseite nach einer Calendly-Buchung
@@ -30,7 +31,7 @@ import {
  */
 export function useBookingThankYouTracking() {
   const route = useRoute();
-  const { trackCalendlyBookingConfirmed } = useGoogleAnalytics();
+  const { trackCalendlyBookingConfirmed, trackEvent } = useGoogleAnalytics();
 
   const slug = route.params.slug;
   const isThankYouPage =
@@ -42,7 +43,26 @@ export function useBookingThankYouTracking() {
     return typeof x === "string" && x.trim() ? x.trim() : undefined;
   };
 
-  const track = () => {
+  /**
+   * Erweiterte Conversions (myhb-app/myhb-os#637): Calendly gibt E-Mail
+   * (`invitee_email`) und die erste Frage "Telefonnummer" (`answer_1`) an die
+   * Dankesseite. Nur mit Marketing-Einwilligung und nur gehasht als
+   * `ec_user_data` in die Datenschicht, BEVOR `booking_thank_you` kommt — der
+   * Ads-Tag 44 liest sie ueber "Vom Nutzer bereitgestellte Daten". Ohne
+   * Einwilligung wird ein frueherer Stand geleert.
+   */
+  const setzeErweiterteConversions = () =>
+    pushErweiterteConversions(window as unknown as Parameters<typeof pushErweiterteConversions>[0], {
+      email: firstString(route.query.invitee_email),
+      phone: firstString(route.query.answer_1),
+    });
+
+  const track = async () => {
+    try {
+      await setzeErweiterteConversions();
+    } catch (err) {
+      console.error("[ads] erweiterte Conversions", err);
+    }
     const inviteeUuid = firstString(route.query.invitee_uuid);
     const eventTypeUuid = firstString(route.query.event_type_uuid);
     const assignedTo = firstString(route.query.assigned_to);
@@ -63,13 +83,27 @@ export function useBookingThankYouTracking() {
       : `calendly:${eventTypeUuid ?? "unknown"}:${new Date().toISOString().slice(0, 16)}`;
     if (hasFiredBookingConfirmed(dedupeId)) return;
 
-    // Dialog hat diese Buchung schon gemeldet → nur aufräumen.
     const sameBooking =
       !!handoff &&
       (handoff.invitee_uuid && inviteeUuid
         ? handoff.invitee_uuid === inviteeUuid
         : // Ohne IDs: eine frische Übergabe gehört zu dieser Buchung.
           true);
+
+    // Google-Ads-Conversion „Dankesseite Calendly" (GTM, 01.10.2026): genau
+    // einmal je Buchung, auch wenn der Dialog `booking_confirmed` schon
+    // gemeldet hat — jede Calendly-Buchung landet hier, das Embed nicht immer.
+    // `value` ist der Seitenpreis aus dem Dialog; GTM rechnet den DB1.
+    // Bewusst nicht an `booking_confirmed` (das faellt im Embed-Fall hier aus).
+    trackEvent("booking_thank_you", {
+      event_category: "conversion",
+      booking_type: "calendly",
+      event_id: inviteeUuid ?? dedupeId,
+      value: sameBooking ? handoff?.booking_value : undefined,
+      currency: "EUR",
+    });
+
+    // Dialog hat diese Buchung schon gemeldet → nur aufräumen.
     if (handoff?.fired && sameBooking) {
       markBookingConfirmedFired(dedupeId);
       clearBookingHandoff();
@@ -101,7 +135,7 @@ export function useBookingThankYouTracking() {
 
   onMounted(() => {
     if (!isThankYouPage || !import.meta.client) return;
-    track();
+    void track();
   });
 
   return { isThankYouPage };

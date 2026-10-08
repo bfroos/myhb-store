@@ -1,4 +1,14 @@
 // Strapi proxy with server-side caching.
+import { sanitizeAdsContent } from "#shared/adsTerms";
+import { rewriteAdsLinksDeep, type AdsLinkContext } from "#shared/adsLinks";
+import { isAdsPricePage, prepareAdsPricePage } from "#shared/adsPricePages";
+import { stripBlockedAdsVideos } from "#shared/adsMedia";
+import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
+import {
+  applyNewCustomerPricesDeep,
+  isSurgeryPathKey,
+} from "#shared/newCustomerOffer";
+
 // CRITICAL: When the __NUXT_PREVIEW cookie is set (via /api/preview route),
 // the request skips the cache wrapper entirely and carries status=draft.
 
@@ -7,6 +17,9 @@ const FALLBACK_LOCALE = 'de';
 const NO_FALLBACK_PATHS = [/^\/menu(?:\/|$)/];
 
 function isPreviewRequest(event: any): boolean {
+  // Ohne gueltiges Bypass-Cookie kaeme ein Entwurf in den oeffentlichen
+  // ISR-Cache, siehe server/utils/previewBypass.ts.
+  if (!hasPrerenderBypass(event)) return false;
   const cookie = getCookie(event, '__NUXT_PREVIEW');
   if (cookie === 'true') return true;
   const raw = getRequestHeader(event, 'cookie') || '';
@@ -61,8 +74,10 @@ function isPlainObject(value: any): boolean {
 // Fields that identify an entity or address it in a specific locale. When a
 // German value is substituted wholesale these must not travel with it, or a
 // translated page ends up carrying German documentIds and German URLs.
+// `id` stays: the frontend keys v-for lists on it (faq.id, slide.id, link.id)
+// and never fetches by it, so stripping it turned every substituted list into
+// undefined keys.
 const LOCALE_BOUND_KEYS = new Set([
-  'id',
   'documentId',
   'createdAt',
   'updatedAt',
@@ -149,7 +164,139 @@ function mergeFallback(target: any, fallback: any): any {
 // veroeffentlichte. Der Preview-Fall wird deshalb aussen am echten Event
 // entschieden: Preview geht ungecacht direkt an Strapi, alles andere weiter
 // durch den Cache.
+// Ads-Modus (go.*): Google lehnt Anzeigen ab, wenn auf der Zielseite "Botox"
+// steht (RESTRICTED_DRUG_TERMS). Die Antwort wird deshalb hier einmal zentral
+// bereinigt - so erreicht der Begriff weder Seite, Meta, JSON-LD noch den
+// Nuxt-Payload. SEO-Modus (www) bleibt unveraendert.
 async function fetchFromStrapi(
+  event: any,
+  preview: boolean,
+  previewStatus: 'draft' | 'published',
+) {
+  const config = useRuntimeConfig(event);
+  const siteMode = config.siteMode || config.public.siteMode;
+  const raw = await fetchFromStrapiRaw(event, preview, previewStatus);
+  // TSEO-08: eigene Links mit Weiterleitung gleich aufs Ziel (www).
+  if (siteMode !== 'ads') return rewriteRedirectedLinks(raw);
+  const url = getRequestURL(event);
+  const locale = url.searchParams.get('locale');
+  // go.-Standortseite: Behandlungskacheln und Bewertungen zurueck (Inhaber,
+  // 30.09.2026). Vor der Bereinigung, damit auch diese Texte sie durchlaufen.
+  const result = await withAdsLocationExtras(event, url.pathname, raw, locale);
+  // #184: Ausgaenge schliessen - www-Links werden relativ, ortlose
+  // Querlinks auf Standort-Behandlungsseiten fuehren zum selben Standort.
+  const linkCtx = await adsLinkContext(event, getRequestURL(event).pathname);
+  let sanitized: any = rewriteAdsLinksDeep(
+    // Videos mit dem Markennamen im Dateinamen/Bild nicht ausliefern.
+    sanitizeAdsContent(stripBlockedAdsVideos(result), locale),
+    linkCtx,
+  );
+  // ... und die Kacheln "Passende Behandlungen" verlinken nur, was es am
+  // Standort gibt (mapTreatmentCommonFixedBlocks liest das Feld).
+  if (
+    linkCtx.availablePathKeys &&
+    sanitized?.data?.treatmentPage &&
+    !Array.isArray(sanitized.data.availableTreatmentPathKeys)
+  ) {
+    sanitized = {
+      ...sanitized,
+      data: {
+        ...sanitized.data,
+        availableTreatmentPathKeys: linkCtx.availablePathKeys,
+      },
+    };
+  }
+  // go.: Preise in Texten der Behandlungsseite (Preistabellen, FAQ, Teaser,
+  // SEO-Title/Description) zeigen den Neukundenpreis mit Sternchen
+  // (shared/newCustomerOffer.ts). Nur der Behandlungsteil der Antwort: Die
+  // Standortdaten daneben tragen andere Euro-Betraege (Parkgebuehren), und
+  // freie Landingpages (/p/…) koennten Rabatte schon selbst ausweisen. Nur
+  // Deutsch, weil Fussnote und Hinweis deutsch sind. Zahlenfelder
+  // (priceInEuroCent) bleiben unveraendert.
+  const restPath = url.pathname.replace(/^\/api\/strapi/, '');
+  if ((!locale || locale === 'de') && restPath.startsWith('/treatment-pages/')) {
+    const data = (sanitized as any)?.data;
+    if (data?.treatmentPage) {
+      // In Strapi fuer go. gebaute Seiten (ADS_TEMPLATE_V2_EXCLUDE) nennen
+      // den Neukundenpreis schon selbst: Saetze mit "Neukunde" bleiben.
+      const tp = /^\/treatment-pages\/([^/]+)\/([^/]+)\/(.+)$/.exec(restPath);
+      const priceOpts = {
+        keepNewCustomerSentences:
+          !!tp && tp[1] !== 'by-path' && isAdsTemplateV2Excluded(tp[1], tp[2], tp[3]),
+      };
+      return {
+        ...(sanitized as any),
+        data: {
+          ...data,
+          treatmentPage: applyNewCustomerPricesDeep(data.treatmentPage, undefined, priceOpts),
+          // SEO-Felder der Seite (Title/Description) liegen daneben.
+          ...(data.seo && !isSurgeryPathKey(data.treatmentPage.pathKey)
+            ? { seo: applyNewCustomerPricesDeep(data.seo, undefined, priceOpts) }
+            : {}),
+        },
+      };
+    }
+    if (data && typeof data === 'object' && !Array.isArray(data) && data.pathKey) {
+      return { ...(sanitized as any), data: applyNewCustomerPricesDeep(data) };
+    }
+  }
+  // go.-Standortseite: Preise in den Kacheltexten ("PRP ab 199,99 €") wie
+  // auf den Behandlungsseiten mit Neukundenpreis. OPs kommen gar nicht mit.
+  if (
+    (!locale || locale === 'de') &&
+    ADS_LOCATION_PAGE.test(restPath) &&
+    Array.isArray((sanitized as any)?.data?.treatmentPages)
+  ) {
+    return {
+      ...(sanitized as any),
+      data: {
+        ...(sanitized as any).data,
+        treatmentPages: applyNewCustomerPricesDeep((sanitized as any).data.treatmentPages),
+      },
+    };
+  }
+  // go.: Preisseiten /p/botox-kosten, /p/hyaluron-spritzen-kosten,
+  // /p/skinbooster-preise mit Neukundenpreisen wie die Behandlungsseiten
+  // (Benjamin, 30.09.2026). Andere /p/-Seiten bleiben, wie sie sind.
+  if ((!locale || locale === 'de') && restPath.startsWith('/pages/by-slug/')) {
+    const data = (sanitized as any)?.data;
+    if (data && isAdsPricePage(data.slug)) {
+      return { ...(sanitized as any), data: prepareAdsPricePage(data) };
+    }
+  }
+  // go.: Produktseiten (/produkte/…, verlinkt aus /preise) nennen die Preise
+  // der Varianten im Beschreibungstext ("… ab 149,99€"). Gleiche Umstellung,
+  // Zahlenfelder (priceInEuroCent, cheapestVariantPrice) bleiben.
+  if ((!locale || locale === 'de') && restPath.startsWith('/product-pages/')) {
+    const data = (sanitized as any)?.data;
+    if (data?.product) {
+      return {
+        ...(sanitized as any),
+        data: {
+          ...data,
+          product: applyNewCustomerPricesDeep(data.product),
+          ...(data.productPage
+            ? { productPage: applyNewCustomerPricesDeep(data.productPage) }
+            : {}),
+        },
+      };
+    }
+  }
+  return sanitized;
+}
+
+async function adsLinkContext(event: any, pathname: string): Promise<AdsLinkContext> {
+  // #199: Links auf Behandlungen, die es im Ads-Baum nicht gibt, fallen weg.
+  const adsPathKeys = await adsTreePathKeys(event).catch(() => null);
+  const m = /^\/api\/strapi\/treatment-pages\/([^/]+)\/([^/]+)\/.+/.exec(pathname);
+  if (!m || m[1] === 'by-path') return { adsPathKeys };
+  const keys = await locationPathKeys(event, m[1]!, m[2]!);
+  return keys
+    ? { locationBase: `/standorte/${m[1]}/${m[2]}`, availablePathKeys: keys, adsPathKeys }
+    : { adsPathKeys };
+}
+
+async function fetchFromStrapiRaw(
   event: any,
   preview: boolean,
   previewStatus: 'draft' | 'published',

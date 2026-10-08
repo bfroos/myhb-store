@@ -14,7 +14,12 @@
   </div>
   <div v-if="showHint" class="bookingEmbedStatus__hint">
     <span>{{ t("dialogs.booking.slowHint") }}</span>
-    <a :href="url" target="_blank" rel="noopener noreferrer">
+    <a
+      :href="url"
+      target="_blank"
+      rel="noopener noreferrer"
+      @click="oeffneMitDaten"
+    >
       {{ t("dialogs.booking.openInNewTab") }}
     </a>
   </div>
@@ -56,6 +61,12 @@ const props = withDefaults(
     unbestaetigt?: boolean;
     /** Buchungs-URL fuer den Notausgang in einen neuen Tab. */
     url?: string;
+    /**
+     * Dieselbe URL mit Vorbefuellung (E-Mail/Telefon nach dem Rabatt-Dialog).
+     * Sie steht bewusst nicht im `href`: Das Klick-Tracking (#155) schickt
+     * `href` als `link_url` in den dataLayer. Geoeffnet wird sie beim Klick.
+     */
+    openUrl?: string;
     hintAfterMs?: number;
   }>(),
   { hintAfterMs: 6000 },
@@ -63,6 +74,12 @@ const props = withDefaults(
 
 const { t } = useI18n();
 const showHint = ref(false);
+
+function oeffneMitDaten(e: MouseEvent) {
+  if (!props.openUrl || props.openUrl === props.url) return;
+  e.preventDefault();
+  window.open(props.openUrl, "_blank", "noopener,noreferrer");
+}
 let timer: ReturnType<typeof setTimeout> | undefined;
 
 /** Wartet der Besucher noch auf etwas Sichtbares? */

@@ -145,6 +145,12 @@
   },
 
   "blog": {
+    "pagination": "Pages",
+    "firstPage": "First page",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "pageTitle": "Page {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Knowledge, news and everything about health and beauty.",
@@ -356,9 +362,7 @@
       "previousImage": "Previous image",
       "nextImage": "Next image",
       "slideLabel": "Image {index} of {total}",
-      "selectImage": "Show image {index}",
-      "before": "Before",
-      "after": "After"
+      "selectImage": "Show image {index}"
     },
     "jobTeasers": {
       "headline": "Current job openings",
@@ -515,7 +519,8 @@
       "locationDenied": "Location unavailable. Please enter a postcode or city."
     },
     "newsletterSignUp": {
-      "header": "Subscribe to our newsletter"
+      "header": "Subscribe to our newsletter",
+      "headerDiscount": "Secure your {newsletterDiscountPercentage} % new-customer discount"
     },
     "booking": {
       "loading": "Loading booking …",
@@ -531,7 +536,10 @@
       "headlineDiscount": "For all new customers: Get {newsletterDiscountPercentage}% exclusive discount!",
       "exlusiveOffers": "Exclusive Offers",
       "treatmentNews": "News about treatments",
-      "eventInvitations": "Event invitations"
+      "eventInvitations": "Event invitations",
+      "bookingIntro": "Code by email – then pick your appointment right away.",
+      "consentHint": "By signing up you'll receive our newsletter (offers, treatment news, events). Unsubscribe at any time.",
+      "submitAndBook": "Secure discount & pick a time"
     },
     "success": "Welcome to {brandNameShort}! If the address is not yet registered, you will receive a confirmation email shortly. If you are already registered, nothing will happen.",
     "emailPlaceholder": "Your email address",

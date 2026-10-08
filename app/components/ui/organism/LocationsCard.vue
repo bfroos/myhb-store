@@ -1,12 +1,17 @@
 <template>
   <UiLayoutCardSurface :card-settings="cardSettings">
     <div class="locationsCard__header">
-      <h2 v-if="headline">
+      <!-- TSEO-14: auf Stadtseiten ist das die einzige Seitenueberschrift -->
+      <component
+        :is="headingLevel === 1 ? 'h1' : 'h2'"
+        v-if="headline"
+        :class="{ 'locationsCard__title--asH2': headingLevel === 1 }"
+      >
         {{ headline }}
         <template v-if="selectedStateLabel">
           {{ $t("common.in") }} {{ selectedStateLabel }}
         </template>
-      </h2>
+      </component>
       <div
         v-if="
           showFilters &&
@@ -47,6 +52,8 @@ import Select from "primevue/select";
 
 const props = defineProps<{
   headline?: string;
+  /** 1 = Seitenueberschrift (H1 in der Groesse einer H2) */
+  headingLevel?: 1 | 2;
   cardSettings?: CardSettingsDto;
   selectedFederalState?: string | null;
   availableFederalStates?: string[];
@@ -109,6 +116,11 @@ const selectedStateLabel = computed(() => {
 });
 </script>
 <style scoped>
+.locationsCard__title--asH2 {
+  font-size: var(--font-4xl);
+  line-height: var(--line-4xl);
+}
+
 .locationsCard__header {
   display: flex;
   flex-wrap: wrap;

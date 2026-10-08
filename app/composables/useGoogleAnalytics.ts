@@ -20,6 +20,8 @@
  */
 import { readGaAttributionParams } from "~/lib/attribution";
 import { mirrorFunnelEvent } from "~/lib/firstPartyFunnel";
+import { checkoutEventId, startCheckoutAttempt } from "~/lib/checkoutAttempt";
+import { carriesOfferVariant, currentOfferVariant } from "~/lib/offerVariant";
 
 type DataLayerObject = Record<string, unknown> & { event: string };
 
@@ -72,8 +74,26 @@ export const useGoogleAnalytics = () => {
       params.event_category === 'conversion'
         ? { ...(readGaAttributionParams() ?? {}), ...params }
         : params;
+    // go.-Vorschau der Seitenvorlage v2 (/vorschau-v2/...): Ereignisse tragen
+    // `template: "v2-preview"`, damit Vorschau-Klicks die Messwerte der
+    // echten Anzeigenseiten nicht vermischen. Sonst kein Feld (unveraendert).
+    const previewTemplate =
+      typeof window !== 'undefined'
+        ? (window as any).__myhbPreviewTemplate
+        : undefined;
+    const withTemplate = previewTemplate
+      ? { ...withAttribution, template: previewTemplate }
+      : withAttribution;
+    // go.-Angebots-Test (shared/adsOfferVariant.ts): `offer_variant` "a"/"b"
+    // an den Konversions-Ereignissen, nur wenn bekannt. Ein Wert des
+    // Aufrufers gewinnt.
+    const offerVariant = carriesOfferVariant(eventName) ? currentOfferVariant() : undefined;
+    const tagged =
+      offerVariant && withTemplate.offer_variant === undefined
+        ? { ...withTemplate, offer_variant: offerVariant }
+        : withTemplate;
     // `event` zuletzt, damit kein Parameter den Ereignisnamen ueberschreibt.
-    pushToDataLayer({ ...withAttribution, event: eventName });
+    pushToDataLayer({ ...tagged, event: eventName });
   };
 
   /**
@@ -163,13 +183,42 @@ export const useGoogleAnalytics = () => {
        * (elanagency/myhb-os#271) beide Gruppen gegeneinander stellen kann.
        */
       treatment_context?: boolean;
+      /**
+       * Preis der Behandlungsseite als Zahl (elanagency/myhb-os#400), aus
+       * der Kontextzeile. GTM liest ihn fuer Meta „Schedule mit Wert", wenn
+       * spaeter die Calendly-Buchung eintrifft.
+       */
+      booking_value?: number;
+      /**
+       * Buchung nach „20 % Rabatt sichern" (`nk20`). Der Wert oben ist dann
+       * schon der Neukundenpreis.
+       */
+      offer?: string;
+      /**
+       * go. Variante A (02.10.2026): Buchungsdialog kam aus dem Rabatt-Dialog
+       * statt direkt vom Knopf. Nur `true`; sonst null.
+       */
+      via_modal?: boolean;
     },
   ) => {
+    // #400: ein Klick = ein Buchungsversuch. Dieselbe event_id traegt die App
+    // an `booking_start` (per ?checkout_id=), Meta zaehlt InitiateCheckout
+    // dann einmal.
+    const checkoutId = startCheckoutAttempt();
     trackEvent('click_booking', {
       event_category: 'conversion',
       booking_type: bookingType,
       ...(extra ?? {}),
       treatment_context: extra?.treatment_context ?? false,
+      event_id: checkoutEventId(checkoutId),
+      // Bewusst null statt weglassen: GTM liest den zusammengefuehrten Stand
+      // der Datenschicht, ein Preis vom vorigen Klick darf nicht kleben (#161).
+      booking_value: extra?.booking_value ?? null,
+      booking_currency: extra?.booking_value ? 'EUR' : null,
+      // Ebenso: das Angebot des vorigen Versuchs darf nicht kleben.
+      offer: extra?.offer ?? null,
+      // Ebenso: "via_modal" des vorigen Klicks darf nicht kleben.
+      via_modal: extra?.via_modal ? true : null,
     });
   };
 
@@ -187,6 +236,11 @@ export const useGoogleAnalytics = () => {
       ab_source?: 'ads' | 'seo';
       /** Dialog kam von einer Behandlungsseite (#78). */
       treatment_context?: boolean;
+      /**
+       * #182: Slug des Seitenstandorts ohne Online-Buchung, von dem aus eine
+       * andere Lounge gewaehlt wurde (z. B. "mediapark-klinik").
+       */
+      fallback_from?: string;
     },
   ) => {
     trackEvent('booking_location_selected', {

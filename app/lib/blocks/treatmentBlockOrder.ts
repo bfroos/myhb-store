@@ -32,9 +32,10 @@ export const COMMON_TREATMENT_BLOCK_ORDER: string[] = [
 ];
 
 /**
- * Standortseite im SEO-Modus: Hero, dann die Standort-Bloecke, dann der
- * gemeinsame Teil. "blocks" (Dynamic Zone) steht am Ende - ohne Eintrag hier
- * wuerde ein am Standort gepflegter Zusatzblock nie gerendert.
+ * Standortseite im SEO-Modus: Hero, dann Kontakt und Anfahrt, dann der
+ * gemeinsame Teil bis zur FAQ, danach die Lounge-Vorstellung (aboutLocation,
+ * seit #121 hinter der FAQ). "blocks" (Dynamic Zone) steht am Ende - ohne
+ * Eintrag hier wuerde ein am Standort gepflegter Zusatzblock nie gerendert.
  */
 export const LOCATION_SEO_BLOCK_ORDER: string[] = [
   "hero",
@@ -55,6 +56,8 @@ export const LOCATION_ADS_BLOCK_ORDER: string[] = [
   "hero",
   "about",
   "reviews",
+  // #181: Adresse und Oeffnungszeiten nicht erst bei y≈15.000 px.
+  "locationContact",
   "treatmentDetails",
   "relatedTreatments",
   "treatmentProcess",
@@ -63,7 +66,6 @@ export const LOCATION_ADS_BLOCK_ORDER: string[] = [
   "suitability",
   "tableOfContents",
   "treatmentPlan",
-  "locationContact",
   "aboutLocation",
   "locationDirections",
   "faq",

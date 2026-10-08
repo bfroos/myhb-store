@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 /**
- * A/B-Test Calendly gegen App-Buchung (#100) — Wochenbericht.
+ * A/B-Test Calendly gegen App-Buchung (#100) — Wochenbericht. HISTORISCH:
+ * der Test endete am 07.10.2026 (#281); laufend gilt
+ * scripts/buchung-wochenbericht.mjs (funnel_events statt GA4).
  *
  * Beantwortet die eine Frage, die ueber die Abschaltung von Calendly
  * entscheidet: Bucht mehr, wer die App bekommt, oder wer Calendly bekommt?

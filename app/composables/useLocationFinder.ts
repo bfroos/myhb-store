@@ -114,9 +114,16 @@ export function useLocationFinder() {
 
   async function fetchLocations(options?: {
     treatmentType?: TreatmentType;
+    /**
+     * pathKey der Behandlungsseite: myhb-cms blendet dann Standorte aus, deren
+     * Stadt die Behandlung an einem anderen Standort anbietet (Köln: Botox nur
+     * Arcaden, OPs nur MediaPark) - sonst verlinkt die Kachel auf eine URL,
+     * die per 301 weiterleitet.
+     */
+    pathKey?: string;
     force?: boolean;
   }) {
-    const cacheKey = `${currentLocale}::${options?.treatmentType ?? ""}`;
+    const cacheKey = `${currentLocale}::${options?.treatmentType ?? ""}::${options?.pathKey ?? ""}`;
     if (!options?.force && locationsCacheKey.value === cacheKey && locationsCache.value.length > 0) {
       return;
     }
@@ -124,7 +131,11 @@ export function useLocationFinder() {
       const response = await strapiFetch<{ data: LocationDto[] }>(
         "/locations/bookable",
         {
-          query: { locale: currentLocale, treatmentType: options?.treatmentType },
+          query: {
+            locale: currentLocale,
+            treatmentType: options?.treatmentType,
+            pathKey: options?.pathKey,
+          },
         },
       );
       const data = response?.data ?? [];

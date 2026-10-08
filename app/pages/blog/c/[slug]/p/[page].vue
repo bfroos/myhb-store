@@ -7,7 +7,7 @@
   <PagesBlogPageArticles
     :articles="articles"
     :pagination="pagination"
-    @page-change="handlePageChange"
+    :base-path="`/blog/c/${categorySlug}`"
     spacing="sibling"
   />
   <BlockRenderer v-if="blocks && blocks.length > 0" :blocks="blocks" />
@@ -18,10 +18,16 @@ const route = useRoute();
 const router = useRouter();
 
 const categorySlug = computed(() => route.params.slug as string);
-const pageParam = computed(() => {
-  const p = Number(route.params.page) || 1;
-  return Math.max(1, p);
-});
+// TSEO-09: nur ganze Zahlen ab 2. Seite 1 ist die Uebersicht selbst (301),
+// alles andere (0, abc, -1) eine 404 statt einer Kopie der ersten Seite.
+const rawPage = String(route.params.page ?? "");
+if (!/^[1-9]\d*$/.test(rawPage)) {
+  throw handleNotFound(useI18n().t);
+}
+if (rawPage === "1") {
+  await navigateTo(useLocalePath()(`/blog/c/${route.params.slug}`), { redirectCode: 301 });
+}
+const pageParam = computed(() => Number(rawPage));
 
 const {
   fetchPage,
@@ -39,13 +45,4 @@ if (pageLoaded) {
   await setPageSeo(seo.value);
 }
 
-function handlePageChange(page: number) {
-  if (page === 1) {
-    router.push({ path: `/blog/c/${categorySlug.value}` });
-  } else {
-    router.push({
-      path: `/blog/c/${categorySlug.value}/p/${page}`,
-    });
-  }
-}
 </script>

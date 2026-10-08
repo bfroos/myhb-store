@@ -28,7 +28,7 @@ const LOCATION_PLACE_IDS = [
   'ChIJf4C6OSkTlkcRpTMm00E5JLE', // Kaiserslautern K in Lautern
   'ChIJ-S5ezxr5pkcRqzaZzf4jdDQ', // Leipzig Höfe am Brühl
   'ChIJuVWkFmyZwEcRM9nuZ1SejT4', // Aachen Aquis Plaza
-  // 'ChIJiV6-12Z6hUcR3d5X8yL6b5Q', // Duisburg Forum - Place ID ungültig (404), muss aktualisiert werden
+  'ChIJScBd156_uEcRPHWNSbioDlo', // Duisburg Forum (aus Strapi, 06.10.2026; alte ID lieferte 404)
 ];
 
 interface LocationRating {

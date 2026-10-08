@@ -51,6 +51,8 @@
  * - Headers: { "x-webhook-secret": "YOUR_SECRET" }
  */
 
+import { hasRevalidationBuilder, normalizeWebhookUid, pathsForEntry } from "../../utils/revalidatePaths";
+
 // Aus i18n.locales / i18n.strategy = "prefix_except_default" in nuxt.config.ts.
 const LOCALES = ["de", "en", "tr", "ar", "fr", "nl"] as const;
 const DEFAULT_LOCALE = "de";
@@ -248,9 +250,12 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    // 2. Payload lesen
+    // 2. Payload lesen. Strapi v5 schickt model: "page" und uid:
+    // "api::page.page"; frueher verglich dieser Handler model mit der uid und
+    // fand deshalb nie eine Regel.
     const body = await readBody(event);
-    const { model, entry } = body;
+    const { entry } = body || {};
+    const model = normalizeWebhookUid(body || {});
 
     if (!model || !entry) {
       throw createError({
@@ -269,20 +274,17 @@ export default defineEventHandler(async (event) => {
     // Sprachpfade sind dann geraten statt aufgeloest.
     let localizationsResolved: boolean | undefined;
 
-    switch (model) {
-      case "api::page.page": {
-        const slug = typeof entry.slug === "string" ? entry.slug : "";
+    if (model === "api::page.page") {
+      const slug = typeof entry.slug === "string" ? entry.slug : "";
 
-        if (!SAFE_SLUG.test(slug)) {
-          console.warn(`[revalidate] Unusable slug for ${model}: ${slug}`);
-          return { revalidated: false, info: "Missing or unusable slug" };
-        }
+      if (!SAFE_SLUG.test(slug)) {
+        console.warn(`[revalidate] Unusable slug for ${model}: ${slug}`);
+        return { revalidated: false, info: "Missing or unusable slug" };
+      }
 
-        if (slug === "homepage") {
-          pathsToRevalidate.push(...homepagePaths());
-          break;
-        }
-
+      if (slug === "homepage") {
+        pathsToRevalidate.push(...homepagePaths());
+      } else {
         const strapiUrl = useRuntimeConfig(event).public.strapiUrl;
         const localizations = strapiUrl
           ? await fetchPageLocalizations(
@@ -300,31 +302,21 @@ export default defineEventHandler(async (event) => {
         }
 
         pathsToRevalidate.push(...generalPagePaths(slug, localizations));
-        break;
       }
-
-      // Ungeprueft uebernommen: /products/<slug> und /blog/<slug> stammen aus
-      // der urspruenglichen Fassung. /products/** existiert in diesem Projekt
-      // gar nicht (die Route heisst /produkte/[categorySlug]/[productSlug]),
-      // und die Sprachpfade fehlen bei beiden. Wer product/article wirklich
-      // revalidieren will, muss die Pfade hier erst richtigstellen.
-      case "api::product.product":
-        if (entry.slug && SAFE_SLUG.test(entry.slug)) {
-          pathsToRevalidate.push(`/products/${entry.slug}`);
-        }
-        pathsToRevalidate.push("/products");
-        break;
-
-      case "api::article.article":
-        if (entry.slug && SAFE_SLUG.test(entry.slug)) {
-          pathsToRevalidate.push(`/blog/${entry.slug}`);
-        }
-        pathsToRevalidate.push("/blog");
-        break;
-
-      default:
-        console.log(`[revalidate] No revalidation rules for model: ${model}`);
-        return { revalidated: false, info: "No matching revalidation rules" };
+    } else if (hasRevalidationBuilder(model)) {
+      // Alle uebrigen Typen mit eigenen Seiten: server/utils/revalidatePaths.ts
+      const strapiUrl = useRuntimeConfig(event).public.strapiUrl;
+      const documentId =
+        typeof entry.documentId === "string" ? entry.documentId : "";
+      if (!strapiUrl || !documentId) {
+        return { revalidated: false, info: "Missing strapiUrl or documentId" };
+      }
+      pathsToRevalidate.push(
+        ...((await pathsForEntry(model, documentId, strapiUrl)) || []),
+      );
+    } else {
+      console.log(`[revalidate] No revalidation rules for model: ${model}`);
+      return { revalidated: false, info: "No matching revalidation rules" };
     }
 
     const paths = [...new Set(pathsToRevalidate)];
@@ -360,9 +352,18 @@ export default defineEventHandler(async (event) => {
     // Header schickt. globalThis.fetch statt $fetch, damit der Request wirklich
     // durch Vercels CDN laeuft und nicht Nitro-intern kurzgeschlossen wird.
     const origin = getRequestURL(event).origin;
-    const results = await Promise.all(
-      paths.map((path) => revalidatePath(origin, path, bypassToken)),
-    );
+    // Je Pfad rendert Vercel die Seite neu; in kleinen Wellen statt alle
+    // auf einmal (eine Filiale hat ~60 Behandlungsseiten).
+    const results: Awaited<ReturnType<typeof revalidatePath>>[] = [];
+    for (let i = 0; i < paths.length; i += 8) {
+      results.push(
+        ...(await Promise.all(
+          paths
+            .slice(i, i + 8)
+            .map((path) => revalidatePath(origin, path, bypassToken)),
+        )),
+      );
+    }
 
     return {
       revalidated: results.some((result) => result.success),

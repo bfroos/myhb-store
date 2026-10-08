@@ -4,6 +4,7 @@ import type { StrapiBlock } from "~/lib/strapi/dto/types";
 
 const props = defineProps<{
   blocks: StrapiBlock[];
+  anchorOf?: (block: StrapiBlock) => string | undefined;
 }>();
 
 const getBlockProps = (block: StrapiBlock) => {
@@ -32,7 +33,6 @@ const landingBlockKeys = new Set<string>([
   "blocks.landing-hero",
   "blocks.trust-bar",
   "blocks.quick-info",
-  "blocks.before-after",
   "blocks.benefit-grid",
   "blocks.seo-collapsible",
   "blocks.doctor",
@@ -120,7 +120,6 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   "blocks.landing-hero": defineAsyncComponent(() => import("./LandingHeroBlock.vue")),
   "blocks.trust-bar": defineAsyncComponent(() => import("./TrustBarBlock.vue")),
   "blocks.quick-info": defineAsyncComponent(() => import("./QuickInfoBlock.vue")),
-  "blocks.before-after": defineAsyncComponent(() => import("./BeforeAfterBlock.vue")),
   "blocks.benefit-grid": defineAsyncComponent(() => import("./BenefitGridBlock.vue")),
   "blocks.seo-collapsible": defineAsyncComponent(() => import("./SeoCollapsibleBlock.vue")),
   "blocks.doctor": defineAsyncComponent(() => import("./DoctorBlock.vue")),
@@ -151,7 +150,10 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
 
 <template>
   <template v-for="(block, index) in blocks" :key="block.id">
-    <UiLayoutSectionBlock v-if="landingBlockKeys.has(block.__component)">
+    <UiLayoutSectionBlock
+      v-if="landingBlockKeys.has(block.__component)"
+      :id="anchorOf?.(block)"
+    >
       <component
         :is="registry[block.__component]"
         v-bind="getBlockProps(block)"
@@ -165,6 +167,7 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
     <component
       v-else
       :is="registry[block.__component]"
+      :id="anchorOf?.(block)"
       v-bind="getBlockProps(block)"
       :priority="index === 0"
     />

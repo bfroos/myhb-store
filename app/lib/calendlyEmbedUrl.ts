@@ -1,3 +1,5 @@
+import { tryUseNuxtApp } from "#app";
+
 /**
  * Die iFrame-URL, die das Calendly-Widget aus einer Buchungs-URL baut (#141).
  *
@@ -60,9 +62,40 @@ export function withCalendlyLocale(
   try {
     const u = new URL(url);
     if (!u.searchParams.get("locale")) u.searchParams.set("locale", kurz);
+    // #186 (nur go.): am Monatsende gleich den Folgemonat zeigen. Dialog und
+    // Vorwaermen bauen die URL beide hier, bleiben also deckungsgleich.
+    if (isAdsModeClient() && !u.searchParams.get("month")) {
+      const month = calendlyStartMonth(new Date());
+      if (month) u.searchParams.set("month", month);
+    }
     return u.toString();
   } catch {
     return url;
+  }
+}
+
+/** Letzte Tage eines Monats, an denen der Kalender im Folgemonat startet. */
+export const MONTH_END_DAYS = 3;
+
+/**
+ * #186: Am 29.09. war im Kalender nur noch der 30.09. waehlbar, Oktober erst
+ * per Pfeil. In den letzten MONTH_END_DAYS Tagen (heute mitgezaehlt) startet
+ * das Widget deshalb im Folgemonat (`month=JJJJ-MM`), sonst `null`.
+ */
+export function calendlyStartMonth(now: Date): string | null {
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+  const daysLeft = lastDay - now.getDate() + 1;
+  if (daysLeft > MONTH_END_DAYS) return null;
+  const next = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  return `${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}`;
+}
+
+function isAdsModeClient(): boolean {
+  if (!import.meta.client) return false;
+  try {
+    return tryUseNuxtApp()?.$config?.public?.siteMode === "ads";
+  } catch {
+    return false;
   }
 }
 

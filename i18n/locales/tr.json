@@ -133,6 +133,12 @@
   },
 
   "blog": {
+    "pagination": "Sayfalar",
+    "firstPage": "İlk sayfa",
+    "previousPage": "Önceki sayfa",
+    "nextPage": "Sonraki sayfa",
+    "lastPage": "Son sayfa",
+    "pageTitle": "Sayfa {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Sağlık ve güzellik konusunda bilgi, haberler ve her şey.",
@@ -330,9 +336,7 @@
       "previousImage": "Önceki görsel",
       "nextImage": "Sonraki görsel",
       "slideLabel": "{total} görselden {index}.",
-      "selectImage": "{index}. görseli göster",
-      "before": "Önce",
-      "after": "Sonra"
+      "selectImage": "{index}. görseli göster"
     },
     "jobTeasers": {
       "headline": "Mevcut iş ilanları",

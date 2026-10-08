@@ -1,6 +1,7 @@
 <template>
   <footer class="appFooter">
-    <UiLayoutSectionBlock>
+    <!-- go.-Vorlage v2 (Vorschau): Minimal-Footer ohne Querlinks -->
+    <UiLayoutSectionBlock v-if="!isAdsTemplateV2">
       <UiLayoutCardSurface>
         <div class="appFooter__inner">
           <aside class="appFooter__newsletter">
@@ -12,8 +13,39 @@
               <ImageAppLogo width="140" />
             </div>
             <div class="appFooter__navs">
+              <!-- go.: Behandlungen nur mit go.-internen Zielen (useAdsNav) -->
               <nav
-                v-if="treatmentPages.length > 0"
+                v-if="isAdsMode && adsCategories.length > 0"
+                :aria-label="$t('navigation.footer.treatments')"
+              >
+                <h2 class="appFooter__navTitle">
+                  {{ $t("navigation.footer.treatments") }}
+                </h2>
+                <ul>
+                  <li v-for="category in adsCategories" :key="category.id">
+                    <NuxtLinkLocale :to="category.href">
+                      {{ category.name }}
+                    </NuxtLinkLocale>
+                  </li>
+                </ul>
+              </nav>
+              <nav
+                v-if="isAdsMode && adsOverviewLinks.length > 0"
+                :aria-label="$t('navigation.footer.company')"
+              >
+                <h2 class="appFooter__navTitle">
+                  {{ $t("navigation.footer.company") }}
+                </h2>
+                <ul>
+                  <li v-for="link in adsOverviewLinks" :key="link.slug">
+                    <NuxtLinkLocale :to="`/${link.slug}`">
+                      {{ link.name }}
+                    </NuxtLinkLocale>
+                  </li>
+                </ul>
+              </nav>
+              <nav
+                v-if="!isAdsMode && treatmentPages.length > 0"
                 :aria-label="$t('navigation.footer.treatments')"
               >
                 <h2 class="appFooter__navTitle">
@@ -222,10 +254,13 @@ import {
 } from "@tabler/icons-vue";
 
 const { isAdsMode } = useSiteModeFlags();
+const isAdsTemplateV2 = useAdsTemplateV2();
 const { locale } = useI18n();
 const { treatmentPages, productCategories } = useMenu(() =>
   isAdsMode.value ? "treatment-pages" : "treatment-pages,product-categories",
 );
+const { categories: adsCategories, overviewLinks: adsOverviewLinks } =
+  await useAdsNav();
 const { openCookieSettings } = useCookiebot();
 const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);

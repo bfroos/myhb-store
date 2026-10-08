@@ -2,6 +2,7 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <UiMoleculeReviewsBadgeSprite />
 </template>
 
 <script setup lang="ts">
@@ -15,17 +16,24 @@ const config = useRuntimeConfig();
 const { brandName } = useBrand();
 const { isAdsMode } = useSiteModeFlags();
 
+// TSEO-12: die einzige Organization der Seite. Alle anderen Knoten verweisen
+// per @id darauf; vorher stand sie auf der Startseite doppelt, einmal ohne @id.
 const organizationSchema = computed(() => ({
   "@context": "https://schema.org",
   "@type": "Organization",
+  "@id": `${String(config.public.publicUrl).replace(/\/+$/, "")}/#organization`,
   name: brandName.value,
   url: config.public.publicUrl,
   logo: {
     "@type": "ImageObject",
-    url: `${config.public.publicUrl}/favicon/favicon.svg`,
+    url: `${config.public.publicUrl}/favicon/web-app-manifest-512x512.png`,
     width: 512,
     height: 512,
   },
+  sameAs: [
+    "https://www.instagram.com/myhealthandbeauty/",
+    "https://www.facebook.com/myhealthbeautylounge",
+  ],
   contactPoint: {
     "@type": "ContactPoint",
     telephone: "+49-221-94899428",

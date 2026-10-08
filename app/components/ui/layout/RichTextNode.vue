@@ -47,6 +47,8 @@ const props = defineProps<{
   node: StrapiNode;
 }>();
 
+import { normalizeOwnLink } from "#shared/ownLink";
+
 const config = useRuntimeConfig();
 const localePath = useLocalePath();
 
@@ -68,8 +70,11 @@ const linkUrl = computed(() => {
   if (props.node.type !== "link") return "";
   const url = (props.node as any).url;
   if (typeof url !== "string") return "";
-  if (isInternalLink.value) return localePath(url);
-  return url;
+  // TSEO-08: eigene Links ohne Schraegstrich am Ende, sonst kostet jeder
+  // einen 301 (shared/ownLink.ts).
+  const own = normalizeOwnLink(url);
+  if (isInternalLink.value) return localePath(own);
+  return own;
 });
 
 const hasFormatting = computed(() => {

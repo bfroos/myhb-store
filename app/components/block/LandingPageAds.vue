@@ -11,19 +11,6 @@
       @primary="() => { trackCtaClick('hero'); navigateTo(heroData.ctaLink); }"
     />
 
-    <!-- Before/After Carousel -->
-    <div class="before-after-section py-20">
-      <div class="container mx-auto px-4">
-        <h2 class="text-4xl font-bold text-center mb-4 text-neutral-900">
-          {{ t('landing.ads.beforeAfter.title') }}
-        </h2>
-        <p class="text-xl text-center text-neutral-600 mb-12">
-          {{ t('landing.ads.beforeAfter.subtitle') }}
-        </p>
-        <BeforeAfterBlock :items="beforeAfterItems" />
-      </div>
-    </div>
-
     <!-- Social Proof / Testimonials -->
     <div class="testimonials-section py-20 bg-neutral-50">
       <div class="container mx-auto px-4">
@@ -96,13 +83,6 @@ interface HeroData {
   image: string;
 }
 
-interface BeforeAfterItem {
-  before: string;
-  after: string;
-  title: string;
-  description: string;
-}
-
 interface Testimonial {
   id: string;
   name: string;
@@ -151,28 +131,6 @@ const heroData = ref<HeroData>({
   ctaLink: '/termin-buchen',
   image: '[Real Hero Image Here - Lip Filler Result]',
 });
-
-// Before/After Carousel Items
-const beforeAfterItems = ref<BeforeAfterItem[]>([
-  {
-    before: '[Before Image 1]',
-    after: '[After Image 1]',
-    title: 'Lippen-Volumen',
-    description: 'Subtile und natürliche Steigerung des Lippenvolumens',
-  },
-  {
-    before: '[Before Image 2]',
-    after: '[After Image 2]',
-    title: 'Lippenkontur',
-    description: 'Klare Kontur und Symmetrie',
-  },
-  {
-    before: '[Before Image 3]',
-    after: '[After Image 3]',
-    title: 'Lippenform',
-    description: 'Optimale Formgebung für Ihren Gesichtstyp',
-  },
-]);
 
 // Testimonials
 const testimonials = ref<Testimonial[]>([
@@ -307,10 +265,6 @@ const ctaData = ref<CTAData>({
 
 .hero-section {
   @apply mb-0;
-}
-
-.before-after-section {
-  @apply scroll-mt-16;
 }
 
 .testimonials-section {

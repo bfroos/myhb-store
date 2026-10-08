@@ -1,0 +1,32 @@
+# Naechtliche Sitemap-Pruefung gegen Produktion (TSEO-05).
+#
+# scripts/sitemap-pruefen.mjs ruft jede Sitemap-URL ab und wird rot bei
+# Weiterleitung, Nicht-200, noindex, fremdem Canonical, Dubletten oder einer
+# nicht erreichbaren Teil-Sitemap. Laeuft nachts statt im PR: 1.700 URLs
+# dauern Minuten, und ein Inhaltsfehler in Strapi soll keinen fremden PR rot
+# machen. Ein roter Lauf heisst: In der Sitemap steht etwas, das Google dort
+# nicht sehen sollte - meist ein Strapi-Eintrag.
+name: Sitemap-Pruefung
+
+on:
+  schedule:
+    - cron: "30 4 * * *" # 04:30 UTC, nach dem naechtlichen Deploy-Ruhefenster
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sitemap-pruefung
+  cancel-in-progress: false
+
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/sitemap-pruefen.mjs

@@ -7,9 +7,9 @@ export default defineAppConfig({
      */
     aggregateRating: {
       ratingValue: 4.9,
-      reviewCount: 1569,
+      reviewCount: 1680,
       source: "Google Business Profile (aggregated)",
-      lastUpdated: "2026-09-27",
+      lastUpdated: "2026-10-07",
     },
 
     /**
@@ -18,9 +18,10 @@ export default defineAppConfig({
     organization: {
       name: "My Health & Beauty",
       logo: {
-        // TODO: Ersetzen durch echtes Markenlogo (mind. 112x112px, ideal 600x60px PNG)
-        url: "/favicon/favicon.svg",
-        fallback: "https://www.myhealthandbeauty.com/favicon/favicon.svg",
+        // TSEO-12: PNG statt Favicon-SVG (Google: mind. 112x112 px).
+        url: "/favicon/web-app-manifest-512x512.png",
+        fallback:
+          "https://www.myhealthandbeauty.com/favicon/web-app-manifest-512x512.png",
       },
     },
   },

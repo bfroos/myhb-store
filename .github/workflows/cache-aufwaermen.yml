@@ -1,0 +1,48 @@
+# ISR-Cache nach jedem Produktions-Deploy aufwaermen (TSEO-03).
+#
+# Jeder Vercel-Deploy startet mit leerem ISR-Cache, auch die taeglichen
+# Bewertungs-Commits loesen einen Deploy aus. scripts/cache-aufwaermen.mjs
+# ruft danach jede Sitemap-URL einmal ab, damit Besucher und Googlebot nicht
+# auf kalte Seiten treffen. Auf go. (Ads, keine eigene Sitemap) werden die
+# Standortseiten aus der www-Sitemap aufgewaermt, dort landen die Anzeigen.
+name: Cache aufwaermen
+
+on:
+  deployment_status:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cache-aufwaermen-${{ github.event.deployment.environment || 'manuell' }}
+  cancel-in-progress: true
+
+jobs:
+  www:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production – myhb-store')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/cache-aufwaermen.mjs
+
+  go:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment.environment == 'Production – myhb-store-ads')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/cache-aufwaermen.mjs --host https://go.myhealthandbeauty.com --segments locations

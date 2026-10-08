@@ -1,15 +1,6 @@
 {
   "headers": [
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "all"
-        }
-      ]
-    },
-    {
       "source": "/robots.txt",
       "headers": [
         {
@@ -38,6 +29,28 @@
   ],
   "rewrites": [],
   "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "myhb-store.vercel.app"
+        }
+      ],
+      "destination": "https://www.myhealthandbeauty.com/",
+      "statusCode": 301
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "myhb-store.vercel.app"
+        }
+      ],
+      "destination": "https://www.myhealthandbeauty.com/:path*",
+      "statusCode": 301
+    },
     {
       "source": "/",
       "has": [

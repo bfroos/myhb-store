@@ -14,6 +14,10 @@ import { DEFAULT_TIMEZONE } from "../config";
 import { OrganismMediaCardLayout } from "~/lib/ui/enums";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 import { mapTreatmentCommonFixedBlocks } from "./mapTreatmentCommonFixedBlocks";
+import {
+  adsTreatmentHeadline,
+  adsTreatmentSubline,
+} from "./adsTreatmentHeadline";
 
 type TranslateFn = ReturnType<typeof useI18n>["t"];
 
@@ -26,6 +30,14 @@ export function mapLocationTreatmentPageFixedBlocks(
   localeIso?: string,
   isAdsMode = false,
   availableTreatmentPathKeys?: string[],
+  /**
+   * go.: In Strapi fuer go. gebaute Seite (ADS_TEMPLATE_V2_EXCLUDE). Der Hero
+   * zeigt Titel, Titelzusatz und Unterzeile aus Strapi statt der Suchsprache
+   * aus shared/adsHeadlines.ts.
+   */
+  adsStrapiHero = false,
+  /** pathKey -> "city/location": Behandlungen eines Geschwister-Standorts. */
+  cityTreatmentLocations?: Record<string, string>,
 ) {
   if (!treatmentPage || !location) {
     return;
@@ -49,6 +61,7 @@ export function mapLocationTreatmentPageFixedBlocks(
         : "",
     },
     availableTreatmentPathKeys,
+    cityTreatmentLocations,
   );
 
   const fixed = {
@@ -77,14 +90,37 @@ export function mapLocationTreatmentPageFixedBlocks(
     // treatmentPage.name ist dasselbe Keyword wie im Meta-Titel (treatmentName).
     const treatmentKeyword =
       treatmentPage.name ?? treatmentPage.hero?.headline ?? "";
-    const heroHeadline = city
-      ? `${treatmentKeyword} ${city}`
-      : treatmentKeyword;
+    // go.: H1 in Suchsprache, wie gesucht wird ("Stirnfalte glätten in
+    // Köln" statt "Stirnfalte Köln"; shared/adsHeadlines.ts).
+    const strapiHeadline = adsStrapiHero
+      ? (treatmentPage.hero?.headline ?? "").trim() || null
+      : null;
+    const adsSearchHeadline = isAdsMode && !strapiHeadline
+      ? adsTreatmentHeadline(treatmentPage.pathKey, city, localeCode)
+      : null;
+    const heroHeadline =
+      strapiHeadline ??
+      adsSearchHeadline ??
+      (city ? `${treatmentKeyword} ${city}` : treatmentKeyword);
 
     return {
       eyebrow: fullLocationName,
       headline: heroHeadline,
-      subline: treatmentPage.hero?.subline,
+      ...(adsStrapiHero
+        ? {
+            headlineSuffix: treatmentPage.hero?.headlineSuffix || undefined,
+            strapiHero: true,
+          }
+        : {}),
+      // go.: generische Strapi-Unterzeile ("Erfahrene Ärzte & Premium
+      // Produkte") -> konkrete Unterzeile der Behandlung.
+      subline: isAdsMode && !adsStrapiHero
+        ? adsTreatmentSubline(
+            treatmentPage.pathKey,
+            treatmentPage.hero?.subline,
+            localeCode,
+          )
+        : treatmentPage.hero?.subline,
       cover: treatmentPage.hero?.cover ?? location.buildingImage,
       text: treatmentPage.hero?.text,
       showPrice: treatmentPage.hero?.showPrice,
@@ -104,6 +140,9 @@ export function mapLocationTreatmentPageFixedBlocks(
       // ist.
       appTreatmentSlug: resolveAppTreatmentSlug(treatmentPage),
       googlePlaceId: location?.googlePlaceId ?? undefined,
+      treatmentPathKey: treatmentPage.pathKey,
+      // go.: Telefon-Knopf in der mitlaufenden Leiste (#181).
+      phoneNumber: isAdsMode ? location.contact?.phoneNumber ?? null : null,
     };
   }
 

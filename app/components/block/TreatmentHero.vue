@@ -2,7 +2,7 @@
   <UiLayoutSectionBlock>
     <UiLayoutCardSurface :card-settings="cardSettings">
       <div class="hero-card" ref="heroCardRef">
-        <div v-if="hasMarquee" class="hero__marquee-wrapper">
+        <div v-if="hasMarquee && !isAdsMode" class="hero__marquee-wrapper">
           <div class="hero__marquee" role="marquee" aria-live="polite">
             <div class="hero__marquee-viewport">
               <div
@@ -31,10 +31,20 @@
           :class="{
             'hero--has-marquee': hasMarquee,
             'hero--has-reviews': showReviews,
+            'hero--ads-offer': !!newCustomerOffer,
+            'hero--ads-buttons': forceBothButtons,
+            'hero--ads-compact': isAdsMode,
+            'hero--ads-long-title': isAdsMode && (headline?.length ?? 0) > 26,
+            'hero--v2': templateV2,
+            'hero--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'),
+            'hero--desk': templateV2 && v2Desktop,
+            'hero--preis': templateV2 && v2Design === 'ci-preis',
+            'hero--edit': templateV2 && v2Editorial,
           }"
         >
-          <div v-if="hasCover" class="hero__media">
+          <div v-if="hasCover || heroClip" class="hero__media">
             <UiAtomMediaPicture
+              v-if="!heroClip"
               class="hero__media-image"
               :media="cover!"
               :sources="{
@@ -42,23 +52,75 @@
               }"
               priority
             />
+            <!-- go.-Vorlage v2: Clip statt Foto; sein Poster ist das
+                 LCP-Element (shared/adsClips.ts). -->
+            <PagesTreatmentAdsV2HeroClip v-if="heroClip" :clip="heroClip" />
           </div>
           <div class="hero__body">
             <header class="hero__main">
-              <p v-if="eyebrow" class="hero__eyebrow">{{ eyebrow }}</p>
-              <h1 v-if="headline" class="hero__title">
-                <span v-if="headlinePrefix" class="hero__title-prefix">
+              <!--
+                go.: Im ersten Screen nur Bild, H1, EINE Unterzeile, EINE
+                Preiszeile, zwei Knoepfe, Google-Sterne (Benjamin, 30.09.2026).
+                Eyebrow, Zusatztext, Marquee, Logos, regulaerer Preis und
+                Rechnung entfallen dort; Sternchen und regulaerer Preis stehen
+                in der Fussnotenzeile am Seitenende (BlockAdsPriceFootnote).
+              -->
+              <p v-if="eyebrow && !isAdsMode" class="hero__eyebrow">
+                {{ eyebrow }}
+              </p>
+              <p v-if="templateV2 && v2Editorial && v2Eyebrow" class="hero__v2-eyebrow">{{ v2Eyebrow }}</p>
+              <h1 v-if="templateV2 && v2Editorial && v2HeadlineLines?.length" class="hero__title hero__title--edit">
+                <span v-for="(line, li) in v2HeadlineLines" :key="li" class="hero__title-line" :class="{ 'hero__title-line--soft': li === v2HeadlineLines.length - 1 }">{{ line }}</span>
+              </h1>
+              <h1 v-else-if="headline" class="hero__title">
+                <span
+                  v-if="headlinePrefix && !isAdsMode"
+                  class="hero__title-prefix"
+                >
                   {{ headlinePrefix }}
                 </span>
                 {{ headline }}
-                <span v-if="headlineSuffix" class="hero__title-suffix">
+                <span
+                  v-if="headlineSuffix && (!isAdsMode || strapiMode)"
+                  class="hero__title-suffix"
+                >
                   {{ headlineSuffix }}
                 </span>
               </h1>
-              <p v-if="subline" class="hero__subline">
-                <strong>{{ subline }}</strong>
-              </p>
-              <p v-if="text" class="hero__text">{{ text }}</p>
+              <!-- go., in Strapi gebaute Seite (ADS_TEMPLATE_V2_EXCLUDE):
+                   Unterzeile und Text wie in Strapi, ohne zusaetzliche rote
+                   Preiszeile (Redaktion, 02.10.2026). -->
+              <template v-if="isAdsMode && !strapiMode">
+                <p v-if="adsSubline" class="hero__subline hero__subline--ads">
+                  {{ adsSubline }}
+                </p>
+                <!-- v2 (Agentur-Feedback 01.10.2026): EINE Preis-/Angebotszeile
+                     "Ab 119,99 €* – mit 20 % Neukundenrabatt" statt Preis +
+                     zweitem Rabatt-Link; Betrag ohne Umbruch. -->
+                <p
+                  v-if="templateV2 && v2PriceLine"
+                  class="hero__price hero__price--v2"
+                  :data-offer-kind="newCustomerOffer?.kind ?? 'regular'"
+                >
+                  <span class="hero__nowrap">{{ v2PriceLine.main }}</span>
+                  <span v-if="v2PriceLine.extra" class="hero__price-extra">{{ v2PriceLine.extra }}</span>
+                </p>
+                <p
+                  v-else-if="newCustomerOffer"
+                  class="hero__price"
+                  :data-offer-kind="newCustomerOffer.kind"
+                >
+                  <!-- v2: Betrag und "€*" nicht trennen ("239,99" / "€*") -->
+                  <template v-if="templateV2">{{ heroPriceParts[0] }}<span class="hero__nowrap">{{ heroPriceParts[1] }}</span></template>
+                  <template v-else>{{ newCustomerOffer.heroLine }}</template>
+                </p>
+              </template>
+              <template v-else>
+                <p v-if="subline" class="hero__subline">
+                  <strong>{{ subline }}</strong>
+                </p>
+                <p v-if="text" class="hero__text">{{ text }}</p>
+              </template>
               <div class="hero__cta">
                 <div
                   class="hero__cta-price"
@@ -66,7 +128,7 @@
                 >
                   <strong v-if="priceLabel">{{ priceLabel }}</strong>
                   <SharedButton
-                    v-if="cta && showBookingButton"
+                    v-if="cta && bookingButtonVisible"
                     :button="cta"
                     :data="{
                       calendlyUrl: calendlyUrl,
@@ -78,12 +140,14 @@
                     :button-props="{
                       size: 'lg',
                       variant: 'primary',
-                      wide: !priceLabel,
+                      wide: !priceLabel && !forceBothButtons,
                     }"
+                    class="hero-cta-btn"
                   />
                 </div>
                 <SharedButton
-                  v-if="showGlobalDiscount"
+                  v-if="discountButtonVisible && !templateV2"
+                  class="hero-cta-btn"
                   :button="{
                     label: discountLabel,
                     method: SharedButtonMethod.ACTION,
@@ -98,8 +162,27 @@
                   }"
                   :button-props="{ size: 'lg', variant: 'secondary' }"
                 />
+                <!-- v2: nur EIN Knopf im Hero. Der zweite rote Rabatt-Link ist
+                     weg (Agentur-Feedback 01.10.2026), der Rabatt steht in der
+                     Preiszeile; "20 % Rabatt sichern" gibt es weiter unten
+                     (Preise, Schlussaufruf). -->
               </div>
-              <template v-if="showReviews">
+              <p v-if="templateV2 && v2Note" class="hero__v2-note">
+                <IconShieldCheck v-if="v2Editorial" size="16" aria-hidden="true" /> {{ v2Note }}
+              </p>
+              <!-- Prototyp editorial: hochwertigeres Google-Badge (Zelgai 05.10.2026) -->
+              <div v-if="templateV2 && v2Editorial && v2Rating" class="hero__gbadge">
+                <ImageGoogleG class="hero__gbadge-g" />
+                <span class="hero__gbadge-body">
+                  <span class="hero__gbadge-label">Google-Bewertung</span>
+                  <span class="hero__gbadge-score">
+                    <strong>{{ v2Rating.rating }}</strong>
+                    <span class="hero__gbadge-stars" role="img" :aria-label="`${v2Rating.rating} von 5 Sternen`">★★★★★</span>
+                  </span>
+                  <span class="hero__gbadge-count">{{ v2Rating.count }}</span>
+                </span>
+              </div>
+              <template v-else-if="showReviews">
                 <UiMoleculeReviewsBadge
                   v-if="googlePlaceId"
                   show-text
@@ -119,7 +202,7 @@
                 />
               </template>
             </header>
-            <ul v-if="showCompanyLogos" class="hero__logos" role="list">
+            <ul v-if="showCompanyLogos && !isAdsMode" class="hero__logos" role="list">
               <li class="hero__logo">
                 <ImageBildLogo style="height: 30px" />
               </li>
@@ -141,18 +224,46 @@
 
   <Teleport to="body" v-if="showFloatingCta && isMounted">
     <Transition name="floating-cta">
-      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode }">
+      <div v-show="showFloatingBanner" class="floating-cta" :class="{ 'floating-cta--ads-mode': isAdsMode, 'floating-cta--v2': templateV2, 'floating-cta--ci': templateV2 && (v2Design === 'ci' || v2Design === 'ci-hell'), 'floating-cta--preis': templateV2 && v2Design === 'ci-preis', 'floating-cta--edit': templateV2 && v2Editorial }">
         <div class="floating-cta__content">
           <div class="floating-cta__text">
-            <strong v-if="priceLabel" class="floating-cta__price">
+            <strong
+              v-if="templateV2 && v2StickyPrice"
+              class="floating-cta__price floating-cta__price--offer"
+            >
+              {{ v2StickyPrice }}
+            </strong>
+            <strong
+              v-else-if="newCustomerOffer"
+              class="floating-cta__price floating-cta__price--offer"
+            >
+              {{ stickyPriceLine }}
+            </strong>
+            <strong v-else-if="priceLabel" class="floating-cta__price">
               {{ priceLabel }}
             </strong>
-            <span v-if="headline || eyebrow" class="floating-cta__title">
+            <!-- go.: Leiste einzeilig, nur Preis + Telefon + Buchen (#181) -->
+            <span
+              v-if="!isAdsMode && (headline || eyebrow)"
+              class="floating-cta__title"
+            >
               {{ headline || eyebrow }}
             </span>
           </div>
           <div class="floating-cta__actions">
-            <template v-if="showReviews">
+            <a
+              v-if="isAdsMode && phoneHref"
+              :href="phoneHref"
+              class="floating-cta__phone"
+              :class="{ 'floating-cta__phone--label': templateV2 }"
+              :aria-label="`${t('blocks.locationContact.phone')}: ${phoneNumber}`"
+              @click="trackPhoneClick(phoneNumber ?? undefined)"
+            >
+              <IconPhone :size="templateV2 ? 18 : 22" aria-hidden="true" />
+              <!-- v2: Telefon mit Beschriftung (Agentur-Feedback 01.10.2026) -->
+              <span v-if="templateV2" class="floating-cta__phone-label">Anrufen</span>
+            </a>
+            <template v-if="showReviews && !isAdsMode">
               <UiMoleculeReviewsBadge
                 v-if="googlePlaceId"
                 show-text
@@ -172,8 +283,8 @@
               />
             </template>
             <SharedButton
-              v-if="cta && showBookingButton"
-              :button="cta"
+              v-if="cta && bookingButtonVisible"
+              :button="stickyCta"
               :data="{
                 calendlyUrl: calendlyUrl,
                 appBookingUrl: appBookingUrl,
@@ -185,6 +296,7 @@
                 size: 'md',
                 variant: 'primary',
               }"
+              class="floating-cta-btn"
               :class="{ 'floating-cta__button--ads-mode': isAdsMode }"
             />
           </div>
@@ -203,20 +315,144 @@ import {
   SharedButtonAction,
 } from "~/lib/strapi/dto/enums";
 import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
-import { IconAsterisk } from "@tabler/icons-vue";
+import { IconAsterisk, IconPhone, IconShieldCheck } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
+import type { AdsClip } from "#shared/adsClips";
 
-const { isAdsMode } = useSiteModeFlags();
+const { isAdsMode: siteIsAdsMode } = useSiteModeFlags();
 
 const props = withDefaults(
-  defineProps<BlockTreatmentHeroDto & { showFloatingCta?: boolean }>(),
+  defineProps<
+    BlockTreatmentHeroDto & {
+      showFloatingCta?: boolean;
+      /** go.-Vorlage v2 (shared/adsTemplateV2.ts): Knoepfe untereinander. */
+      templateV2?: boolean;
+      /** go.-Vorlage v2: stummer Clip ueber dem Hero-Foto. */
+      heroClip?: AdsClip | null;
+      /** Kurzer Text fuer den Knopf der mitlaufenden Leiste. */
+      stickyCtaLabel?: string | null;
+      /**
+       * go.-Vorlage v2: EINE Preis-/Angebotszeile im Hero, z. B.
+       * { main: "Ab 119,99 €*", extra: "– mit 20 % Neukundenrabatt" }.
+       */
+      v2PriceLine?: { main: string; extra?: string | null } | null;
+      /** go.-Vorlage v2: kleine Zeile unter dem Knopf (Vertrauen). */
+      v2Note?: string | null;
+      /** go.-Vorlage v2: Preis in der mitlaufenden Leiste. */
+      v2StickyPrice?: string | null;
+      /**
+       * go.-Vorlage v2: Gestaltung (shared/adsTemplateV2.ts, adsV2Design).
+       * "ci"/"ci-hell": Preiszeile schwarz statt rot; rot nur die Leiste.
+       * "ci-rot": Preiszeile rot wie heute.
+       */
+      v2Design?: "v2" | "ci" | "ci-hell" | "ci-rot" | "ci-preis";
+      /**
+       * go.-Vorlage v2: Desktop-Layout ab 1024 px (shared/adsTemplateV2.ts,
+       * isAdsV2DesktopLayout): Text linksbuendig, Hero nicht bildschirmhoch.
+       */
+      v2Desktop?: boolean;
+      /** Prototyp "editorial" (nur Vorschau): Text zuerst, linksbuendig. */
+      v2Editorial?: boolean;
+      /** Prototyp: Ueberzeile, z. B. "PROFHILO® · DÜSSELDORF". */
+      v2Eyebrow?: string | null;
+      /** Prototyp: H1 in Zeilen, die letzte hell. */
+      v2HeadlineLines?: string[] | null;
+      /** Prototyp: Google-Note fuers Badge, z. B. { rating: "4,9", count: "190 Bewertungen" }. */
+      v2Rating?: { rating: string; count: string } | null;
+    }
+  >(),
   {
     showFloatingCta: false,
     showBookingButton: true,
+    templateV2: false,
+    heroClip: null,
+    stickyCtaLabel: null,
+    v2PriceLine: null,
+    v2Note: null,
+    v2StickyPrice: null,
+    v2Design: "v2",
+    v2Desktop: false,
+    v2Editorial: false,
+    v2Eyebrow: null,
+    v2HeadlineLines: null,
+    v2Rating: null,
   },
 );
-const { t } = useI18n();
+
+// Vorlage v2 verhaelt sich auch auf www wie go. (bundesweite Meta-Seiten,
+// app/pages/aktion/[slug].vue); sonst gilt der Modus der Seite.
+const isAdsMode = computed(() => siteIsAdsMode.value || props.templateV2);
+
+// Gleicher Knopf (gleiche Aktion, gleiche Daten -> gleiches click_booking),
+// nur kuerzer beschriftet.
+const stickyCta = computed(() =>
+  props.cta && props.stickyCtaLabel
+    ? { ...props.cta, label: props.stickyCtaLabel }
+    : props.cta,
+);
+const { t, locale } = useI18n();
 const globals = useGlobals();
+
+// go.: Benjamins Vorgabe (29.09.2026) - im Hero stehen immer beide Knoepfe:
+// "Termin buchen" (primaer, oeffnet direkt die Buchung) und "20 % Rabatt
+// sichern" (sekundaer, erst Newsletter, dann Buchung). Die Strapi-Schalter
+// showBookingButton/showDiscount gelten dort nicht, auch nicht auf den
+// "-rabatt"-Seiten, die bisher nur den Rabatt-Knopf hatten. Ohne `cta` (Standort
+// nimmt keine Buchungen an) bleibt es beim Strapi-Stand. www unveraendert.
+// Ausnahme: in Strapi fuer go. gebaute Seiten (ADS_TEMPLATE_V2_EXCLUDE,
+// `strapiHero`) - dort gelten die Strapi-Schalter (Redaktion, 02.10.2026).
+const strapiMode = computed(
+  () => isAdsMode.value && !!props.strapiHero && !props.templateV2,
+);
+const forceBothButtons = computed(
+  () => isAdsMode.value && !!props.cta && !strapiMode.value,
+);
+// "Termin buchen" bleibt auf go. auch dort fest (Hero und Leiste): Der
+// Strapi-Schalter showBookingButton stand am 02.10.2026 auf aus, ohne dass
+// das als Wunsch belegt ist - Entscheidung liegt bei Benjamin.
+const bookingButtonVisible = computed(
+  () =>
+    forceBothButtons.value ||
+    (strapiMode.value && !!props.cta) ||
+    props.showBookingButton,
+);
+const discountButtonVisible = computed(
+  () => forceBothButtons.value || !!props.showGlobalDiscount,
+);
+
+// go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet). Texte sind
+// deutsch; andere Sprachen zeigen nichts.
+const newCustomerOffer = useNewCustomerOffer(
+  () => props.treatment,
+  () => props.treatmentPathKey,
+  () => props.templateV2,
+);
+
+// v2: "Neukunden " + "ab 239,99 €*" - der Betrag mit "ab" und "€*" bricht
+// nicht um (iPhone SE: sonst stand "€*" allein in der zweiten Zeile).
+const heroPriceParts = computed<[string, string]>(() => {
+  const t = newCustomerOffer.value?.heroLine ?? "";
+  const m = /(?:ab\s)?\d[\d.]*(?:,\d{2})?\s?€\*?(?:\s+pro\s+Zone\*?)?/.exec(t);
+  if (!m) return [t, ""];
+  return [t.slice(0, m.index), t.slice(m.index).replace(/\s/g, "\u00a0")];
+});
+
+// go.: Leiste einzeilig - "ab 119,99 €*" ohne "Neukunden" (Sternchen erklaert
+// die Fussnote am Seitenende).
+const stickyPriceLine = computed(() =>
+  (newCustomerOffer.value?.heroLine ?? "").replace(/^Neukunden\s+/, ""),
+);
+
+// go.: EINE kurze Unterzeile (Strapi-Subline, sonst der Hero-Text).
+const adsSubline = computed(
+  () => (props.subline || props.text || "").trim() || null,
+);
+
+const { trackPhoneClick } = useGoogleAnalytics();
+const phoneHref = computed(() => {
+  const digits = (props.phoneNumber ?? "").replace(/[^\d+]/g, "");
+  return digits ? `tel:${digits}` : null;
+});
 
 // Floating CTA logic
 const heroCardRef = ref<HTMLElement | null>(null);
@@ -294,8 +530,12 @@ const hasCover = computed(() => !!props.cover && isMediaImage(props.cover));
 
 // #78: dieselbe Quelle wie die Kontextzeile im Buchungsdialog
 // (useSeitenBehandlung) — Seite und Dialog zeigen nie zwei Preise.
+// go.: Steht der Neukundenpreis im Hero, ist er der Hauptpreis; die Preis-
+// Pille mit dem regulaeren Preis entfaellt dann (er steht klein im Kasten).
 const priceLabel = computed(() =>
-  treatmentPriceLabel(props.treatment, props.showPrice, t),
+  newCustomerOffer.value
+    ? ""
+    : treatmentPriceLabel(props.treatment, props.showPrice, t),
 );
 
 const discountLabel = computed(() => {
@@ -406,6 +646,183 @@ const discountLabel = computed(() => {
   max-width: 48ch;
   color: var(--color-text-light);
   margin: 0;
+}
+
+/* go.: EINE Unterzeile, EINE grosse Preiszeile (Benjamin, 30.09.2026). */
+.hero__subline--ads {
+  max-width: 100%;
+  font-weight: var(--font-bold);
+}
+
+.hero__price {
+  margin: 0;
+  font-size: var(--font-xl, 1.5rem);
+  line-height: 1.2;
+  font-weight: var(--font-bold);
+  color: #b91c1c;
+}
+
+/* go.: Der Hero fuellt den ersten Screen allein - darunter beginnt kein
+   weiterer Abschnitt im ersten Viewport (Benjamin, 30.09.2026). */
+.hero-card:has(.hero--ads-compact) {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100svh - 110px);
+}
+
+.hero--ads-compact {
+  flex: 1;
+}
+
+.hero--ads-compact .hero__title {
+  hyphens: manual;
+}
+
+/* go.-Vorlage v2: Clip an der Stelle des Fotos. Er liegt im Fluss von
+   .hero__media und nutzt dessen Innenabstaende (links = rechts). */
+.hero--v2 .hero__media {
+  position: relative;
+  min-width: 0;
+}
+
+/* go.: Bild klein, alles Weitere im ersten Screen (375 x 667, #181). */
+@media (max-width: 899px) {
+  /* Das Bild nimmt den Platz, den Text und Knoepfe freilassen - sonst
+     bleibt unter den Sternen eine leere Flaeche (Benjamin, 30.09.2026). */
+  .hero--ads-compact .hero__media {
+    aspect-ratio: auto;
+    flex: 1 1 auto;
+    min-height: min(18svh, 130px);
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero--ads-compact .hero__media-image {
+    flex: 1 1 auto;
+    height: auto;
+  }
+
+  .hero--ads-compact .hero__body {
+    flex: 0 0 auto;
+  }
+
+  .hero--ads-compact .hero__main {
+    justify-content: flex-start;
+    gap: var(--space-300);
+    padding-top: var(--space-500);
+  }
+
+  .hero--ads-compact .hero__title {
+    font-size: 1.75rem;
+    line-height: 1.15;
+    max-width: none;
+  }
+
+  .hero--ads-long-title .hero__title {
+    font-size: 1.5rem;
+  }
+
+  /* hoechstens zwei Zeilen, nicht mitten im Wort abgeschnitten */
+  .hero--ads-compact .hero__subline--ads {
+    font-size: 0.875rem;
+    line-height: var(--line-sm);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .hero--ads-compact .hero__reviews {
+    margin-top: var(--space-100);
+  }
+
+  .hero--ads-buttons .hero__cta {
+    flex-wrap: nowrap;
+    width: 100%;
+    gap: var(--space-200);
+  }
+
+  .hero--ads-buttons .hero__cta-price {
+    display: contents;
+  }
+
+  .hero--ads-buttons .hero-cta-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: var(--space-300);
+    white-space: nowrap;
+  }
+
+  /* 320er-Handys: "Termin buchen" + "20% Rabatt sichern" passen nicht
+     nebeneinander (Text lief uebereinander) - untereinander, volle Breite. */
+  @media (max-width: 359px) {
+    .hero--ads-buttons .hero__cta {
+      flex-direction: column;
+    }
+
+    .hero--ads-buttons .hero-cta-btn {
+      flex: 0 0 auto;
+      width: 100%;
+    }
+  }
+
+  /* v2: "Kostenlose Beratung buchen" ist zu lang fuer zwei Knoepfe in
+     einer Zeile - untereinander, volle Breite. */
+  .hero--v2.hero--ads-buttons .hero__cta {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  .hero--v2.hero--ads-buttons .hero-cta-btn {
+    flex: 0 0 auto;
+    width: 100%;
+  }
+
+  /* v2 auf 320er-Handys: H1 und Preis je eine Zeile kuerzer, damit die
+     Sterne noch in den ersten Screen passen. */
+  @media (max-width: 359px) {
+    .hero--v2 .hero__title,
+    .hero--v2.hero--ads-long-title .hero__title {
+      font-size: 1.375rem;
+    }
+
+    .hero--v2 .hero__price {
+      font-size: 1.1875rem;
+    }
+
+    .hero--v2 .hero__main {
+      padding-top: var(--space-400);
+    }
+  }
+}
+
+.hero__nowrap {
+  white-space: nowrap;
+}
+
+/* v2: Preis gross, der Rabatt-Zusatz kleiner in derselben Zeile; bricht
+   nur nach dem Betrag um, nie im Betrag. */
+.hero__price--v2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: center;
+  column-gap: 0.35em;
+}
+
+.hero__price-extra {
+  font-size: var(--font-md, 1rem);
+  line-height: 1.3;
+}
+
+/* v2: kleine Vertrauenszeile unter dem Knopf */
+.hero__v2-note {
+  margin: calc(-1 * var(--space-100)) 0 0;
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+  color: var(--color-text-light);
 }
 
 .hero__cta {
@@ -671,6 +1088,122 @@ const discountLabel = computed(() => {
   display: none;
 }
 
+.floating-cta__price--offer {
+  color: #b91c1c;
+}
+
+/* go.: Leiste einzeilig - Preis links, Telefon + "Termin buchen" rechts
+   (#181, Benjamin 30.09.2026). */
+.floating-cta__phone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  background: var(--color-white);
+}
+
+@media (max-width: 767px) {
+  .floating-cta--ads-mode {
+    padding: var(--space-300) var(--space-400);
+  }
+
+  .floating-cta--ads-mode .floating-cta__content {
+    gap: var(--space-300);
+  }
+
+  .floating-cta--ads-mode .floating-cta__price {
+    font-size: var(--font-md);
+    line-height: var(--line-md);
+    white-space: nowrap;
+  }
+
+  .floating-cta--ads-mode .floating-cta__actions {
+    gap: var(--space-200);
+  }
+
+  .floating-cta--ads-mode .floating-cta-btn {
+    white-space: nowrap;
+  }
+}
+
+/* v2: "Beratung buchen" ist laenger als "Termin buchen" - Preis kleiner,
+   damit die Leiste einzeilig bleibt. */
+@media (max-width: 767px) {
+  .floating-cta--v2 .floating-cta__price {
+    font-size: var(--font-sm);
+    line-height: var(--line-sm);
+  }
+
+  .floating-cta--v2 .floating-cta__phone {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* v2 (Agentur-Feedback 01.10.2026): Telefon mit Beschriftung "Anrufen".
+   Preis, "Anrufen" und "Kostenlose Beratung" passen erst ab 480 px in eine
+   Zeile; darunter zeigt die Leiste nur die beiden Knoepfe (der Preis steht
+   im Hero und in den Preisen), einzeilig bis 320 px. */
+.floating-cta__phone--label {
+  width: auto;
+  gap: 6px;
+  padding: 0 14px;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+@media (max-width: 767px) {
+  .floating-cta--v2 .floating-cta__phone--label {
+    width: auto;
+    height: 44px;
+  }
+}
+
+@media (max-width: 479px) {
+  .floating-cta--v2 .floating-cta__text {
+    display: none;
+  }
+
+  .floating-cta--v2 .floating-cta__content {
+    justify-content: stretch;
+  }
+
+  .floating-cta--v2 .floating-cta__actions {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .floating-cta--v2 .floating-cta-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .floating-cta--v2 .floating-cta-btn :deep(button),
+  .floating-cta--v2 :deep(button.floating-cta-btn) {
+    width: 100%;
+    padding-inline: var(--space-300);
+  }
+}
+
+@media (max-width: 359px) {
+  .floating-cta--v2 .floating-cta__phone--label {
+    padding: 0 10px;
+  }
+
+  .floating-cta--v2 .floating-cta-btn :deep(button),
+  .floating-cta--v2 :deep(button.floating-cta-btn) {
+    font-size: var(--font-sm);
+    padding-inline: var(--space-200);
+  }
+}
+
 @media (min-width: 768px) {
   .floating-cta {
     padding: var(--space-500) var(--space-600);
@@ -695,6 +1228,294 @@ const discountLabel = computed(() => {
 @media (min-width: 900px) {
   .floating-cta__reviews {
     display: flex;
+  }
+}
+/* go.-Vorlage v2, Gestaltung "ci"/"ci-hell" (Feedback 02.10.2026): Preis
+   schwarz, Rabatt-Zusatz grau; Knopf schwarz wie auf www. Rot bleibt nur
+   der Buchungsknopf der mitlaufenden Leiste (#dc2626, weiss darauf 4,8:1). */
+.hero--ci .hero__price {
+  color: var(--color-text);
+}
+
+.hero--ci .hero__price-extra {
+  color: var(--color-text-light);
+  font-weight: var(--font-regular);
+}
+
+.floating-cta--ci .floating-cta__price--offer {
+  color: var(--color-text);
+}
+
+/* go.-Vorlage v2, Desktop-Layout ab 1024 px (Feedback 02.10.2026): Text
+   linksbuendig mit grossem Titel, Hero nicht mehr bildschirmhoch, damit
+   darunter der naechste Abschnitt anschaut. Mobil unveraendert. */
+@media (min-width: 1024px) {
+  .hero-card:has(.hero--desk) {
+    min-height: 0;
+  }
+
+  .hero--desk {
+    min-height: min(620px, calc(100svh - 200px));
+  }
+
+  .hero--desk .hero__body {
+    flex: 1 1 46%;
+  }
+
+  .hero--desk .hero__media {
+    flex: 1 1 54%;
+  }
+
+  .hero--desk .hero__main {
+    align-items: flex-start;
+    justify-content: center;
+    margin-top: 0;
+    padding: var(--space-1000) var(--space-900);
+    text-align: left;
+  }
+
+  .hero--desk .hero__title {
+    max-width: 14ch;
+    font-size: var(--font-5xl);
+    line-height: var(--line-5xl);
+  }
+
+  .hero--desk .hero__subline--ads {
+    max-width: 40ch;
+    font-size: var(--font-lg);
+    line-height: var(--line-lg);
+  }
+
+  .hero--desk .hero__price--v2 {
+    justify-content: flex-start;
+    font-size: var(--font-2xl);
+  }
+
+  .hero--desk .hero__cta {
+    justify-content: flex-start;
+  }
+
+  .hero--desk .hero__reviews {
+    margin-top: var(--space-300);
+  }
+}
+/* Koelner CI-Seiten ("ci-preis", Michael 03.10.2026): Neukundenpreis fett
+   und im kraeftigen Rot der Leiste (#dc2626, weiss: 4,8:1) */
+.hero--preis .hero__price {
+  font-weight: 700;
+  color: #dc2626;
+}
+
+.floating-cta--preis .floating-cta__price--offer {
+  color: #dc2626;
+}
+/* Prototyp "editorial" (Paryas Entwurf, nur Vorschau): Text zuerst,
+   linksbuendig, grosse Ueberschrift mit heller letzter Zeile, Preis mit
+   Marke statt Zusatzzeile, Bild/Video darunter. */
+.hero--edit {
+  flex-direction: column;
+}
+
+.hero--edit .hero__body {
+  order: 1;
+}
+
+.hero--edit .hero__media {
+  order: 2;
+  margin-top: var(--space-500);
+  border-radius: var(--border-radius-500, 24px);
+  overflow: hidden;
+}
+
+.hero--edit .hero__main {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.hero__v2-eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-light);
+}
+
+.hero--edit .hero__title--edit {
+  display: flex;
+  flex-direction: column;
+  font-size: clamp(2.25rem, 9vw, 3.5rem);
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.hero__title-line--soft {
+  color: var(--color-text-light);
+}
+
+.hero--edit .hero__subline--ads {
+  font-size: 1.0625rem;
+  line-height: 1.5;
+  color: var(--color-text-light);
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  display: block !important;
+}
+
+/* Badge neben den Preis, wenn Platz ist; sonst in die naechste Zeile
+   (Sergej 06.10.2026: "pro Zone" + Badge lief auf dem iPhone ueber den Rand) */
+.hero--edit .hero__price--v2 {
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+  column-gap: var(--space-300);
+  row-gap: var(--space-100);
+}
+
+.hero__gbadge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-300);
+  margin-top: var(--space-200);
+  padding: var(--space-300) var(--space-400);
+  border: 1px solid var(--color-border-mute);
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 8px 24px -16px rgba(0, 0, 0, 0.35);
+}
+
+.hero__gbadge-g {
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+}
+
+.hero__gbadge-body {
+  display: grid;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.hero__gbadge-label,
+.hero__gbadge-count {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+.hero__gbadge-score {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-200);
+}
+
+.hero__gbadge-score strong {
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.hero__gbadge-stars {
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: #fbbc05;
+}
+
+@media (max-width: 359px) {
+  .hero--edit .hero__price--v2 {
+    flex-wrap: wrap;
+  }
+
+  .hero--edit .hero-cta-btn,
+  .hero--edit .hero-cta-btn :deep(.button__label) {
+    white-space: normal;
+    height: auto;
+  }
+}
+
+/* Sticky-Knopf: Text fett (Zelgai 05.10.2026) */
+.floating-cta--edit :deep(.button__label) {
+  font-weight: 700;
+}
+
+.hero--edit .hero__price--v2 {
+  font-size: clamp(1.125rem, 4.9vw, 1.5rem);
+  column-gap: var(--space-200);
+}
+
+.hero--edit .hero__price-extra {
+  white-space: nowrap;
+  padding: 0.25em 0.6em;
+  border-radius: 999px;
+  background: var(--color-card-bg-soft, #ececec);
+  color: var(--color-text);
+  font-size: clamp(0.625rem, 2.7vw, 0.8125rem);
+  font-weight: 600;
+}
+
+.hero--edit .hero__cta {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+/* Zweite Zeile buendig unter der ersten, nicht eingerueckt neben dem Icon
+   (Benjamin 07.10.2026, Variante B) */
+.hero--edit .hero__v2-note {
+  display: block;
+  margin-top: 0;
+}
+
+.hero--edit .hero__v2-note :deep(svg) {
+  display: inline-block;
+  vertical-align: -3px;
+  margin-right: var(--space-100);
+}
+
+@media (max-width: 899px) {
+  .hero--edit.hero--ads-compact .hero__media {
+    flex: 0 0 auto;
+    aspect-ratio: 4 / 5;
+    min-height: 0;
+  }
+
+  .hero--edit.hero--ads-compact .hero__main {
+    gap: var(--space-400);
+    padding-top: var(--space-400);
+  }
+
+  .hero--edit.hero--ads-compact .hero__title {
+    font-size: clamp(1.875rem, 8.6vw, 2.5rem);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero--edit.hero--desk {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-900);
+  }
+
+  .hero--edit.hero--desk .hero__body {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .hero--edit.hero--desk .hero__media {
+    flex: 0 0 40%;
+    margin-top: 0;
+    aspect-ratio: 4 / 5;
+    max-height: 640px;
+  }
+}
+
+/* v2 (03.10.2026): Unterzeilen mit "Behandlung durch Aerzte" sind laenger -
+   bis zu drei Zeilen statt zwei, damit nichts abgeschnitten wird; das Bild
+   darueber gibt den Platz ab (flex). */
+@media (max-width: 899px) {
+  .hero--v2.hero--ads-compact .hero__subline--ads {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
   }
 }
 </style>

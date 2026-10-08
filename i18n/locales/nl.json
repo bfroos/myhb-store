@@ -139,6 +139,12 @@
     }
   },
   "blog": {
+    "pagination": "Pagina's",
+    "firstPage": "Eerste pagina",
+    "previousPage": "Vorige pagina",
+    "nextPage": "Volgende pagina",
+    "lastPage": "Laatste pagina",
+    "pageTitle": "Pagina {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Interessante informatie, actueel nieuws en alles over gezondheid en schoonheid.",
@@ -344,9 +350,7 @@
       "previousImage": "Vorige afbeelding",
       "nextImage": "Volgende afbeelding",
       "slideLabel": "Afbeelding {index} van {total}",
-      "selectImage": "Afbeelding {index} tonen",
-      "before": "Voor",
-      "after": "Na"
+      "selectImage": "Afbeelding {index} tonen"
     },
     "jobTeasers": {
       "headline": "Actuele vacatures",

@@ -42,7 +42,11 @@
           <ImageAppLogo />
         </NuxtLinkLocale>
         <span v-else class="appHeader__mainNav__brand"><ImageAppLogo /></span>
-        <div class="appHeader__desktop appHeader__mainNav__menu">
+        <!-- go.: Behandlungsmenue nur mit go.-internen Zielen (useAdsNav) -->
+        <div
+          v-if="!isAdsMode || priorityNavItems.length > 0"
+          class="appHeader__desktop appHeader__mainNav__menu"
+        >
           <div class="appHeader__priorityWrap">
             <BaseAppHeaderMainNav
               :links="priorityNavItems"
@@ -64,7 +68,16 @@
         <div v-if="!isAdsMode" class="appHeader__mobile">
           <UiMoleculeLanguageSwitcher />
         </div>
-        <div class="appHeader__desktop">
+        <div class="appHeader__desktop appHeader__actions">
+          <a
+            v-if="isAdsMode && adsPhone"
+            :href="adsPhone.href"
+            class="appHeader__phone text-link"
+            @click="trackPhoneClick(adsPhone.label)"
+          >
+            <IconPhone :size="18" aria-hidden="true" />
+            {{ adsPhone.label }}
+          </a>
           <SharedButton
             :button="{
               label: t('cta.bookAppointment'),
@@ -86,11 +99,18 @@
   </header>
 </template>
 <script setup lang="ts">
-import { IconMenu2 } from "@tabler/icons-vue";
+import { IconMenu2, IconPhone } from "@tabler/icons-vue";
 import { SharedButtonMethod, SharedButtonAction } from "~/lib/strapi/dto/enums";
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
-const { treatmentPages } = useMenu("treatment-pages");
+const { treatmentPages: seoTreatmentPages } = useMenu("treatment-pages");
+// go.: Menue aus dem Ads-Baum, Ziele nur auf go. (Standort der Seite, sonst
+// Kategorie-Seiten und Uebersichten).
+const { categories: adsCategories, overviewLinks: adsOverviewLinks } =
+  await useAdsNav();
+const treatmentPages = computed(() =>
+  isAdsMode.value ? adsCategories.value : seoTreatmentPages.value,
+);
 const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 
@@ -122,18 +142,53 @@ const currentMainNav = computed(() =>
   treatmentPages.value.find((page) => page.id === mainNavId.value),
 );
 
-const priorityNavItems = computed(() =>
-  treatmentPages.value.map((page) => ({
+const priorityNavItems = computed(() => [
+  ...treatmentPages.value.map((page) => ({
     id: page.id,
     label: page.name,
-    href: treatmentPagePath(page.pathKey, page.slug),
+    href:
+      "href" in page && page.href
+        ? page.href
+        : treatmentPagePath(page.pathKey, page.slug),
   })),
-);
+  // go.: Uebersichten am Ende (ohne Untermenue).
+  ...adsOverviewLinks.value.map((link, i) => ({
+    id: -1 - i,
+    label: link.name,
+    href: `/${link.slug}`,
+  })),
+]);
+
+// go. (#184): Standort der Seite fuer "Anrufen" und "Standort" im Menue.
+const { seitenOrt } = useSeitenStandort();
+const { trackPhoneClick } = useGoogleAnalytics();
+const route = useRoute();
+const adsPhone = computed(() => {
+  const phone = seitenOrt.value?.phoneNumber;
+  const digits = (phone ?? "").replace(/[^\d+]/g, "");
+  return isAdsMode.value && phone && digits
+    ? { label: phone, href: `tel:${digits}` }
+    : null;
+});
+const adsLocationLink = computed(() => {
+  const city = route.params.citySlug as string | undefined;
+  const loc = route.params.locationSlug as string | undefined;
+  if (!isAdsMode.value || !city || !loc || !seitenOrt.value) return null;
+  return {
+    label: seitenOrt.value.name ?? t("navigation.secondary.locations"),
+    // Sprung zum Standort-Block (Adresse, Oeffnungszeiten) derselben Seite.
+    to: `${route.path}#standort`,
+  };
+});
 
 const mobileMenuItems = computed(() => {
   return {
-    secondaryNavItems: secondaryNavItems.value,
+    secondaryNavItems: isAdsMode.value
+      ? adsOverviewLinks.value
+      : secondaryNavItems.value,
     mainNavItems: treatmentPages.value,
+    adsPhone: adsPhone.value,
+    adsLocation: adsLocationLink.value,
   };
 });
 
@@ -143,11 +198,14 @@ const subnavItems = computed(() =>
     label: child.name,
     // pathKey statt parent-slug + child-slug: der zusammengesetzte Pfad
     // stimmt nur bei genau zwei Ebenen.
-    href: treatmentPagePath(
-      child.pathKey,
-      currentMainNav.value?.slug,
-      child.slug,
-    ),
+    href:
+      "href" in child && child.href
+        ? child.href
+        : treatmentPagePath(
+            child.pathKey,
+            currentMainNav.value?.slug,
+            child.slug,
+          ),
   })),
 );
 
@@ -195,6 +253,19 @@ function closeMobileMenu() {
   background: var(--color-card-bg-light);
   border-radius: var(--border-radius-card);
   box-shadow: var(--shadow-1);
+}
+.appHeader__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-500);
+}
+.appHeader__phone {
+  margin-right: var(--space-500);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-200);
+  font-weight: var(--font-bold);
+  white-space: nowrap;
 }
 .appHeader__secondaryNav {
   padding: var(--space-100) var(--space-card-pad);

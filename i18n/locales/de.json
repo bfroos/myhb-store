@@ -139,6 +139,12 @@
     }
   },
   "blog": {
+    "pagination": "Seiten",
+    "firstPage": "Erste Seite",
+    "previousPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "lastPage": "Letzte Seite",
+    "pageTitle": "Seite {page}",
     "breadcrumbTitle": "Blog",
     "headline": "Blog",
     "intro": "Wissenswertes, Aktuelles und Alles zum Thema Gesundheit und Schönheit.",
@@ -345,9 +351,7 @@
       "previousImage": "Vorheriges Bild",
       "nextImage": "Nächstes Bild",
       "slideLabel": "Bild {index} von {total}",
-      "selectImage": "Bild {index} anzeigen",
-      "before": "Vorher",
-      "after": "Nachher"
+      "selectImage": "Bild {index} anzeigen"
     },
     "jobTeasers": {
       "headline": "Aktuelle Stellenangebote",
@@ -499,10 +503,15 @@
     "calendly": {
       "header": "Wähle deine Lounge",
       "sortedByDistance": "Nach Entfernung sortiert",
-      "locationDenied": "Standort nicht verfügbar. Bitte PLZ oder Ort eingeben."
+      "locationDenied": "Standort nicht verfügbar. Bitte PLZ oder Ort eingeben.",
+      "sortedByPageLocation": "Nach Entfernung zu {name} sortiert",
+      "fallbackUnavailable": "In der {name} ist Online-Buchung gerade nicht möglich.",
+      "fallbackNearest": "Nächste Lounge: {name} (≈ {km} km)",
+      "fallbackCall": "{name} anrufen"
     },
     "newsletterSignUp": {
-      "header": "Newsletter abonnieren"
+      "header": "Newsletter abonnieren",
+      "headerDiscount": "{newsletterDiscountPercentage} % Neukunden-Rabatt sichern"
     },
     "booking": {
       "loading": "Buchung wird geladen …",
@@ -517,7 +526,10 @@
       "headlineDiscount": "Für alle Neukunden: Sichere dir jetzt {newsletterDiscountPercentage}% Rabatt!",
       "exlusiveOffers": "Exklusive Angebote",
       "treatmentNews": "News zu Behandlungen",
-      "eventInvitations": "Einladungen zu Events"
+      "eventInvitations": "Einladungen zu Events",
+      "bookingIntro": "Code per E-Mail – direkt danach Termin wählen.",
+      "consentHint": "Mit der Anmeldung erhältst du unseren Newsletter (Angebote, News zu Behandlungen, Events). Abmeldung jederzeit.",
+      "submitAndBook": "Rabatt sichern & Termin wählen"
     },
     "success": "Willkommen bei {brandNameShort}! Wenn die Adresse noch nicht registriert ist, bekommst du in Kürze eine Bestätigungs-E-Mail. Falls du schon registriert bist, passiert nichts weiter.",
     "emailPlaceholder": "Deine E-Mail-Adresse",

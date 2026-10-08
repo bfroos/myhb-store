@@ -34,25 +34,22 @@
                 aria-roledescription="slide"
                 :aria-label="t('blocks.gallery.slideLabel', { index: index + 1, total: slides.length })"
               >
-                <div class="frames" :class="{ 'frames--pair': slide.frames.length > 1 }">
-                  <figure v-for="(frame, frameIndex) in slide.frames" :key="frameIndex" class="frame">
-                    <button
-                      type="button"
-                      class="frame__open"
-                      :class="`ratio--${aspectRatio}`"
-                      :tabindex="index === activeIndex ? 0 : -1"
-                      :aria-label="t('blocks.gallery.openImage', { index: offsets[index]! + frameIndex + 1 })"
-                      @click="open(index, frameIndex)"
-                    >
-                      <UiAtomMediaPicture
-                        :media="frame.media"
-                        :default-format="slide.frames.length > 1 ? ImageFormat.MEDIUM : ImageFormat.LARGE"
-                        :priority="priority && index === 0 && frameIndex === 0"
-                      />
-                    </button>
-                    <span v-if="frame.label" class="frame__label">{{ frame.label }}</span>
-                  </figure>
-                </div>
+                <figure class="frame">
+                  <button
+                    type="button"
+                    class="frame__open"
+                    :class="`ratio--${aspectRatio}`"
+                    :tabindex="index === activeIndex ? 0 : -1"
+                    :aria-label="t('blocks.gallery.openImage', { index: index + 1 })"
+                    @click="open(index)"
+                  >
+                    <UiAtomMediaPicture
+                      :media="slide.media"
+                      :default-format="ImageFormat.LARGE"
+                      :priority="priority && index === 0"
+                    />
+                  </button>
+                </figure>
                 <p v-if="showCaptions && slide.caption" class="gallery__caption">
                   {{ slide.caption }}
                 </p>
@@ -97,8 +94,8 @@
                 @click="goTo(index)"
               >
                 <img
-                  :src="getThumbnailSrc(slide.frames[slide.frames.length - 1]!.media)"
-                  :alt="slide.frames[slide.frames.length - 1]!.media.alternativeText || ''"
+                  :src="getThumbnailSrc(slide.media)"
+                  :alt="slide.media.alternativeText || ''"
                   loading="lazy"
                   width="72"
                   height="72"
@@ -111,29 +108,26 @@
         <ul
           v-else
           class="gallery__grid"
-          :class="[`gallery__grid--${columns}`, { 'gallery__grid--pairs': isPairs }]"
+          :class="`gallery__grid--${columns}`"
           role="list"
         >
           <li v-for="(slide, index) in slides" :key="slide.id" class="gallery__item">
-            <div class="frames" :class="{ 'frames--pair': slide.frames.length > 1 }">
-              <figure v-for="(frame, frameIndex) in slide.frames" :key="frameIndex" class="frame">
-                <button
-                  type="button"
-                  class="frame__open frame__open--zoom"
-                  :class="`ratio--${aspectRatio}`"
-                  :aria-label="t('blocks.gallery.openImage', { index: offsets[index]! + frameIndex + 1 })"
-                  @click="open(index, frameIndex)"
-                >
-                  <UiAtomMediaPicture
-                    :media="frame.media"
-                    :default-format="ImageFormat.SMALL"
-                    :sources="thumbSources"
-                    :priority="priority && index === 0 && frameIndex === 0"
-                  />
-                </button>
-                <span v-if="frame.label" class="frame__label">{{ frame.label }}</span>
-              </figure>
-            </div>
+            <figure class="frame">
+              <button
+                type="button"
+                class="frame__open frame__open--zoom"
+                :class="`ratio--${aspectRatio}`"
+                :aria-label="t('blocks.gallery.openImage', { index: index + 1 })"
+                @click="open(index)"
+              >
+                <UiAtomMediaPicture
+                  :media="slide.media"
+                  :default-format="ImageFormat.SMALL"
+                  :sources="thumbSources"
+                  :priority="priority && index === 0"
+                />
+              </button>
+            </figure>
             <p v-if="showCaptions && slide.caption" class="gallery__caption">
               {{ slide.caption }}
             </p>
@@ -155,7 +149,7 @@
       >
         <div class="lightbox__bar">
           <span class="lightbox__counter">
-            {{ t("blocks.gallery.counter", { current: lightboxIndex + 1, total: lightboxFrames.length }) }}
+            {{ t("blocks.gallery.counter", { current: lightboxIndex + 1, total: slides.length }) }}
           </span>
           <UiAtomBaseButton
             icon-only
@@ -174,9 +168,9 @@
           @touchend.passive="onTouchEnd"
         >
           <UiAtomMediaPicture
-            v-if="activeFrame"
+            v-if="activeSlide"
             :key="`${lightboxIndex}`"
-            :media="activeFrame.media"
+            :media="activeSlide.media"
             :default-format="ImageFormat.LARGE"
             priority
             class="lightbox__image"
@@ -186,7 +180,7 @@
           </figcaption>
         </figure>
 
-        <div v-if="lightboxFrames.length > 1" class="lightbox__nav">
+        <div v-if="hasMultiple" class="lightbox__nav">
           <UiAtomBaseButton
             icon-only
             variant="tertiary"
@@ -218,8 +212,7 @@ import type { BlockGalleryDto } from "~/lib/strapi/dto/components";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { getMediaUrl } from "~/utils/media";
 
-type Frame = { media: StrapiMedia; label?: string };
-type Slide = { id: string | number; frames: Frame[]; caption: string };
+type Slide = { id: string | number; media: StrapiMedia; caption: string };
 
 const props = defineProps<BlockGalleryDto & { priority?: boolean }>();
 
@@ -233,48 +226,17 @@ function captionOf(image?: StrapiMedia | null): string {
   return image?.caption || image?.alternativeText || "";
 }
 
-const pairItems = computed(() =>
-  (props.items ?? []).filter((item) => item.before && item.after),
-);
-
-const isPairs = computed(() => props.mode === "before-after" && pairItems.value.length > 0);
-
-const slides = computed<Slide[]>(() => {
-  if (isPairs.value) {
-    return pairItems.value.map((item) => ({
-      id: item.id,
-      frames: [
-        { media: item.before!, label: t("blocks.gallery.before") },
-        { media: item.after!, label: t("blocks.gallery.after") },
-      ],
-      caption: item.caption ?? "",
-    }));
-  }
-  return (props.images ?? []).map((image) => ({
+const slides = computed<Slide[]>(() =>
+  (props.images ?? []).map((image) => ({
     id: image.id,
-    frames: [{ media: image }],
+    media: image,
     caption: captionOf(image),
-  }));
-});
+  })),
+);
 
 const hasSlides = computed(() => slides.value.length > 0);
 const hasMultiple = computed(() => slides.value.length > 1);
 const isSlider = computed(() => props.layout === "slider");
-
-const offsets = computed(() => {
-  let total = 0;
-  return slides.value.map((slide) => {
-    const start = total;
-    total += slide.frames.length;
-    return start;
-  });
-});
-
-const lightboxFrames = computed(() =>
-  slides.value.flatMap((slide, slideIndex) =>
-    slide.frames.map((frame) => ({ ...frame, slideIndex, caption: slide.caption })),
-  ),
-);
 
 const activeIndex = ref(0);
 const trackEl = ref<HTMLElement | null>(null);
@@ -282,27 +244,57 @@ const thumbsEl = ref<HTMLElement | null>(null);
 
 const lightboxIndex = ref<number | null>(null);
 const lightboxEl = ref<HTMLElement | null>(null);
+// The element that opened the lightbox gets focus back when it closes.
+let lightboxOpener: HTMLElement | null = null;
 
-const activeFrame = computed(() =>
-  lightboxIndex.value === null ? null : (lightboxFrames.value[lightboxIndex.value] ?? null),
+const activeSlide = computed(() =>
+  lightboxIndex.value === null ? null : (slides.value[lightboxIndex.value] ?? null),
 );
 
-const lightboxCaption = computed(() => {
-  const frame = activeFrame.value;
-  if (!frame) return "";
-  const text = isPairs.value ? frame.caption : captionOf(frame.media);
-  return [frame.label, text].filter(Boolean).join(" · ");
-});
+const lightboxCaption = computed(() => activeSlide.value?.caption ?? "");
 
-function open(slideIndex: number, frameIndex = 0) {
-  lightboxIndex.value = (offsets.value[slideIndex] ?? 0) + frameIndex;
+function open(slideIndex: number) {
+  if (import.meta.client) {
+    lightboxOpener =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  }
+  lightboxIndex.value = slideIndex;
 }
 
 function close() {
-  const last = activeFrame.value?.slideIndex ?? null;
+  const last = lightboxIndex.value;
   lightboxIndex.value = null;
   if (isSlider.value && last !== null) {
     nextTick(() => goTo(last, false));
+  }
+  const opener = lightboxOpener;
+  lightboxOpener = null;
+  if (opener?.isConnected) nextTick(() => opener.focus());
+}
+
+const FOCUSABLE = 'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
+
+// Keeps Tab inside the dialog; without this the focus walks into the page
+// behind the overlay, which aria-modal only claims to prevent.
+function trapTab(event: KeyboardEvent) {
+  const root = lightboxEl.value;
+  if (!root) return;
+  const items = Array.from(root.querySelectorAll<HTMLElement>(FOCUSABLE));
+  if (items.length === 0) {
+    event.preventDefault();
+    root.focus();
+    return;
+  }
+  const first = items[0];
+  const last = items[items.length - 1];
+  if (!first || !last) return;
+  const active = document.activeElement;
+  if (event.shiftKey && (active === first || active === root)) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && active === last) {
+    event.preventDefault();
+    first.focus();
   }
 }
 
@@ -404,7 +396,7 @@ function onTouchEnd(event: TouchEvent) {
 // Wraps, so the arrows never dead-end on the first or last image.
 function step(delta: number) {
   if (lightboxIndex.value === null) return;
-  const total = lightboxFrames.value.length;
+  const total = slides.value.length;
   lightboxIndex.value = (lightboxIndex.value + delta + total) % total;
 }
 
@@ -414,6 +406,8 @@ function onKeydown(event: KeyboardEvent) {
   if (event.key === "Escape") {
     event.preventDefault();
     close();
+  } else if (event.key === "Tab") {
+    trapTab(event);
   } else if (event.key === "ArrowLeft") {
     event.preventDefault();
     step(-1);
@@ -486,16 +480,6 @@ onBeforeUnmount(() => {
   min-width: 0;
 }
 
-.frames {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-200);
-}
-
-.frames--pair {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-
 .frame {
   position: relative;
   margin: 0;
@@ -550,19 +534,6 @@ onBeforeUnmount(() => {
   object-fit: contain;
 }
 
-.frame__label {
-  position: absolute;
-  inset-block-end: var(--space-200);
-  inset-inline-start: var(--space-200);
-  padding: var(--space-100) var(--space-300);
-  border-radius: 999px;
-  background: rgb(0 0 0 / 0.6);
-  color: #fff;
-  font-size: var(--font-sm);
-  line-height: 1.2;
-  pointer-events: none;
-}
-
 .gallery__caption {
   margin: 0;
   font-size: var(--font-sm);
@@ -579,11 +550,11 @@ onBeforeUnmount(() => {
 }
 
 @media (min-width: 900px) {
-  .gallery__grid--3:not(.gallery__grid--pairs) {
+  .gallery__grid--3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
-  .gallery__grid--4:not(.gallery__grid--pairs) {
+  .gallery__grid--4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }

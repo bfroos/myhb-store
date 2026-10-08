@@ -17,27 +17,11 @@
       <svg
         v-if="source === ReviewSource.GOOGLE"
         class="reviewsBadge__icons__brand"
-        xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 26 26"
         aria-hidden="true"
         focusable="false"
       >
-        <path
-          d="M25.154 13.125a14.75 14.75 0 0 0-.233-2.625H12.834v4.97h6.907c-.303 1.598-1.213 2.952-2.578 3.862v3.232h4.165c2.427-2.24 3.827-5.53 3.827-9.438z"
-          fill="#4285f4"
-        />
-        <path
-          d="M12.834 25.667c3.465 0 6.37-1.143 8.493-3.103l-4.165-3.232c-1.143.77-2.602 1.237-4.328 1.237-3.337 0-6.172-2.252-7.187-5.285h-4.27v3.313c2.112 4.188 6.44 7.07 11.457 7.07z"
-          fill="#34a853"
-        />
-        <path
-          d="M5.647 15.271a7.69 7.69 0 0 1-.408-2.438 7.69 7.69 0 0 1 .408-2.438V7.081h-4.27C.502 8.808 0 10.756 0 12.833s.502 4.025 1.377 5.752l3.325-2.59.945-.723z"
-          fill="#fbbc05"
-        />
-        <path
-          d="M12.834 5.11c1.89 0 3.57.653 4.912 1.913l3.675-3.675C19.192 1.272 16.299 0 12.834 0 7.817 0 3.489 2.882 1.377 7.082l4.27 3.313c1.015-3.033 3.85-5.285 7.187-5.285z"
-          fill="#ea4335"
-        />
+        <use href="#rb-google" />
       </svg>
       <IconMessageCircle
         v-else-if="source === ReviewSource.OTHER"
@@ -52,18 +36,10 @@
       >
         <svg
           class="reviewsBadge__icons__value-bg"
-          xmlns="http://www.w3.org/2000/svg"
           viewBox="1.5 2.5 21 19"
           aria-hidden="true"
-          fill="none"
-          stroke="var(--color-text-light)"
-          stroke-width="1"
-          stroke-linecap="round"
-          stroke-linejoin="round"
         >
-          <path
-            d="M5 7.2a2.2 2.2 0 0 1 2.2 -2.2h1a2.2 2.2 0 0 0 1.55 -.64l.7 -.7a2.2 2.2 0 0 1 3.12 0l.7 .7c.412 .41 .97 .64 1.55 .64h1a2.2 2.2 0 0 1 2.2 2.2v1c0 .58 .23 1.138 .64 1.55l.7 .7a2.2 2.2 0 0 1 0 3.12l-.7 .7a2.2 2.2 0 0 0 -.64 1.55v1a2.2 2.2 0 0 1 -2.2 2.2h-1a2.2 2.2 0 0 0 -1.55 .64l-.7 .7a2.2 2.2 0 0 1 -3.12 0l-.7 -.7a2.2 2.2 0 0 0 -1.55 -.64h-1a2.2 2.2 0 0 1 -2.2 -2.2v-1a2.2 2.2 0 0 0 -.64 -1.55l-.7 -.7a2.2 2.2 0 0 1 0 -3.12l.7 -.7a2.2 2.2 0 0 0 .64 -1.55v-1"
-          />
+          <use href="#rb-value-bg" />
         </svg>
         <span>{{ ratingDisplay }}</span>
       </div>
@@ -71,17 +47,26 @@
       <div class="reviewsBadge__icons__rating">
         <span>{{ reviewCountText }}</span>
         <div role="img" :aria-label="ratingAriaLabel">
-          <IconStarFilled
+          <!-- TSEO-13: Grafiken aus ReviewsBadgeSprite (app.vue) -->
+          <svg
             v-for="i in stars.full"
             :key="`full-${i}`"
+            viewBox="0 0 24 24"
             aria-hidden="true"
-          />
-          <IconStarHalfFilled v-if="stars.half" key="half" aria-hidden="true" />
-          <IconStar
+          >
+            <use href="#rb-star" />
+          </svg>
+          <svg v-if="stars.half" key="half" viewBox="0 0 24 24" aria-hidden="true">
+            <use href="#rb-star-half" />
+          </svg>
+          <svg
             v-for="i in stars.empty"
             :key="`empty-${i}`"
+            viewBox="0 0 24 24"
             aria-hidden="true"
-          />
+          >
+            <use href="#rb-star-empty" />
+          </svg>
         </div>
       </div>
     </div>
@@ -90,9 +75,6 @@
 
 <script setup lang="ts">
 import {
-  IconStarFilled,
-  IconStarHalfFilled,
-  IconStar,
   IconMessageCircle,
 } from "@tabler/icons-vue";
 import { ReviewSource } from "~/lib/strapi/dto/enums";

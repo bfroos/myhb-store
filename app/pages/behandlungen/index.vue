@@ -6,7 +6,7 @@
   />
   <template v-else>
     <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
-    <h1 class="treatments-page__title">{{ $t('treatments.pageTitle') }}</h1>
+    <h1 class="treatments-page__title">{{ pageTitle }}</h1>
     <BlockTreatmentTeasers
       v-for="(group, index) in treatmentPageGroups"
       :key="group.groupId"
@@ -21,6 +21,18 @@
 </template>
 <script setup lang="ts">
 import { ColorTheme } from "~/lib/strapi/dto/enums";
+import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
+
+// go.*: Die Ueberschrift kommt aus i18n ("Botox®, Hyaluron & …") und lief
+// am Ads-Filter vorbei (Strapi-Proxy + Seiten-Meta). www unveraendert.
+const { t, locale } = useI18n();
+const { isAdsMode } = useSiteModeFlags();
+const pageTitle = computed(() => {
+  const title = t("treatments.pageTitle");
+  return isAdsMode.value
+    ? replaceRestrictedDrugTerms(title, String(locale.value || "de"))
+    : title;
+});
 
 const { fetchTreatmentPageGroups, treatmentPageGroups, seo } =
   useTreatmentsPage();
@@ -40,12 +52,8 @@ const breadcrumbItems = computed(() => [
   },
 ]);
 
-// Schema.org BreadcrumbList
+// Schema.org BreadcrumbList: kommt aus BaseBreadcrumb (TSEO-12)
 const config = useRuntimeConfig();
-const breadcrumbSchema = computed(() =>
-  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
-);
-useSchemaOrg(breadcrumbSchema);
 </script>
 <style scoped>
 .treatments-page__title {

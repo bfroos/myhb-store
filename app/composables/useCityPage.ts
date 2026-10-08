@@ -102,6 +102,13 @@ export function useCityPage() {
       (locations.value.open?.length ?? 0) +
       (locations.value.openSoon?.length ?? 0);
     seo.value = applySeoPlaceholders(rawSeo, cityName.value, locationCount);
+    // TSEO-04: Stadt nur mit Filialen ohne Eroeffnungsdatum -> noindex, wie
+    // in der Sitemap (citySlugsWithOpenLocations).
+    if (locationCount === 0 && seo.value) {
+      seo.value = { ...seo.value, metaRobots: "noindex, follow" };
+    } else if (locationCount === 0) {
+      seo.value = { metaRobots: "noindex, follow" } as SharedSeoDto;
+    }
     topBlocks.value = data.value.data.cityPage?.topBlocks as StrapiBlock[];
     bottomBlocks.value = data.value.data.cityPage
       ?.bottomBlocks as StrapiBlock[];

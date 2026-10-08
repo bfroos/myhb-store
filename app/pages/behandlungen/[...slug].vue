@@ -30,6 +30,12 @@
     :show-filters="false"
   />
   <BlockRenderer v-if="blocks" :blocks="blocks" />
+  <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
+  <BlockAdsPriceFootnote
+    v-if="isAdsMode && fixedBlocks.hero"
+    :treatment="fixedBlocks.hero.treatment"
+    :treatment-path-key="fixedBlocks.hero.treatmentPathKey"
+  />
 </template>
 <script setup lang="ts">
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
@@ -84,7 +90,10 @@ const treatmentPageLoaded = await fetchTreatment();
 
 if (treatmentPageLoaded) {
   if (treatmentType.value) {
-    await fetchLocations({ treatmentType: treatmentType.value });
+    await fetchLocations({
+      treatmentType: treatmentType.value,
+      pathKey: treatmentPage.value?.pathKey,
+    });
   }
   usePageI18nParams(localizations.value, "pathKey");
   await setPageSeo(seo.value);
@@ -96,7 +105,10 @@ const route = useRoute();
 const { brandName } = useBrand();
 const appConfig = useAppConfig();
 
-const reviewer = DEFAULT_MEDICAL_REVIEWER;
+// TSEO-12: Pruefer aus Strapi (Feld medicalReviewer), sonst Dr. Ruppert.
+const reviewer = computed(() =>
+  resolveMedicalReviewer((treatmentPage.value as any)?.medicalReviewer),
+);
 const treatmentUpdatedAt = computed(
   () => (treatmentPage.value as any)?.updatedAt ?? null,
 );
@@ -108,13 +120,11 @@ const medicalProcedureSchema = computed(() =>
     brandName: brandName.value,
     ratingValue: appConfig.seo?.aggregateRating?.ratingValue,
     reviewCount: appConfig.seo?.aggregateRating?.reviewCount,
+    omitOffer: isAdsMode.value,
   }),
 );
 
-// Schema.org BreadcrumbList
-const breadcrumbSchema = computed(() =>
-  buildBreadcrumbSchema(breadcrumbItems.value, (config.public.publicUrl as string) || ""),
-);
+// Schema.org BreadcrumbList: kommt aus BaseBreadcrumb (TSEO-12)
 
 // Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
 const faqSchema = computed(() => {
@@ -145,14 +155,13 @@ const medicalWebPageSchema = computed(() =>
   buildMedicalWebPageSchema({
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
-    reviewer,
+    reviewer: reviewer.value,
     lastReviewed: treatmentUpdatedAt.value,
     brandName: brandName.value,
   }),
 );
 
 useSchemaOrg(medicalProcedureSchema);
-useSchemaOrg(breadcrumbSchema);
 useSchemaOrg(faqSchema);
 useSchemaOrg(videoSchema);
 useSchemaOrg(medicalWebPageSchema);
