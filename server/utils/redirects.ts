@@ -8,6 +8,9 @@ import bundledRedirects from "../assets/redirects.json";
 // Redirect-Kette). Ueberschreibt gleichnamige Eintraege aus redirects.json;
 // Strapi-Redirects haben weiterhin Vorrang vor beiden Dateien.
 import koelnRedirects from "../assets/redirects-koeln.json";
+// TSEO-Regression 07.10.2026: Startseiten der Sprachversionen (/, /en, /tr,
+// ...) sind nie Quelle einer Weiterleitung oder eines 410.
+import { isProtectedRedirectPath } from "#shared/redirectGuards";
 
 type StrapiPagination = {
   page: number;
@@ -174,6 +177,11 @@ const parseRedirectItems = (
     if (!from || (!to && code !== 410)) continue;
     const key = normalizeFrom(from);
     if (!key) continue;
+    // Shopify-Altlast {"from":"/tr/","code":410} traf die tuerkische Startseite.
+    if (isProtectedRedirectPath(key)) {
+      console.warn(`[redirects] Eintrag fuer Live-Startseite ignoriert: ${from}`);
+      continue;
+    }
     // Abgeglichen wird nur der Pfad. Ein Eintrag mit Query in "from"
     // (/collections/all?page=6) darf den Eintrag ohne Query nicht ersetzen.
     if (from.includes("?") && map.has(key)) continue;
@@ -262,6 +270,10 @@ const fetchStrapiRedirects = async (): Promise<
       if (!attributes || typeof attributes !== "object") continue;
       const key = normalizeFrom((attributes as RedirectAttributes).from);
       if (!key) continue;
+      if (isProtectedRedirectPath(key)) {
+        console.warn(`[redirects] Strapi-Eintrag fuer Live-Startseite ignoriert: ${key}`);
+        continue;
+      }
       map.set(key, attributes as RedirectAttributes);
     }
 
@@ -357,6 +369,7 @@ export const resolveRedirect = async (
   try {
     const normalizedPath = normalizePath(pathname);
     if (shouldSkipPath(normalizedPath)) return null;
+    if (isProtectedRedirectPath(normalizedPath)) return null;
 
     const redirectMap = await getRedirectMap();
     const match = redirectMap.get(normalizedPath);
