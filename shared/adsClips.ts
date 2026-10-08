@@ -246,17 +246,14 @@ const H = {
   infusionB: heroClip("hero-infusion-b-7s", crop(0.55, [[0.72, 0.82]])),
 };
 
-// 08.10.2026 entfernt: Clips mit eingebranntem "BOTOX" (stirn-karussell-10,
-// stirn-karussell-14, feedback-koeln-1, feedback-mr-1, feedback-recklinghausen-1,
-// hyperhidrose-karussell-1 - Laienwerbung fuer ein verschreibungspflichtiges
-// Mittel, HWG) und mit Ergebnisdarstellung (lippen-karussell-7,
-// fio-lippen-2-karussell-12s - Vorher-Nachher-Verbot). Nicht wieder aufnehmen.
 // Muskelrelaxans Stirn/Zornesfalte/Kraehenfuesse (Benjamin: dieselben Videos
 // fuer alle drei Zonen, wo er sie so markiert hat).
 const MR = {
   injectionMan: clip("stirn-karussell-2", 209, "Behandlung: die Zonen werden vorher erklärt"),
   marking: clip("stirn-karussell-8", 831, "Einzeichnen und behandeln"),
+  threeZones: clip("stirn-karussell-10", 843, "Kundin direkt nach der Behandlung"),
   refresh: clip("stirn-karussell-9", 839, "Stirn und Zornesfalte auffrischen"),
+  koeln: clip("stirn-karussell-14", 1080, "Kundin in Köln", "koeln"),
   trio: clip("stirn-karussell-6", 266, "Kundinnen nach der Behandlung"),
   firstTime: clip("stirn-karussell-12", 848, "Zum ersten Mal – trotz Angst vor Spritzen"),
   patricia: clip("stirn-karussell-15", 1143, "Krähenfüße und Zornesfalte"),
@@ -267,16 +264,20 @@ const MR = {
 // Kundenfeedback (Benjamins Notiz "Kundenfeedback", 01.10.2026), 12 s mit
 // Ton; Stadtname im Bild -> nur in dieser Stadt.
 const FB = {
+  mrKoeln: clip("feedback-koeln-1", 801, "Kundin in Köln", "koeln"),
+  mrRecklinghausen: clip("feedback-recklinghausen-1", 802, "Kundin in Recklinghausen", "recklinghausen"),
+  mr1: clip("feedback-mr-1", 874, "Erster Eindruck: sehr professionell"),
   mr2: clip("feedback-mr-2", 862, "Kundin erzählt (Englisch)"),
   mrTrio: MR.trio,
   lippen1: clip("lippen-karussell-9", 1073, "Zwei Cousinen erzählen"),
+  lippen2: clip("fio-lippen-2-karussell-12s", "fio-lippen-2", "Ärztin ihres Vertrauens gefunden"),
   prpLeipzig: clip("feedback-leipzig-prp-1", 808, "Kundin in Leipzig", "leipzig"),
   // Strapi 874, 0-10,1 s: endet vor "... originales Botox verwendet", nennt
   // also keine Behandlung - passt auf jede Seite (Benjamin 05.10.2026)
   allgemein: clip("feedback-allgemein-1", 874, "Erster Eindruck: sehr professionell"),
 };
-const FEEDBACK_MR = [FB.allgemein, FB.mrTrio, FB.mr2];
-const FEEDBACK_LIPPEN = [FB.lippen1, FB.allgemein];
+const FEEDBACK_MR = [FB.mrKoeln, FB.mrRecklinghausen, FB.mr1, FB.mrTrio, FB.mr2];
+const FEEDBACK_LIPPEN = [FB.lippen1, FB.lippen2];
 
 const LIPPENKORR = [
   clip("lippenkorr-karussell-1", 206, "Woanders behandelt, jetzt korrigiert"),
@@ -305,17 +306,17 @@ const CLIPS: Record<string, AdsClipSet> = {
   "muskelrelaxans/stirnfalte": {
     heroes: [H.stirn],
     // Benjamin 07.10.2026: vor allem Frauen als Kundinnen -> Clip mit Mann ans Ende
-    carousel: [MR.marking, MR.refresh, MR.trio, MR.injectionMan],
+    carousel: [MR.marking, MR.refresh, MR.threeZones, MR.koeln, MR.trio, MR.injectionMan],
     feedback: FEEDBACK_MR,
   },
   "muskelrelaxans/zornesfalte": {
     heroes: [H.stirn],
-    carousel: [MR.marking, MR.firstTime, MR.zornesKoeln, MR.zornesMan],
+    carousel: [MR.marking, MR.firstTime, MR.zornesKoeln, MR.threeZones, MR.koeln, MR.zornesMan],
     feedback: FEEDBACK_MR,
   },
   "muskelrelaxans/kraehenfuesse": {
     heroes: [H.kraehen],
-    carousel: [MR.marking, MR.patricia, MR.trio],
+    carousel: [MR.marking, MR.patricia, MR.threeZones, MR.koeln, MR.trio],
     feedback: FEEDBACK_MR,
   },
   "muskelrelaxans/browlift": {
@@ -355,13 +356,14 @@ const CLIPS: Record<string, AdsClipSet> = {
   },
   "muskelrelaxans/hyperhidrose-starkes-schwitzen": {
     heroes: [H.hyperhidrose],
-    carousel: [],
+    carousel: [clip("hyperhidrose-karussell-1", 833, "Ärztin erklärt die Behandlung der Achseln")],
     feedback: FEEDBACK_MR,
   },
   // ---------------------------------------------------------------- Hyaluron
   "hyaluron/lippen-aufspritzen": {
     heroes: [H.lippen],
     carousel: [
+      clip("lippen-karussell-7", 857, "Lippen mit 0,5 ml Hyaluron"),
       clip("lippen-karussell-6", 854, "Direkt nach der Behandlung"),
       clip("lippen-karussell-3", 221, "Die erste Lippenbehandlung", "leipzig"),
       clip("lippen-karussell-2", 217, "Kundin in Mönchengladbach", "moenchengladbach"),
