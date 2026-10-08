@@ -130,6 +130,7 @@ export function useCalendlyDialog() {
       disposeBookingPrewarm();
       openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, {
         abVariant,
+        abSource,
         treatmentContext,
         offer,
         lead: options?.prefill?.leadToken,
