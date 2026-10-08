@@ -986,12 +986,25 @@ const editorialEyebrow = computed(() => {
   return [label, city].filter(Boolean).join(" · ") || null;
 });
 const editorialHeadline = computed(() => editorialCopy.value?.lines.map(withCity) ?? null);
+// Oeffnungszeiten fuer den Hero nur, wenn sie in eine kurze Angabe passen
+// ("Mo–Sa 10–20 Uhr"); gestaffelte Zeiten stehen weiter in der Vertrauenszeile.
+const heroHours = computed(() => {
+  const parts = (hours.value ?? "").split(" · ").filter((t) => !/geschlossen/.test(t));
+  return parts.length === 1 ? parts[0] : null;
+});
+// Wettbewerbsvergleich 08.10.2026: Kalia, Sinis, Beethoven, Yousthetics und
+// Faceland nehmen 30-120 EUR fuer die Beratung, Walk-in bis 20 Uhr bietet
+// sonst niemand - beides gehoert nach oben, nicht erst in die Vertrauenszeile.
 const heroNote = computed(() =>
-  isB.value
+  (isB.value
     ? ["Nur Ärztinnen und Ärzte", "Zufriedenheitsgarantie", "auch ohne Termin"]
-        .map((v) => v.replace(/ /g, "\u00a0"))
-        .join(" · ")
-    : null,
+    : [
+        "Beratung ohne Aufpreis",
+        heroHours.value ? `auch ohne Termin, ${heroHours.value}` : "auch ohne Termin",
+      ]
+  )
+    .map((v) => v.replace(/ /g, "\u00a0"))
+    .join(" · "),
 );
 
 /** "ab 119,99 €*" / "ab 79,99 € pro Zone*" (ohne "Neukunden"); B: "ab 149,99 €". */
@@ -1009,11 +1022,16 @@ const heroPriceLine = computed(() => {
   if (!p) return null;
   return {
     main: `${p[0]!.toUpperCase()}${p.slice(1)}`.replace(/\s/g, "\u00a0"),
+    // "ab 79,99 € pro Zone" gilt ab zwei Zonen (Fussnote) - das steht jetzt
+    // gleich daneben, sonst wirkt der Preiskasten (1 Zone 119,99 €) wie ein
+    // Widerspruch (Wettbewerbsvergleich 08.10.2026).
     extra: isB.value
       ? null
-      : editorial.value
-        ? `${discountPct.value}\u00a0% Neukunden-Vorteil`
-        : `– mit ${discountPct.value}\u00a0% Neukundenrabatt`,
+      : `${/pro\s+Zone/.test(p) ? "bei 2\u00a0Zonen · " : ""}${
+          editorial.value
+            ? `${discountPct.value}\u00a0% Neukunden-Vorteil`
+            : `– mit ${discountPct.value}\u00a0% Neukundenrabatt`
+        }`,
   };
 });
 const stickyPrice = computed(() => shortPrice.value);
