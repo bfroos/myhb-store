@@ -34,9 +34,12 @@
         class="reviewsBadge__icons__value"
         :aria-label="`${t('common.rating')}: ${ratingDisplay}`"
       >
+        <!-- Der Ausschnitt 1.5 2.5 steckt im Symbol (#rb-value-bg). Hier muss
+             der viewBox bei 0 0 beginnen, sonst sitzt die Rosette versetzt
+             und wird oben abgeschnitten. -->
         <svg
           class="reviewsBadge__icons__value-bg"
-          viewBox="1.5 2.5 21 19"
+          viewBox="0 0 21 19"
           aria-hidden="true"
         >
           <use href="#rb-value-bg" />
