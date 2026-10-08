@@ -28,6 +28,7 @@
       :v2-price-line="heroPriceLine"
       :v2-sticky-price="stickyPrice"
       :v2-note="heroNote"
+      :v2-next-slot="nextSlotLabel"
       :v2-design="design"
       :v2-desktop="desktopLayout"
       :v2-editorial="editorial"
@@ -526,6 +527,9 @@
           <UiAtomBaseButton v-if="routeHref" as="a" :href="routeHref" target="_blank" rel="noopener noreferrer" variant="secondary" size="lg" class="v2-btn">
             <IconMapPin size="18" aria-hidden="true" /> Route planen
           </UiAtomBaseButton>
+          <UiAtomBaseButton v-if="whatsAppHref" as="a" :href="whatsAppHref" target="_blank" rel="noopener noreferrer" variant="secondary" size="lg" class="v2-btn" data-track-placement="v2_location_whatsapp" @click="trackWhatsApp('location')">
+            <IconBrandWhatsapp size="18" aria-hidden="true" /> WhatsApp
+          </UiAtomBaseButton>
         </div>
       </div>
     </UiLayoutSectionBlock>
@@ -540,6 +544,14 @@
             <p class="v2-faq__a"><PagesTreatmentAdsV2Emph :parts="emph(faq.answer)" /></p>
           </details>
         </div>
+        <!-- Wettbewerbsvergleich 08.10.2026: 6 von 12 Wettbewerbern bieten
+             WhatsApp; Antworten kommen ueber Superchat (zentrale Nummer). -->
+        <p v-if="whatsAppHref" class="v2-faq__chat">
+          Noch eine Frage?
+          <a :href="whatsAppHref" target="_blank" rel="noopener noreferrer" data-track-placement="v2_faq_whatsapp" @click="trackWhatsApp('faq')">
+            <IconBrandWhatsapp size="18" aria-hidden="true" /> Schreib uns per WhatsApp
+          </a>
+        </p>
         <template v-if="aftercare.length">
           <h2 class="v2-h2 v2-h2--sub">{{ H.aftercare }}</h2>
           <ul class="v2-aftercare" role="list">
@@ -581,6 +593,7 @@ import {
   IconHourglass,
   IconInfoCircle,
   IconMapPin,
+  IconBrandWhatsapp,
   IconMessageCircle,
   IconMoodSmile,
   IconPhone,
@@ -888,6 +901,37 @@ function trackVoucherClick() {
 const discountPct = computed(
   () => globals.value?.ecommerce?.newsletterDiscountPercentage || DEFAULT_NEW_CUSTOMER_DISCOUNT_PCT,
 );
+
+// Naechster freier Termin (08.10.2026): im Browser nachgeladen, weil die
+// Seite ISR-gecacht ist. Standort = location= aus der App-Buchungs-URL.
+const nextSlotQuery = computed(() => {
+  let loc = "";
+  try {
+    loc = new URL(String(props.hero.appBookingUrl ?? ""), "https://x").searchParams.get("location") ?? "";
+  } catch {}
+  const treatment = props.hero.appTreatmentSlug || pathKey.value.split("/").pop() || "";
+  return loc && treatment ? { location: loc, treatment } : null;
+});
+const { data: nextSlot } = useFetch<{ date?: string; time?: string; none?: boolean }>("/api/naechster-termin", {
+  query: computed(() => nextSlotQuery.value ?? {}),
+  server: false,
+  lazy: true,
+  immediate: !!nextSlotQuery.value,
+  default: () => ({ none: true }),
+});
+const nextSlotLabel = computed(() => {
+  const s = nextSlot.value;
+  if (!s?.date || !s.time || props.bundesweit) return null;
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Berlin" }).format(new Date());
+  const tomorrow = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Berlin" }).format(new Date(Date.now() + 86_400_000));
+  const day =
+    s.date === today
+      ? "heute"
+      : s.date === tomorrow
+        ? "morgen"
+        : new Intl.DateTimeFormat("de-DE", { weekday: "short", day: "2-digit", month: "2-digit", timeZone: "UTC" }).format(new Date(`${s.date}T12:00:00Z`));
+  return `Nächster Termin: ${day} ab\u00a0${s.time}\u00a0Uhr`;
+});
 
 // Alle Buchungsknoepfe: dieselbe Aktion und dieselben Daten wie der Hero
 // -> derselbe Dialog, dasselbe click_booking (A/B-Weiche unveraendert).
@@ -1328,6 +1372,19 @@ const phoneHref = computed(() => {
   const digits = String(phoneNumber.value ?? "").replace(/[^\d+]/g, "");
   return digits ? `tel:${digits}` : null;
 });
+// WhatsApp ueber Superchat: Nummer aus Strapi (contact.whatsAppNumber), mit
+// vorbelegtem Text, damit Superchat Standort und Behandlung erkennt.
+const whatsAppHref = computed(() => {
+  const digits = String((props.location as any)?.contact?.whatsAppNumber ?? "").replace(/\D/g, "");
+  if (!digits) return null;
+  const what = terms.value?.label ?? "einer Behandlung";
+  const where = props.location?.city?.name ?? "";
+  const text = `Hallo, ich habe eine Frage zu ${what}${where ? ` (${where})` : ""}.`;
+  return `https://wa.me/${digits}?text=${encodeURIComponent(text)}`;
+});
+function trackWhatsApp(placement: string) {
+  trackEvent("whatsapp_click", { placement, location: locSlug });
+}
 const routeHref = computed(() => {
   const c: any = (props.location as any)?.coordinates;
   if (c?.lat && c?.long) {
@@ -1382,6 +1439,21 @@ const routeHref = computed(() => {
   flex-direction: column;
   gap: var(--space-300);
   margin-top: var(--space-500);
+}
+
+.v2-faq__chat {
+  margin: var(--space-300) 0 0;
+  font-size: var(--font-sm);
+}
+
+.v2-faq__chat a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-100);
+  font-weight: var(--font-bold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  color: inherit;
 }
 
 .v2-actions--row {
