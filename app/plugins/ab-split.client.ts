@@ -39,7 +39,7 @@ import {
   type AbSource,
   type BookingVariant,
 } from "~/lib/bookingAbTest";
-import { mirrorFunnelEvent } from "~/lib/firstPartyFunnel";
+import { mirrorFunnelEvent, setFunnelDefaults } from "~/lib/firstPartyFunnel";
 
 export default defineNuxtPlugin((nuxtApp) => {
   if (import.meta.server) return;
@@ -54,6 +54,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   // steht fuer alle auf `app`, damit Tags, die sie lesen, dasselbe sehen wie
   // die Klick-Ereignisse. Ein alter Calendly-Bucket wird umgeschrieben.
   if (abConfig.appOnly) {
+    // Auch ohne Einwilligung (kein Cookie) traegt funnel_events Arm und Quelle.
+    setFunnelDefaults({ variant: "app", source: siteMode });
     const setzeApp = () => {
       const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
       w.dataLayer = w.dataLayer || [];

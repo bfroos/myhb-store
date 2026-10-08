@@ -15,7 +15,7 @@
  * `fp_sid` an das App-Buchungsfenster (useAppBookingDialog), damit Klick hier
  * und Schritte dort zur selben Sitzung gehoeren. Fire-and-forget.
  */
-import { readAbBucket, readAbSource } from "~/lib/bookingAbTest";
+import { readAbBucket, readAbSource, type AbSource, type BookingVariant } from "~/lib/bookingAbTest";
 
 const ENDPUNKT = "https://forgsirmbzkxbblepscr.supabase.co/functions/v1/track-funnel";
 const SID_KEY = "mhb_fp_sid";
@@ -42,6 +42,19 @@ const UMBENANNT: Record<string, string> = {
 };
 
 let sidImSpeicher: string | undefined;
+
+/**
+ * Arm und Quelle, wenn kein Cookie da ist. Seit dem Ende des A/B-Tests
+ * (07.10.2026, #281) bucht jeder ueber die App, auch ohne
+ * Marketing-Einwilligung — dann gibt es aber kein Cookie, und Klicks liefen
+ * ohne `ab_source` ein: ads (go.) und seo (www) waren nicht mehr zu trennen.
+ * Das Deployment ist keine Angabe ueber die Person; plugins/ab-split setzt es.
+ */
+let standard: { variant?: BookingVariant; source?: AbSource } = {};
+
+export function setFunnelDefaults(werte: { variant?: BookingVariant; source?: AbSource }): void {
+  standard = werte;
+}
 
 const neueSid = (): string => {
   try {
@@ -82,8 +95,8 @@ export function mirrorFunnelEvent(payload: Record<string, unknown>): void {
       client_at: new Date().toISOString(),
       page_path: window.location.pathname,
       // ab_assigned traegt den frisch gezogenen Arm selbst; sonst gilt das Cookie.
-      ab_variant: event === "ab_assigned" ? text(payload.ab_variant) : readAbBucket(),
-      ab_source: event === "ab_assigned" ? text(payload.ab_source) : readAbSource(),
+      ab_variant: event === "ab_assigned" ? text(payload.ab_variant) : readAbBucket() ?? standard.variant,
+      ab_source: event === "ab_assigned" ? text(payload.ab_source) : readAbSource() ?? standard.source,
       booking_type: text(payload.booking_type),
       ab_fallback: payload.ab_fallback === true,
       ab_bypass: payload.ab_bypass === true,
