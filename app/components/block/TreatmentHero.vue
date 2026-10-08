@@ -167,6 +167,10 @@
                      Preiszeile; "20 % Rabatt sichern" gibt es weiter unten
                      (Preise, Schlussaufruf). -->
               </div>
+              <!-- Naechster freier Termin live aus der App (08.10.2026) -->
+              <p v-if="templateV2 && v2NextSlot" class="hero__v2-next">
+                <span class="hero__v2-next-dot" aria-hidden="true" /> {{ v2NextSlot }}
+              </p>
               <p v-if="templateV2 && v2Note" class="hero__v2-note">
                 <IconShieldCheck v-if="v2Editorial" size="16" aria-hidden="true" /> {{ v2Note }}
               </p>
@@ -338,6 +342,7 @@ const props = withDefaults(
       v2PriceLine?: { main: string; extra?: string | null } | null;
       /** go.-Vorlage v2: kleine Zeile unter dem Knopf (Vertrauen). */
       v2Note?: string | null;
+      v2NextSlot?: string | null;
       /** go.-Vorlage v2: Preis in der mitlaufenden Leiste. */
       v2StickyPrice?: string | null;
       /**
@@ -369,6 +374,7 @@ const props = withDefaults(
     stickyCtaLabel: null,
     v2PriceLine: null,
     v2Note: null,
+    v2NextSlot: null,
     v2StickyPrice: null,
     v2Design: "v2",
     v2Desktop: false,
@@ -815,6 +821,24 @@ const discountLabel = computed(() => {
 .hero__price-extra {
   font-size: var(--font-md, 1rem);
   line-height: 1.3;
+}
+
+.hero__v2-next {
+  display: flex;
+  align-items: center;
+  gap: var(--space-200);
+  margin: 0;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+}
+
+.hero__v2-next-dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1f9d55;
+  box-shadow: 0 0 0 3px rgb(31 157 85 / 20%);
 }
 
 /* v2: kleine Vertrauenszeile unter dem Knopf */
