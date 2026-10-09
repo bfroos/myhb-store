@@ -39,13 +39,13 @@
             class="reviews__header reviews__header--floating"
             :class="themeClass(1)"
           >
-            <!-- go. (#186): nur EINE H2 im HTML. Die Desktop-Ueberschrift ist
-                 dort reine Optik; Screenreader lesen die (auf Desktop
-                 unsichtbare) H2 oben. -->
-            <p v-if="isAdsMode" class="reviews__title" aria-hidden="true">
+            <!-- Nur EINE H2 im HTML (go. #186, www D-01 08.10.2026: vorher
+                 stand die Ueberschrift auf www zweimal als H2 im Quelltext).
+                 Die Desktop-Ueberschrift ist reine Optik; Screenreader und
+                 Crawler lesen die (auf Desktop unsichtbare) H2 oben. -->
+            <p class="reviews__title" aria-hidden="true">
               {{ displayHeadline }}
             </p>
-            <h2 v-else :id="desktopHeadingId">{{ displayHeadline }}</h2>
             <div>
               <SharedButton :button="ctaButton" />
             </div>
@@ -85,7 +85,6 @@ const props = defineProps<BlockReviewsDto>();
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
 const mobileHeadingId = useId();
-const desktopHeadingId = useId();
 
 const reviews = computed(() => (props.reviews ?? []) as ReviewDto[]);
 
@@ -211,12 +210,8 @@ function themeClass(index: number) {
     justify-content: space-between;
   }
 
+  /* H2 bleibt im Accessibility-Tree, nur unsichtbar (vorher nur go.). */
   .reviews__header--static {
-    display: none;
-  }
-
-  /* go.: H2 bleibt im Accessibility-Tree, nur unsichtbar. */
-  .reviews--ads .reviews__header--static {
     display: block;
     position: absolute;
     width: 1px;
@@ -228,13 +223,16 @@ function themeClass(index: number) {
     white-space: nowrap;
   }
 
-  .reviews--ads .reviews__static-cta {
+  .reviews__static-cta {
     display: none;
   }
 }
 
+/* Gleiche Optik wie die globale h2 (main.css). */
 .reviews__title {
   margin: 0;
+  hyphens: auto;
+  overflow-wrap: break-word;
   font-size: var(--font-4xl);
   line-height: var(--line-4xl);
   font-weight: var(--font-bold);
