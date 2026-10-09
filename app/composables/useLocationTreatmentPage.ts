@@ -397,6 +397,7 @@ export function useLocationTreatmentPage() {
     breadcrumbItems,
     locationLocalizations,
     cityLocalizations,
+    treatmentPageLocalizations,
     treatmentPage,
     location,
     seo: seoWithFallback,
