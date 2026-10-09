@@ -75,7 +75,9 @@
       "careers": "Carrière",
       "blog": "Blog",
       "aboutUs": "Over ons",
-      "myAccount": "Mijn account / MY App"
+      "myAccount": "Mijn account / MY App",
+      "preferredSourceTitle": "Google",
+      "preferredSource": "MY HEALTH & BEAUTY toevoegen als voorkeursbron op Google"
     },
     "meta": {
       "privacyPolicy": "Privacy",

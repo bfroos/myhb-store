@@ -76,7 +76,9 @@
       "careers": "Careers",
       "blog": "Blog",
       "aboutUs": "About us",
-      "myAccount": "My account / MY App"
+      "myAccount": "My account / MY App",
+      "preferredSourceTitle": "Google",
+      "preferredSource": "Add MY HEALTH & BEAUTY as a preferred source on Google"
     },
     "meta": {
       "privacyPolicy": "Privacy Policy",
