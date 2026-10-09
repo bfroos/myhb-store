@@ -206,12 +206,12 @@ Existing URL;Status;Seitentyp;Richtiger Standort;Final Target URL;Maßnahme;Hops
 /blogs/news/botox-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden;301;Blog-Altlink;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects-koeln.json;200;
 /blogs/news/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden;301;Blog-Altlink;–;/blog/lemon-bottle-behandlungen-ohne-termin-bei-my-health-beauty-in-den-koln-arcaden;301 unverändert;1;redirects.json;200;
 /en/blogs/news/botox-treatments-without-appointment-at-my-health-beauty-in-the-cologne-arcaden;301;Blog-Altlink;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects-koeln.json;200;
-/en/locations/koeln/koeln-arcaden;200;Sprachversion EN;Arcaden;/en/locations/koeln/koeln-arcaden;behalten;0;–;200;
-/en/locations/koeln/koeln-arcaden/botox;200;Sprachversion EN;Arcaden;/en/locations/koeln/koeln-arcaden/botox;behalten;0;–;200;
-/en/locations/koeln/koeln-arcaden/schoenheitsoperationen/haartransplantation;200;Sprachversion EN;MediaPark;/en/locations/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 neu;1;standortregel;200;vorher Duplikat 200
-/en/locations/koeln/mediapark-klinik;200;Sprachversion EN;MediaPark;/en/locations/koeln/mediapark-klinik;behalten;0;–;200;
-/en/locations/koeln/mediapark-klinik/botox;200;Sprachversion EN;Arcaden;/en/locations/koeln/koeln-arcaden/botox;301 neu;1;standortregel;200;vorher Duplikat 200
-/en/locations/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;200;Sprachversion EN;MediaPark;/en/locations/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;behalten;0;–;200;
+/en/locations/koeln/koeln-arcaden;200;Sprachversion EN;Arcaden;/standorte/koeln/koeln-arcaden;301 neu;1;TSEO-01;200;TSEO-01: Standortseiten nur Deutsch
+/en/locations/koeln/koeln-arcaden/botox;200;Sprachversion EN;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 neu;1;TSEO-01;200;TSEO-01: Standortseiten nur Deutsch
+/en/locations/koeln/koeln-arcaden/schoenheitsoperationen/haartransplantation;200;Sprachversion EN;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 neu;1;TSEO-01 + standortregel;200;TSEO-01: Standortseiten nur Deutsch; Middleware leitet direkt auf den bedienenden Standort; vorher Duplikat 200
+/en/locations/koeln/mediapark-klinik;200;Sprachversion EN;MediaPark;/standorte/koeln/mediapark-klinik;301 neu;1;TSEO-01;200;TSEO-01: Standortseiten nur Deutsch
+/en/locations/koeln/mediapark-klinik/botox;200;Sprachversion EN;Arcaden;/standorte/koeln/koeln-arcaden/botox;301 neu;1;TSEO-01 + standortregel;200;TSEO-01: Standortseiten nur Deutsch; Middleware leitet direkt auf den bedienenden Standort; vorher Duplikat 200
+/en/locations/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;200;Sprachversion EN;MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation;301 neu;1;TSEO-01;200;TSEO-01: Standortseiten nur Deutsch
 /en/pages/barbie-botox-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox/barbie-botox;301 unverändert;1;redirects.json;200;
 /en/pages/botox-cologne;301;Alt-URL Shopify (Sprache);Arcaden;/standorte/koeln/koeln-arcaden/botox;301 unverändert;1;redirects.json;200;
 /en/pages/breast-enlargement-cologne;301;Alt-URL Shopify (Sprache);MediaPark;/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung;301 Ziel korrigiert;1;redirects-koeln.json;200;vorher Startseite

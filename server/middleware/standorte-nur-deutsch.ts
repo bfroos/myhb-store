@@ -12,6 +12,12 @@
  * deutscher). Unbekannte Slugs bleiben unveraendert. Die Uebersicht
  * (/en/locations ohne weiteres Segment) bleibt bestehen.
  *
+ * Filial-Behandlungsseiten landen in einem Hop auf der finalen Seite: Gehoert
+ * die Behandlung in der Stadt zu einem anderen Standort (Konsolidierung Koeln,
+ * myhb-cms locationTreatmentRouting), liefert der CMS-Endpunkt der Seite
+ * `data.redirect`, und die Middleware leitet direkt dorthin statt erst auf die
+ * deutsche Seite, die dann ein zweites Mal umleiten wuerde.
+ *
  * Faellt Strapi aus, leitet die Middleware mit unveraenderten Slugs um; das
  * trifft fuer alle Slugs ausser Koeln ohnehin die richtige Seite.
  */
@@ -68,6 +74,42 @@ async function loadMap(
   return map;
 }
 
+// Konsolidierungsziel je deutscher Filial-Behandlungsseite (null = keins).
+const targetCache = new Map<string, { at: number; target: string | null }>();
+
+/** Finale deutsche URL, wenn der Standort die Behandlung abgibt (sonst null). */
+async function consolidatedTarget(path: string): Promise<string | null> {
+  const hit = targetCache.get(path);
+  if (hit && Date.now() - hit.at < TTL_MS) return hit.target;
+  const strapiUrl = useRuntimeConfig().public.strapiUrl?.replace(/\/+$/, "");
+  if (!strapiUrl) return null;
+  try {
+    const res = await $fetch<{
+      data?: {
+        redirect?: {
+          citySlug?: string;
+          locationSlug?: string;
+          treatmentPathKey?: string;
+        };
+      };
+    }>(`${strapiUrl}/api/treatment-pages/${encodeURI(path)}`, {
+      query: { locale: "de" },
+      timeout: 5000,
+    });
+    const r = res.data?.redirect;
+    const target =
+      r?.citySlug && r.locationSlug && r.treatmentPathKey
+        ? `/standorte/${r.citySlug}/${r.locationSlug}/${r.treatmentPathKey}`
+        : null;
+    if (targetCache.size > 2000) targetCache.clear();
+    targetCache.set(path, { at: Date.now(), target });
+    return target;
+  } catch {
+    // 404 oder Strapi-Ausfall: auf die deutsche Seite, die entscheidet selbst.
+    return null;
+  }
+}
+
 async function getMaps(): Promise<SlugMaps | null> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.maps;
   const strapiUrl = useRuntimeConfig().public.strapiUrl?.replace(/\/+$/, "");
@@ -106,9 +148,9 @@ export default defineEventHandler(async (event) => {
     segments.push(maps?.pathKey.get(pathKey) ?? pathKey);
   }
 
-  return sendRedirect(
-    event,
-    `/standorte/${segments.join("/")}${search || ""}`,
-    301,
-  );
+  const target =
+    (rest.length && (await consolidatedTarget(segments.join("/")))) ||
+    `/standorte/${segments.join("/")}`;
+
+  return sendRedirect(event, `${target}${search || ""}`, 301);
 });
