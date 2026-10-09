@@ -47,9 +47,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, inject } from "vue";
 import { IconArrowRight } from "@tabler/icons-vue";
 import type { SharedButtonDto } from "~/lib/strapi/dto/components";
+import { resolveTreatmentTilePath } from "#shared/locationTreatmentLinks";
+import { TREATMENT_LINK_CONTEXT } from "~/lib/treatmentLinkContext";
 
 interface PriceItem {
   label: string;
@@ -83,6 +85,10 @@ const props = withDefaults(defineProps<{
   footnote: "",
 });
 
+// Auf Standort-Behandlungsseiten: erst lokal, dann Geschwister-Standort, dann
+// national (wie die Kacheln). Sonst /behandlungen (lib/treatmentLinkContext).
+const linkContext = inject(TREATMENT_LINK_CONTEXT, undefined);
+
 // Ausgewählte Behandlungen → Preiszeilen
 const items = computed<PriceItem[]>(() =>
   (props.treatments ?? [])
@@ -92,7 +98,10 @@ const items = computed<PriceItem[]>(() =>
       price: (t.priceInEuroCent ?? 0) / 100,
       from: t.isStartingPrice ?? false,
       href: t.treatmentPage?.pathKey
-        ? `/behandlungen/${t.treatmentPage.pathKey}`
+        ? resolveTreatmentTilePath({
+            ...linkContext?.value,
+            pathKey: t.treatmentPage.pathKey,
+          })
         : undefined,
     })),
 );

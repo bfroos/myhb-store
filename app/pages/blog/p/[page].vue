@@ -41,6 +41,10 @@ const {
 const pageLoaded = await fetchPage(pageParam.value);
 
 if (pageLoaded) {
+  // TSEO-Regression 07.10.2026: Blog-Folgeseiten sind je Sprache verschiedene Listen
+  // (Artikel- und Seitenzahl weichen ab, Kategorie-Slugs sind uebersetzt).
+  // Kein Alternate auf Seite n einer anderen Sprache, die es nicht geben muss.
+  usePageI18nSelfOnly();
   await setPageSeo(seo.value);
 }
 

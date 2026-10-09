@@ -150,10 +150,13 @@ import {
   ImageFormat,
   ImageBreakpoint,
 } from "~/lib/strapi/dto/enums";
+import { resolveTreatmentTilePath } from "#shared/locationTreatmentLinks";
+import { TREATMENT_LINK_CONTEXT } from "~/lib/treatmentLinkContext";
 
 const props = defineProps<BlockTreatmentPlanDto>();
 const { t } = useI18n();
 const { isAdsMode } = useSiteModeFlags();
+const linkContext = inject(TREATMENT_LINK_CONTEXT, undefined);
 
 const hasContent = computed(() => (props.content?.length ?? 0) > 0);
 
@@ -202,7 +205,10 @@ function getTreatmentLinkPath(
     ? treatment.treatmentAdsPage?.pathKey
     : treatment.treatmentPage?.pathKey;
 
-  return pathKey ? `/behandlungen/${pathKey}` : undefined;
+  if (!pathKey) return undefined;
+  // Standort-Behandlungsseite (www): erst lokal, dann Geschwister-Standort,
+  // dann national, wie die Kacheln (lib/treatmentLinkContext).
+  return resolveTreatmentTilePath({ ...linkContext?.value, pathKey });
 }
 </script>
 
