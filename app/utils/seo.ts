@@ -4,6 +4,7 @@ import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
 import { stripAdsTemplateV2Preview } from "#shared/adsTemplateV2";
 import { stripAdsOfferB } from "#shared/adsOfferVariant";
 import { isBlockedAdsImageFile } from "#shared/adsMedia";
+import { selectAlternateLocales } from "#shared/hreflang";
 
 /**
  * Fallback share image (Open Graph / Twitter) used when a page has neither a
@@ -112,11 +113,12 @@ export async function setPageSeo(
       .filter(Boolean) as string[];
     const coveredLocales =
       coverage.value?.path === route.path ? coverage.value.locales : null;
-    const alternateLocales = coveredLocales
-      ? localeCodes.filter(
-          (code) => code === currentLocale || coveredLocales.includes(code),
-        )
-      : localeCodes;
+    // Regel unveraendert, nur nach shared/hreflang.ts verschoben (Unit-Tests).
+    const alternateLocales = selectAlternateLocales(
+      localeCodes,
+      currentLocale,
+      coveredLocales,
+    );
 
     const defaultLocale = fallbackLocale.value as string;
     const defaultLocalePath = alternateLocales.includes(defaultLocale)
