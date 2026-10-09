@@ -23,6 +23,7 @@
     :headline="treatmentLocationTeasersHeadline"
     :locations="treatmentLocations"
     :treatment-path-key="treatmentPage?.pathKey"
+    :treatment-name="isAdsMode ? undefined : treatmentPage?.name"
     :show-filters="false"
   />
   <BlockRenderer v-if="blocks" :blocks="blocks" />

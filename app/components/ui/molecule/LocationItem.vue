@@ -1,12 +1,19 @@
 <template>
   <div class="locationTile" :class="classes">
+    <!-- D-02: Bild-Link fuehrt zum selben Ziel wie der Titel. Fuer Tastatur
+         und Screenreader nur EIN Link je Kachel (der Titel); der Bild-Link ist
+         ausgeblendet, bleibt fuer Maus/Touch klickbar. -->
     <NuxtLinkLocale
       :to="buildLocationPath(item)"
       class="locationTile__imageLink"
+      tabindex="-1"
+      aria-hidden="true"
+      @click="handleDetailsClick"
     >
       <UiAtomMediaPicture
         v-if="item.buildingImage && isMediaImage(item.buildingImage)"
         :media="item.buildingImage"
+        :alt="imageAlt"
         :sources="{
           [ImageBreakpoint.SMALL]: ImageFormat.SMALL,
         }"
@@ -16,7 +23,20 @@
     <div class="locationTile__content">
       <div class="locationTile__contactInfo">
         <div class="locationTitle__header">
-          <b v-if="item.city" class="locationTile__title">{{ title }}</b>
+          <!-- D-02: Auf Behandlungsseiten ist der Titel der Link der Kachel
+               (sprechender Linktext, z. B. "Lippen aufspritzen Berlin").
+               Sonst (Buchungsdialog, Standortsuche, Standortseiten) bleibt er
+               reiner Text, damit ein Tipp auf den Namen nicht aus dem
+               Buchungsweg fuehrt. -->
+          <NuxtLinkLocale
+            v-if="item.city && treatmentName"
+            :to="buildLocationPath(item)"
+            class="locationTile__titleLink"
+            @click="handleDetailsClick"
+          >
+            <b class="locationTile__title">{{ title }}</b>
+          </NuxtLinkLocale>
+          <b v-else-if="item.city" class="locationTile__title">{{ title }}</b>
           <span
             v-if="
               item.distanceInKilometers &&
@@ -98,7 +118,7 @@
             :to="buildLocationPath(item)"
             @click="handleDetailsClick"
           >
-            {{ $t("cta.details") }}
+            {{ $t("cta.details") }}<span class="sr-only"> – {{ title }}</span>
           </UiAtomBaseButton>
         </UiMoleculeButtonGroup>
       </div>
@@ -123,6 +143,10 @@ import {
 import { isMediaImage } from "~/utils/media";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
 import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
+import {
+  locationTeaserImageAlt,
+  locationTeaserTitle,
+} from "#shared/locationTeaserLinks";
 
 const { locale, locales } = useI18n();
 const { formatInteger, localeIso } = useFormatInteger();
@@ -140,6 +164,11 @@ const props = withDefaults(
     onBook?: () => void;
     onBeforeNavigate?: () => void;
     to?: string;
+    /**
+     * D-02: Name der Behandlung, wenn die Kachel auf einer Behandlungsseite
+     * steht. Titel wird dann "<Behandlung> <Stadt>".
+     */
+    treatmentName?: string;
   }>(),
   {
     mainInformation: "location",
@@ -225,13 +254,17 @@ const isComingSoon = computed(
   () => props.item.openingStatus === LocationOpenStatus.COMING_SOON,
 );
 
-const title = computed(() => {
-  if (isMainInformationLocation.value) {
-    return props.item.name;
-  }
+const title = computed(() =>
+  locationTeaserTitle(props.item, {
+    treatmentName: props.treatmentName,
+    mainInformation: props.mainInformation,
+  }),
+);
 
-  return props.item.city.name;
-});
+const { brandName } = useBrand();
+const imageAlt = computed(() =>
+  locationTeaserImageAlt(props.item, brandName.value || undefined),
+);
 
 const badgeText = computed(() => {
   const { openingStatus, newOpeningDate } = props.item;
@@ -342,6 +375,16 @@ const buildLocationPath = (item: MoleculeLocationItem) => {
 
 .locationTile__badge span {
   margin-top: var(--space-100);
+}
+
+.locationTile__titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.locationTile__titleLink:hover,
+.locationTile__titleLink:focus-visible {
+  text-decoration: underline;
 }
 
 .locationTile__imageLink {
