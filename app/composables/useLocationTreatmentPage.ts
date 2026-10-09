@@ -1,3 +1,8 @@
+import {
+  resolveTreatmentPrice,
+  treatmentPriceText,
+  type ResolvedTreatmentPrice,
+} from "#shared/treatmentPrice";
 import { mapLocationTreatmentPageFixedBlocks } from "~/lib/strapi/mapper/mapLocationTreatmentPageBlocks";
 import type {
   LocationDto,
@@ -235,15 +240,20 @@ export function useLocationTreatmentPage() {
   const { brandName, brandNameShort } = useBrand();
   const globals = useGlobals();
   
-  // Price fallback: fetch from general treatment page if location treatment has no price
-  const treatmentPrice = ref<number | null>(null);
-  
+  // Preis der Seite (TSEO Preise, 09.10.2026): eine Regel fuer generierten
+  // Titel und Schema, shared/treatmentPrice.ts. Hat die Behandlung der
+  // Standortseite keinen Preis, gilt die der nationalen Seite. Ohne Preis
+  // bleibt es bei null - kein Standardpreis.
+  const treatmentPriceResolved = ref<ResolvedTreatmentPrice | null>(null);
+  const treatmentPrice = computed<number | null>(
+    () => treatmentPriceResolved.value?.cent ?? null,
+  );
+
   async function fetchTreatmentPrice() {
-    // 1. Try location treatment price (usually null)
-    let price = treatmentPage.value?.treatment?.priceInEuroCent 
-      ?? treatmentPage.value?.treatment?.cheapestPriceInEuroCent;
-    
-    // 2. Fallback: Fetch from general treatment page
+    // 1. Preis der Behandlung dieser Seite
+    let price = resolveTreatmentPrice(treatmentPage.value?.treatment);
+
+    // 2. Rueckfall: Behandlung der nationalen Seite
     if (!price && treatmentPage.value?.pathKey) {
       try {
         const { data } = await useStrapiFetch<any>(
@@ -256,14 +266,13 @@ export function useLocationTreatmentPage() {
           }
         );
         
-        price = data.value?.data?.treatment?.priceInEuroCent 
-          ?? data.value?.data?.treatment?.cheapestPriceInEuroCent;
+        price = resolveTreatmentPrice(data.value?.data?.treatment);
       } catch (e) {
-        // Silently fail, use ultimate fallback
+        // Kein Preis - dann steht auch keiner im Titel oder Schema.
       }
     }
-    
-    treatmentPrice.value = price;
+
+    treatmentPriceResolved.value = price;
   }
   
   const generatedSeo = computed(() => {
@@ -338,20 +347,25 @@ export function useLocationTreatmentPage() {
       };
     }
     
-    // SEO mode (www.): Optimized with price
-    const startPrice = treatmentPrice.value 
-      ? Math.floor(treatmentPrice.value / 100) 
-      : 149; // Ultimate fallback
-    
-    const priceTag = `ab ${startPrice}€`;
-    
+    // www.: Preis wie im Hero ("ab 299,99 €"), nur wenn die Seite ihn zeigt
+    // (hero.showPrice). Vorher "ab ${Math.floor(cent / 100)}€" und ohne Preis
+    // fest "ab 149€" (TSEO Preise, Audit 09.10.2026).
+    const priceTag = treatmentPriceText(
+      treatmentPage.value?.hero?.showPrice
+        ? treatmentPriceResolved.value
+        : null,
+      t("common.price.startingPrefix"),
+    );
+
     return {
       metaTitle: t("locations.location.locationTreatment.seo.title", {
         treatmentName,
         city: loc?.city?.name ?? "",
         priceTag,
         brandName: brandName.value, // Use full brand name (MY HEALTH & BEAUTY)
-      }),
+      })
+        .replace(/\s+/g, " ")
+        .trim(),
       metaDescription: t(
         "locations.location.locationTreatment.seo.description",
         {
@@ -388,6 +402,7 @@ export function useLocationTreatmentPage() {
     location,
     seo: seoWithFallback,
     treatmentPrice, // Expose for schema
+    treatmentPriceResolved,
     redirectTarget,
   };
 }

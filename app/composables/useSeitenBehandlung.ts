@@ -3,6 +3,7 @@ import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { resolveAppTreatmentSlug } from "~/composables/useAppBookingDialog";
 import { treatmentPriceLabel } from "~/utils/treatmentPriceLabel";
+import { resolveTreatmentPrice } from "#shared/treatmentPrice";
 
 /**
  * Die Behandlung, die die aktuelle Seite bereits kennt (bfroos/myhb-store#78).
@@ -43,9 +44,9 @@ type Gemerkt = SeitenBehandlung & { pfad: string };
 
 /** Derselbe Preis wie `treatmentPriceLabel`, als Zahl und ohne Anzeigeschalter. */
 function preisInEuro(page: TreatmentPageDto): number | undefined {
-  const cent =
-    page.treatment?.priceInEuroCent || page.treatment?.cheapestPriceInEuroCent;
-  return cent && cent > 0 ? Math.round(cent) / 100 : undefined;
+  // TSEO Preise: dieselbe Regel wie Hero, Titel und Schema.
+  const price = resolveTreatmentPrice(page.treatment);
+  return price ? price.cent / 100 : undefined;
 }
 
 export function useSeitenBehandlung() {
