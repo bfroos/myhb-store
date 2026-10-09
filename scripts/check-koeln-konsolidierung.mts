@@ -125,9 +125,22 @@ async function main() {
   }
 
   // 4. Sitemap
+  // /sitemap.xml ist ein Sitemap-Index: die <loc> der Teil-Sitemaps einsammeln.
+  const readLocs = (xml: string) =>
+    Array.from(xml.matchAll(/<loc>([^<]+)<\/loc>/g)).map((m) => m[1].trim());
   const sitemap = await fetch(`${BASE}/sitemap.xml`).then((r) => r.text());
-  const locs = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g))
-    .map((m) => new URL(m[1]).pathname)
+  const sitemapUrls = /<sitemapindex[\s>]/.test(sitemap)
+    ? (
+        await Promise.all(
+          readLocs(sitemap).map((sub) =>
+            // Teil-Sitemaps relativ zu BASE holen (lokal/Preview statt Prod-Host).
+            fetch(BASE + new URL(sub).pathname).then((r) => r.text()).then(readLocs),
+          ),
+        )
+      ).flat()
+    : readLocs(sitemap);
+  const locs = sitemapUrls
+    .map((u) => decodeURI(new URL(u).pathname))
     .filter((p) => p.startsWith("/standorte/koeln"));
   for (const loc of locs) {
     if (loc.split("/").length > 4 && !finals.has(loc)) errors.push(`[4] Sitemap enthaelt ${loc} (nicht final)`);
