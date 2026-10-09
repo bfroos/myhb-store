@@ -103,3 +103,18 @@ export function usePageI18nParamsFromSources(
 
   coverage.value = { path: route.path, locales: completeLocales };
 }
+
+/**
+ * Seite gibt es nur in der aktuellen Sprache als Entsprechung: kein
+ * Alternate auf andere Sprachen (TSEO-Regression 07.10.2026). Fuer Listen,
+ * deren Inhalt je Sprache verschieden ist (Blog-Folgeseiten /p/[n]), und als
+ * Rueckfall, wenn die Uebersetzungen einer Seite nicht bekannt sind.
+ * Der Sprachumschalter bleibt unveraendert.
+ */
+export function usePageI18nSelfOnly(): void {
+  const route = useRoute();
+  const { locale, fallbackLocale } = useI18n();
+  const coverage = usePageI18nCoverage();
+  const current = (locale.value || fallbackLocale.value) as string;
+  coverage.value = { path: route.path, locales: [current] };
+}
