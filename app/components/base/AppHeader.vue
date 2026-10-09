@@ -18,6 +18,18 @@
               {{ $t("navigation.secondary.myClub") }}
             </a>
           </li>
+          <!-- Desktop: in der oberen Leiste, damit die Hauptzeile dem
+               Behandlungsmenue nicht den Platz nimmt. -->
+          <li v-if="kontoLink.enabled.value">
+            <a
+              :href="kontoLink.href('header')"
+              class="appHeader__konto text-link"
+              @click="kontoLink.trackClick('header')"
+            >
+              <IconUserCircle :size="16" aria-hidden="true" />
+              {{ $t("navigation.header.myAccount") }}
+            </a>
+          </li>
           <li>
             <UiMoleculeLanguageSwitcher />
           </li>
@@ -96,15 +108,6 @@
             }"
             ohne-seiten-kontext
           />
-          <a
-            v-if="kontoLink.enabled.value"
-            :href="kontoLink.href('header')"
-            class="appHeader__konto text-link"
-            @click="kontoLink.trackClick('header')"
-          >
-            <IconUserCircle :size="20" aria-hidden="true" />
-            {{ $t("navigation.header.myAccount") }}
-          </a>
         </div>
       </nav>
     </div>
@@ -293,9 +296,6 @@ function closeMobileMenu() {
   display: inline-flex;
   align-items: center;
   gap: var(--space-200);
-  margin-left: var(--space-500);
-  font-size: var(--font-sm);
-  line-height: var(--line-sm);
   white-space: nowrap;
   vertical-align: middle;
 }
