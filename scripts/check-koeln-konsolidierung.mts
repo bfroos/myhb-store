@@ -108,7 +108,7 @@ async function main() {
   for (const url of finals) {
     const p = await page(url);
     if (p.status !== 200) errors.push(`[3] ${url}: Status ${p.status}`);
-    if (p.canonical && new URL(p.canonical).pathname !== url) errors.push(`[3] ${url}: Canonical ${p.canonical}`);
+    if (p.canonical && new URL(p.canonical, BASE).pathname !== url) errors.push(`[3] ${url}: Canonical ${p.canonical}`);
     if (p.robots && /noindex/i.test(p.robots)) errors.push(`[3] ${url}: robots ${p.robots}`);
     for (const link of new Set(p.links)) {
       if (link.startsWith("/behandlungen/")) {
