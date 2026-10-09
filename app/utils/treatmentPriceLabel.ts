@@ -1,5 +1,8 @@
 import type { TreatmentDto } from "~/lib/strapi/dto/collections";
-import { formatPriceInEuro } from "~/utils/formatPriceInEuro";
+import {
+  treatmentPriceText,
+  visibleTreatmentPrice,
+} from "#shared/treatmentPrice";
 
 type PriceFields = Pick<
   TreatmentDto,
@@ -13,18 +16,17 @@ type PriceFields = Pick<
  * Buchungsdialog: Redaktionsschalter `showPrice`, Festpreis vor guenstigstem
  * Preis, Praefix „ab" nur bei `isStartingPrice`. Leer, wenn die Seite keinen
  * Preis zeigt — dann zeigt auch der Dialog keinen.
+ *
+ * TSEO Preise (09.10.2026): Regel liegt in shared/treatmentPrice.ts, dieselbe
+ * wie fuer generierten Meta Title und Schema.org Offer.
  */
 export function treatmentPriceLabel(
   treatment: PriceFields | null | undefined,
   showPrice: boolean | undefined,
   t: (key: string) => string,
 ): string {
-  if (!showPrice || !treatment) return "";
-  const price =
-    treatment.priceInEuroCent || treatment.cheapestPriceInEuroCent;
-  return formatPriceInEuro(price as number, {
-    prefix: treatment.isStartingPrice
-      ? t("common.price.startingPrefix")
-      : undefined,
-  });
+  return treatmentPriceText(
+    visibleTreatmentPrice(treatment, showPrice),
+    t("common.price.startingPrefix"),
+  );
 }
