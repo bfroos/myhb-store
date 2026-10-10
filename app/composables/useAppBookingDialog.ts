@@ -257,6 +257,8 @@ export type AppBookingUrlOptions = {
    * Token, nie die Daten selbst.
    */
   lead?: string | null;
+  /** Reise-ID aus plugins/journey.client.ts (myhb-app/myhb-os#1088). */
+  journeyId?: string | null;
 };
 
 /**
@@ -307,6 +309,9 @@ export function buildBookingUrl(
       const mitLead = new URL(withLeadToken(url.toString(), options.lead));
       url.search = mitLead.search;
     }
+    if (options?.journeyId && !url.searchParams.has("jid")) {
+      url.searchParams.set("jid", options.journeyId);
+    }
     if (hatAbgelehnt() && !url.searchParams.has("consent")) {
       url.searchParams.set("consent", "necessary");
     }
@@ -336,7 +341,13 @@ export function useAppBookingDialog() {
   ) {
     // #180: Ein spaeter geplantes Calendly-Vorwaermen waere jetzt nur Ballast.
     markBookingDialogOpened();
-    const bookingUrl = buildBookingUrl(url, options);
+    // Kontaktpunkte bis zur Buchung (myhb-app/myhb-os#1088): Liste jetzt
+    // einmal senden, die Reise-ID geht als `jid=` an die App, die sie nach der
+    // Buchung an den Termin haengt. Ohne Einwilligung liefert $journeyId null.
+    const { $journeyId, $sendJourney } = useNuxtApp();
+    $sendJourney();
+    const jid = $journeyId();
+    const bookingUrl = buildBookingUrl(url, jid ? { ...options, journeyId: jid } : options);
     dialog.open(
       defineAsyncComponent(
         () => import("~/components/ui/organism/AppBookingDialog.vue"),
