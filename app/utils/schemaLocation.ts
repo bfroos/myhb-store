@@ -56,7 +56,7 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJoct0O2RTqEcRZthU8Tn5dGs": {
     "rating": "4.8",
-    "count": "239"
+    "count": "240"
   },
   "ChIJYyPheE7LuEcRAIgZkPAOJyU": {
     "rating": "4.9",
@@ -72,7 +72,7 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJf4C6OSkTlkcRpTMm00E5JLE": {
     "rating": "4.7",
-    "count": "98"
+    "count": "99"
   },
   "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": {
     "rating": "5.0",
@@ -84,7 +84,7 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJScBd156_uEcRPHWNSbioDlo": {
     "rating": "4.8",
-    "count": "98"
+    "count": "99"
   }
 };
 
