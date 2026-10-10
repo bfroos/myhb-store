@@ -75,7 +75,9 @@
       "careers": "Karriere",
       "blog": "Blog",
       "aboutUs": "Über uns",
-      "myAccount": "Mein Konto / MY App"
+      "myAccount": "Mein Konto / MY App",
+      "preferredSourceTitle": "Google",
+      "preferredSource": "MY HEALTH & BEAUTY als bevorzugte Quelle auf Google hinzufügen"
     },
     "meta": {
       "privacyPolicy": "Datenschutz",
