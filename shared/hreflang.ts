@@ -12,6 +12,11 @@
 
 export type I18nLocalization = { locale: string; slug?: string | null };
 
+export const INDEXABLE_LOCALES: readonly string[] = ["de", "en"];
+
+export const isIndexableLocale = (locale: string) =>
+  INDEXABLE_LOCALES.includes(locale);
+
 /**
  * Sprachen, fuer die setPageSeo ein Alternate ausgibt. Verhalten wie bisher
  * in seo.ts: ohne Abdeckung alle Sprachen, sonst die abgedeckten plus die
