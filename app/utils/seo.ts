@@ -4,7 +4,7 @@ import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
 import { stripAdsTemplateV2Preview } from "#shared/adsTemplateV2";
 import { stripAdsOfferB } from "#shared/adsOfferVariant";
 import { isBlockedAdsImageFile } from "#shared/adsMedia";
-import { selectAlternateLocales } from "#shared/hreflang";
+import { isIndexableLocale, selectAlternateLocales } from "#shared/hreflang";
 
 /**
  * Fallback share image (Open Graph / Twitter) used when a page has neither a
@@ -96,6 +96,9 @@ export async function setPageSeo(
     // TSEO-10: auf go. gewinnt nie der Strapi-Wert. /lp/lippen-aachen stand
     // dort per metaRobots auf index (Audit 06.10.2026).
     if (isAdsMode.value) return "noindex, nofollow";
+    if (!isIndexableLocale(currentLocale) && !/noindex/i.test(pageSeo?.metaRobots || "")) {
+      return "noindex, follow";
+    }
     return pageSeo?.metaRobots || "index, follow";
   });
 
@@ -118,7 +121,7 @@ export async function setPageSeo(
       localeCodes,
       currentLocale,
       coveredLocales,
-    );
+    ).filter(isIndexableLocale);
 
     const defaultLocale = fallbackLocale.value as string;
     const defaultLocalePath = alternateLocales.includes(defaultLocale)
@@ -153,7 +156,7 @@ export async function setPageSeo(
           rel: "canonical",
           href: canonicalUrl,
         },
-        ...hreflangLinks,
+        ...(isIndexableLocale(currentLocale) ? hreflangLinks : []),
       ],
     });
 
