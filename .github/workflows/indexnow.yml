@@ -1,0 +1,42 @@
+name: IndexNow
+
+on:
+  schedule:
+    # täglich 05:15 UTC: neue Seiten aus der Sitemap an Bing/IndexNow melden
+    - cron: '15 5 * * *'
+  workflow_dispatch:
+    inputs:
+      all:
+        description: 'Alle URLs melden (nicht nur neue)'
+        type: boolean
+        default: false
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Neue Seiten melden
+        run: node scripts/indexnow-submit.mjs ${{ inputs.all && '--all' || '' }}
+
+      - name: Stand speichern
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- data/indexnow-urls.txt && git ls-files --error-unmatch data/indexnow-urls.txt >/dev/null 2>&1; then
+            echo "Keine neuen Seiten"
+            exit 0
+          fi
+          git add data/indexnow-urls.txt
+          git commit -m "chore(seo): IndexNow-Stand aktualisiert [skip ci]"
+          git push
