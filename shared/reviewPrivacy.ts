@@ -114,6 +114,17 @@ export function shortenReviewAuthor(author: string | null | undefined): string {
   return [first, initials[initials.length - 1] ?? ""].filter(Boolean).join(" ");
 }
 
+/**
+ * Rezensionen, die andere Anbieter nennen ("... was M1 Beauty nicht
+ * geschafft hat"), zeigen wir nicht: Auf unserer Seite waeren sie
+ * vergleichende Werbung mit einer herabsetzenden Aussage (§ 6 UWG).
+ */
+const COMPETITORS = /\bM1\b|m1[- ]?beauty|aesthetify|liebdeingesicht|k[oö]e[- ]?(?:klinik|aesthetics)/i;
+
+export function namesCompetitor(text: string | null | undefined): boolean {
+  return COMPETITORS.test(String(text ?? ""));
+}
+
 type ReviewShape = { author?: unknown; text?: unknown; rating?: unknown };
 
 function isReviewShape(x: any): x is ReviewShape {
@@ -131,6 +142,7 @@ function isReviewShape(x: any): x is ReviewShape {
 export function sanitizeReview<T extends ReviewShape>(r: T): T | null {
   let text = r.text;
   if (typeof r.text === "string") {
+    if (namesCompetitor(r.text)) return null;
     const clean = anonymizeDoctorNames(r.text);
     if (clean === null) return null;
     text = clean;

@@ -33,6 +33,14 @@ test("Nachname ohne bekannten Vornamen: Rezension nicht ausliefern", () => {
   assert.equal(anonymizeDoctorNames("Dr. Zouria und ihre Assistentin"), null);
 });
 
+test("Rezensionen mit Wettbewerbernamen werden nicht ausgeliefert", () => {
+  const out = sanitizeReviewsDeep([
+    { author: "Coco M.", rating: 5, text: "Ihr habt geschafft, was M1 Beauty nicht geschafft hat" },
+    { author: "Anna B.", rating: 5, text: "Toll, 1 ml war genau richtig" },
+  ]) as any[];
+  assert.deepEqual(out.map((r) => r.author), ["Anna B."]);
+});
+
 test("Autor:innen nur mit Vorname und Initiale", () => {
   assert.equal(shortenReviewAuthor("Julia Karaus"), "Julia K.");
   assert.equal(shortenReviewAuthor("Laura G. A."), "Laura A.");
