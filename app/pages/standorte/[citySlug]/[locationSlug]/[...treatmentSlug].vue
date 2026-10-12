@@ -14,6 +14,13 @@
       :order="blockOrder"
       :hidden-blocks="(treatmentPage as any)?.hiddenBlocks"
     >
+      <template #afterHero>
+        <BlockTreatmentAnswer
+          v-if="answer"
+          :headline="answerHeadline((treatmentPage as any)?.pathKey, treatmentPage?.name, location?.city?.name)"
+          :text="answer"
+        />
+      </template>
       <template #reviewer="{ inline }">
         <UiMoleculeMedicalReviewerSignature
           v-if="!isAdsMode"
@@ -45,6 +52,7 @@ import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
 import { medicalProcedureId } from "~/utils/schemaTreatment";
 import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
+import { answerHeadline, treatmentAnswer } from "#shared/treatmentAnswer";
 import { seoTitleFor } from "#shared/seoTitles";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
@@ -139,6 +147,21 @@ const hubLink = computed(() => {
     costHref: pathKey === "hyaluron/lippen-aufspritzen" ? "/behandlungen/hyaluron/lippen-aufspritzen#kosten" : cost?.href,
     costText: pathKey === "hyaluron/lippen-aufspritzen" ? "Lippen aufspritzen Kosten" : cost?.text,
   };
+});
+
+// E24 #314: Kurzantwort mit Stadt und Center (nur www, Deutsch).
+const answerRoute = useRoute();
+const answer = computed(() => {
+  if (isAdsMode.value || !/^\/standorte\//.test(answerRoute.path)) return null;
+  const t = (treatmentPage.value as any)?.treatment;
+  return treatmentAnswer({
+    pathKey: (treatmentPage.value as any)?.pathKey,
+    name: treatmentPage.value?.name,
+    priceInEuroCent: treatmentPrice.value ?? t?.priceInEuroCent,
+    isStartingPrice: t?.isStartingPrice,
+    city: location.value?.city?.name,
+    center: location.value?.name,
+  });
 });
 
 // blockOrder sortiert nur; nicht gelistete Bloecke werden in Default-

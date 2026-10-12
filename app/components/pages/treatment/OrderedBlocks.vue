@@ -30,6 +30,8 @@
       name="reviewer"
       :inline="false"
     />
+    <!-- E24 #314: Kurzantwort direkt nach dem Hero -->
+    <slot v-if="key === 'hero'" name="afterHero" />
   </template>
 </template>
 
