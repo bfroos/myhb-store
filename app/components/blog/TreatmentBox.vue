@@ -9,7 +9,7 @@
     <section v-else id="in-deiner-stadt" class="btb" data-track-placement="blog_city_box">
       <h2 class="btb__title">{{ name }} in deiner Stadt</h2>
       <p>
-        Bei MY HEALTH &amp; BEAUTY<template v-if="price"> {{ price }}</template> – es behandeln ausschließlich
+        Bei MY HEALTH &amp; BEAUTY{{ price ? ` ${price}` : "" }} – es behandeln ausschließlich
         Ärztinnen und Ärzte, an allen Standorten zum gleichen Preis, nach Verfügbarkeit auch ohne Termin.
       </p>
       <ul class="btb__cities" role="list">
