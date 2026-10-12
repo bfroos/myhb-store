@@ -4,6 +4,8 @@
     :reviewer="reviewer"
     :date="article?.displayDate"
   />
+  <!-- E24 #316: Preiszeile oben, Buchungsbox unter dem Artikel (nur www, Deutsch) -->
+  <BlogTreatmentBox v-if="bookingPathKey" :path-key="bookingPathKey" compact />
   <PagesBlogArticleBlock
     :headline="article?.headline"
     :intro="article?.intro"
@@ -12,10 +14,21 @@
     :displayDate="article?.displayDate"
     :footnotes="article?.footnotes"
   />
+  <BlogTreatmentBox v-if="bookingPathKey" :path-key="bookingPathKey" />
 </template>
 
 <script setup lang="ts">
+import { blogTreatmentPathKey } from "#shared/blogTreatment";
+
 const { fetchPage, seo, article, breadcrumbItems, localizations } = useBlogArticlePage();
+const { isAdsMode } = useSiteModeFlags();
+const { locale: blogLocale } = useI18n();
+const blogRoute = useRoute();
+const bookingPathKey = computed(() =>
+  !isAdsMode.value && blogLocale.value === "de"
+    ? blogTreatmentPathKey(String(blogRoute.params.slug ?? ""))
+    : null,
+);
 
 const pageLoaded = await fetchPage();
 
