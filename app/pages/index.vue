@@ -42,4 +42,13 @@ const websiteSchema = computed(() =>
 
 
 useSchemaOrg(websiteSchema);
+
+// #308: FAQPage aus dem FAQ-Block der Startseite (sichtbare Fragen)
+const homeFaqSchema = computed(() => {
+  const faq = (blocks.value ?? []).find((b: any) => b?.__component === "blocks.faq") as any;
+  if (!faq || isAdsMode.value) return null;
+  const items = [...(faq.faqs ?? []), ...(faq.faqSets ?? []).flatMap((set: any) => set?.faqs ?? [])];
+  return items.length ? buildFaqPageSchema(items) : null;
+});
+useSchemaOrg(homeFaqSchema);
 </script>

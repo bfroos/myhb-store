@@ -21,7 +21,7 @@
 <script setup lang="ts">
 const globals = useGlobals();
 
-const { fetchPage, fixedBlocks, seo, breadcrumbItems, localizations } =
+const { fetchPage, page, fixedBlocks, seo, breadcrumbItems, localizations } =
   useDoctorPage(globals.value?.brand?.name ?? "");
 
 const pageLoaded = await fetchPage();
@@ -32,4 +32,22 @@ if (pageLoaded) {
   usePageI18nParams(localizations.value, "slug");
   await setPageSeo(seo.value, fixedBlocks.value?.hero?.media ?? null);
 }
+
+// #308: Schema.org IndividualPhysician (Name wie auf der Seite, ohne Nachnamen)
+const config = useRuntimeConfig();
+const route = useRoute();
+const { brandName } = useBrand();
+const physicianSchema = computed(() =>
+  buildPhysicianSchema({
+    publicUrl: (config.public.publicUrl as string) || "",
+    path: route.path,
+    name: fixedBlocks.value?.hero?.headline ?? "",
+    jobTitle: fixedBlocks.value?.hero?.intro ?? null,
+    imageUrl: (page.value as any)?.photo?.url ?? null,
+    locations: (page.value as any)?.locations ?? [],
+    specialties: ((page.value as any)?.treatmentSpecialties ?? []).map((t: any) => t?.name).filter(Boolean),
+    brandName: brandName.value,
+  }),
+);
+useSchemaOrg(physicianSchema);
 </script>

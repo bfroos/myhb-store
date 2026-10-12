@@ -86,6 +86,7 @@ export function useDoctorPage(brandName: string = "") {
 
   return {
     fetchPage,
+    page,
     fixedBlocks,
     seo,
     breadcrumbItems,
