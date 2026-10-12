@@ -69,12 +69,14 @@ const { t } = useI18n();
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+/* Klappt im Textfluss auf: Karten mit overflow:hidden schneiden ihn so nicht ab. */
+.authNote[open] {
+  display: block;
+  flex-basis: 100%;
+}
 .authNote__panel {
-  position: absolute;
-  z-index: 30;
-  top: calc(100% + 6px);
-  left: 0;
-  width: min(20rem, calc(100vw - 2rem));
+  margin-top: 6px;
+  max-width: min(22rem, calc(100vw - 2rem));
   padding: 0.75rem 0.875rem;
   border-radius: 12px;
   background: #fff;
