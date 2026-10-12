@@ -12,7 +12,7 @@
  * Die Teil-Sitemaps haben kein <lastmod>, deshalb erkennt das Skript nur neue Seiten,
  * keine geänderten. Geänderte Seiten bei Bedarf mit --all nachreichen.
  */
-import { readFile, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 
 const SITE = process.env.INDEXNOW_SITE || "https://www.myhealthandbeauty.com";
 const KEY = "e8917cf2c75a83fbb9d7004f60488a46";
@@ -78,4 +78,7 @@ if (fresh.length > 0 && !dryRun) {
     console.log(`Gemeldet: ${Math.min(i + BATCH, fresh.length)}/${fresh.length} (HTTP ${status})`);
   }
 }
-if (!dryRun) await writeFile(STATE_FILE, current.join("\n") + "\n");
+if (!dryRun) {
+  await mkdir(new URL(".", STATE_FILE), { recursive: true });
+  await writeFile(STATE_FILE, current.join("\n") + "\n");
+}
