@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   blogCategoryLocaleSlugs,
   blogCategoryPath,
+  isIndexableLocale,
   selectAlternateLocales,
 } from "./hreflang.ts";
 
@@ -120,4 +121,8 @@ test("Nachher: alle Kategorieseiten verweisen gegenseitig aufeinander (Reciproci
       assert.equal(alternatesNew(doc, locale).size, LOCALES.length);
     }
   }
+});
+
+test("only de and en are indexable", () => {
+  assert.deepEqual(LOCALES.filter(isIndexableLocale), ["de", "en"]);
 });

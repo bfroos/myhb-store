@@ -29,6 +29,7 @@
  */
 import qs from "qs";
 import { resolveRedirect } from "./redirects";
+import { isIndexableLocale } from "#shared/hreflang";
 
 type StrapiPagination = {
   page: number;
@@ -184,6 +185,8 @@ export const ROUTE_MAP: Record<
 };
 
 export type Locale = (typeof LOCALES)[number];
+
+const SITEMAP_LOCALES = LOCALES.filter(isIndexableLocale);
 
 type PathParams = Partial<{
   slug: string;
@@ -383,7 +386,7 @@ const SEGMENT_BUILDERS: Record<
       "doctors",
     ];
 
-    for (const locale of LOCALES) {
+    for (const locale of SITEMAP_LOCALES) {
       for (const key of staticRoutes) {
         out.add(key, "static", locale, getLocalizedPath(key, locale));
       }
@@ -415,7 +418,7 @@ const SEGMENT_BUILDERS: Record<
   },
 
   async treatments({ fetchCollection, out }) {
-    for (const locale of LOCALES) {
+    for (const locale of SITEMAP_LOCALES) {
       const treatmentPages = await fetchCollection<
         Localized & { pathKey?: string; seo?: SeoFields }
       >("treatment-pages", {
@@ -541,7 +544,7 @@ const SEGMENT_BUILDERS: Record<
   },
 
   async blog({ fetchCollection, out }) {
-    for (const locale of LOCALES) {
+    for (const locale of SITEMAP_LOCALES) {
       const [categories, articles] = await Promise.all([
         fetchCollection<Localized & { slug?: string }>("blog-categories", {
           locale,
@@ -582,7 +585,7 @@ const SEGMENT_BUILDERS: Record<
   },
 
   async doctors({ fetchCollection, out }) {
-    for (const locale of LOCALES) {
+    for (const locale of SITEMAP_LOCALES) {
       const doctors = await fetchCollection<Localized & { slug?: string }>(
         "employees",
         {
@@ -611,7 +614,7 @@ const SEGMENT_BUILDERS: Record<
   },
 
   async careers({ fetchJson, out }) {
-    for (const locale of LOCALES) {
+    for (const locale of SITEMAP_LOCALES) {
       const careerPage = await fetchJson<{
         data?: { jobs?: Array<Localized & { slug?: string }> };
       }>("/api/career-page", {
@@ -636,7 +639,7 @@ const SEGMENT_BUILDERS: Record<
   },
 
   async products({ fetchCollection, out }) {
-    for (const locale of LOCALES) {
+    for (const locale of SITEMAP_LOCALES) {
       const products = await fetchCollection<
         Localized & { slug?: string; category?: { slug?: string } }
       >("products", {
