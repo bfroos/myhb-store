@@ -169,6 +169,8 @@
     "application": {
       "headline": "Başvurunuz",
       "intro": "Formu doldurun ve özgeçmişinizi ekleyin. Birkaç gün içinde size geri dönüş yapacağız.",
+      "contactQuestion": "Önce soruların mı var? İşe alım ekibimizden Jenni'ye yaz:",
+      "contactHint": "Başvurmadan önce bile pozisyonun sana uygun olup olmadığını seninle birlikte netleştirir.",
       "firstName": "Ad",
       "lastName": "Soyad",
       "email": "E-posta",

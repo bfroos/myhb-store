@@ -3,6 +3,15 @@
     <h2 class="application__heading">{{ $t("career.application.headline") }}</h2>
     <p class="application__intro">{{ $t("career.application.intro") }}</p>
 
+    <!-- Wunsch des Recruitings (Jenni, 28.09.): Fragen vor der Bewerbung
+         direkt klären, statt erst nach dem Absenden auszusortieren. -->
+    <p class="application__contact">
+      {{ $t("career.application.contactQuestion") }}
+      <a :href="`mailto:${recruitingEmail}`">{{ recruitingEmail }}</a>
+      <br>
+      <span>{{ $t("career.application.contactHint") }}</span>
+    </p>
+
     <Message v-if="success" severity="success" class="application__message">
       <strong>{{ $t("career.application.success.headline") }}</strong>
       <br>
@@ -184,6 +193,7 @@ const { t, locale, fallbackLocale } = useI18n();
 const { trackCareerApply } = useGoogleAnalytics();
 
 const retentionMonths = 6;
+const recruitingEmail = "j.bauer@myhb.app";
 const cvAccept = CV_ERLAUBTE_ENDUNGEN.join(",");
 const ausbildungsstandOptionen = AUSBILDUNGSSTAND_OPTIONEN;
 
@@ -225,6 +235,33 @@ const standortOptionen = computed<string[]>(() => {
     .filter((name): name is string => !!name);
   return [...namen, WUNSCHSTANDORT_FLEXIBEL];
 });
+
+// Das Recruiting will sehen, über welchen Kanal ein Bewerber kam (Social-
+// Kampagnen auswerten). Deshalb hängt an der Quelle die Attribution, die auch
+// die Buchung bekommt: Last Touch, abweichender First Touch, Klick-ID.
+// Die Route kürzt auf 255 Zeichen, die Kurzform hält das meist ein.
+function quelleMitHerkunft(): string {
+  const a = collectAttributionParams();
+  const teile = [props.quelle];
+  const kanal = [a.utm_source, a.utm_medium].filter(Boolean).join("/");
+  if (kanal) teile.push(`via ${kanal}`);
+  if (a.utm_campaign) teile.push(`Kampagne ${a.utm_campaign}`);
+  if (a.utm_content) teile.push(`Anzeige ${a.utm_content}`);
+  const klick = (["fbclid", "gclid", "ttclid"] as const).find((k) => a[k]);
+  if (klick) teile.push(klick);
+  const ersterKanal = [a.ft_source, a.ft_medium].filter(Boolean).join("/");
+  if (ersterKanal) teile.push(`zuerst via ${ersterKanal}`);
+  if (a.ft_campaign) teile.push(`erste Kampagne ${a.ft_campaign}`);
+  if (teile.length === 1 && document.referrer) {
+    try {
+      const host = new URL(document.referrer).hostname;
+      if (host && host !== window.location.hostname) teile.push(`von ${host}`);
+    } catch {
+      // kaputter Referrer: dann eben ohne
+    }
+  }
+  return teile.join(" · ");
+}
 
 function handleFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
@@ -278,7 +315,7 @@ async function handleSubmit() {
       form.nachricht.trim().slice(0, BEWERBUNG_MAX_NACHRICHT),
     );
     payload.append("datenschutz", String(form.datenschutz));
-    payload.append("quelle", props.quelle);
+    payload.append("quelle", quelleMitHerkunft());
     payload.append("website", form.website);
     if (cvDatei.value) payload.append("cv", cvDatei.value);
 
@@ -331,6 +368,26 @@ async function handleSubmit() {
   font-size: var(--font-md);
   line-height: var(--line-md);
   max-width: 60ch;
+}
+
+.application__contact {
+  margin: 0;
+  padding: var(--space-300) var(--space-400);
+  border-left: 3px solid var(--color-text);
+  background: var(--color-card-bg-soft);
+  border-radius: var(--border-radius-card);
+  font-size: var(--font-md);
+  line-height: var(--line-md);
+  overflow-wrap: anywhere;
+}
+
+.application__contact a {
+  font-weight: var(--font-bold);
+  color: inherit;
+}
+
+.application__contact span {
+  color: var(--color-text-light);
 }
 
 .application__form {

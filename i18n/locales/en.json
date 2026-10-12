@@ -181,6 +181,8 @@
     "application": {
       "headline": "Your application",
       "intro": "Fill in the form and attach your CV. We will get back to you within a few days.",
+      "contactQuestion": "Questions first? Write to Jenni from our recruiting team:",
+      "contactHint": "She'll help you figure out whether the role fits you – even before you apply.",
       "firstName": "First name",
       "lastName": "Last name",
       "email": "Email",
