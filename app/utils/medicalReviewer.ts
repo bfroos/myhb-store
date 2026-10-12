@@ -112,7 +112,53 @@ export function buildMedicalWebPageSchema(opts: {
     "@context": "https://schema.org",
     "@type": "MedicalWebPage",
     url: toAbsoluteUrl(opts.publicUrl, opts.path),
-    ...(lastReviewed ? { lastReviewed } : {}),
+    // #308: dateModified neben lastReviewed - KI-Systeme gewichten Aktualitaet.
+    ...(lastReviewed ? { lastReviewed, dateModified: lastReviewed } : {}),
     reviewedBy: person,
+  };
+}
+
+/**
+ * #308 (E24): Aerzteseite /aerzte/{slug} als IndividualPhysician (schema.org-
+ * Typ fuer eine einzelne Aerztin/einen Arzt). Name genau wie auf der Seite -
+ * in Strapi nur Vorname mit "Ärztin"/"Arzt" (keine vollen Namen), Ausnahme
+ * Dr. Gero Ruppert. practicesAt verweist auf die Standorte (@id #clinic).
+ */
+export function buildPhysicianSchema(opts: {
+  publicUrl: string;
+  path: string;
+  name: string;
+  jobTitle?: string | null;
+  imageUrl?: string | null;
+  description?: string | null;
+  locations?: Array<{ slug?: string | null; city?: { slug?: string | null } | null }> | null;
+  specialties?: string[];
+  brandName?: string;
+}): Record<string, unknown> | null {
+  if (!opts.name) return null;
+  const practicesAt = (opts.locations ?? [])
+    .filter((l) => l?.slug && l.city?.slug)
+    .map((l) => ({
+      "@id": `${toAbsoluteUrl(opts.publicUrl, `/standorte/${l.city!.slug}/${l.slug}`)}#clinic`,
+    }));
+  return {
+    "@context": "https://schema.org",
+    "@type": "IndividualPhysician",
+    "@id": `${toAbsoluteUrl(opts.publicUrl, opts.path)}#physician`,
+    name: opts.name,
+    url: toAbsoluteUrl(opts.publicUrl, opts.path),
+    ...(opts.imageUrl ? { image: opts.imageUrl } : {}),
+    ...(opts.description ? { description: opts.description } : {}),
+    ...(opts.specialties?.length ? { knowsAbout: opts.specialties } : {}),
+    ...(practicesAt.length ? { practicesAt } : {}),
+    ...(opts.brandName
+      ? {
+          memberOf: {
+            "@type": "Organization",
+            "@id": `${toAbsoluteUrl(opts.publicUrl, "/")}#organization`,
+            name: opts.brandName,
+          },
+        }
+      : {}),
   };
 }

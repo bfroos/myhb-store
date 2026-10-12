@@ -6,6 +6,16 @@ import { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { SchemaOrgContext } from "~/utils/schemaShared";
 import { toAbsoluteUrl, formatEuroFromCent, parseEuroCent } from "~/utils/schemaShared";
 import { buildAggregateRatingSchema } from "~/utils/schemaRating";
+import { locationEntityId } from "~/utils/schemaLocation";
+
+/**
+ * #308 (E24): Behandlungen als ["MedicalProcedure", "Service"]. Preis
+ * ("offers"), Anbieter ("provider") und Bewertung gibt es laut schema.org nur
+ * an Service, nicht an MedicalProcedure - vorher stand dort "offer" (gibt es
+ * gar nicht) und "performer" (nur an Event). Google, Bing und KI-Systeme
+ * haben den Preis deshalb ignoriert.
+ */
+const PROCEDURE_TYPES = ["MedicalProcedure", "Service"];
 
 type TreatmentSchemaContext = SchemaOrgContext & {
   brandName?: string;
@@ -56,7 +66,7 @@ export function buildMedicalProcedureSchema(
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "MedicalProcedure",
+    "@type": PROCEDURE_TYPES,
     // Eigene @id, damit die Einrichtung (LocalBusiness/MedicalClinic des
     // Standorts) sie per availableService referenzieren kann.
     "@id": medicalProcedureId(ctx.publicUrl, ctx.path),
@@ -66,24 +76,47 @@ export function buildMedicalProcedureSchema(
     ...(image && { image }),
     ...(procedureType && { procedureType }),
     ...(ctx.brandName && {
-      performer: {
+      provider: {
         "@type": "Organization",
         "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
         name: ctx.brandName,
       },
     }),
+    ...(location.city?.name && { areaServed: { "@type": "City", name: location.city.name } }),
     ...(priceInCent != null && {
-      offer: {
-        "@type": "Offer",
-        price: formatEuroFromCent(priceInCent),
-        priceCurrency: ctx.currency ?? "EUR",
-        availability: "https://schema.org/InStock",
-      },
+      offers: buildOffer(priceInCent, treatmentPage, ctx, pageUrl, locationEntityId(ctx.publicUrl, location)),
     }),
     ...(aggregateRating && { aggregateRating }),
   };
 
   return schema;
+}
+
+/** Preis "ab": Offer mit Mindestpreis, am Standort verfuegbar. */
+function buildOffer(
+  priceInCent: number,
+  treatmentPage: TreatmentPageDto,
+  ctx: TreatmentSchemaContext,
+  pageUrl: string,
+  availableAtId: string | null,
+): Record<string, unknown> {
+  const price = formatEuroFromCent(priceInCent);
+  const currency = ctx.currency ?? "EUR";
+  return {
+    "@type": "Offer",
+    price,
+    priceCurrency: currency,
+    url: pageUrl,
+    availability: "https://schema.org/InStock",
+    ...((treatmentPage.treatment as any)?.isStartingPrice && {
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: price,
+        priceCurrency: currency,
+      },
+    }),
+    ...(availableAtId && { availableAtOrFrom: { "@id": availableAtId } }),
+  };
 }
 
 /**
@@ -111,26 +144,22 @@ export function buildGeneralMedicalProcedureSchema(
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "MedicalProcedure",
+    "@type": PROCEDURE_TYPES,
+    "@id": medicalProcedureId(ctx.publicUrl, ctx.path),
     name: treatmentPage.name,
     url: pageUrl,
     ...(description && { description }),
     ...(image && { image }),
     ...(procedureType && { procedureType }),
     ...(ctx.brandName && {
-      performer: {
+      provider: {
         "@type": "Organization",
         "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
         name: ctx.brandName,
       },
     }),
     ...(priceInCent != null && {
-      offer: {
-        "@type": "Offer",
-        price: formatEuroFromCent(priceInCent),
-        priceCurrency: ctx.currency ?? "EUR",
-        availability: "https://schema.org/InStock",
-      },
+      offers: buildOffer(priceInCent, treatmentPage, ctx, pageUrl, null),
     }),
     ...(aggregateRating && { aggregateRating }),
   };

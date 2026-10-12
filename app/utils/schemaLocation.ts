@@ -161,6 +161,22 @@ export function getGoogleReviewForPlace(
  * - hasMap (Google Maps link)
  * - openingHoursSpecification (structured opening hours)
  */
+/**
+ * #308: Telefon einheitlich im internationalen Format ("0221 80142399" ->
+ * "+49 221 80142399") - gleiche NAP-Angaben wie im Google-Profil.
+ */
+export function toE164(phone: string): string {
+  const raw = String(phone ?? "").trim();
+  const digits = raw.replace(/[^\d+]/g, "");
+  if (digits.startsWith("+")) return raw;
+  if (digits.startsWith("00")) return `+${digits.slice(2)}`;
+  if (digits.startsWith("0")) {
+    const groups = raw.replace(/[^\d\s/]/g, "").replace(/\//g, " ").trim().replace(/^0/, "").split(/\s+/).filter(Boolean);
+    return `+49 ${groups.join(" ")}`;
+  }
+  return raw;
+}
+
 export function buildLocalBusinessSchema(
   location: LocationDto | null | undefined,
   ctx: LocalBusinessSchemaContext,
@@ -218,7 +234,7 @@ export function buildLocalBusinessSchema(
     url: locationUrl,
     ...(address && { address }),
     ...(location.contact?.phoneNumber && {
-      telephone: location.contact.phoneNumber,
+      telephone: toE164(location.contact.phoneNumber),
     }),
     ...(geo && { geo }),
     ...(openingHours.length > 0 && { openingHours }),
