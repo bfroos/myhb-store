@@ -29,6 +29,11 @@
         />
       </template>
     </PagesTreatmentOrderedBlocks>
+    <BlockPurchaseFaq
+      v-if="purchase.length"
+      :headline="`Fragen vor der Buchung in ${location?.city?.name ?? ''}`"
+      :faqs="purchase"
+    />
     <!-- E24 #315: Stadtseite -> bundesweite Seite und Kostenseite (www) -->
     <UiLayoutSectionBlock v-if="hubLink" spacing="sibling">
       <p class="hubLink">
@@ -53,6 +58,7 @@ import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
 import { medicalProcedureId } from "~/utils/schemaTreatment";
 import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
 import { answerHeadline, treatmentAnswer } from "#shared/treatmentAnswer";
+import { purchaseFaqs } from "#shared/purchaseFaq";
 import { seoTitleFor } from "#shared/seoTitles";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
@@ -220,21 +226,36 @@ const medicalProcedureSchema = computed(() =>
 // Schema.org BreadcrumbList: kommt aus BaseBreadcrumb (TSEO-12)
 
 // Schema.org FAQPage (nur wenn FAQ-Block sichtbar ist)
+// #317: Kauf-Fragen im selben FAQPage-Schema (nur eins je Seite erlaubt)
+const toRich = (f: { question: string; answer: string }) => ({
+  question: f.question,
+  answer: [{ type: "paragraph", children: [{ type: "text", text: f.answer }] }],
+});
+// Sichtbare Strapi-Fragen (ausgeblendete Bloecke zaehlen nicht).
+const visibleStrapiFaqs = computed<any[]>(() => {
+  const faq = fixedBlocks.value?.faq as any;
+  if (!faq || isV2.value || !blockOrder.value.includes("faq")) return [];
+  return [...(faq.faqs ?? []), ...(faq.faqSets ?? []).flatMap((set: any) => set.faqs ?? [])];
+});
+// E24 #317: Fragen mit Kaufabsicht (nur www, deutsche Stadtseite)
+const purchaseRoute = useRoute();
+const purchase = computed(() => {
+  if (isAdsMode.value || !/^\/standorte\//.test(purchaseRoute.path)) return [];
+  const t = (treatmentPage.value as any)?.treatment;
+  return purchaseFaqs({
+    pathKey: (treatmentPage.value as any)?.pathKey,
+    priceInEuroCent: treatmentPrice.value ?? t?.priceInEuroCent,
+    isStartingPrice: t?.isStartingPrice,
+    city: location.value?.city?.name,
+    existingQuestions: visibleStrapiFaqs.value.map((f: any) => String(f?.question ?? "")),
+  });
+});
 const faqSchema = computed(() => {
-  if (!fixedBlocks.value?.faq) return null;
   // v2 zeigt eigene Fragen statt des Strapi-FAQ-Blocks.
   if (isV2.value) return null;
-  // Ausgeblendete Bloecke duerfen nicht im strukturierten Datensatz landen -
-  // sonst bewirbt Google FAQs, die auf der Seite nicht existieren.
-  if (!blockOrder.value.includes("faq")) return null;
 
-  // Merge faqs from both direct faqs and faqSets
-  const directFaqs = fixedBlocks.value.faq.faqs ?? [];
-  const faqSetsItems = (fixedBlocks.value.faq.faqSets ?? []).flatMap(
-    (set: any) => set.faqs ?? [],
-  );
-  const allFaqs = [...directFaqs, ...faqSetsItems];
-  return buildFaqPageSchema(allFaqs);
+  const all = [...visibleStrapiFaqs.value, ...purchase.value.map(toRich)];
+  return all.length ? buildFaqPageSchema(all as any) : null;
 });
 
 // Schema.org VideoObject (from about block videos)

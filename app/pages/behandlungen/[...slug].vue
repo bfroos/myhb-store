@@ -23,6 +23,11 @@
       />
     </template>
   </PagesTreatmentOrderedBlocks>
+  <BlockPurchaseFaq
+    v-if="purchase.length"
+    :headline="`Fragen vor der Buchung`"
+    :faqs="purchase"
+  />
   <PagesTreatmentRelatedArticles
     v-if="!isAdsMode && relatedArticles.length"
     :articles="relatedArticles"
@@ -48,6 +53,7 @@ import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import { COMMON_TREATMENT_BLOCK_ORDER } from "~/lib/blocks/treatmentBlockOrder";
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { answerHeadline, treatmentAnswer } from "#shared/treatmentAnswer";
+import { purchaseFaqs } from "#shared/purchaseFaq";
 import { seoTitleFor } from "#shared/seoTitles";
 
 const config = useRuntimeConfig();
@@ -161,16 +167,31 @@ const medicalProcedureSchema = computed(() =>
 // Schema.org BreadcrumbList: kommt aus BaseBreadcrumb (TSEO-12)
 
 // Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
+// #317: Kauf-Fragen im selben FAQPage-Schema (nur eins je Seite erlaubt)
+const toRich = (f: { question: string; answer: string }) => ({
+  question: f.question,
+  answer: [{ type: "paragraph", children: [{ type: "text", text: f.answer }] }],
+});
+const strapiFaqs = computed<any[]>(() => {
+  const faq = fixedBlocks.value?.faq as any;
+  if (!faq) return [];
+  return [...(faq.faqs ?? []), ...(faq.faqSets ?? []).flatMap((set: any) => set.faqs ?? [])];
+});
+// E24 #317: Fragen mit Kaufabsicht (nur www, Deutsch)
+const { locale: faqLocale } = useI18n();
+const purchase = computed(() => {
+  if (isAdsMode.value || faqLocale.value !== "de") return [];
+  const t = (treatmentPage.value as any)?.treatment;
+  return purchaseFaqs({
+    pathKey: treatmentPage.value?.pathKey,
+    priceInEuroCent: t?.priceInEuroCent,
+    isStartingPrice: t?.isStartingPrice,
+    existingQuestions: strapiFaqs.value.map((f: any) => String(f?.question ?? "")),
+  });
+});
 const faqSchema = computed(() => {
-  if (!fixedBlocks.value?.faq) return null;
-  
-  // Merge faqs from both direct faqs and faqSets
-  const directFaqs = fixedBlocks.value.faq.faqs ?? [];
-  const faqSetsItems = (fixedBlocks.value.faq.faqSets ?? []).flatMap(
-    (set: any) => set.faqs ?? [],
-  );
-  const allFaqs = [...directFaqs, ...faqSetsItems];
-  return buildFaqPageSchema(allFaqs);
+  const all = [...strapiFaqs.value, ...purchase.value.map(toRich)];
+  return all.length ? buildFaqPageSchema(all as any) : null;
 });
 
 // Schema.org VideoObject
