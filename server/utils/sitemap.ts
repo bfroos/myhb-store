@@ -30,6 +30,7 @@
 import qs from "qs";
 import { resolveRedirect } from "./redirects";
 import { isIndexableLocale } from "#shared/hreflang";
+import { isTestEmployeeSlug } from "#shared/reviewPrivacy";
 
 type StrapiPagination = {
   page: number;
@@ -600,7 +601,8 @@ const SEGMENT_BUILDERS: Record<
       );
 
       for (const doctor of doctors) {
-        if (!doctor.slug) continue;
+        // #307: Test-Eintraege ("Frau Ärztin Weber", MusterMannFrau) raus.
+        if (!doctor.slug || isTestEmployeeSlug(doctor.slug)) continue;
         const groupId = getGroupId(doctor, doctor.slug);
         if (!groupId) continue;
         out.add(

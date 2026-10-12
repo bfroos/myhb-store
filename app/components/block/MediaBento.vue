@@ -42,6 +42,7 @@
           :rating="5"
           class="bento__reviews"
         />
+        <UiMoleculeReviewAuthenticityNote v-if="showReviewsBadge" />
       </template>
       <template v-if="secondMedia" #secondMedia>
         <UiAtomMediaPicture

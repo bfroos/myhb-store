@@ -185,8 +185,9 @@
                   </span>
                   <span class="hero__gbadge-count">{{ v2Rating.count }}</span>
                 </span>
+                <UiMoleculeReviewAuthenticityNote />
               </div>
-              <template v-else-if="showReviews">
+              <div v-else-if="showReviews" class="hero__reviews-row">
                 <UiMoleculeReviewsBadge
                   v-if="googlePlaceId"
                   show-text
@@ -204,7 +205,9 @@
                   :rating="5"
                   class="hero__reviews"
                 />
-              </template>
+                <!-- #307: Echtheitshinweis (§ 5b Abs. 3 UWG) an den Sternen -->
+                <UiMoleculeReviewAuthenticityNote class="hero__auth-note" />
+              </div>
             </header>
             <ul v-if="showCompanyLogos && !isAdsMode" class="hero__logos" role="list">
               <li class="hero__logo">
@@ -885,6 +888,18 @@ const discountLabel = computed(() => {
 }
 
 .hero__reviews {
+  margin-top: var(--space-500);
+}
+
+/* #307: Badge und Echtheitshinweis in einer Zeile */
+.hero__reviews-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: inherit;
+  gap: 0 var(--space-200);
+}
+.hero__reviews-row .hero__auth-note {
   margin-top: var(--space-500);
 }
 

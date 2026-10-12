@@ -61,6 +61,7 @@
           <b>{{ googleReview.ratingDisplay }}</b>
           <span>({{ googleReview.countDisplay }} Google)</span>
         </a>
+        <UiMoleculeReviewAuthenticityNote v-if="googleReview" class="locationTile__auth-note" />
         <p v-if="!isMainInformationLocation" class="locationTile__subtitle">
           {{ item.name }}
         </p>

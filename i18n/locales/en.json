@@ -52,7 +52,9 @@
       "cheap": "cheap",
       "startingPrefix": "from",
       "forPrefix": "for"
-    }
+    },
+    "reviewsAuthenticityTitle": "Where these reviews come from",
+    "reviewsAuthenticityBody": "The reviews come from the Google business profiles of our locations. We ask for feedback after a treatment and do not select by how satisfied someone was; we offer nothing in return for a review. Google checks whether reviews are genuine, not us – we cannot delete or change any review."
   },
 
   "navigation": {

@@ -5,10 +5,11 @@
         <span class="reviews__stars" aria-hidden="true">
           <IconStarFilled v-for="i in 5" :key="i" :size="20" />
         </span>
-        <strong class="reviews__score">{{ rating.toFixed(1) }}</strong>
+        <strong class="reviews__score">{{ shownRating.toLocaleString("de-DE", { minimumFractionDigits: 1 }) }}</strong>
       </div>
       <p class="reviews__sub">
-        Basierend auf <strong>{{ count }}</strong> Google-Bewertungen
+        Basierend auf <strong>{{ shownCount }}</strong> Google-Bewertungen
+        <UiMoleculeReviewAuthenticityNote />
       </p>
     </header>
 
@@ -34,26 +35,33 @@
 
 <script setup lang="ts">
 import { IconStarFilled } from "@tabler/icons-vue";
+import { getGoogleReviewAggregate } from "~/utils/schemaLocation";
 
 interface Review { author: string; date: string; stars: number; quote: string; color?: string }
 
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   rating?: number;
   count?: string;
   reviews?: Review[];
   elevated?: boolean;
   themeClass?: "theme-light" | "theme-soft" | "theme-neutral" | "theme-strong";
 }>(), {
-  rating: 5.0,
-  count: "2.700+",
+  // #307: keine festen Werte ("5,0 aus 2.700+"), sondern die echten
+  // Google-Zahlen aller Standorte (taeglich aktualisiert).
+  rating: undefined,
+  count: undefined,
   elevated: true,
   themeClass: "theme-light",
-  reviews: () => [
-    { author: "Jana M.",   date: "vor 2 Wochen", stars: 5, quote: "Sehr nettes Team, professionelle Beratung. Ergebnis sieht absolut natürlich aus!", color: "#e3d7cb" },
-    { author: "Sebastian K.", date: "vor 1 Monat",  stars: 5, quote: "Schneller Termin, kompetente Ärztin, kein Druck. Komme gerne wieder.",          color: "#cdd5d8" },
-    { author: "Lara F.",   date: "vor 3 Monaten", stars: 5, quote: "Wirklich angenehme Atmosphäre — ich war zuerst skeptisch, jetzt überzeugt.",       color: "#d9c8c0" },
-  ],
+  // #307: keine erfundenen Beispiel-Bewertungen als Vorgabe. Ohne echte
+  // Bewertungen aus Strapi zeigt der Block nur die Gesamtnote.
+  reviews: () => [],
 });
+
+const aggregate = getGoogleReviewAggregate();
+const shownRating = computed(() => props.rating ?? aggregate?.rating ?? 4.9);
+const shownCount = computed(
+  () => props.count ?? (aggregate ? aggregate.userRatingsTotal.toLocaleString("de-DE") : ""),
+);
 
 function initial(name: string) { return name.charAt(0).toUpperCase(); }
 </script>
