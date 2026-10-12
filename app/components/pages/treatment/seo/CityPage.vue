@@ -412,19 +412,21 @@ const clinicId = computed(() => locationEntityId(String(config.public.publicUrl 
 useSchemaOrg(
   computed(() => ({
     "@context": "https://schema.org",
-    "@type": "MedicalProcedure",
+    // Doppeltyp: "offers" und "provider" gibt es nur an Service, nicht an
+    // MedicalProcedure (schema.org-Validator).
+    "@type": ["MedicalProcedure", "Service"],
+    provider: { "@id": `${config.public.publicUrl}/#organization` },
     "@id": medicalProcedureId(String(config.public.publicUrl || ""), route.path),
     name: `Lippen aufspritzen in ${props.content.city}`,
     alternateName: ["Lippenunterspritzung", "Lip Filler", "Lippen unterspritzen"],
-    procedureType: "https://schema.org/NoninvasiveProcedure",
+    procedureType: "https://schema.org/PercutaneousProcedure",
     bodyLocation: "Lippen",
     description: paragraphText(props.content.intro[0] ?? []),
     howPerformed:
       "Nach ärztlicher Beratung und Betäubung mit Creme wird Hyaluronsäure (0,5 oder 1 ml) mit feiner Nadel in Kontur und Lippenkörper gesetzt. Dauer 30–45 Minuten.",
     followup: "Kostenlose Nachkontrolle nach 14 Tagen.",
     url: pageUrl.value,
-    isPartOf: { "@id": `${config.public.publicUrl}${SEO_PILOT_HUB_PATH}#procedure` },
-    ...(clinicId.value ? { availableAtOrFrom: { "@id": clinicId.value } } : {}),
+    areaServed: { "@type": "City", name: props.content.city },
     ...(prices.value.length
       ? {
           offers: {
@@ -434,6 +436,7 @@ useSchemaOrg(
             highPrice: Math.max(...prices.value.map((p) => p.cent)) / 100,
             offerCount: prices.value.length,
             url: `${pageUrl.value}#kosten`,
+            ...(clinicId.value ? { availableAtOrFrom: { "@id": clinicId.value } } : {}),
           },
         }
       : {}),
