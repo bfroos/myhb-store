@@ -255,6 +255,10 @@
       },
       "locationTreatment": {
         "seo": {
+          "titleWww": "{treatmentName} {city}: {priceTag}",
+          "titleWwwNoPrice": "{treatmentName} {city}",
+          "descriptionWww": "{treatmentName} in {city} ({locationName}): ärztlich, {priceTag}. Zertifizierte Ärzte, Termin in 24 h, auch ohne Termin – jetzt online buchen.",
+          "descriptionWwwNoPrice": "{treatmentName} in {city} ({locationName}): ärztlich behandelt. Zertifizierte Ärzte, Termin in 24 h, auch ohne Termin – jetzt online buchen.",
           "title": "{treatmentName} {city} {priceTag} ✓ {brandName}",
           "description": "{treatmentName} {city}: Zertifizierte Ärzte ✓ Termin in 24h ✓ Premium-Lounge {locationName} ✓ Natürliche Ergebnisse ✓ Jetzt online buchen!"
         }
@@ -313,7 +317,7 @@
     "treatment": {
       "allTreatments": "Behandlungen",
       "locationTeasers": {
-        "headline": "{treatment} an unseren Standorten"
+        "headline": "{treatment} in deiner Nähe"
       },
       "error": {
         "treatmentNotFound": "Behandlung nicht gefunden",

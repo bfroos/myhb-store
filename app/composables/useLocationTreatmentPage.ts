@@ -338,27 +338,49 @@ export function useLocationTreatmentPage() {
       };
     }
     
-    // SEO mode (www.): Optimized with price
-    const startPrice = treatmentPrice.value 
-      ? Math.floor(treatmentPrice.value / 100) 
-      : 149; // Ultimate fallback
-    
-    const priceTag = `ab ${startPrice}€`;
-    
-    return {
-      metaTitle: t("locations.location.locationTreatment.seo.title", {
-        treatmentName,
-        city: loc?.city?.name ?? "",
-        priceTag,
-        brandName: brandName.value, // Use full brand name (MY HEALTH & BEAUTY)
-      }),
-      metaDescription: t(
-        "locations.location.locationTreatment.seo.description",
-        {
+    // E24-Pilot Lippen: Leipzig und Aachen sind die Kontrollgruppe (Konzept
+    // Abschnitt 4) und behalten bis zur Nachmessung (8 Wochen nach Pilotstart)
+    // den alten Title.
+    const controlPage =
+      treatmentPage.value?.pathKey === "hyaluron/lippen-aufspritzen" &&
+      ["hoefe-am-bruehl", "aquis-plaza"].includes(String(loc?.slug ?? ""));
+    if (controlPage) {
+      const startPrice = treatmentPrice.value ? Math.floor(treatmentPrice.value / 100) : 149;
+      return {
+        metaTitle: t("locations.location.locationTreatment.seo.title", {
+          treatmentName,
+          city: loc?.city?.name ?? "",
+          priceTag: `ab ${startPrice}€`,
+          brandName: brandName.value,
+        }),
+        metaDescription: t("locations.location.locationTreatment.seo.description", {
           treatmentName,
           city: loc?.city?.name ?? "",
           locationName: loc?.name ?? "",
-        },
+        }),
+      };
+    }
+
+    // SEO mode (www.): E24 #315 - echter Preis ("ab 149,99 €" statt
+    // abgerundet "ab 149€"), ohne Haken und ohne Ergebnisversprechen.
+    // "Zertifizierte Ärzte" und "Termin in 24 h" sind belegt (Benjamin,
+    // 12.10.2026). Ohne Preis kein Preis im Title (vorher Fallback 149€).
+    const priceTag = treatmentPrice.value
+      ? `ab ${(treatmentPrice.value / 100).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\u00a0€`
+      : "";
+    const city = loc?.city?.name ?? "";
+    return {
+      metaTitle: t(
+        priceTag
+          ? "locations.location.locationTreatment.seo.titleWww"
+          : "locations.location.locationTreatment.seo.titleWwwNoPrice",
+        { treatmentName, city, priceTag },
+      ),
+      metaDescription: t(
+        priceTag
+          ? "locations.location.locationTreatment.seo.descriptionWww"
+          : "locations.location.locationTreatment.seo.descriptionWwwNoPrice",
+        { treatmentName, city, locationName: loc?.name ?? "", priceTag },
       ),
     };
   });
