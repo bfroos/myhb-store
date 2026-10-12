@@ -5,6 +5,11 @@
     v-bind="heroWithSeoH1"
     show-floating-cta
   />
+  <BlockTreatmentAnswer
+    v-if="answer"
+    :headline="answerHeadline(treatmentPage?.pathKey, treatmentPage?.name)"
+    :text="answer"
+  />
   <PagesTreatmentOrderedBlocks
     :fixed-blocks="fixedBlocks"
     :order="COMMON_TREATMENT_BLOCK_ORDER"
@@ -42,6 +47,7 @@
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import { COMMON_TREATMENT_BLOCK_ORDER } from "~/lib/blocks/treatmentBlockOrder";
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
+import { answerHeadline, treatmentAnswer } from "#shared/treatmentAnswer";
 import { seoTitleFor } from "#shared/seoTitles";
 
 const config = useRuntimeConfig();
@@ -89,6 +95,18 @@ const treatmentLocationTeasersHeadline = computed(() =>
 );
 
 const treatmentPageLoaded = await fetchTreatment();
+// E24 #314: Kurzantwort (nur www, Deutsch)
+const { locale: answerLocale } = useI18n();
+const answer = computed(() => {
+  if (isAdsMode.value || answerLocale.value !== "de") return null;
+  const t = (treatmentPage.value as any)?.treatment;
+  return treatmentAnswer({
+    pathKey: treatmentPage.value?.pathKey,
+    name: treatmentPage.value?.name,
+    priceInEuroCent: t?.priceInEuroCent,
+    isStartingPrice: t?.isStartingPrice,
+  });
+});
 // E24 #315: Title/H1 auf den Suchbegriff, Preis aus Strapi (nur www, Deutsch).
 const { locale: seoLocale } = useI18n();
 const seoTitle = computed(() =>
