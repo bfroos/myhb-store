@@ -1,3 +1,4 @@
+import { shortDescription } from "#shared/blogTreatment";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { BlogArticleDto } from "~/lib/strapi/dto/collections";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
@@ -81,7 +82,8 @@ export function useBlogArticlePage() {
         articleTitle: article.value?.headline ?? "",
         brandName: brandName.value,
       }),
-      metaDescription: article.value?.intro ?? "",
+      // E24 #316: eigene kurze Description statt des ganzen Intros (300+ Zeichen)
+      metaDescription: shortDescription(article.value?.intro),
     } as SharedSeoDto;
   });
 

@@ -1,54 +1,53 @@
 /**
- * GEO / AI-readiness: /llms.txt (SEO audit 2026-07)
+ * GEO / AI-readiness: /llms.txt
  *
- * Machine-readable site summary for AI assistants and crawlers
- * (ChatGPT, Claude, Perplexity, Google AI Overviews).
- * Cached for 24h; disabled in ads mode like the sitemap.
+ * E24 #318: aus Strapi erzeugt (shared/llmsText.ts) statt festem Text:
+ * alle eroeffneten Standorte mit Adresse, Telefon, Oeffnungszeiten und
+ * Online-Termin, Behandlungen mit Preis, Kostenseiten. 6 h im Cache; bei
+ * einem Strapi-Fehler der letzte gute Stand (stale). Auf go. aus wie die
+ * Sitemap.
  */
+import qs from "qs";
+import { buildLlmsText } from "#shared/llmsText";
+
 export default defineCachedEventHandler(
-  (event) => {
+  async (event) => {
     const config = useRuntimeConfig();
     if (config.public.siteMode === "ads") {
       throw createError({ statusCode: 404, statusMessage: "Not found" });
     }
-
     const requestUrl = getRequestURL(event);
     const siteUrl = (
       (config.public.publicUrl as string) ||
       `${requestUrl.protocol}//${requestUrl.host}`
     ).replace(/\/+$/, "");
+    const base = String(config.public.strapiUrl || "").replace(/\/+$/, "");
 
-    const body = `# MY Health & Beauty
-
-> Ärztlich geführte Beauty Lounges in Deutschland für minimalinvasive ästhetische
-> Behandlungen: Botox®, Hyaluron-Filler, Skinbooster, Infusionen, Fettwegspritze,
-> Anti-Haarausfall-Therapien und Schönheitsoperationen. Standorte in Einkaufszentren
-> u. a. in Köln, Düsseldorf, Essen, Aachen und Kaiserslautern —
-> Behandlungen vom Arzt, transparente Preise (Botox & Hyaluron ab 149,99 €).
-
-## Behandlungen
-- [Botox](${siteUrl}/behandlungen/botox): Faltenbehandlung ab 149,99 €
-- [Hyaluron](${siteUrl}/behandlungen/hyaluron): Filler für Lippen, Wangen, Jawline
-- [Skinbooster](${siteUrl}/behandlungen/skinbooster): Hydration & Kollagenaufbau
-- [Infusionen](${siteUrl}/behandlungen/infusionen): Vitamin C ab 69 €
-- [Haartransplantation](${siteUrl}/behandlungen/schoenheitsoperationen/haartransplantation): ab 2.499 €
-
-## Standorte
-- [Alle Standorte](${siteUrl}/standorte)
-
-## Preise
-- [Preisliste](${siteUrl}/preise)
-
-## Ratgeber
-- [Blog](${siteUrl}/blog): Ärztlich geprüfte Ratgeber zu ästhetischen Behandlungen
-`;
-
+    const locQuery = qs.stringify(
+      {
+        locale: "de",
+        pagination: { pageSize: 100 },
+        fields: ["name", "slug", "type", "newOpeningDate", "appBookingUrl"],
+        populate: {
+          city: { fields: ["name", "slug"] },
+          address: true,
+          contact: true,
+          openingHours: { populate: { week: { populate: ["intervals"] } } },
+        },
+      },
+      { encodeValuesOnly: true },
+    );
+    const [locs, prices] = await Promise.all([
+      $fetch<{ data: any[] }>(`${base}/api/locations?${locQuery}`),
+      $fetch<{ data: { productCategories?: any[] } }>(`${base}/api/prices-page/with-product-categories?locale=de`),
+    ]);
+    const body = buildLlmsText(siteUrl, locs?.data ?? [], prices?.data?.productCategories ?? []);
     setHeader(event, "Content-Type", "text/plain; charset=utf-8");
     return body;
   },
   {
     name: "llms.txt",
-    maxAge: 60 * 60 * 24,
+    maxAge: 60 * 60 * 6,
     staleMaxAge: 60 * 60 * 24,
   },
 );
