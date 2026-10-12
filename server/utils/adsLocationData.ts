@@ -7,6 +7,7 @@ import {
   type AdsTreePage,
 } from "#shared/adsLocationTreatments";
 import { pickAdsV2Doctors } from "#shared/adsTemplateV2";
+import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
 
 // #184: pathKeys, die es an einem Standort gibt (5 min im Speicher). Die
 // Antwort der Behandlungsseite traegt sie nicht mit; "with-treatments" nennt
@@ -218,5 +219,6 @@ export async function adsTemplateV2Extras(
   const reviews = reviewsWithoutRestrictedTerms(seo?.location?.reviews ?? []).map(
     (r: any) => ({ id: r.id, rating: r.rating, text: r.text, author: r.author }),
   );
-  return { reviews, doctors };
+  // #307: Arztnamen kuerzen, Autor:innen mit Initiale.
+  return sanitizeReviewsDeep({ reviews, doctors });
 }

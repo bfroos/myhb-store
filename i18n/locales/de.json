@@ -52,7 +52,9 @@
       "cheap": "günstig",
       "startingPrefix": "ab",
       "forPrefix": "für"
-    }
+    },
+    "reviewsAuthenticityTitle": "Woher die Bewertungen kommen",
+    "reviewsAuthenticityBody": "Die Bewertungen stammen aus den Google-Unternehmensprofilen unserer Standorte. Wir bitten nach der Behandlung um eine Rückmeldung und wählen dabei nicht danach aus, wie zufrieden jemand war; für eine Bewertung gibt es bei uns keine Gegenleistung. Die Echtheit prüft Google, nicht wir – wir können keine Bewertung löschen oder verändern."
   },
   "navigation": {
     "header": {

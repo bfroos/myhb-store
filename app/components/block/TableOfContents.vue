@@ -19,6 +19,7 @@
               />
             </UiMoleculeButtonGroup>
             <UiMoleculeReviewsBadge :source="ReviewSource.GOOGLE" :rating="5" />
+            <UiMoleculeReviewAuthenticityNote />
           </div>
           <slot />
         </div>

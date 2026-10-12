@@ -4,6 +4,7 @@ import { rewriteAdsLinksDeep, type AdsLinkContext } from "#shared/adsLinks";
 import { isAdsPricePage, prepareAdsPricePage } from "#shared/adsPricePages";
 import { stripBlockedAdsVideos } from "#shared/adsMedia";
 import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
+import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
 import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
@@ -168,7 +169,19 @@ function mergeFallback(target: any, fallback: any): any {
 // steht (RESTRICTED_DRUG_TERMS). Die Antwort wird deshalb hier einmal zentral
 // bereinigt - so erreicht der Begriff weder Seite, Meta, JSON-LD noch den
 // Nuxt-Payload. SEO-Modus (www) bleibt unveraendert.
+// #307 (E24): Rezensionen ohne volle Arztnamen/Dr.-Titel und mit gekuerzten
+// Autor:innen, Test-Aerzt:innen raus - www und go., inklusive JSON-LD und
+// Nuxt-Payload. Laeuft zuletzt, damit auch nachgeladene Rezensionen
+// (go.-Standortseite) erfasst sind.
 async function fetchFromStrapi(
+  event: any,
+  preview: boolean,
+  previewStatus: 'draft' | 'published',
+) {
+  return sanitizeReviewsDeep(await fetchFromStrapiByMode(event, preview, previewStatus));
+}
+
+async function fetchFromStrapiByMode(
   event: any,
   preview: boolean,
   previewStatus: 'draft' | 'published',

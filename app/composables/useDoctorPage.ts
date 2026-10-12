@@ -1,5 +1,6 @@
 import { mapDoctorPageBlocks } from "~/lib/strapi/mapper/mapDoctorPageBlocks";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
+import { isTestEmployeeSlug } from "#shared/reviewPrivacy";
 
 export function useDoctorPage(brandName: string = "") {
   const { locale, fallbackLocale, t } = useI18n();
@@ -38,7 +39,8 @@ export function useDoctorPage(brandName: string = "") {
       throw handleFetchError(error.value, t);
     }
 
-    if (!data.value?.data || data.value.data.hideFromPublic) {
+    // #307: Test-Eintraege ("Frau Ärztin Weber") nie ausliefern.
+    if (!data.value?.data || data.value.data.hideFromPublic || isTestEmployeeSlug(slug)) {
       throw handleNotFound(t);
     }
 

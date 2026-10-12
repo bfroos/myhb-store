@@ -10,6 +10,8 @@
           :class="themeClass(1)"
         >
           <h2 v-if="displayHeadline" :id="mobileHeadingId">{{ displayHeadline }}</h2>
+          <!-- #307: Echtheitshinweis (§ 5b Abs. 3 UWG) -->
+          <UiMoleculeReviewAuthenticityNote with-label class="reviews__auth-note" />
           <div class="reviews__static-cta">
             <SharedButton :button="ctaButton" />
           </div>
@@ -46,6 +48,7 @@
             <p class="reviews__title" aria-hidden="true">
               {{ displayHeadline }}
             </p>
+            <UiMoleculeReviewAuthenticityNote with-label class="reviews__auth-note" />
             <div>
               <SharedButton :button="ctaButton" />
             </div>

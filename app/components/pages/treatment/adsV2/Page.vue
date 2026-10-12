@@ -65,7 +65,7 @@
           <ImageGoogleG class="v2-why__g" />
           <span>
             <span class="v2-why__score"><strong>{{ ratingLabel }}</strong> von 5 Sternen <span class="v2-why__stars" aria-hidden="true">★★★★★</span></span>
-            <span class="v2-why__count">{{ ratingCountLabel }} bei Google {{ atLocation }}</span>
+            <span class="v2-why__count">{{ ratingCountLabel }} bei Google {{ atLocation }} <UiMoleculeReviewAuthenticityNote /></span>
           </span>
         </div>
         <ol class="v2-why__list" role="list">
@@ -89,14 +89,14 @@
             <span class="v2-trust__stars" role="img" :aria-label="`${ratingLabel} von 5 Sternen`">
               <IconStarFilled v-for="n in 5" :key="n" size="16" aria-hidden="true" />
             </span>
-            <span class="v2-trust__text">Sternen bei Google – aus {{ ratingCountLabel }} {{ atLocation }}</span>
+            <span class="v2-trust__text">Sternen bei Google – aus {{ ratingCountLabel }} {{ atLocation }} <UiMoleculeReviewAuthenticityNote /></span>
           </span>
         </li>
         <li v-else-if="rating" class="v2-trust__item">
           <IconStarFilled class="v2-trust__icon v2-trust__icon--star" size="22" aria-hidden="true" />
           <span>
             <strong>Google {{ ratingLabel }}</strong>
-            <span class="v2-trust__text">{{ ratingCountLabel }} {{ atLocation }}</span>
+            <span class="v2-trust__text">{{ ratingCountLabel }} {{ atLocation }} <UiMoleculeReviewAuthenticityNote /></span>
           </span>
         </li>
         <li v-for="item in trustItems" :key="item.key" class="v2-trust__item">
@@ -393,6 +393,8 @@
         <p v-if="rating" class="v2-lead">
           <IconStarFilled class="v2-star" size="18" aria-hidden="true" />
           <strong>{{ ratingLabel }}</strong> · {{ ratingCountLabel }} bei Google {{ atLocation }}
+          <!-- #307: Echtheitshinweis (§ 5b Abs. 3 UWG) -->
+          <UiMoleculeReviewAuthenticityNote />
         </p>
         <!-- Kundenfeedback-Videos (Benjamin, 01.10.2026): tippen zum Abspielen, mit Ton -->
         <div v-if="clips.feedback.length" class="v2-feedback" data-track-placement="v2_feedback">
