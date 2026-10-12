@@ -5,15 +5,19 @@
     v-bind="fixedBlocks.hero"
     show-floating-cta
   />
-  <UiMoleculeMedicalReviewerSignature
-    v-if="!isAdsMode"
-    :reviewer="reviewer"
-    :date="treatmentUpdatedAt"
-  />
   <PagesTreatmentOrderedBlocks
     :fixed-blocks="fixedBlocks"
     :order="COMMON_TREATMENT_BLOCK_ORDER"
-  />
+  >
+    <template #reviewer="{ inline }">
+      <UiMoleculeMedicalReviewerSignature
+        v-if="!isAdsMode"
+        :reviewer="reviewer"
+        :date="treatmentUpdatedAt"
+        :inline="inline"
+      />
+    </template>
+  </PagesTreatmentOrderedBlocks>
   <PagesTreatmentRelatedArticles
     v-if="!isAdsMode && relatedArticles.length"
     :articles="relatedArticles"
