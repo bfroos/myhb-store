@@ -5,6 +5,7 @@ import { isAdsPricePage, prepareAdsPricePage } from "#shared/adsPricePages";
 import { stripBlockedAdsVideos } from "#shared/adsMedia";
 import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
 import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
+import { rewriteBeforeAfterDeep, rewritesBeforeAfterFor } from "#shared/beforeAfterWording";
 import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
@@ -178,7 +179,11 @@ async function fetchFromStrapi(
   preview: boolean,
   previewStatus: 'draft' | 'published',
 ) {
-  return sanitizeReviewsDeep(await fetchFromStrapiByMode(event, preview, previewStatus));
+  const result = sanitizeReviewsDeep(await fetchFromStrapiByMode(event, preview, previewStatus));
+  // #307: kein "Vorher-Nachher" bei Unterspritzungen (BGH I ZR 170/24) -
+  // Behandlungs-, Standort- und freie Seiten, nicht der Ratgeber.
+  const strapiPath = getRequestURL(event).pathname.replace(/^\/api\/strapi/, '');
+  return rewritesBeforeAfterFor(strapiPath) ? rewriteBeforeAfterDeep(result) : result;
 }
 
 async function fetchFromStrapiByMode(
