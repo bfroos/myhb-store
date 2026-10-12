@@ -6,6 +6,7 @@ import { stripBlockedAdsVideos } from "#shared/adsMedia";
 import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
 import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
 import { rewriteBeforeAfterDeep, rewritesBeforeAfterFor } from "#shared/beforeAfterWording";
+import { normalizePriceWordingDeep } from "#shared/priceWording";
 import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
@@ -183,7 +184,13 @@ async function fetchFromStrapi(
   // #307: kein "Vorher-Nachher" bei Unterspritzungen (BGH I ZR 170/24) -
   // Behandlungs-, Standort- und freie Seiten, nicht der Ratgeber.
   const strapiPath = getRequestURL(event).pathname.replace(/^\/api\/strapi/, '');
-  return rewritesBeforeAfterFor(strapiPath) ? rewriteBeforeAfterDeep(result) : result;
+  if (!rewritesBeforeAfterFor(strapiPath)) return result;
+  const rewritten = rewriteBeforeAfterDeep(result);
+  // #313: einheitliche Preisschreibweise ("ab 149,99 €") - nur www; go.
+  // rechnet Neukundenpreise selbst um (shared/newCustomerOffer.ts).
+  const config = useRuntimeConfig(event);
+  const siteMode = config.siteMode || config.public.siteMode;
+  return siteMode === 'ads' ? rewritten : normalizePriceWordingDeep(rewritten);
 }
 
 async function fetchFromStrapiByMode(
