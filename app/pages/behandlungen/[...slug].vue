@@ -1,5 +1,13 @@
 <template>
   <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
+  <!-- E24 SEO-Pilot Lippen (shared/seoPilotLippen.ts): eigener Hub -->
+  <PagesTreatmentSeoHubPage
+    v-if="seoPilotHub && fixedBlocks.hero"
+    :hero="fixedBlocks.hero"
+    :treatment-page="treatmentPage"
+    :content="SEO_HUB_LIPPEN"
+  />
+  <template v-else>
   <BlockTreatmentHero
     v-if="fixedBlocks.hero"
     v-bind="fixedBlocks.hero"
@@ -18,19 +26,21 @@
       />
     </template>
   </PagesTreatmentOrderedBlocks>
+  </template>
   <PagesTreatmentRelatedArticles
     v-if="!isAdsMode && relatedArticles.length"
     :articles="relatedArticles"
   />
   <BlockLocationTeasers
-    v-if="hasTreatmentLocations"
+    v-if="hasTreatmentLocations && !seoPilotHub"
     :headline="treatmentLocationTeasersHeadline"
     :locations="treatmentLocations"
     :treatment-path-key="treatmentPage?.pathKey"
     :treatment-name="isAdsMode ? undefined : treatmentPage?.name"
     :show-filters="false"
   />
-  <BlockRenderer v-if="blocks" :blocks="blocks" />
+  <!-- Pilot-Hub: Standortliste steht schon in der Standorttabelle -->
+  <BlockRenderer v-if="blocks && !seoPilotHub" :blocks="blocks" />
   <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
   <BlockAdsPriceFootnote
     v-if="isAdsMode && fixedBlocks.hero"
@@ -42,6 +52,7 @@
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import { COMMON_TREATMENT_BLOCK_ORDER } from "~/lib/blocks/treatmentBlockOrder";
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
+import { SEO_HUB_LIPPEN, isSeoPilotHub } from "#shared/seoPilotLippen";
 
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
@@ -88,6 +99,11 @@ const treatmentLocationTeasersHeadline = computed(() =>
 );
 
 const treatmentPageLoaded = await fetchTreatment();
+// www: E24 SEO-Pilot, Hub "Lippen aufspritzen" (nur Deutsch).
+const { locale: seoLocale } = useI18n();
+const seoPilotHub = computed(
+  () => !isAdsMode.value && seoLocale.value === "de" && isSeoPilotHub(treatmentPage.value?.pathKey),
+);
 
 if (treatmentPageLoaded) {
   if (treatmentType.value) {
@@ -97,7 +113,11 @@ if (treatmentPageLoaded) {
     });
   }
   usePageI18nParams(localizations.value, "pathKey");
-  await setPageSeo(seo.value);
+  await setPageSeo(
+    seoPilotHub.value
+      ? { ...(seo.value ?? {}), metaTitle: SEO_HUB_LIPPEN.metaTitle, metaDescription: SEO_HUB_LIPPEN.metaDescription }
+      : seo.value,
+  );
   await fetchRelatedArticles(treatmentPage.value?.pathKey?.split("/")[0]);
 }
 
@@ -114,8 +134,9 @@ const treatmentUpdatedAt = computed(
   () => (treatmentPage.value as any)?.updatedAt ?? null,
 );
 
+// Pilot-Hub gibt MedicalProcedure und FAQPage selbst aus (HubPage.vue).
 const medicalProcedureSchema = computed(() =>
-  buildGeneralMedicalProcedureSchema(treatmentPage.value, {
+  seoPilotHub.value ? null : buildGeneralMedicalProcedureSchema(treatmentPage.value, {
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
     brandName: brandName.value,
@@ -130,6 +151,7 @@ const medicalProcedureSchema = computed(() =>
 // Schema.org FAQPage (nur wenn FAQ-Block vorhanden)
 const faqSchema = computed(() => {
   if (!fixedBlocks.value?.faq) return null;
+  if (seoPilotHub.value) return null;
   
   // Merge faqs from both direct faqs and faqSets
   const directFaqs = fixedBlocks.value.faq.faqs ?? [];
@@ -142,6 +164,7 @@ const faqSchema = computed(() => {
 
 // Schema.org VideoObject
 const videoSchema = computed(() => {
+  if (seoPilotHub.value) return null;
   const about = fixedBlocks.value?.about as any;
   return buildVideoObjectSchema({
     media: about?.mediaItems?.[0],

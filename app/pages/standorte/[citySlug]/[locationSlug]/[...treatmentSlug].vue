@@ -6,6 +6,16 @@
     :treatment-page="treatmentPage"
     :location="location"
   />
+  <!-- E24 SEO-Pilot Lippen (shared/seoPilotLippen.ts): eigene Stadtseite -->
+  <template v-else-if="seoPilot && fixedBlocks?.hero">
+    <UiOrganismBaseBreadcrumb :items="breadcrumbItems" />
+    <PagesTreatmentSeoCityPage
+      :hero="fixedBlocks.hero"
+      :treatment-page="treatmentPage"
+      :location="location"
+      :content="seoPilot"
+    />
+  </template>
   <template v-else>
     <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
     <PagesTreatmentOrderedBlocks
@@ -38,6 +48,7 @@ import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
 import { rememberOfferVariant } from "~/lib/offerVariant";
+import { seoPilotCity } from "#shared/seoPilotLippen";
 import {
   LOCATION_ADS_BLOCK_ORDER,
   LOCATION_SEO_BLOCK_ORDER,
@@ -61,6 +72,16 @@ const {
 const { isAdsMode } = useSiteModeFlags();
 // go.: Seitenvorlage v2 fuer die Seiten aus ADS_TEMPLATE_V2_PAGES.
 const isV2 = useAdsTemplateV2();
+// www: E24 SEO-Pilot (Lippen Köln/Düsseldorf). Nur deutsche Seite.
+const seoRoute = useRoute();
+const seoPilot = computed(() => {
+  if (isAdsMode.value) return null;
+  const r = seoRoute;
+  if (!/^\/standorte\//.test(r.path)) return null;
+  const p = r.params as Record<string, unknown>;
+  const slug = Array.isArray(p.treatmentSlug) ? p.treatmentSlug.join("/") : String(p.treatmentSlug ?? "");
+  return seoPilotCity(String(p.citySlug ?? ""), String(p.locationSlug ?? ""), slug);
+});
 const pageLoaded = await fetchPage();
 // Standort-Konsolidierung: Die Behandlung gehoert in dieser Stadt zu einem
 // anderen Standort (Köln: OPs -> MediaPark, nichtoperativ -> Köln Arcaden).
@@ -137,7 +158,12 @@ if (pageLoaded) {
     },
   ], { hreflangLocales: ["de"] }); // TSEO-01: nur de + x-default
   // Vorschaubild beim Teilen: Titelbild der Seite statt des allgemeinen
-  await setPageSeo(seo.value, (fixedBlocks.value?.hero as any)?.cover ?? null);
+  await setPageSeo(
+    seoPilot.value
+      ? { ...(seo.value ?? {}), metaTitle: seoPilot.value.metaTitle, metaDescription: seoPilot.value.metaDescription }
+      : seo.value,
+    (fixedBlocks.value?.hero as any)?.cover ?? null,
+  );
 }
 
 // Schema.org MedicalProcedure
@@ -146,8 +172,9 @@ const route = useRoute();
 const { brandName } = useBrand();
 const appConfig = useAppConfig();
 
+// Pilot-Seiten geben MedicalProcedure und FAQPage selbst aus (CityPage.vue).
 const medicalProcedureSchema = computed(() =>
-  buildMedicalProcedureSchema(treatmentPage.value, location.value, {
+  seoPilot.value ? null : buildMedicalProcedureSchema(treatmentPage.value, location.value, {
     publicUrl: (config.public.publicUrl as string) || "",
     path: route.path,
     brandName: brandName.value,
@@ -163,6 +190,7 @@ const medicalProcedureSchema = computed(() =>
 // Schema.org FAQPage (nur wenn FAQ-Block sichtbar ist)
 const faqSchema = computed(() => {
   if (!fixedBlocks.value?.faq) return null;
+  if (seoPilot.value) return null;
   // v2 zeigt eigene Fragen statt des Strapi-FAQ-Blocks.
   if (isV2.value) return null;
   // Ausgeblendete Bloecke duerfen nicht im strukturierten Datensatz landen -
@@ -181,6 +209,7 @@ const faqSchema = computed(() => {
 // Schema.org VideoObject (from about block videos)
 const videoSchema = computed(() => {
   if (!blockOrder.value.includes("about")) return null;
+  if (seoPilot.value) return null;
   // v2 zeigt den About-Block (und sein Video) nicht.
   if (isV2.value) return null;
 
