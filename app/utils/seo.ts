@@ -5,6 +5,7 @@ import { stripAdsTemplateV2Preview } from "#shared/adsTemplateV2";
 import { stripAdsOfferB } from "#shared/adsOfferVariant";
 import { isBlockedAdsImageFile } from "#shared/adsMedia";
 import { isIndexableLocale, selectAlternateLocales } from "#shared/hreflang";
+import { cleanSeoText } from "#shared/seoTitles";
 
 /**
  * Fallback share image (Open Graph / Twitter) used when a page has neither a
@@ -197,10 +198,13 @@ export async function setPageSeo(
       toOgImageValue(pageSeo?.openGraph?.ogImage) ??
       toShareImage(fallbackOgImage, isAdsMode.value) ??
       DEFAULT_OG_IMAGE;
+    // E24 #315: www-Titles/-Descriptions ohne Emojis, Haken, Rabattwerbung.
     const clean = (value?: string | null) =>
       value && isAdsMode.value
         ? replaceRestrictedDrugTerms(value, currentLocale)
-        : value ?? undefined;
+        : value
+          ? cleanSeoText(value)
+          : undefined;
 
     useSeoMeta({
       title: clean(title),

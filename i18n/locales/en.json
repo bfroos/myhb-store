@@ -263,6 +263,10 @@
       },
       "locationTreatment": {
         "seo": {
+          "titleWww": "{treatmentName} {city}: {priceTag}",
+          "titleWwwNoPrice": "{treatmentName} {city}",
+          "descriptionWww": "{treatmentName} in {city} ({locationName}): by doctors, {priceTag}. Certified doctors, appointments within 24 h, walk-ins welcome – book online.",
+          "descriptionWwwNoPrice": "{treatmentName} in {city} ({locationName}): by doctors. Certified doctors, appointments within 24 h, walk-ins welcome – book online.",
           "title": "{treatmentName} treatment at {brandNameShort} in {city}, {locationName}",
           "description": "{brandName} in {city}, {locationName} – {treatmentName} – Opening hours and all details about the treatment."
         }
@@ -323,7 +327,7 @@
     "treatment": {
       "allTreatments": "Treatments",
       "locationTeasers": {
-        "headline": "{treatment} at our locations"
+        "headline": "{treatment} near you"
       },
       "error": {
         "treatmentNotFound": "Treatment not found",

@@ -2,7 +2,7 @@
   <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
   <BlockTreatmentHero
     v-if="fixedBlocks.hero"
-    v-bind="fixedBlocks.hero"
+    v-bind="heroWithSeoH1"
     show-floating-cta
   />
   <PagesTreatmentOrderedBlocks
@@ -42,6 +42,7 @@
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import { COMMON_TREATMENT_BLOCK_ORDER } from "~/lib/blocks/treatmentBlockOrder";
 import { buildVideoObjectSchema } from "~/utils/schemaVideo";
+import { seoTitleFor } from "#shared/seoTitles";
 
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
@@ -88,6 +89,18 @@ const treatmentLocationTeasersHeadline = computed(() =>
 );
 
 const treatmentPageLoaded = await fetchTreatment();
+// E24 #315: Title/H1 auf den Suchbegriff, Preis aus Strapi (nur www, Deutsch).
+const { locale: seoLocale } = useI18n();
+const seoTitle = computed(() =>
+  !isAdsMode.value && seoLocale.value === "de"
+    ? seoTitleFor(treatmentPage.value?.pathKey, (treatmentPage.value as any)?.treatment)
+    : null,
+);
+const heroWithSeoH1 = computed(() =>
+  seoTitle.value?.h1
+    ? { ...fixedBlocks.value.hero, headlinePrefix: undefined, headline: seoTitle.value.h1, headlineSuffix: undefined }
+    : fixedBlocks.value.hero,
+);
 
 if (treatmentPageLoaded) {
   if (treatmentType.value) {
@@ -97,7 +110,9 @@ if (treatmentPageLoaded) {
     });
   }
   usePageI18nParams(localizations.value, "pathKey");
-  await setPageSeo(seo.value);
+  await setPageSeo(
+    seoTitle.value ? ({ ...(seo.value ?? {}), metaTitle: seoTitle.value.title } as any) : seo.value,
+  );
   await fetchRelatedArticles(treatmentPage.value?.pathKey?.split("/")[0]);
 }
 
