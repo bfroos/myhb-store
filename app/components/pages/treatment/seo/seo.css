@@ -11,7 +11,7 @@
 .seo-card--soft {
   background: var(--color-card-bg-soft);
 }
-.seo-card > * + * {
+.seo-card.seo-card > * + * {
   margin-top: var(--space-500);
 }
 .seo-h1 {
