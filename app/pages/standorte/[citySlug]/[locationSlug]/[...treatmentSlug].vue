@@ -32,6 +32,16 @@
         />
       </template>
     </PagesTreatmentOrderedBlocks>
+    <!-- E24 #315: Stadtseite -> bundesweite Seite und Kostenseite (www) -->
+    <UiLayoutSectionBlock v-if="hubLink" spacing="sibling">
+      <p class="hubLink">
+        Wirkung, Ablauf und Risiken bundesweit erklärt:
+        <NuxtLink :to="hubLink.href">{{ hubLink.text }}</NuxtLink>
+        <template v-if="hubLink.costHref">
+          · <NuxtLink :to="hubLink.costHref">{{ hubLink.costText }}</NuxtLink>
+        </template>
+      </p>
+    </UiLayoutSectionBlock>
     <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
     <BlockAdsPriceFootnote
       v-if="isAdsMode && fixedBlocks?.hero"
@@ -45,6 +55,7 @@ import { buildVideoObjectSchema } from "~/utils/schemaVideo";
 import { buildLocalBusinessSchema } from "~/utils/schemaLocation";
 import { medicalProcedureId } from "~/utils/schemaTreatment";
 import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
+import { seoTitleFor } from "#shared/seoTitles";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
 import { rememberOfferVariant } from "~/lib/offerVariant";
@@ -124,6 +135,31 @@ onBeforeUnmount(() => {
   if (next && isAdsTemplateV2LivePage(next[1], next[2], next[3])) return;
   delete (window as any).__myhbPreviewTemplate;
   (window as any).dataLayer?.push({ template: undefined });
+});
+
+// E24 #315: Link von der Stadtseite auf die bundesweite Seite (Hub-Signal)
+// und die Kostenseite des Themas. Nur www, Deutsch.
+const COST_PAGE_BY_CATEGORY: Record<string, { href: string; text: string }> = {
+  botox: { href: "/p/botox-kosten", text: "Kosten pro Zone" },
+  hyaluron: { href: "/p/hyaluron-spritzen-kosten", text: "Hyaluron Kosten" },
+  skinbooster: { href: "/p/skinbooster-preise", text: "Skinbooster Kosten" },
+};
+const hubRoute = useRoute();
+const hubLink = computed(() => {
+  if (isAdsMode.value) return null;
+  if (!/^\/standorte\//.test(hubRoute.path)) return null;
+  const pathKey = String((treatmentPage.value as any)?.pathKey ?? "");
+  if (!pathKey || pathKey.startsWith("schoenheitsoperationen")) return null;
+  // Kontrollgruppe des Lippen-Pilots (Leipzig, Aachen) bleibt unveraendert.
+  if (pathKey === "hyaluron/lippen-aufspritzen" && ["hoefe-am-bruehl", "aquis-plaza"].includes(String(hubRoute.params.locationSlug ?? ""))) return null;
+  const name = seoTitleFor(pathKey, null)?.h1 ?? treatmentPage.value?.name ?? "";
+  const cost = COST_PAGE_BY_CATEGORY[pathKey.split("/")[0] ?? ""];
+  return {
+    href: `/behandlungen/${pathKey}`,
+    text: name,
+    costHref: pathKey === "hyaluron/lippen-aufspritzen" ? "/behandlungen/hyaluron/lippen-aufspritzen#kosten" : cost?.href,
+    costText: pathKey === "hyaluron/lippen-aufspritzen" ? "Lippen aufspritzen Kosten" : cost?.text,
+  };
 });
 
 // blockOrder sortiert nur; nicht gelistete Bloecke werden in Default-
@@ -249,3 +285,17 @@ useSchemaOrg(faqSchema);
 useSchemaOrg(videoSchema);
 useSchemaOrg(localBusinessSchema); // NEW: Address + Stars in SERPs
 </script>
+
+<style scoped>
+.hubLink {
+  margin: 0;
+  padding: var(--space-500) var(--space-card-pad-xs);
+  border-radius: var(--border-radius-card, 24px);
+  background: var(--color-card-bg-light, #fff);
+  line-height: 1.6;
+}
+.hubLink a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+</style>
