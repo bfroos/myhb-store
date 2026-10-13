@@ -1,5 +1,6 @@
 import type { LocationDto } from "~/lib/strapi/dto/collections";
 import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
+import { istOnlineBuchbar } from "~/lib/bookingAbTest";
 
 /**
  * Der Standort, den die aktuelle Seite bereits kennt (bfroos/myhb-store#78).
@@ -60,6 +61,7 @@ export function useSeitenStandort() {
     () => null,
   );
   const route = useRoute();
+  const { appOnly } = useBookingAbTest();
 
   /** Setzt den Standort der Seite. `null` loescht ihn. */
   function setzeSeitenStandort(location?: LocationDto | null) {
@@ -80,7 +82,7 @@ export function useSeitenStandort() {
             lat,
             long,
             phoneNumber: location.contact?.phoneNumber ?? null,
-            buchbar: !!(calendlyUrl || appBookingUrl),
+            buchbar: istOnlineBuchbar({ calendlyUrl, appBookingUrl }, appOnly),
           }
         : null;
     gemerkt.value =

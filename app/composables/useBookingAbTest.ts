@@ -3,6 +3,7 @@ import {
   readAbBucket,
   readAbSource,
   resolveBookingTarget,
+  resolveAppOnlyTarget,
   forcedAbVariant,
   istNurCalendlySeite,
   type AbSource,
@@ -36,11 +37,11 @@ export function useBookingAbTest() {
 
   function resolveBooking(urls: BookingUrls): AppliedBooking {
     // 07.10.2026: Test beendet, alle buchen wie der App-Arm — auch auf den
-    // frueheren Nur-Calendly-Seiten. Ohne `appBookingUrl` faellt der Standort
-    // sichtbar (`ab_fallback`) auf Calendly zurueck. Quelle ist das
-    // Deployment, nicht mehr das Cookie der Testzeit.
+    // frueheren Nur-Calendly-Seiten. Ohne `appBookingUrl` oeffnet seit dem
+    // 13.10. die Standortsuche statt Calendly (`ab_fallback` bleibt am
+    // Ereignis). Quelle ist das Deployment, nicht mehr das Cookie der Testzeit.
     if (abConfig.appOnly) {
-      const resolved = resolveBookingTarget(urls, "app");
+      const resolved = resolveAppOnlyTarget(urls);
       return { ...resolved, abSource: siteMode };
     }
     // Die Meta-Rabatt-Seiten buchen immer ueber Calendly (NUR_CALENDLY_PFADE).
