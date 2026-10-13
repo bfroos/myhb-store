@@ -14,7 +14,6 @@ https://www.myhealthandbeauty.com/aerzte/carina
 https://www.myhealthandbeauty.com/aerzte/claudia
 https://www.myhealthandbeauty.com/aerzte/csilla
 https://www.myhealthandbeauty.com/aerzte/dr-gero-ruppert
-https://www.myhealthandbeauty.com/aerzte/employee
 https://www.myhealthandbeauty.com/aerzte/iqra
 https://www.myhealthandbeauty.com/aerzte/jenniffer-bauer
 https://www.myhealthandbeauty.com/aerzte/katharina
@@ -250,7 +249,6 @@ https://www.myhealthandbeauty.com/en/doctors/burhan
 https://www.myhealthandbeauty.com/en/doctors/carina
 https://www.myhealthandbeauty.com/en/doctors/csilla
 https://www.myhealthandbeauty.com/en/doctors/dr-gero-ruppert
-https://www.myhealthandbeauty.com/en/doctors/employee
 https://www.myhealthandbeauty.com/en/doctors/iqra
 https://www.myhealthandbeauty.com/en/doctors/jenniffer-bauer
 https://www.myhealthandbeauty.com/en/doctors/katharina
