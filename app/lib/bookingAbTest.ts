@@ -12,8 +12,8 @@
  * - bucht jeder Knopf wie der bisherige App-Arm: `appBookingUrl` des
  *   Standorts, `ab_variant: "app"` an den Ereignissen und an der App-URL,
  * - gilt das auch fuer die frueheren Nur-Calendly-Seiten (NUR_CALENDLY_PFADE),
- * - faellt ein Standort ohne `appBookingUrl` sichtbar auf Calendly zurueck
- *   (`ab_fallback: true`, wie bisher im App-Arm).
+ * - oeffnet ein Standort ohne `appBookingUrl` die Standortsuche statt Calendly
+ *   (seit 13.10.2026, `resolveAppOnlyTarget`; `ab_fallback: true` am Ereignis).
  *
  * `NUXT_PUBLIC_BOOKING_APP_ONLY=off` stellt den alten Split
  * (`NUXT_PUBLIC_AB_BOOKING_SPLIT`) unveraendert wieder her — Notbremse ohne
@@ -354,6 +354,33 @@ export function resolveBookingTarget(
   }
 
   return { url: appBookingUrl, abVariant: "app" };
+}
+
+/**
+ * Nur-App-Betrieb: Ziel eines Buchungsknopfs (13.10.2026).
+ *
+ * Bis zum 13.10. fiel ein Standort ohne `appBookingUrl` auch im Nur-App-Betrieb
+ * auf seine Calendly-URL zurueck. Gemessen 09.–12.10.2026: Leipzig hatte drei
+ * Tage keine App-URL in Strapi, 118 Klicks und 29 Buchungen liefen still ueber
+ * Calendly. Jetzt oeffnet die Standortsuche, der Standort selbst steht dort mit
+ * Telefon statt Knopf (`istOnlineBuchbar`). `abFallback` bleibt am Ereignis,
+ * damit die Luecke in `funnel_events` sichtbar ist.
+ */
+export function resolveAppOnlyTarget(urls: BookingUrls): ResolvedBooking {
+  const appBookingUrl = urls.appBookingUrl?.trim() || undefined;
+  if (appBookingUrl) return { url: appBookingUrl, abVariant: "app" };
+  if (urls.calendlyUrl?.trim()) return { abVariant: "app", abFallback: true };
+  return { abVariant: "app" };
+}
+
+/**
+ * Bekommt dieser Standort einen Buchungsknopf? Im Nur-App-Betrieb nur mit
+ * App-URL, sonst reicht wie bisher eine der beiden.
+ */
+export function istOnlineBuchbar(urls: BookingUrls, appOnly: boolean): boolean {
+  const app = !!urls.appBookingUrl?.trim();
+  if (appOnly) return app;
+  return app || !!urls.calendlyUrl?.trim();
 }
 
 /**

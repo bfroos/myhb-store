@@ -144,6 +144,7 @@ import {
 import { isMediaImage } from "~/utils/media";
 import { getGoogleReviewForPlace } from "~/utils/schemaLocation";
 import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
+import { istOnlineBuchbar } from "~/lib/bookingAbTest";
 import {
   locationTeaserImageAlt,
   locationTeaserTitle,
@@ -227,11 +228,12 @@ const googleReview = computed(() => {
  * gesperrt ist (#141: 70 Klicks in zwei Wochen, null Buchungen). Jetzt
  * bekommt sie den Kontaktweg darunter statt eines Knopfes ins Leere.
  */
-// 07.10.2026 (nur noch App): Ein App-Link allein reicht auch.
-const buchbar = computed(() => {
-  const urls = bookingUrlsOf(props.item as any);
-  return !!(urls.calendlyUrl || urls.appBookingUrl);
-});
+// 07.10.2026 (nur noch App): Ein App-Link allein reicht auch. Seit 13.10.
+// braucht es ihn: ohne App-Link Kontaktweg statt Calendly-Knopf.
+const { appOnly } = useBookingAbTest();
+const buchbar = computed(() =>
+  istOnlineBuchbar(bookingUrlsOf(props.item as any), appOnly),
+);
 
 const phoneHref = computed(() => {
   const phone = props.item.contact?.phoneNumber?.trim();

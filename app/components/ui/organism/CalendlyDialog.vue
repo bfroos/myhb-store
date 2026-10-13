@@ -143,6 +143,7 @@ import {
 import { PAGE_SETTINGS, withCalendlyLocale } from "~/lib/calendlyEmbedUrl";
 import { withBookingPrefill } from "~/lib/bookingPrefill";
 import { bookingUrlsOf } from "~/lib/strapi/bookingUrls";
+import { istOnlineBuchbar } from "~/lib/bookingAbTest";
 import {
   attachBookingPrewarm,
   bookingWasPrewarmed,
@@ -278,7 +279,7 @@ onBeforeUnmount(() => {
 });
 const { openAppBookingDialog } = useAppBookingDialog();
 const { treatmentEventUrl } = useCalendlyTreatmentEvent();
-const { resolveBooking } = useBookingAbTest();
+const { resolveBooking, appOnly } = useBookingAbTest();
 const {
   trackEvent,
   trackBookingClick,
@@ -502,9 +503,11 @@ function handleLocationBook(location: {
   // Deeplink #66: Wurde der Dialog von einer Behandlungsseite geoeffnet, haengt
   // der Behandlungs-Slug auch an der App-URL des erst hier gewaehlten
   // Standorts, damit die Behandlung in der App vorausgewaehlt ist.
+  // Nur-App (13.10.2026): kein Rueckfall auf Calendly. Standorte ohne App-URL
+  // zeigen in der Liste ohnehin keinen Knopf (istOnlineBuchbar).
   const bookingUrl =
     withAppTreatmentSlug(targetUrl, params.value?.appTreatmentSlug) ??
-    erlaubt.calendlyUrl;
+    (appOnly ? undefined : erlaubt.calendlyUrl);
   if (!bookingUrl) return;
   const isApp = isAppBookingUrl(bookingUrl);
   // Conversion-Audit #67: Standortwahl im Dialog tracken, aufgeteilt nach
@@ -630,7 +633,7 @@ const ersatzHinweis = computed(() => {
   if (!isAdsMode.value || !ort || ort.buchbar) return null;
   const naechste = sortiertNachSeitenOrt.value
     ? (dialogLocations.value.find(
-        (loc: any) => bookingUrlsOf(loc).calendlyUrl,
+        (loc: any) => istOnlineBuchbar(bookingUrlsOf(loc), appOnly),
       ) as any)
     : null;
   const km = naechste?.distanceInKilometers;
