@@ -344,6 +344,7 @@
             <span class="v2-doctor__name">
               <span class="v2-doctor__title">{{ doc.title || "\u00a0" }}</span>
               <strong class="v2-doctor__full">{{ doc.fullName }}</strong>
+              <span v-if="doc.homeLocation" class="v2-doctor__home">aus {{ doc.homeLocation }}</span>
             </span>
           </li>
         </ul>
@@ -601,6 +602,7 @@ import {
   IconPhone,
   IconRepeat,
   IconShieldCheck,
+  IconUsers,
   IconSnowflake,
   IconSparkles,
   IconStarFilled,
@@ -1182,6 +1184,7 @@ const wayClip = computed(() => adsWayClipFor(locSlug));
 const trustItems = computed(() => W(adsV2TrustItems(pathKey.value)));
 const priceInclusion = computed(() => adsV2PriceInclusion(pathKey.value));
 function trustIcon(key: string) {
+  if (key === "kunden") return IconUsers;
   if (key === "garantie") return IconShieldCheck;
   if (key === "walkin") return IconWalk;
   return IconStethoscope;
@@ -1352,6 +1355,7 @@ const doctors = computed(() =>
       name: employeeDisplayName(d),
       ...doctorLines(employeeDisplayName(d)),
       photo: d.photo,
+      homeLocation: (d.homeLocation as string | null | undefined) ?? null,
     }))
     .filter((d) => d.name && d.photo),
 );
@@ -1990,6 +1994,11 @@ const routeHref = computed(() => {
   width: 100%;
   font-size: var(--font-sm);
   line-height: var(--line-sm);
+}
+
+.v2-doctor__home {
+  color: var(--color-text-light);
+  font-size: var(--font-xs, 0.75rem);
 }
 
 .v2-doctor__title {

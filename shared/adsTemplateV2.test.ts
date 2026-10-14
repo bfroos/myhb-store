@@ -20,6 +20,7 @@ import {
   stripAdsTemplateV2Preview,
   openingHoursSummary,
   pickAdsV2Doctors,
+  fillAdsV2Doctors,
   pickAdsV2Reviews,
   shortenText,
   ADS_V2_CTA,
@@ -114,7 +115,7 @@ test("Preiskarten je Behandlung passend zum Hero-Preis", () => {
 test("Zufriedenheitsgarantie fuer alle Kategorien, Text je Kategorie; Hersteller nur wo freigegeben", () => {
   const g = (k: string) => adsV2TrustItems(k).find((i) => i.key === "garantie")?.text ?? "";
   // Reihenfolge nach der Google-Bewertung: Garantie, Aerzt:innen, ohne Termin
-  assert.deepEqual(adsV2TrustItems("hyaluron/jawline").map((i) => i.key), ["garantie", "aerzte", "walkin"]);
+  assert.deepEqual(adsV2TrustItems("hyaluron/jawline").map((i) => i.key), ["kunden", "garantie", "aerzte", "walkin"]);
   assert.equal(g("muskelrelaxans/stirnfalte"), "Kostenlose Nachkontrolle nach 14 Tagen inkl. kostenloser Nachbehandlung");
   assert.match(g("hyaluron/lippen-aufspritzen"), /Korrekturen der Form inklusive – zusätzliches Volumen \(weitere ml\) wird nach Preisliste berechnet/);
   for (const k of ["infusionen/vitamin-c-infusion", "skinbooster/profhilo", "skinbooster/vampir-lifting-prp", "anti-haarausfall/mesotherapie-haare", "hyaluron/hylase"]) {
@@ -451,4 +452,24 @@ test("editorial: live auf allen v2-Seiten, in der Vorschau nur die gelisteten", 
   );
   // bundesweite /aktion-Seiten haben keinen Standort
   assert.equal(isAdsV2EditorialPreview("/aktion/botox", null, null, "muskelrelaxans/stirnfalte"), false);
+});
+
+test("Aerzt:innen auffuellen: eigene zuerst, dann andere Standorte mit Herkunft (14.10.2026)", () => {
+  const L = (slug: string, name = slug) => ({ slug, name: `MY HEALTH & BEAUTY ${name}` });
+  const all = [
+    { firstName: "Eigen", lastName: "A", employeeType: "doctor", photo: {}, locations: [L("gesundbrunnencenter", "Berlin Gesundbrunnen-Center")] },
+    { firstName: "Ohne", lastName: "Foto", employeeType: "doctor", locations: [L("gesundbrunnencenter")] },
+    { firstName: "Koeln", lastName: "B", employeeType: "doctor", photo: {}, locations: [L("koeln-arcaden", "Köln Arcaden")] },
+    { firstName: "Viele", lastName: "C", employeeType: "doctor", photo: {}, locations: [L("minto", "Mönchengladbach Minto"), L("forum"), L("palais-vest")] },
+    { firstName: "Versteckt", lastName: "D", employeeType: "doctor", photo: {}, hideFromPublic: true, locations: [L("forum")] },
+    { firstName: "Weg", lastName: "E", employeeType: "doctor", photo: {}, isActive: false, locations: [L("forum")] },
+  ];
+  const own = pickAdsV2Doctors(all, "gesundbrunnencenter");
+  const filled = fillAdsV2Doctors(own, all, "gesundbrunnencenter");
+  assert.deepEqual(filled.map((e) => e.firstName), ["Eigen", "Viele", "Koeln"]);
+  assert.equal(filled[0]!.homeLocation, undefined);
+  assert.equal(filled[1]!.homeLocation, "Mönchengladbach Minto");
+  assert.equal(filled[2]!.homeLocation, "Köln Arcaden");
+  // genug eigene: nichts auffuellen
+  assert.equal(fillAdsV2Doctors(filled.slice(0, 3), all, "x").length, 3);
 });

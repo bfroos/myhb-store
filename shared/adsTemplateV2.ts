@@ -391,6 +391,13 @@ export function adsV2Guarantee(pathKey: string | null | undefined) {
  */
 export function adsV2TrustItems(pathKey?: string | null): AdsV2TrustItem[] {
   return [
+    // Benjamin, 14.10.2026: „Über 40.000 Kunden würde ich stehen lassen“
+    // (Wettbewerbsvergleich #331: Kundenzahl auf die Seite).
+    {
+      key: "kunden",
+      title: "Über 40.000 Kundinnen und Kunden",
+      text: "vertrauen MY HEALTH & BEAUTY bereits",
+    },
     {
       key: "garantie",
       title: "Zufriedenheitsgarantie",
@@ -825,7 +832,7 @@ export type EmployeeLike = {
   isActive?: boolean | null;
   hideFromPublic?: boolean | null;
   photo?: unknown;
-  locations?: Array<{ slug?: string | null }> | null;
+  locations?: Array<{ slug?: string | null; name?: string | null }> | null;
 };
 
 export function employeeDisplayName(e: EmployeeLike): string {
@@ -858,6 +865,42 @@ export function pickAdsV2Doctors<T extends EmployeeLike>(
   return [...list]
     .sort((a, b) => (a.locations?.length ?? 0) - (b.locations?.length ?? 0))
     .slice(0, count);
+}
+
+/**
+ * Auffuellen mit Aerzt:innen anderer Standorte (Benjamin, 14.10.2026: „nimm
+ * die Fotos, die du hast, und sonst füll mit Ärztinnen und Ärzten aus anderen
+ * Standorten auf“). Berlin hatte 1 von 4, Leipzig 1 von 5 mit Foto. Eigene
+ * zuerst; aufgefuellte tragen `homeLocation` (Name ihres ersten Standorts),
+ * damit die Seite ehrlich „aus Köln Arcaden“ dazuschreibt. Wer an vielen
+ * Centern gefuehrt wird, kommt zuerst (arbeitet am ehesten auch hier).
+ */
+export function fillAdsV2Doctors<T extends EmployeeLike>(
+  own: T[],
+  all: T[] | null | undefined,
+  locationSlug: string | null | undefined,
+  count = 3,
+): Array<T & { homeLocation?: string | null }> {
+  const out: Array<T & { homeLocation?: string | null }> = own.slice(0, count);
+  if (out.length >= count) return out;
+  const taken = new Set(out.map((e) => employeeDisplayName(e)));
+  const others = (all ?? []).filter(
+    (e) =>
+      e &&
+      e.employeeType === "doctor" &&
+      e.isActive !== false &&
+      !e.hideFromPublic &&
+      !!e.photo &&
+      !!employeeDisplayName(e) &&
+      !taken.has(employeeDisplayName(e)) &&
+      !(e.locations ?? []).some((l) => l?.slug === locationSlug),
+  );
+  for (const e of [...others].sort((a, b) => (b.locations?.length ?? 0) - (a.locations?.length ?? 0))) {
+    if (out.length >= count) break;
+    const home = (e.locations ?? []).map((l) => (l?.name ?? "").replace(/^MY\s+HEALTH\s+&\s+BEAUTY\s*/i, "").trim()).find(Boolean) ?? null;
+    out.push({ ...e, homeLocation: home });
+  }
+  return out;
 }
 
 // ---------------------------------------------------------------- Oeffnungszeiten
