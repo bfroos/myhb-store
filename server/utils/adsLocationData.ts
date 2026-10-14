@@ -6,7 +6,8 @@ import {
   reviewsWithoutRestrictedTerms,
   type AdsTreePage,
 } from "#shared/adsLocationTreatments";
-import { pickAdsV2Doctors } from "#shared/adsTemplateV2";
+import { fillAdsV2Doctors, pickAdsV2Doctors } from "#shared/adsTemplateV2";
+import { isBlockedAdsImageFile } from "#shared/adsMedia";
 import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
 
 // #184: pathKeys, die es an einem Standort gibt (5 min im Speicher). Die
@@ -173,11 +174,12 @@ async function locationDoctors(event: any, loc: string, locale: string): Promise
   try {
     const config = useRuntimeConfig(event);
     const base = String(config.public.strapiUrl || '').replace(/\/+$/, '');
+    // Alle Aerzt:innen einmal laden (wenige Dutzend): eigene des Standorts
+    // zuerst, fehlende Plaetze mit anderen Standorten auffuellen (14.10.2026).
     const params = new URLSearchParams({
       locale,
-      'filters[locations][slug][$eq]': loc,
       'filters[employeeType][$eq]': 'doctor',
-      'pagination[pageSize]': '50',
+      'pagination[pageSize]': '200',
       'fields[0]': 'academicTitle',
       'fields[1]': 'firstName',
       'fields[2]': 'lastName',
@@ -188,15 +190,23 @@ async function locationDoctors(event: any, loc: string, locale: string): Promise
       'fields[7]': 'slug',
       'populate[photo]': 'true',
       'populate[locations][fields][0]': 'slug',
+      'populate[locations][fields][1]': 'name',
     });
     const res: any = await $fetch(`${base}/api/employees?${params}`);
-    const data = pickAdsV2Doctors(res?.data ?? [], loc).map((e: any) => ({
+    // Gesperrte Fotos (altes Logo im Bild, adsMedia) VOR der Auswahl raus,
+    // sonst belegt z. B. der Chefarzt einen Platz und faellt erst auf der
+    // Seite weg - Berlin zeigte so 2 statt 3 (14.10.2026).
+    const all = (res?.data ?? []).map((e: any) =>
+      isBlockedAdsImageFile(e?.photo) ? { ...e, photo: null } : e,
+    );
+    const data = fillAdsV2Doctors(pickAdsV2Doctors(all, loc), all, loc).map((e: any) => ({
       id: e.id,
       academicTitle: e.academicTitle,
       firstName: e.firstName,
       lastName: e.lastName,
       role: e.role,
       photo: e.photo,
+      homeLocation: e.homeLocation ?? null,
     }));
     doctorCache.set(key, { at: Date.now(), data });
     return data;
