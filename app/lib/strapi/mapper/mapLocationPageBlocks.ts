@@ -72,20 +72,12 @@ export function mapLocationFixedBlocks(
       ),
     };
 
-    // #141: Ein gesperrter Standort, der laut Datum laengst offen ist, sah aus
-    // wie jeder andere — die MediaPark-Klinik trug nicht einmal einen Hinweis,
-    // waehrend 70 Menschen im Monat dort vergeblich einen Termin suchten. Fuer
-    // die noch nicht eroeffneten Standorte steht der richtige Hinweis schon da
-    // ("Coming Soon"), der darf nicht ueberschrieben werden.
-    const laengstOffen =
-      locationOpenStatus === LocationOpenStatus.OPEN ||
-      locationOpenStatus === LocationOpenStatus.OPEN_NEW_TODAY;
-
+    // Kein "Vorübergehend geschlossen" mehr, wenn nur die Online-Buchung
+    // gesperrt ist (#141 hatte das eingeführt): Der Standort ist geöffnet,
+    // für die MediaPark-Klinik ist das vertraglich zugesichert. Die Sperre
+    // betrifft nur den Buchungsknopf.
     return {
-      announcementText:
-        buchungGesperrt && laengstOffen
-          ? t("locations.location.openingHoursTemporarilyClosed")
-          : announcementText[locationOpenStatus],
+      announcementText: announcementText[locationOpenStatus],
       headline: location?.name,
       headlinePrefix: `${brandName} · ${location?.city?.name}`,
       cover: location?.buildingImage,
