@@ -1,3 +1,5 @@
+import { cleanMenuTree } from "#shared/menuTree";
+
 export type TreatmentPageMenuItem = {
   id: number;
   name: string;
@@ -64,7 +66,8 @@ export function useMenu(
       }));
 
   const treatmentPages = computed(() => {
-    const items = data.value?.data?.["treatment-pages"] ?? [];
+    // Verwaiste Unterseiten nicht oben zeigen, siehe shared/menuTree.ts.
+    const items = cleanMenuTree(data.value?.data?.["treatment-pages"] ?? []);
     return sortMenuByName(items, locale.value || fallbackLocale.value || "de");
   });
   const productCategories = computed(() => {
