@@ -99,7 +99,7 @@ const TEXTS = {
     benefitNotify: "Du erfährst zuerst, wann wir öffnen und ab wann du buchen kannst",
     emailLabel: "E-Mail-Adresse",
     emailPlaceholder: "Deine E-Mail-Adresse",
-    submit: "Vormerken & 20 % sichern",
+    submit: "20 % zur Eröffnung sichern",
     consent:
       "Mit der Anmeldung bekommst du unseren Newsletter und eine Nachricht, sobald der Standort öffnet. Abmeldung jederzeit.",
     success:
@@ -121,7 +121,7 @@ const TEXTS = {
       "Vous êtes informé(e) en premier de l'ouverture et des premiers rendez-vous",
     emailLabel: "Adresse e-mail",
     emailPlaceholder: "Votre adresse e-mail",
-    submit: "M'inscrire & obtenir 20 %",
+    submit: "Obtenir 20 % à l'ouverture",
     consent:
       "En vous inscrivant, vous recevez notre newsletter et un message dès l'ouverture. Désinscription possible à tout moment.",
     success:

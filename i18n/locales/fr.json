@@ -468,7 +468,8 @@
     },
     "treatmentHero": {
       "discountCta": "Obtenir {pct}% de réduction",
-      "ctaActionLabel": "Prendre rendez-vous"
+      "ctaActionLabel": "Prendre rendez-vous",
+      "ctaWaitlistLabel": "Obtenir 20 % à l'ouverture"
     },
     "productCategoryPriceOverview": {
       "treatments": "Traitements",
