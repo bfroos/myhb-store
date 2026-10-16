@@ -5,6 +5,7 @@ export const NEWSLETTER_SIGNUP_SOURCES = [
   "newsletter_footer",
   "discount_cta_20",
   "blog_newsletter_block",
+  "vorregistrierung_saarbruecken",
 ] as const;
 
 export type NewsletterSignupSource =
@@ -77,6 +78,7 @@ export type NewsletterSignupFailure = "validation" | "server";
 
 export function useNewsletterSignup(
   source: NewsletterSignupSource = "newsletter_footer",
+  options: { language?: () => string } = {},
 ) {
   const { t, te } = useI18n();
   const { trackEvent } = useGoogleAnalytics();
@@ -174,6 +176,8 @@ export function useNewsletterSignup(
           source,
           // Handynummer ist optional; nur mitsenden, wenn ausgefuellt.
           phone: phone.value?.trim() || undefined,
+          // Nur Wartelisten senden die Sprache mit (Start-Mail DE/FR).
+          language: options.language?.() || undefined,
           // T6 Set B (#13): Quellenstempel aus dem utm-persist-Plugin.
           // Rein additiv; wenn nichts erfasst wurde, fehlt das Feld.
           attribution: readWireAttribution() ?? undefined,
