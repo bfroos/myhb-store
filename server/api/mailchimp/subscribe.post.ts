@@ -7,15 +7,15 @@ const ALLOWED_SOURCES = new Set([
   "newsletter_footer",
   "discount_cta_20",
   "blog_newsletter_block",
-  "vorregistrierung_saarbruecken",
+  "vorregistrierung_standort",
 ]);
 
-// Wartelisten neuer Standorte (Saarbruecken, 16.10.2026): Zusatz-Tag, ueber
-// den Mailchimp beim Start genau diese Anmeldungen anschreibt. Der Tag muss
-// auch bei Bestandsmitgliedern gesetzt werden, sonst fehlen sie im Segment.
-const WAITLIST_TAGS: Record<string, string> = {
-  vorregistrierung_saarbruecken: "warteliste:saarbruecken",
-};
+// Wartelisten noch nicht eroeffneter Standorte (Vormerk-Kasten der
+// Standortseite, 16.10.2026): Zusatz-Tag "warteliste:<stadt-slug>", ueber den
+// Mailchimp beim Start genau diese Anmeldungen anschreibt. Der Tag muss auch
+// bei Bestandsmitgliedern gesetzt werden, sonst fehlen sie im Segment.
+const WAITLIST_SOURCE = "vorregistrierung_standort";
+const WAITLIST_SLUG = /^[a-z0-9-]{2,60}$/;
 
 // Sprache der Anmeldung (Mailchimp-Feld "language"), damit die Start-Mail an
 // Kundinnen aus Frankreich auf Franzoesisch gehen kann.
@@ -113,6 +113,7 @@ export default defineEventHandler(async (event) => {
     source?: string;
     phone?: string;
     language?: string;
+    waitlist?: string;
     attribution?: unknown;
   }>(event);
   const email = (body.email || "").trim().toLowerCase();
@@ -122,7 +123,11 @@ export default defineEventHandler(async (event) => {
   const attribution = sanitizeAttribution(body.attribution);
   const rawLanguage = (body.language || "").trim().toLowerCase();
   const language = ALLOWED_LANGUAGES.has(rawLanguage) ? rawLanguage : null;
-  const waitlistTag = source ? WAITLIST_TAGS[source] : undefined;
+  const waitlistSlug = (body.waitlist || "").trim().toLowerCase();
+  const waitlistTag =
+    source === WAITLIST_SOURCE && WAITLIST_SLUG.test(waitlistSlug)
+      ? `warteliste:${waitlistSlug}`
+      : undefined;
   const tags = [
     ...(source ? [`source:${source}`] : []),
     ...(waitlistTag ? [waitlistTag] : []),
