@@ -843,9 +843,12 @@ export function employeeDisplayName(e: EmployeeLike): string {
 }
 
 /**
- * Aerzt:innen DES Centers: sichtbar, mit Foto, dem Standort zugeordnet.
- * Wer an vielen Centern gefuehrt wird (Chefarzt an allen), kommt nach
- * hinten; hoechstens `count`.
+ * Aerzt:innen DES Centers: sichtbar und dem Standort zugeordnet. Nur eigene,
+ * keine aus anderen Standorten (Wettbewerbsvergleich 16.10.2026: Leipzig
+ * zeigte unter „Dein Ärzteteam in den Höfen am Brühl“ Ärzte aus Duisburg und
+ * Düsseldorf; das Auffuellen vom 14.10. ist damit zurueckgenommen). Mit Foto
+ * zuerst, ohne Foto zeigt die Seite die Initiale. Wer an vielen Centern
+ * gefuehrt wird (Chefarzt an allen), kommt nach hinten; hoechstens `count`.
  */
 export function pickAdsV2Doctors<T extends EmployeeLike>(
   employees: T[] | null | undefined,
@@ -858,49 +861,16 @@ export function pickAdsV2Doctors<T extends EmployeeLike>(
       e.employeeType === "doctor" &&
       e.isActive !== false &&
       !e.hideFromPublic &&
-      !!e.photo &&
       !!employeeDisplayName(e) &&
       (e.locations ?? []).some((l) => l?.slug === locationSlug),
   );
   return [...list]
-    .sort((a, b) => (a.locations?.length ?? 0) - (b.locations?.length ?? 0))
+    .sort(
+      (a, b) =>
+        Number(!a.photo) - Number(!b.photo) ||
+        (a.locations?.length ?? 0) - (b.locations?.length ?? 0),
+    )
     .slice(0, count);
-}
-
-/**
- * Auffuellen mit Aerzt:innen anderer Standorte (Benjamin, 14.10.2026: „nimm
- * die Fotos, die du hast, und sonst füll mit Ärztinnen und Ärzten aus anderen
- * Standorten auf“). Berlin hatte 1 von 4, Leipzig 1 von 5 mit Foto. Eigene
- * zuerst; aufgefuellte tragen `homeLocation` (Name ihres ersten Standorts),
- * damit die Seite ehrlich „aus Köln Arcaden“ dazuschreibt. Wer an vielen
- * Centern gefuehrt wird, kommt zuerst (arbeitet am ehesten auch hier).
- */
-export function fillAdsV2Doctors<T extends EmployeeLike>(
-  own: T[],
-  all: T[] | null | undefined,
-  locationSlug: string | null | undefined,
-  count = 3,
-): Array<T & { homeLocation?: string | null }> {
-  const out: Array<T & { homeLocation?: string | null }> = own.slice(0, count);
-  if (out.length >= count) return out;
-  const taken = new Set(out.map((e) => employeeDisplayName(e)));
-  const others = (all ?? []).filter(
-    (e) =>
-      e &&
-      e.employeeType === "doctor" &&
-      e.isActive !== false &&
-      !e.hideFromPublic &&
-      !!e.photo &&
-      !!employeeDisplayName(e) &&
-      !taken.has(employeeDisplayName(e)) &&
-      !(e.locations ?? []).some((l) => l?.slug === locationSlug),
-  );
-  for (const e of [...others].sort((a, b) => (b.locations?.length ?? 0) - (a.locations?.length ?? 0))) {
-    if (out.length >= count) break;
-    const home = (e.locations ?? []).map((l) => (l?.name ?? "").replace(/^MY\s+HEALTH\s+&\s+BEAUTY\s*/i, "").trim()).find(Boolean) ?? null;
-    out.push({ ...e, homeLocation: home });
-  }
-  return out;
 }
 
 // ---------------------------------------------------------------- Oeffnungszeiten

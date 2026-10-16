@@ -6,7 +6,7 @@ import {
   reviewsWithoutRestrictedTerms,
   type AdsTreePage,
 } from "#shared/adsLocationTreatments";
-import { fillAdsV2Doctors, pickAdsV2Doctors } from "#shared/adsTemplateV2";
+import { pickAdsV2Doctors } from "#shared/adsTemplateV2";
 import { isBlockedAdsImageFile } from "#shared/adsMedia";
 import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
 
@@ -174,8 +174,8 @@ async function locationDoctors(event: any, loc: string, locale: string): Promise
   try {
     const config = useRuntimeConfig(event);
     const base = String(config.public.strapiUrl || '').replace(/\/+$/, '');
-    // Alle Aerzt:innen einmal laden (wenige Dutzend): eigene des Standorts
-    // zuerst, fehlende Plaetze mit anderen Standorten auffuellen (14.10.2026).
+    // Alle Aerzt:innen einmal laden (wenige Dutzend), dann nur die des
+    // Standorts (16.10.2026: keine mehr aus anderen Standorten).
     const params = new URLSearchParams({
       locale,
       'filters[employeeType][$eq]': 'doctor',
@@ -194,19 +194,17 @@ async function locationDoctors(event: any, loc: string, locale: string): Promise
     });
     const res: any = await $fetch(`${base}/api/employees?${params}`);
     // Gesperrte Fotos (altes Logo im Bild, adsMedia) VOR der Auswahl raus,
-    // sonst belegt z. B. der Chefarzt einen Platz und faellt erst auf der
-    // Seite weg - Berlin zeigte so 2 statt 3 (14.10.2026).
+    // damit Aerzt:innen mit gezeigtem Foto vorne stehen.
     const all = (res?.data ?? []).map((e: any) =>
       isBlockedAdsImageFile(e?.photo) ? { ...e, photo: null } : e,
     );
-    const data = fillAdsV2Doctors(pickAdsV2Doctors(all, loc), all, loc).map((e: any) => ({
+    const data = pickAdsV2Doctors(all, loc).map((e: any) => ({
       id: e.id,
       academicTitle: e.academicTitle,
       firstName: e.firstName,
       lastName: e.lastName,
       role: e.role,
       photo: e.photo,
-      homeLocation: e.homeLocation ?? null,
     }));
     doctorCache.set(key, { at: Date.now(), data });
     return data;

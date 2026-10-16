@@ -20,7 +20,6 @@ import {
   stripAdsTemplateV2Preview,
   openingHoursSummary,
   pickAdsV2Doctors,
-  fillAdsV2Doctors,
   pickAdsV2Reviews,
   shortenText,
   ADS_V2_CTA,
@@ -228,7 +227,7 @@ test("Aerzt:innen des Centers, Chefarzt aller Center nach hinten", () => {
     ],
     "koeln-arcaden",
   );
-  assert.deepEqual(picked.map((e) => e.lastName), ["Lokal", "Chef"]);
+  assert.deepEqual(picked.map((e) => e.lastName), ["Lokal", "Chef", "Ohne Foto"]);
 });
 
 test("Oeffnungszeiten zusammengefasst", () => {
@@ -454,22 +453,18 @@ test("editorial: live auf allen v2-Seiten, in der Vorschau nur die gelisteten", 
   assert.equal(isAdsV2EditorialPreview("/aktion/botox", null, null, "muskelrelaxans/stirnfalte"), false);
 });
 
-test("Aerzt:innen auffuellen: eigene zuerst, dann andere Standorte mit Herkunft (14.10.2026)", () => {
-  const L = (slug: string, name = slug) => ({ slug, name: `MY HEALTH & BEAUTY ${name}` });
+test("Aerzt:innen: nur eigene des Standorts, mit Foto zuerst (16.10.2026)", () => {
+  const L = (slug: string) => ({ slug, name: `MY HEALTH & BEAUTY ${slug}` });
   const all = [
-    { firstName: "Eigen", lastName: "A", employeeType: "doctor", photo: {}, locations: [L("gesundbrunnencenter", "Berlin Gesundbrunnen-Center")] },
-    { firstName: "Ohne", lastName: "Foto", employeeType: "doctor", locations: [L("gesundbrunnencenter")] },
-    { firstName: "Koeln", lastName: "B", employeeType: "doctor", photo: {}, locations: [L("koeln-arcaden", "Köln Arcaden")] },
-    { firstName: "Viele", lastName: "C", employeeType: "doctor", photo: {}, locations: [L("minto", "Mönchengladbach Minto"), L("forum"), L("palais-vest")] },
-    { firstName: "Versteckt", lastName: "D", employeeType: "doctor", photo: {}, hideFromPublic: true, locations: [L("forum")] },
-    { firstName: "Weg", lastName: "E", employeeType: "doctor", photo: {}, isActive: false, locations: [L("forum")] },
+    { firstName: "Chef", lastName: "A", employeeType: "doctor", locations: [L("hoefe-am-bruehl"), L("forum"), L("minto")] },
+    { firstName: "Ohne", lastName: "Foto", employeeType: "doctor", locations: [L("hoefe-am-bruehl")] },
+    { firstName: "Mit", lastName: "Foto", employeeType: "doctor", photo: {}, locations: [L("hoefe-am-bruehl"), L("forum")] },
+    { firstName: "Fremd", lastName: "B", employeeType: "doctor", photo: {}, locations: [L("duesseldorf-arcaden")] },
+    { firstName: "Versteckt", lastName: "D", employeeType: "doctor", photo: {}, hideFromPublic: true, locations: [L("hoefe-am-bruehl")] },
+    { firstName: "Weg", lastName: "E", employeeType: "doctor", photo: {}, isActive: false, locations: [L("hoefe-am-bruehl")] },
   ];
-  const own = pickAdsV2Doctors(all, "gesundbrunnencenter");
-  const filled = fillAdsV2Doctors(own, all, "gesundbrunnencenter");
-  assert.deepEqual(filled.map((e) => e.firstName), ["Eigen", "Viele", "Koeln"]);
-  assert.equal(filled[0]!.homeLocation, undefined);
-  assert.equal(filled[1]!.homeLocation, "Mönchengladbach Minto");
-  assert.equal(filled[2]!.homeLocation, "Köln Arcaden");
-  // genug eigene: nichts auffuellen
-  assert.equal(fillAdsV2Doctors(filled.slice(0, 3), all, "x").length, 3);
+  const picked = pickAdsV2Doctors(all, "hoefe-am-bruehl");
+  assert.deepEqual(picked.map((e) => e.firstName), ["Mit", "Ohne", "Chef"]);
+  // Standort ohne eigene Aerzt:innen: leer statt aufgefuellt
+  assert.deepEqual(pickAdsV2Doctors(all, "loom"), []);
 });
