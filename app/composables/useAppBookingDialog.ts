@@ -118,14 +118,14 @@ const UTM_PARAMS = [
  */
 function splitClickId(
   clickId?: string,
-): { key: "gclid" | "fbclid" | "ttclid"; value: string } | null {
+): { key: "gclid" | "fbclid" | "ttclid" | "msclkid"; value: string } | null {
   if (!clickId) return null;
   const idx = clickId.indexOf(":");
   if (idx <= 0) return null;
   const key = clickId.slice(0, idx);
   const value = clickId.slice(idx + 1);
   if (!value) return null;
-  if (key === "gclid" || key === "fbclid" || key === "ttclid") {
+  if (key === "gclid" || key === "fbclid" || key === "ttclid" || key === "msclkid") {
     return { key, value };
   }
   return null;
@@ -157,7 +157,7 @@ export function collectAttributionParams(): Record<string, string> {
     const val = current.get(key);
     if (val) params[key] = val;
   }
-  for (const key of ["gclid", "fbclid", "ttclid"] as const) {
+  for (const key of ["gclid", "fbclid", "ttclid", "msclkid"] as const) {
     const val = current.get(key);
     if (val) params[key] = val;
   }
@@ -171,7 +171,7 @@ export function collectAttributionParams(): Record<string, string> {
       if (!params[key] && last[key]) params[key] = last[key] as string;
     }
     const cid = splitClickId(last.click_id) ?? splitClickId(first?.click_id);
-    if (cid && !params.gclid && !params.fbclid && !params.ttclid) {
+    if (cid && !params.gclid && !params.fbclid && !params.ttclid && !params.msclkid) {
       params[cid.key] = cid.value;
     }
   }
