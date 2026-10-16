@@ -11383,5 +11383,15 @@
     "from": "/p/botox-meta-rabatt-moenchengladbach",
     "to": "/p/botox-meta-moenchengladbach",
     "code": 301
+  },
+  {
+    "from": "/saarbruecken",
+    "to": "/standorte/saarbruecken/europa-galerie",
+    "code": 302
+  },
+  {
+    "from": "/fr/sarrebruck",
+    "to": "/fr/lieux/saarbruecken/europa-galerie",
+    "code": 302
   }
 ]
