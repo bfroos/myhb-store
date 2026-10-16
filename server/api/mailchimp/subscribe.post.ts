@@ -75,6 +75,7 @@ function deriveSrc(t: WireTouch | undefined): string | null {
   const med = (t.utm_medium || "").toLowerCase();
   if (cid.startsWith("gclid:")) return "google_ads";
   if (cid.startsWith("ttclid:")) return "tiktok_ads";
+  if (cid.startsWith("msclkid:")) return "bing_ads";
   if (cid.startsWith("fbclid:")) return "meta_ads";
   if (src === "google" && (med === "cpc" || med.includes("paid"))) return "google_ads";
   if (src === "tiktok" && med.includes("paid")) return "tiktok_ads";

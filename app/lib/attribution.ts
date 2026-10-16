@@ -29,7 +29,7 @@ const UTM_KEYS = [
 ] as const;
 
 type RawTouch = Partial<
-  Record<(typeof UTM_KEYS)[number] | "gclid" | "fbclid" | "ttclid", string>
+  Record<(typeof UTM_KEYS)[number] | "gclid" | "fbclid" | "ttclid" | "msclkid", string>
 > & {
   _ts?: string;
   _lp?: string;
@@ -83,6 +83,7 @@ export function clickIdOf(t: RawTouch | null | undefined): string | null {
   if (t.gclid) return `gclid:${t.gclid}`;
   if (t.fbclid) return `fbclid:${t.fbclid}`;
   if (t.ttclid) return `ttclid:${t.ttclid}`;
+  if (t.msclkid) return `msclkid:${t.msclkid}`;
   return null;
 }
 
