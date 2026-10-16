@@ -276,6 +276,14 @@ export default defineNuxtConfig({
       },
     ],
     pages: {
+      // Vorregistrierung Saarbruecken: nur Deutsch und Franzoesisch.
+      saarbruecken: {
+        fr: "/sarrebruck",
+        en: false,
+        tr: false,
+        ar: false,
+        nl: false,
+      },
       behandlungen: {
         en: "/treatments",
         tr: "/tedaviler",
