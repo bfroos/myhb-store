@@ -1,4 +1,4 @@
-import Aura from "@primeuix/themes/aura";
+import { fileURLToPath } from "node:url";
 
 /**
  * ISR-Regel fuer Vercel: Laufzeit in Sekunden, Query-Parameter NICHT im
@@ -441,55 +441,11 @@ export default defineNuxtConfig({
         "Toast",
       ],
     },
-    options: {
-      theme: {
-        preset: {
-          ...Aura,
-          extend: {
-            primitive: {
-              surface: {
-                0: "var(--color-white)",
-                100: "var(--color-gray-100)",
-                200: "var(--color-gray-200)",
-                300: "var(--color-gray-300)",
-                400: "var(--color-gray-400)",
-                500: "var(--color-gray-500)",
-                600: "var(--color-gray-600)",
-                700: "var(--color-gray-700)",
-                800: "var(--color-gray-800)",
-                900: "var(--color-gray-900)",
-              },
-              primary: {
-                0: "var(--color-white)",
-                100: "var(--color-gray-100)",
-                200: "var(--color-gray-200)",
-                300: "var(--color-gray-300)",
-                400: "var(--color-gray-400)",
-                500: "var(--color-gray-500)",
-                600: "var(--color-gray-600)",
-                700: "var(--color-gray-700)",
-                800: "var(--color-gray-800)",
-                900: "var(--color-gray-900)",
-              },
-              gray: {
-                0: "var(--color-white)",
-                100: "var(--color-gray-100)",
-                200: "var(--color-gray-200)",
-                300: "var(--color-gray-300)",
-                400: "var(--color-gray-400)",
-                500: "var(--color-gray-500)",
-                600: "var(--color-gray-600)",
-                700: "var(--color-gray-700)",
-                800: "var(--color-gray-800)",
-                900: "var(--color-gray-900)",
-              },
-            },
-          },
-        },
-        options: {
-          darkModeSelector: "none",
-        },
-      },
+    // Theme aus einer Datei statt options.theme: sonst steht das ganze
+    // Aura-Preset (110 KB) in runtimeConfig.public und damit in jedem HTML.
+    importTheme: {
+      as: "MyhbPrimeTheme",
+      from: fileURLToPath(new URL("./app/primevue-theme.ts", import.meta.url)),
     },
   },
 
