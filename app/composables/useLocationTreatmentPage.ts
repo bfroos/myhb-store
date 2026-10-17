@@ -159,6 +159,9 @@ export function useLocationTreatmentPage() {
     // availableTreatmentPathKeys steht, ist eine 404. Nur auf www und auf
     // Deutsch: go. hat eigene Pfade (-rabatt-Rueckfall oben), und die
     // Standortseiten in anderen Sprachen leiten nach TSEO-01 auf Deutsch um.
+    // Eine Kategorie gilt als angeboten, sobald eine ihrer Unterseiten es ist:
+    // Strapi fuehrt z. B. "skinbooster" nicht, wohl aber "skinbooster/profhilo"
+    // - Brotkrume und Kacheln liefen sonst auf 404 (678 Links, 12.10.2026).
     const offered = data.value.data.availableTreatmentPathKeys as
       | string[]
       | undefined;
@@ -166,7 +169,10 @@ export function useLocationTreatmentPage() {
       !isAdsMode.value &&
       currentLocale === "de" &&
       Array.isArray(offered) &&
-      !offered.includes(treatmentPathKey)
+      !offered.some(
+        (key) =>
+          key === treatmentPathKey || key.startsWith(`${treatmentPathKey}/`),
+      )
     ) {
       throw handleNotFound(t);
     }
