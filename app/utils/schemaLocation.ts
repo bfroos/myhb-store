@@ -52,39 +52,39 @@ const WEEKDAY_TO_SCHEMA: Record<string, string> = {
 export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = {
   "ChIJoesgRlglv0cRh0fAgCZ9MTk": {
     "rating": "4.9",
-    "count": "481"
+    "count": "480"
   },
   "ChIJoct0O2RTqEcRZthU8Tn5dGs": {
-    "rating": "4.8",
-    "count": "240"
+    "rating": "4.7",
+    "count": "242"
   },
   "ChIJYyPheE7LuEcRAIgZkPAOJyU": {
     "rating": "4.9",
-    "count": "193"
+    "count": "195"
   },
   "ChIJ_7Xx1HetuEcRUE0rtbPlvEQ": {
     "rating": "4.9",
-    "count": "182"
+    "count": "181"
   },
   "ChIJr60IH9PjuEcRdVPR8YiTgSo": {
     "rating": "4.9",
-    "count": "182"
+    "count": "183"
   },
   "ChIJf4C6OSkTlkcRpTMm00E5JLE": {
     "rating": "4.7",
-    "count": "99"
+    "count": "100"
   },
   "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": {
     "rating": "5.0",
-    "count": "168"
+    "count": "169"
   },
   "ChIJuVWkFmyZwEcRM9nuZ1SejT4": {
     "rating": "4.9",
-    "count": "54"
+    "count": "56"
   },
   "ChIJScBd156_uEcRPHWNSbioDlo": {
     "rating": "4.8",
-    "count": "99"
+    "count": "100"
   }
 };
 

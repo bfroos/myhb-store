@@ -339,7 +339,8 @@
         <ul v-if="doctors.length" class="v2-doctors" role="list">
           <li v-for="doc in doctors" :key="doc.id ?? doc.name" class="v2-doctor">
             <div class="v2-doctor__photo">
-              <UiAtomMediaPicture :media="doc.photo" />
+              <UiAtomMediaPicture v-if="doc.photo" :media="doc.photo" />
+              <span v-else class="v2-doctor__initial" aria-hidden="true">{{ doc.fullName.charAt(0) }}</span>
             </div>
             <span class="v2-doctor__name">
               <span class="v2-doctor__title">{{ doc.title || "\u00a0" }}</span>
@@ -601,6 +602,7 @@ import {
   IconPhone,
   IconRepeat,
   IconShieldCheck,
+  IconUsers,
   IconSnowflake,
   IconSparkles,
   IconStarFilled,
@@ -1182,6 +1184,7 @@ const wayClip = computed(() => adsWayClipFor(locSlug));
 const trustItems = computed(() => W(adsV2TrustItems(pathKey.value)));
 const priceInclusion = computed(() => adsV2PriceInclusion(pathKey.value));
 function trustIcon(key: string) {
+  if (key === "kunden") return IconUsers;
   if (key === "garantie") return IconShieldCheck;
   if (key === "walkin") return IconWalk;
   return IconStethoscope;
@@ -1351,9 +1354,9 @@ const doctors = computed(() =>
       id: d.id,
       name: employeeDisplayName(d),
       ...doctorLines(employeeDisplayName(d)),
-      photo: d.photo,
+      photo: d.photo ?? null,
     }))
-    .filter((d) => d.name && d.photo),
+    .filter((d) => d.name),
 );
 const reviews = computed(() =>
   pickAdsV2Reviews(extras.value?.reviews ?? [], props.location?.city?.name, pathKey.value).map(
@@ -1990,6 +1993,20 @@ const routeHref = computed(() => {
   width: 100%;
   font-size: var(--font-sm);
   line-height: var(--line-sm);
+}
+
+/* Ohne Foto: Initiale statt einer Aerztin von einem anderen Standort */
+.v2-doctor__initial {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-card-bg-light, #fff);
+  border: 1px solid var(--color-gray-300, #d6d3d1);
+  color: var(--color-text-light);
+  font-size: 2.5rem;
+  font-weight: 600;
 }
 
 .v2-doctor__title {

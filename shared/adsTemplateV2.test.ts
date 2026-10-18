@@ -114,7 +114,7 @@ test("Preiskarten je Behandlung passend zum Hero-Preis", () => {
 test("Zufriedenheitsgarantie fuer alle Kategorien, Text je Kategorie; Hersteller nur wo freigegeben", () => {
   const g = (k: string) => adsV2TrustItems(k).find((i) => i.key === "garantie")?.text ?? "";
   // Reihenfolge nach der Google-Bewertung: Garantie, Aerzt:innen, ohne Termin
-  assert.deepEqual(adsV2TrustItems("hyaluron/jawline").map((i) => i.key), ["garantie", "aerzte", "walkin"]);
+  assert.deepEqual(adsV2TrustItems("hyaluron/jawline").map((i) => i.key), ["kunden", "garantie", "aerzte", "walkin"]);
   assert.equal(g("muskelrelaxans/stirnfalte"), "Kostenlose Nachkontrolle nach 14 Tagen inkl. kostenloser Nachbehandlung");
   assert.match(g("hyaluron/lippen-aufspritzen"), /Korrekturen der Form inklusive – zusätzliches Volumen \(weitere ml\) wird nach Preisliste berechnet/);
   for (const k of ["infusionen/vitamin-c-infusion", "skinbooster/profhilo", "skinbooster/vampir-lifting-prp", "anti-haarausfall/mesotherapie-haare", "hyaluron/hylase"]) {
@@ -227,7 +227,7 @@ test("Aerzt:innen des Centers, Chefarzt aller Center nach hinten", () => {
     ],
     "koeln-arcaden",
   );
-  assert.deepEqual(picked.map((e) => e.lastName), ["Lokal", "Chef"]);
+  assert.deepEqual(picked.map((e) => e.lastName), ["Lokal", "Chef", "Ohne Foto"]);
 });
 
 test("Oeffnungszeiten zusammengefasst", () => {
@@ -451,4 +451,20 @@ test("editorial: live auf allen v2-Seiten, in der Vorschau nur die gelisteten", 
   );
   // bundesweite /aktion-Seiten haben keinen Standort
   assert.equal(isAdsV2EditorialPreview("/aktion/botox", null, null, "muskelrelaxans/stirnfalte"), false);
+});
+
+test("Aerzt:innen: nur eigene des Standorts, mit Foto zuerst (16.10.2026)", () => {
+  const L = (slug: string) => ({ slug, name: `MY HEALTH & BEAUTY ${slug}` });
+  const all = [
+    { firstName: "Chef", lastName: "A", employeeType: "doctor", locations: [L("hoefe-am-bruehl"), L("forum"), L("minto")] },
+    { firstName: "Ohne", lastName: "Foto", employeeType: "doctor", locations: [L("hoefe-am-bruehl")] },
+    { firstName: "Mit", lastName: "Foto", employeeType: "doctor", photo: {}, locations: [L("hoefe-am-bruehl"), L("forum")] },
+    { firstName: "Fremd", lastName: "B", employeeType: "doctor", photo: {}, locations: [L("duesseldorf-arcaden")] },
+    { firstName: "Versteckt", lastName: "D", employeeType: "doctor", photo: {}, hideFromPublic: true, locations: [L("hoefe-am-bruehl")] },
+    { firstName: "Weg", lastName: "E", employeeType: "doctor", photo: {}, isActive: false, locations: [L("hoefe-am-bruehl")] },
+  ];
+  const picked = pickAdsV2Doctors(all, "hoefe-am-bruehl");
+  assert.deepEqual(picked.map((e) => e.firstName), ["Mit", "Ohne", "Chef"]);
+  // Standort ohne eigene Aerzt:innen: leer statt aufgefuellt
+  assert.deepEqual(pickAdsV2Doctors(all, "loom"), []);
 });

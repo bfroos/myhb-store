@@ -391,6 +391,13 @@ export function adsV2Guarantee(pathKey: string | null | undefined) {
  */
 export function adsV2TrustItems(pathKey?: string | null): AdsV2TrustItem[] {
   return [
+    // Benjamin, 14.10.2026: „Über 40.000 Kunden würde ich stehen lassen“
+    // (Wettbewerbsvergleich #331: Kundenzahl auf die Seite).
+    {
+      key: "kunden",
+      title: "Über 40.000 Kundinnen und Kunden",
+      text: "vertrauen MY HEALTH & BEAUTY bereits",
+    },
     {
       key: "garantie",
       title: "Zufriedenheitsgarantie",
@@ -825,7 +832,7 @@ export type EmployeeLike = {
   isActive?: boolean | null;
   hideFromPublic?: boolean | null;
   photo?: unknown;
-  locations?: Array<{ slug?: string | null }> | null;
+  locations?: Array<{ slug?: string | null; name?: string | null }> | null;
 };
 
 export function employeeDisplayName(e: EmployeeLike): string {
@@ -836,9 +843,12 @@ export function employeeDisplayName(e: EmployeeLike): string {
 }
 
 /**
- * Aerzt:innen DES Centers: sichtbar, mit Foto, dem Standort zugeordnet.
- * Wer an vielen Centern gefuehrt wird (Chefarzt an allen), kommt nach
- * hinten; hoechstens `count`.
+ * Aerzt:innen DES Centers: sichtbar und dem Standort zugeordnet. Nur eigene,
+ * keine aus anderen Standorten (Wettbewerbsvergleich 16.10.2026: Leipzig
+ * zeigte unter „Dein Ärzteteam in den Höfen am Brühl“ Ärzte aus Duisburg und
+ * Düsseldorf; das Auffuellen vom 14.10. ist damit zurueckgenommen). Mit Foto
+ * zuerst, ohne Foto zeigt die Seite die Initiale. Wer an vielen Centern
+ * gefuehrt wird (Chefarzt an allen), kommt nach hinten; hoechstens `count`.
  */
 export function pickAdsV2Doctors<T extends EmployeeLike>(
   employees: T[] | null | undefined,
@@ -851,12 +861,15 @@ export function pickAdsV2Doctors<T extends EmployeeLike>(
       e.employeeType === "doctor" &&
       e.isActive !== false &&
       !e.hideFromPublic &&
-      !!e.photo &&
       !!employeeDisplayName(e) &&
       (e.locations ?? []).some((l) => l?.slug === locationSlug),
   );
   return [...list]
-    .sort((a, b) => (a.locations?.length ?? 0) - (b.locations?.length ?? 0))
+    .sort(
+      (a, b) =>
+        Number(!a.photo) - Number(!b.photo) ||
+        (a.locations?.length ?? 0) - (b.locations?.length ?? 0),
+    )
     .slice(0, count);
 }
 

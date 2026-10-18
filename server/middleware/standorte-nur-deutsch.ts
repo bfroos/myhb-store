@@ -18,6 +18,9 @@
  * `data.redirect`, und die Middleware leitet direkt dorthin statt erst auf die
  * deutsche Seite, die dann ein zweites Mal umleiten wuerde.
  *
+ * Ausnahme seit 16.10.2026: Filialseiten mit dem Strapi-Haken
+ * "showFrenchPage" bleiben unter /fr/lieux/<stadt>/<filiale> stehen.
+ *
  * Faellt Strapi aus, leitet die Middleware mit unveraenderten Slugs um; das
  * trifft fuer alle Slugs ausser Koeln ohnehin die richtige Seite.
  */
@@ -110,6 +113,36 @@ async function consolidatedTarget(path: string): Promise<string | null> {
   }
 }
 
+// Deutscher Filial-Slug -> Haken "showFrenchPage" in Strapi.
+const frenchCache = new Map<string, { at: number; value: boolean }>();
+
+async function hasFrenchPage(locationSlug: string): Promise<boolean> {
+  const hit = frenchCache.get(locationSlug);
+  if (hit && Date.now() - hit.at < TTL_MS) return hit.value;
+  const strapiUrl = useRuntimeConfig().public.strapiUrl?.replace(/\/+$/, "");
+  if (!strapiUrl) return false;
+  try {
+    const res = await $fetch<{ data?: { showFrenchPage?: boolean }[] }>(
+      `${strapiUrl}/api/locations?${qs.stringify(
+        {
+          locale: "de",
+          filters: { slug: { $eq: locationSlug } },
+          fields: ["showFrenchPage"],
+        },
+        { encodeValuesOnly: true },
+      )}`,
+      { timeout: 5000 },
+    );
+    const value = res.data?.[0]?.showFrenchPage === true;
+    if (frenchCache.size > 500) frenchCache.clear();
+    frenchCache.set(locationSlug, { at: Date.now(), value });
+    return value;
+  } catch {
+    // Strapi-Ausfall oder Feld noch nicht im Schema: wie bisher umleiten.
+    return false;
+  }
+}
+
 async function getMaps(): Promise<SlugMaps | null> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.maps;
   const strapiUrl = useRuntimeConfig().public.strapiUrl?.replace(/\/+$/, "");
@@ -139,6 +172,19 @@ export default defineEventHandler(async (event) => {
 
   const [citySlug, locationSlug, ...rest] = match[3]!.split("/");
   const maps = await getMaps();
+
+  // Ausnahme: Filialseite mit Strapi-Haken "showFrenchPage" bleibt auf
+  // Franzoesisch stehen (Saarbruecken, Benjamin 16.10.2026). Nur die
+  // Filialseite selbst, nicht Stadt- oder Behandlungsseiten.
+  if (
+    match[1] === "fr" &&
+    match[2] === "lieux" &&
+    locationSlug &&
+    !rest.length &&
+    (await hasFrenchPage(maps?.location.get(locationSlug) ?? locationSlug))
+  ) {
+    return;
+  }
   const segments = [maps?.city.get(citySlug!) ?? citySlug!];
   if (locationSlug) {
     segments.push(maps?.location.get(locationSlug) ?? locationSlug);

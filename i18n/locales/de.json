@@ -475,7 +475,8 @@
     },
     "treatmentHero": {
       "discountCta": "{pct}% Rabatt sichern",
-      "ctaActionLabel": "Termin buchen"
+      "ctaActionLabel": "Termin buchen",
+      "ctaWaitlistLabel": "20 % zur Eröffnung sichern"
     },
     "productCategoryPriceOverview": {
       "treatments": "Behandlungen",

@@ -45,13 +45,28 @@ export function mapLocationFixedBlocks(
   };
 
   function buildTreatmentHeroBlockModel() {
+    // Noch nicht eroeffnet und Buchung aus (Saarbruecken, Benjamin
+    // 16.10.2026): statt "Termin buchen" ein Knopf zum Vormerk-Kasten
+    // (#vormerken, BlockLocationWaitlist), und kein zweiter Rabatt-Knopf,
+    // der in die Buchung fuehren wuerde.
+    const isNotYetOpen =
+      locationOpenStatus === LocationOpenStatus.OPEN_SOON ||
+      locationOpenStatus === LocationOpenStatus.COMING_SOON;
+    const waitlistInsteadOfBooking =
+      !isAdsMode && isNotYetOpen && !location?.isBookingAllowed;
     const cta = location?.isBookingAllowed
       ? ({
           label: t("blocks.treatmentHero.ctaActionLabel"),
           method: SharedButtonMethod.ACTION,
           action: SharedButtonAction.APPOINTMENT_BOOKING,
         } as SharedButtonDto)
-      : undefined;
+      : waitlistInsteadOfBooking
+        ? ({
+            label: t("blocks.treatmentHero.ctaWaitlistLabel"),
+            method: SharedButtonMethod.EXTERNAL_LINK,
+            url: "#vormerken",
+          } as SharedButtonDto)
+        : undefined;
 
     const announcementText = {
       [LocationOpenStatus.OPEN]: undefined,
@@ -72,26 +87,20 @@ export function mapLocationFixedBlocks(
       ),
     };
 
-    // #141: Ein gesperrter Standort, der laut Datum laengst offen ist, sah aus
-    // wie jeder andere — die MediaPark-Klinik trug nicht einmal einen Hinweis,
-    // waehrend 70 Menschen im Monat dort vergeblich einen Termin suchten. Fuer
-    // die noch nicht eroeffneten Standorte steht der richtige Hinweis schon da
-    // ("Coming Soon"), der darf nicht ueberschrieben werden.
-    const laengstOffen =
-      locationOpenStatus === LocationOpenStatus.OPEN ||
-      locationOpenStatus === LocationOpenStatus.OPEN_NEW_TODAY;
-
+    // Kein "Vorübergehend geschlossen" mehr, wenn nur die Online-Buchung
+    // gesperrt ist (#141 hatte das eingeführt): Der Standort ist geöffnet,
+    // für die MediaPark-Klinik ist das vertraglich zugesichert. Die Sperre
+    // betrifft nur den Buchungsknopf.
     return {
-      announcementText:
-        buchungGesperrt && laengstOffen
-          ? t("locations.location.openingHoursTemporarilyClosed")
-          : announcementText[locationOpenStatus],
+      announcementText: announcementText[locationOpenStatus],
       headline: location?.name,
       headlinePrefix: `${brandName} · ${location?.city?.name}`,
       cover: location?.buildingImage,
       text: location?.description,
       cta,
-      showGlobalDiscount: location?.showDiscount ?? true,
+      showGlobalDiscount: waitlistInsteadOfBooking
+        ? false
+        : (location?.showDiscount ?? true),
       showBookingButton: location?.showBookingButton ?? true,
       showCompanyLogos: true,
       showReviews: true,

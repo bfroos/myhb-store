@@ -140,6 +140,8 @@ export type LocationDto = {
   buildingImage?: StrapiMedia;
   isBookingAllowed: boolean;
   showDiscount: boolean;
+  /** Standortseite zusaetzlich auf Franzoesisch (sonst nur Deutsch, TSEO-01). */
+  showFrenchPage?: boolean;
   timezone: string;
   newOpeningDate?: string;
   openingStatus: LocationOpenStatus;

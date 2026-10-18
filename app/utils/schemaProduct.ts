@@ -10,12 +10,18 @@ import {
 
 type ProductSchemaContext = SchemaOrgContext & {
   currency?: string;
+  brandName?: string;
   /** go.*: keine Offer-Preise (Seite zeigt Neukundenpreise, wie #187). */
   omitOffers?: boolean;
 };
 
 /**
- * Schema.org Product for product detail pages.
+ * Schema.org fuer die /produkte/-Seiten. Das sind Praeparate, die nur als
+ * Behandlung am Standort angeboten werden (Botox 1 Zone, Filler, Infusionen),
+ * nichts wird verschickt. Deshalb "Service" statt "Product": Als Product mit
+ * Offer zeigte Google die Seite wie einen Shop-Artikel ("149,99 € ·
+ * Kostenlose Lieferung", Wettbewerbsvergleich 16.10.2026). Preise bleiben
+ * als Offer am Service lesbar, ohne Warenzustand.
  *
  * We use active variants preferentially for price/availability.
  */
@@ -37,10 +43,9 @@ export function buildProductSchema(
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": "Product",
+    "@type": "Service",
     name: product.name,
     url: pageUrl,
-    ...(product.slug && { sku: product.slug }),
     ...(product.category?.name && { category: product.category.name }),
     ...(imageUrls.length > 0 && { image: imageUrls }),
     ...(strapiRichTextToPlainText(product.description) && {
@@ -48,14 +53,11 @@ export function buildProductSchema(
     }),
   };
 
-  if (product.manufacturer?.name) {
-    schema.brand = {
-      "@type": "Brand",
-      name: "product.manufacturer.name",
-    };
-    schema.manufacturer = {
+  if (ctx.brandName) {
+    schema.provider = {
       "@type": "Organization",
-      name: product.manufacturer.name,
+      "@id": `${toAbsoluteUrl(ctx.publicUrl, "/")}#organization`,
+      name: ctx.brandName,
     };
   }
 
@@ -76,7 +78,6 @@ export function buildProductSchema(
         "@id": pageUrl,
         priceCurrency: currency,
         availability,
-        itemCondition: "https://schema.org/NewCondition",
       },
     ];
   }
@@ -130,6 +131,5 @@ function buildOffer(
     priceCurrency: ctx.currency,
     price: formatEuroFromCent(priceInEuroCent),
     availability: vAvailability,
-    itemCondition: "https://schema.org/NewCondition",
   };
 }

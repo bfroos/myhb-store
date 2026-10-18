@@ -1,12 +1,25 @@
 // https://mailchimp.com/developer/marketing/api/list-members/add-member-to-list/
 
+import { createHash } from "node:crypto";
 import mailchimp from "@mailchimp/mailchimp_marketing";
 
 const ALLOWED_SOURCES = new Set([
   "newsletter_footer",
   "discount_cta_20",
   "blog_newsletter_block",
+  "vorregistrierung_standort",
 ]);
+
+// Wartelisten noch nicht eroeffneter Standorte (Vormerk-Kasten der
+// Standortseite, 16.10.2026): Zusatz-Tag "warteliste:<stadt-slug>", ueber den
+// Mailchimp beim Start genau diese Anmeldungen anschreibt. Der Tag muss auch
+// bei Bestandsmitgliedern gesetzt werden, sonst fehlen sie im Segment.
+const WAITLIST_SOURCE = "vorregistrierung_standort";
+const WAITLIST_SLUG = /^[a-z0-9-]{2,60}$/;
+
+// Sprache der Anmeldung (Mailchimp-Feld "language"), damit die Start-Mail an
+// Kundinnen aus Frankreich auf Franzoesisch gehen kann.
+const ALLOWED_LANGUAGES = new Set(["de", "fr"]);
 
 // Zentrale Adresspruefung (Syntax, Tippfehler, MX-Eintrag). Dient hier als
 // Sicherheitsnetz fuer alles, was am Frontend vorbeikommt: Bots, Clients
@@ -62,6 +75,7 @@ function deriveSrc(t: WireTouch | undefined): string | null {
   const med = (t.utm_medium || "").toLowerCase();
   if (cid.startsWith("gclid:")) return "google_ads";
   if (cid.startsWith("ttclid:")) return "tiktok_ads";
+  if (cid.startsWith("msclkid:")) return "bing_ads";
   if (cid.startsWith("fbclid:")) return "meta_ads";
   if (src === "google" && (med === "cpc" || med.includes("paid"))) return "google_ads";
   if (src === "tiktok" && med.includes("paid")) return "tiktok_ads";
@@ -99,6 +113,8 @@ export default defineEventHandler(async (event) => {
     email?: string;
     source?: string;
     phone?: string;
+    language?: string;
+    waitlist?: string;
     attribution?: unknown;
   }>(event);
   const email = (body.email || "").trim().toLowerCase();
@@ -106,6 +122,18 @@ export default defineEventHandler(async (event) => {
   const source = ALLOWED_SOURCES.has(rawSource) ? rawSource : null;
   const phone = (body.phone || "").trim();
   const attribution = sanitizeAttribution(body.attribution);
+  const rawLanguage = (body.language || "").trim().toLowerCase();
+  const language = ALLOWED_LANGUAGES.has(rawLanguage) ? rawLanguage : null;
+  const waitlistSlug = (body.waitlist || "").trim().toLowerCase();
+  const waitlistTag =
+    source === WAITLIST_SOURCE && WAITLIST_SLUG.test(waitlistSlug)
+      ? `warteliste:${waitlistSlug}`
+      : undefined;
+  const tags = [
+    ...(source ? [`source:${source}`] : []),
+    ...(waitlistTag ? [waitlistTag] : []),
+    ...(waitlistTag && language ? [`sprache:${language}`] : []),
+  ];
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     throw createError({
@@ -143,6 +171,7 @@ export default defineEventHandler(async (event) => {
           email,
           phone: phone || null,
           source: source || "newsletter_dialog",
+          language,
           // T6 Set B (#13): first/last-Touch fuer touchpoints/identities.
           attribution: attribution || null,
         },
@@ -177,7 +206,8 @@ export default defineEventHandler(async (event) => {
     const res = await mailchimp.lists.addListMember(mailchimpAudienceId, {
       email_address: email,
       status: "subscribed",
-      ...(source ? { tags: [`source:${source}`] } : {}),
+      ...(tags.length ? { tags } : {}),
+      ...(language ? { language } : {}),
       ...(Object.keys(mergeFields).length ? { merge_fields: mergeFields } : {}),
     });
 
@@ -202,6 +232,19 @@ export default defineEventHandler(async (event) => {
         hasMemberExistsCode);
 
     if (isMemberExists) {
+      // Warteliste: Bestandsmitglied trotzdem in die Liste aufnehmen.
+      if (waitlistTag) {
+        try {
+          const hash = createHash("md5").update(email).digest("hex");
+          await (mailchimp.lists as any).updateListMemberTags(
+            mailchimpAudienceId,
+            hash,
+            { tags: tags.map((name) => ({ name, status: "active" })) },
+          );
+        } catch (tagErr) {
+          console.error("[newsletter] waitlist tag for existing member failed", tagErr);
+        }
+      }
       // Merge-Felder werden bei Bestandsmitgliedern bewusst NICHT
       // ueberschrieben (First-Stempel bleibt stehen); der n8n-Intake
       // entscheidet dort anhand von identities.

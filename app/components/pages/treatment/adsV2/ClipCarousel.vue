@@ -4,8 +4,11 @@
     30.09.2026). Wischbare Reihe 9:16 mit festem Seitenverhaeltnis (kein
     CLS). Quelle erst, wenn der Clip in die Naehe kommt; laeuft stumm und
     inline (iPhone: muted + playsinline), solange er sichtbar ist. Poster statt
-    #t=1. Pause- und Ton-Knopf; bei prefers-reduced-motion kein Autoplay, der
-    Clip startet erst auf Tippen.
+    #t=1. Das Poster zeigt das lazy <img>; am <video> steht es erst mit der
+    Quelle, sonst laedt der Browser alle Poster sofort mit dem Hero-Bild
+    (Lighthouse 16.10.2026: 8 Poster bei 205 ms, ~290 KB). Pause- und
+    Ton-Knopf; bei prefers-reduced-motion kein Autoplay, der Clip startet erst
+    auf Tippen.
     Von selbst laufen nur die geschnittenen Kurzclips (public/videos/go/,
     ~0,5 MB). Volle Strapi-Videos (2,5-8,5 MB) zeigen ihr Poster und laden
     erst, wenn jemand auf Abspielen tippt (preload=none, keine Quelle vorher).
@@ -30,7 +33,7 @@
           class="clips__video"
           :class="{ 'clips__video--on': state[i]?.started }"
           :src="state[i]?.src"
-          :poster="clip.posterUrl || undefined"
+          :poster="state[i]?.src ? clip.posterUrl || undefined : undefined"
           :aria-label="clip.caption || 'Behandlungsclip'"
           muted
           playsinline

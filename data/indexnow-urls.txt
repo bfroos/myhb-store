@@ -14,7 +14,6 @@ https://www.myhealthandbeauty.com/aerzte/carina
 https://www.myhealthandbeauty.com/aerzte/claudia
 https://www.myhealthandbeauty.com/aerzte/csilla
 https://www.myhealthandbeauty.com/aerzte/dr-gero-ruppert
-https://www.myhealthandbeauty.com/aerzte/employee
 https://www.myhealthandbeauty.com/aerzte/iqra
 https://www.myhealthandbeauty.com/aerzte/jenniffer-bauer
 https://www.myhealthandbeauty.com/aerzte/katharina
@@ -96,6 +95,7 @@ https://www.myhealthandbeauty.com/behandlungen/schoenheitsoperationen/oberarmstr
 https://www.myhealthandbeauty.com/behandlungen/schoenheitsoperationen/oberschenkelstraffung
 https://www.myhealthandbeauty.com/behandlungen/skinbooster
 https://www.myhealthandbeauty.com/behandlungen/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/behandlungen/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/behandlungen/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/behandlungen/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/behandlungen/skinbooster/profhilo
@@ -250,7 +250,6 @@ https://www.myhealthandbeauty.com/en/doctors/burhan
 https://www.myhealthandbeauty.com/en/doctors/carina
 https://www.myhealthandbeauty.com/en/doctors/csilla
 https://www.myhealthandbeauty.com/en/doctors/dr-gero-ruppert
-https://www.myhealthandbeauty.com/en/doctors/employee
 https://www.myhealthandbeauty.com/en/doctors/iqra
 https://www.myhealthandbeauty.com/en/doctors/jenniffer-bauer
 https://www.myhealthandbeauty.com/en/doctors/katharina
@@ -472,6 +471,7 @@ https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/infusionen/regene
 https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/skinbooster/profhilo
@@ -533,6 +533,7 @@ https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/infusione
 https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/skinbooster/profhilo
@@ -594,6 +595,7 @@ https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/infu
 https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/skinbooster/profhilo
@@ -655,6 +657,7 @@ https://www.myhealthandbeauty.com/standorte/duisburg/forum/infusionen/regenerati
 https://www.myhealthandbeauty.com/standorte/duisburg/forum/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/duisburg/forum/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/duisburg/forum/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/duisburg/forum/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/duisburg/forum/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/duisburg/forum/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/duisburg/forum/skinbooster/profhilo
@@ -716,6 +719,7 @@ https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/infusion
 https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/kaiserslautern/k-in-lautern/skinbooster/profhilo
@@ -777,6 +781,7 @@ https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/infusionen/regen
 https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/skinbooster/profhilo
@@ -849,6 +854,7 @@ https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/infusionen/r
 https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/leipzig/hoefe-am-bruehl/skinbooster/profhilo
@@ -910,6 +916,7 @@ https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/infusionen/re
 https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/moenchengladbach/minto/skinbooster/profhilo
@@ -971,6 +978,7 @@ https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/infusione
 https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/infusionen/vitamin-c-infusion
 https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/skinbooster/lumi-eyes-polynukleotide
+https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/standorte/recklinghausen/palais-vest/skinbooster/profhilo

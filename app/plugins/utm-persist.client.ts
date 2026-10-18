@@ -85,6 +85,8 @@ export default defineNuxtPlugin(() => {
     "gclid",
     "fbclid",
     "ttclid",
+    // Microsoft Ads (Bing), seit 16.10.2026 fuer den Bing-Test
+    "msclkid",
   ] as const;
   const KEY = "myhb_attribution";
   const TTL_DAYS = 90;
@@ -229,6 +231,9 @@ export default defineNuxtPlugin(() => {
       } else if (found.ttclid) {
         found.utm_source = "tiktok";
         found.utm_medium = found.utm_medium || "paid_social";
+      } else if (found.msclkid) {
+        found.utm_source = "bing";
+        found.utm_medium = found.utm_medium || "cpc";
       }
     }
 
@@ -267,7 +272,9 @@ export default defineNuxtPlugin(() => {
         ? `fbclid:${t.fbclid}`
         : t.ttclid
           ? `ttclid:${t.ttclid}`
-          : null;
+          : t.msclkid
+            ? `msclkid:${t.msclkid}`
+            : null;
   }
 
   function decorate(url: string): string {
