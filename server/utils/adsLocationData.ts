@@ -205,6 +205,8 @@ async function locationDoctors(event: any, loc: string, locale: string): Promise
       lastName: e.lastName,
       role: e.role,
       photo: e.photo,
+      // E24-Pilot (www): Link auf die Aerzteseite (Vornamen-Slug).
+      slug: e.slug,
     }));
     doctorCache.set(key, { at: Date.now(), data });
     return data;
