@@ -9,7 +9,14 @@
  * Punkt. serviceArea darf auch kommagetrennt sein, solange kein Ort selbst
  * ein Komma enthaelt.
  */
-import type { SeoCityContent } from "./seoPilotLippen.ts";
+import type { SeoCityContent, SeoFaq, SeoParagraph } from "./seoPilotLippen.ts";
+
+/** Strapi-Rich-Text, soweit die FAQ ihn nutzen (Absaetze, Text, Links). */
+type RichNode = { type?: string; text?: string; url?: string; children?: RichNode[] };
+
+export type LocalFaqSetDto = {
+  faqs?: Array<{ question?: string | null; answer?: RichNode[] | string | null; isActive?: boolean | null }> | null;
+} | null;
 
 export type LocalFactsDto = {
   district?: string | null;
@@ -23,6 +30,8 @@ export type LocalFactsDto = {
   factsSource?: string | null;
   /** ISO-Datum, z. B. "2026-10-12". */
   checkedAt?: string | null;
+  /** Standortfragen, fuer alle Behandlungen gleich (Konzept 3.2). */
+  localFaqSet?: LocalFaqSetDto;
 };
 
 const MONTHS = [
@@ -73,6 +82,53 @@ export function factsSourceSentence(
   return `${s}${stand}. Angaben ohne Gewähr.`;
 }
 
+function inline(nodes: RichNode[] | undefined, out: SeoParagraph): void {
+  for (const n of nodes ?? []) {
+    if (n.type === "link" && n.url) {
+      const t = (n.children ?? []).map((c) => c.text ?? "").join("");
+      if (t) out.push({ text: t, href: n.url });
+    } else if (typeof n.text === "string") {
+      out.push(n.text);
+    } else {
+      inline(n.children, out);
+    }
+  }
+}
+
+/** Antwort aus Strapi (Rich Text oder String) als Absatz; Absaetze mit Leerzeichen. */
+export function richTextParagraph(answer: RichNode[] | string | null | undefined): SeoParagraph {
+  if (typeof answer === "string") return answer.trim() ? [answer.trim()] : [];
+  const out: SeoParagraph = [];
+  (answer ?? []).forEach((block, i) => {
+    if (i > 0 && out.length) out.push(" ");
+    inline(block.children ?? [block], out);
+  });
+  return out.some((x) => (typeof x === "string" ? x.trim() : x.text)) ? out : [];
+}
+
+function questionKey(q: string): string {
+  return q.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+}
+
+/**
+ * FAQ der Stadtseite plus Standortfragen aus Strapi (localFaqSet). Fragen,
+ * die es schon gibt, kommen nicht doppelt; inaktive und leere fallen weg.
+ */
+export function mergeLocalFaqs(faqs: SeoFaq[], set: LocalFaqSetDto | undefined): SeoFaq[] {
+  const seen = new Set(faqs.map((f) => questionKey(f.question)));
+  const extra: SeoFaq[] = [];
+  for (const f of set?.faqs ?? []) {
+    const question = text(f?.question);
+    if (!question || f?.isActive === false) continue;
+    const answer = richTextParagraph(f?.answer);
+    const key = questionKey(question);
+    if (!answer.length || seen.has(key)) continue;
+    seen.add(key);
+    extra.push({ question, answer });
+  }
+  return extra.length ? [...faqs, ...extra] : faqs;
+}
+
 /** Stadtseite mit den Strapi-Fakten des Standorts; ohne Fakten unveraendert. */
 export function applyLocalFacts(
   content: SeoCityContent,
@@ -90,5 +146,6 @@ export function applyLocalFacts(
     serviceArea: list(facts.serviceArea) ?? content.serviceArea,
     languages: languagesSentence(facts.languages) ?? content.languages,
     factsSource: factsSourceSentence(facts.factsSource, facts.checkedAt) ?? content.factsSource,
+    faqs: mergeLocalFaqs(content.faqs, facts.localFaqSet),
   };
 }

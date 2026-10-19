@@ -18,7 +18,10 @@
  * - keine Quelle einer Weiterleitung (redirects.json, redirects-koeln.json und
  *   Strapi-Redirects, gemergt in server/utils/redirects.ts),
  * - kein metaRobots mit noindex (treatment-pages, pages),
- * - excludeFromSitemap, Coming-soon-Filialen wie bisher.
+ * - excludeFromSitemap, Coming-soon-Filialen wie bisher,
+ * - Stadtseiten ohne eigenen lokalen Inhalt, sobald fuer ihre Behandlung das
+ *   Gate an ist (shared/localContentGate.ts, E24 #312). Sie zeigen per
+ *   Canonical auf den Hub.
  *
  * lastmod wird bewusst nicht mehr ausgegeben: updatedAt springt bei jedem
  * Massen-Republish (932 URLs trugen den 19.09.2026), und ein falsches Datum
@@ -31,6 +34,7 @@ import qs from "qs";
 import { resolveRedirect } from "./redirects";
 import { isIndexableLocale } from "#shared/hreflang";
 import { isTestEmployeeSlug } from "#shared/reviewPrivacy";
+import { localGateInSitemap } from "#shared/localContentGate";
 
 type StrapiPagination = {
   page: number;
@@ -530,6 +534,7 @@ const SEGMENT_BUILDERS: Record<
       if (!locationGroupId) continue;
       for (const treatment of treatments) {
         if (!treatment.pathKey) continue;
+        if (!localGateInSitemap(treatment.pathKey, citySlug, locationSlug)) continue;
         out.add(
           "locationTreatment",
           `${locationGroupId}/${treatment.pathKey}`,
