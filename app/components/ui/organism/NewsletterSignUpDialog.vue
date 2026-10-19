@@ -6,9 +6,11 @@
     <!-- Mit Buchung (Behandlungsseiten, go. Variante A): kompakt, damit am
          Handy (375x667) alles bis zum Knopf ohne Scrollen sichtbar ist
          (Benjamin 07.10.2026). Die Ueberschrift steht im Dialogkopf. -->
-    <p v-if="hasBooking && !gesichert" class="newsletterSignUpDialog__intro">
-      {{ $t("newsletter.marketingText.bookingIntro") }}
-    </p>
+    <template v-if="hasBooking">
+      <p v-if="!gesichert" class="newsletterSignUpDialog__intro">
+        {{ $t("newsletter.marketingText.bookingIntro") }}
+      </p>
+    </template>
     <template v-else>
       <h2>
         {{
