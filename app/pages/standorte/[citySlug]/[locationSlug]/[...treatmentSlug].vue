@@ -74,6 +74,7 @@ import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
 import { rememberOfferVariant } from "~/lib/offerVariant";
 import { seoPilotCity } from "#shared/seoPilotLippen";
+import { applyLocalFacts } from "#shared/localFacts";
 import {
   LOCATION_ADS_BLOCK_ORDER,
   LOCATION_SEO_BLOCK_ORDER,
@@ -105,7 +106,9 @@ const seoPilot = computed(() => {
   if (!/^\/standorte\//.test(r.path)) return null;
   const p = r.params as Record<string, unknown>;
   const slug = Array.isArray(p.treatmentSlug) ? p.treatmentSlug.join("/") : String(p.treatmentSlug ?? "");
-  return seoPilotCity(String(p.citySlug ?? ""), String(p.locationSlug ?? ""), slug);
+  const city = seoPilotCity(String(p.citySlug ?? ""), String(p.locationSlug ?? ""), slug);
+  // #312: Standortfakten aus Strapi gewinnen, sonst Text im Code.
+  return city ? applyLocalFacts(city, location.value?.localFacts) : null;
 });
 const pageLoaded = await fetchPage();
 // Standort-Konsolidierung: Die Behandlung gehoert in dieser Stadt zu einem
