@@ -10,10 +10,14 @@
  * Diese Datei kennt nur HubSpot. Validierung und Formularlogik stehen in
  * server/api/karriere/bewerbung.post.ts.
  *
- * Was in HubSpot von Hand angelegt werden muss — Properties, Workflow fuer die
- * Benachrichtigung an Jenny, Loeschfrist fuer Bewerberdaten:
+ * Was in HubSpot von Hand angelegt werden muss (Private App, Properties):
  * docs/hubspot-bewerbung-aerzte.md. Ohne diese Properties laufen die Requests
  * auf einen 400 ("Property ... does not exist").
+ *
+ * Das Portal hat kein HubSpot Professional, also keine Workflows. Deshalb
+ * liegt beides hier im Code: Jenny wird Owner des Deals (HubSpot benachrichtigt
+ * Owner von sich aus), und die Loeschfrist erledigt der Cron
+ * server/api/cron/bewerber-loeschen.get.ts.
  */
 
 const HUBSPOT_API_BASE = "https://api.hubapi.com";
@@ -33,6 +37,11 @@ const DEFAULT_PIPELINE_ID = "3858382020";
 const DEFAULT_STAGE_ID = "5463910623"; // "Bewerbung eingegangen"
 const DEFAULT_PORTAL_ID = "148248537";
 const DEFAULT_UI_DOMAIN = "app-eu1.hubspot.com";
+/**
+ * Jenniffer Bauer (Recruiting), Owner jeder neuen Bewerbung. Ueber
+ * NUXT_HUBSPOT_RECRUITING_OWNER_ID austauschbar, wenn das Recruiting wechselt.
+ */
+const DEFAULT_OWNER_ID = "39148340";
 
 /** Ordner im HubSpot File Manager, in dem die Lebenslaeufe landen. */
 const CV_FOLDER_PATH = "/bewerbungen/aerzte";
@@ -69,6 +78,7 @@ export type HubspotConfig = {
   stageId: string;
   portalId: string;
   uiDomain: string;
+  ownerId: string;
 };
 
 /**
@@ -102,6 +112,9 @@ export function getHubspotConfig(): HubspotConfig {
     uiDomain:
       ((config as any).hubspotUiDomain as string | undefined) ||
       DEFAULT_UI_DOMAIN,
+    ownerId:
+      ((config as any).hubspotRecruitingOwnerId as string | undefined) ||
+      DEFAULT_OWNER_ID,
   };
 }
 
@@ -287,8 +300,9 @@ export async function upsertBewerberKontakt(
 
 /**
  * Legt den Deal in der Recruiting-Pipeline an, Stage "Bewerbung eingegangen",
- * verknuepft mit dem Kontakt. An dieser Deal-Erstellung haengt der Workflow,
- * der Jenny benachrichtigt (siehe docs/hubspot-bewerbung-aerzte.md).
+ * verknuepft mit dem Kontakt. Jenny ist Owner: Die Zuweisung loest HubSpots
+ * eigene Benachrichtigung "Deal zugewiesen" aus, ein Workflow ist dafuer nicht
+ * noetig.
  */
 export async function createBewerbungsDeal(
   config: HubspotConfig,
@@ -305,6 +319,7 @@ export async function createBewerbungsDeal(
           dealname: `Bewerbung Arzt — ${daten.vorname} ${daten.nachname}`,
           pipeline: config.pipelineId,
           dealstage: config.stageId,
+          hubspot_owner_id: config.ownerId,
         },
         associations: [
           {
@@ -381,5 +396,158 @@ export async function createBewerbungsNotiz(
         },
       ],
     },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Loeschfrist (Cron server/api/cron/bewerber-loeschen.get.ts)
+// ---------------------------------------------------------------------------
+
+/** Erkennt die Notizen, die createBewerbungsNotiz anlegt. */
+const NOTIZ_KENNUNG = "<b>Bewerbung Arzt (Karriereseite)</b>";
+
+export type FaelligerKontakt = {
+  id: string;
+  lifecyclestage: string | null;
+  cvUrl: string | null;
+};
+
+/** Kontakte, deren `bewerbung_loeschdatum` heute oder frueher ist. */
+export async function findeFaelligeBewerber(
+  config: HubspotConfig,
+  faelligBisMs: string,
+  max: number,
+): Promise<FaelligerKontakt[]> {
+  const p = HUBSPOT_APPLICANT_PROPERTIES;
+  const result = await hubspotFetch<{
+    results?: Array<{ id: string; properties: Record<string, string | null> }>;
+  }>(config, "/crm/v3/objects/contacts/search", {
+    method: "POST",
+    body: {
+      filterGroups: [
+        {
+          filters: [
+            { propertyName: p.loeschdatum, operator: "LTE", value: faelligBisMs },
+          ],
+        },
+      ],
+      properties: ["lifecyclestage", p.cvUrl],
+      sorts: [{ propertyName: p.loeschdatum, direction: "ASCENDING" }],
+      limit: max,
+    },
+  });
+
+  return (result.results ?? []).map((kontakt) => ({
+    id: kontakt.id,
+    lifecyclestage: kontakt.properties.lifecyclestage ?? null,
+    cvUrl: kontakt.properties[p.cvUrl] ?? null,
+  }));
+}
+
+async function assoziierteIds(
+  config: HubspotConfig,
+  contactId: string,
+  zu: "deals" | "notes",
+): Promise<string[]> {
+  const result = await hubspotFetch<{ results?: Array<{ toObjectId: number }> }>(
+    config,
+    `/crm/v4/objects/contacts/${contactId}/associations/${zu}?limit=500`,
+  );
+  return (result.results ?? []).map((r) => String(r.toObjectId));
+}
+
+async function batchRead(
+  config: HubspotConfig,
+  objekt: "deals" | "notes",
+  ids: string[],
+  properties: string[],
+): Promise<Array<{ id: string; properties: Record<string, string | null> }>> {
+  if (ids.length === 0) return [];
+  const result = await hubspotFetch<{
+    results?: Array<{ id: string; properties: Record<string, string | null> }>;
+  }>(config, `/crm/v3/objects/${objekt}/batch/read`, {
+    method: "POST",
+    body: { properties, inputs: ids.map((id) => ({ id })) },
+  });
+  return result.results ?? [];
+}
+
+export type BewerbungsSpuren = {
+  /** Deals der Recruiting-Pipeline mit ihrer Stage. */
+  recruitingDeals: Array<{ id: string; stage: string }>;
+  hatAndereDeals: boolean;
+  /** Notizen aus createBewerbungsNotiz und ihre Anhaenge. */
+  notizIds: string[];
+  dateiIds: string[];
+};
+
+/** Alles, was am Kontakt von Bewerbungen stammt. */
+export async function ladeBewerbungsSpuren(
+  config: HubspotConfig,
+  contactId: string,
+): Promise<BewerbungsSpuren> {
+  const deals = await batchRead(
+    config,
+    "deals",
+    await assoziierteIds(config, contactId, "deals"),
+    ["pipeline", "dealstage"],
+  );
+  const recruitingDeals = deals
+    .filter((deal) => deal.properties.pipeline === config.pipelineId)
+    .map((deal) => ({ id: deal.id, stage: deal.properties.dealstage ?? "" }));
+
+  const notizen = (
+    await batchRead(
+      config,
+      "notes",
+      await assoziierteIds(config, contactId, "notes"),
+      ["hs_note_body", "hs_attachment_ids"],
+    )
+  ).filter((notiz) => notiz.properties.hs_note_body?.startsWith(NOTIZ_KENNUNG));
+
+  return {
+    recruitingDeals,
+    hatAndereDeals: deals.length > recruitingDeals.length,
+    notizIds: notizen.map((notiz) => notiz.id),
+    dateiIds: notizen.flatMap((notiz) =>
+      (notiz.properties.hs_attachment_ids ?? "")
+        .split(";")
+        .map((id) => id.trim())
+        .filter(Boolean),
+    ),
+  };
+}
+
+export async function loescheObjekt(
+  config: HubspotConfig,
+  objekt: "contacts" | "deals" | "notes",
+  id: string,
+): Promise<void> {
+  await hubspotFetch(config, `/crm/v3/objects/${objekt}/${id}`, {
+    method: "DELETE",
+  });
+}
+
+export async function loescheDatei(
+  config: HubspotConfig,
+  fileId: string,
+): Promise<void> {
+  await hubspotFetch(config, `/files/v3/files/${fileId}`, { method: "DELETE" });
+}
+
+/**
+ * Leert die Bewerbungs-Properties eines Kontakts, der bleibt (Bestandskundin).
+ * Damit faellt er auch aus der naechsten Suche nach faelligen Bewerbern.
+ */
+export async function leereBewerbungsFelder(
+  config: HubspotConfig,
+  contactId: string,
+): Promise<void> {
+  const properties = Object.fromEntries(
+    Object.values(HUBSPOT_APPLICANT_PROPERTIES).map((name) => [name, ""]),
+  );
+  await hubspotFetch(config, `/crm/v3/objects/contacts/${contactId}`, {
+    method: "PATCH",
+    body: { properties },
   });
 }
