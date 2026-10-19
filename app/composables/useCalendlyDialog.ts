@@ -41,6 +41,8 @@ export type BookingDialogOptions = {
    * in der Calendly-URL — nie ins Tracking (siehe lib/bookingPrefill.ts).
    */
   prefill?: BookingPrefill;
+  /** Termin-Knopf aus dem Rabatt-Fenster (myhb-app/myhb-os#1030), nur App. */
+  termin?: { date: string; time: string };
 };
 
 export function useCalendlyDialog() {
@@ -134,6 +136,7 @@ export function useCalendlyDialog() {
         treatmentContext,
         offer,
         lead: options?.prefill?.leadToken,
+        termin: options?.termin,
       });
       return;
     }
