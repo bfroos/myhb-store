@@ -259,6 +259,12 @@ export type AppBookingUrlOptions = {
   lead?: string | null;
   /** Reise-ID aus plugins/journey.client.ts (myhb-app/myhb-os#1088). */
   journeyId?: string | null;
+  /**
+   * Termin-Knopf aus dem Rabatt-Fenster (myhb-app/myhb-os#1030). Geht als
+   * `date`/`time` an die App: Ist die Zeit dort noch frei, landet der Kunde
+   * direkt in der Zusammenfassung, sonst auf dem Tag.
+   */
+  termin?: { date: string; time: string } | null;
 };
 
 /**
@@ -308,6 +314,10 @@ export function buildBookingUrl(
     if (options?.lead) {
       const mitLead = new URL(withLeadToken(url.toString(), options.lead));
       url.search = mitLead.search;
+    }
+    if (options?.termin && /^\d{4}-\d{2}-\d{2}$/.test(options.termin.date) && /^\d{2}:\d{2}$/.test(options.termin.time)) {
+      url.searchParams.set("date", options.termin.date);
+      url.searchParams.set("time", options.termin.time);
     }
     if (options?.journeyId && !url.searchParams.has("jid")) {
       url.searchParams.set("jid", options.journeyId);

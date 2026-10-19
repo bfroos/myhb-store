@@ -8,6 +8,11 @@
  *
  *   GET /api/naechster-termin?location=<venues.url_slug>&treatment=<slug>
  *   -> { date: "2026-10-09", time: "10:15" } | { none: true }
+ *
+ * Mit `&anzahl=3` (myhb-app/myhb-os#1030, Rabatt-Fenster Schritt 2) kommen
+ * zusaetzlich bis zu drei Termine als `termine`, hoechstens zwei je Tag,
+ * damit der Kunde auch einen anderen Tag sieht. `date`/`time` bleiben der
+ * erste Termin, bestehende Aufrufer merken nichts.
  */
 const SUPABASE_URL = "https://forgsirmbzkxbblepscr.supabase.co";
 // Oeffentlicher anon/publishable Key der App (steht auch im App-Bundle).
@@ -37,6 +42,7 @@ export default defineCachedEventHandler(
     const q = getQuery(event);
     const location = String(q.location ?? "");
     const treatment = String(q.treatment ?? "");
+    const anzahl = Math.min(4, Math.max(1, Number.parseInt(String(q.anzahl ?? "1"), 10) || 1));
     if (!SLUG.test(location) || !SLUG.test(treatment)) {
       throw createError({ statusCode: 400, statusMessage: "Bad Request" });
     }
@@ -62,6 +68,7 @@ export default defineCachedEventHandler(
           p_treatment_id: t.id,
         }),
       });
+      const termine: { date: string; time: string }[] = [];
       for (const date of (dates ?? []).slice(0, 3)) {
         const slots = await rest<{ slot_start: string; free_capacity: number }[]>("rpc/get_available_slots", {
           method: "POST",
@@ -72,10 +79,15 @@ export default defineCachedEventHandler(
             p_treatment_id: t.id,
           }),
         });
-        const first = (slots ?? []).find((s) => (s.free_capacity ?? 1) > 0);
-        if (first) return { date, time: first.slot_start.slice(0, 5) };
+        const frei = (slots ?? []).filter((s) => (s.free_capacity ?? 1) > 0);
+        for (const s of frei.slice(0, anzahl > 1 ? 2 : 1)) {
+          termine.push({ date, time: s.slot_start.slice(0, 5) });
+        }
+        if (termine.length >= anzahl) break;
       }
-      return { none: true };
+      if (termine.length === 0) return { none: true };
+      const [erster] = termine;
+      return anzahl > 1 ? { ...erster, termine: termine.slice(0, anzahl) } : erster;
     } catch {
       // Lieber nichts anzeigen als etwas Falsches.
       return { none: true };
@@ -87,7 +99,7 @@ export default defineCachedEventHandler(
     name: "naechster-termin",
     getKey: (event) => {
       const q = getQuery(event);
-      return `${q.location}:${q.treatment}`;
+      return `${q.location}:${q.treatment}:${q.anzahl ?? 1}`;
     },
   },
 );
