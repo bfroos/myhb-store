@@ -1,3 +1,4 @@
+import type { LocalFactsDto } from "#shared/localFacts";
 import type {
   LocationContactDto,
   SharedCoordinatesDto,
@@ -159,6 +160,8 @@ export type LocationDto = {
    *  dessen — der A/B-Split (#100) braucht beide. */
   appBookingUrl?: string;
   jobs?: JobDto[];
+  /** Belegte Standortfakten fuer Stadtseiten (E24 #312, nur www). */
+  localFacts?: LocalFactsDto | null;
 };
 
 export type ProductDto = {
