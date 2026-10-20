@@ -167,6 +167,14 @@
                      Preiszeile; "20 % Rabatt sichern" gibt es weiter unten
                      (Preise, Schlussaufruf). -->
               </div>
+              <!-- #282: Satz mit Link zur Kunden-App unter dem Buchungsknopf -->
+              <p v-if="kontoHintVisible" class="hero__konto">
+                {{ t("blocks.treatmentHero.kontoHint.text") }}
+                <a
+                  :href="kontoLink.href('behandlungsseite')"
+                  @click="kontoLink.trackClick('behandlungsseite')"
+                >{{ t("blocks.treatmentHero.kontoHint.link") }}</a>
+              </p>
               <!-- Naechster freier Termin live aus der App (08.10.2026) -->
               <p v-if="templateV2 && v2NextSlot" class="hero__v2-next">
                 <span class="hero__v2-next-dot" aria-hidden="true" /> {{ v2NextSlot }}
@@ -332,6 +340,8 @@ const props = withDefaults(
   defineProps<
     BlockTreatmentHeroDto & {
       showFloatingCta?: boolean;
+      /** #282: Satz mit Link zur Kunden-App (nur Behandlungsseiten). */
+      showKontoHint?: boolean;
       /** go.-Vorlage v2 (shared/adsTemplateV2.ts): Knoepfe untereinander. */
       templateV2?: boolean;
       /** go.-Vorlage v2: stummer Clip ueber dem Hero-Foto. */
@@ -371,6 +381,7 @@ const props = withDefaults(
   >(),
   {
     showFloatingCta: false,
+    showKontoHint: false,
     showBookingButton: true,
     templateV2: false,
     heroClip: null,
@@ -427,6 +438,18 @@ const bookingButtonVisible = computed(
 );
 const discountButtonVisible = computed(
   () => forceBothButtons.value || !!props.showGlobalDiscount,
+);
+
+// #282: nur auf www und nur mit Buchungsknopf (Schalter NUXT_PUBLIC_KONTO_LINK
+// in useKontoLink). Nicht auf go. und nicht in der Vorlage v2.
+const kontoLink = useKontoLink();
+const kontoHintVisible = computed(
+  () =>
+    props.showKontoHint &&
+    !isAdsMode.value &&
+    kontoLink.enabled.value &&
+    !!props.cta &&
+    bookingButtonVisible.value,
 );
 
 // go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet). Texte sind
@@ -862,6 +885,19 @@ const discountLabel = computed(() => {
 
 .hero__cta-price {
   display: contents;
+}
+
+.hero__konto {
+  margin: 0;
+  font-size: var(--font-sm);
+  color: var(--color-text-light);
+  text-align: center;
+}
+
+.hero__konto a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .hero__cta-price--with-price {

@@ -133,7 +133,7 @@ const BLOCK_MAP: Record<
 > = {
   hero: {
     is: resolveComponent("BlockTreatmentHero"),
-    props: { showFloatingCta: true },
+    props: { showFloatingCta: true, showKontoHint: true },
   },
   locationContact: {
     is: resolveComponent("BlockLocationContact"),

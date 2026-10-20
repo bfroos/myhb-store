@@ -12,6 +12,7 @@
     v-if="fixedBlocks.hero"
     v-bind="heroWithSeoH1"
     show-floating-cta
+    show-konto-hint
   />
   <BlockTreatmentAnswer
     v-if="answer"
