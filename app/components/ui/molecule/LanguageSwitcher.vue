@@ -32,6 +32,7 @@ import { computed } from "vue";
 import Select from "primevue/select";
 
 const { locale, locales, setLocale } = useI18n();
+const switchLocalePath = useSwitchLocalePath();
 
 const currentLocale = computed(() => {
   return (
@@ -56,6 +57,16 @@ const selectedLocaleCode = computed({
         return;
       }
 
+      // Ganzer Seitenaufruf statt setLocale: Beim Wechsel im Browser blieben
+      // die Inhalte in der alten Sprache stehen (Seiten holen ihre Daten
+      // einmal mit der beim Aufbau gueltigen Sprache), nur Adresse und
+      // Knoepfe wechselten. Gemeldet 20.10.2026 an der Saarbruecken-Seite,
+      // betraf aber jede Seite, z. B. /fr/traitements/botox -> Deutsch.
+      const target = switchLocalePath(newCode as any);
+      if (import.meta.client && target) {
+        window.location.assign(target);
+        return;
+      }
       await setLocale(newCode as any);
     }
   },
