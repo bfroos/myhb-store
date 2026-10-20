@@ -45,28 +45,13 @@ export function mapLocationFixedBlocks(
   };
 
   function buildTreatmentHeroBlockModel() {
-    // Noch nicht eroeffnet und Buchung aus (Saarbruecken, Benjamin
-    // 16.10.2026): statt "Termin buchen" ein Knopf zum Vormerk-Kasten
-    // (#vormerken, BlockLocationWaitlist), und kein zweiter Rabatt-Knopf,
-    // der in die Buchung fuehren wuerde.
-    const isNotYetOpen =
-      locationOpenStatus === LocationOpenStatus.OPEN_SOON ||
-      locationOpenStatus === LocationOpenStatus.COMING_SOON;
-    const waitlistInsteadOfBooking =
-      !isAdsMode && isNotYetOpen && !location?.isBookingAllowed;
     const cta = location?.isBookingAllowed
       ? ({
           label: t("blocks.treatmentHero.ctaActionLabel"),
           method: SharedButtonMethod.ACTION,
           action: SharedButtonAction.APPOINTMENT_BOOKING,
         } as SharedButtonDto)
-      : waitlistInsteadOfBooking
-        ? ({
-            label: t("blocks.treatmentHero.ctaWaitlistLabel"),
-            method: SharedButtonMethod.EXTERNAL_LINK,
-            url: "#vormerken",
-          } as SharedButtonDto)
-        : undefined;
+      : undefined;
 
     const announcementText = {
       [LocationOpenStatus.OPEN]: undefined,
@@ -98,9 +83,7 @@ export function mapLocationFixedBlocks(
       cover: location?.buildingImage,
       text: location?.description,
       cta,
-      showGlobalDiscount: waitlistInsteadOfBooking
-        ? false
-        : (location?.showDiscount ?? true),
+      showGlobalDiscount: location?.showDiscount ?? true,
       showBookingButton: location?.showBookingButton ?? true,
       showCompanyLogos: true,
       showReviews: true,
