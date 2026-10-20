@@ -30,6 +30,7 @@ import {
 import { useCalendlyTreatmentEvent } from "~/composables/useCalendlyTreatmentEvent";
 import { SharedButtonAction } from "~/lib/strapi/dto/enums";
 import type { BaseButtonProps } from "~/lib/ui/types";
+import { KLINIK_CTA_LABEL } from "#shared/klinik";
 
 const props = defineProps<{
   button?: SharedButtonDto | null;
@@ -49,7 +50,27 @@ const props = defineProps<{
 const { t } = useI18n();
 const globals = useGlobals();
 const { isAdsMode } = useSiteModeFlags();
-const button = computed(() => props.button ?? null);
+// Klinik-Regel (E28 #1636): Auf OP-Seiten wird jeder Buchungs- oder
+// Rabatt-Knopf aus Strapi zum Anfrage-Knopf. Die Kopfzeile (ohneSeitenKontext)
+// bleibt der allgemeine Termin-Knopf.
+const klinikZiel = useKlinikSeite();
+const istBuchungOderRabatt = (b: SharedButtonDto | null | undefined) =>
+  !!b &&
+  (b.method === "app-booking" ||
+    (b.method === "action" &&
+      (b.action === SharedButtonAction.APPOINTMENT_BOOKING ||
+        b.action === SharedButtonAction.NEWSLETTER_SIGN_UP)));
+const button = computed<SharedButtonDto | null>(() => {
+  if (klinikZiel.value && !props.ohneSeitenKontext && istBuchungOderRabatt(props.button)) {
+    return {
+      label: KLINIK_CTA_LABEL,
+      method: "external-link" as SharedButtonDto["method"],
+      url: klinikZiel.value,
+      variant: props.button?.variant,
+    };
+  }
+  return props.button ?? null;
+});
 
 const as = computed(() => {
   switch (button.value?.method) {

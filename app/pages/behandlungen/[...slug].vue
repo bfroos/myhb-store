@@ -66,6 +66,7 @@ import { SEO_HUB_LIPPEN, isSeoPilotHub } from "#shared/seoPilotLippen";
 import { answerHeadline, treatmentAnswer } from "#shared/treatmentAnswer";
 import { purchaseFaqs } from "#shared/purchaseFaq";
 import { seoTitleFor } from "#shared/seoTitles";
+import { anfrageZiel, isKlinikBehandlung } from "#shared/klinik";
 
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
@@ -100,6 +101,13 @@ const treatmentType = computed<TreatmentType | undefined>(() => {
     | undefined;
   return relatedPages?.find((p) => p?.treatment?.type)?.treatment?.type;
 });
+
+// Klinik-Regel (E28 #1636): OP-Seiten fuehren in den Anfrage-Funnel.
+provideKlinikSeite(() =>
+  isKlinikBehandlung({ type: treatmentType.value, pathKey: treatmentPage.value?.pathKey })
+    ? anfrageZiel(treatmentPage.value?.pathKey)
+    : null,
+);
 
 const hasTreatmentLocations = computed(
   () => (treatmentLocations.value?.length ?? 0) > 0,
