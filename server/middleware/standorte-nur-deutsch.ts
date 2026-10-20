@@ -33,16 +33,22 @@ type SlugMaps = {
   city: Map<string, string>;
   location: Map<string, string>;
   pathKey: Map<string, string>;
+  /** Deutsche Filial-Slugs mit Strapi-Haken "showFrenchPage". */
+  french: Set<string>;
 };
 
 let cache: { at: number; maps: SlugMaps } | null = null;
 
-/** documentId -> de-Wert; danach jeder lokalisierte Wert -> de-Wert. */
+/**
+ * documentId -> de-Wert; danach jeder lokalisierte Wert -> de-Wert.
+ * Mit `flagField` zusaetzlich die de-Werte, bei denen dieser Haken gesetzt ist.
+ */
 async function loadMap(
   strapiUrl: string,
   collection: string,
   field: string,
-): Promise<Map<string, string>> {
+  flagField?: string,
+): Promise<{ map: Map<string, string>; flagged: Set<string> }> {
   type Row = { documentId?: string; locale?: string } & Record<string, any>;
   const rows: Row[] = [];
   // Strapi deckelt pageSize (Standard 100), also seitenweise.
@@ -54,7 +60,7 @@ async function loadMap(
       `${strapiUrl}/api/${collection}?${qs.stringify(
         {
           locale: "*",
-          fields: [field, "locale"],
+          fields: [field, "locale", ...(flagField ? [flagField] : [])],
           pagination: { page, pageSize: 100 },
         },
         { encodeValuesOnly: true },
@@ -64,9 +70,11 @@ async function loadMap(
     pageCount = res.meta?.pagination?.pageCount || 1;
   }
   const german = new Map<string, string>();
+  const flagged = new Set<string>();
   for (const row of rows) {
     if (row.locale === "de" && row.documentId && row[field]) {
       german.set(row.documentId, row[field]);
+      if (flagField && row[flagField] === true) flagged.add(row[field]);
     }
   }
   const map = new Map<string, string>();
@@ -74,7 +82,7 @@ async function loadMap(
     const de = row.documentId ? german.get(row.documentId) : undefined;
     if (de && row[field] && !map.has(row[field])) map.set(row[field], de);
   }
-  return map;
+  return { map, flagged };
 }
 
 // Konsolidierungsziel je deutscher Filial-Behandlungsseite (null = keins).
@@ -113,47 +121,29 @@ async function consolidatedTarget(path: string): Promise<string | null> {
   }
 }
 
-// Deutscher Filial-Slug -> Haken "showFrenchPage" in Strapi.
-const frenchCache = new Map<string, { at: number; value: boolean }>();
-
-async function hasFrenchPage(locationSlug: string): Promise<boolean> {
-  const hit = frenchCache.get(locationSlug);
-  if (hit && Date.now() - hit.at < TTL_MS) return hit.value;
-  const strapiUrl = useRuntimeConfig().public.strapiUrl?.replace(/\/+$/, "");
-  if (!strapiUrl) return false;
-  try {
-    const res = await $fetch<{ data?: { showFrenchPage?: boolean }[] }>(
-      `${strapiUrl}/api/locations?${qs.stringify(
-        {
-          locale: "de",
-          filters: { slug: { $eq: locationSlug } },
-          fields: ["showFrenchPage"],
-        },
-        { encodeValuesOnly: true },
-      )}`,
-      { timeout: 5000 },
-    );
-    const value = res.data?.[0]?.showFrenchPage === true;
-    if (frenchCache.size > 500) frenchCache.clear();
-    frenchCache.set(locationSlug, { at: Date.now(), value });
-    return value;
-  } catch {
-    // Strapi-Ausfall oder Feld noch nicht im Schema: wie bisher umleiten.
-    return false;
-  }
-}
-
 async function getMaps(): Promise<SlugMaps | null> {
   if (cache && Date.now() - cache.at < TTL_MS) return cache.maps;
   const strapiUrl = useRuntimeConfig().public.strapiUrl?.replace(/\/+$/, "");
   if (!strapiUrl) return null;
   try {
+    // showFrenchPage kommt mit der ohnehin geladenen Slug-Liste: Eine eigene
+    // Abfrage je Aufruf lief bei langsamem Strapi (20.10.2026: 9 s) in den
+    // Timeout, leitete die franzoesische Seite um, und der ISR-Cache hielt
+    // die Umleitung fest. So gilt bei einem Ausfall der letzte bekannte Stand.
     const [city, location, pathKey] = await Promise.all([
       loadMap(strapiUrl, "cities", "slug"),
-      loadMap(strapiUrl, "locations", "slug"),
+      loadMap(strapiUrl, "locations", "slug", "showFrenchPage"),
       loadMap(strapiUrl, "treatment-pages", "pathKey"),
     ]);
-    cache = { at: Date.now(), maps: { city, location, pathKey } };
+    cache = {
+      at: Date.now(),
+      maps: {
+        city: city.map,
+        location: location.map,
+        pathKey: pathKey.map,
+        french: location.flagged,
+      },
+    };
     return cache.maps;
   } catch (err) {
     console.warn("[standorte-nur-deutsch] Slug-Lookup fehlgeschlagen:", err);
@@ -181,7 +171,7 @@ export default defineEventHandler(async (event) => {
     match[2] === "lieux" &&
     locationSlug &&
     !rest.length &&
-    (await hasFrenchPage(maps?.location.get(locationSlug) ?? locationSlug))
+    maps?.french.has(maps.location.get(locationSlug) ?? locationSlug)
   ) {
     return;
   }
