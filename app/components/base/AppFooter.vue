@@ -92,7 +92,25 @@
                       {{ $t("navigation.secondary.blog") }}
                     </NuxtLinkLocale>
                   </li>
-                  <li v-if="clubUrl">
+                  <template v-if="clubSeiten.enabled.value">
+                    <li>
+                      <NuxtLinkLocale
+                        to="/club"
+                        @click="clubSeiten.trackClick('footer', 'club')"
+                      >
+                        {{ $t("navigation.secondary.myClub") }}
+                      </NuxtLinkLocale>
+                    </li>
+                    <li>
+                      <NuxtLinkLocale
+                        to="/beauty-sparbuch"
+                        @click="clubSeiten.trackClick('footer', 'sparbuch')"
+                      >
+                        {{ $t("navigation.secondary.beautySparbuch") }}
+                      </NuxtLinkLocale>
+                    </li>
+                  </template>
+                  <li v-else-if="clubUrl">
                     <a
                       :href="clubUrl"
                       target="_blank"
@@ -294,6 +312,8 @@ const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 // #282: "Mein Konto" zur Kunden-App, hinter NUXT_PUBLIC_KONTO_LINK.
 const kontoLink = useKontoLink();
+// Seiten /club und /beauty-sparbuch, hinter NUXT_PUBLIC_CLUB_SEITEN.
+const clubSeiten = useClubSeiten();
 
 // Overrides for specific price categories that should link to a dedicated
 // page instead of the default /preise#<slug> anchor.

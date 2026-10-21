@@ -499,6 +499,11 @@ export default defineNuxtConfig({
       // AUS; "on" schaltet ihn ein. Live erst nach den Schulungen Kunden-App
       // und Behandlungsplan (myhb-os#905, #906, Reihenfolge in #908).
       kontoLink: process.env.NUXT_PUBLIC_KONTO_LINK,
+      // Seiten /club und /beauty-sparbuch (shared/clubSeiten.ts): aus, bis die
+      // Stufen und das Sparbuch in der App laufen; auf Vercel-Previews an.
+      clubSeiten:
+        process.env.NUXT_PUBLIC_CLUB_SEITEN ??
+        (process.env.VERCEL_ENV === "preview" ? "on" : ""),
     },
   },
 

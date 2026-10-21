@@ -8,7 +8,16 @@
               {{ item.name }}
             </NuxtLinkLocale>
           </li>
-          <li v-if="clubUrl">
+          <li v-if="clubSeiten.enabled.value">
+            <NuxtLinkLocale
+              to="/club"
+              class="text-link"
+              @click="clubSeiten.trackClick('header', 'club')"
+            >
+              {{ $t("navigation.secondary.myClub") }}
+            </NuxtLinkLocale>
+          </li>
+          <li v-else-if="clubUrl">
             <a
               :href="clubUrl"
               target="_blank"
@@ -139,6 +148,8 @@ const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 const isMobileMenuOpen = ref(false);
 // #282: "Mein Konto" zur Kunden-App, hinter NUXT_PUBLIC_KONTO_LINK.
 const kontoLink = useKontoLink();
+// Seiten /club und /beauty-sparbuch, hinter NUXT_PUBLIC_CLUB_SEITEN.
+const clubSeiten = useClubSeiten();
 
 const secondaryNavItems = computed(() => [
   {
@@ -214,6 +225,7 @@ const mobileMenuItems = computed(() => {
     adsPhone: adsPhone.value,
     adsLocation: adsLocationLink.value,
     kontoHref: kontoLink.enabled.value ? kontoLink.href("header") : null,
+    clubSeiten: clubSeiten.enabled.value,
   };
 });
 
