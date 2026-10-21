@@ -458,8 +458,8 @@ export default defineNuxtConfig({
     mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,
     mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
     // HubSpot: Bewerbungsformular Aerzte (#102). Token ist ein Private-App-
-    // Token mit crm.objects.contacts/deals (read+write), crm.objects.notes
-    // (write) und files (write).
+    // Token mit crm.objects.contacts/deals/notes (read+write) und files
+    // (read+write) — Lesen und Loeschen braucht der Loesch-Cron.
     //
     // In Vercel als NUXT_HUBSPOT_PRIVATE_APP_TOKEN setzen, nicht als
     // HUBSPOT_PRIVATE_APP_TOKEN: process.env wird beim Build ausgewertet und
@@ -471,6 +471,8 @@ export default defineNuxtConfig({
     hubspotRecruitingStageId: process.env.HUBSPOT_RECRUITING_STAGE_ID,
     hubspotPortalId: process.env.HUBSPOT_PORTAL_ID,
     hubspotUiDomain: process.env.HUBSPOT_UI_DOMAIN,
+    // Owner neuer Bewerbungs-Deals (Default: Jenniffer Bauer, 39148340).
+    hubspotRecruitingOwnerId: process.env.HUBSPOT_RECRUITING_OWNER_ID,
     googlePlacesApiKey: process.env.GOOGLE_PLACES_API_KEY,
     googleGeolocationApiKey: process.env.GOOGLE_GEOLOCATION_API_KEY,
     siteMode: process.env.NUXT_PUBLIC_SITE_MODE,

@@ -62,5 +62,11 @@
       "destination": "/p/magazin-lippen-aufspritzen",
       "statusCode": 307
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/bewerber-loeschen",
+      "schedule": "0 4 * * *"
+    }
   ]
 }
