@@ -468,11 +468,7 @@
     },
     "treatmentHero": {
       "discountCta": "{pct}% korting veiligstellen",
-      "ctaActionLabel": "Afspraak maken",
-      "kontoHint": {
-        "text": "Na je behandeling vind je je voor-en-na-foto's",
-        "link": "in de app."
-      }
+      "ctaActionLabel": "Afspraak maken"
     },
     "productCategoryPriceOverview": {
       "treatments": "Behandelingen",

@@ -468,11 +468,7 @@
     },
     "treatmentHero": {
       "discountCta": "Obtenir {pct}% de réduction",
-      "ctaActionLabel": "Prendre rendez-vous",
-      "kontoHint": {
-        "text": "Après ton soin, tu retrouves tes photos avant-après",
-        "link": "dans l'app."
-      }
+      "ctaActionLabel": "Prendre rendez-vous"
     },
     "productCategoryPriceOverview": {
       "treatments": "Traitements",

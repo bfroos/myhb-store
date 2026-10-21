@@ -486,11 +486,7 @@
     },
     "treatmentHero": {
       "discountCta": "Get {pct}% off",
-      "ctaActionLabel": "Book appointment",
-      "kontoHint": {
-        "text": "After your treatment, you'll find your before-and-after photos",
-        "link": "in the app."
-      }
+      "ctaActionLabel": "Book appointment"
     },
     "productCategoryPriceOverview": {
       "treatments": "Treatments",
