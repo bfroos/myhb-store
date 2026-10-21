@@ -55,8 +55,11 @@ export type Stufe = {
 
 export const STATUS_FENSTER_MONATE = 36;
 
+// Basic behaelt 1 % Cashback wie seit 19.10.2026 fuer alle (Benjamin 21.10.2026),
+// abweichend vom Rechner (0 %).
+
 export const STUFEN: Stufe[] = [
-  { name: "Basic", ab: null, cashbackProzent: 0, geburtstagEuro: 10, geschenkEuro: null, sparbuchBonusProzent: 6, aktionen: false, wunscharzt: false, bevorzugterService: false },
+  { name: "Basic", ab: null, cashbackProzent: 1, geburtstagEuro: 10, geschenkEuro: null, sparbuchBonusProzent: 6, aktionen: false, wunscharzt: false, bevorzugterService: false },
   { name: "White", ab: 1000, cashbackProzent: 1, geburtstagEuro: 20, geschenkEuro: 50, sparbuchBonusProzent: 7, aktionen: false, wunscharzt: false, bevorzugterService: false },
   { name: "Grey", ab: 3000, cashbackProzent: 2, geburtstagEuro: 30, geschenkEuro: 100, sparbuchBonusProzent: 8, aktionen: true, wunscharzt: true, bevorzugterService: true },
   { name: "Black", ab: 5000, cashbackProzent: 3, geburtstagEuro: 50, geschenkEuro: 200, sparbuchBonusProzent: 9, aktionen: true, wunscharzt: true, bevorzugterService: true },

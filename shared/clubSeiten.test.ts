@@ -27,6 +27,10 @@ test("Stufen steigen", () => {
   }
 });
 
+test("Basic behaelt 1 % Cashback wie heute fuer alle", () => {
+  assert.equal(STUFEN[0]!.cashbackProzent, 1);
+});
+
 test("Rechenbeispiel 50 € x 12 Monate", () => {
   // 50·(1+…+12) = 3.900 €·Monat; × 6 %/12 = 19,50 €
   assert.deepEqual(sparbuchBeispiel(6), { eingezahlt: 600, bonus: 19.5 });
