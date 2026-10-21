@@ -475,7 +475,11 @@
     },
     "treatmentHero": {
       "discountCta": "{pct}% Rabatt sichern",
-      "ctaActionLabel": "Termin buchen"
+      "ctaActionLabel": "Termin buchen",
+      "kontoHint": {
+        "text": "Nach deiner Behandlung findest du deine Vorher-Nachher-Fotos",
+        "link": "in der App."
+      }
     },
     "productCategoryPriceOverview": {
       "treatments": "Behandlungen",

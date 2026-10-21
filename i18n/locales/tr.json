@@ -454,7 +454,11 @@
     },
     "treatmentHero": {
       "discountCta": "%{pct} indirim kazan",
-      "ctaActionLabel": "Randevu al"
+      "ctaActionLabel": "Randevu al",
+      "kontoHint": {
+        "text": "Tedavinden sonra öncesi-sonrası fotoğraflarını",
+        "link": "uygulamada bulabilirsin."
+      }
     },
     "productCategoryPriceOverview": {
       "treatments": "Tedaviler",
