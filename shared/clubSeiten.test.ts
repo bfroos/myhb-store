@@ -6,6 +6,7 @@ import {
   STUFEN,
   appUrl,
   isClubSeitenEnabled,
+  prozent,
   sparbuchBeispiel,
 } from "./clubSeiten.ts";
 
@@ -27,8 +28,9 @@ test("Stufen steigen", () => {
   }
 });
 
-test("Basic behaelt 1 % Cashback wie heute fuer alle", () => {
-  assert.equal(STUFEN[0]!.cashbackProzent, 1);
+test("Cashback: Basic 1 % wie heute, White 1,5 % (Benjamin 21.10.2026)", () => {
+  assert.deepEqual(STUFEN.map((s) => s.cashbackProzent), [1, 1.5, 2, 3]);
+  assert.equal(prozent(1.5), "1,5 %");
 });
 
 test("Rechenbeispiel 50 € x 12 Monate", () => {

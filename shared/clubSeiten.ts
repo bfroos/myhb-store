@@ -55,24 +55,25 @@ export type Stufe = {
 
 export const STATUS_FENSTER_MONATE = 36;
 
-// Basic behaelt 1 % Cashback wie seit 19.10.2026 fuer alle (Benjamin 21.10.2026),
-// abweichend vom Rechner (0 %).
+// Benjamin 21.10.2026, abweichend vom Rechner: Basic behaelt 1 % Cashback wie
+// seit 19.10.2026 fuer alle, White 1,5 % (statt 0 / 1 %), kein Startguthaben.
 
 export const STUFEN: Stufe[] = [
   { name: "Basic", ab: null, cashbackProzent: 1, geburtstagEuro: 10, geschenkEuro: null, sparbuchBonusProzent: 6, aktionen: false, wunscharzt: false, bevorzugterService: false },
-  { name: "White", ab: 1000, cashbackProzent: 1, geburtstagEuro: 20, geschenkEuro: 50, sparbuchBonusProzent: 7, aktionen: false, wunscharzt: false, bevorzugterService: false },
+  { name: "White", ab: 1000, cashbackProzent: 1.5, geburtstagEuro: 20, geschenkEuro: 50, sparbuchBonusProzent: 7, aktionen: false, wunscharzt: false, bevorzugterService: false },
   { name: "Grey", ab: 3000, cashbackProzent: 2, geburtstagEuro: 30, geschenkEuro: 100, sparbuchBonusProzent: 8, aktionen: true, wunscharzt: true, bevorzugterService: true },
   { name: "Black", ab: 5000, cashbackProzent: 3, geburtstagEuro: 50, geschenkEuro: 200, sparbuchBonusProzent: 9, aktionen: true, wunscharzt: true, bevorzugterService: true },
 ];
 
 export const CLUB = {
-  startguthabenErsterBesuch: 50,
-  startguthabenZweiterBesuch: 50,
   empfehlungEuro: 50,
-  /** Jedes Bonusguthaben gilt ab Gutschrift so lange. */
+  /**
+   * Jedes Bonusguthaben (auch der Sparbuch-Bonus) gilt ab Gutschrift so lange,
+   * und wer so lange nicht da war, verliert alles Bonusguthaben (Benjamin
+   * 21.10.2026). Eingezahltes Geld verfaellt nie.
+   */
   bonusGueltigMonate: 12,
-  /** Wer so lange nicht da war, verliert alles Bonusguthaben. */
-  verfallOhneBesuchMonate: 18,
+  verfallOhneBesuchMonate: 12,
   loloyalPunkteJeEuro: 100,
 };
 
@@ -103,6 +104,10 @@ export function sparbuchBeispiel(prozentImJahr: number) {
     bonus += (eingezahlt * prozentImJahr) / 100 / 12;
   }
   return { eingezahlt, bonus: Math.round(bonus * 100) / 100 };
+}
+
+export function prozent(wert: number): string {
+  return `${wert.toLocaleString("de-DE", { maximumFractionDigits: 1 })} %`;
 }
 
 export function euro(betrag: number): string {

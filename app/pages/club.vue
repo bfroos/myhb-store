@@ -1,24 +1,20 @@
 <template>
-  <div class="clubSeite">
-    <UiLayoutSectionBlock>
-      <UiLayoutCardSurface :card-settings="{ colorTheme: ColorTheme.STRONG }">
-        <header class="clubSeite__hero">
-          <p class="clubSeite__eyebrow">MY Club · Treueprogramm</p>
-          <h1>Bei jedem Besuch Guthaben für den nächsten</h1>
-          <p class="clubSeite__lead">
-            Melde dich kostenlos in der MY App an. Ab dann sammelst du bei jeder
-            Behandlung automatisch Guthaben. Je öfter du bei uns bist, desto mehr
-            bekommst du zurück.
+  <div class="cl">
+    <div class="cl__blatt">
+      <section class="cl__hero">
+        <div class="cl__heroBild" role="img" aria-label="Behandlung bei MY HEALTH & BEAUTY" style="background-image: url('/img/club/hero.jpg')" />
+        <div class="cl__heroText">
+          <p class="cl__eyebrow">MY Club · Treueprogramm</p>
+          <h1>Je öfter du kommst, desto mehr bekommst du zurück.</h1>
+          <p class="cl__lead">
+            Melde dich kostenlos in der MY App an. Ab dann bekommst du von jeder
+            Behandlung Guthaben für den nächsten Besuch, dazu Geschenke und mit
+            jeder Stufe mehr Vorteile.
           </p>
-          <div class="clubSeite__ctas">
-            <UiAtomBaseButton
-              as="a"
-              size="lg"
-              :href="appUrl('club-seite', 'club')"
-              @click="trackClick('club-seite', 'app')"
-            >
+          <div class="cl__knoepfe">
+            <a class="cl__knopf" :href="appUrl('club-seite', 'club')" @click="trackClick('club-seite', 'app')">
               Kostenlos Mitglied werden
-            </UiAtomBaseButton>
+            </a>
             <SharedButton
               :button="{
                 label: t('cta.bookAppointment'),
@@ -28,185 +24,153 @@
               ohne-seiten-kontext
             />
           </div>
-        </header>
-      </UiLayoutCardSurface>
-    </UiLayoutSectionBlock>
+        </div>
+      </section>
 
-    <UiLayoutSectionBlock>
-      <ol class="clubSeite__schritte">
-        <li>
-          <strong>In der App anmelden</strong>
-          <span>Kostenlos, mit deiner E-Mail-Adresse. Du bist sofort im MY Club.</span>
-        </li>
-        <li>
-          <strong>Behandlung genießen</strong>
-          <span>Dein Guthaben wird nach dem Bezahlen automatisch gutgeschrieben.</span>
-        </li>
-        <li>
-          <strong>Beim nächsten Besuch einlösen</strong>
-          <span>An der Kasse an allen Standorten. Dein Stand steht immer in der App.</span>
-        </li>
-      </ol>
-    </UiLayoutSectionBlock>
-
-    <UiLayoutSectionBlock>
-      <UiLayoutCardSurface :card-settings="{ colorTheme: ColorTheme.LIGHT }">
-        <section class="clubSeite__karte">
-          <h2>Deine Stufe</h2>
-          <p class="clubSeite__muted">
-            Deine Stufe richtet sich nach deinem Umsatz bei uns in den letzten
-            {{ STATUS_FENSTER_MONATE }} Monaten, an allen Standorten zusammen.
-          </p>
-          <div class="clubSeite__tabelle">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col"><span class="sr-only">Vorteil</span></th>
-                  <th v-for="s in STUFEN" :key="s.name" scope="col">
-                    <span class="clubSeite__stufe" :class="`clubSeite__stufe--${s.name.toLowerCase()}`">{{ s.name }}</span>
-                    <small>{{ s.ab ? `ab ${euro(s.ab)}` : "ab Anmeldung" }}</small>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th scope="row">Guthaben zurück bei jedem Besuch</th>
-                  <td v-for="s in STUFEN" :key="s.name">{{ s.cashbackProzent ? `${s.cashbackProzent} %` : "–" }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Geburtstagsgeschenk</th>
-                  <td v-for="s in STUFEN" :key="s.name">{{ euro(s.geburtstagEuro) }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">Willkommensgeschenk in der neuen Stufe</th>
-                  <td v-for="s in STUFEN" :key="s.name">{{ s.geschenkEuro ? euro(s.geschenkEuro) : "–" }}</td>
-                </tr>
-                <tr>
-                  <th scope="row">
-                    Bonus im
-                    <NuxtLinkLocale to="/beauty-sparbuch" @click="trackClick('club-seite', 'sparbuch')">Beauty-Sparbuch</NuxtLinkLocale>
-                  </th>
-                  <td v-for="s in STUFEN" :key="s.name">{{ s.sparbuchBonusProzent }} % im Jahr</td>
-                </tr>
-                <tr>
-                  <th scope="row">Aktionen für ausgewählte Behandlungen</th>
-                  <td v-for="s in STUFEN" :key="s.name"><Haken :an="s.aktionen" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Wunscharzt fest buchen</th>
-                  <td v-for="s in STUFEN" :key="s.name"><Haken :an="s.wunscharzt" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Bevorzugter Service</th>
-                  <td v-for="s in STUFEN" :key="s.name"><Haken :an="s.bevorzugterService" /></td>
-                </tr>
-                <tr>
-                  <th scope="row">Mitgliedskarte in der App</th>
-                  <td v-for="s in STUFEN" :key="s.name"><Haken an /></td>
-                </tr>
-              </tbody>
-            </table>
+      <section class="cl__band" aria-label="Guthaben zurück je Stufe">
+        <div class="cl__bandRaster">
+          <div v-for="s in STUFEN" :key="s.name">
+            <p class="cl__bandName">{{ s.name }}</p>
+            <p class="cl__bandZahl">{{ prozent(s.cashbackProzent) }}</p>
+            <p class="cl__bandText">{{ s.ab ? `ab ${euro(s.ab)} Umsatz` : "ab Anmeldung" }}</p>
           </div>
-          <ul class="clubSeite__stufenKarten" role="list">
-            <li v-for="s in STUFEN" :key="s.name">
-              <p class="clubSeite__stufenKopf">
-                <span class="clubSeite__stufe" :class="`clubSeite__stufe--${s.name.toLowerCase()}`">{{ s.name }}</span>
-                <small>{{ s.ab ? `ab ${euro(s.ab)} Umsatz` : "ab Anmeldung" }}</small>
-              </p>
-              <ul role="list">
-                <li v-for="v in vorteile(s)" :key="v">{{ v }}</li>
-              </ul>
-            </li>
-          </ul>
-        </section>
-      </UiLayoutCardSurface>
-    </UiLayoutSectionBlock>
+        </div>
+        <p class="cl__bandFuss">
+          Guthaben zurück von jeder bezahlten Behandlung. Deine Stufe richtet sich
+          nach deinem Umsatz in den letzten {{ STATUS_FENSTER_MONATE }} Monaten.
+        </p>
+      </section>
 
-    <UiLayoutSectionBlock>
-      <div class="clubSeite__kacheln">
-        <UiLayoutCardSurface :card-settings="{ colorTheme: ColorTheme.SOFT }">
-          <section class="clubSeite__kachel">
-            <h2>Neu bei uns?</h2>
-            <p>
-              Du bekommst {{ euro(CLUB.startguthabenErsterBesuch) }} Startguthaben für
-              deinen ersten Besuch und noch einmal
-              {{ euro(CLUB.startguthabenZweiterBesuch) }} für den zweiten.
+      <section class="cl__abschnitt">
+        <p class="cl__eyebrow">In drei Schritten</p>
+        <ol class="cl__schritte">
+          <li><span><strong>In der App anmelden.</strong> Kostenlos, mit deiner E-Mail-Adresse. Du bist sofort im MY Club.</span></li>
+          <li><span><strong>Behandlung genießen.</strong> Dein Guthaben wird nach dem Bezahlen automatisch gutgeschrieben.</span></li>
+          <li><span><strong>Beim nächsten Besuch einlösen.</strong> Sag am Empfang: „Bitte mit Guthaben.“</span></li>
+        </ol>
+      </section>
+
+      <section class="cl__abschnitt cl__abschnitt--hell">
+        <p class="cl__eyebrow">Alle Vorteile</p>
+        <h2>Deine Stufe, deine Vorteile</h2>
+        <div class="cl__tabelle">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col"><span class="sr-only">Vorteil</span></th>
+                <th v-for="s in STUFEN" :key="s.name" scope="col">
+                  <span class="cl__stufe" :class="`cl__stufe--${s.name.toLowerCase()}`">{{ s.name }}</span>
+                  <small>{{ s.ab ? `ab ${euro(s.ab)}` : "ab Anmeldung" }}</small>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="z in zeilen" :key="z.name">
+                <th scope="row">{{ z.name }}</th>
+                <td v-for="(w, i) in z.werte" :key="i" :class="{ cl__nein: w === '–' }">{{ w }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="cl__karten" role="list">
+          <li v-for="(s, i) in STUFEN" :key="s.name">
+            <p class="cl__kartenKopf">
+              <span class="cl__stufe" :class="`cl__stufe--${s.name.toLowerCase()}`">{{ s.name }}</span>
+              {{ s.ab ? `ab ${euro(s.ab)} Umsatz` : "ab Anmeldung" }}
             </p>
-          </section>
-        </UiLayoutCardSurface>
-        <UiLayoutCardSurface :card-settings="{ colorTheme: ColorTheme.SOFT }">
-          <section class="clubSeite__kachel">
-            <h2>Freunde werben</h2>
-            <p>
-              Empfiehl uns weiter: Ihr bekommt beide {{ euro(CLUB.empfehlungEuro) }}
-              Guthaben, sobald die Person, die du empfohlen hast, ihre erste
-              Behandlung bei uns hatte. Deinen Empfehlungslink findest du in der App.
+            <ul role="list">
+              <li v-for="z in zeilen.filter((z) => z.werte[i] !== '–')" :key="z.name">
+                {{ z.werte[i] === "✓" ? z.name : `${z.name}: ${z.werte[i]}` }}
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section class="cl__abschnitt">
+        <div class="cl__zwei">
+          <div class="cl__box cl__box--puder">
+            <p class="cl__eyebrow">Neu: Beauty-Sparbuch</p>
+            <h2>Jeden Monat ein bisschen für deine nächste Behandlung</h2>
+            <p class="cl__text">
+              Ab {{ euro(SPARBUCH.mindestRate) }} im Monat zurücklegen, ohne Gebühren,
+              und jeden Monat einen Beauty-Bonus dazubekommen.
             </p>
-          </section>
-        </UiLayoutCardSurface>
-        <UiLayoutCardSurface :card-settings="{ colorTheme: ColorTheme.SOFT }">
-          <section class="clubSeite__kachel">
-            <h2>Beauty-Sparbuch</h2>
-            <p>
-              Leg jeden Monat ab {{ euro(SPARBUCH.mindestRate) }} für deine nächste
-              Behandlung zurück und bekomm jeden Monat einen Beauty-Bonus dazu.
-            </p>
-            <NuxtLinkLocale
-              to="/beauty-sparbuch"
-              class="clubSeite__mehr"
-              @click="trackClick('club-seite', 'sparbuch')"
-            >
-              So funktioniert das Beauty-Sparbuch →
+            <NuxtLinkLocale to="/beauty-sparbuch" class="cl__knopf cl__knopf--rand" @click="trackClick('club-seite', 'sparbuch')">
+              So funktioniert es
             </NuxtLinkLocale>
-          </section>
-        </UiLayoutCardSurface>
-      </div>
-    </UiLayoutSectionBlock>
+          </div>
+          <div class="cl__box">
+            <p class="cl__eyebrow">Weiterempfehlen</p>
+            <p class="cl__boxZahl">{{ euro(CLUB.empfehlungEuro) }} + {{ euro(CLUB.empfehlungEuro) }}</p>
+            <p class="cl__text">
+              Teil deinen persönlichen Link aus der App. Wer damit zum ersten Mal
+              bucht, bekommt {{ euro(CLUB.empfehlungEuro) }} auf die erste Behandlung.
+              Du bekommst {{ euro(CLUB.empfehlungEuro) }} Guthaben, sobald sie bezahlt ist.
+            </p>
+            <a class="cl__knopf cl__knopf--rand" :href="appUrl('club-seite', 'club')" @click="trackClick('club-seite', 'app')">Link holen</a>
+          </div>
+        </div>
+      </section>
 
-    <UiLayoutSectionBlock>
-      <UiLayoutCardSurface :card-settings="{ colorTheme: ColorTheme.LIGHT }">
-        <section class="clubSeite__karte">
-          <h2>Häufige Fragen</h2>
-          <details v-for="f in fragen" :key="f.frage" class="clubSeite__frage">
+      <section class="cl__abschnitt cl__abschnitt--puder">
+        <div class="cl__app">
+          <div style="display: grid; gap: 20px">
+            <p class="cl__eyebrow">Deine App</p>
+            <h2>Alles für deine Behandlung. An einem Ort.</h2>
+            <div class="cl__vorteile">
+              <p><strong>Guthaben und Stufe</strong>Du siehst jederzeit, wie viel du hast und was bis zur nächsten Stufe fehlt.</p>
+              <p><strong>Buchen, wann du willst</strong>Rund um die Uhr, deine letzte Behandlung mit einem Tipp nochmal.</p>
+              <p><strong>Erinnerung inklusive</strong>Am Vortag und zwei Stunden vor deinem Termin.</p>
+              <p><strong>Dein Behandlungsplan</strong>Dein Arzt legt ihn an, du siehst, was als Nächstes ansteht.</p>
+            </div>
+          </div>
+          <img src="/img/club/app.jpg" alt="Die App von MY HEALTH & BEAUTY auf dem Handy" width="1200" height="1000" loading="lazy">
+        </div>
+      </section>
+
+      <section class="cl__abschnitt cl__fragen">
+        <p class="cl__eyebrow">Gut zu wissen</p>
+        <div>
+          <details v-for="f in fragen" :key="f.frage">
             <summary>{{ f.frage }}</summary>
             <p>{{ f.antwort }}</p>
           </details>
-        </section>
-      </UiLayoutCardSurface>
-    </UiLayoutSectionBlock>
+        </div>
+      </section>
+
+      <section class="cl__abschnitt cl__abschnitt--hell cl__mitte">
+        <h2>Schön, dass du dabei bist.</h2>
+        <p class="cl__text">Wir freuen uns auf deinen nächsten Besuch.</p>
+        <a class="cl__knopf" :href="appUrl('club-seite', 'club')" @click="trackClick('club-seite', 'app')">Jetzt Mitglied werden</a>
+      </section>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 /**
- * Landingpage MY Club (Treueprogramm), siehe shared/clubSeiten.ts.
- * Solange NUXT_PUBLIC_CLUB_SEITEN aus ist: noindex und nirgends verlinkt.
+ * Landingpage MY Club (Treueprogramm), siehe shared/clubSeiten.ts. Look wie
+ * das Mailing (assets/css/club-seiten.css). Solange NUXT_PUBLIC_CLUB_SEITEN
+ * aus ist: noindex und nirgends verlinkt.
  */
-import { CLUB, SPARBUCH, STATUS_FENSTER_MONATE, STUFEN, euro, type Stufe } from "#shared/clubSeiten";
-import { ColorTheme, SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
+import { CLUB, SPARBUCH, STATUS_FENSTER_MONATE, STUFEN, euro, prozent } from "#shared/clubSeiten";
+import { SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
 
 const { t } = useI18n();
 const { enabled, appUrl, trackClick } = useClubSeiten();
 
-const Haken = defineComponent({
-  props: { an: { type: Boolean, default: false } },
-  setup: (p) => () =>
-    p.an ? h("span", { "aria-label": "ja" }, "✓") : h("span", { "aria-label": "nein" }, "–"),
-});
-
-// Handy: dieselben Vorteile als Liste je Stufe statt Tabelle.
-function vorteile(s: Stufe): string[] {
-  return [
-    s.cashbackProzent ? `${s.cashbackProzent} % Guthaben zurück bei jedem Besuch` : "",
-    `${euro(s.geburtstagEuro)} zum Geburtstag`,
-    s.geschenkEuro ? `${euro(s.geschenkEuro)} Willkommensgeschenk` : "",
-    `${s.sparbuchBonusProzent} % Bonus im Jahr im Beauty-Sparbuch`,
-    s.aktionen ? "Aktionen für ausgewählte Behandlungen" : "",
-    s.wunscharzt ? "Wunscharzt fest buchen" : "",
-    s.bevorzugterService ? "Bevorzugter Service" : "",
-    "Mitgliedskarte in der App",
-  ].filter(Boolean);
-}
+const ja = (b: boolean) => (b ? "✓" : "–");
+const zeilen = [
+  { name: "Guthaben zurück bei jedem Besuch", werte: STUFEN.map((s) => prozent(s.cashbackProzent)) },
+  { name: "Geburtstagsgeschenk", werte: STUFEN.map((s) => euro(s.geburtstagEuro)) },
+  { name: "Geschenk beim Erreichen der Stufe", werte: STUFEN.map((s) => (s.geschenkEuro ? euro(s.geschenkEuro) : "–")) },
+  { name: "Bonus im Beauty-Sparbuch", werte: STUFEN.map((s) => `${prozent(s.sparbuchBonusProzent)} im Jahr`) },
+  { name: "Aktionen für ausgewählte Behandlungen", werte: STUFEN.map((s) => ja(s.aktionen)) },
+  { name: "Wunscharzt fest buchen", werte: STUFEN.map((s) => ja(s.wunscharzt)) },
+  { name: "Bevorzugter Service", werte: STUFEN.map((s) => ja(s.bevorzugterService)) },
+  { name: "Mitgliedskarte in der App", werte: STUFEN.map(() => "✓") },
+];
 
 const fragen = [
   {
@@ -219,11 +183,11 @@ const fragen = [
   },
   {
     frage: "Wie löse ich mein Guthaben ein?",
-    antwort: "Sag beim Bezahlen an der Kasse Bescheid. Das Guthaben wird von deinem Betrag abgezogen, an allen Standorten.",
+    antwort: "Sag beim Bezahlen am Empfang Bescheid. Das Guthaben wird von deinem Betrag abgezogen, an allen Standorten.",
   },
   {
     frage: "Wie lange gilt mein Guthaben?",
-    antwort: `Jedes Guthaben, das du von uns bekommst, gilt ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift. Warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt dein Bonusguthaben. Geld, das du selbst im Beauty-Sparbuch eingezahlt hast, verfällt nie.`,
+    antwort: `Jedes Guthaben, das wir dir schenken, gilt ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift. Warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt alles geschenkte Guthaben. Geld, das du selbst ins Beauty-Sparbuch einzahlst, verfällt nie.`,
   },
   {
     frage: "Kann ich mir Guthaben auszahlen lassen?",
@@ -241,196 +205,11 @@ useHead({
     {
       name: "description",
       content:
-        "Das Treueprogramm von MY HEALTH & BEAUTY: kostenlos in der App anmelden, bei jedem Besuch Guthaben sammeln, Stufen White, Grey und Black.",
+        "Das Treueprogramm von MY HEALTH & BEAUTY: kostenlos in der App anmelden, bei jedem Besuch 1 bis 3 % Guthaben zurück, Geschenke und Stufen White, Grey und Black.",
     },
     ...(enabled.value ? [] : [{ name: "robots", content: "noindex, nofollow" }]),
   ],
 });
 </script>
 
-<style scoped>
-.clubSeite {
-  padding-bottom: var(--space-1000);
-}
-.clubSeite__hero {
-  display: grid;
-  gap: var(--space-500);
-  padding: var(--space-900) var(--space-card-pad);
-  max-width: 760px;
-}
-.clubSeite__hero h1 {
-  margin: 0;
-  hyphens: manual;
-}
-.clubSeite__eyebrow {
-  margin: 0;
-  font-size: var(--font-sm);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-light);
-}
-.clubSeite__lead {
-  margin: 0;
-  font-size: var(--font-lg);
-  color: var(--color-text-light);
-}
-.clubSeite__ctas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-400);
-}
-.clubSeite__schritte {
-  list-style: none;
-  counter-reset: schritt;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-400);
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-}
-.clubSeite__schritte li {
-  counter-increment: schritt;
-  display: grid;
-  gap: var(--space-200);
-  padding: var(--space-500);
-  border-radius: 16px;
-  border: 1px solid var(--color-gray-200, #e5e5e5);
-}
-.clubSeite__schritte li::before {
-  content: counter(schritt);
-  font-size: var(--font-2xl);
-  font-weight: var(--font-bold);
-}
-.clubSeite__schritte span,
-.clubSeite__muted {
-  color: var(--color-text-light);
-}
-.clubSeite__karte {
-  display: grid;
-  gap: var(--space-400);
-  padding: var(--space-card-pad);
-}
-.clubSeite__karte h2,
-.clubSeite__kachel h2 {
-  margin: 0;
-}
-.clubSeite__muted {
-  margin: 0;
-}
-.clubSeite__tabelle {
-  overflow-x: auto;
-}
-.clubSeite__tabelle table {
-  width: 100%;
-  min-width: 560px;
-  border-collapse: collapse;
-}
-.clubSeite__tabelle th,
-.clubSeite__tabelle td {
-  padding: var(--space-300) var(--space-200);
-  border-bottom: 1px solid var(--color-gray-200, #e5e5e5);
-  text-align: center;
-  vertical-align: middle;
-}
-.clubSeite__tabelle tbody th {
-  text-align: left;
-  font-weight: var(--font-regular);
-}
-.clubSeite__tabelle thead th {
-  vertical-align: bottom;
-}
-.clubSeite__tabelle thead small {
-  display: block;
-  margin-top: 4px;
-  font-weight: var(--font-regular);
-  font-size: var(--font-xs);
-  color: var(--color-text-light);
-}
-.clubSeite__stufenKarten {
-  display: none;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: var(--space-400);
-}
-.clubSeite__stufenKarten > li {
-  padding: var(--space-400) 0;
-  border-bottom: 1px solid var(--color-gray-200, #e5e5e5);
-}
-.clubSeite__stufenKarten ul {
-  margin: var(--space-200) 0 0;
-  padding-left: 1.2em;
-  display: grid;
-  gap: 4px;
-}
-.clubSeite__stufenKopf {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--space-300);
-}
-.clubSeite__stufenKopf small {
-  color: var(--color-text-light);
-}
-@media (max-width: 640px) {
-  .clubSeite__tabelle {
-    display: none;
-  }
-  .clubSeite__stufenKarten {
-    display: grid;
-  }
-}
-.clubSeite__stufe {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--color-gray-300, #d4d4d4);
-}
-.clubSeite__stufe--white {
-  background: #fff;
-}
-.clubSeite__stufe--grey {
-  background: var(--color-gray-400, #a3a3a3);
-  color: #fff;
-  border-color: transparent;
-}
-.clubSeite__stufe--black {
-  background: #111;
-  color: #fff;
-  border-color: transparent;
-}
-.clubSeite__kacheln {
-  display: grid;
-  gap: var(--space-bento-gap-sm);
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-.clubSeite__kachel {
-  display: grid;
-  gap: var(--space-300);
-  align-content: start;
-  padding: var(--space-card-pad);
-  height: 100%;
-}
-.clubSeite__kachel h2 {
-  font-size: var(--font-2xl);
-}
-.clubSeite__kachel p {
-  margin: 0;
-}
-.clubSeite__mehr {
-  color: inherit;
-  font-weight: var(--font-bold);
-}
-.clubSeite__frage {
-  border-bottom: 1px solid var(--color-gray-200, #e5e5e5);
-  padding: var(--space-300) 0;
-}
-.clubSeite__frage summary {
-  cursor: pointer;
-  font-weight: var(--font-bold);
-}
-.clubSeite__frage p {
-  margin: var(--space-200) 0 0;
-  color: var(--color-text-light);
-}
-</style>
+<style src="~/assets/css/club-seiten.css"></style>

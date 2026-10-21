@@ -1,0 +1,417 @@
+/*
+ * Gemeinsamer Look der Seiten /club und /beauty-sparbuch: derselbe wie das
+ * Mailing „Der neue MY Club" (Creme, Puder, schwarzes Zahlenband, runde
+ * Knoepfe). Alle Klassen beginnen mit .cl, damit nichts nach aussen wirkt.
+ */
+.cl {
+  --cl-creme: #f7f3ef;
+  --cl-puder: #f5e8e0;
+  --cl-hell: #faf7f4;
+  --cl-linie: #e8dcd4;
+  --cl-akzent: #9a7b6c;
+  --cl-schwarz: #111111;
+  --cl-text: #333333;
+  --cl-leise: #666666;
+  background: var(--cl-creme);
+  color: var(--cl-schwarz);
+  padding: var(--space-600) var(--container-pad) var(--space-1000);
+}
+.cl__blatt {
+  max-width: 1080px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 28px;
+  overflow: hidden;
+}
+.cl__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+}
+.cl__heroBild {
+  min-height: 320px;
+  background-size: cover;
+  background-position: center;
+}
+.cl__heroText {
+  padding: clamp(32px, 6vw, 72px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+.cl__eyebrow {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cl-akzent);
+}
+.cl h1 {
+  margin: 0;
+  font-size: clamp(34px, 4.6vw, 52px);
+  line-height: 1.08;
+  letter-spacing: -1px;
+  font-weight: 700;
+  hyphens: manual;
+  color: var(--cl-schwarz);
+}
+.cl h2 {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.6px;
+  font-weight: 700;
+  hyphens: manual;
+  color: var(--cl-schwarz);
+}
+.cl__lead {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.6;
+  color: #444;
+}
+.cl__knoepfe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+.cl__knopf {
+  display: inline-block;
+  padding: 17px 32px;
+  border-radius: 100px;
+  background: var(--cl-schwarz);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 2px solid var(--cl-schwarz);
+}
+.cl__knopf:hover {
+  background: #333;
+}
+.cl__knopf--rand {
+  background: transparent;
+  color: var(--cl-schwarz);
+}
+.cl__knopf--rand:hover {
+  background: var(--cl-schwarz);
+  color: #fff;
+}
+.cl__band {
+  background: var(--cl-schwarz);
+  color: #fff;
+  padding: 48px clamp(20px, 5vw, 56px) 40px;
+}
+.cl__bandRaster {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 28px 16px;
+  text-align: center;
+}
+.cl__bandZahl {
+  margin: 0;
+  font-size: clamp(40px, 5vw, 56px);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+}
+.cl__bandName {
+  margin: 0 0 12px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #d9cfc8;
+}
+.cl__bandText {
+  margin: 12px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #d9cfc8;
+}
+.cl__bandFuss {
+  margin: 28px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: #d9cfc8;
+}
+.cl__abschnitt {
+  padding: clamp(40px, 6vw, 72px) clamp(24px, 6vw, 72px);
+  display: grid;
+  gap: 24px;
+}
+.cl__abschnitt--puder {
+  background: var(--cl-puder);
+}
+.cl__abschnitt--hell {
+  background: var(--cl-hell);
+}
+.cl__mitte {
+  text-align: center;
+  justify-items: center;
+}
+.cl__text {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--cl-text);
+  max-width: 680px;
+}
+.cl__klein {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--cl-leise);
+  max-width: 680px;
+}
+.cl__schritte {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  counter-reset: schritt;
+}
+.cl__schritte li {
+  counter-increment: schritt;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 14px;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--cl-text);
+}
+.cl__schritte li::before {
+  content: counter(schritt);
+  width: 44px;
+  height: 44px;
+  line-height: 44px;
+  border-radius: 44px;
+  background: var(--cl-puder);
+  text-align: center;
+  font-weight: 700;
+  color: var(--cl-schwarz);
+}
+.cl__schritte strong {
+  display: block;
+  color: var(--cl-schwarz);
+}
+.cl__tabelle {
+  overflow-x: auto;
+}
+.cl__tabelle table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.cl__tabelle th,
+.cl__tabelle td {
+  padding: 14px 10px;
+  border-bottom: 1px solid var(--cl-linie);
+  text-align: center;
+}
+.cl__tabelle tbody th {
+  text-align: left;
+  font-weight: 400;
+  color: var(--cl-text);
+}
+.cl__tabelle thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid var(--cl-schwarz);
+}
+.cl__tabelle thead small {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--cl-leise);
+}
+.cl__tabelle td {
+  font-weight: 700;
+}
+.cl__nein {
+  color: #c8bdb5;
+  font-weight: 400;
+}
+.cl__stufe {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  border: 1px solid var(--cl-linie);
+  background: #fff;
+}
+.cl__stufe--white {
+  background: #fff;
+  border-color: #cfc6bf;
+}
+.cl__stufe--grey {
+  background: #8b9098;
+  border-color: #8b9098;
+  color: #fff;
+}
+.cl__stufe--black {
+  background: var(--cl-schwarz);
+  border-color: var(--cl-schwarz);
+  color: #fff;
+}
+.cl__karten {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  gap: 16px;
+}
+.cl__karten > li {
+  border: 1px solid var(--cl-linie);
+  border-radius: 20px;
+  padding: 20px;
+}
+.cl__karten ul {
+  margin: 12px 0 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 6px;
+  font-size: 16px;
+  color: var(--cl-text);
+}
+.cl__kartenKopf {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--cl-leise);
+}
+@media (max-width: 680px) {
+  .cl__tabelle {
+    display: none;
+  }
+  .cl__karten {
+    display: grid;
+  }
+}
+.cl__zwei {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.cl__box {
+  border: 1px solid var(--cl-linie);
+  border-radius: 24px;
+  padding: clamp(28px, 4vw, 44px);
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  text-align: center;
+  justify-items: center;
+}
+.cl__box--puder {
+  background: var(--cl-puder);
+  border-color: var(--cl-puder);
+}
+.cl__boxZahl {
+  margin: 0;
+  font-size: 44px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+.cl__app {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+}
+.cl__app img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 20px;
+}
+.cl__vorteile {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px 32px;
+}
+.cl__vorteile p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--cl-leise);
+}
+.cl__vorteile strong {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 18px;
+  color: var(--cl-schwarz);
+}
+.cl__fragen details {
+  border-bottom: 1px solid var(--cl-linie);
+  padding: 18px 0;
+}
+.cl__fragen summary {
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.cl__fragen summary::-webkit-details-marker {
+  display: none;
+}
+.cl__fragen summary::after {
+  content: "+";
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1;
+}
+.cl__fragen details[open] summary::after {
+  content: "–";
+}
+.cl__fragen p {
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--cl-leise);
+}
+.cl__link {
+  color: var(--cl-schwarz);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+@media (max-width: 820px) {
+  .cl__hero,
+  .cl__app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cl__heroBild {
+    min-height: 240px;
+  }
+}
+@media (max-width: 620px) {
+  .cl {
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+  }
+  .cl__blatt {
+    border-radius: 0;
+  }
+  .cl__lead,
+  .cl__text {
+    font-size: 17px;
+  }
+}
