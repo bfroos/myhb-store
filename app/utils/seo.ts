@@ -76,6 +76,7 @@ export function mapStrapiLocaleToOpenGraphLocale(locale: string): string {
 export async function setPageSeo(
   pageSeo?: SharedSeoDto | null,
   fallbackOgImage?: StrapiMedia | null,
+  options: { canonicalPath?: string | null } = {},
 ): Promise<void> {
   const nuxtApp = useNuxtApp();
   const { locale, fallbackLocale, locales } = useI18n();
@@ -90,7 +91,13 @@ export async function setPageSeo(
   // go.-Vorschau /vorschau-v2/... (Seitenvorlage v2): Canonical bleibt die
   // echte Seite. Alle anderen Pfade unveraendert.
   // Ebenso Variante B des Angebots-Tests /ab-beratung/... (adsOfferVariant).
-  const canonicalUrl = `${config.public.publicUrl}${stripAdsOfferB(stripAdsTemplateV2Preview(route.path))}`;
+  // E24 #312: Stadtseite ohne eigenen lokalen Inhalt -> Canonical auf den
+  // Hub (shared/localContentGate.ts). hreflang entfaellt dann, sonst zeigt
+  // x-default auf eine Seite, die sich selbst nicht als Canonical nennt.
+  const canonicalOverride = options.canonicalPath || null;
+  const canonicalUrl = canonicalOverride
+    ? `${config.public.publicUrl}${canonicalOverride}`
+    : `${config.public.publicUrl}${stripAdsOfferB(stripAdsTemplateV2Preview(route.path))}`;
 
   const robots = computed(() => {
     const { isAdsMode } = useSiteModeFlags();
@@ -157,7 +164,7 @@ export async function setPageSeo(
           rel: "canonical",
           href: canonicalUrl,
         },
-        ...(isIndexableLocale(currentLocale) ? hreflangLinks : []),
+        ...(isIndexableLocale(currentLocale) && !canonicalOverride ? hreflangLinks : []),
       ],
     });
 

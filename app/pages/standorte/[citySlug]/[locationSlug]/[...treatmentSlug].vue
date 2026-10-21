@@ -75,6 +75,8 @@ import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOffe
 import { rememberOfferVariant } from "~/lib/offerVariant";
 import { seoPilotCity } from "#shared/seoPilotLippen";
 import { applyLocalFacts } from "#shared/localFacts";
+import { isLocalGateActive, localGateCanonical, type LocalGatePageData } from "#shared/localContentGate";
+import { employeeDisplayName, pickAdsV2Reviews } from "#shared/adsTemplateV2";
 import {
   LOCATION_ADS_BLOCK_ORDER,
   LOCATION_SEO_BLOCK_ORDER,
@@ -225,12 +227,41 @@ if (pageLoaded) {
       paramName: "treatmentSlug",
     },
   ], { hreflangLocales: ["de"] }); // TSEO-01: nur de + x-default
+  // E24 #312: Mindestpaket je Stadtseite (shared/localContentGate.ts). Ohne
+  // eigenen lokalen Inhalt zeigt das Canonical auf den Hub. Nur www, nur
+  // Behandlungen aus LOCAL_GATE_PATH_KEYS; sonst wie bisher.
+  const gateParams = seoRoute.params as Record<string, unknown>;
+  const gateCity = String(gateParams.citySlug ?? "");
+  const gateLoc = String(gateParams.locationSlug ?? "");
+  const gatePathKey = String((treatmentPage.value as any)?.pathKey ?? "");
+  const gateActive =
+    !isAdsMode.value &&
+    /^\/standorte\//.test(seoRoute.path) &&
+    isLocalGateActive(gatePathKey, gateCity, gateLoc);
+  let canonicalPath: string | null = null;
+  if (gateActive) {
+    const pilot = seoPilot.value;
+    const gatePage: LocalGatePageData = {
+      hasOpeningHours: !!(location.value as any)?.openingHours?.week?.length,
+    };
+    if (pilot) {
+      // Dieselbe Abfrage (und derselbe Key) wie in CityPage.vue.
+      const { data: gateExtras } = await useFetch<{ reviews?: any[]; doctors?: any[] }>(
+        `/api/seo-pilot/${pilot.citySlug}/${pilot.locationSlug}`,
+        { key: `seo-pilot:${pilot.key}`, default: () => ({}) },
+      );
+      gatePage.doctors = (gateExtras.value?.doctors ?? []).filter((d: any) => employeeDisplayName(d)).length;
+      gatePage.reviews = pickAdsV2Reviews(gateExtras.value?.reviews ?? [], pilot.city, gatePathKey, 4).length;
+    }
+    canonicalPath = localGateCanonical(gatePathKey, gateCity, gateLoc, pilot, gatePage);
+  }
   // Vorschaubild beim Teilen: Titelbild der Seite statt des allgemeinen
   await setPageSeo(
     seoPilot.value
       ? { ...(seo.value ?? {}), metaTitle: seoPilot.value.metaTitle, metaDescription: seoPilot.value.metaDescription }
       : seo.value,
     (fixedBlocks.value?.hero as any)?.cover ?? null,
+    { canonicalPath },
   );
 }
 
