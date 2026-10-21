@@ -1,9 +1,6 @@
 <template>
   <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
   <BlockTreatmentHero v-if="fixedBlocks?.hero" v-bind="fixedBlocks.hero" />
-  <!-- Noch nicht eroeffnet (Strapi: kein oder kuenftiges Eroeffnungsdatum):
-       vormerken + naechster offener Standort. -->
-  <BlockLocationWaitlist v-if="showWaitlist && location" :location="location" />
   <BlockLocationContact
     v-if="fixedBlocks?.locationContact"
     id="standort"
@@ -74,15 +71,6 @@ if (locationLoaded) {
   });
   await setPageSeo(seo.value);
 }
-
-const showWaitlist = computed(() => {
-  if (isAdsMode.value || !location.value) return false;
-  const status = getLocationStatus(
-    location.value.newOpeningDate,
-    location.value.timezone,
-  );
-  return status === "comingSoon" || status === "openSoon";
-});
 
 // go.: Fussnote zu den Neukundenpreisen der Kacheln (wie #187).
 const { showsNewCustomerPrice, discountPct } = useDisplayPrice();

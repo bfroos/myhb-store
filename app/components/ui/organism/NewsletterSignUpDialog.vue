@@ -6,9 +6,11 @@
     <!-- Mit Buchung (Behandlungsseiten, go. Variante A): kompakt, damit am
          Handy (375x667) alles bis zum Knopf ohne Scrollen sichtbar ist
          (Benjamin 07.10.2026). Die Ueberschrift steht im Dialogkopf. -->
-    <p v-if="hasBooking" class="newsletterSignUpDialog__intro">
-      {{ $t("newsletter.marketingText.bookingIntro") }}
-    </p>
+    <template v-if="hasBooking">
+      <p v-if="!gesichert" class="newsletterSignUpDialog__intro">
+        {{ $t("newsletter.marketingText.bookingIntro") }}
+      </p>
+    </template>
     <template v-else>
       <h2>
         {{
@@ -33,7 +35,41 @@
         </li>
       </ul>
     </template>
-    <template v-if="success">
+    <!-- Schritt 2 (myhb-app/myhb-os#1030, Benjamin 08.10.2026): Gutschein
+         gesichert, die naechsten freien Termine als Knoepfe im selben
+         Fenster. Wer nicht gleich bucht, bleibt ueber die Mail erreichbar. -->
+    <div v-if="gesichert" class="newsletterSignUpDialog__termine" data-testid="rabatt-termine">
+      <Message severity="success">
+        {{ text.gesichert }}
+      </Message>
+      <p class="newsletterSignUpDialog__termineTitel">{{ text.naechste }}</p>
+      <div class="newsletterSignUpDialog__actions newsletterSignUpDialog__actions--stacked">
+        <UiAtomBaseButton
+          v-for="t in termine"
+          :key="t.date + t.time"
+          data-track-placement="newsletter_slot"
+          @click="terminBuchen(t)"
+        >
+          {{ terminText(t, locale) }}
+        </UiAtomBaseButton>
+        <UiAtomBaseButton
+          variant="secondary"
+          data-track-placement="newsletter_other_slot"
+          @click="anderenTermin"
+        >
+          {{ text.anderer }}
+        </UiAtomBaseButton>
+        <button
+          type="button"
+          class="newsletterSignUpDialog__spaeter"
+          data-track-placement="newsletter_later"
+          @click="handleClose"
+        >
+          {{ text.spaeter }}
+        </button>
+      </div>
+    </div>
+    <template v-else-if="success">
       <Message severity="success">
         {{
           $t("newsletter.success", { brandNameShort })
@@ -151,6 +187,8 @@ import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import type { BookingPrefill } from "~/lib/bookingPrefill";
 import { createBookingLead } from "~/lib/bookingLead";
+import { freieTermine, terminText, type FreierTermin } from "~/lib/rabattTermine";
+import { appLocationFromBookingUrl } from "~/composables/useNextSlot";
 
 const globals = useGlobals();
 const { brandNameShort } = useBrand();
@@ -292,6 +330,48 @@ function skipToBooking() {
   openBooking({});
 }
 
+// Schritt 2 (#1030): Termine schon beim Oeffnen holen, damit nach dem
+// Absenden nichts wartet. Ohne Standort/Behandlung oder ohne freie Zeit
+// bleibt es beim bisherigen Weg (Buchung oeffnet direkt).
+const termine = ref<FreierTermin[]>([]);
+const gesichert = ref(false);
+let nachAnmeldung: BookingDialogOptions = {};
+
+const schritt2Text: Record<string, { gesichert: string; naechste: string; anderer: string; spaeter: string }> = {
+  de: { gesichert: "✓ Dein 20-%-Gutschein ist gesichert. Den Code schicken wir dir per E-Mail.", naechste: "Nächste freie Termine:", anderer: "Anderen Termin wählen", spaeter: "Später buchen" },
+  en: { gesichert: "✓ Your 20% voucher is saved. We'll email you the code.", naechste: "Next available times:", anderer: "Choose another time", spaeter: "Book later" },
+  tr: { gesichert: "✓ %20 kuponun kaydedildi. Kodu e-posta ile gönderiyoruz.", naechste: "En yakın boş randevular:", anderer: "Başka bir zaman seç", spaeter: "Daha sonra" },
+  ar: { gesichert: "✓ تم حفظ قسيمة الخصم 20٪. سنرسل لك الرمز عبر البريد الإلكتروني.", naechste: "أقرب المواعيد المتاحة:", anderer: "اختر موعدًا آخر", spaeter: "لاحقًا" },
+  fr: { gesichert: "✓ Ton bon de 20 % est enregistré. Nous t'envoyons le code par e-mail.", naechste: "Prochains créneaux libres :", anderer: "Choisir un autre créneau", spaeter: "Réserver plus tard" },
+  nl: { gesichert: "✓ Je kortingsbon van 20% is opgeslagen. We mailen je de code.", naechste: "Eerstvolgende vrije tijden:", anderer: "Andere tijd kiezen", spaeter: "Later boeken" },
+};
+const text = computed(() => schritt2Text[locale.value] ?? schritt2Text.de);
+
+onMounted(async () => {
+  const b = booking.value;
+  if (!hasBooking.value || !b?.appBookingUrl || !b.appTreatmentSlug) return;
+  const location = appLocationFromBookingUrl(b.appBookingUrl);
+  if (!location) return;
+  try {
+    termine.value = freieTermine(
+      await $fetch("/api/naechster-termin", {
+        query: { location, treatment: b.appTreatmentSlug, anzahl: 3 },
+        timeout: 3000,
+      }),
+    );
+  } catch {
+    termine.value = [];
+  }
+});
+
+function terminBuchen(t: FreierTermin) {
+  openBooking({ ...nachAnmeldung, termin: t });
+}
+
+function anderenTermin() {
+  openBooking(nachAnmeldung);
+}
+
 async function handleSubmit() {
   // Handynummer ist jetzt Pflicht (nur in diesem Dialog, nicht im
   // Footer-Formular, das dasselbe Composable ohne Telefonfeld nutzt).
@@ -328,10 +408,15 @@ async function handleSubmit() {
     return;
   }
 
-  // Nach erfolgreicher Anmeldung direkt den Terminbuchungs-Dialog oeffnen.
-  // Buchung mit Neukundenrabatt: Wert −20 %, InitiateCheckout erst bei der
-  // Standortwahl (useCalendlyDialog).
-  openBooking({ offer: NEUKUNDEN_OFFER, prefill });
+  // Nach erfolgreicher Anmeldung: mit freien Terminen erst Schritt 2 (#1030),
+  // sonst direkt den Terminbuchungs-Dialog. Buchung mit Neukundenrabatt:
+  // Wert −20 %, InitiateCheckout erst bei der Standortwahl (useCalendlyDialog).
+  nachAnmeldung = { offer: NEUKUNDEN_OFFER, prefill };
+  if (termine.value.length > 0) {
+    gesichert.value = true;
+    return;
+  }
+  openBooking(nachAnmeldung);
 }
 </script>
 <style scoped>
@@ -425,6 +510,34 @@ async function handleSubmit() {
   display: flex;
   align-items: center;
   gap: var(--space-200);
+}
+
+.newsletterSignUpDialog__termine {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-300);
+}
+
+.newsletterSignUpDialog__termineTitel {
+  margin: 0;
+  font-size: var(--font-sm);
+  font-weight: var(--font-bold);
+}
+
+.newsletterSignUpDialog__termine .newsletterSignUpDialog__actions {
+  margin-top: 0;
+}
+
+.newsletterSignUpDialog__spaeter {
+  background: none;
+  border: none;
+  padding: var(--space-200) 0 0;
+  font: inherit;
+  font-size: var(--font-sm);
+  color: var(--color-text-light);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
 }
 
 .newsletterSignUpDialog__actions {
