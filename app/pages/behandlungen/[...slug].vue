@@ -13,6 +13,7 @@
     v-bind="heroWithSeoH1"
     show-floating-cta
   />
+  <BlockRenderer v-if="promoBlocks.length" :blocks="promoBlocks" />
   <BlockTreatmentAnswer
     v-if="answer"
     :headline="answerHeadline(treatmentPage?.pathKey, treatmentPage?.name)"
@@ -50,7 +51,7 @@
     :show-filters="false"
   />
   <!-- Pilot-Hub: Standortliste steht schon in der Standorttabelle -->
-  <BlockRenderer v-if="blocks && !seoPilotHub" :blocks="blocks" />
+  <BlockRenderer v-if="restBlocks.length && !seoPilotHub" :blocks="restBlocks" />
   <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
   <BlockAdsPriceFootnote
     v-if="isAdsMode && fixedBlocks.hero"
@@ -100,6 +101,15 @@ const treatmentType = computed<TreatmentType | undefined>(() => {
     | undefined;
   return relatedPages?.find((p) => p?.treatment?.type)?.treatment?.type;
 });
+
+// Aktionsbloecke (blocks.promo-hero) stehen direkt unter dem Hero, damit eine
+// laufende Aktion sofort sichtbar ist; alle anderen Bloecke bleiben unten.
+const promoBlocks = computed(() =>
+  (blocks.value ?? []).filter((b) => b.__component === "blocks.promo-hero"),
+);
+const restBlocks = computed(() =>
+  (blocks.value ?? []).filter((b) => b.__component !== "blocks.promo-hero"),
+);
 
 const hasTreatmentLocations = computed(
   () => (treatmentLocations.value?.length ?? 0) > 0,
