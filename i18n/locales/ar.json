@@ -454,11 +454,7 @@
     },
     "treatmentHero": {
       "discountCta": "احصل على خصم {pct}%",
-      "ctaActionLabel": "احجز موعدًا",
-      "kontoHint": {
-        "text": "بعد علاجك، ستجدين صور قبل وبعد",
-        "link": "في التطبيق."
-      }
+      "ctaActionLabel": "احجز موعدًا"
     },
     "productCategoryPriceOverview": {
       "treatments": "العلاجات",
