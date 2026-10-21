@@ -31,7 +31,12 @@ function gedrosselt(ip: string, jetzt = Date.now()): boolean {
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig();
   const url = (config as any).leadAnfrageUrl as string | undefined;
-  const secret = (config as any).leadAnfrageSecret as string | undefined;
+  // Beim Einfuegen in Vercel rutschen leicht Leerzeichen, Zeilenumbruch oder
+  // Anfuehrungszeichen mit (erster Test 21.10.2026: 401 von lead-anfrage).
+  const secret = String((config as any).leadAnfrageSecret ?? "")
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
   if (!url || !secret) {
     console.error("[lead-anfrage] Konfiguration fehlt (NUXT_LEAD_ANFRAGE_URL/SECRET)");
     throw createError({ statusCode: 503, statusMessage: "Anfrage gerade nicht möglich." });
@@ -67,7 +72,8 @@ export default defineEventHandler(async (event) => {
     });
     return { status: "ok" as const, id: (antwort._data as any)?.id ?? null };
   } catch (error: any) {
-    console.error("[lead-anfrage] Weiterleitung fehlgeschlagen", error?.statusCode ?? error?.name ?? "unbekannt");
+    // 401 = Schluessel in Vercel passt nicht zu cron_secrets.LEAD_WEBHOOK_SECRET.
+    console.error("[lead-anfrage] Weiterleitung fehlgeschlagen", error?.statusCode ?? error?.name ?? "unbekannt", `schluessel-laenge=${secret.length}`);
     throw createError({
       statusCode: 502,
       statusMessage: "Deine Anfrage konnte gerade nicht gesendet werden. Bitte ruf uns an oder versuch es gleich noch einmal.",
