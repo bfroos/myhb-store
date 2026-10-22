@@ -125,6 +125,19 @@ export function namesCompetitor(text: string | null | undefined): boolean {
   return COMPETITORS.test(String(text ?? ""));
 }
 
+/**
+ * Rezensionen mit unserer frueheren Kurzbezeichnung (M-Y-H, "&", B; auch mit
+ * Leerzeichen oder "und") zeigen wir nicht: Die Bezeichnung verletzt fremde
+ * Markenrechte und darf nirgends mehr bei uns stehen (Markenstreit
+ * LG Stuttgart 17 O 287/26, Benjamin 22.10.2026). Der Kundentext wird nicht
+ * umgeschrieben, die Rezension faellt weg.
+ */
+const LEGACY_BRAND = /\bMY\s?H\s?(?:&|&amp;|\+|und)\s?B\b/i;
+
+export function namesLegacyBrand(text: string | null | undefined): boolean {
+  return LEGACY_BRAND.test(String(text ?? ""));
+}
+
 type ReviewShape = { author?: unknown; text?: unknown; rating?: unknown };
 
 function isReviewShape(x: any): x is ReviewShape {
@@ -143,6 +156,7 @@ export function sanitizeReview<T extends ReviewShape>(r: T): T | null {
   let text = r.text;
   if (typeof r.text === "string") {
     if (namesCompetitor(r.text)) return null;
+    if (namesLegacyBrand(r.text)) return null;
     const clean = anonymizeDoctorNames(r.text);
     if (clean === null) return null;
     text = clean;

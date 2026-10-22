@@ -489,13 +489,14 @@ export function adsV2ProductNote(pathKey: string | null | undefined): string | n
 /**
  * Ratenzahlung (Benjamin, 01.10.2026): Raten gibt es nur ueber einen vorab
  * gekauften Gutschein, beim Gutscheinkauf mit Klarna oder PayPal. Der Knopf
- * fuehrt auf den Geschenkgutschein im Shop.
+ * fuehrt auf die Gutscheinseite der Website (seit 22.10.2026; vorher der alte
+ * Shopify-Onlineshop). Absolut, weil go. eine eigene Domain ist.
  */
 export const ADS_V2_PAYMENT_TITLE = "Lieber in Raten?";
 export const ADS_V2_PAYMENT_NOTE =
   "Gutschein vorab kaufen und mit Klarna oder PayPal in Raten zahlen.";
 export const ADS_V2_VOUCHER_LABEL = "Gutschein kaufen\u00a0– in Raten zahlen";
-export const ADS_V2_VOUCHER_URL = "https://shop.myhealthandbeauty.com/products/myh-b-geschenkgutschein";
+export const ADS_V2_VOUCHER_URL = "https://www.myhealthandbeauty.com/gutschein";
 
 const BLOCKED_UTM_TERM = /botox|btx|botulinum/gi;
 
