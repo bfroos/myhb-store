@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   anonymizeDoctorNames,
   isTestEmployeeSlug,
+  namesLegacyBrand,
   sanitizeReviewsDeep,
   shortenReviewAuthor,
 } from "./reviewPrivacy.ts";
@@ -70,4 +71,19 @@ test("Test-Aerzt:innen und Rezensionen in einer Strapi-Antwort", () => {
     { author: "Julia K.", rating: 5, text: "Danke Noura" },
     { author: "Anna", rating: 5, text: null },
   ]);
+});
+
+test("Rezensionen mit der frueheren Kurzbezeichnung fallen weg", () => {
+  // Bezeichnung zusammengesetzt, damit sie nicht als Klartext im Repo steht.
+  const alt = ["MY" + "H&" + "B", "My " + "H&" + "B", "MY" + "H&amp;" + "B", "my H und B"];
+  for (const s of alt) assert.equal(namesLegacyBrand(`Ich war bei ${s} im Minto`), true, s);
+  assert.equal(namesLegacyBrand("Ich war bei MY HEALTH & BEAUTY"), false);
+  assert.equal(namesLegacyBrand("MYHB ist super"), false);
+  const out = sanitizeReviewsDeep({
+    reviews: [
+      { author: "Leonie N.", rating: 5, text: `Ich bin bei ${alt[0]} gewesen` },
+      { author: "Anna", rating: 5, text: "Super Team" },
+    ],
+  }) as any;
+  assert.deepEqual(out.reviews.map((r: any) => r.author), ["Anna"]);
 });
