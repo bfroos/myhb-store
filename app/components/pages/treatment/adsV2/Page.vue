@@ -255,7 +255,7 @@
           <li v-if="productNote">{{ productNote }}</li>
         </ul>
         <!-- Raten nur ueber einen vorab gekauften Gutschein (Benjamin,
-             01.10.2026); ohne Fremdlogos. Knopf auf den Geschenkgutschein im Shop. -->
+             01.10.2026); ohne Fremdlogos. Knopf auf die Gutscheinseite der Website. -->
         <div class="v2-pay" data-track-placement="v2_payment">
           <div class="v2-pay__body">
             <IconCreditCard class="v2-pay__icon" size="22" aria-hidden="true" />
@@ -439,14 +439,14 @@
               <strong class="v2-objection__q">{{ o.question }}</strong>
               <p class="v2-objection__a"><PagesTreatmentAdsV2Emph :parts="emph(o.answer, 0)" /></p>
               <!-- Zelgai, 05.10.2026: kein unterstrichener Zweit-Link, sondern
-                   aufklappbar erklaert; der Shop-Link steht erst darin -->
+                   aufklappbar erklaert; der Gutschein-Link steht erst darin -->
               <details v-if="o.action === 'voucher'" class="v2-raten">
                 <summary class="v2-raten__q" data-track-placement="v2_raten_info">
                   <IconInfoCircle size="18" aria-hidden="true" /> So funktioniert die Ratenzahlung
                 </summary>
                 <ol class="v2-raten__steps">
-                  <li>Gutschein im Online-Shop kaufen</li>
-                  <li>Im Shop mit Klarna oder PayPal in Raten bezahlen</li>
+                  <li>Gutschein auf unserer Website kaufen</li>
+                  <li>Beim Bezahlen Klarna oder PayPal mit Ratenzahlung wählen</li>
                   <li>Termin buchen und den Gutschein beim Termin einlösen</li>
                 </ol>
                 <a

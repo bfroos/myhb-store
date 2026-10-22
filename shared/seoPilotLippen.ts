@@ -81,7 +81,7 @@ export const SEO_HUB_LIPPEN: SeoHubContent = {
   ],
   costMarket: [
     "Warum die Preise am Markt so unterschiedlich sind: Entscheidend sind die Menge (0,5 oder 1 ml), das verwendete Präparat und ob eine Ärztin oder ein Arzt behandelt. Lippen aufspritzen ist eine ärztliche Behandlung – bei uns behandeln ausschließlich approbierte Ärztinnen und Ärzte. Lieber in Raten zahlen? Das geht über einen ",
-    { text: "Gutschein", href: "https://shop.myhealthandbeauty.com/products/myh-b-geschenkgutschein" },
+    { text: "Gutschein", href: "/gutschein" },
     ", den du beim Kauf mit Klarna oder PayPal in Raten bezahlst.",
   ],
   mlHeadline: "Wie viel Hyaluron brauche ich – 0,5 oder 1 ml?",

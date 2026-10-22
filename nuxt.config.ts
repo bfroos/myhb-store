@@ -276,6 +276,8 @@ export default defineNuxtConfig({
       },
     ],
     pages: {
+      // Gutscheinkauf gibt es nur auf Deutsch (Umzug aus dem alten Shop, 22.10.2026).
+      gutschein: { en: false, tr: false, ar: false, fr: false, nl: false },
       behandlungen: {
         en: "/treatments",
         tr: "/tedaviler",

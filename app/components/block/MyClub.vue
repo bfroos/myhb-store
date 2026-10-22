@@ -59,7 +59,7 @@
                 as="a"
                 size="lg"
                 :href="grouponUrl"
-                target="_blank"
+                :target="grouponUrl.startsWith('/') ? undefined : '_blank'"
               >
                 {{ t("cta.shopGroupon") }}
               </UiAtomBaseButton>
@@ -75,6 +75,7 @@
 import { ImageBreakpoint, ImageFormat } from "~/lib/strapi/dto/enums";
 import type { BlockMyClubDto } from "~/lib/strapi/dto/components";
 import { isMediaImage } from "~/utils/media";
+import { gutscheinLink } from "#shared/geschenkgutschein";
 
 const props = defineProps<BlockMyClubDto>();
 const { t } = useI18n();
@@ -82,7 +83,9 @@ const globals = useGlobals();
 const { brandNameShort } = useBrand();
 
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
-const grouponUrl = computed(() => globals.value?.ecommerce?.couponUrl ?? null);
+// Strapi fuehrt noch den Gutschein im alten Shop; der Kauf laeuft seit
+// 22.10.2026 ueber die Gutscheinseite der Website.
+const grouponUrl = computed(() => gutscheinLink(globals.value?.ecommerce?.couponUrl ?? null));
 
 const hasContent = computed(
   () =>
