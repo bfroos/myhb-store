@@ -51,7 +51,7 @@ export type CostPageConfig = {
 };
 
 const RATEN =
-  "Ja, über einen Gutschein: Du kaufst ihn im Shop und bezahlst ihn dort mit Klarna oder PayPal in Raten, eingelöst wird er bei der Behandlung.";
+  "Ja, über einen Gutschein: Du kaufst ihn auf unserer Website und bezahlst ihn mit Klarna oder PayPal in Raten, eingelöst wird er bei der Behandlung.";
 const SAME_PRICE =
   "Ja. Für alle nichtoperativen Behandlungen gelten an unseren Standorten dieselben Preise – in Köln, Düsseldorf, Berlin, Leipzig, Aachen, Duisburg, Mönchengladbach, Recklinghausen und Kaiserslautern.";
 const WALK_IN =

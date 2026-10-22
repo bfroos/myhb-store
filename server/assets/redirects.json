@@ -3376,7 +3376,7 @@
   },
   {
     "from": "/products/myh-b-geschenkgutschein",
-    "to": "/myh-b-geschenkgutschein",
+    "to": "/gutschein",
     "code": 301
   },
   {
@@ -11393,5 +11393,15 @@
     "from": "/fr/sarrebruck",
     "to": "/fr/lieux/saarbruecken/europa-galerie",
     "code": 302
+  },
+  {
+    "from": "/products/my-geschenkgutschein",
+    "to": "/gutschein",
+    "code": 301
+  },
+  {
+    "from": "/myh-b-geschenkgutschein",
+    "to": "/gutschein",
+    "code": 301
   }
 ]
