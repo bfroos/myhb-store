@@ -37,6 +37,13 @@ test("Preis: Einheiten × Preis je Graft + Zusätze", () => {
   assert.equal(preisCent(1500, null), 0);
 });
 
+test("Mindestpreis wie in Michaels Entwurf: 1.500 Grafts x 1,50 € = 2.250 €, angezeigt 2.900 €", () => {
+  const ohneRasur = { label: "Ohne Rasur", pricePerGraftCent: 150 };
+  assert.equal(preisCent(1500, ohneRasur, [], 290000), 290000);
+  assert.equal(preisCent(2500, ohneRasur, [], 290000), 375000);
+  assert.equal(preisCent(1500, ohneRasur, [{ label: "PRP", priceCent: 59900 }], 290000), 349900);
+});
+
 test("Raten: ohne Zinsen, aufgerundet auf volle Euro", () => {
   assert.equal(monatsrateCent(290000, 100000, 12), 15900);
   assert.equal(monatsrateCent(225000, 0, 24), 9400);

@@ -27,12 +27,18 @@ export function begrenze(
   return Math.min(grenzen.max, Math.max(grenzen.min, gerastert));
 }
 
+/**
+ * Einheiten x Preis je Graft, mindestens der Mindestpreis (Michaels Entwurf:
+ * 2.900 €), dazu die Zusaetze.
+ */
 export function preisCent(
   einheiten: number,
   methode: RechnerMethode | null | undefined,
   zusaetze: RechnerZusatz[] = [],
+  mindestCent = 0,
 ): number {
-  const basis = methode ? Math.round(einheiten * methode.pricePerGraftCent) : 0;
+  const roh = methode ? Math.round(einheiten * methode.pricePerGraftCent) : 0;
+  const basis = methode ? Math.max(mindestCent || 0, roh) : 0;
   return basis + zusaetze.reduce((s, z) => s + (z.priceCent || 0), 0);
 }
 

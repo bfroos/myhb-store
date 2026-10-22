@@ -76,6 +76,10 @@ const landingBlockKeys = new Set<string>([
   "blocks.promo-floating-sticker",
   "blocks.lead-funnel",
   "blocks.price-calculator",
+  "blocks.stat-strip",
+  "blocks.comparison-table",
+  "blocks.info-cards",
+  "blocks.steps-timeline",
 ]);
 
 const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
@@ -167,6 +171,10 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   // E28 (myhb-app/myhb-os#1638/#1639): OP-Landingpages
   "blocks.lead-funnel": defineAsyncComponent(() => import("./LeadFunnelBlock.vue")),
   "blocks.price-calculator": defineAsyncComponent(() => import("./PriceCalculatorBlock.vue")),
+  "blocks.stat-strip": defineAsyncComponent(() => import("./StatStripBlock.vue")),
+  "blocks.comparison-table": defineAsyncComponent(() => import("./ComparisonTableBlock.vue")),
+  "blocks.info-cards": defineAsyncComponent(() => import("./InfoCardsBlock.vue")),
+  "blocks.steps-timeline": defineAsyncComponent(() => import("./StepsTimelineBlock.vue")),
   "blog.cta": defineAsyncComponent(() => import("../blog/CtaBlock.vue")),
   "blog.image": defineAsyncComponent(() => import("../blog/ImageBlock.vue")),
   "blog.newsletter": defineAsyncComponent(
