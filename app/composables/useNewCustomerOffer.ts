@@ -1,6 +1,7 @@
 import type { MaybeRefOrGetter } from "vue";
 import type { TreatmentDto } from "~/lib/strapi/dto/collections";
 import { buildNewCustomerOffer } from "#shared/newCustomerOffer";
+import { isKlinikBehandlung } from "#shared/klinik";
 
 /**
  * go.* (Ads-Modus, Deutsch): Neukundenangebot einer Behandlungsseite
@@ -23,6 +24,8 @@ export function useNewCustomerOffer(
     if (!String(locale.value || "de").startsWith("de")) return null;
     const t = toValue(treatment);
     if (!t) return null;
+    // Klinik-Regel (E28 #1636): OPs haben keinen Neukundenrabatt.
+    if (isKlinikBehandlung({ type: t.type, pathKey: toValue(pathKey) })) return null;
     const twoZonePriceCent = (t.products ?? [])
       .flatMap((product) => product.variants ?? [])
       .find(

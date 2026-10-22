@@ -128,8 +128,8 @@
                 >
                   <strong v-if="priceLabel">{{ priceLabel }}</strong>
                   <SharedButton
-                    v-if="cta && bookingButtonVisible"
-                    :button="cta"
+                    v-if="klinikCta || (cta && bookingButtonVisible)"
+                    :button="klinikCta ?? cta"
                     :data="{
                       calendlyUrl: calendlyUrl,
                       appBookingUrl: appBookingUrl,
@@ -290,8 +290,8 @@
               />
             </template>
             <SharedButton
-              v-if="cta && bookingButtonVisible"
-              :button="stickyCta"
+              v-if="klinikCta || (cta && bookingButtonVisible)"
+              :button="klinikCta ?? stickyCta"
               :data="{
                 calendlyUrl: calendlyUrl,
                 appBookingUrl: appBookingUrl,
@@ -321,7 +321,15 @@ import {
   SharedButtonMethod,
   SharedButtonAction,
 } from "~/lib/strapi/dto/enums";
-import type { BlockTreatmentHeroDto } from "~/lib/strapi/dto/components";
+import type {
+  BlockTreatmentHeroDto,
+  SharedButtonDto,
+} from "~/lib/strapi/dto/components";
+import {
+  anfrageZiel,
+  isKlinikBehandlung,
+  KLINIK_CTA_LABEL,
+} from "#shared/klinik";
 import { IconAsterisk, IconPhone, IconShieldCheck } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
 import type { AdsClip } from "#shared/adsClips";
@@ -388,6 +396,24 @@ const props = withDefaults(
   },
 );
 
+// Klinik-Regel (E28 #1636): OP-Behandlungen bucht man nicht online und sie
+// haben keinen 20-%-Knopf; Hero und Leiste fuehren in den Anfrage-Funnel.
+const klinik = computed(() =>
+  isKlinikBehandlung({
+    type: props.treatment?.type,
+    pathKey: props.treatmentPathKey,
+  }),
+);
+const klinikCta = computed<SharedButtonDto | null>(() =>
+  klinik.value
+    ? {
+        label: KLINIK_CTA_LABEL,
+        method: SharedButtonMethod.EXTERNAL_LINK,
+        url: anfrageZiel(props.treatmentPathKey),
+      }
+    : null,
+);
+
 // Vorlage v2 verhaelt sich auch auf www wie go. (bundesweite Meta-Seiten,
 // app/pages/aktion/[slug].vue); sonst gilt der Modus der Seite.
 const isAdsMode = computed(() => siteIsAdsMode.value || props.templateV2);
@@ -426,7 +452,7 @@ const bookingButtonVisible = computed(
     props.showBookingButton,
 );
 const discountButtonVisible = computed(
-  () => forceBothButtons.value || !!props.showGlobalDiscount,
+  () => !klinik.value && (forceBothButtons.value || !!props.showGlobalDiscount),
 );
 
 // go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet). Texte sind

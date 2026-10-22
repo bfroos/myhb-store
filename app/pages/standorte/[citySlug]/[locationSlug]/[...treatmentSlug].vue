@@ -70,6 +70,7 @@ import { mergeBlockOrder } from "~/lib/blocks/mergeBlockOrder";
 import { answerHeadline, treatmentAnswer } from "#shared/treatmentAnswer";
 import { purchaseFaqs } from "#shared/purchaseFaq";
 import { seoTitleFor } from "#shared/seoTitles";
+import { anfrageZiel, isKlinikBehandlung } from "#shared/klinik";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
 import { rememberOfferVariant } from "~/lib/offerVariant";
@@ -98,6 +99,12 @@ const {
 } = useLocationTreatmentPage();
 
 const { isAdsMode } = useSiteModeFlags();
+// Klinik-Regel (E28 #1636): OP-Seiten fuehren in den Anfrage-Funnel.
+provideKlinikSeite(() => {
+  const pathKey = (treatmentPage.value as any)?.pathKey as string | undefined;
+  const type = (treatmentPage.value as any)?.treatment?.type as string | undefined;
+  return isKlinikBehandlung({ type, pathKey }) ? anfrageZiel(pathKey) : null;
+});
 // go.: Seitenvorlage v2 fuer die Seiten aus ADS_TEMPLATE_V2_PAGES.
 const isV2 = useAdsTemplateV2();
 // www: E24 SEO-Pilot (Lippen Köln/Düsseldorf). Nur deutsche Seite.
