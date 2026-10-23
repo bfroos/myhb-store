@@ -2,7 +2,11 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   anfrageZiel,
+  behandlungDerAnfrage,
+  behandlungFuerPfad,
+  istAnfrageModal,
   isKlinikBehandlung,
+  modalBehandlung,
   KLINIK_AUSGEBLENDETE_BLOECKE,
 } from "./klinik.ts";
 
@@ -24,13 +28,23 @@ test("pathKey unter schoenheitsoperationen reicht, auch ohne type", () => {
   assert.equal(isKlinikBehandlung({}), false);
 });
 
-test("Anfrage-Ziel: Haartransplantation hat eigene Seite, sonst allgemeine OP-Anfrage", () => {
-  assert.equal(
-    anfrageZiel("schoenheitsoperationen/haartransplantation"),
-    "/lp/haartransplantation",
-  );
-  assert.equal(anfrageZiel("schoenheitsoperationen/lidstraffung"), "/lp/op-anfrage");
-  assert.equal(anfrageZiel(null), "/lp/op-anfrage");
+test("Anfrage-Ziel: Modal mit der OP der Seite, Kategorieseite ohne", () => {
+  assert.equal(anfrageZiel("schoenheitsoperationen/haartransplantation"), "modal:Haartransplantation");
+  assert.equal(anfrageZiel("/schoenheitsoperationen/lidstraffung/"), "modal:Lidstraffung");
+  assert.equal(anfrageZiel("schoenheitsoperationen/brustvergroesserung"), "modal:Brust-OP");
+  assert.equal(anfrageZiel("schoenheitsoperationen"), "modal:");
+  assert.equal(anfrageZiel(null), "modal:");
+  assert.equal(istAnfrageModal("modal:Lidstraffung"), true);
+  assert.equal(istAnfrageModal("/lp/op-anfrage"), false);
+  assert.equal(modalBehandlung("modal:Lidstraffung"), "Lidstraffung");
+  assert.equal(modalBehandlung("modal:"), null);
+  assert.equal(behandlungFuerPfad("schoenheitsoperationen/unbekannt"), null);
+});
+
+test("Allgemeiner Funnel nimmt die gewaehlte OP als Behandlung", () => {
+  assert.equal(behandlungDerAnfrage("Schönheits-OP", ["Lidstraffung", "Seit einigen Monaten"]), "Lidstraffung");
+  assert.equal(behandlungDerAnfrage("Schönheits-OP", ["Etwas anderes"]), "Schönheits-OP");
+  assert.equal(behandlungDerAnfrage("Haartransplantation", ["Brust-OP"]), "Haartransplantation");
 });
 
 test("Alle 20-%-Promo-Bloecke werden ausgeblendet", () => {

@@ -20,11 +20,43 @@ export const KLINIK_PATH_PREFIX = "schoenheitsoperationen";
 
 export const KLINIK_CTA_LABEL = "Kostenlose Analyse anfragen";
 
-/** Funnel-Seiten (Strapi landing-page) je OP; alles andere: allgemeine OP-Anfrage. */
-const ANFRAGE_SEITE: Record<string, string> = {
-  "schoenheitsoperationen/haartransplantation": "/lp/haartransplantation",
+/**
+ * Behandlung je OP-Seite (letztes Segment des pathKey). So heisst sie auch im
+ * Lead-Board der App, darum dieselben Namen wie im Funnel "Welcher Eingriff"
+ * (Strapi landing-page op-anfrage). Brust-OPs laufen dort gemeinsam.
+ */
+const BEHANDLUNG_JE_SEITE: Record<string, string> = {
+  haartransplantation: "Haartransplantation",
+  lidstraffung: "Lidstraffung",
+  bruststraffung: "Brust-OP",
+  brustvergroesserung: "Brust-OP",
+  fettabsaugung: "Fettabsaugung",
+  bauchdeckenstraffung: "Bauchdeckenstraffung",
+  facelift: "Facelift",
+  oberarmstraffung: "Oberarmstraffung",
+  oberschenkelstraffung: "Oberschenkelstraffung",
 };
-export const ANFRAGE_SEITE_FALLBACK = "/lp/op-anfrage";
+
+/** Behandlungsnamen, die ein generischer Funnel als Antwort liefern kann. */
+export const OP_BEHANDLUNGEN: ReadonlySet<string> = new Set(Object.values(BEHANDLUNG_JE_SEITE));
+
+/** Behandlung zur OP-Seite; `null` auf der Kategorieseite oder bei Unbekanntem. */
+export function behandlungFuerPfad(pathKey?: string | null): string | null {
+  const key = (pathKey ?? "").replace(/^\/+/, "").replace(/\/+$/, "");
+  const letztes = key.split("/").pop() ?? "";
+  return BEHANDLUNG_JE_SEITE[letztes] ?? null;
+}
+
+/**
+ * Seit 23.10.2026 (Benjamin): Der Knopf auf OP-Seiten oeffnet den Anfrage-Funnel
+ * als Modal auf derselben Seite, die OP ist schon gewaehlt. Ziel-Form
+ * `modal:<Behandlung>`; ohne Behandlung fragt der Funnel danach.
+ */
+export const ANFRAGE_MODAL_PREFIX = "modal:";
+export const istAnfrageModal = (ziel?: string | null): ziel is string =>
+  !!ziel && ziel.startsWith(ANFRAGE_MODAL_PREFIX);
+export const modalBehandlung = (ziel: string): string | null =>
+  ziel.slice(ANFRAGE_MODAL_PREFIX.length) || null;
 
 export function isKlinikBehandlung(input: {
   type?: string | null;
@@ -37,8 +69,17 @@ export function isKlinikBehandlung(input: {
 
 /** Ziel des Anfrage-Knopfs fuer eine OP-Seite. */
 export function anfrageZiel(pathKey?: string | null): string {
-  const key = (pathKey ?? "").replace(/^\/+/, "").replace(/\/+$/, "");
-  return ANFRAGE_SEITE[key] ?? ANFRAGE_SEITE_FALLBACK;
+  return `${ANFRAGE_MODAL_PREFIX}${behandlungFuerPfad(pathKey) ?? ""}`;
+}
+
+/**
+ * Behandlung, die eine Anfrage im Board traegt: Ein generischer Funnel
+ * ("Schoenheits-OP") nimmt die gewaehlte OP aus den Antworten, sonst landete
+ * jede Anfrage von /lp/op-anfrage unter "Schoenheits-OP".
+ */
+export function behandlungDerAnfrage(funnelBehandlung: string, antworten: string[]): string {
+  if (OP_BEHANDLUNGEN.has(funnelBehandlung)) return funnelBehandlung;
+  return antworten.find((a) => OP_BEHANDLUNGEN.has(a)) ?? funnelBehandlung;
 }
 
 /** Strapi-Bloecke, die auf OP-Seiten nicht erscheinen (20-%-Aktion). */
