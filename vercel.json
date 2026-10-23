@@ -61,6 +61,26 @@
       ],
       "destination": "/p/magazin-lippen-aufspritzen",
       "statusCode": 307
+    },
+    {
+      "source": "/haartransplantation/maenner",
+      "destination": "/lp/haartransplantation-maenner/",
+      "statusCode": 301
+    },
+    {
+      "source": "/haartransplantation/maenner/",
+      "destination": "/lp/haartransplantation-maenner/",
+      "statusCode": 301
+    },
+    {
+      "source": "/haartransplantation/frauen",
+      "destination": "/lp/haartransplantation-frauen/",
+      "statusCode": 301
+    },
+    {
+      "source": "/haartransplantation/frauen/",
+      "destination": "/lp/haartransplantation-frauen/",
+      "statusCode": 301
     }
   ]
 }
