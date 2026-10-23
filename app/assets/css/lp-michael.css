@@ -5,10 +5,13 @@
  * Gold als Akzent, Jost fuer Ueberschriften, DM Sans fuer Text, dunkler Kopf
  * ueber die volle Breite.
  *
+ * Regeln beginnen mit "body", weil die scoped Styles der Bloecke sonst gleich
+ * stark sind und je nach Ladereihenfolge gewinnen.
+ *
  * Gilt nur innerhalb von .lp-michael (gesetzt in pages/lp/[slug].vue, wenn die
  * Seite einen Anfrage-Funnel hat). Die Bloecke selbst bleiben unveraendert.
  */
-.lp-michael {
+body .lp-michael {
   --michael-bg: #f7f4ef;
   --michael-band: #efe6dc;
   --michael-dunkel: #141414;
@@ -32,71 +35,71 @@
   overflow-x: clip;
   padding-bottom: 48px;
 }
-.lp-michael h1,
-.lp-michael h2,
-.lp-michael h3,
-.lp-michael .funnel__title,
-.lp-michael .rechner__preis,
-.lp-michael .rechner__wert,
-.lp-michael .stats__wert,
-.lp-michael .ablauf__nummer,
-.lp-michael .ablauf__wann {
+body .lp-michael h1,
+body .lp-michael h2,
+body .lp-michael h3,
+body .lp-michael .funnel__title,
+body .lp-michael .rechner__preis,
+body .lp-michael .rechner__wert,
+body .lp-michael .stats__wert,
+body .lp-michael .ablauf__nummer,
+body .lp-michael .ablauf__wann {
   font-family: "Jost", "Inter", system-ui, sans-serif;
   font-weight: 500;
   letter-spacing: -0.01em;
 }
-.lp-michael .theme-strong {
+body .lp-michael .theme-strong {
   --button-primary-color-bg: var(--michael-gold);
   --button-primary-color-bg-hover: var(--michael-gold-hover);
   --button-primary-color-text: #ffffff;
   --card-color-bg: var(--michael-dunkel);
 }
-.lp-michael .p-button,
-.lp-michael a[class*="button"],
-.lp-michael button[class*="button"] {
+body .lp-michael .p-button,
+body .lp-michael a[class*="button"],
+body .lp-michael button[class*="button"] {
   border-radius: 999px;
 }
 
 /* ---------- Kopf: volle Breite, dunkel, Vertrauensband in Beige ---------- */
-.lp-michael .lp-hero-wrap {
+body .lp-michael .lp-hero-wrap {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   gap: 0;
 }
-.lp-michael .lp-trust {
+body .lp-michael .lp-trust {
   border-radius: 0;
   background: var(--michael-band);
   color: var(--michael-text);
   font-weight: 500;
 }
-.lp-michael .lp-trust__item svg { color: var(--michael-gold); }
-.lp-michael .lp-hero {
+body .lp-michael .lp-trust__item svg { color: var(--michael-gold); }
+body .lp-michael .lp-hero {
   border-radius: 0;
   background: var(--michael-dunkel);
   padding-inline: max(20px, calc((100vw - 1200px) / 2));
 }
-.lp-michael .lp-hero__eyebrow { color: #c9a36a; letter-spacing: 0.18em; }
-.lp-michael .lp-hero__lead { color: #d8d2c8; }
-.lp-michael .lp-hero__checks svg { color: #c9a36a; }
-.lp-michael .lp-hero__bild { max-width: 460px; }
+body .lp-michael .lp-hero__eyebrow { color: #c9a36a; letter-spacing: 0.18em; }
+body .lp-michael .lp-hero__lead { color: #d8d2c8; }
+body .lp-michael .lp-hero__checks svg { color: #c9a36a; }
+body .lp-michael .lp-hero__bild { max-width: 460px; }
 
 /* ---------- Formular ---------- */
-.lp-michael .funnel { border-radius: 16px; }
-.lp-michael .funnel__bar { background: var(--michael-band); }
-.lp-michael .funnel__bar-fill { background: var(--michael-gold); }
-.lp-michael .funnel__option:hover,
-.lp-michael .funnel__option--aktiv {
+body .lp-michael .funnel { border-radius: 16px; }
+body .lp-michael .funnel__bar { background: var(--michael-band); }
+body .lp-michael .funnel__bar-fill { background: var(--michael-gold); }
+body .lp-michael .funnel__option:hover,
+body .lp-michael .funnel__option--aktiv {
   border-color: var(--michael-gold);
   box-shadow: 0 0 0 1px var(--michael-gold);
 }
-.lp-michael .funnel__option:not(.funnel__option--bild).funnel__option--aktiv { background: var(--michael-gold-hell); }
-.lp-michael .funnel__option--bild .funnel__option-text { background: var(--michael-dunkel); }
-.lp-michael .funnel__weg--aktiv { border-color: var(--michael-gold); background: var(--michael-gold-hell); }
-.lp-michael .funnel__einwilligung input,
-.lp-michael .rechner__zusatz input { accent-color: var(--michael-gold); }
+body .lp-michael .funnel__option:not(.funnel__option--bild).funnel__option--aktiv { background: var(--michael-gold-hell); }
+body .lp-michael .funnel__option--bild .funnel__option-text { background: var(--michael-dunkel); }
+body .lp-michael .funnel__weg--aktiv { border-color: var(--michael-gold); background: var(--michael-gold-hell); }
+body .lp-michael .funnel__einwilligung input,
+body .lp-michael .rechner__zusatz input { accent-color: var(--michael-gold); }
 
 /* ---------- Kennzahlen: weisses Band ueber die volle Breite ---------- */
-.lp-michael .stats {
+body .lp-michael .stats {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   background: #ffffff;
@@ -105,32 +108,32 @@
 }
 
 /* ---------- Preisrechner ---------- */
-.lp-michael .rechner__eyebrow,
-.lp-michael .karten__eyebrow { color: var(--michael-gold); }
-.lp-michael .rechner__eingabe { border-radius: 16px; }
-.lp-michael .rechner__kachel { border-color: var(--michael-linie); }
-.lp-michael .rechner__kachel--aktiv {
+body .lp-michael .rechner__eyebrow,
+body .lp-michael .karten__eyebrow { color: var(--michael-gold); }
+body .lp-michael .rechner__eingabe { border-radius: 16px; }
+body .lp-michael .rechner__kachel { border-color: var(--michael-linie); }
+body .lp-michael .rechner__kachel--aktiv {
   border-color: var(--michael-gold);
   background: var(--michael-gold-hell);
   box-shadow: 0 0 0 1px var(--michael-gold);
 }
-.lp-michael .rechner__regler { accent-color: var(--michael-gold); }
-.lp-michael .rechner__ergebnis { background: var(--michael-dunkel); border-radius: 16px; }
-.lp-michael .rechner__ergebnis-label { color: #c9a36a; }
+body .lp-michael .rechner__regler { accent-color: var(--michael-gold); }
+body .lp-michael .rechner__ergebnis { background: var(--michael-dunkel); border-radius: 16px; }
+body .lp-michael .rechner__ergebnis-label { color: #c9a36a; }
 
 /* ---------- Vergleich ---------- */
-.lp-michael .vergleich { background: transparent; }
-.lp-michael .vergleich__zeile { background: var(--michael-band); }
-.lp-michael .vergleich__wir { background: var(--michael-dunkel); }
-.lp-michael .vergleich__ja--wir { background: #c9a36a; color: var(--michael-dunkel); }
-.lp-michael .vergleich__andere { background: #e6e0d8; }
+body .lp-michael .vergleich { background: transparent; }
+body .lp-michael .vergleich__zeile { background: var(--michael-band); }
+body .lp-michael .vergleich__wir { background: var(--michael-dunkel); }
+body .lp-michael .vergleich__ja--wir { background: #c9a36a; color: var(--michael-dunkel); }
+body .lp-michael .vergleich__andere { background: #e6e0d8; }
 
 /* ---------- Ablauf und Zeitleiste ---------- */
-.lp-michael .ablauf { background: var(--michael-dunkel); }
-.lp-michael .ablauf__nummer { color: #c9a36a; }
-.lp-michael .ablauf__zeit { background: #1f1d1a; }
-.lp-michael .ablauf__wann { color: #c9a36a; }
+body .lp-michael .ablauf { background: var(--michael-dunkel); }
+body .lp-michael .ablauf__nummer { color: #c9a36a; }
+body .lp-michael .ablauf__zeit { background: #1f1d1a; }
+body .lp-michael .ablauf__wann { color: #c9a36a; }
 
 /* ---------- FAQ und Abschluss ---------- */
-.lp-michael .faq__item { border-color: var(--michael-linie); }
-.lp-michael .final.theme-strong { background: var(--michael-dunkel); }
+body .lp-michael .faq__item { border-color: var(--michael-linie); }
+body .lp-michael .final.theme-strong { background: var(--michael-dunkel); }
