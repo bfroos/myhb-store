@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  CLUB,
   SPARBUCH_PFLICHTSATZ,
   STUFEN,
   appUrl,
@@ -53,4 +54,18 @@ test("Sparbuch-Texte: keine verbotenen Woerter (Konzept Kap. 3)", () => {
     assert.doesNotMatch(sichtbar, wort);
   }
   assert.match(SPARBUCH_PFLICHTSATZ, /Nicht auszahlbar/);
+});
+
+test("Regeln vom 23.10.2026: Bonus 36 Monate, Wunscharzt ab WHITE, Namen in Versalien", () => {
+  assert.equal(CLUB.bonusGueltigMonate, 36);
+  assert.equal(CLUB.verfallOhneBesuchMonate, 36);
+  assert.deepEqual(STUFEN.map((s) => s.wunscharzt), [false, true, true, true]);
+  assert.deepEqual(STUFEN.map((s) => s.name), ["BASIC", "WHITE", "GREY", "BLACK"]);
+});
+
+test("Club-Seite nennt den Geburtstagsbonus nicht (Ueberraschung, Benjamin 23.10.2026)", () => {
+  const club = readFileSync(new URL("../app/pages/club.vue", import.meta.url), "utf8")
+    .replace(/\/\*[\s\S]*?\*\//g, "")
+    .replace(/^\s*\/\/.*$/gm, "");
+  assert.doesNotMatch(club, /geburtstagEuro|Geburtstag/);
 });
