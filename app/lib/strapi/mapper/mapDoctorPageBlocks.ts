@@ -1,8 +1,14 @@
 import type { EmployeeDto } from "../dto/collections";
 import { BlockPageHeaderLayout, ColorTheme } from "../dto/enums";
 
-export function mapDoctorPageBlocks(employee: EmployeeDto) {
-  const { t } = useI18n();
+// translate: t aus dem Setup der Seite. useI18n darf nur im Setup laufen; die
+// Seite rechnet diesen Block aber in einem computed, das Vue auch nach dem
+// Setup neu auswerten kann (sonst "SyntaxError: 26").
+export function mapDoctorPageBlocks(
+  employee: EmployeeDto,
+  translate?: ReturnType<typeof useI18n>["t"],
+) {
+  const t = translate ?? useI18n().t;
 
   const blocks = {
     hero: buildHeroBlockModel(),
@@ -105,4 +111,25 @@ export function mapDoctorPageBlocks(employee: EmployeeDto) {
   }
 
   return blocks;
+}
+
+// Auf der Arzt-Seite nur gute Bewertungen (ab 4 Sternen), hoechstens sechs.
+const DOCTOR_REVIEW_MIN_RATING = 4;
+const DOCTOR_REVIEW_LIMIT = 6;
+
+export function mapDoctorReviewsBlock(employee: EmployeeDto | null) {
+  // Die Texte sind schon serverseitig bereinigt (shared/reviewPrivacy.ts).
+  const reviews = (employee?.reviews ?? [])
+    .filter((review) => (review?.rating ?? 0) >= DOCTOR_REVIEW_MIN_RATING)
+    .slice(0, DOCTOR_REVIEW_LIMIT);
+
+  if (reviews.length === 0) {
+    return null;
+  }
+
+  return {
+    oddItemsTheme: ColorTheme.NEUTRAL,
+    evenItemsTheme: ColorTheme.SOFT,
+    reviews,
+  };
 }

@@ -17,14 +17,19 @@
     v-if="fixedBlocks.locations"
     v-bind="fixedBlocks.locations"
   />
+  <BlockReviewsBlock v-if="reviewsBlock" v-bind="reviewsBlock" />
 </template>
 <script setup lang="ts">
+import { mapDoctorReviewsBlock } from "~/lib/strapi/mapper/mapDoctorPageBlocks";
+
 const globals = useGlobals();
 
 const { fetchPage, page, fixedBlocks, seo, breadcrumbItems, localizations } =
   useDoctorPage(globals.value?.brand?.name ?? "");
 
 const pageLoaded = await fetchPage();
+
+const reviewsBlock = computed(() => mapDoctorReviewsBlock(page.value));
 
 if (pageLoaded) {
   // Reihenfolge zaehlt: setPageSeo liest die von usePageI18nParams gemeldete
