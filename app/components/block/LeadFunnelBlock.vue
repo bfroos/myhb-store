@@ -151,6 +151,7 @@ import { ReviewSource } from "~/lib/strapi/dto/enums";
 import { readWireAttribution } from "~/lib/attribution";
 import { useLeadRechner } from "~/composables/useLeadRechner";
 import { funnelIllustration } from "#shared/funnelIllustrationen";
+import { behandlungDerAnfrage } from "#shared/klinik";
 
 /**
  * Anfrage-Funnel fuer OP-Landingpages (E28, myhb-app/myhb-os#1638).
@@ -198,9 +199,10 @@ const props = defineProps<{
   resultNote?: string | null;
 }>();
 
+// Rueckruf per Anruf ist der Standard (Besprechung 21.10.2026).
 const KONTAKTWEGE = [
-  { wert: "whatsapp", label: "WhatsApp" },
   { wert: "anruf", label: "Anruf" },
+  { wert: "whatsapp", label: "WhatsApp" },
   { wert: "email", label: "E-Mail" },
 ] as const;
 
@@ -225,7 +227,7 @@ const kontakt = reactive({
   name: "",
   telefon: "",
   email: "",
-  kontaktweg: "whatsapp" as (typeof KONTAKTWEGE)[number]["wert"],
+  kontaktweg: "anruf" as (typeof KONTAKTWEGE)[number]["wert"],
   einwilligung: false,
   website: "",
 });
@@ -272,11 +274,12 @@ async function absenden() {
   if (!kontakt.einwilligung) return void (fehler.value = "Bitte bestätige die Einwilligung.");
 
   sendet.value = true;
+  const behandlung = behandlungDerAnfrage(props.behandlung, antworten.value);
   try {
     await $fetch("/api/lead-anfrage", {
       method: "POST",
       body: {
-        behandlung: props.behandlung,
+        behandlung,
         name: kontakt.name,
         telefon: kontakt.telefon,
         email: kontakt.email,
@@ -290,7 +293,7 @@ async function absenden() {
       },
     });
     gesendet.value = true;
-    trackEvent("generate_lead", { behandlung: props.behandlung, lead_source: "landingpage" });
+    trackEvent("generate_lead", { behandlung, lead_source: "landingpage" });
   } catch (e: any) {
     console.error("[lead-funnel] Senden fehlgeschlagen", e?.statusCode ?? e);
     fehler.value =

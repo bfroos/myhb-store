@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
-import { KLINIK_AUSGEBLENDETE_BLOECKE } from "#shared/klinik";
+import { KLINIK_AUSGEBLENDETE_BLOECKE, istAnfrageModal, modalBehandlung } from "#shared/klinik";
 
 const props = defineProps<{
   blocks: StrapiBlock[];
@@ -26,8 +26,13 @@ const sichtbareBloecke = computed(() =>
     ? props.blocks.filter((b) => !KLINIK_AUSGEBLENDETE_BLOECKE.has(b.__component))
     : props.blocks,
 );
+const { openOpAnfrage } = useOpAnfrageDialog();
 const openBooking = async (block: StrapiBlock) => {
   const ziel = klinikZiel.value;
+  if (istAnfrageModal(ziel)) {
+    openOpAnfrage(modalBehandlung(ziel));
+    return;
+  }
   if (ziel) {
     if (ziel.startsWith("#")) {
       document.querySelector(ziel)?.scrollIntoView({ behavior: "smooth" });
