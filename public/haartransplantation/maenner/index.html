@@ -473,6 +473,7 @@ input[type=range]{accent-color:#8A6A3D}
 </section>
 
 <!-- STIMMEN -->
+<sc-if value="{{showReviews}}" hint-placeholder-val="{{ false }}">
 <section style="padding: 96px 24px">
 <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
 <h2 style="margin: 0; font-family: 'Jost', sans-serif; font-weight: 500; font-size: 42px; line-height: 1.15">Was Patienten über uns sagen</h2>
@@ -489,6 +490,7 @@ input[type=range]{accent-color:#8A6A3D}
 </div>
 </section>
 
+</sc-if>
 <!-- FAQ -->
 <section id="faq" style="background: #FFFFFF; padding: 96px 24px">
 <div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
@@ -534,7 +536,7 @@ input[type=range]{accent-color:#8A6A3D}
 </footer>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"showStories":{"editor":"boolean","default":false,"section":"Inhalte"},"googleRating":{"editor":"float","default":4.9,"min":0,"max":5,"step":0.1,"section":"Google-Bewertungen"},"googleCount":{"editor":"int","default":1538,"min":0,"max":100000,"step":1,"section":"Google-Bewertungen"},"accent":{"editor":"color","default":"#8A6A3D","options":["#8A6A3D","#141414","#6B4E6E","#2F5D62"],"section":"Marke"},"pricePerGraftFUE":{"editor":"float","default":1.5,"min":0.5,"max":10,"step":0.05,"unit":"€","section":"Preise"},"pricePerGraftDHI":{"editor":"float","default":1.5,"min":0.5,"max":10,"step":0.05,"unit":"€","section":"Preise"},"minPrice":{"editor":"int","default":2900,"min":0,"max":20000,"step":100,"unit":"€","section":"Preise"},"prpPrice":{"editor":"int","default":599,"min":0,"max":2000,"step":10,"unit":"€","section":"Preise"},"defaultDown":{"editor":"int","default":1000,"min":0,"max":5000,"step":100,"unit":"€","section":"Finanzierung"},"apr":{"editor":"float","default":0,"min":0,"max":20,"step":0.1,"unit":"% eff. Jahreszins","section":"Finanzierung"},"$preview":{"width":1440,"height":7400}}'>
+<script type="text/x-dc" data-dc-script data-props='{"showStories":{"editor":"boolean","default":true,"section":"Inhalte"},"googleRating":{"editor":"float","default":4.9,"min":0,"max":5,"step":0.1,"section":"Google-Bewertungen"},"googleCount":{"editor":"int","default":1538,"min":0,"max":100000,"step":1,"section":"Google-Bewertungen"},"accent":{"editor":"color","default":"#8A6A3D","options":["#8A6A3D","#141414","#6B4E6E","#2F5D62"],"section":"Marke"},"pricePerGraftFUE":{"editor":"float","default":1.5,"min":0.5,"max":10,"step":0.05,"unit":"€","section":"Preise"},"pricePerGraftDHI":{"editor":"float","default":1.5,"min":0.5,"max":10,"step":0.05,"unit":"€","section":"Preise"},"minPrice":{"editor":"int","default":2900,"min":0,"max":20000,"step":100,"unit":"€","section":"Preise"},"prpPrice":{"editor":"int","default":599,"min":0,"max":2000,"step":10,"unit":"€","section":"Preise"},"defaultDown":{"editor":"int","default":1000,"min":0,"max":5000,"step":100,"unit":"€","section":"Finanzierung"},"apr":{"editor":"float","default":0,"min":0,"max":20,"step":0.1,"unit":"% eff. Jahreszins","section":"Finanzierung"},"$preview":{"width":1440,"height":7400}}'>
 class Component extends DCLogic {
   constructor(props) {
     super(props);
@@ -745,6 +747,8 @@ class Component extends DCLogic {
       ].map((r, i, a) => ({ label: r[0], other: r[1], noOther: !r[1], radius: i === 0 ? '14px 0 0 0' : (i === a.length - 1 ? '0 0 0 14px' : '0'), othRadius: i === 0 ? '0 14px 0 0' : (i === a.length - 1 ? '0 0 14px 0' : '0'), oursRadius: i === a.length - 1 ? '0 0 28px 28px' : '0', oursPad: i === a.length - 1 ? '30px' : '12px' })),
       included: included, steps: steps, timeline: timeline, reviews: reviews, faqs: faqs,
       showStories: P.showStories ?? true,
+      // Zitate erst mit echten Bewertungen (23.10.2026)
+      showReviews: P.showReviews ?? false,
       storyName: ['Marco Huber, 34 Jahre', 'Mehmet Yılmaz, 36 Jahre', 'Andriy Kovalenko, 32 Jahre', 'Murat Şahin, 39 Jahre'][S.story],
       viewOpts: [['top', 'Obenansicht'], ['front', 'Vorderansicht']].map((v) => { const on = (S.storyView || 'top') === v[0]; return { label: v[1], pressed: on ? 'true' : 'false', bg: on ? '#141414' : 'transparent', fg: on ? '#FFFFFF' : '#141414', pick: () => this.setState({ storyView: v[0] }) }; }),
       storyTabs: ['Marco H.', 'Mehmet Y.', 'Andriy K.', 'Murat Ş.'].map((n, i) => ({ name: n, selected: S.story === i ? 'true' : 'false', bg: S.story === i ? accent : '#FFFFFF', fg: S.story === i ? '#FFFFFF' : accent, pick: () => this.setState({ story: i }) })),

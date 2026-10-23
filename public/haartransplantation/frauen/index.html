@@ -391,6 +391,7 @@ input[type=range]{accent-color:#8A6A3D}
 </section>
 
 <!-- STIMMEN -->
+<sc-if value="{{showReviews}}" hint-placeholder-val="{{ false }}">
 <section style="padding: 96px 24px">
 <div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 40px">
 <h2 style="margin: 0; font-family: 'Jost', sans-serif; font-weight: 500; font-size: 42px; line-height: 1.15">Was Patientinnen über uns sagen</h2>
@@ -406,6 +407,7 @@ input[type=range]{accent-color:#8A6A3D}
 </div>
 </section>
 
+</sc-if>
 <!-- FAQ -->
 <section id="faq" style="background: #FFFFFF; padding: 96px 24px">
 <div style="max-width: 880px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px">
@@ -659,7 +661,9 @@ class Component extends DCLogic {
         ['Nachsorge persönlich vor Ort', false], ['Deutschsprachiges Ärzteteam', false], ['14 Standorte in Deutschland', false]
       ].map((r, i, a) => ({ label: r[0], other: r[1], noOther: !r[1], radius: i === 0 ? '14px 0 0 0' : (i === a.length - 1 ? '0 0 0 14px' : '0'), othRadius: i === 0 ? '0 14px 0 0' : (i === a.length - 1 ? '0 0 14px 0' : '0'), oursRadius: i === a.length - 1 ? '0 0 28px 28px' : '0', oursPad: i === a.length - 1 ? '30px' : '12px' })),
       included: included, steps: steps, timeline: timeline, reviews: reviews, faqs: faqs,
-      showStories: P.showStories ?? true,
+      showStories: P.showStories ?? false,
+      // Zitate erst mit echten Bewertungen (23.10.2026)
+      showReviews: P.showReviews ?? false,
       storyTabs: ['[Patientin 1]', '[Patientin 2]', '[Patientin 3]', '[Patientin 4]'].map((n, i) => ({ name: n, selected: S.story === i ? 'true' : 'false', bg: S.story === i ? accent : '#FFFFFF', fg: S.story === i ? '#FFFFFF' : accent, pick: () => this.setState({ story: i }) })),
       storyFrames: (() => {
         const L = ['1. Tag', '1. Monat', '3. Monat', '5. Monat', 'Das Ergebnis nach 6 Monaten'];
