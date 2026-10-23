@@ -30,7 +30,9 @@
       <section class="cl__band" aria-label="Cashback je Status">
         <div class="cl__bandRaster">
           <div v-for="s in STUFEN" :key="s.name">
-            <p class="cl__bandName">{{ s.name }}</p>
+            <p class="cl__bandName">
+              <span class="cl__stufe cl__stufe--gross" :class="`cl__stufe--${s.name.toLowerCase()}`">{{ s.name }}</span>
+            </p>
             <p class="cl__bandZahl">{{ prozent(s.cashbackProzent) }} Cashback</p>
             <p class="cl__bandText">{{ s.ab ? `ab ${euro(s.ab)} Umsatz` : "ab Anmeldung" }}</p>
           </div>
@@ -168,7 +170,7 @@ const zeilen = [
   { name: "Status-Welcome-Guthaben", werte: STUFEN.map((s) => (s.geschenkEuro ? euro(s.geschenkEuro) : "–")) },
   { name: "Bonus Beauty-Sparbuch", werte: STUFEN.map((s) => `${prozent(s.sparbuchBonusProzent)} im Jahr`) },
   { name: "Sonderaktionen", werte: STUFEN.map((s) => ja(s.aktionen)) },
-  { name: "Wunscharzt buchen", werte: STUFEN.map((s) => ja(s.wunscharzt)) },
+  { name: "Priority Booking: Wunscharzt wählen", werte: STUFEN.map((s) => ja(s.wunscharzt)) },
   { name: "Priority Support", werte: STUFEN.map((s) => ja(s.bevorzugterService)) },
   { name: "Mitgliedskarte in der App", werte: STUFEN.map(() => "✓") },
 ];

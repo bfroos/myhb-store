@@ -265,6 +265,21 @@
   border-color: var(--cl-schwarz);
   color: #fff;
 }
+.cl__stufe--basic {
+  background: #d9cfc8;
+  border-color: #d9cfc8;
+  color: #111;
+}
+/* Michael 23.10.2026: Status-Namen in der schwarzen Leiste hervorheben. */
+.cl__stufe--gross {
+  padding: 9px 20px;
+  font-size: 17px;
+  letter-spacing: 3px;
+  border-width: 2px;
+}
+.cl__band .cl__stufe--black {
+  border-color: #c9a96e;
+}
 .cl__karten {
   display: none;
   list-style: none;
