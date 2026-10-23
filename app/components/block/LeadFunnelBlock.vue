@@ -8,7 +8,7 @@
       </span>
     </div>
 
-    <section :class="istHero ? ['lp-hero', 'theme-strong', { 'lp-hero--ohne-bild': !heroImage }] : 'lp-plain'">
+    <section :class="istHero ? ['lp-hero', 'theme-strong', { 'lp-hero--ohne-bild': !heroImage && !ersatzBild }] : 'lp-plain'">
       <!-- Hero-Text links -->
       <div v-if="istHero" class="lp-hero__text">
         <p v-if="eyebrow" class="lp-hero__eyebrow">{{ eyebrow }}</p>
@@ -139,6 +139,15 @@
           class="lp-hero__bild"
           loading="eager"
         />
+        <img
+          v-else-if="istHero && ersatzBild"
+          :src="ersatzBild"
+          alt="Arzt von MYHB zeigt auf die kostenlose Analyse"
+          class="lp-hero__bild"
+          width="800"
+          height="856"
+          loading="eager"
+        />
       </div>
     </section>
   </div>
@@ -207,6 +216,13 @@ const KONTAKTWEGE = [
 ] as const;
 
 const istHero = computed(() => props.variant === "hero");
+// Michaels Kopf zeigt den Arzt neben dem Formular. Solange in Strapi kein
+// heroImage hinterlegt ist, nimmt die Haar-Seite den Freisteller aus seinem
+// Entwurf (public/lp-bilder, sauber freigestellt 23.10.2026).
+const ERSATZ_BILD: Record<string, string> = {
+  Haartransplantation: "/lp-bilder/haartransplantation-arzt.webp",
+};
+const ersatzBild = computed(() => (props.heroImage ? null : ERSATZ_BILD[props.behandlung] ?? null));
 const checkListe = computed(() => (Array.isArray(props.checks) ? props.checks.filter(Boolean) : []));
 const trustListe = computed(() => (Array.isArray(props.trustItems) ? props.trustItems.filter(Boolean) : []));
 const clipId = `funnel-clip-${useId()}`;
