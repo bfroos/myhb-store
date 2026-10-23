@@ -33,8 +33,8 @@
             <p class="cl__bandName">
               <span class="cl__stufe cl__stufe--gross" :class="`cl__stufe--${s.name.toLowerCase()}`">{{ s.name }}</span>
             </p>
-            <p class="cl__bandZahl">{{ prozent(s.cashbackProzent) }} Cashback</p>
-            <p class="cl__bandText">{{ s.ab ? `ab ${euro(s.ab)} Umsatz` : "ab Anmeldung" }}</p>
+            <p class="cl__bandZahl">{{ prozent(s.cashbackProzent) }}</p>
+            <p class="cl__bandText">Cashback<br>{{ s.ab ? `ab ${euro(s.ab)} Umsatz` : "ab Anmeldung" }}</p>
           </div>
         </div>
         <p class="cl__bandFuss">
