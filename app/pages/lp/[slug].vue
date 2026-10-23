@@ -26,6 +26,9 @@ if (pageLoaded) {
   // Reihenfolge zaehlt: setPageSeo liest die von usePageI18nParams gemeldete
   // Sprachabdeckung, um nur existierende hreflang-Alternates auszugeben.
   usePageI18nParams(localizations.value, "slug");
-  await setPageSeo(seo.value);
+  // Landingpages sind fuer Mailings und Kampagnen gedacht, nicht fuer Google:
+  // Sie sollen den Standortseiten (z. B. Haartransplantation Koeln) keine
+  // Rankings wegnehmen (Benjamin, 23.10.2026).
+  await setPageSeo({ ...(seo.value ?? {}), metaRobots: "noindex, follow" } as typeof seo.value);
 }
 </script>
