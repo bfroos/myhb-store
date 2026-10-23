@@ -115,6 +115,9 @@ export default defineNuxtConfig({
         display: "swap", // verhindert FOIT; dank Fallback-Metriken CLS-neutral
         fallbacks: ["system-ui", "Arial"],
       },
+      // Michaels Look fuer Klinik-Landingpages (assets/css/lp-michael.css)
+      { name: "Jost", weights: [400, 500, 600], styles: ["normal"], subsets: ["latin"], display: "swap", fallbacks: ["Inter", "Arial"] },
+      { name: "DM Sans", weights: [400, 500, 700], styles: ["normal"], subsets: ["latin"], display: "swap", fallbacks: ["Inter", "Arial"] },
     ],
   },
 
