@@ -82,6 +82,9 @@ body .lp-michael .lp-hero__eyebrow { color: #c9a36a; letter-spacing: 0.18em; }
 body .lp-michael .lp-hero__lead { color: #d8d2c8; }
 body .lp-michael .lp-hero__checks svg { color: #c9a36a; }
 body .lp-michael .lp-hero__bild { max-width: 460px; }
+@media (max-width: 1023px) {
+  body .lp-michael .lp-hero__bild { max-width: 300px; }
+}
 
 /* ---------- Formular ---------- */
 body .lp-michael .funnel { border-radius: 16px; }
