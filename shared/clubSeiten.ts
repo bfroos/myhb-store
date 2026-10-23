@@ -57,12 +57,14 @@ export const STATUS_FENSTER_MONATE = 36;
 
 // Benjamin 21.10.2026, abweichend vom Rechner: Basic behaelt 1 % Cashback wie
 // seit 19.10.2026 fuer alle, White 1,5 % (statt 0 / 1 %), kein Startguthaben.
+// Benjamin 23.10.2026 (nach Michaels Mail-Werkstatt): Wunscharzt schon ab WHITE,
+// Status-Namen in Versalien, der Geburtstagsbonus wird nicht genannt (Ueberraschung).
 
 export const STUFEN: Stufe[] = [
-  { name: "Basic", ab: null, cashbackProzent: 1, geburtstagEuro: 10, geschenkEuro: null, sparbuchBonusProzent: 6, aktionen: false, wunscharzt: false, bevorzugterService: false },
-  { name: "White", ab: 1000, cashbackProzent: 1.5, geburtstagEuro: 20, geschenkEuro: 50, sparbuchBonusProzent: 7, aktionen: false, wunscharzt: false, bevorzugterService: false },
-  { name: "Grey", ab: 3000, cashbackProzent: 2, geburtstagEuro: 30, geschenkEuro: 100, sparbuchBonusProzent: 8, aktionen: true, wunscharzt: true, bevorzugterService: true },
-  { name: "Black", ab: 5000, cashbackProzent: 3, geburtstagEuro: 50, geschenkEuro: 200, sparbuchBonusProzent: 9, aktionen: true, wunscharzt: true, bevorzugterService: true },
+  { name: "BASIC", ab: null, cashbackProzent: 1, geburtstagEuro: 10, geschenkEuro: null, sparbuchBonusProzent: 6, aktionen: false, wunscharzt: false, bevorzugterService: false },
+  { name: "WHITE", ab: 1000, cashbackProzent: 1.5, geburtstagEuro: 20, geschenkEuro: 50, sparbuchBonusProzent: 7, aktionen: false, wunscharzt: true, bevorzugterService: false },
+  { name: "GREY", ab: 3000, cashbackProzent: 2, geburtstagEuro: 30, geschenkEuro: 100, sparbuchBonusProzent: 8, aktionen: true, wunscharzt: true, bevorzugterService: true },
+  { name: "BLACK", ab: 5000, cashbackProzent: 3, geburtstagEuro: 50, geschenkEuro: 200, sparbuchBonusProzent: 9, aktionen: true, wunscharzt: true, bevorzugterService: true },
 ];
 
 export const CLUB = {
@@ -70,10 +72,10 @@ export const CLUB = {
   /**
    * Jedes Bonusguthaben (auch der Sparbuch-Bonus) gilt ab Gutschrift so lange,
    * und wer so lange nicht da war, verliert alles Bonusguthaben (Benjamin
-   * 21.10.2026). Eingezahltes Geld verfaellt nie.
+   * 21.10.2026, am 23.10.2026 von 12 auf 36 Monate). Eingezahltes Geld verfaellt nie.
    */
-  bonusGueltigMonate: 12,
-  verfallOhneBesuchMonate: 12,
+  bonusGueltigMonate: 36,
+  verfallOhneBesuchMonate: 36,
   loloyalPunkteJeEuro: 100,
 };
 

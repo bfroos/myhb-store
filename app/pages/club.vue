@@ -5,11 +5,11 @@
         <div class="cl__heroBild" role="img" aria-label="Behandlung bei MY HEALTH & BEAUTY" style="background-image: url('/img/club/hero.jpg')" />
         <div class="cl__heroText">
           <p class="cl__eyebrow">MY Club · Treueprogramm</p>
-          <h1>Je öfter du kommst, desto mehr bekommst du zurück.</h1>
+          <h1>Treue, die sich auszahlt!</h1>
           <p class="cl__lead">
-            Melde dich kostenlos in der MY App an. Ab dann bekommst du von jeder
-            Behandlung Guthaben für den nächsten Besuch, dazu Geschenke und mit
-            jeder Stufe mehr Vorteile.
+            Unser neues Treueprogramm MY Club ist da! Melde dich kostenlos in der
+            MY App an. Mit jeder Behandlung bekommst du Cashback für den nächsten
+            Besuch und mit jedem Status mehr Guthaben, Geschenke und Vorteile.
           </p>
           <div class="cl__knoepfe">
             <a class="cl__knopf" :href="appUrl('club-seite', 'club')" @click="trackClick('club-seite', 'app')">
@@ -27,16 +27,16 @@
         </div>
       </section>
 
-      <section class="cl__band" aria-label="Guthaben zurück je Stufe">
+      <section class="cl__band" aria-label="Cashback je Status">
         <div class="cl__bandRaster">
           <div v-for="s in STUFEN" :key="s.name">
             <p class="cl__bandName">{{ s.name }}</p>
-            <p class="cl__bandZahl">{{ prozent(s.cashbackProzent) }}</p>
+            <p class="cl__bandZahl">{{ prozent(s.cashbackProzent) }} Cashback</p>
             <p class="cl__bandText">{{ s.ab ? `ab ${euro(s.ab)} Umsatz` : "ab Anmeldung" }}</p>
           </div>
         </div>
         <p class="cl__bandFuss">
-          Guthaben zurück von jeder bezahlten Behandlung. Deine Stufe richtet sich
+          Cashback von jeder bezahlten Behandlung. Dein Status richtet sich
           nach deinem Umsatz in den letzten {{ STATUS_FENSTER_MONATE }} Monaten.
         </p>
       </section>
@@ -45,14 +45,14 @@
         <p class="cl__eyebrow">In drei Schritten</p>
         <ol class="cl__schritte">
           <li><span><strong>In der App anmelden.</strong> Kostenlos, mit deiner E-Mail-Adresse. Du bist sofort im MY Club.</span></li>
-          <li><span><strong>Behandlung genießen.</strong> Dein Guthaben wird nach dem Bezahlen automatisch gutgeschrieben.</span></li>
+          <li><span><strong>Behandlung genießen.</strong> Dein Cashback wird nach dem Bezahlen automatisch gutgeschrieben.</span></li>
           <li><span><strong>Beim nächsten Besuch einlösen.</strong> Sag am Empfang: „Bitte mit Guthaben.“</span></li>
         </ol>
       </section>
 
       <section class="cl__abschnitt cl__abschnitt--hell">
         <p class="cl__eyebrow">Alle Vorteile</p>
-        <h2>Deine Stufe, deine Vorteile</h2>
+        <h2>Dein Status, deine Vorteile</h2>
         <div class="cl__tabelle">
           <table>
             <thead>
@@ -93,8 +93,8 @@
             <p class="cl__eyebrow">Neu: Beauty-Sparbuch</p>
             <h2>Jeden Monat ein bisschen für deine nächste Behandlung</h2>
             <p class="cl__text">
-              Ab {{ euro(SPARBUCH.mindestRate) }} im Monat zurücklegen, ohne Gebühren,
-              und jeden Monat einen Beauty-Bonus dazubekommen.
+              Spare für deine Wunschbehandlung: ab {{ euro(SPARBUCH.mindestRate) }} im Monat,
+              ohne zusätzliche Gebühren, und jeden Monat einen Beauty-Bonus dazu.
             </p>
             <NuxtLinkLocale to="/beauty-sparbuch" class="cl__knopf cl__knopf--rand" @click="trackClick('club-seite', 'sparbuch')">
               So funktioniert es
@@ -104,9 +104,9 @@
             <p class="cl__eyebrow">Weiterempfehlen</p>
             <p class="cl__boxZahl">{{ euro(CLUB.empfehlungEuro) }} + {{ euro(CLUB.empfehlungEuro) }}</p>
             <p class="cl__text">
-              Teil deinen persönlichen Link aus der App. Wer damit zum ersten Mal
-              bucht, bekommt {{ euro(CLUB.empfehlungEuro) }} auf die erste Behandlung.
-              Du bekommst {{ euro(CLUB.empfehlungEuro) }} Guthaben, sobald sie bezahlt ist.
+              Teil deinen persönlichen Weiterempfehlungslink aus der App. Die empfohlene
+              Person bekommt {{ euro(CLUB.empfehlungEuro) }} auf ihre erste Behandlung.
+              Du bekommst {{ euro(CLUB.empfehlungEuro) }} Guthaben in deinem Kundenkonto für weitere Behandlungen.
             </p>
             <a class="cl__knopf cl__knopf--rand" :href="appUrl('club-seite', 'club')" @click="trackClick('club-seite', 'app')">Link holen</a>
           </div>
@@ -119,7 +119,7 @@
             <p class="cl__eyebrow">Deine App</p>
             <h2>Alles für deine Behandlung. An einem Ort.</h2>
             <div class="cl__vorteile">
-              <p><strong>Guthaben und Stufe</strong>Du siehst jederzeit, wie viel du hast und was bis zur nächsten Stufe fehlt.</p>
+              <p><strong>Guthaben und Status</strong>Du siehst jederzeit, wie viel du hast und was bis zum nächsten Status fehlt.</p>
               <p><strong>Buchen, wann du willst</strong>Rund um die Uhr, deine letzte Behandlung mit einem Tipp nochmal.</p>
               <p><strong>Erinnerung inklusive</strong>Am Vortag und zwei Stunden vor deinem Termin.</p>
               <p><strong>Dein Behandlungsplan</strong>Dein Arzt legt ihn an, du siehst, was als Nächstes ansteht.</p>
@@ -161,14 +161,15 @@ const { t } = useI18n();
 const { enabled, appUrl, trackClick } = useClubSeiten();
 
 const ja = (b: boolean) => (b ? "✓" : "–");
+// Wortlaut Michael (Mail-Werkstatt 23.10.2026). Der Geburtstagsbonus bleibt eine
+// Ueberraschung und steht deshalb nicht in der Tabelle (Benjamin 23.10.2026).
 const zeilen = [
-  { name: "Guthaben zurück bei jedem Besuch", werte: STUFEN.map((s) => prozent(s.cashbackProzent)) },
-  { name: "Geburtstagsgeschenk", werte: STUFEN.map((s) => euro(s.geburtstagEuro)) },
-  { name: "Geschenk beim Erreichen der Stufe", werte: STUFEN.map((s) => (s.geschenkEuro ? euro(s.geschenkEuro) : "–")) },
-  { name: "Bonus im Beauty-Sparbuch", werte: STUFEN.map((s) => `${prozent(s.sparbuchBonusProzent)} im Jahr`) },
-  { name: "Aktionen für ausgewählte Behandlungen", werte: STUFEN.map((s) => ja(s.aktionen)) },
-  { name: "Wunscharzt fest buchen", werte: STUFEN.map((s) => ja(s.wunscharzt)) },
-  { name: "Bevorzugter Service", werte: STUFEN.map((s) => ja(s.bevorzugterService)) },
+  { name: "Cashback je Besuch", werte: STUFEN.map((s) => prozent(s.cashbackProzent)) },
+  { name: "Status-Welcome-Guthaben", werte: STUFEN.map((s) => (s.geschenkEuro ? euro(s.geschenkEuro) : "–")) },
+  { name: "Bonus Beauty-Sparbuch", werte: STUFEN.map((s) => `${prozent(s.sparbuchBonusProzent)} im Jahr`) },
+  { name: "Sonderaktionen", werte: STUFEN.map((s) => ja(s.aktionen)) },
+  { name: "Wunscharzt buchen", werte: STUFEN.map((s) => ja(s.wunscharzt)) },
+  { name: "Priority Support", werte: STUFEN.map((s) => ja(s.bevorzugterService)) },
   { name: "Mitgliedskarte in der App", werte: STUFEN.map(() => "✓") },
 ];
 
@@ -178,8 +179,8 @@ const fragen = [
     antwort: "Nichts. Du meldest dich kostenlos in der MY App an und bist sofort Mitglied.",
   },
   {
-    frage: "Wo sehe ich mein Guthaben und meine Stufe?",
-    antwort: "In der MY App. Dort stehen dein Guthaben, deine Stufe und wie viel dir bis zur nächsten Stufe fehlt.",
+    frage: "Wo sehe ich mein Guthaben und meinen Status?",
+    antwort: "In der MY App. Dort stehen dein Guthaben, dein Status und wie viel dir bis zum nächsten Status fehlt.",
   },
   {
     frage: "Wie löse ich mein Guthaben ein?",
@@ -187,7 +188,7 @@ const fragen = [
   },
   {
     frage: "Wie lange gilt mein Guthaben?",
-    antwort: `Jedes Guthaben, das wir dir schenken, gilt ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift. Warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt alles geschenkte Guthaben. Geld, das du selbst ins Beauty-Sparbuch einzahlst, verfällt nie.`,
+    antwort: `Alles Guthaben, das wir dir schenken, ist ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift gültig, auch der Beauty-Bonus. Warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt das geschenkte Guthaben. Guthaben, das du ins Beauty-Sparbuch einzahlst, ist unbegrenzt gültig.`,
   },
   {
     frage: "Kann ich mir Guthaben auszahlen lassen?",
@@ -200,12 +201,12 @@ const fragen = [
 ];
 
 useHead({
-  title: "MY Club – Guthaben bei jedem Besuch | MY Health & Beauty",
+  title: "MY Club – Cashback bei jedem Besuch | MY Health & Beauty",
   meta: [
     {
       name: "description",
       content:
-        "Das Treueprogramm von MY HEALTH & BEAUTY: kostenlos in der App anmelden, bei jedem Besuch 1 bis 3 % Guthaben zurück, Geschenke und Stufen White, Grey und Black.",
+        "Das Treueprogramm von MY HEALTH & BEAUTY: kostenlos in der App anmelden, bei jedem Besuch 1 bis 3 % Cashback, Geschenke und die Status WHITE, GREY und BLACK.",
     },
     ...(enabled.value ? [] : [{ name: "robots", content: "noindex, nofollow" }]),
   ],

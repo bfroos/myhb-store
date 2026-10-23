@@ -7,10 +7,10 @@
           <p class="cl__eyebrow">Beauty-Sparbuch · Teil vom MY Club</p>
           <h1>Du findest Ratenzahlung und Gebühren doof? Dann haben wir was für dich.</h1>
           <p class="cl__lead">
-            Leg vorher zurück statt hinterher abzuzahlen: ab {{ euro(SPARBUCH.mindestRate) }}
-            im Monat, ohne Gebühren. Jeden Monat schreiben wir dir einen Beauty-Bonus gut,
-            {{ prozent(basis.sparbuchBonusProzent) }} im Jahr, mit deiner Club-Stufe bis
-            {{ prozent(hoechste.sparbuchBonusProzent) }}.
+            Spare für deine Wunschbehandlung: ab {{ euro(SPARBUCH.mindestRate) }} im Monat,
+            ohne zusätzliche Gebühren. Du erhältst jeden Monat einen Beauty-Bonus:
+            {{ prozent(basis.sparbuchBonusProzent) }} im Jahr und als Statuskunde sogar bis zu
+            {{ prozent(hoechste.sparbuchBonusProzent) }} Bonus.
           </p>
           <div class="cl__knoepfe">
             <a class="cl__knopf" :href="appUrl('sparbuch-seite', 'sparbuch')" @click="trackClick('sparbuch-seite', 'app')">
@@ -84,7 +84,7 @@
               Du legst {{ SPARBUCH.beispielMonate }} Monate lang jeden Monat
               {{ euro(SPARBUCH.beispielRate) }} zurück. Dann hast du
               {{ euro(beispielBasis.eingezahlt) }} Guthaben und rund
-              {{ euro(beispielBasis.bonus) }} Beauty-Bonus dazu. In der Stufe
+              {{ euro(beispielBasis.bonus) }} Beauty-Bonus dazu. Im Status
               {{ hoechste.name }} sind es rund {{ euro(beispielHoechste.bonus) }}.
             </p>
             <p class="cl__klein">
@@ -93,7 +93,7 @@
             </p>
           </div>
           <div class="cl__box">
-            <p class="cl__eyebrow">Dein Bonus nach Club-Stufe</p>
+            <p class="cl__eyebrow">Dein Bonus nach Status</p>
             <div class="cl__tabelle" style="width: 100%">
               <table style="min-width: 0">
                 <tbody>
@@ -172,7 +172,7 @@ const fragen = [
   },
   {
     frage: "Wie lange gilt mein Guthaben?",
-    antwort: `Was du einzahlst, verfällt nie. Der Beauty-Bonus ist geschenktes Guthaben: Jeder Bonus gilt ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift, und warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt dein Bonus.`,
+    antwort: `Guthaben, das du einzahlst, ist unbegrenzt gültig. Der Beauty-Bonus ist geschenktes Guthaben: Er ist ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift gültig, und warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt dein Bonus.`,
   },
   {
     frage: "Wie lange muss ich dabei bleiben?",
