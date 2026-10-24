@@ -60,25 +60,31 @@
 
   <UiLayoutSectionBlock spacing="sibling">
     <div class="gutschein__fragen theme-light">
-      <h2>So funktioniert's</h2>
-      <ol>
-        <li>Betrag wählen und bezahlen.</li>
-        <li>Der Gutschein mit Code kommt sofort per E-Mail.</li>
-        <li>Termin buchen und den Code an der Kasse im Standort nennen oder zeigen.</li>
-      </ol>
-      <h2>Lieber in Raten zahlen?</h2>
-      <p>
-        Kauf den Gutschein im Wert deiner Behandlung und wähl beim Bezahlen Klarna oder PayPal mit
-        Ratenzahlung. Eingelöst wird der Gutschein beim Termin.
-      </p>
-      <h2>Wo kann ich den Gutschein einlösen?</h2>
-      <p>
-        In allen Standorten von MY HEALTH & BEAUTY, für jede Behandlung. Reicht der Betrag nicht,
-        zahlst du den Rest vor Ort; ein Restguthaben bleibt auf dem Gutschein.
-      </p>
-      <p>
-        <NuxtLink to="/standorte">Alle Standorte ansehen</NuxtLink>
-      </p>
+      <div class="gutschein__frage">
+        <h2>So funktioniert's</h2>
+        <ol>
+          <li>Betrag wählen und bezahlen.</li>
+          <li>Der Gutschein mit Code kommt sofort per E-Mail.</li>
+          <li>Termin buchen und den Code an der Kasse im Standort nennen oder zeigen.</li>
+        </ol>
+      </div>
+      <div class="gutschein__frage">
+        <h2>Lieber in Raten zahlen?</h2>
+        <p>
+          Kauf den Gutschein im Wert deiner Behandlung und wähl beim Bezahlen Klarna oder PayPal
+          mit Ratenzahlung. Eingelöst wird der Gutschein beim Termin.
+        </p>
+      </div>
+      <div class="gutschein__frage">
+        <h2>Wo kann ich den Gutschein einlösen?</h2>
+        <p>
+          In allen Standorten von MY HEALTH & BEAUTY, für jede Behandlung. Reicht der Betrag
+          nicht, zahlst du den Rest vor Ort; ein Restguthaben bleibt auf dem Gutschein.
+        </p>
+        <p>
+          <NuxtLink to="/standorte">Alle Standorte ansehen</NuxtLink>
+        </p>
+      </div>
     </div>
   </UiLayoutSectionBlock>
 </template>
@@ -130,11 +136,22 @@ useHead({
 </script>
 
 <style scoped>
+.gutschein,
+.gutschein__fragen {
+  border-radius: var(--border-radius-card);
+  padding: var(--space-600);
+}
+@media (min-width: 900px) {
+  .gutschein,
+  .gutschein__fragen {
+    padding: var(--space-900);
+  }
+}
 .gutschein {
   display: grid;
-  gap: var(--space-800, 32px);
+  gap: var(--space-800);
   grid-template-columns: 1fr;
-  align-items: start;
+  align-items: center;
 }
 @media (min-width: 900px) {
   .gutschein {
@@ -143,56 +160,70 @@ useHead({
 }
 .gutschein__bild img {
   width: 100%;
-  max-width: 420px;
+  max-width: 520px;
   margin: 0 auto;
   height: auto;
-  border-radius: 16px;
+  border-radius: var(--border-radius-card-sm);
   display: block;
 }
 .gutschein__kauf {
   display: flex;
   flex-direction: column;
-  gap: var(--space-500, 20px);
+  gap: var(--space-600);
+  max-width: 560px;
 }
 .gutschein__titel {
   margin: 0;
+  font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+  line-height: 1.1;
 }
 .gutschein__intro,
 .gutschein__hinweis {
   margin: 0;
-  color: var(--color-text-light, #555);
+  color: var(--color-text-light);
 }
 .gutschein__hinweis {
   font-size: var(--font-sm, 14px);
+  text-align: center;
 }
 .gutschein__betraege {
   border: 0;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
-  gap: 8px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-300);
+}
+@media (max-width: 480px) {
+  .gutschein__betraege {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 .gutschein__betraege legend {
   font-weight: 600;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-400);
+  padding: 0;
 }
 .gutschein__betrag {
-  padding: 12px 8px;
+  padding: 12px 4px;
   border-radius: 12px;
   border: 1px solid var(--color-gray-200, #e5e5e5);
   background: var(--color-card-bg-light, #fff);
   color: inherit;
   font: inherit;
   font-weight: 600;
+  white-space: nowrap;
   cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
 }
 .gutschein__betrag:hover {
   border-color: var(--color-gray-700, #444);
 }
-.gutschein__betrag--aktiv {
-  border-color: currentColor;
-  box-shadow: inset 0 0 0 1px currentColor;
+.gutschein__betrag--aktiv,
+.gutschein__betrag--aktiv:hover {
+  background: var(--color-black);
+  border-color: var(--color-black);
+  color: var(--color-white);
 }
 .gutschein__menge {
   display: flex;
@@ -208,21 +239,35 @@ useHead({
   background: var(--color-card-bg-light, #fff);
 }
 .gutschein__fragen {
-  max-width: 720px;
+  display: grid;
+  gap: var(--space-700);
+  grid-template-columns: 1fr;
 }
-.gutschein__fragen h2 {
-  margin: var(--space-700, 28px) 0 8px;
-  font-size: clamp(1.35rem, 1.1rem + 1vw, 1.75rem);
+@media (min-width: 900px) {
+  .gutschein__fragen {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
-.gutschein__fragen h2:first-child {
-  margin-top: 0;
+.gutschein__frage h2 {
+  margin: 0 0 var(--space-400);
+  font-size: clamp(1.2rem, 1.05rem + 0.6vw, 1.5rem);
+  line-height: 1.25;
 }
-.gutschein__fragen ol {
+.gutschein__frage p {
+  margin: 0 0 var(--space-300);
+  color: var(--color-text-light);
+}
+.gutschein__frage a {
+  color: var(--color-text);
+  font-weight: 600;
+}
+.gutschein__frage ol {
   list-style: decimal;
-  padding-left: 1.4em;
+  padding-left: 1.2em;
   margin: 0;
+  color: var(--color-text-light);
 }
-.gutschein__fragen li + li {
-  margin-top: 4px;
+.gutschein__frage li + li {
+  margin-top: var(--space-200);
 }
 </style>
