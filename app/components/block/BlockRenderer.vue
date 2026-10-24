@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent } from "vue";
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
+import { KLINIK_AUSGEBLENDETE_BLOECKE, istAnfrageModal, modalBehandlung } from "#shared/klinik";
 
 const props = defineProps<{
   blocks: StrapiBlock[];
@@ -15,6 +16,32 @@ const getBlockProps = (block: StrapiBlock) => {
     );
   }
   return props;
+};
+
+// Klinik-Regel (E28 #1636): auf OP-Seiten keine 20-%-Bloecke, und
+// "Termin buchen" fuehrt in den Anfrage-Funnel.
+const klinikZiel = useKlinikSeite();
+const sichtbareBloecke = computed(() =>
+  klinikZiel.value
+    ? props.blocks.filter((b) => !KLINIK_AUSGEBLENDETE_BLOECKE.has(b.__component))
+    : props.blocks,
+);
+const { openOpAnfrage } = useOpAnfrageDialog();
+const openBooking = async (block: StrapiBlock) => {
+  const ziel = klinikZiel.value;
+  if (istAnfrageModal(ziel)) {
+    openOpAnfrage(modalBehandlung(ziel));
+    return;
+  }
+  if (ziel) {
+    if (ziel.startsWith("#")) {
+      document.querySelector(ziel)?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+    await navigateTo(ziel);
+    return;
+  }
+  await openBlockTarget((block as any).bookingCta ?? (block as any).cta);
 };
 
 const openBlockTarget = async (target?: { to?: string; href?: string } | null) => {
@@ -52,6 +79,12 @@ const landingBlockKeys = new Set<string>([
   "blocks.promo-strip",
   "blocks.promo-hero",
   "blocks.promo-floating-sticker",
+  "blocks.lead-funnel",
+  "blocks.price-calculator",
+  "blocks.stat-strip",
+  "blocks.comparison-table",
+  "blocks.info-cards",
+  "blocks.steps-timeline",
 ]);
 
 const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
@@ -140,6 +173,13 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
   "blocks.promo-strip": defineAsyncComponent(() => import("./PromoStripBlock.vue")),
   "blocks.promo-hero": defineAsyncComponent(() => import("./PromoHeroBlock.vue")),
   "blocks.promo-floating-sticker": defineAsyncComponent(() => import("./PromoFloatingStickerBlock.vue")),
+  // E28 (myhb-app/myhb-os#1638/#1639): OP-Landingpages
+  "blocks.lead-funnel": defineAsyncComponent(() => import("./LeadFunnelBlock.vue")),
+  "blocks.price-calculator": defineAsyncComponent(() => import("./PriceCalculatorBlock.vue")),
+  "blocks.stat-strip": defineAsyncComponent(() => import("./StatStripBlock.vue")),
+  "blocks.comparison-table": defineAsyncComponent(() => import("./ComparisonTableBlock.vue")),
+  "blocks.info-cards": defineAsyncComponent(() => import("./InfoCardsBlock.vue")),
+  "blocks.steps-timeline": defineAsyncComponent(() => import("./StepsTimelineBlock.vue")),
   "blog.cta": defineAsyncComponent(() => import("../blog/CtaBlock.vue")),
   "blog.image": defineAsyncComponent(() => import("../blog/ImageBlock.vue")),
   "blog.newsletter": defineAsyncComponent(
@@ -150,7 +190,7 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
 </script>
 
 <template>
-  <template v-for="(block, index) in blocks" :key="block.id">
+  <template v-for="(block, index) in sichtbareBloecke" :key="block.id">
     <UiLayoutSectionBlock
       v-if="landingBlockKeys.has(block.__component)"
       :id="anchorOf?.(block)"
@@ -162,7 +202,7 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
         @primary="openBlockTarget((block as any).primaryCta)"
         @secondary="openBlockTarget((block as any).secondaryCta)"
         @cta="openBlockTarget((block as any).cta)"
-        @book="openBlockTarget((block as any).bookingCta ?? (block as any).cta)"
+        @book="openBooking(block)"
       />
     </UiLayoutSectionBlock>
     <component

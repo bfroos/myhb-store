@@ -307,6 +307,7 @@ https://www.myhealthandbeauty.com/en/products/skinbooster/profhilo
 https://www.myhealthandbeauty.com/en/products/skinbooster/teosyal-redensity-1
 https://www.myhealthandbeauty.com/en/treatments
 https://www.myhealthandbeauty.com/en/treatments/anti-haarausfall
+https://www.myhealthandbeauty.com/en/treatments/anti-haarausfall/hair-boost-infusion4
 https://www.myhealthandbeauty.com/en/treatments/anti-haarausfall/kostenlose-haaranalyse
 https://www.myhealthandbeauty.com/en/treatments/anti-haarausfall/mesotherapie-haare
 https://www.myhealthandbeauty.com/en/treatments/anti-haarausfall/prp-haartherapie
@@ -324,7 +325,7 @@ https://www.myhealthandbeauty.com/en/treatments/botox/frown-line
 https://www.myhealthandbeauty.com/en/treatments/botox/full-face-botox
 https://www.myhealthandbeauty.com/en/treatments/botox/halsfalten-platysma
 https://www.myhealthandbeauty.com/en/treatments/botox/hyperhidrosis-excessive-sweating
-https://www.myhealthandbeauty.com/en/treatments/botox/kraehenfuesse
+https://www.myhealthandbeauty.com/en/treatments/botox/laugh-lines
 https://www.myhealthandbeauty.com/en/treatments/botox/lipflip
 https://www.myhealthandbeauty.com/en/treatments/botox/masseter
 https://www.myhealthandbeauty.com/en/treatments/botox/migraenebehandlung
@@ -336,16 +337,18 @@ https://www.myhealthandbeauty.com/en/treatments/fettwegspritze/lemon-bottle-hip
 https://www.myhealthandbeauty.com/en/treatments/fettwegspritze/lemon-bottle-knee
 https://www.myhealthandbeauty.com/en/treatments/fettwegspritze/lemon-bottle-thigh
 https://www.myhealthandbeauty.com/en/treatments/fettwegspritze/lemon-bottle-upper-arm
-https://www.myhealthandbeauty.com/en/treatments/hair-boost-infusion4
 https://www.myhealthandbeauty.com/en/treatments/hyaluron
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/cheek-augmentation
+https://www.myhealthandbeauty.com/en/treatments/hyaluron/chin-correction
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/cleavage
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/full-face-hyaluron
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/hands
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/hylase
-https://www.myhealthandbeauty.com/en/treatments/hyaluron/kinnkorrektur
+https://www.myhealthandbeauty.com/en/treatments/hyaluron/jawline
+https://www.myhealthandbeauty.com/en/treatments/hyaluron/lippen-aufspritzen
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/lippenkorrektur
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/marionettenfalten
+https://www.myhealthandbeauty.com/en/treatments/hyaluron/nasolabial-fold
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/plisseefalten
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/russian-lips
 https://www.myhealthandbeauty.com/en/treatments/hyaluron/under-eye-dark-circles-treatment
@@ -357,9 +360,6 @@ https://www.myhealthandbeauty.com/en/treatments/infusionen/power-infusion-glutat
 https://www.myhealthandbeauty.com/en/treatments/infusionen/regenerations-infusion
 https://www.myhealthandbeauty.com/en/treatments/infusionen/relax-infusion
 https://www.myhealthandbeauty.com/en/treatments/infusionen/vitamin-c-infusion
-https://www.myhealthandbeauty.com/en/treatments/jawline
-https://www.myhealthandbeauty.com/en/treatments/lippen-aufspritzen
-https://www.myhealthandbeauty.com/en/treatments/nasolabial-fold
 https://www.myhealthandbeauty.com/en/treatments/schoenheitsoperationen
 https://www.myhealthandbeauty.com/en/treatments/schoenheitsoperationen/bruststraffung
 https://www.myhealthandbeauty.com/en/treatments/schoenheitsoperationen/brustvergroesserung
@@ -371,6 +371,7 @@ https://www.myhealthandbeauty.com/en/treatments/schoenheitsoperationen/oberarmst
 https://www.myhealthandbeauty.com/en/treatments/schoenheitsoperationen/thigh-lift
 https://www.myhealthandbeauty.com/en/treatments/skinbooster
 https://www.myhealthandbeauty.com/en/treatments/skinbooster/lumi-eyes-polynucleotides
+https://www.myhealthandbeauty.com/en/treatments/skinbooster/lumi-face
 https://www.myhealthandbeauty.com/en/treatments/skinbooster/mesotherapie-nctf-135-ha
 https://www.myhealthandbeauty.com/en/treatments/skinbooster/polynukleotide-lachssperma
 https://www.myhealthandbeauty.com/en/treatments/skinbooster/profhilo

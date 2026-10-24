@@ -30,6 +30,7 @@ import {
 import { useCalendlyTreatmentEvent } from "~/composables/useCalendlyTreatmentEvent";
 import { SharedButtonAction } from "~/lib/strapi/dto/enums";
 import type { BaseButtonProps } from "~/lib/ui/types";
+import { KLINIK_CTA_LABEL, istAnfrageModal, modalBehandlung } from "#shared/klinik";
 
 const props = defineProps<{
   button?: SharedButtonDto | null;
@@ -49,9 +50,35 @@ const props = defineProps<{
 const { t } = useI18n();
 const globals = useGlobals();
 const { isAdsMode } = useSiteModeFlags();
-const button = computed(() => props.button ?? null);
+// Klinik-Regel (E28 #1636): Auf OP-Seiten wird jeder Buchungs- oder
+// Rabatt-Knopf aus Strapi zum Anfrage-Knopf. Die Kopfzeile (ohneSeitenKontext)
+// bleibt der allgemeine Termin-Knopf.
+const klinikZiel = useKlinikSeite();
+const istBuchungOderRabatt = (b: SharedButtonDto | null | undefined) =>
+  !!b &&
+  (b.method === "app-booking" ||
+    (b.method === "action" &&
+      (b.action === SharedButtonAction.APPOINTMENT_BOOKING ||
+        b.action === SharedButtonAction.NEWSLETTER_SIGN_UP)));
+const button = computed<SharedButtonDto | null>(() => {
+  if (klinikZiel.value && !props.ohneSeitenKontext && istBuchungOderRabatt(props.button)) {
+    return {
+      label: KLINIK_CTA_LABEL,
+      method: "external-link" as SharedButtonDto["method"],
+      url: klinikZiel.value,
+      variant: props.button?.variant,
+    };
+  }
+  return props.button ?? null;
+});
+
+// OP-Seiten (seit 23.10.2026): Ziel "modal:<Behandlung>" oeffnet den Anfrage-Funnel als Modal.
+const anfrageModal = computed(() =>
+  istAnfrageModal(button.value?.url) ? (button.value!.url as string) : null,
+);
 
 const as = computed(() => {
+  if (anfrageModal.value) return "button";
   switch (button.value?.method) {
     case "external-link":
       return "a";
@@ -77,7 +104,7 @@ const appendAnchor = (url: string | undefined): string | undefined => {
 };
 
 const href = computed(() => {
-  if (button.value?.method !== "external-link") return undefined;
+  if (anfrageModal.value || button.value?.method !== "external-link") return undefined;
   return appendAnchor(button.value.url);
 });
 
@@ -250,7 +277,13 @@ onMounted(() => {
   prewarmBookingWhenIdle(bookingUrl.value);
 });
 
+const { openOpAnfrage } = useOpAnfrageDialog();
+
 const handleClick = () => {
+  if (anfrageModal.value) {
+    openOpAnfrage(modalBehandlung(anfrageModal.value));
+    return;
+  }
   // New in-app booking iframe method (limited rollout, e.g. Neukundenrabatt page)
   if (button.value?.method === "app-booking") {
     // #128: Dieser Knopf oeffnet die App unabhaengig vom A/B-Bucket. Ohne

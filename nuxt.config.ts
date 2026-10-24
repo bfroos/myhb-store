@@ -115,6 +115,9 @@ export default defineNuxtConfig({
         display: "swap", // verhindert FOIT; dank Fallback-Metriken CLS-neutral
         fallbacks: ["system-ui", "Arial"],
       },
+      // Michaels Look fuer Klinik-Landingpages (assets/css/lp-michael.css)
+      { name: "Jost", weights: [400, 500, 600], styles: ["normal"], subsets: ["latin"], display: "swap", fallbacks: ["Inter", "Arial"] },
+      { name: "DM Sans", weights: [400, 500, 700], styles: ["normal"], subsets: ["latin"], display: "swap", fallbacks: ["Inter", "Arial"] },
     ],
   },
 
@@ -473,6 +476,11 @@ export default defineNuxtConfig({
     hubspotRecruitingStageId: process.env.HUBSPOT_RECRUITING_STAGE_ID,
     hubspotPortalId: process.env.HUBSPOT_PORTAL_ID,
     hubspotUiDomain: process.env.HUBSPOT_UI_DOMAIN,
+    // E28 (myhb-app/myhb-os#1637): Website-Funnel -> Edge Function
+    // lead-anfrage. In Vercel als NUXT_LEAD_ANFRAGE_URL und
+    // NUXT_LEAD_ANFRAGE_SECRET setzen (Laufzeit, nicht im Bundle).
+    leadAnfrageUrl: "",
+    leadAnfrageSecret: "",
     googlePlacesApiKey: process.env.GOOGLE_PLACES_API_KEY,
     googleGeolocationApiKey: process.env.GOOGLE_GEOLOCATION_API_KEY,
     siteMode: process.env.NUXT_PUBLIC_SITE_MODE,

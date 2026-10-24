@@ -50,7 +50,7 @@ export function useDoctorPage(brandName: string = "") {
     return true;
   }
 
-  const fixedBlocks = computed(() => mapDoctorPageBlocks(page.value));
+  const fixedBlocks = computed(() => mapDoctorPageBlocks(page.value, t));
 
   const seo = computed(() => {
     const doctorName = fixedBlocks.value?.hero?.headline ?? "";
