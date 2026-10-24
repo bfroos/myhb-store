@@ -39,6 +39,13 @@
         />
       </template>
     </PagesTreatmentOrderedBlocks>
+    <!-- E24 #346: lokale Ergaenzung (shared/seoCityExtras.ts), Strapi-Seite bleibt -->
+    <PagesTreatmentSeoLocalExtra
+      v-if="cityExtra"
+      :extra="cityExtra"
+      :hero="fixedBlocks?.hero"
+      :location="location"
+    />
     <BlockPurchaseFaq
       v-if="purchase.length"
       :headline="`Fragen vor der Buchung in ${location?.city?.name ?? ''}`"
@@ -75,6 +82,7 @@ import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOffe
 import { rememberOfferVariant } from "~/lib/offerVariant";
 import { seoPilotCity } from "#shared/seoPilotLippen";
 import { applyLocalFacts } from "#shared/localFacts";
+import { extraFaqsForSchema, seoCityExtra } from "#shared/seoCityExtras";
 import { isLocalGateActive, localGateCanonical, type LocalGatePageData } from "#shared/localContentGate";
 import { employeeDisplayName, pickAdsV2Reviews } from "#shared/adsTemplateV2";
 import {
@@ -111,6 +119,14 @@ const seoPilot = computed(() => {
   const city = seoPilotCity(String(p.citySlug ?? ""), String(p.locationSlug ?? ""), slug);
   // #312: Standortfakten aus Strapi gewinnen, sonst Text im Code.
   return city ? applyLocalFacts(city, location.value?.localFacts) : null;
+});
+// www: E24 #346, lokale Ergaenzung unter der Strapi-Seite. Nicht neben dem
+// Pilot und nicht auf go.
+const cityExtra = computed(() => {
+  if (isAdsMode.value || seoPilot.value) return null;
+  if (!/^\/standorte\//.test(seoRoute.path)) return null;
+  const p = seoRoute.params as Record<string, unknown>;
+  return seoCityExtra((treatmentPage.value as any)?.pathKey, String(p.citySlug ?? ""), String(p.locationSlug ?? ""));
 });
 const pageLoaded = await fetchPage();
 // Standort-Konsolidierung: Die Behandlung gehoert in dieser Stadt zu einem
@@ -316,7 +332,7 @@ const faqSchema = computed(() => {
   // v2 zeigt eigene Fragen statt des Strapi-FAQ-Blocks.
   if (isV2.value) return null;
 
-  const all = [...visibleStrapiFaqs.value, ...purchase.value.map(toRich)];
+  const all = [...visibleStrapiFaqs.value, ...purchase.value.map(toRich), ...extraFaqsForSchema(cityExtra.value)];
   return all.length ? buildFaqPageSchema(all as any) : null;
 });
 
