@@ -204,12 +204,13 @@ export default defineEventHandler(async (event) => {
         hasMemberExistsCode);
 
     if (isMemberExists) {
-      // Von Shopify als "transactional" angelegt oder frueher abgemeldet:
-      // die Anmeldung hier nachholen, sonst bleibt sie ohne Code (26.10.2026).
+      // Heute im Laden angelegt (Shopify -> Mailchimp "transactional"): die
+      // Anmeldung hier nachholen, sonst bleibt sie ohne Code. Bestandskunden
+      // bleiben unberuehrt, damit sie keinen Neukundencode bekommen (26.10.2026).
       try {
         const hash = subscriberHash(email);
         const member: any = await mailchimp.lists.getListMember(mailchimpAudienceId, hash);
-        if (anmeldungNachholen(member?.status)) {
+        if (anmeldungNachholen(member)) {
           await mailchimp.lists.setListMember(mailchimpAudienceId, hash, {
             email_address: email,
             status_if_new: "subscribed",
