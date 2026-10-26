@@ -1,6 +1,7 @@
 // https://mailchimp.com/developer/marketing/api/list-members/add-member-to-list/
 
 import mailchimp from "@mailchimp/mailchimp_marketing";
+import { anmeldungNachholen, subscriberHash } from "#shared/newsletterBestand";
 
 const ALLOWED_SOURCES = new Set([
   "newsletter_footer",
@@ -203,6 +204,28 @@ export default defineEventHandler(async (event) => {
         hasMemberExistsCode);
 
     if (isMemberExists) {
+      // Von Shopify als "transactional" angelegt oder frueher abgemeldet:
+      // die Anmeldung hier nachholen, sonst bleibt sie ohne Code (26.10.2026).
+      try {
+        const hash = subscriberHash(email);
+        const member: any = await mailchimp.lists.getListMember(mailchimpAudienceId, hash);
+        if (anmeldungNachholen(member?.status)) {
+          await mailchimp.lists.setListMember(mailchimpAudienceId, hash, {
+            email_address: email,
+            status_if_new: "subscribed",
+            status: "subscribed",
+          });
+          if (source) {
+            await mailchimp.lists.updateListMemberTags(mailchimpAudienceId, hash, {
+              tags: [{ name: `source:${source}`, status: "active" }],
+            });
+          }
+          console.info("[newsletter] bestehende Adresse angemeldet", { vorher: member.status });
+        }
+      } catch (nachholFehler) {
+        console.error("[newsletter] Anmeldung bestehender Adresse fehlgeschlagen", nachholFehler);
+      }
+
       // Merge-Felder werden bei Bestandsmitgliedern bewusst NICHT
       // ueberschrieben (First-Stempel bleibt stehen); der n8n-Intake
       // entscheidet dort anhand von identities.
