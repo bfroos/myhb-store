@@ -562,3 +562,14 @@ console.log('Config response:', config);
 
 **Ende der Anleitung**  
 Bei Fragen: Diese Anleitung als Referenz nutzen und spezifische Probleme debuggen.
+
+## Standort (location) per API ändern: Stolperfallen (27.10.2026)
+
+- `address`, `contact`, `coordinates` und Schalter wie `isBookingAllowed` gelten für **alle Sprachen gemeinsam**.
+  Schreibst du sie je Sprache verschieden (z. B. „5e étage“ in `fr`), gewinnt die zuletzt gespeicherte Sprache, auch auf der deutschen Seite.
+  Darum in jeder Sprache denselben Wert schicken.
+- Ein `PUT …?locale=<xx>&status=published` veröffentlicht den **Entwurf** dieser Sprache. Ältere Entwürfe der Fremdsprachen können
+  gemeinsame Felder mit alten Werten enthalten (am 27.10. sprang so `isBookingAllowed` der MediaPark Klinik auf `true`).
+  Vorher je Sprache `status=draft` lesen und gemeinsame Felder ausdrücklich mitschicken; danach alle Sprachen veröffentlicht nachprüfen.
+- Die Seite rendert per Webhook neu, während du noch speicherst. Am Ende einen letzten Speichervorgang nach ~2 Minuten machen
+  (der Strapi-Proxy cached 60 s frisch / 240 s stale) und die Live-Seite prüfen; sonst bleibt bis zu 15 Minuten ein Zwischenstand stehen.
