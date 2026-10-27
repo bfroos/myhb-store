@@ -174,6 +174,9 @@ input[type=range]{accent-color:#8A6A3D}
 <div style="background: #FAF5F1; border-radius: 14px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
 <p style="margin: 0; font-size: 16px"><strong>Bereich:</strong> {{resArea}}</p>
 <p style="margin: 0; font-size: 16px"><strong>Richtwert:</strong> {{resGrafts}}</p>
+<sc-if value="{{resHasPrice}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: 16px"><strong>Richtpreis:</strong> {{resPrice}}</p>
+</sc-if>
 <p style="margin: 0; font-size: 16px">{{resLength}}</p>
 <p style="margin: 0; font-size: 16px">{{resNote}}</p>
 </div>
@@ -320,7 +323,7 @@ class Component extends DCLogic {
     this.state = {
       step: 0, answers: {}, contact: 'Anruf',
       leadName: '', leadPhone: '', leadMail: '', consent: false, formError: false,
-      areas: { scheitel: true }, grafts: 1500, method: 'noshave', prp: false,
+      areas: { scheitel: true }, grafts: 1500, method: 'noshave', prp: false, rechnerUsed: false,
       down: null, months: 12, faqOpen: 0
     };
   }
@@ -366,7 +369,9 @@ class Component extends DCLogic {
     };
     const resLength = A.length === 'Kurz'
       ? 'Bei kurzem Haar lässt sich der Entnahmebereich schwerer verdecken. Wir prüfen gemeinsam, ob ohne Rasur oder mit kleiner Teilrasur besser für dich ist.'
-      : 'Bei deiner Haarlänge lässt sich der Entnahmebereich in der Regel gut unter dem Deckhaar verbergen – eine gute Voraussetzung für die Behandlung ohne Rasur.';
+      : (S.rechnerUsed && S.method === 'fue'
+        ? 'Du hast FUE mit Teilrasur gewählt. Bei deiner Haarlänge wäre in der Regel auch die Behandlung ohne Rasur möglich – das besprechen wir gemeinsam.'
+        : 'Bei deiner Haarlänge lässt sich der Entnahmebereich in der Regel gut unter dem Deckhaar verbergen – eine gute Voraussetzung für die Behandlung ohne Rasur.');
     const resNote = A.area === 'Das Haar wird insgesamt dünner'
       ? 'Bei gleichmäßigem Ausdünnen klären wir zuerst die Ursache (z. B. Blutwerte, Hormone). Manchmal ist eine Therapie der bessere erste Schritt.'
       : (A.wish === 'Dass es niemand bemerkt'
@@ -384,6 +389,7 @@ class Component extends DCLogic {
         fetch('/api/lead-anfrage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
           behandlung: 'Haartransplantation', name: S.leadName, telefon: S.leadPhone, email: S.leadMail,
           kontaktweg: kanal, einwilligung: !!S.consent, antworten: antworten,
+          rechner: S.rechnerUsed ? { einheiten: S.grafts, methode: S.method, zusatz: S.prp ? ['PRP'] : [], bereiche: rechnerAreas, richtpreis: total } : undefined,
           seite: location.pathname + location.search
         }) }).catch(function () {});
       } catch (e) {}
@@ -405,7 +411,7 @@ class Component extends DCLogic {
       const sel = Object.assign({}, S.areas, { [id]: !S.areas[id] });
       const sum = AREAS.filter((a) => sel[a.id]).reduce((s, a) => s + a.g, 0);
       const g = sum ? Math.min(3000, Math.max(300, Math.round(sum / 100) * 100)) : S.grafts;
-      this.setState({ areas: sel, grafts: g });
+      this.setState({ areas: sel, grafts: g, rechnerUsed: true });
     };
     const areas = AREAS.map((a) => {
       const on = !!S.areas[a.id];
@@ -418,7 +424,7 @@ class Component extends DCLogic {
       { id: 'fue', label: 'FUE mit Teilrasur', sub: eur2(ppgFUE) + ' / Graft' }
     ].map((m) => {
       const on = S.method === m.id;
-      return Object.assign({}, m, { pressed: on ? 'true' : 'false', border: on ? accent : '#E6DACF', bg: on ? tint : '#FFFFFF', pick: () => this.setState({ method: m.id }) });
+      return Object.assign({}, m, { pressed: on ? 'true' : 'false', border: on ? accent : '#E6DACF', bg: on ? tint : '#FFFFFF', pick: () => this.setState({ method: m.id, rechnerUsed: true }) });
     });
     const downMax = Math.max(0, Math.floor(total / 100) * 100);
     const down = Math.min(S.down == null ? (P.defaultDown ?? 1000) : S.down, downMax);
@@ -435,6 +441,10 @@ class Component extends DCLogic {
       return { label: m + ' Mon.', pressed: on ? 'true' : 'false', border: on ? '#D8C3A0' : '#3A3632', bg: on ? '#D8C3A0' : 'transparent', fg: on ? '#141414' : '#F7F4EF', pick: () => this.setState({ months: m }) };
     });
     const totalPaid = down + rate * S.months;
+    // Hat sie den Preisrechner benutzt, zeigt das Ergebnis ihre Auswahl statt des Quiz-Richtwerts.
+    const rechnerAreas = AREAS.filter((a) => S.areas[a.id]).map((a) => a.label).join(', ');
+    const methodName = S.method === 'noshave' ? 'DHI ohne Rasur' : 'FUE mit Teilrasur';
+    const useRechner = S.rechnerUsed && A.area !== 'Das Haar wird insgesamt dünner';
     const financeNote = apr > 0
       ? 'Repräsentatives Beispiel: Nettodarlehensbetrag ' + eur(financed) + ', ' + S.months + ' Monate, effektiver Jahreszins ' + num(apr) + ' %, Gesamtbetrag ' + eur(totalPaid) + '. Bonität vorausgesetzt.'
       : 'Ohne Zinsen: Gesamtbetrag ' + eur(totalPaid) + ' (Anzahlung + ' + S.months + ' Raten). Bonität vorausgesetzt.';
@@ -479,12 +489,14 @@ class Component extends DCLogic {
       setMail: (e) => this.setState({ leadMail: e.target.value }),
       toggleConsent: () => this.setState({ consent: !S.consent }),
       contactWays: contactWays, submitLead: submitLead,
-      resArea: A.area || '', resGrafts: graftHint[A.area] || '', resLength: resLength, resNote: resNote, resContact: S.contact,
+      resArea: (useRechner && rechnerAreas) || A.area || '',
+      resGrafts: useRechner ? 'ca. ' + num(S.grafts) + ' Grafts (deine Auswahl im Preisrechner)' : (graftHint[A.area] || ''),
+      resHasPrice: useRechner, resPrice: eur(total) + ' · ' + methodName + (S.prp ? ' · inkl. PRP' : ''), resLength: resLength, resNote: resNote, resContact: S.contact,
       areas: areas, methods: methods, grafts: S.grafts, graftsFmt: num(S.grafts),
-      setGrafts: (e) => this.setState({ grafts: +e.target.value }),
-      prp: S.prp, togglePrp: () => this.setState({ prp: !S.prp }), prpFmt: eur(prpPrice),
+      setGrafts: (e) => this.setState({ grafts: +e.target.value, rechnerUsed: true }),
+      prp: S.prp, togglePrp: () => this.setState({ prp: !S.prp, rechnerUsed: true }), prpFmt: eur(prpPrice),
       prpLine: S.prp ? ' · inkl. PRP' : '',
-      methodName: S.method === 'noshave' ? 'DHI ohne Rasur' : 'FUE mit Teilrasur',
+      methodName: methodName,
       totalFmt: eur(total), down: down, downMax: downMax, downFmt: eur(down),
       setDown: (e) => this.setState({ down: +e.target.value }),
       terms: terms, rateFmt: eur(Math.ceil(rate)), financeNote: financeNote,
