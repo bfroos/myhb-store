@@ -262,8 +262,13 @@ input[type=range]{accent-color:#8A6A3D}
 <p style="margin: 0; font-weight: 700">Deine erste Einschätzung</p>
 <p style="margin: 0"><strong>Bereich:</strong> {{resArea}}</p>
 <p style="margin: 0"><strong>Richtwert:</strong> {{resGrafts}}</p>
+<sc-if value="{{resHasPrice}}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0"><strong>Richtpreis:</strong> {{resPrice}}</p>
+</sc-if>
+<sc-if value="{{resHasText}}" hint-placeholder-val="{{ false }}">
 <p style="margin: 0">{{resLength}}</p>
 <p style="margin: 0">{{resNote}}</p>
+</sc-if>
 <p style="margin: 0; font-size: 13px; color: #5C5650">Die endgültige Einschätzung erfolgt immer ärztlich.</p>
 </div>
 </sc-if>
@@ -550,7 +555,7 @@ class Component extends DCLogic {
     this.state = {
       step: 0, gender: '', stage: '', age: '', contact: 'Anruf',
       leadName: '', leadPhone: '', leadMail: '', consent: false, formError: false,
-      areas: { ecken: true, stirn: true }, grafts: 2700, method: 'fue', prp: false,
+      areas: { ecken: true, stirn: true }, grafts: 2700, method: 'fue', prp: false, rechnerUsed: false,
       down: null, months: 12, faqOpen: 0, story: 0
     };
   }
@@ -618,7 +623,7 @@ class Component extends DCLogic {
         fetch('/api/lead-anfrage', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({
           behandlung: 'Haartransplantation', name: S.leadName, telefon: S.leadPhone, email: S.leadMail,
           kontaktweg: kanal, einwilligung: !!S.consent, antworten: antworten,
-          rechner: { einheiten: S.grafts, methode: S.method, zusatz: S.prp ? ['PRP'] : [] },
+          rechner: S.rechnerUsed ? { einheiten: S.grafts, methode: S.method, zusatz: S.prp ? ['PRP'] : [], bereiche: rechnerAreas, richtpreis: total } : undefined,
           seite: location.pathname + location.search
         }) }).catch(function () {});
       } catch (e) {}
@@ -638,7 +643,7 @@ class Component extends DCLogic {
       const sel = Object.assign({}, S.areas, { [id]: !S.areas[id] });
       const sum = AREAS.filter((a) => sel[a.id]).reduce((s, a) => s + a.g, 0);
       const g = sum ? Math.min(5000, Math.max(500, Math.round(sum / 100) * 100)) : S.grafts;
-      this.setState({ areas: sel, grafts: g });
+      this.setState({ areas: sel, grafts: g, rechnerUsed: true });
     };
     const areas = AREAS.map((a) => {
       const on = !!S.areas[a.id];
@@ -652,8 +657,12 @@ class Component extends DCLogic {
       { id: 'dhi', label: 'DHI (Choi-Pen)', sub: eur2(ppgDHI) + ' / Graft' }
     ].map((m) => {
       const on = S.method === m.id;
-      return Object.assign({}, m, { pressed: on ? 'true' : 'false', border: on ? accent : '#E6DFD4', bg: on ? tint : '#FFFFFF', pick: () => this.setState({ method: m.id }) });
+      return Object.assign({}, m, { pressed: on ? 'true' : 'false', border: on ? accent : '#E6DFD4', bg: on ? tint : '#FFFFFF', pick: () => this.setState({ method: m.id, rechnerUsed: true }) });
     });
+
+    // Wer den Preisrechner benutzt hat, sieht im Ergebnis diese Auswahl statt des Quiz-Richtwerts (wie Frauen-Seite).
+    const rechnerAreas = AREAS.filter((a) => S.areas[a.id]).map((a) => a.label).join(', ');
+    const useRechner = S.rechnerUsed && S.stage !== 'Das Haar wird insgesamt dünner';
 
     // Finanzierung
     const downMax = Math.max(0, Math.floor(total / 100) * 100);
@@ -723,7 +732,11 @@ class Component extends DCLogic {
       qGender: cur === 'gender', qLength: cur === 'length', qStage: cur === 'stage', qAge: cur === 'age', qContact: cur === 'contact', qDone: cur === 'done', lengthOpts: lengthOpts,
       stageQuestion: isWoman ? 'Wo wünschst du dir mehr Fülle?' : 'Wie würdest du deinen Haarausfall beschreiben?',
       qSince: cur === 'since', qWish: cur === 'wish', sinceOpts: sinceOpts, wishOpts: wishOpts,
-      showResult: isWoman && !!S.stage, resArea: S.stage || '', resGrafts: graftHint[S.stage] || '', resLength: resLength, resNote: resNote,
+      showResult: (isWoman && !!S.stage) || useRechner,
+      resArea: (useRechner && rechnerAreas) || S.stage || '',
+      resGrafts: useRechner ? 'ca. ' + num(S.grafts) + ' Grafts (deine Auswahl im Preisrechner)' : (graftHint[S.stage] || ''),
+      resHasPrice: useRechner, resPrice: eur(total) + ' · ' + (S.method === 'dhi' ? 'DHI' : 'FUE') + (S.prp ? ' · inkl. PRP' : ''),
+      resHasText: isWoman, resLength: resLength, resNote: resNote,
       quizLabel: labels[Math.min(S.step, flow.length - 1)], quizProgress: (Math.min(S.step + 1, nQ) / nQ * 100) + '%',
       genderOpts: genderOpts, stageOpts: stageOpts, ageOpts: ageOpts,
       quizBack: () => this.setState({ step: Math.max(0, S.step - 1), formError: false }),
@@ -739,8 +752,8 @@ class Component extends DCLogic {
       submitLead: submitLead,
       areas: areas, methods: methods,
       grafts: S.grafts, graftsFmt: num(S.grafts),
-      setGrafts: (e) => this.setState({ grafts: +e.target.value }),
-      prp: S.prp, togglePrp: () => this.setState({ prp: !S.prp }), prpFmt: eur2(prpPrice),
+      setGrafts: (e) => this.setState({ grafts: +e.target.value, rechnerUsed: true }),
+      prp: S.prp, togglePrp: () => this.setState({ prp: !S.prp, rechnerUsed: true }), prpFmt: eur2(prpPrice),
       prpLine: S.prp ? ' · inkl. PRP' : '',
       methodName: S.method === 'dhi' ? 'DHI' : 'FUE',
       ppgFmt: eur2(ppg), totalFmt: eur(total),
