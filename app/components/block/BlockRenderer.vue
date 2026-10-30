@@ -212,5 +212,7 @@ const registry: Record<string, ReturnType<typeof defineAsyncComponent>> = {
       v-bind="getBlockProps(block)"
       :priority="index === 0"
     />
+    <!-- Optional: Inhalt direkt nach dem ersten sichtbaren Block (Startseite, myhb-os#1445) -->
+    <slot v-if="index === 0" name="nach-erstem-block" />
   </template>
 </template>
