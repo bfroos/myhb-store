@@ -2,7 +2,7 @@
   <BlockRenderer v-if="blocks && blocks.length > 0" :blocks="blocks">
     <!-- myhb-os#1445: sichtbarer Link zur kostenlosen Hautanalyse direkt unter dem ersten Block -->
     <template v-if="zeigeHautanalyse" #nach-erstem-block>
-      <BlockHautanalyseCta content="startseite" medium="startseite" titel="Kostenlose Hautanalyse per Selfie" />
+      <BlockHautanalyseTeaser />
     </template>
   </BlockRenderer>
   <BlockLocationTeasers
