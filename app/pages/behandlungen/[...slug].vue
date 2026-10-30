@@ -32,6 +32,8 @@
       />
     </template>
   </PagesTreatmentOrderedBlocks>
+  <!-- myhb-os#1445: Hautanalyse nur bei Themen, die sie misst (shared/hautanalyseCta.ts) -->
+  <BlockHautanalyseCta v-if="hautanalyseSlug" :content="hautanalyseSlug" />
   </template>
   <BlockPurchaseFaq
     v-if="purchase.length"
@@ -68,6 +70,7 @@ import { answerHeadline, treatmentAnswer } from "#shared/treatmentAnswer";
 import { purchaseFaqs } from "#shared/purchaseFaq";
 import { seoTitleFor } from "#shared/seoTitles";
 import { anfrageZiel, isKlinikBehandlung } from "#shared/klinik";
+import { hatHautanalyseBlock, seitenSlug } from "#shared/hautanalyseCta";
 
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
@@ -141,6 +144,12 @@ const answer = computed(() => {
     priceInEuroCent: t?.priceInEuroCent,
     isStartingPrice: t?.isStartingPrice,
   });
+});
+// myhb-os#1445: Block zur kostenlosen Hautanalyse (nur www, Deutsch).
+const hautanalyseSlug = computed(() => {
+  if (isAdsMode.value || answerLocale.value !== "de") return null;
+  const pathKey = treatmentPage.value?.pathKey;
+  return hatHautanalyseBlock(pathKey) ? seitenSlug(pathKey) : null;
 });
 // www: E24 SEO-Pilot, Hub "Lippen aufspritzen" (nur Deutsch).
 const { locale: seoLocale } = useI18n();

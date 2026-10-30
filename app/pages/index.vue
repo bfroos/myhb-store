@@ -1,5 +1,10 @@
 <template>
-  <BlockRenderer v-if="blocks && blocks.length > 0" :blocks="blocks" />
+  <BlockRenderer v-if="blocks && blocks.length > 0" :blocks="blocks">
+    <!-- myhb-os#1445: sichtbarer Link zur kostenlosen Hautanalyse direkt unter dem ersten Block -->
+    <template v-if="zeigeHautanalyse" #nach-erstem-block>
+      <BlockHautanalyseCta content="startseite" medium="startseite" titel="Kostenlose Hautanalyse per Selfie" />
+    </template>
+  </BlockRenderer>
   <BlockLocationTeasers
     v-if="homepageLocations.length > 0"
     :headline="$t('locations.discoverLocations')"
@@ -26,6 +31,8 @@ const appConfig = useAppConfig();
 const { brandName } = useBrand();
 const globals = useGlobals();
 const { isAdsMode } = useSiteModeFlags();
+const { locale } = useI18n();
+const zeigeHautanalyse = computed(() => !isAdsMode.value && locale.value === "de");
 
 const logoUrl = appConfig.seo?.organization?.logo?.url
   ? `${config.public.publicUrl}${appConfig.seo.organization.logo.url}`
