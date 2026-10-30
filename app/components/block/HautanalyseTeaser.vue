@@ -75,8 +75,11 @@ const href = hautanalyseDeeplink("startseite", "startseite");
 
 .ha-teaser__media {
   position: relative;
+  /* Festes Seitenverhaeltnis wie das Foto: kein Zuschnitt, der Rahmen sitzt
+     dadurch bei jeder Breite auf dem Gesicht. */
+  align-self: center;
   margin: 0;
-  min-height: 260px;
+  aspect-ratio: 3 / 2;
   background: var(--color-gray-100, #f2f2f2);
 }
 .ha-teaser__img {
@@ -84,16 +87,16 @@ const href = hautanalyseDeeplink("startseite", "startseite");
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: 60% 30%;
+  object-position: center;
 }
 
 /* Scan-Rahmen ums Gesicht: vier Ecken plus eine langsam laufende Linie. */
 .ha-teaser__frame {
   position: absolute;
-  left: 50%;
-  top: 6%;
-  width: 34%;
-  height: 72%;
+  left: 45%;
+  top: 12%;
+  width: 28%;
+  height: 60%;
   --ecke: 22px;
   background:
     linear-gradient(#fff, #fff) left top / var(--ecke) 2px,
