@@ -166,9 +166,16 @@ const href = hautanalyseDeeplink("startseite", "startseite");
 }
 .ha-teaser__title {
   margin: 0;
-  font-size: var(--font-3xl);
+  font-size: var(--font-2xl);
   font-weight: var(--font-bold);
   line-height: 1.15;
+  hyphens: manual;
+  overflow-wrap: normal;
+}
+@media (min-width: 900px) {
+  .ha-teaser__title {
+    font-size: var(--font-3xl);
+  }
 }
 .ha-teaser__steps {
   display: grid;
