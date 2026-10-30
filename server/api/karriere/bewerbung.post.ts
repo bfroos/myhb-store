@@ -1,20 +1,19 @@
 /**
- * Bewerbung Aerzte → HubSpot (bfroos/myhb-store#102).
+ * Bewerbung Aerzte → App (myhb-app/myhb-os#1464, vorher bfroos/myhb-store#102).
  *
  * Nimmt das Formular der Karriereseite als multipart/form-data entgegen
- * (wegen des Lebenslaufs) und legt in HubSpot an:
+ * (wegen des Lebenslaufs) und schickt es an die Edge Function
+ * `bewerbung-eingang` der App. Dort landet es im Bewerber-Board, der
+ * Lebenslauf im privaten Fach, und das Recruiting bekommt eine Mail.
+ *
+ * Erreicht die Route die App nicht, faellt sie auf den alten Weg nach HubSpot
+ * zurueck (sofern dort ein Token gesetzt ist): eine Bewerbung in HubSpot ist
+ * besser als eine verlorene. Der HubSpot-Weg legt an:
  *   1. Lebenslauf im File Manager (PRIVATE)
  *   2. Kontakt (Upsert ueber die E-Mail)
  *   3. Deal in der Recruiting-Pipeline, Stage "Bewerbung eingegangen"
  *   4. Notiz mit allen Feldern und dem Lebenslauf als Anhang
- *
- * An Schritt 3 haengt der HubSpot-Workflow, der Jenny benachrichtigt. Der
- * gehoert bewusst nach HubSpot und nicht hierher: Wer benachrichtigt wird,
- * aendert sich mit dem Team, nicht mit dem Code.
- *
- * Scheitert nur der Upload, laeuft der Rest trotzdem durch — eine Bewerbung
- * ohne Lebenslauf ist deutlich besser als eine verlorene Bewerbung. Die Notiz
- * sagt dann, dass der Lebenslauf nachgefordert werden muss.
+ * Scheitert dort nur der Upload, laeuft der Rest trotzdem durch.
  */
 import {
   AUSBILDUNGSSTAND_WERTE,
@@ -24,6 +23,7 @@ import {
   CV_MAX_BYTES,
   ausbildungsstandLabel,
 } from "#shared/karriere";
+import { bewerbungFuerApp, bewerbungUrl } from "#shared/bewerbungApp";
 
 /** Lebenslauf ist Pflicht: ohne ihn kann das Recruiting nicht sichten. */
 const CV_PFLICHT = true;
@@ -36,8 +36,6 @@ const badRequest = (message: string) =>
   createError({ statusCode: 400, statusMessage: message });
 
 export default defineEventHandler(async (event) => {
-  const config = getHubspotConfig();
-
   const parts = await readMultipartFormData(event);
   if (!parts?.length) {
     throw badRequest("Formulardaten fehlen");
@@ -88,7 +86,7 @@ export default defineEventHandler(async (event) => {
   if (!wunschstandort) {
     throw badRequest("Bitte wähle einen Wunschstandort aus.");
   }
-  // Die Einwilligung ist die Rechtsgrundlage fuer die Speicherung in HubSpot.
+  // Die Einwilligung ist die Rechtsgrundlage fuer die Speicherung der Bewerbung.
   // Ohne sie wird nichts uebertragen.
   if (felder.datenschutz !== "true") {
     throw badRequest("Bitte stimme der Datenschutzerklärung zu.");
@@ -114,6 +112,71 @@ export default defineEventHandler(async (event) => {
     throw badRequest("Bitte lade deinen Lebenslauf hoch.");
   }
 
+  const ausbildungsstandText = ausbildungsstandLabel(ausbildungsstand);
+
+  // Erster Weg: die App. Antwortet sie, ist die Bewerbung angekommen.
+  const runtime = useRuntimeConfig() as any;
+  const appUrl = bewerbungUrl(runtime.leadAnfrageUrl);
+  const secret = String(runtime.leadAnfrageSecret ?? "")
+    .trim()
+    .replace(/^["']|["']$/g, "")
+    .trim();
+  if (appUrl && secret) {
+    try {
+      await $fetch(appUrl, {
+        method: "POST",
+        headers: { "x-lead-secret": secret, "Content-Type": "application/json" },
+        body: bewerbungFuerApp({
+          vorname,
+          nachname,
+          email,
+          telefon,
+          ausbildungsstandLabel: ausbildungsstandText,
+          wunschstandort,
+          nachricht,
+          quelle,
+          cv: cvTeil,
+        }),
+        timeout: 20_000,
+      });
+      return { status: "ok" as const };
+    } catch (error: any) {
+      // Keine Personendaten ins Log, nur der Fehlercode.
+      console.error("[bewerbung] App nicht erreicht, weiter mit HubSpot", error?.statusCode ?? error?.name ?? "unbekannt");
+    }
+  } else {
+    console.error("[bewerbung] App-Adresse fehlt (NUXT_LEAD_ANFRAGE_URL/SECRET), weiter mit HubSpot");
+  }
+
+  return await nachHubspot({
+    vorname,
+    nachname,
+    email,
+    telefon,
+    ausbildungsstand,
+    ausbildungsstandLabel: ausbildungsstandText,
+    wunschstandort,
+    nachricht,
+    quelle,
+    cvTeil,
+  });
+});
+
+/** Alter Weg, nur noch Ausweichweg: Bewerbung als Deal in HubSpot. */
+async function nachHubspot(f: {
+  vorname: string;
+  nachname: string;
+  email: string;
+  telefon: string;
+  ausbildungsstand: string;
+  ausbildungsstandLabel: string;
+  wunschstandort: string;
+  nachricht: string;
+  quelle: string;
+  cvTeil: { data: Buffer; filename: string; type?: string } | null;
+}) {
+  const config = getHubspotConfig();
+  const { cvTeil, ...felder } = f;
   const eingegangenAm = new Date();
 
   // Upload zuerst: Scheitert er, steht das Ergebnis in der Notiz. Scheitert
@@ -129,20 +192,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  const daten = {
-    vorname,
-    nachname,
-    email,
-    telefon,
-    ausbildungsstand,
-    ausbildungsstandLabel: ausbildungsstandLabel(ausbildungsstand),
-    wunschstandort,
-    nachricht,
-    quelle,
-    eingegangenAm,
-    cv,
-    cvFehler,
-  };
+  const daten = { ...felder, eingegangenAm, cv, cvFehler };
 
   const contactId = await upsertBewerberKontakt(config, daten);
   const dealId = await createBewerbungsDeal(config, contactId, daten);
@@ -156,4 +206,4 @@ export default defineEventHandler(async (event) => {
   }
 
   return { status: "ok" as const };
-});
+}
