@@ -82,7 +82,7 @@ export const CLUB = {
 export const SPARBUCH = {
   mindestRate: 10,
   schrittRate: 10,
-  obergrenze: 1000,
+  obergrenze: 5000, // seit 03.11.2026 (myhb-app/myhb-os#2099), vorher 1.000 €
   mindestlaufzeitMonate: 3,
   widerrufTage: 14,
   beispielRate: 50,

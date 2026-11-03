@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
   CLUB,
+  SPARBUCH,
   SPARBUCH_PFLICHTSATZ,
   STUFEN,
   appUrl,
@@ -68,4 +69,8 @@ test("Club-Seite nennt den Geburtstagsbonus nicht (Ueberraschung, Benjamin 23.10
     .replace(/\/\*[\s\S]*?\*\//g, "")
     .replace(/^\s*\/\/.*$/gm, "");
   assert.doesNotMatch(club, /geburtstagEuro|Geburtstag/);
+});
+
+test("Obergrenze Beauty-Sparbuch 5.000 € (seit 03.11.2026, myhb-os#2099)", () => {
+  assert.equal(SPARBUCH.obergrenze, 5000);
 });
