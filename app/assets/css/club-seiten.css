@@ -501,3 +501,13 @@
     display: none;
   }
 }
+
+.cl__liste {
+  margin: 4px 0 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--cl-text);
+}
