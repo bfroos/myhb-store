@@ -67,10 +67,27 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="z in zeilen" :key="z.name">
-                <th scope="row">{{ z.name }}</th>
-                <td v-for="(w, i) in z.werte" :key="i" :class="{ cl__nein: w === '–' }">{{ w }}</td>
-              </tr>
+              <template v-for="(z, zi) in zeilen" :key="z.name">
+                <tr class="cl__zeile" :class="{ 'cl__zeile--offen': offen === zi }" @click="umschalten(zi)">
+                  <th scope="row">
+                    <button
+                      type="button"
+                      class="cl__zeileKnopf"
+                      :aria-expanded="offen === zi"
+                      :aria-controls="`vorteil-${zi}`"
+                      @click.stop="umschalten(zi)"
+                    >
+                      {{ z.name }}
+                    </button>
+                  </th>
+                  <td v-for="(w, i) in z.werte" :key="i" :class="{ cl__nein: w === '–' }">{{ w }}</td>
+                </tr>
+                <tr v-show="offen === zi" :id="`vorteil-${zi}`" class="cl__erklaerung">
+                  <td :colspan="STUFEN.length + 1">
+                    <p v-for="(absatz, ai) in z.erklaerung" :key="ai">{{ absatz }}</p>
+                  </td>
+                </tr>
+              </template>
             </tbody>
           </table>
         </div>
@@ -87,6 +104,14 @@
             </ul>
           </li>
         </ul>
+        <div class="cl__fragen cl__vorteilErklaert">
+          <p class="cl__hinweis">Was heißt das? Tipp auf einen Vorteil.</p>
+          <details v-for="z in zeilen" :key="z.name">
+            <summary>{{ z.name }}</summary>
+            <p v-for="(absatz, ai) in z.erklaerung" :key="ai">{{ absatz }}</p>
+          </details>
+        </div>
+        <p class="cl__hinweis cl__hinweis--tabelle">Tipp auf einen Vorteil, dann siehst du, wie er funktioniert.</p>
       </section>
 
       <section class="cl__abschnitt">
@@ -156,7 +181,7 @@
  * das Mailing (assets/css/club-seiten.css). Solange NUXT_PUBLIC_CLUB_SEITEN
  * aus ist: noindex und nirgends verlinkt.
  */
-import { CLUB, SPARBUCH, STATUS_FENSTER_MONATE, STUFEN, euro, prozent } from "#shared/clubSeiten";
+import { CLUB, SPARBUCH, SPARBUCH_PFLICHTSATZ, STATUS_FENSTER_MONATE, STUFEN, euro, prozent, sparbuchBeispiel } from "#shared/clubSeiten";
 import { SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
 
 const { t } = useI18n();
@@ -165,15 +190,72 @@ const { enabled, appUrl, trackClick } = useClubSeiten();
 const ja = (b: boolean) => (b ? "✓" : "–");
 // Wortlaut Michael (Mail-Werkstatt 23.10.2026). Der Geburtstagsbonus bleibt eine
 // Ueberraschung und steht deshalb nicht in der Tabelle (Benjamin 23.10.2026).
+const beispiel = sparbuchBeispiel(STUFEN[0]!.sparbuchBonusProzent);
+const stufeNamen = (pruef: (s: (typeof STUFEN)[number]) => boolean) => STUFEN.find(pruef)?.name ?? "";
+
+// Erklaerungen zum Aufklappen (Benjamin und Michael 03.11.2026): Jeder Vorteil
+// soll nicht nur ein Wort sein, sondern sagen, was er heisst und wie er funktioniert.
 const zeilen = [
-  { name: "Cashback je Besuch", werte: STUFEN.map((s) => prozent(s.cashbackProzent)) },
-  { name: "Status-Welcome-Guthaben", werte: STUFEN.map((s) => (s.geschenkEuro ? euro(s.geschenkEuro) : "–")) },
-  { name: "Bonus Beauty-Sparbuch", werte: STUFEN.map((s) => `${prozent(s.sparbuchBonusProzent)} im Jahr`) },
-  { name: "Sonderaktionen", werte: STUFEN.map((s) => ja(s.aktionen)) },
-  { name: "Priority Booking: Wunscharzt wählen", werte: STUFEN.map((s) => ja(s.wunscharzt)) },
-  { name: "Priority Support", werte: STUFEN.map((s) => ja(s.bevorzugterService)) },
-  { name: "Mitgliedskarte in der App", werte: STUFEN.map(() => "✓") },
+  {
+    name: "Cashback je Besuch",
+    werte: STUFEN.map((s) => prozent(s.cashbackProzent)),
+    erklaerung: [
+      `Nach jeder bezahlten Behandlung schreiben wir dir automatisch einen Teil des Betrags als Guthaben gut: ${STUFEN.map((s) => `${prozent(s.cashbackProzent)} als ${s.name}`).join(", ")}.`,
+      `Beispiel: Du bezahlst 400 € für eine Behandlung. Als GREY bekommst du ${euro((400 * STUFEN[2]!.cashbackProzent) / 100)} Guthaben, als BLACK ${euro((400 * STUFEN[3]!.cashbackProzent) / 100)}.`,
+      "Dein Guthaben siehst du sofort in der App. Beim nächsten Besuch sagst du am Empfang einfach: „Bitte mit Guthaben.“",
+    ],
+  },
+  {
+    name: "Status-Welcome-Guthaben",
+    werte: STUFEN.map((s) => (s.geschenkEuro ? euro(s.geschenkEuro) : "–")),
+    erklaerung: [
+      `Erreichst du einen neuen Status, schenken wir dir einmalig Guthaben: ${STUFEN.filter((s) => s.geschenkEuro).map((s) => `${euro(s.geschenkEuro!)} für ${s.name}`).join(", ")}.`,
+      `Dein Status richtet sich nach deinem Umsatz in den letzten ${STATUS_FENSTER_MONATE} Monaten. Sobald du die Grenze erreichst, liegt das Guthaben automatisch in deinem Kundenkonto in der App.`,
+    ],
+  },
+  {
+    name: "Bonus Beauty-Sparbuch",
+    werte: STUFEN.map((s) => `${prozent(s.sparbuchBonusProzent)} im Jahr`),
+    erklaerung: [
+      `Mit dem Beauty-Sparbuch legst du jeden Monat ab ${euro(SPARBUCH.mindestRate)} für deine nächste Behandlung zurück, ohne zusätzliche Gebühren. Auf dein eingezahltes Guthaben bekommst du jeden Monat einen Beauty-Bonus dazu: ${prozent(STUFEN[0]!.sparbuchBonusProzent)} im Jahr, mit Status bis zu ${prozent(STUFEN[STUFEN.length - 1]!.sparbuchBonusProzent)}.`,
+      `Beispiel: Du legst ${SPARBUCH.beispielMonate} Monate lang je ${euro(SPARBUCH.beispielRate)} zurück. Dann hast du ${euro(beispiel.eingezahlt)} Guthaben und rund ${euro(beispiel.bonus)} Beauty-Bonus dazu (bei ${prozent(STUFEN[0]!.sparbuchBonusProzent)}).`,
+      `Angelegt wird das Sparbuch in der App. ${SPARBUCH_PFLICHTSATZ}`,
+    ],
+  },
+  {
+    name: "Sonderaktionen",
+    werte: STUFEN.map((s) => ja(s.aktionen)),
+    erklaerung: [
+      `Ab ${stufeNamen((s) => s.aktionen)} bekommst du Aktionen für ausgewählte Behandlungen, die es nur für Statuskunden gibt. Wir sagen dir per E-Mail und in der App Bescheid, sobald eine Aktion läuft.`,
+    ],
+  },
+  {
+    name: "Priority Booking: Wunscharzt wählen",
+    werte: STUFEN.map((s) => ja(s.wunscharzt)),
+    erklaerung: [
+      `Ab ${stufeNamen((s) => s.wunscharzt)} buchst du deinen Termin direkt bei deinem Wunscharzt. In der App siehst du, an welchen Tagen er an deinem Standort ist, und wählst ihn bei der Buchung aus.`,
+    ],
+  },
+  {
+    name: "Priority Support",
+    werte: STUFEN.map((s) => ja(s.bevorzugterService)),
+    erklaerung: [
+      `Ab ${stufeNamen((s) => s.bevorzugterService)} kommst du bei Fragen schneller dran: Deine Anfragen an unseren Kundenservice, ob per Telefon, WhatsApp oder E-Mail, bearbeiten wir bevorzugt.`,
+    ],
+  },
+  {
+    name: "Mitgliedskarte in der App",
+    werte: STUFEN.map(() => "✓"),
+    erklaerung: [
+      "In der App hast du deine Mitgliedskarte immer dabei. Darauf siehst du deinen Status, dein Guthaben und wie viel dir bis zum nächsten Status fehlt.",
+    ],
+  },
 ];
+
+const offen = ref<number | null>(null);
+function umschalten(i: number) {
+  offen.value = offen.value === i ? null : i;
+}
 
 const fragen = [
   {
