@@ -219,7 +219,8 @@ const zeilen = [
     erklaerung: [
       `Mit dem Beauty-Sparbuch legst du jeden Monat ab ${euro(SPARBUCH.mindestRate)} für deine nächste Behandlung zurück, ohne zusätzliche Gebühren. Auf dein eingezahltes Guthaben bekommst du jeden Monat einen Beauty-Bonus dazu: ${prozent(STUFEN[0]!.sparbuchBonusProzent)} im Jahr, mit Status bis zu ${prozent(STUFEN[STUFEN.length - 1]!.sparbuchBonusProzent)}.`,
       `Beispiel: Du legst ${SPARBUCH.beispielMonate} Monate lang je ${euro(SPARBUCH.beispielRate)} zurück. Dann hast du ${euro(beispiel.eingezahlt)} Guthaben und rund ${euro(beispiel.bonus)} Beauty-Bonus dazu (bei ${prozent(STUFEN[0]!.sparbuchBonusProzent)}).`,
-      `Angelegt wird das Sparbuch in der App. ${SPARBUCH_PFLICHTSATZ}`,
+      "Angelegt wird das Sparbuch in der App.",
+      `${prozent(STUFEN[0]!.sparbuchBonusProzent)} ${SPARBUCH_PFLICHTSATZ}`,
     ],
   },
   {
