@@ -8,6 +8,17 @@
         <span>{{ g.text }}</span>
       </NuxtLink>
     </nav>
+    <!-- MY Club und Beauty-Sparbuch, hinter NUXT_PUBLIC_CLUB_SEITEN -->
+    <nav v-if="clubSeiten.enabled.value" class="priceGuide priceGuide--club" aria-label="Sparen bei MY HEALTH & BEAUTY">
+      <NuxtLinkLocale to="/club" class="priceGuide__item" @click="clubSeiten.trackClick('preise', 'club')">
+        <strong>MY Club</strong>
+        <span>Bei jedem Besuch Guthaben für den nächsten</span>
+      </NuxtLinkLocale>
+      <NuxtLinkLocale to="/beauty-sparbuch" class="priceGuide__item" @click="clubSeiten.trackClick('preise', 'sparbuch')">
+        <strong>Beauty-Sparbuch</strong>
+        <span>Monatlich zurücklegen, Beauty-Bonus dazu</span>
+      </NuxtLinkLocale>
+    </nav>
   </UiLayoutSectionBlock>
   <BlockProductCategoryPriceOverview :productCategories="shownCategories" />
   <BlockRenderer v-if="bottomBlocks" :blocks="bottomBlocks" />
@@ -24,6 +35,7 @@ const pageLoaded = await fetchPage();
 // Schema.org ItemList (Service + Offer) for the treatment prices
 const config = useRuntimeConfig();
 const { isAdsMode } = useSiteModeFlags();
+const clubSeiten = useClubSeiten();
 const prices = computed(() => costPagePrices((productCategories.value ?? []) as any));
 
 // #313: www-Title/H1 mit "Kosten" und konkreten Preisen; Strapi-Text bleibt.
@@ -95,6 +107,9 @@ useSchemaOrg(priceListSchema);
   display: grid;
   gap: var(--space-400);
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+.priceGuide--club {
+  margin-top: var(--space-400);
 }
 .priceGuide__item {
   display: flex;

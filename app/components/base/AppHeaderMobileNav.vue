@@ -108,7 +108,11 @@
           </ul>
         </nav>
         <nav
-          v-if="props.items.secondaryNavItems.length > 0 || props.items.kontoHref"
+          v-if="
+            props.items.secondaryNavItems.length > 0 ||
+            props.items.kontoHref ||
+            props.items.clubSeiten
+          "
           class="mobileMenu__secondaryNav"
         >
           <ul>
@@ -119,6 +123,24 @@
                 @click="closeMobileMenu"
               >
                 {{ item.name }}
+              </NuxtLinkLocale>
+            </li>
+            <li v-if="props.items.clubSeiten">
+              <NuxtLinkLocale
+                to="/club"
+                class="mobileMenu__link"
+                @click="onClub('club')"
+              >
+                {{ $t("navigation.secondary.myClub") }}
+              </NuxtLinkLocale>
+            </li>
+            <li v-if="props.items.clubSeiten">
+              <NuxtLinkLocale
+                to="/beauty-sparbuch"
+                class="mobileMenu__link"
+                @click="onClub('sparbuch')"
+              >
+                {{ $t("navigation.secondary.beautySparbuch") }}
               </NuxtLinkLocale>
             </li>
             <li v-if="props.items.kontoHref">
@@ -173,6 +195,7 @@ const props = defineProps<{
     adsLocation?: { label: string; to: string } | null;
     /** #282: "Mein Konto" zur Kunden-App; null = Schalter aus. */
     kontoHref?: string | null;
+    clubSeiten?: boolean;
   };
 }>();
 
@@ -185,6 +208,12 @@ function onAdsPhone() {
 const kontoLink = useKontoLink();
 function onKonto() {
   kontoLink.trackClick("header");
+  closeMobileMenu();
+}
+
+const clubSeiten = useClubSeiten();
+function onClub(ziel: "club" | "sparbuch") {
+  clubSeiten.trackClick("mobilmenue", ziel);
   closeMobileMenu();
 }
 

@@ -1,4 +1,5 @@
 import { fileURLToPath } from "node:url";
+import { isClubSeitenEnabled } from "./shared/clubSeiten";
 
 /**
  * ISR-Regel fuer Vercel: Laufzeit in Sekunden, Query-Parameter NICHT im
@@ -509,6 +510,11 @@ export default defineNuxtConfig({
       // AUS; "on" schaltet ihn ein. Live erst nach den Schulungen Kunden-App
       // und Behandlungsplan (myhb-os#905, #906, Reihenfolge in #908).
       kontoLink: process.env.NUXT_PUBLIC_KONTO_LINK,
+      // Seiten /club und /beauty-sparbuch (shared/clubSeiten.ts): aus, bis die
+      // Stufen und das Sparbuch in der App laufen; auf Vercel-Previews an.
+      clubSeiten:
+        process.env.NUXT_PUBLIC_CLUB_SEITEN ??
+        (process.env.VERCEL_ENV === "preview" ? "on" : ""),
     },
   },
 
@@ -548,6 +554,18 @@ export default defineNuxtConfig({
               // SAMEORIGIN here would block the preview iframe in Strapi admin.
             },
           },
+          // /club und /beauty-sparbuch: solange NUXT_PUBLIC_CLUB_SEITEN aus ist,
+          // sind die Seiten nur per Direktlink zum Zeigen da (Benjamin
+          // 04.11.2026). Zweite Sicherung neben dem robots-Meta der Seite:
+          // der Header gilt auch, wenn das Meta einmal fehlt.
+          ...(isClubSeitenEnabled(process.env.NUXT_PUBLIC_CLUB_SEITEN)
+            ? {}
+            : Object.fromEntries(
+                ["/club", "/beauty-sparbuch", "/*/club", "/*/beauty-sparbuch"].map((pfad) => [
+                  pfad,
+                  { headers: { "x-robots-tag": "noindex, nofollow" } },
+                ]),
+              )),
           // Naechster freier Termin: 60 s am CDN, danach im Hintergrund neu
           // (die Seite selbst ist ISR, die Zeit wird im Browser nachgeladen).
           "/api/naechster-termin": {

@@ -11,8 +11,26 @@
           <div v-if="hasClubContent" class="myClub__club-content">
             <UiLayoutRichText :blocks="clubContent!" />
           </div>
+          <template v-if="clubSeiten.enabled.value">
+            <UiAtomBaseButton
+              as="nuxt-link-locale"
+              to="/club"
+              size="lg"
+              wide
+              @click="clubSeiten.trackClick('myclub-block', 'club')"
+            >
+              {{ t("cta.joinMyClub", { brandNameShort }) }}
+            </UiAtomBaseButton>
+            <NuxtLinkLocale
+              to="/beauty-sparbuch"
+              class="myClub__sparbuch"
+              @click="clubSeiten.trackClick('myclub-block', 'sparbuch')"
+            >
+              {{ t("navigation.secondary.beautySparbuch") }} →
+            </NuxtLinkLocale>
+          </template>
           <UiAtomBaseButton
-            v-if="clubUrl"
+            v-else-if="clubUrl"
             :href="clubUrl"
             size="lg"
             as="a"
@@ -83,6 +101,8 @@ const globals = useGlobals();
 const { brandNameShort } = useBrand();
 
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
+// Seiten /club und /beauty-sparbuch, hinter NUXT_PUBLIC_CLUB_SEITEN.
+const clubSeiten = useClubSeiten();
 // Strapi fuehrt noch den Gutschein im alten Shop; der Kauf laeuft seit
 // 22.10.2026 ueber die Gutscheinseite der Website.
 const grouponUrl = computed(() => gutscheinLink(globals.value?.ecommerce?.couponUrl ?? null));
@@ -109,6 +129,12 @@ const hasGrouponImage = computed(
 </script>
 
 <style scoped>
+.myClub__sparbuch {
+  color: inherit;
+  font-weight: var(--font-bold);
+  text-align: center;
+}
+
 .myClub {
   display: flex;
   flex-direction: column;
