@@ -16,7 +16,7 @@
   },
   {
     "from": "/blogs/news/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
-    "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "to": "/behandlungen/infusionen/vitamin-c-infusion",
     "code": 301
   },
   {
@@ -2186,8 +2186,8 @@
   },
   {
     "from": "/pages/reviews",
-    "to": "/reviews",
-    "code": 410
+    "to": "/p/kunden-erfahrungen",
+    "code": 301
   },
   {
     "from": "/pages/lumi-eyes-recklinghausen",
@@ -3521,17 +3521,17 @@
   },
   {
     "from": "/products/juvederm-ultra-smile-0-5ml-filler-behandlung",
-    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=0-55-ml",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
     "code": 301
   },
   {
     "from": "/products/juvederm%C2%AE-ultra-smile-1-1ml-filler-behandlung",
-    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=1-1-ml",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
     "code": 301
   },
   {
     "from": "/products/mona-lisa-hyaluron-filler-0-5-ml-behandlung",
-    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=0-55-ml",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
     "code": 301
   },
   {
@@ -3811,7 +3811,7 @@
   },
   {
     "from": "/ar/products/juvederm-ultra-smile-0-5ml-فيلر-علاج",
-    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=0-55-ml",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
     "code": 301
   },
   {
@@ -4591,7 +4591,7 @@
   },
   {
     "from": "/tr/blogs/haberler/vitamin-c-enjeksiyonu-bagisiklik-sistemin-icin-guclendirici",
-    "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "to": "/behandlungen/infusionen/vitamin-c-infusion",
     "code": 301
   },
   {
@@ -6311,7 +6311,7 @@
   },
   {
     "from": "/pages/gdpr-compliance",
-    "to": "/p/gdpr-compliance",
+    "to": "/p/datenschutz",
     "code": 301
   },
   {
@@ -6401,8 +6401,7 @@
   },
   {
     "from": "/ar/pages/gluecksrad",
-    "to": "/p/gluecksrad",
-    "code": 301
+    "code": 410
   },
   {
     "from": "/tr/pages/mesotherapie-haare-aachen",
@@ -6511,7 +6510,7 @@
   },
   {
     "from": "/ar/pages/gdpr-compliance",
-    "to": "/p/gdpr-compliance",
+    "to": "/p/datenschutz",
     "code": 301
   },
   {
@@ -6651,7 +6650,7 @@
   },
   {
     "from": "/en/pages/ccpa-compliance",
-    "to": "/p/ccpa-compliance",
+    "to": "/p/datenschutz",
     "code": 301
   },
   {
@@ -6701,8 +6700,7 @@
   },
   {
     "from": "/tr/pages/gluecksrad",
-    "to": "/p/gluecksrad",
-    "code": 301
+    "code": 410
   },
   {
     "from": "/en/products/teoxane-redensity-2-i-1-0-ml-filler-treatment-3",
@@ -6821,8 +6819,7 @@
   },
   {
     "from": "/en/pages/influencer-werbeseite",
-    "to": "/p/influencer-werbeseite",
-    "code": 301
+    "code": 410
   },
   {
     "from": "/en/pages/lip-plumping-and-russian-lips-in-moenchengladbach",
@@ -6886,7 +6883,7 @@
   },
   {
     "from": "/ar/blogs/أخبار/فيتامين-سي-تسريب-المعزز-لنظامك-المناعي",
-    "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "to": "/behandlungen/infusionen/vitamin-c-infusion",
     "code": 301
   },
   {
@@ -6906,7 +6903,7 @@
   },
   {
     "from": "/ar/pages/our-story",
-    "to": "/p/our-story",
+    "to": "/ueber-uns",
     "code": 301
   },
   {
@@ -7101,7 +7098,7 @@
   },
   {
     "from": "/pages/appi-compliance",
-    "to": "/p/appi-compliance",
+    "to": "/p/datenschutz",
     "code": 301
   },
   {
@@ -7231,7 +7228,7 @@
   },
   {
     "from": "/pages/termin-buchen",
-    "to": "/p/termin-buchen",
+    "to": "/standorte",
     "code": 301
   },
   {
@@ -7251,7 +7248,7 @@
   },
   {
     "from": "/pages/customer-service",
-    "to": "/p/customer-service",
+    "to": "/ueber-uns",
     "code": 301
   },
   {
@@ -7301,7 +7298,7 @@
   },
   {
     "from": "/tr/pages/partner",
-    "to": "/p/partner",
+    "to": "/ueber-uns",
     "code": 301
   },
   {
@@ -7651,7 +7648,7 @@
   },
   {
     "from": "/ar/pages/appi-compliance",
-    "to": "/p/appi-compliance",
+    "to": "/p/datenschutz",
     "code": 301
   },
   {
@@ -7676,7 +7673,7 @@
   },
   {
     "from": "/en/pages/customer-service",
-    "to": "/p/customer-service",
+    "to": "/ueber-uns",
     "code": 301
   },
   {
@@ -7731,7 +7728,7 @@
   },
   {
     "from": "/en/pages/partner",
-    "to": "/p/partner",
+    "to": "/ueber-uns",
     "code": 301
   },
   {
@@ -7941,7 +7938,7 @@
   },
   {
     "from": "/en/blogs/news/vitamin-c-infusion-the-booster-for-your-immune-system",
-    "to": "/blog/vitamin-c-infusion-der-booster-fur-dein-immunsystem",
+    "to": "/behandlungen/infusionen/vitamin-c-infusion",
     "code": 301
   },
   {
@@ -7996,8 +7993,7 @@
   },
   {
     "from": "/tr/pages/glucksrad-promo",
-    "to": "/p/glucksrad-promo",
-    "code": 301
+    "code": 410
   },
   {
     "from": "/en/pages/location-berlin-gesundbrunnencenter",
@@ -8021,8 +8017,7 @@
   },
   {
     "from": "/pages/influencer-werbeseite",
-    "to": "/p/influencer-werbeseite",
-    "code": 301
+    "code": 410
   },
   {
     "from": "/ar/cart/update",
@@ -8131,8 +8126,7 @@
   },
   {
     "from": "/pages/glucksrad-promo",
-    "to": "/p/glucksrad-promo",
-    "code": 301
+    "code": 410
   },
   {
     "from": "/en/pages/botox-hyaluronic-without-appointment-in-kaiserslautern",
@@ -8401,7 +8395,7 @@
   },
   {
     "from": "/tr/products/juvederm®-ultra-smile-1-1ml-dolgu-tedavisi",
-    "to": "/produkte/hyaluron-und-filler/juvederm-ultra-smile?v=1-1-ml",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
     "code": 301
   },
   {
@@ -8446,7 +8440,7 @@
   },
   {
     "from": "/pages/botox-vistabel-ab-99-je-zone",
-    "to": "/produkte/botox/botox-vistabel-ab-99-je-zone",
+    "to": "/p/botox-kosten",
     "code": 301
   },
   {
@@ -8511,7 +8505,7 @@
   },
   {
     "from": "/pages/social-media-landingpage",
-    "to": "/p/social-media-landingpage",
+    "to": "/",
     "code": 301
   },
   {
@@ -8621,8 +8615,7 @@
   },
   {
     "from": "/tr/pages/oez-munchen",
-    "to": "/p/oez-munchen",
-    "code": 301
+    "code": 410
   },
   {
     "from": "/en/pages/breast-augmentation-leipzig",
@@ -10711,7 +10704,7 @@
   },
   {
     "from": "/en/blogs/news/prp-for-a-rejuvenated-and-radiant-complexion",
-    "to": "/blog/prp-for-a-rejuvenated-and-radiant-complexion",
+    "to": "/behandlungen/skinbooster/vampir-lifting-prp",
     "code": 301
   },
   {
@@ -11402,6 +11395,176 @@
   {
     "from": "/myh-b-geschenkgutschein",
     "to": "/gutschein",
+    "code": 301
+  },
+  {
+    "from": "/tr/blogs/haberler/yurt-disinda-estetik-ameliyatlar-firsat-mi-risk-mi",
+    "to": "/behandlungen/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/products/juvederm®-ultra-smile-1-1ml-filler-behandlung",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/en/blogs/news/hair-transplantation-in-germany-vs-turkey-cost-quality-and-patient-experiences",
+    "to": "/en/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "code": 301
+  },
+  {
+    "from": "/tr/blogs/haberler/almanya-vs-turkiye-sac-ekimi-maliyet-kalite-ve-hasta-deneyimleri",
+    "to": "/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "code": 301
+  },
+  {
+    "from": "/tr/blogs/haberler/turkiye-sac-ekimi-mekkesi-neden-bu-kadar-cok-alman-oraya-gidiyor",
+    "to": "/blog/haartransplantation-in-deutschland-vs-turkei-kosten-qualitat-und-patienten-erfahrungen",
+    "code": 301
+  },
+  {
+    "from": "/pages/vorher-nachher-lippen",
+    "to": "/behandlungen/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/collections/all",
+    "to": "/behandlungen",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vampire-lift-prp-berlin",
+    "to": "/en/treatments/skinbooster/vampire-lift-PRP",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/mesotherapy-hair-berlin",
+    "to": "/en/treatments/anti-haarausfall/mesotherapie-haare",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/mesotherapy-hair-duesseldorf",
+    "to": "/en/treatments/anti-haarausfall/mesotherapie-haare",
+    "code": 301
+  },
+  {
+    "from": "/en/collections/your-skinbooster-treatments",
+    "to": "/en/treatments/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/tr/products/hyaloron-tedavi",
+    "to": "/behandlungen/hyaluron",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/liposuction-cologne",
+    "to": "/en/treatments/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/en/products/restylane-kysse-1-ml-filler-treatment-1",
+    "to": "/en/treatments/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/tummy-tuck-berlin",
+    "to": "/en/treatments/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/en/blogs/news/what-helps-against-wrinkles",
+    "to": "/en/treatments/botox",
+    "code": 301
+  },
+  {
+    "from": "/products/botox-masseter",
+    "to": "/behandlungen/botox/masseter",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/dark-circles-with-hyaluronic-injection-in-leipzig-from-299-99",
+    "to": "/en/treatments/hyaluron/augenringe-unterspritzen",
+    "code": 301
+  },
+  {
+    "from": "/tr/products/hylase-1-0-ml-behandlung",
+    "to": "/behandlungen/hyaluron/hylase",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/location-loom-bielefeld",
+    "to": "/standorte/bielefeld/loom",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/fat-dissolving-injection",
+    "to": "/en/treatments/fettwegspritze",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/skinbooster-recklinghausen",
+    "to": "/en/treatments/skinbooster",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lip-filler-and-russian-lips-in-moenchengladbach-ba",
+    "to": "/standorte/moenchengladbach/minto/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lippen-aufspritzen-und-russian-lips-in-moenchengladbach-ab",
+    "to": "/standorte/moenchengladbach/minto/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/en/products/juvederm-ultra-smile-0-5ml-filler-treatment",
+    "to": "/en/treatments/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/pages/krahenfusse-in-oberhausen-mit-botox-glatten-ab-149-99-i-myh-b-oberhausen",
+    "to": "/behandlungen/botox/kraehenfuesse",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/vitamin-b-complex-berlin",
+    "to": "/en/treatments/infusionen/b-komplex-infusion",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/location-moenchengladbach",
+    "to": "/standorte/moenchengladbach/minto",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/botox-without-appointment-oberhausen",
+    "to": "/en/treatments/botox",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/location-saarbrucken",
+    "to": "/standorte/saarbruecken/europa-galerie",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/smile-lines-berlin",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox/lachfalten",
+    "code": 301
+  },
+  {
+    "from": "/collections/all/products/teoxane-rha-kiss-0-5-ml-filler-behandlung-1",
+    "to": "/produkte/hyaluron-und-filler/teosyal-rha-kiss",
+    "code": 301
+  },
+  {
+    "from": "/tr/pages/brustvergrosserung-koeln",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/en/pages/lip-wrinkle-duesseldorf",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/plisseefalten",
     "code": 301
   }
 ]
