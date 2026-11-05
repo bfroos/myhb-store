@@ -53,6 +53,9 @@
     />
     <!-- E24 #315: Stadtseite -> bundesweite Seite und Kostenseite (www) -->
     <UiLayoutSectionBlock v-if="hubLink" spacing="sibling">
+      <p v-if="primary" class="hubLink hubLink--primary">
+        Mehr zum Thema: <NuxtLink :to="primary.href">{{ primary.label }}</NuxtLink>
+      </p>
       <p class="hubLink">
         Wirkung, Ablauf und Risiken bundesweit erklärt:
         <NuxtLink :to="hubLink.href">{{ hubLink.text }}</NuxtLink>
@@ -60,6 +63,13 @@
           · <NuxtLink :to="hubLink.costHref">{{ hubLink.costText }}</NuxtLink>
         </template>
       </p>
+      <!-- E24 #395: dieselbe Behandlung in den anderen Staedten (shared/cityLinks.ts) -->
+      <nav v-if="otherCities.length" class="hubLink hubLink--cities" aria-label="Auch in anderen Städten">
+        Auch in anderen Städten:
+        <template v-for="(c, i) in otherCities" :key="c.href">
+          <NuxtLink :to="c.href">{{ c.label }}</NuxtLink><template v-if="i < otherCities.length - 1"> · </template>
+        </template>
+      </nav>
     </UiLayoutSectionBlock>
     <!-- go.: Sternchen-Erklaerung + regulaerer Preis (nicht mehr im Hero) -->
     <BlockAdsPriceFootnote
@@ -85,6 +95,7 @@ import { seoPilotCity } from "#shared/seoPilotLippen";
 import { applyLocalFacts } from "#shared/localFacts";
 import { extraFaqsForSchema, seoCityExtra } from "#shared/seoCityExtras";
 import { applyLocalText, localTextKey, type SeoLocalText } from "#shared/seoLocalTexts";
+import { otherCityLinks, primaryLink, type BookableLocation } from "#shared/cityLinks";
 import { isLocalGateActive, localGateCanonical, type LocalGatePageData } from "#shared/localContentGate";
 import { employeeDisplayName, pickAdsV2Reviews } from "#shared/adsTemplateV2";
 import {
@@ -223,6 +234,38 @@ const hubLink = computed(() => {
     costText: pathKey === "hyaluron/lippen-aufspritzen" ? "Lippen aufspritzen Kosten" : cost?.text,
   };
 });
+// E24 #395: Links auf dieselbe Behandlung an den anderen Standorten.
+const otherCitiesKey = hubLink.value?.href ?? "";
+const { data: otherCityLocations } = otherCitiesKey
+  ? await useAsyncData(`other-cities:${otherCitiesKey}`, () =>
+      strapiFetch<{ data: BookableLocation[] }>("/locations/bookable", {
+        query: { locale: "de", pathKey: String((treatmentPage.value as any)?.pathKey ?? "") },
+      })
+        .then((r) => r?.data ?? [])
+        .catch(() => [] as BookableLocation[]),
+    )
+  : { data: ref<BookableLocation[]>([]) };
+const primary = computed(() =>
+  hubLink.value
+    ? primaryLink(
+        String((treatmentPage.value as any)?.pathKey ?? ""),
+        String(seoRoute.params.citySlug ?? ""),
+        String(seoRoute.params.locationSlug ?? ""),
+        location.value?.city?.name ?? "",
+      )
+    : null,
+);
+const otherCities = computed(() =>
+  hubLink.value
+    ? otherCityLinks(
+        otherCityLocations.value,
+        String((treatmentPage.value as any)?.pathKey ?? ""),
+        String(seoRoute.params.locationSlug ?? ""),
+        hubLink.value.text,
+      )
+    : [],
+);
+
 
 // E24 #314: Kurzantwort mit Stadt und Center (nur www, Deutsch).
 const answerRoute = useRoute();
@@ -414,6 +457,12 @@ useSchemaOrg(localBusinessSchema); // NEW: Address + Stars in SERPs
   border-radius: var(--border-radius-card, 24px);
   background: var(--color-card-bg-light, #fff);
   line-height: 1.6;
+}
+.hubLink--primary {
+  margin-bottom: var(--space-300);
+}
+.hubLink--cities {
+  margin-top: var(--space-300);
 }
 .hubLink a {
   text-decoration: underline;

@@ -170,6 +170,24 @@
                 </a>
               </nav>
             </div>
+            <!-- E24 #395: je Stadt die gefragtesten Behandlungen (shared/cityLinks.ts) -->
+            <nav
+              v-if="!isAdsMode && locale === 'de' && footerCities.length"
+              class="appFooter__cities"
+              aria-label="Behandlungen in deiner Stadt"
+            >
+              <h2 class="appFooter__navTitle">Behandlungen in deiner Stadt</h2>
+              <ul class="appFooter__citiesGrid">
+                <li v-for="c in footerCities" :key="c.href">
+                  <NuxtLink :to="c.href" class="appFooter__city">{{ c.city }}</NuxtLink>
+                  <ul>
+                    <li v-for="l in c.links" :key="l.href">
+                      <NuxtLink :to="l.href">{{ l.label }}</NuxtLink>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </nav>
           </div>
         </div>
       </UiLayoutCardSurface>
@@ -298,6 +316,7 @@ import {
   IconBrandLinkedin,
   IconBrandTiktok,
 } from "@tabler/icons-vue";
+import { footerCityLinks, type BookableLocation } from "#shared/cityLinks";
 
 const { isAdsMode } = useSiteModeFlags();
 const isAdsTemplateV2 = useAdsTemplateV2();
@@ -308,6 +327,15 @@ const { treatmentPages, productCategories } = useMenu(() =>
 const { categories: adsCategories, overviewLinks: adsOverviewLinks } =
   await useAdsNav();
 const { openCookieSettings } = useCookiebot();
+// E24 #395: Stadt-Links im Footer (www, Deutsch).
+const { data: footerLocations } = await useAsyncData("footer-city-locations", () =>
+  isAdsMode.value || locale.value !== "de"
+    ? Promise.resolve([] as BookableLocation[])
+    : strapiFetch<{ data: BookableLocation[] }>("/locations/bookable", { query: { locale: "de" } })
+        .then((r) => r?.data ?? [])
+        .catch(() => [] as BookableLocation[]),
+);
+const footerCities = computed(() => footerCityLinks(footerLocations.value));
 const globals = useGlobals();
 const clubUrl = computed(() => globals.value?.ecommerce?.clubUrl ?? null);
 // #282: "Mein Konto" zur Kunden-App, hinter NUXT_PUBLIC_KONTO_LINK.
@@ -374,6 +402,25 @@ function priceCategoryLink(category: { slug: string }) {
   display: flex;
   flex-direction: column;
   gap: var(--space-600);
+}
+
+.appFooter__cities {
+  grid-column: 1 / -1;
+  padding: var(--space-card-pad);
+  border-top: 1px solid var(--color-border-mute);
+}
+.appFooter__citiesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16ch, 1fr));
+  gap: var(--space-500);
+}
+.appFooter__citiesGrid ul {
+  margin-top: var(--space-200);
+  font-size: var(--font-sm);
+  line-height: var(--line-sm);
+}
+.appFooter__city {
+  font-weight: var(--font-bold);
 }
 
 .appFooter__navTitle {

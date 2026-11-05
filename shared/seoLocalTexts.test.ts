@@ -80,7 +80,12 @@ test("applyLocalText ersetzt Texte, behaelt Bilder und 'nicht geeignet'", () => 
       faqs: [{ question: "s1", answer: [] }, { question: "s2", answer: [] }],
       faqSets: [{ faqs: [{ question: "s3", answer: [] }, { question: "s4", answer: [] }] }],
     },
-    tableOfContents: { index: [{ key: "how-it-works", value: "alt" }, { key: "faq", value: "Fragen" }] },
+    treatmentPlan: { headline: "Plan" },
+    tableOfContents: {
+      intro: "allgemein",
+      content: ["x"],
+      index: [{ key: "how-it-works", value: "alt" }, { key: "treatment-plan", value: "Plan" }, { key: "faq", value: "Fragen" }],
+    },
   };
   const t: SeoLocalText = {
     key: "x@y/z",
@@ -101,6 +106,9 @@ test("applyLocalText ersetzt Texte, behaelt Bilder und 'nicht geeignet'", () => 
   assert.deepEqual(out.faq.faqs.map((f: any) => f.question), ["Q", "s1", "s2", "s3"]);
   assert.deepEqual(out.faq.faqSets, []);
   assert.equal(out.tableOfContents.index[0].value, "Neu");
+  assert.deepEqual(out.tableOfContents.index.map((e: any) => e.key), ["how-it-works", "faq"]);
+  assert.deepEqual(out.tableOfContents.content, []);
+  assert.equal(out.treatmentPlan, undefined);
   assert.equal(applyLocalText(fixed, null), fixed);
   assert.equal(applyLocalText(null, t), null);
 });
