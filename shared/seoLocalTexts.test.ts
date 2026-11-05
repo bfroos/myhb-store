@@ -75,7 +75,11 @@ test("applyLocalText ersetzt Texte, behaelt Bilder und 'nicht geeignet'", () => 
     benefits: { headline: "alt", items: [{ heading: "a", content: [], media: "bild" }] },
     suitability: { firstItem: { heading: "a", content: [] }, secondItem: { heading: "nicht", content: ["x"] } },
     treatmentProcess: { headline: "alt", content: [], steps: [{ heading: "a", text: "a", image: "i" }] },
-    faq: { headline: "Fragen", faqs: [{ question: "strapi", answer: [] }] },
+    faq: {
+      headline: "Fragen",
+      faqs: [{ question: "s1", answer: [] }, { question: "s2", answer: [] }],
+      faqSets: [{ faqs: [{ question: "s3", answer: [] }, { question: "s4", answer: [] }] }],
+    },
     tableOfContents: { index: [{ key: "how-it-works", value: "alt" }, { key: "faq", value: "Fragen" }] },
   };
   const t: SeoLocalText = {
@@ -94,7 +98,8 @@ test("applyLocalText ersetzt Texte, behaelt Bilder und 'nicht geeignet'", () => 
   assert.equal(out.benefits.items.length, 2);
   assert.equal(out.suitability.secondItem.heading, "nicht");
   assert.equal(out.treatmentProcess.steps[0].image, "i");
-  assert.deepEqual(out.faq.faqs.map((f: any) => f.question), ["Q", "strapi"]);
+  assert.deepEqual(out.faq.faqs.map((f: any) => f.question), ["Q", "s1", "s2", "s3"]);
+  assert.deepEqual(out.faq.faqSets, []);
   assert.equal(out.tableOfContents.index[0].value, "Neu");
   assert.equal(applyLocalText(fixed, null), fixed);
   assert.equal(applyLocalText(null, t), null);

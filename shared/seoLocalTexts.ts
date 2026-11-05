@@ -33,6 +33,9 @@ export type SeoLocalText = {
 /** Notschalter: false = alle Seiten zeigen wieder nur den Strapi-Text. */
 export const SEO_LOCAL_TEXTS_ENABLED = true;
 
+/** So viele Strapi-Fragen bleiben neben den drei Standortfragen stehen. */
+export const STRAPI_FAQS_KEPT = 3;
+
 /** Woerter und Wendungen, die in keinem Text stehen duerfen. */
 export const SEO_LOCAL_TEXT_FORBIDDEN =
   /MYH\s?&\s?B|\bMYHB\b|®|€|\beuro\b|rabatt|angebot|neukund|kostenlos|gratis|garantie|garantiert|\bheilt|perfekt|schmerzfrei|risikolos|ohne nebenwirkungen|vorher[- ]nachher|\bdr\.|vistabel|allergan|juv[eé]derm|teoxane|aliaxin|restylane|azzalure|bocouture|xeomin|dysport|original-botox|kundin|(?:ärzt|berater|patient|spezialist|expert)innen/i;
@@ -119,13 +122,21 @@ export function applyLocalText<T extends Record<string, any> | null | undefined>
     };
     toc["treatment-process-steps"] = text.process.headline;
   }
+  // Die Strapi-Fragen stehen gleich auf allen Standorten und auf dem Hub
+  // (rund 1.300 Woerter). Hier nur die ersten drei, die uebrigen auf dem
+  // Hub, der unten auf der Seite verlinkt ist.
   if (text.faqs?.length && out.faq) {
+    const strapi = [
+      ...(out.faq.faqs ?? []),
+      ...(out.faq.faqSets ?? []).flatMap((set: any) => set?.faqs ?? []),
+    ];
     out.faq = {
       ...out.faq,
       faqs: [
         ...text.faqs.map((f) => ({ question: f.question, answer: rich([f.answer]) })),
-        ...(out.faq.faqs ?? []),
+        ...strapi.slice(0, STRAPI_FAQS_KEPT),
       ],
+      faqSets: [],
     };
   }
   if (out.tableOfContents?.index) {
