@@ -278,3 +278,31 @@
 @media (min-width: 760px) and (max-width: 1000px) {
   .pp__karten--drei { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Bilder (E32, Fotos vom eigenen Shooting) */
+.pp__heroRaster { display: grid; gap: 32px; align-items: center; }
+.pp__heroText { display: grid; gap: 24px; }
+.pp__heroBild,
+.pp__bild,
+.pp__band {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  object-fit: cover;
+  background: var(--pp-puder);
+}
+.pp__heroBild { aspect-ratio: 4 / 3; }
+.pp__bild { aspect-ratio: 3 / 2; margin-top: 24px; }
+.pp__band { aspect-ratio: 21 / 8; margin: 8px 0 32px; }
+.pp__zwei--bild { align-items: center; }
+.pp__zwei--bild .pp__bild { margin-top: 0; }
+.pp__qualitaet { margin-top: 24px; }
+@media (min-width: 900px) {
+  .pp__heroRaster { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 48px; }
+  .pp__vollbreit { grid-column: 1 / -1; }
+  .pp__zwei--bild { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+}
+@media (max-width: 599px) {
+  .pp__band { aspect-ratio: 3 / 2; }
+}

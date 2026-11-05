@@ -28,6 +28,42 @@ export const PARTNER_SEO = {
 
 export type Kachel = { titel: string; text: string };
 
+/**
+ * Fotos vom eigenen Shooting 2026 aus der Strapi-Mediathek (large = 800 px).
+ * Bewusst Team, Lounge und Beratung, keine Behandlung im Gesicht: Die Seite
+ * richtet sich an Aerzte, nicht an Kunden.
+ */
+const MEDIA = "https://media.myhealthandbeauty.app";
+export const BILDER = {
+  team: { src: `${MEDIA}/large_2026_MYHB_Tag2_18_c8f564feac.webp`, alt: "Ärzteteam von MY HEALTH & BEAUTY vor dem Logo", width: 800, height: 533 },
+  aerzte: { src: `${MEDIA}/large_2026_MYHB_Tag2_40_46146feabe.webp`, alt: "Ärzte von MY HEALTH & BEAUTY in der Lounge", width: 800, height: 533 },
+  beratung: { src: `${MEDIA}/large_2026_MYHB_Tag2_107_eeb1dc8823.webp`, alt: "Beratungsgespräch in einer MY HEALTH & BEAUTY Lounge", width: 800, height: 534 },
+  empfang: { src: `${MEDIA}/large_2026_MYHB_Tag3_34_ebf7060f7d.webp`, alt: "Empfang einer MY HEALTH & BEAUTY Lounge", width: 800, height: 533 },
+  lounge: { src: `${MEDIA}/large_2026_MYHB_Tag3_32_4cedcff959.webp`, alt: "Schild einer MY HEALTH & BEAUTY Lounge im Einkaufszentrum", width: 800, height: 533 },
+  software: { src: `${MEDIA}/large_2026_MYHB_Tag2_65_21135b2901.webp`, alt: "Kundenberaterin arbeitet am Tablet mit der MYHB-Software", width: 800, height: 533 },
+} as const;
+
+/**
+ * Ausbildung an unseren Standorten (Benjamin 05.11.2026): Wer noch nicht
+ * genug Erfahrung hat, arbeitet erst bei uns und lernt alle Behandlungsarten.
+ * Keine Pflicht. Die fachliche Pruefung vor dem Start gilt aber fuer jeden
+ * Partner, denn jede Praxis traegt die Marke.
+ */
+export const AUSBILDUNG = {
+  titel: "Erst bei uns lernen, dann selbstständig",
+  text: "Dir fehlt noch Erfahrung in der Ästhetik? Dann arbeite zuerst als Arzt an einem unserer Standorte. Dort lernst du alle Behandlungsarten, die wir anbieten, an echten Kunden und an der Seite erfahrener Kollegen. Wenn du sicher bist, eröffnest du auf dieser Grundlage deine eigene Praxis.",
+  punkte: [
+    "Alle Behandlungsarten: Faltenbehandlung, Hyaluron, Skinbooster, Mesotherapie, Infusionen und mehr",
+    "Lernen im Alltag einer Lounge, mit unseren Standards und unserer Software",
+    "Freiwillig: Wer schon erfahren ist, startet direkt als Partner",
+  ],
+};
+
+export const QUALITAET = {
+  titel: "Qualität prüfen wir bei jedem Partner",
+  text: "Jede Partnerpraxis trägt die Marke MY HEALTH & BEAUTY. Deshalb schauen wir uns vor dem Start bei jedem Arzt Ausbildung und Erfahrung an und lassen uns Behandlungen an einem unserer Standorte zeigen. Das gilt auch für die Ärzte, die du später in deiner Praxis einsetzt.",
+};
+
 /** Was jede Partnerpraxis bekommt (und nutzt): Marke, Website, Software, Einkauf. */
 export const FUNDAMENT: Kachel[] = [
   {
@@ -79,6 +115,7 @@ export const STANDORT_WEGE: Kachel[] = [
 export const SCHRITTE: Kachel[] = [
   { titel: "Bewerbung", text: "Du füllst das kurze Formular unten aus. Das dauert drei Minuten." },
   { titel: "Kennenlernen", text: "Wir melden uns innerhalb von fünf Werktagen und sprechen über dich, deine Pläne und deine Region." },
+  { titel: "Fachlicher Check", text: "Du zeigst uns an einem unserer Standorte, wie du behandelst. Fehlt dir noch Erfahrung, lernst du erst bei uns." },
   { titel: "Standort und Rechnung", text: "Wir klären den Standort und rechnen gemeinsam durch, was deine Praxis kostet und was sie braucht." },
   { titel: "Vertrag und Aufbau", text: "Nach dem Vertrag richten wir Website, Software und Einkauf ein, du stellst dein Team zusammen." },
   { titel: "Eröffnung", text: "Deine Praxis geht online und öffnet. Wir bleiben im Alltag an deiner Seite." },
@@ -86,7 +123,7 @@ export const SCHRITTE: Kachel[] = [
 
 export const WEN_WIR_SUCHEN = [
   "Du bist approbierter Arzt in Deutschland.",
-  "Du hast Erfahrung mit ästhetischen Behandlungen wie Hyaluron oder Faltenbehandlung, oder willst sie gezielt aufbauen.",
+  "Du hast Erfahrung mit ästhetischen Behandlungen wie Hyaluron oder Faltenbehandlung, oder willst sie bei uns aufbauen.",
   "Du willst selbstständig sein, aber nicht deine Abende mit Buchhaltung, Bestellungen und Dienstplänen verbringen.",
   "Dir sind Qualität, Hygiene und ein freundlicher Umgang mit Kunden wichtig, denn sie tragen deine Praxis und die Marke.",
 ];
@@ -126,7 +163,17 @@ export const FRAGEN: Frage[] = [
   {
     frage: "Welche Voraussetzungen brauche ich?",
     antwort:
-      "Eine ärztliche Approbation in Deutschland. Ein Facharzttitel ist kein Muss. Erfahrung mit ästhetischen Behandlungen ist ein großer Vorteil. Heilpraktiker können nicht Partner werden, weil bei uns ausschließlich Ärzte behandeln.",
+      "Eine ärztliche Approbation in Deutschland. Ein Facharzttitel ist kein Muss. Erfahrung mit ästhetischen Behandlungen ist ein großer Vorteil; fehlt sie, kannst du sie erst an unseren Standorten sammeln. Heilpraktiker können nicht Partner werden, weil bei uns ausschließlich Ärzte behandeln.",
+  },
+  {
+    frage: "Kann ich mich bei euch ausbilden lassen, bevor ich eine eigene Praxis eröffne?",
+    antwort:
+      "Ja. Du kannst zuerst als Arzt an einem unserer Standorte arbeiten und dort alle Behandlungsarten lernen, von der Faltenbehandlung über Hyaluron bis zu Infusionen. Wenn du sicher bist, eröffnest du deine eigene Praxis. Das ist ein Angebot, keine Pflicht.",
+  },
+  {
+    frage: "Wie stellt ihr die Qualität in den Partnerpraxen sicher?",
+    antwort:
+      "Vor dem Start prüfen wir bei jedem Arzt Ausbildung und Erfahrung und lassen uns Behandlungen an einem unserer Standorte zeigen. Das gilt auch für Ärzte, die später in einer Partnerpraxis arbeiten. Alle Praxen arbeiten mit denselben Standards, derselben Dokumentation und derselben Software.",
   },
   {
     frage: "Gilt für ästhetische Behandlungen die GOÄ?",
@@ -194,6 +241,12 @@ export const STANDORTWEG_OPTIONEN = [
   "Noch offen",
 ];
 
+export const AUSBILDUNG_OPTIONEN = [
+  "Ja, ich möchte erst bei euch lernen",
+  "Vielleicht, das möchte ich besprechen",
+  "Nein, ich bin schon erfahren",
+];
+
 export const START = [
   "So bald wie möglich",
   "In 3 bis 6 Monaten",
@@ -215,6 +268,7 @@ export type PartnerEingabe = {
   situation?: unknown;
   erfahrung?: unknown;
   standortweg?: unknown;
+  ausbildung?: unknown;
   start?: unknown;
   pakete?: unknown;
   nachricht?: unknown;
@@ -234,6 +288,7 @@ export type PartnerAnfrage = {
   situation: string;
   erfahrung: string;
   standortweg: string;
+  ausbildung: string;
   start: string;
   pakete: string[];
   nachricht: string;
@@ -287,6 +342,7 @@ export function pruefePartnerEingabe(
       situation: ausListe(e.situation, SITUATIONEN),
       erfahrung: ausListe(e.erfahrung, ERFAHRUNG),
       standortweg: ausListe(e.standortweg, STANDORTWEG_OPTIONEN),
+      ausbildung: ausListe(e.ausbildung, AUSBILDUNG_OPTIONEN),
       start: ausListe(e.start, START),
       pakete,
       nachricht: kurz(e.nachricht, PARTNER_MAX_NACHRICHT),

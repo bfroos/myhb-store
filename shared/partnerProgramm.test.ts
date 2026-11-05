@@ -12,6 +12,9 @@ import {
   STANDORT_WEGE,
   WEN_WIR_SUCHEN,
   AUTOMATISIERUNG,
+  AUSBILDUNG,
+  QUALITAET,
+  BILDER,
   partnerAnfrageUrl,
   partnerFaqSchema,
   pruefePartnerEingabe,
@@ -76,6 +79,12 @@ test("Wortwahl: keine riskanten Begriffe, keine weiblichen Formen, Titel kurz ge
     PARTNER_SEO.description,
     ...[FUNDAMENT, PAKETE, SCHRITTE, STANDORT_WEGE, AUTOMATISIERUNG].flat().flatMap((k) => [k.titel, k.text]),
     ...WEN_WIR_SUCHEN,
+    AUSBILDUNG.titel,
+    AUSBILDUNG.text,
+    ...AUSBILDUNG.punkte,
+    QUALITAET.titel,
+    QUALITAET.text,
+    ...Object.values(BILDER).map((b) => b.alt),
     ...FRAGEN.flatMap((f) => [f.frage, f.antwort]),
   ].join("\n");
   // "Franchise" nur in der Frage, die den Unterschied erklaert.
@@ -85,4 +94,10 @@ test("Wortwahl: keine riskanten Begriffe, keine weiblichen Formen, Titel kurz ge
   assert.doesNotMatch(texte, /Ärztinnen|Kundinnen|Beraterinnen|Patientinnen/);
   assert.doesNotMatch(texte, /MYH&B/);
   assert.ok(PARTNER_SEO.description.length <= 170, `Beschreibung ${PARTNER_SEO.description.length} Zeichen`);
+});
+
+test("Ausbildungswunsch wird übernommen, Bilder kommen aus der eigenen Mediathek", () => {
+  const r = pruefePartnerEingabe({ ...gut, ausbildung: "Ja, ich möchte erst bei euch lernen" });
+  assert.ok(r.ok && r.anfrage.ausbildung === "Ja, ich möchte erst bei euch lernen");
+  for (const b of Object.values(BILDER)) assert.match(b.src, /^https:\/\/media\.myhealthandbeauty\.app\/large_/);
 });
