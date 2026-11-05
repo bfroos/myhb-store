@@ -28,13 +28,21 @@ export type SeoLocalText = {
   process?: { headline: string; intro: string; steps: { heading: string; text: string }[] };
   faqHeadline?: string;
   faqs?: { question: string; answer: string }[];
+  /** Neu formulierte Strapi-Bloecke (05.11.2026, Benjamin: umschreiben statt loeschen). */
+  toc?: { headline?: string; intro?: string; paragraphs: string[] };
+  team?: { headline?: string; intro?: string; paragraphs: string[] };
+  plan?: {
+    headline?: string;
+    paragraphs?: string[];
+    additionalInfos?: string[];
+    steps?: { description?: string; followUpPlanText?: string; endOfPlanText?: string }[];
+  };
+  /** Alle Strapi-Fragen neu formuliert, gleiche Anzahl und Reihenfolge. */
+  strapiFaqs?: { question: string; answer: string }[];
 };
 
 /** Notschalter: false = alle Seiten zeigen wieder nur den Strapi-Text. */
 export const SEO_LOCAL_TEXTS_ENABLED = true;
-
-/** So viele Strapi-Fragen bleiben neben den drei Standortfragen stehen. */
-export const STRAPI_FAQS_KEPT = 3;
 
 /** Woerter und Wendungen, die in keinem Text stehen duerfen. */
 export const SEO_LOCAL_TEXT_FORBIDDEN =
@@ -48,8 +56,40 @@ export function localTextKey(
   return `${String(pathKey ?? "").replace(/^\/+|\/+$/g, "")}@${citySlug}/${locationSlug}`;
 }
 
-const rich = (paragraphs: string[]) =>
-  paragraphs.map((text) => ({ type: "paragraph", children: [{ type: "text", text }] }));
+const SITE = "https://www.myhealthandbeauty.com";
+const LINK = /\[([^\]]+)\]\((\/[^)\s]*)\)/g;
+
+/** Text mit [Linktext](/pfad) als Strapi-Inline-Knoten. */
+function inline(text: string) {
+  const out: any[] = [];
+  let last = 0;
+  for (const m of text.matchAll(LINK)) {
+    if (m.index! > last) out.push({ type: "text", text: text.slice(last, m.index) });
+    out.push({ type: "link", url: SITE + m[2], children: [{ type: "text", text: m[1] }] });
+    last = m.index! + m[0].length;
+  }
+  if (last < text.length) out.push({ type: "text", text: text.slice(last) });
+  return out.length ? out : [{ type: "text", text: "" }];
+}
+
+/** Absaetze als Strapi-Rich-Text; Zeilen mit "- " werden zur Liste. */
+export function rich(paragraphs: string[]) {
+  const blocks: any[] = [];
+  let list: any[] | null = null;
+  for (const line of paragraphs.flatMap((p) => p.split("\n")).map((l) => l.trim()).filter(Boolean)) {
+    if (line.startsWith("- ")) {
+      if (!list) blocks.push({ type: "list", format: "unordered", children: (list = []) });
+      list.push({ type: "list-item", children: inline(line.slice(2)) });
+    } else {
+      list = null;
+      blocks.push({ type: "paragraph", children: inline(line) });
+    }
+  }
+  return blocks;
+}
+
+/** Ohne Link-Syntax, fuer Tests. */
+const plain = (t: string | undefined) => (t ?? "").replace(LINK, "$1");
 
 /** Gesamter eigener Text einer Seite (fuer Aehnlichkeits- und Regeltests). */
 export function localTextOwn(t: SeoLocalText): string {
@@ -66,6 +106,17 @@ export function localTextOwn(t: SeoLocalText): string {
     ...(t.process?.steps ?? []).flatMap((s) => [s.heading, s.text]),
     t.faqHeadline,
     ...(t.faqs ?? []).flatMap((f) => [f.question, f.answer]),
+    t.toc?.headline,
+    t.toc?.intro,
+    ...(t.toc?.paragraphs ?? []).map(plain),
+    t.team?.headline,
+    t.team?.intro,
+    ...(t.team?.paragraphs ?? []).map(plain),
+    t.plan?.headline,
+    ...(t.plan?.paragraphs ?? []).map(plain),
+    ...(t.plan?.additionalInfos ?? []).map(plain),
+    ...(t.plan?.steps ?? []).flatMap((s) => [s.description, s.followUpPlanText, s.endOfPlanText]),
+    ...(t.strapiFaqs ?? []).flatMap((f) => [f.question, plain(f.answer)]),
   ]
     .filter(Boolean)
     .join(" ");
@@ -122,35 +173,54 @@ export function applyLocalText<T extends Record<string, any> | null | undefined>
     };
     toc["treatment-process-steps"] = text.process.headline;
   }
-  // Die Strapi-Fragen stehen gleich auf allen Standorten und auf dem Hub
-  // (rund 1.300 Woerter). Hier nur die ersten drei, die uebrigen auf dem
-  // Hub, der unten auf der Seite verlinkt ist.
-  if (text.faqs?.length && out.faq) {
-    const strapi = [
-      ...(out.faq.faqs ?? []),
-      ...(out.faq.faqSets ?? []).flatMap((set: any) => set?.faqs ?? []),
-    ];
+  if (text.team && out.medicalTeamHighlight) {
+    out.medicalTeamHighlight = {
+      ...out.medicalTeamHighlight,
+      headline: text.team.headline || out.medicalTeamHighlight.headline,
+      intro: text.team.intro ?? out.medicalTeamHighlight.intro,
+      content: rich(text.team.paragraphs),
+    };
+    if (text.team.headline) toc.employee = text.team.headline;
+  }
+  if (text.plan && out.treatmentPlan) {
+    const old = out.treatmentPlan.steps ?? [];
+    out.treatmentPlan = {
+      ...out.treatmentPlan,
+      headline: text.plan.headline || out.treatmentPlan.headline,
+      content: text.plan.paragraphs?.length ? rich(text.plan.paragraphs) : out.treatmentPlan.content,
+      additionalInfos: text.plan.additionalInfos?.length
+        ? rich(text.plan.additionalInfos)
+        : out.treatmentPlan.additionalInfos,
+      steps: old.map((step: any, n: number) => ({ ...step, ...(text.plan!.steps?.[n] ?? {}) })),
+    };
+    if (text.plan.headline) toc["treatment-plan"] = text.plan.headline;
+  }
+  // Fragen: drei zum Standort, dann alle Strapi-Fragen - neu formuliert, wo
+  // vorhanden, sonst im Strapi-Wortlaut.
+  if (out.faq && (text.faqs?.length || text.strapiFaqs?.length)) {
+    const strapi = text.strapiFaqs?.length
+      ? text.strapiFaqs.map((f) => ({ question: f.question, answer: rich([f.answer]) }))
+      : [...(out.faq.faqs ?? []), ...(out.faq.faqSets ?? []).flatMap((set: any) => set?.faqs ?? [])];
     out.faq = {
       ...out.faq,
-      faqs: [
-        ...text.faqs.map((f) => ({ question: f.question, answer: rich([f.answer]) })),
-        ...strapi.slice(0, STRAPI_FAQS_KEPT),
-      ],
+      faqs: [...(text.faqs ?? []).map((f) => ({ question: f.question, answer: rich([f.answer]) })), ...strapi],
       faqSets: [],
     };
   }
-  // Einheitstext ohne Ortsbezug (Strapi, gemessen 05.11.2026): Einleitung
-  // des Inhaltsverzeichnisses (~300 Woerter) und Behandlungsplan (~250).
-  // Das Verzeichnis bleibt als Sprungliste, der Plan steht auf dem Hub.
-  delete out.treatmentPlan;
-  if (out.tableOfContents) {
+  if (text.toc && out.tableOfContents) {
     out.tableOfContents = {
       ...out.tableOfContents,
-      intro: undefined,
-      content: [],
-      index: (out.tableOfContents.index ?? [])
-        .filter((e: { key: string }) => e.key !== "treatment-plan")
-        .map((e: { key: string; value: string }) => (toc[e.key] ? { ...e, value: toc[e.key] } : e)),
+      headline: text.toc.headline || out.tableOfContents.headline,
+      intro: text.toc.intro ?? out.tableOfContents.intro,
+      content: rich(text.toc.paragraphs),
+    };
+  }
+  if (out.tableOfContents?.index) {
+    out.tableOfContents = {
+      ...out.tableOfContents,
+      index: out.tableOfContents.index.map((e: { key: string; value: string }) =>
+        toc[e.key] ? { ...e, value: toc[e.key] } : e,
+      ),
     };
   }
   return out as T;

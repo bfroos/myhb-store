@@ -411,8 +411,13 @@ function priceCategoryLink(category: { slug: string }) {
 }
 .appFooter__citiesGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16ch, 1fr));
-  gap: var(--space-500);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-500) var(--space-400);
+}
+@media (min-width: 768px) {
+  .appFooter__citiesGrid {
+    grid-template-columns: repeat(auto-fill, minmax(16ch, 1fr));
+  }
 }
 .appFooter__citiesGrid ul {
   margin-top: var(--space-200);
