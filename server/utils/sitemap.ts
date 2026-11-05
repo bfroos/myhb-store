@@ -187,6 +187,8 @@ export const ROUTE_MAP: Record<
     },
   },
   general: { base: "/p/[slug]" },
+  // Partnerprogramm fuer Aerzte (E32): nur Deutsch, siehe i18n.pages.
+  partnerpraxis: { base: "/partnerpraxis" },
 };
 
 export type Locale = (typeof LOCALES)[number];
@@ -394,6 +396,9 @@ const SEGMENT_BUILDERS: Record<
     for (const locale of SITEMAP_LOCALES) {
       for (const key of staticRoutes) {
         out.add(key, "static", locale, getLocalizedPath(key, locale));
+      }
+      if (locale === DEFAULT_LOCALE) {
+        out.add("partnerpraxis", "static", locale, getLocalizedPath("partnerpraxis", locale));
       }
 
       const generalPages = await fetchCollection<
