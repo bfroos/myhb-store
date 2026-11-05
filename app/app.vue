@@ -13,7 +13,6 @@ const currentLocale = computed(
 
 // Global Organization Schema for Brand Knowledge Panel
 const config = useRuntimeConfig();
-const { brandName } = useBrand();
 const { isAdsMode } = useSiteModeFlags();
 
 // TSEO-12: die einzige Organization der Seite. Alle anderen Knoten verweisen
@@ -22,7 +21,7 @@ const organizationSchema = computed(() => ({
   "@context": "https://schema.org",
   "@type": "Organization",
   "@id": `${String(config.public.publicUrl).replace(/\/+$/, "")}/#organization`,
-  name: brandName.value,
+  name: SITE_NAME,
   url: config.public.publicUrl,
   logo: {
     "@type": "ImageObject",
