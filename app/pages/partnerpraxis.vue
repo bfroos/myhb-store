@@ -20,7 +20,7 @@
           <li><strong>9 Städte</strong><span>mit Standorten von MY</span></li>
           <li><strong>Nur Ärzte</strong><span>behandeln bei uns</span></li>
           <li><strong>Eigene Software</strong><span>für den ganzen Praxisalltag</span></li>
-          <li><strong>5 Werktage</strong><span>bis zu deiner Antwort</span></li>
+          <li><strong>5 Werktage</strong><span>bis du von uns hörst</span></li>
         </ul>
       </div>
     </section>
@@ -136,7 +136,7 @@
       <div class="pp__breite pp__zwei">
         <div>
           <p class="pp__eyebrow">Wen wir suchen</p>
-          <h2>Ärzte, die Ästhetik lieben</h2>
+          <h2>Ärzte mit Leidenschaft für Ästhetik</h2>
         </div>
         <ul class="pp__haekchen" role="list">
           <li v-for="z in WEN_WIR_SUCHEN" :key="z">{{ z }}</li>
