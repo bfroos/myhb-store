@@ -93,6 +93,7 @@ export const AUTOMATISIERUNG: Kachel[] = [
 ];
 
 /** Was man zusaetzlich buchen kann. */
+/** Kassen-Paket: Benjamin 05.11.2026, Kasse in der App mit Zahlungsanbieter statt Shopify (myhb-os#2207). */
 export const PAKETE: Kachel[] = [
   { titel: "Marketing-Paket", text: "Anzeigen bei Google, Instagram und Facebook, gesteuert von unserem Team." },
   { titel: "Social-Media-Paket", text: "Wir kommen in deine Praxis, drehen deine ersten Videos und betreuen deine Kanäle." },
@@ -100,6 +101,7 @@ export const PAKETE: Kachel[] = [
   { titel: "Lohn-Paket", text: "Die monatliche Lohnabrechnung für dein ganzes Team." },
   { titel: "Buchhaltungs-Paket", text: "Belege, Kasse und Zahlungen jeden Monat fertig für deinen Steuerberater." },
   { titel: "Standort-Paket", text: "Wir suchen mit dir den passenden Standort und verhandeln den Mietvertrag." },
+  { titel: "Kassen-Paket", text: "Kartenterminal und Kasse über uns. Die Zahlungen deiner Kunden gehen direkt auf dein Konto." },
 ];
 
 export const PAKETE_HINWEIS =
@@ -188,7 +190,7 @@ export const FRAGEN: Frage[] = [
   {
     frage: "Was ist Pflicht und was ist freiwillig?",
     antwort:
-      "Pflicht sind die Marke MY HEALTH & BEAUTY, deine Standortseite auf unserer Website, unsere Software und der Einkauf über uns. So erlebt jeder Kunde in jeder Praxis dieselbe Qualität. Freiwillig sind die Zusatzpakete: Marketing, Social Media, Recruiting, Lohn, Buchhaltung und Standortsuche.",
+      "Pflicht sind die Marke MY HEALTH & BEAUTY, deine Standortseite auf unserer Website, unsere Software und der Einkauf über uns. So erlebt jeder Kunde in jeder Praxis dieselbe Qualität. Freiwillig sind die Zusatzpakete: Marketing, Social Media, Recruiting, Lohn, Buchhaltung, Standortsuche und Kasse.",
   },
   {
     frage: "Kann ich meine bestehende Praxis einbringen?",
