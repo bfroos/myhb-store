@@ -54,7 +54,7 @@ export const AUSBILDUNG = {
   text: "Dir fehlt noch Erfahrung in der Ästhetik? Dann starte als Arzt an einem unserer Standorte. Dort lernst du alle Behandlungen, die wir anbieten, an der Seite erfahrener Kollegen. Wenn du sicher bist, eröffnest du deine eigene Praxis.",
   punkte: [
     "Alle Behandlungen: Faltenbehandlung, Hyaluron, Skinbooster, Mesotherapie, Infusionen und mehr",
-    "Unsere Standards und unsere Software, direkt im Alltag",
+    "Du lernst unsere Standards und unsere Software im Alltag kennen",
     "Kein Muss: Wer schon erfahren ist, startet direkt als Partner",
   ],
 };
@@ -88,7 +88,7 @@ export const FUNDAMENT: Kachel[] = [
 export const AUTOMATISIERUNG: Kachel[] = [
   { titel: "KI-Telefon", text: "Nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Auch dann, wenn am Empfang gerade viel los ist." },
   { titel: "KI-Chat", text: "Beantwortet Nachrichten auf WhatsApp rund um die Uhr." },
-  { titel: "Terminbestätigung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch. Weniger Ausfälle, volle Kalender." },
+  { titel: "Terminbestätigung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch. So fallen weniger Termine aus." },
   { titel: "Kunden-App", text: "Kunden buchen selbst, sehen ihr Guthaben und kommen wieder. Du siehst jede Behandlung auf einen Blick." },
 ];
 
@@ -118,7 +118,7 @@ export const SCHRITTE: Kachel[] = [
   { titel: "Fachlicher Check", text: "Du zeigst uns an einem unserer Standorte, wie du behandelst." },
   { titel: "Standort und Rechnung", text: "Wir finden deinen Standort und rechnen gemeinsam durch, was deine Praxis braucht." },
   { titel: "Vertrag und Aufbau", text: "Wir richten Website, Software und Einkauf ein, du stellst dein Team zusammen." },
-  { titel: "Eröffnung", text: "Deine Praxis öffnet. Und wir bleiben an deiner Seite." },
+  { titel: "Eröffnung", text: "Deine Praxis öffnet, und wir sind weiter für dich da." },
 ];
 
 export const WEN_WIR_SUCHEN = [
