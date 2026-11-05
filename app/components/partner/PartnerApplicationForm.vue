@@ -3,13 +3,13 @@
     <p class="pp__eyebrow">Bewerbung</p>
     <h2 id="bewerbung-titel">Werde Partner</h2>
     <p class="pp__text">
-      Erzähl uns kurz von dir und deinen Plänen. Wir melden uns innerhalb von fünf Werktagen.
+      Erzähl uns kurz von dir und deinen Plänen. Wir melden uns innerhalb von 5 Werktagen bei dir.
     </p>
 
     <Message v-if="erfolg" severity="success" class="pp__meldung">
       <strong>Danke, {{ form.vorname }}!</strong>
       <br>
-      Deine Bewerbung ist bei uns angekommen. Wir melden uns innerhalb von fünf Werktagen bei dir.
+      Deine Bewerbung ist bei uns angekommen. Wir melden uns innerhalb von 5 Werktagen und freuen uns sehr auf das Gespräch mit dir.
     </Message>
 
     <form v-else class="pp__form" novalidate @submit.prevent="absenden">
@@ -61,7 +61,7 @@
 
       <div class="pp__reihe">
         <div class="pp__feld">
-          <label for="partner-standortweg">Standort</label>
+          <label for="partner-standortweg">Dein Standort</label>
           <Select id="partner-standortweg" v-model="form.standortweg" :options="STANDORTWEG_OPTIONEN" placeholder="Bitte wählen" />
         </div>
         <div class="pp__feld">
@@ -78,7 +78,7 @@
       </div>
 
       <fieldset class="pp__feld pp__pakete">
-        <legend>Welche Zusatzpakete interessieren dich? (freiwillig)</legend>
+        <legend>Welche Zusatzpakete interessieren dich?</legend>
         <div class="pp__paketListe">
           <label v-for="(p, i) in PAKET_NAMEN" :key="p" class="pp__haken">
             <Checkbox v-model="form.pakete" :input-id="`partner-paket-${i}`" :value="p" />
@@ -88,7 +88,7 @@
       </fieldset>
 
       <div class="pp__feld">
-        <label for="partner-nachricht">Was sollen wir noch wissen? (freiwillig)</label>
+        <label for="partner-nachricht">Was sollen wir noch über dich wissen?</label>
         <Textarea id="partner-nachricht" v-model="form.nachricht" rows="4" auto-resize :maxlength="PARTNER_MAX_NACHRICHT" />
       </div>
 

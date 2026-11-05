@@ -30,13 +30,13 @@ const gut = {
 };
 
 test("gueltige Eingabe geht durch, unbekannte Auswahlwerte fallen weg", () => {
-  const r = pruefePartnerEingabe({ ...gut, fachrichtung: "Dermatologie", start: "erfunden", pakete: ["Marketing", "Hack"] });
+  const r = pruefePartnerEingabe({ ...gut, fachrichtung: "Dermatologie", start: "erfunden", pakete: ["Marketing-Paket", "Hack"] });
   assert.equal(r.ok, true);
   if (!r.ok) return;
   assert.equal(r.bot, false);
   assert.equal(r.anfrage.fachrichtung, "Dermatologie");
   assert.equal(r.anfrage.start, "");
-  assert.deepEqual(r.anfrage.pakete, ["Marketing"]);
+  assert.deepEqual(r.anfrage.pakete, ["Marketing-Paket"]);
 });
 
 test("Pflichtfelder und Einwilligung", () => {
