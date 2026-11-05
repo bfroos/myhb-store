@@ -50,82 +50,82 @@ export const BILDER = {
  * Partner, denn jede Praxis traegt die Marke.
  */
 export const AUSBILDUNG = {
-  titel: "Erst bei uns lernen, dann selbstständig",
-  text: "Dir fehlt noch Erfahrung in der Ästhetik? Dann arbeite zuerst als Arzt an einem unserer Standorte. Dort lernst du alle Behandlungsarten, die wir anbieten, an echten Kunden und an der Seite erfahrener Kollegen. Wenn du sicher bist, eröffnest du auf dieser Grundlage deine eigene Praxis.",
+  titel: "Erst bei uns lernen, dann selbstständig!",
+  text: "Dir fehlt noch Erfahrung in der Ästhetik? Dann starte als Arzt an einem unserer Standorte. Dort lernst du alle Behandlungen, die wir anbieten, an der Seite erfahrener Kollegen. Wenn du sicher bist, eröffnest du deine eigene Praxis.",
   punkte: [
-    "Alle Behandlungsarten: Faltenbehandlung, Hyaluron, Skinbooster, Mesotherapie, Infusionen und mehr",
-    "Lernen im Alltag einer Lounge, mit unseren Standards und unserer Software",
-    "Freiwillig: Wer schon erfahren ist, startet direkt als Partner",
+    "Alle Behandlungen: Faltenbehandlung, Hyaluron, Skinbooster, Mesotherapie, Infusionen und mehr",
+    "Unsere Standards und unsere Software, direkt im Alltag",
+    "Kein Muss: Wer schon erfahren ist, startet direkt als Partner",
   ],
 };
 
 export const QUALITAET = {
-  titel: "Qualität prüfen wir bei jedem Partner",
-  text: "Jede Partnerpraxis trägt die Marke MY HEALTH & BEAUTY. Deshalb schauen wir uns vor dem Start bei jedem Arzt Ausbildung und Erfahrung an und lassen uns Behandlungen an einem unserer Standorte zeigen. Das gilt auch für die Ärzte, die du später in deiner Praxis einsetzt.",
+  titel: "Qualität für jede Partnerpraxis",
+  text: "Jede Partnerpraxis trägt die Marke MY HEALTH & BEAUTY. Darum lernen wir jeden Arzt vor dem Start auch fachlich kennen, an einem unserer Standorte. Das gilt auch für die Ärzte in deinem Team.",
 };
 
 /** Was jede Partnerpraxis bekommt (und nutzt): Marke, Website, Software, Einkauf. */
 export const FUNDAMENT: Kachel[] = [
   {
     titel: "Die Marke MY HEALTH & BEAUTY",
-    text: "Deine Praxis eröffnet als Standort einer bekannten Marke für ästhetische Medizin, mit Auftritt, Einrichtungskonzept und Qualitätsstandards, die an unseren eigenen Standorten funktionieren.",
+    text: "Du startest nicht mit einem unbekannten Namen, sondern als Standort einer Marke, die Kunden in neun Städten schon kennen und schätzen.",
   },
   {
-    titel: "Deine Standortseite mit allen Unterseiten",
-    text: "Dein Standort erscheint auf myhealthandbeauty.com, mit eigenen Seiten je Behandlung, Öffnungszeiten, Ärzteprofilen und Online-Termin. Gebaut für Google und für KI-Suchen wie ChatGPT.",
+    titel: "Deine Standortseite",
+    text: "Dein Standort steht auf myhealthandbeauty.com, mit Seiten zu jeder Behandlung und Online-Termin. So finden dich Kunden bei Google und in ChatGPT.",
   },
   {
-    titel: "Unsere Software für den ganzen Ablauf",
-    text: "Online-Buchung, Kunden-App, Kundenakte und Behandlungsdokumentation, automatische Terminbestätigung und Erinnerung, Kasse, Warenwirtschaft und Inventur. Alles in einem System, das wir selbst entwickeln und täglich nutzen.",
+    titel: "Unsere Software",
+    text: "Buchung, Kunden-App, Kundenakte, Kasse und Lager in einem System. Du behandelst, die Software erledigt den Rest.",
   },
   {
-    titel: "Einkauf zu unseren Konditionen",
-    text: "Produkte und Material bestellst du über uns. Du bekommst dieselben Einkaufskonditionen wie unsere eigenen Standorte und musst keine Lieferanten verhandeln.",
+    titel: "Faire Einkaufspreise",
+    text: "Produkte und Material bestellst du über uns, zu denselben Konditionen wie unsere eigenen Standorte.",
   },
 ];
 
 /** Automatisierung, die zur Software gehoert. */
 export const AUTOMATISIERUNG: Kachel[] = [
-  { titel: "KI am Telefon", text: "Nimmt Anrufe an, beantwortet Fragen und bucht Termine, auch wenn am Empfang gerade niemand frei ist." },
-  { titel: "KI im Chat", text: "Beantwortet Kundennachrichten, etwa auf WhatsApp, rund um die Uhr." },
-  { titel: "Terminbestätigung und Erinnerung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch, das senkt Ausfälle." },
-  { titel: "Kunden-App und CRM", text: "Kunden buchen in der App und sehen ihr Guthaben. Du siehst jede frühere Behandlung auf einen Blick." },
+  { titel: "KI-Telefon", text: "Nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Auch dann, wenn am Empfang gerade viel los ist." },
+  { titel: "KI-Chat", text: "Beantwortet Nachrichten auf WhatsApp rund um die Uhr." },
+  { titel: "Terminbestätigung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch. Weniger Ausfälle, volle Kalender." },
+  { titel: "Kunden-App", text: "Kunden buchen selbst, sehen ihr Guthaben und kommen wieder. Du siehst jede Behandlung auf einen Blick." },
 ];
 
 /** Was man zusaetzlich buchen kann. */
 export const PAKETE: Kachel[] = [
-  { titel: "Marketing", text: "Anzeigen bei Google und Meta, lokale Sichtbarkeit und Auswertung, gesteuert von unserem Team." },
-  { titel: "Social Media mit Videodreh", text: "Wir kommen in deine Praxis, drehen die ersten Videos für Instagram und Facebook und betreuen deine Kanäle." },
-  { titel: "Recruiting", text: "Wir suchen Kundenberater und Ärzte für dich, mit Stellenanzeigen, Vorauswahl und Bewerbermanagement in der App." },
-  { titel: "Lohnabrechnung", text: "Monatliche Lohnabrechnung deiner Mitarbeiter, ohne dass du Stunden und Belege zusammensuchst." },
-  { titel: "Vorbereitende Buchhaltung", text: "Belege, Kasse und Zahlungen aufbereitet für deinen Steuerberater, jeden Monat." },
-  { titel: "Standortsuche und Mietvertrag", text: "Wir suchen mit dir den passenden Standort und verhandeln den Mietvertrag. Das machen wir für unsere eigenen Standorte genauso." },
+  { titel: "Marketing-Paket", text: "Anzeigen bei Google, Instagram und Facebook, gesteuert von unserem Team." },
+  { titel: "Social-Media-Paket", text: "Wir kommen in deine Praxis, drehen deine ersten Videos und betreuen deine Kanäle." },
+  { titel: "Recruiting-Paket", text: "Wir finden Kundenberater und Ärzte für dein Team." },
+  { titel: "Lohn-Paket", text: "Die monatliche Lohnabrechnung für dein ganzes Team." },
+  { titel: "Buchhaltungs-Paket", text: "Belege, Kasse und Zahlungen jeden Monat fertig für deinen Steuerberater." },
+  { titel: "Standort-Paket", text: "Wir suchen mit dir den passenden Standort und verhandeln den Mietvertrag." },
 ];
 
 export const PAKETE_HINWEIS =
-  "Leistungen, die nach Nutzung anfallen, etwa Gesprächsminuten der Telefon-KI oder WhatsApp-Nachrichten, weisen wir einzeln und nachvollziehbar aus.";
+  "Was nach Nutzung anfällt, etwa Minuten am KI-Telefon oder WhatsApp-Nachrichten, siehst du einzeln auf deiner Abrechnung.";
 
 /** Drei Wege zum eigenen Standort. */
 export const STANDORT_WEGE: Kachel[] = [
-  { titel: "Du hast schon einen Standort", text: "Du schlägst uns eine Fläche oder deine bestehende Praxis vor. Wir prüfen Lage, Größe und Umfeld mit dir." },
-  { titel: "Wir suchen gemeinsam", text: "Du nennst uns deine Wunschregion. Wir suchen passende Flächen, oft in Einkaufszentren, und verhandeln den Mietvertrag." },
-  { titel: "Du übernimmst einen MYHB-Standort", text: "Auf Anfrage prüfen wir, ob einer unserer bestehenden Standorte an dich übergehen kann, damit du ihn selbstständig weiterführst." },
+  { titel: "Dein eigener Standort", text: "Du hast schon eine Fläche oder eine Praxis? Wir prüfen sie gemeinsam mit dir." },
+  { titel: "Gemeinsam suchen", text: "Du nennst uns deine Wunschregion, wir finden die passende Fläche und verhandeln den Mietvertrag." },
+  { titel: "Standort übernehmen", text: "Auf Anfrage prüfen wir, ob du einen bestehenden Standort von MY übernehmen kannst." },
 ];
 
 export const SCHRITTE: Kachel[] = [
-  { titel: "Bewerbung", text: "Du füllst das kurze Formular unten aus. Das dauert drei Minuten." },
-  { titel: "Kennenlernen", text: "Wir melden uns innerhalb von fünf Werktagen und sprechen über dich, deine Pläne und deine Region." },
-  { titel: "Fachlicher Check", text: "Du zeigst uns an einem unserer Standorte, wie du behandelst. Fehlt dir noch Erfahrung, lernst du erst bei uns." },
-  { titel: "Standort und Rechnung", text: "Wir klären den Standort und rechnen gemeinsam durch, was deine Praxis kostet und was sie braucht." },
-  { titel: "Vertrag und Aufbau", text: "Nach dem Vertrag richten wir Website, Software und Einkauf ein, du stellst dein Team zusammen." },
-  { titel: "Eröffnung", text: "Deine Praxis geht online und öffnet. Wir bleiben im Alltag an deiner Seite." },
+  { titel: "Bewerbung", text: "Du füllst das Formular unten aus. Das dauert nur 3 Minuten." },
+  { titel: "Kennenlernen", text: "Wir melden uns innerhalb von 5 Werktagen und sprechen über dich und deine Pläne." },
+  { titel: "Fachlicher Check", text: "Du zeigst uns an einem unserer Standorte, wie du behandelst." },
+  { titel: "Standort und Rechnung", text: "Wir finden deinen Standort und rechnen gemeinsam durch, was deine Praxis braucht." },
+  { titel: "Vertrag und Aufbau", text: "Wir richten Website, Software und Einkauf ein, du stellst dein Team zusammen." },
+  { titel: "Eröffnung", text: "Deine Praxis öffnet. Und wir bleiben an deiner Seite." },
 ];
 
 export const WEN_WIR_SUCHEN = [
   "Du bist approbierter Arzt in Deutschland.",
-  "Du hast Erfahrung mit ästhetischen Behandlungen wie Hyaluron oder Faltenbehandlung, oder willst sie bei uns aufbauen.",
-  "Du willst selbstständig sein, aber nicht deine Abende mit Buchhaltung, Bestellungen und Dienstplänen verbringen.",
-  "Dir sind Qualität, Hygiene und ein freundlicher Umgang mit Kunden wichtig, denn sie tragen deine Praxis und die Marke.",
+  "Du hast Erfahrung in der Ästhetik oder willst sie bei uns sammeln.",
+  "Du willst selbstständig sein, ohne Abende mit Buchhaltung und Dienstplänen.",
+  "Qualität, Hygiene und ein herzlicher Umgang mit Kunden sind dir wichtig.",
 ];
 
 export type Frage = { frage: string; antwort: string };
@@ -138,71 +138,71 @@ export const FRAGEN: Frage[] = [
   {
     frage: "Wie kann ich mich als Arzt in der ästhetischen Medizin selbstständig machen?",
     antwort:
-      "Du brauchst eine Approbation, einen geeigneten Standort, eine Rechtsform (meist Privatpraxis oder Praxis-GmbH), Personal, Software, Einkauf und Marketing. Im Partnerprogramm von MY HEALTH & BEAUTY gründest du deine eigene Praxis, bekommst Marke, Website, Software und Einkauf aber fertig von uns und kannst Marketing, Recruiting, Lohn und Buchhaltung dazubuchen.",
+      "Du brauchst eine Approbation, einen Standort, eine Rechtsform (meist Privatpraxis oder Praxis-GmbH), ein Team, Software, Einkauf und Marketing. Im Partnerprogramm von MY HEALTH & BEAUTY eröffnest du deine eigene Praxis und bekommst Marke, Website, Software und Einkauf fertig von uns. Marketing, Recruiting, Lohn und Buchhaltung kannst du dazubuchen.",
   },
   {
     frage: "Was kostet die Gründung einer Praxis für ästhetische Medizin?",
     antwort:
-      "Das hängt vor allem von Lage, Fläche und Ausstattung ab. Eine klassische Praxisübernahme kostet je nach Fach rund 180.000 € bis über 500.000 € (Analyse von apoBank und Zi). Eine ästhetische Praxis kommt meist mit weniger Geräten aus. Im Partnerprogramm fallen zudem die Kosten für Webagentur, Praxissoftware und Markenaufbau weg. Eine Rechnung für deinen Standort machen wir im Gespräch.",
+      "Das hängt vor allem von Lage, Fläche und Ausstattung ab. Eine klassische Praxisübernahme kostet je nach Fach rund 180.000 € bis über 500.000 € (Analyse von apoBank und Zi). Eine ästhetische Praxis braucht meist weniger Geräte. Im Partnerprogramm sparst du dir außerdem Webagentur, Praxissoftware und den Aufbau einer eigenen Marke. Was es für deinen Standort kostet, rechnen wir im Gespräch gemeinsam durch.",
   },
   {
     frage: "Was kostet das Partnerprogramm?",
     antwort:
-      "Die Konditionen besprechen wir im persönlichen Gespräch. Marke, Website und Software sind enthalten, Produkte beziehst du über uns. Zusatzpakete wie Marketing oder Lohnabrechnung buchst du nur, wenn du sie brauchst. Was nach Nutzung anfällt, etwa Minuten der Telefon-KI oder WhatsApp-Nachrichten, siehst du einzeln auf der Abrechnung.",
+      "Das besprechen wir persönlich mit dir. Marke, Website und Software sind enthalten, Produkte beziehst du über uns. Zusatzpakete buchst du nur, wenn du sie brauchst. Was nach Nutzung anfällt, etwa Minuten am KI-Telefon, siehst du einzeln auf deiner Abrechnung.",
   },
   {
     frage: "Ist das ein Franchise?",
     antwort:
-      "Das Partnerprogramm funktioniert ähnlich: Du führst deine eigene Praxis unter unserer Marke und nutzt unser System. Wir nennen es bewusst Partnerprogramm, denn als Arzt bleibst du in allen medizinischen Fragen frei. Dazu gibt es kein Weisungsrecht.",
+      "Ähnlich: Du führst deine eigene Praxis unter unserer Marke und mit unserem System. Wir nennen es bewusst Partnerprogramm, denn in allen medizinischen Fragen entscheidest du frei.",
   },
   {
     frage: "Bleibe ich medizinisch unabhängig?",
     antwort:
-      "Ja. Welche Behandlung für welchen Kunden richtig ist, entscheidest nur du. Wir kümmern uns um Marke, Technik, Einkauf und Verwaltung, nicht um Diagnosen oder Behandlungen.",
+      "Ja. Welche Behandlung für welchen Kunden richtig ist, entscheidest nur du. Wir kümmern uns um Marke, Technik, Einkauf und Verwaltung.",
   },
   {
     frage: "Welche Voraussetzungen brauche ich?",
     antwort:
-      "Eine ärztliche Approbation in Deutschland. Ein Facharzttitel ist kein Muss. Erfahrung mit ästhetischen Behandlungen ist ein großer Vorteil; fehlt sie, kannst du sie erst an unseren Standorten sammeln. Heilpraktiker können nicht Partner werden, weil bei uns ausschließlich Ärzte behandeln.",
+      "Eine ärztliche Approbation in Deutschland. Ein Facharzttitel ist kein Muss. Erfahrung in der Ästhetik ist ein großer Vorteil, und wenn sie dir noch fehlt, sammelst du sie zuerst an unseren Standorten. Heilpraktiker können nicht Partner werden, denn bei uns behandeln nur Ärzte.",
   },
   {
     frage: "Kann ich mich bei euch ausbilden lassen, bevor ich eine eigene Praxis eröffne?",
     antwort:
-      "Ja. Du kannst zuerst als Arzt an einem unserer Standorte arbeiten und dort alle Behandlungsarten lernen, von der Faltenbehandlung über Hyaluron bis zu Infusionen. Wenn du sicher bist, eröffnest du deine eigene Praxis. Das ist ein Angebot, keine Pflicht.",
+      "Ja. Du startest als Arzt an einem unserer Standorte und lernst dort alle Behandlungen, von der Faltenbehandlung über Hyaluron bis zu Infusionen. Wenn du sicher bist, eröffnest du deine eigene Praxis. Das ist ein Angebot, kein Muss.",
   },
   {
-    frage: "Wie stellt ihr die Qualität in den Partnerpraxen sicher?",
+    frage: "Wie sichert ihr die Qualität in den Partnerpraxen?",
     antwort:
-      "Vor dem Start prüfen wir bei jedem Arzt Ausbildung und Erfahrung und lassen uns Behandlungen an einem unserer Standorte zeigen. Das gilt auch für Ärzte, die später in einer Partnerpraxis arbeiten. Alle Praxen arbeiten mit denselben Standards, derselben Dokumentation und derselben Software.",
+      "Vor dem Start lernen wir jeden Arzt auch fachlich kennen und lassen uns Behandlungen an einem unserer Standorte zeigen. Das gilt auch für die Ärzte, die später in einer Partnerpraxis arbeiten. Alle Praxen arbeiten mit denselben Standards und derselben Software.",
   },
   {
     frage: "Gilt für ästhetische Behandlungen die GOÄ?",
     antwort:
-      "Ja. Auch Behandlungen ohne medizinische Notwendigkeit rechnen Ärzte nach der Gebührenordnung für Ärzte ab (BGH, Urteil vom 23.03.2006, III ZR 223/05). Wie wir das an unseren Standorten umsetzen, zeigen wir dir im Gespräch.",
+      "Ja. Auch Behandlungen ohne medizinische Notwendigkeit rechnen Ärzte nach der Gebührenordnung für Ärzte ab (BGH, Urteil vom 23.03.2006, III ZR 223/05). Wie wir das an unseren Standorten machen, zeigen wir dir im Gespräch.",
   },
   {
     frage: "Privatpraxis oder Praxis-GmbH: Was passt?",
     antwort:
-      "Beides ist möglich. Was für dich passt, hängt von Größe, Zahl der Ärzte und deinen Plänen ab. Wir zeigen dir, wie es an anderen Standorten läuft, die Entscheidung triffst du mit deinem Steuerberater.",
+      "Beides ist möglich. Was zu dir passt, hängt von der Größe und der Zahl der Ärzte ab. Wir zeigen dir, wie es an anderen Standorten läuft. Die Entscheidung triffst du mit deinem Steuerberater.",
   },
   {
     frage: "Was ist Pflicht und was ist freiwillig?",
     antwort:
-      "Pflicht sind die Marke MY HEALTH & BEAUTY, deine Standortseite auf unserer Website, unsere Software und der Einkauf über uns. So sieht jede Praxis gleich gut aus und jeder Kunde erlebt dieselbe Qualität. Freiwillig sind die Zusatzpakete: Marketing, Social Media, Recruiting, Lohnabrechnung, vorbereitende Buchhaltung und Standortsuche.",
+      "Pflicht sind die Marke MY HEALTH & BEAUTY, deine Standortseite auf unserer Website, unsere Software und der Einkauf über uns. So erlebt jeder Kunde in jeder Praxis dieselbe Qualität. Freiwillig sind die Zusatzpakete: Marketing, Social Media, Recruiting, Lohn, Buchhaltung und Standortsuche.",
   },
   {
     frage: "Kann ich meine bestehende Praxis einbringen?",
     antwort:
-      "Ja, wenn Lage und Räume passen. Du kannst uns deinen Standort vorschlagen, mit uns einen neuen suchen oder einen bestehenden Standort von MY HEALTH & BEAUTY übernehmen.",
+      "Ja, wenn Lage und Räume passen. Du kannst uns deinen Standort vorschlagen, mit uns einen neuen suchen oder einen bestehenden Standort von MY übernehmen.",
   },
   {
     frage: "Wie lange dauert es bis zur Eröffnung?",
     antwort:
-      "Das hängt vor allem vom Standort ab: Umbau und Mietvertrag brauchen die meiste Zeit. Am schnellsten geht es, wenn du einen bestehenden Standort übernimmst. Website, Software und Einkauf richten wir parallel ein.",
+      "Das hängt vor allem vom Standort ab, denn Mietvertrag und Umbau brauchen die meiste Zeit. Am schnellsten geht es, wenn du einen bestehenden Standort übernimmst. Website, Software und Einkauf richten wir parallel ein.",
   },
   {
     frage: "Wie schnell meldet ihr euch nach der Bewerbung?",
-    antwort: "Innerhalb von fünf Werktagen, per Telefon oder E-Mail.",
+    antwort: "Innerhalb von 5 Werktagen, per Telefon oder E-Mail.",
   },
 ];
 
@@ -222,7 +222,7 @@ export const FACHRICHTUNGEN = [
 
 export const SITUATIONEN = [
   "Angestellt in Klinik oder Praxis",
-  "Bereits in eigener Praxis niedergelassen",
+  "Schon in eigener Praxis",
   "In Weiterbildung",
   "Andere",
 ];
@@ -237,13 +237,13 @@ export const ERFAHRUNG = [
 export const STANDORTWEG_OPTIONEN = [
   "Ich habe schon einen Standort oder eine Praxis",
   "Ich möchte gemeinsam einen Standort suchen",
-  "Ich möchte einen MYHB-Standort übernehmen",
+  "Ich möchte einen Standort von MY übernehmen",
   "Noch offen",
 ];
 
 export const AUSBILDUNG_OPTIONEN = [
   "Ja, ich möchte erst bei euch lernen",
-  "Vielleicht, das möchte ich besprechen",
+  "Vielleicht, lass uns darüber sprechen",
   "Nein, ich bin schon erfahren",
 ];
 
@@ -251,7 +251,7 @@ export const START = [
   "So bald wie möglich",
   "In 3 bis 6 Monaten",
   "In 6 bis 12 Monaten",
-  "Später / erst informieren",
+  "Später, erst mal informieren",
 ];
 
 export const PAKET_NAMEN = PAKETE.map((p) => p.titel);
