@@ -2,6 +2,7 @@ import type { MaybeRefOrGetter } from "vue";
 import type { TreatmentDto } from "~/lib/strapi/dto/collections";
 import { buildNewCustomerOffer } from "#shared/newCustomerOffer";
 import { isKlinikBehandlung } from "#shared/klinik";
+import { ADS_NO_DISCOUNT } from "#shared/adsOfferVariant";
 
 /**
  * go.* (Ads-Modus, Deutsch): Neukundenangebot einer Behandlungsseite
@@ -9,6 +10,7 @@ import { isKlinikBehandlung } from "#shared/klinik";
  * die Fussnotenzeile am Seitenende, damit alle drei denselben Preis nennen.
  * www und andere Sprachen: `null` - ausser `force` (bundesweite v2-Seiten
  * fuer Meta auf www, app/pages/aktion/[slug].vue).
+ * Google ohne Rabatt (#2042): auf go.* `null`, solange ADS_NO_DISCOUNT an ist.
  */
 export function useNewCustomerOffer(
   treatment: MaybeRefOrGetter<TreatmentDto | null | undefined>,
@@ -21,6 +23,7 @@ export function useNewCustomerOffer(
 
   return computed(() => {
     if (!isAdsMode.value && !toValue(force)) return null;
+    if (ADS_NO_DISCOUNT && isAdsMode.value && !toValue(force)) return null;
     if (!String(locale.value || "de").startsWith("de")) return null;
     const t = toValue(treatment);
     if (!t) return null;

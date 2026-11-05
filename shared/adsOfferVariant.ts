@@ -26,6 +26,15 @@
 /** Notschalter: false = keine Umleitung, /ab-beratung/... fuehrt zur echten Seite. */
 export const ADS_OFFER_AB_ENABLED = true;
 
+/**
+ * Google ohne Rabatt (Benjamin 05.11.2026, myhb-app/myhb-os#2042): go.* zeigt
+ * ueberall Variante B - regulaere Preise, kein Neukundenrabatt, kein
+ * "20 % Rabatt sichern", auch unter dem echten Pfad /standorte/... Die
+ * Meta-Seiten auf www (/aktion/..., `bundesweit`) bleiben unveraendert.
+ * false = zurueck zum Stand davor (A mit Rabatt, B nur unter /ab-beratung/).
+ */
+export const ADS_NO_DISCOUNT = true;
+
 export const ADS_OFFER_QUERY_KEY = "angebot";
 export const ADS_OFFER_QUERY_B = "beratung";
 export const ADS_OFFER_B_PREFIX = "/ab-beratung";
