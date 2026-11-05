@@ -3,6 +3,7 @@ import {
   newCustomerPriceCent,
   newCustomerPriceLabel,
 } from "#shared/newCustomerOffer";
+import { ADS_NO_DISCOUNT } from "#shared/adsOfferVariant";
 import {
   formatPriceInEuro,
   type FormatPriceInEuroOptions,
@@ -22,7 +23,8 @@ export function useDisplayPrice() {
   const globals = useGlobals();
 
   const showsNewCustomerPrice = computed(
-    () => isAdsMode.value && String(locale.value || "de").startsWith("de"),
+    // Google ohne Rabatt (#2042): solange ADS_NO_DISCOUNT an ist, nirgends.
+    () => !ADS_NO_DISCOUNT && isAdsMode.value && String(locale.value || "de").startsWith("de"),
   );
 
   function formatDisplayPrice(
