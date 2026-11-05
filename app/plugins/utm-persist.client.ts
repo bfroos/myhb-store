@@ -43,6 +43,9 @@
  * keine Landingpage. T14 schreibt das Token nach appointment_attribution.ref_path;
  * aeltere T14-Fassungen ignorieren es still wie jedes unbekannte Token.
  *
+ * v1.8 (myhb-os#2157): Nach jedem Speichern setzt /api/stempel das Cookie
+ * zusaetzlich serverseitig, sonst loescht Safari es nach 7 Tagen.
+ *
  * v1.7 (store#168): Cookiebot raeumt bei der Antwort auf den Banner alle
  * Cookies und Storage-Schluessel ab, die im Scan als "nicht klassifiziert"
  * gefuehrt werden — myhb_attribution eingeschlossen, bei "Alle zulassen"
@@ -152,7 +155,20 @@ export default defineNuxtPlugin(() => {
         localStorage.setItem(KEY, payload);
       } catch {}
       setCookie(KEY, payload, TTL_DAYS);
+      serverStempel(payload);
     }
+  }
+
+  // v1.8 (myhb-os#2157): Safari kappt per JavaScript gesetzte Cookies auf
+  // 7 Tage. Der Server setzt den Stempel deshalb per Set-Cookie noch einmal
+  // (server/api/stempel.post.ts); hoechstens einmal je Seitenaufruf und Stand.
+  let zuletztGesendet: string | null = null;
+  function serverStempel(payload: string) {
+    if (payload === zuletztGesendet) return;
+    zuletztGesendet = payload;
+    try {
+      fetch("/api/stempel", { method: "POST", credentials: "same-origin", keepalive: true }).catch(() => {});
+    } catch {}
   }
   function load(): Store | null {
     let raw: string | null = null;
