@@ -28,7 +28,6 @@ if (homepageLoaded) {
 // Schema.org WebSite + Organization (Homepage only)
 const config = useRuntimeConfig();
 const appConfig = useAppConfig();
-const { brandName } = useBrand();
 const globals = useGlobals();
 const { isAdsMode } = useSiteModeFlags();
 const { locale } = useI18n();
@@ -42,7 +41,6 @@ const websiteSchema = computed(() =>
   buildWebSiteSchema({
     publicUrl: (config.public.publicUrl as string) || "",
     path: "/",
-    brandName: brandName.value,
     logoUrl,
   }),
 );

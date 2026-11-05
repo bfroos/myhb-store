@@ -6,6 +6,7 @@ import { stripAdsOfferB } from "#shared/adsOfferVariant";
 import { isBlockedAdsImageFile } from "#shared/adsMedia";
 import { isIndexableLocale, selectAlternateLocales } from "#shared/hreflang";
 import { cleanSeoText } from "#shared/seoTitles";
+import { SITE_NAME } from "~/utils/schemaWebsite";
 
 /**
  * Fallback share image (Open Graph / Twitter) used when a page has neither a
@@ -86,7 +87,6 @@ export async function setPageSeo(
   const config = useRuntimeConfig();
   const globals = useGlobals();
   const globalsSeo = globals.value?.seo;
-  const { brandName } = useBrand();
   const coverage = usePageI18nCoverage();
   // go.-Vorschau /vorschau-v2/... (Seitenvorlage v2): Canonical bleibt die
   // echte Seite. Alle anderen Pfade unveraendert.
@@ -220,7 +220,7 @@ export async function setPageSeo(
       ogType: "website",
       ogLocale: mapStrapiLocaleToOpenGraphLocale(currentLocale),
       ogUrl: canonicalUrl,
-      ogSiteName: brandName.value,
+      ogSiteName: SITE_NAME,
       ogTitle: clean(ogTitle),
       ogDescription: clean(
         pageSeo?.openGraph?.ogDescription ||
