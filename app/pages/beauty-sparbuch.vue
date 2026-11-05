@@ -4,13 +4,13 @@
       <section class="cl__hero">
         <div class="cl__heroBild" role="img" aria-label="Behandlung bei MY HEALTH & BEAUTY" style="background-image: url('/img/club/hero.jpg')" />
         <div class="cl__heroText">
-          <p class="cl__eyebrow">Beauty-Sparbuch · Teil vom MY Club</p>
+          <p class="cl__eyebrow">Beauty-Sparbuch · im MY Club</p>
           <h1>Du findest Ratenzahlung und Gebühren doof? Dann haben wir was für dich.</h1>
           <p class="cl__lead">
             Spare für deine Wunschbehandlung: ab {{ euro(SPARBUCH.mindestRate) }} im Monat,
             ohne zusätzliche Gebühren. Du erhältst jeden Monat einen Beauty-Bonus:
             {{ prozent(basis.sparbuchBonusProzent) }} im Jahr und als Statuskunde sogar bis zu
-            {{ prozent(hoechste.sparbuchBonusProzent) }} Bonus.
+            {{ prozent(hoechste.sparbuchBonusProzent) }}.
           </p>
           <div class="cl__knoepfe">
             <a class="cl__knopf" :href="appUrl('sparbuch-seite', 'sparbuch')" @click="trackClick('sparbuch-seite', 'app')">
@@ -37,7 +37,7 @@
           </div>
           <div>
             <p class="cl__bandZahl">nie</p>
-            <p class="cl__bandText">verfällt dein<br>eingezahltes Geld</p>
+            <p class="cl__bandText">verfällt dein<br>eingezahltes Guthaben</p>
           </div>
         </div>
       </section>
@@ -61,7 +61,7 @@
             <ul class="cl__liste">
               <li>Keine Gebühren, keine Kreditkosten. Jeder Euro, den du einzahlst, ist ein Euro für deine Behandlung.</li>
               <li>Keine Prüfung, keine Schufa. Du startest einfach in der App.</li>
-              <li>Jeden Monat kommt ein Beauty-Bonus obendrauf, mit Status bis zu {{ prozent(hoechste.sparbuchBonusProzent) }} im Jahr.</li>
+              <li>Jeden Monat kommt ein Beauty-Bonus obendrauf, als Statuskunde sogar bis zu {{ prozent(hoechste.sparbuchBonusProzent) }} im Jahr.</li>
             </ul>
           </div>
         </div>
@@ -75,7 +75,7 @@
             <p class="cl__text">
               Viele unserer Kunden planen ihre Behandlungen über das ganze Jahr. Wir wollen nicht,
               dass jemand dafür einen Kredit aufnimmt oder Gebühren zahlt. Beim Beauty-Sparbuch legst
-              du vorher zurück und wir sagen Danke für deine Treue: mit einem Bonus, den du bei uns einlöst.
+              du vorher zurück, und wir sagen Danke für deine Treue: mit einem Bonus, den du bei uns einlöst.
             </p>
             <p class="cl__text">
               Für dich heißt das: Deine nächste Behandlung ist schon bezahlt, wenn du kommst.
@@ -85,7 +85,7 @@
           <div class="cl__box">
             <p class="cl__eyebrow">Was das Beauty-Sparbuch ist</p>
             <p class="cl__text">
-              Ein Guthaben bei MY HEALTH & BEAUTY, das du im Voraus einzahlst und für Behandlungen
+              Ein Guthaben bei MY, das du im Voraus einzahlst und für Behandlungen
               und Produkte bei uns einlöst. Der Beauty-Bonus ist ein Treuebonus in Form von Guthaben.
             </p>
             <p class="cl__eyebrow">Was es nicht ist</p>
@@ -98,13 +98,13 @@
       </section>
 
       <section class="cl__abschnitt cl__abschnitt--hell">
-        <p class="cl__eyebrow">In drei Schritten</p>
+        <p class="cl__eyebrow">So einfach geht's</p>
         <ol class="cl__schritte">
           <li>
             <span><strong>Betrag wählen.</strong> Ab {{ euro(SPARBUCH.mindestRate) }} im Monat,
               in Schritten von {{ euro(SPARBUCH.schrittRate) }}. Per Lastschrift oder Karte, in der App.</span>
           </li>
-          <li><span><strong>Guthaben wächst.</strong> Jeden Monat kommt deine Rate dazu und am Monatsende dein Beauty-Bonus.</span></li>
+          <li><span><strong>Guthaben wachsen lassen.</strong> Jeden Monat kommt deine Rate dazu und am Monatsende dein Beauty-Bonus.</span></li>
           <li><span><strong>Einlösen.</strong> Für Behandlungen und Produkte an allen Standorten. Sag am Empfang: „Bitte mit Guthaben.“</span></li>
         </ol>
       </section>
@@ -118,8 +118,8 @@
               Du legst {{ SPARBUCH.beispielMonate }} Monate lang jeden Monat
               {{ euro(SPARBUCH.beispielRate) }} zurück. Dann hast du
               {{ euro(beispielBasis.eingezahlt) }} Guthaben und rund
-              {{ euro(beispielBasis.bonus) }} Beauty-Bonus dazu. Im Status
-              {{ hoechste.name }} sind es rund {{ euro(beispielHoechste.bonus) }}.
+              {{ euro(beispielBasis.bonus) }} Beauty-Bonus dazu. Als
+              {{ hoechste.name }} sind es sogar rund {{ euro(beispielHoechste.bonus) }}.
             </p>
             <p class="cl__klein">
               Jeden Monat ein Zwölftel des Satzes auf dein eingezahltes Guthaben, ohne
@@ -222,7 +222,7 @@ const fragen = [
   },
   {
     frage: "Was passiert, wenn ich kündige?",
-    antwort: "Dein Guthaben bleibt dir und du kannst es weiter bei uns einlösen.",
+    antwort: "Dein Guthaben bleibt dir, und du kannst es weiter bei uns einlösen.",
   },
 ];
 
