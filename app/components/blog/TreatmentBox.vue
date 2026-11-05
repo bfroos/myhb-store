@@ -10,7 +10,7 @@
       <h2 class="btb__title">{{ name }} in deiner Stadt</h2>
       <p>
         Bei MY HEALTH &amp; BEAUTY{{ price ? ` ${price}` : "" }} – es behandeln ausschließlich
-        Ärztinnen und Ärzte, an allen Standorten zum gleichen Preis, nach Verfügbarkeit auch ohne Termin.
+        Ärzte, an allen Standorten zum gleichen Preis, nach Verfügbarkeit auch ohne Termin.
       </p>
       <ul class="btb__cities" role="list">
         <li v-for="c in cities" :key="c.href"><NuxtLink :to="c.href">{{ c.label }}</NuxtLink></li>

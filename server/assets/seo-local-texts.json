@@ -5672,6 +5672,80 @@
    }
   ]
  },
+ "botox/hyperhidrose-starkes-schwitzen@moenchengladbach/minto": {
+  "key": "botox/hyperhidrose-starkes-schwitzen@moenchengladbach/minto",
+  "about": {
+   "headline": "Warum Botox gegen Schwitzen helfen kann",
+   "intro": "Hinter starkem Schwitzen steckt ein Signalweg: Nerven schicken einen Botenstoff, und die Schweißdrüsen reagieren darauf.",
+   "paragraphs": [
+    "Dieser Botenstoff heißt Acetylcholin. Das Muskelrelaxans, ein Botulinumtoxin vom Typ A, hemmt seine Freisetzung für eine Weile. Kommt das Signal schwächer an, bilden die Drüsen im behandelten Bereich weniger Schweiß.",
+    "Wichtig zu wissen: Die Drüsen bleiben, wo sie sind. Sie werden weder entfernt noch zerstört. Deshalb ist der Effekt auf Zeit angelegt. Lässt die Wirkung nach, kann die Schweißproduktion nach und nach zurückkehren.",
+    "Gespritzt wird flach in die Haut, genau dort, wo du zu stark schwitzt. Meist sind das die Achseln, die Hände oder die Füße.",
+    "Im Minto in Mönchengladbach beurteilt ein erfahrener Arzt vorab, welche Zonen behandelt werden sollen."
+   ]
+  },
+  "benefits": {
+   "headline": "Wie sich die Behandlung im Alltag bemerkbar machen kann",
+   "items": [
+    {
+     "heading": "Weniger Feuchtigkeit",
+     "text": "In den behandelten Zonen kann die Schweißmenge zurückgehen. Das hilft gegen Flecken auf der Kleidung und das Gefühl, ständig nass zu sein."
+    },
+    {
+     "heading": "Ein Effekt, der sich aufbaut",
+     "text": "Die ersten Veränderungen merkst du in der Regel in der ersten Woche. Nach ein bis zwei Wochen ist die volle Wirkung erreicht."
+    },
+    {
+     "heading": "Mehrere Monate Ruhe",
+     "text": "Die Wirkung hält meist vier bis sechs Monate an. Bei regelmäßiger Behandlung sind die Abstände oft länger."
+    },
+    {
+     "heading": "Gezielt behandelt",
+     "text": "Ein Arzt entscheidet, welche Bereiche infrage kommen, und führt die Behandlung selbst durch."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Ab wann ist das ein Thema für dich?",
+   "paragraphs": [
+    "Frauen und Männer, die so stark schwitzen, dass es sie im Alltag einschränkt, können die Behandlung in Betracht ziehen. Das gilt für Achseln, Hände und Füße.",
+    "Wenn dich Schweißflecken stören oder du dir eine Lösung für mehrere Monate wünschst, sprich mit dem Arzt. Er prüft, ob sie bei dir sinnvoll ist."
+   ]
+  },
+  "process": {
+   "headline": "So läuft die Behandlung ab",
+   "intro": "Gut vorbereitet kommst du in wenigen Minuten durch.",
+   "steps": [
+    {
+     "heading": "Zuerst: Zonen festlegen",
+     "text": "Wir sehen uns die Stellen an, an denen du zu stark schwitzt, und fragen nach deinen Beschwerden. Daraus ergibt sich der Plan für die Behandlung. Notiere dir vorab, wann das Schwitzen dich am stärksten stört. Das hilft bei der Auswahl der Zonen."
+    },
+    {
+     "heading": "Dann: die Injektionen",
+     "text": "Der Arzt spritzt das Muskelrelaxans mit einer feinen Nadel oberflächlich in die Haut. Es dauert etwa 20 bis 30 Minuten. Die Schweißdrüsen werden dabei weder entfernt noch zerstört."
+    },
+    {
+     "heading": "Zuletzt: die Wirkung abwarten",
+     "text": "Du bist in der Regel gleich wieder alltagstauglich. Innerhalb der ersten Woche zeigt sich die Wirkung. Aufgefrischt wird bei Bedarf nach ärztlicher Beurteilung. Ob, wann und wie oft aufgefrischt wird, entscheidet der Arzt nach seiner Beurteilung."
+    }
+   ]
+  },
+  "faqHeadline": "Antworten für deinen Termin im Minto",
+  "faqs": [
+   {
+    "question": "Wie finde ich euch in Mönchengladbach?",
+    "answer": "Du findest uns im Minto, Am Minto 3, in Mönchengladbach. Wenn du im Center suchst, hilft ein Anruf unter 02161 4633773 weiter. Mit der Adresse Am Minto 3 findest du uns leicht."
+   },
+   {
+    "question": "Wann kann ich zu euch kommen?",
+    "answer": "Wir haben montags bis samstags von 10 bis 20 Uhr geöffnet. Auch nach der Arbeit lässt sich also ein Termin finden. Ohne Termin geht es spontan nur nach Verfügbarkeit. Wer sehr spät kommen möchte, sollte seinen Termin vorab anfragen."
+   },
+   {
+    "question": "Wie lange dauert der Besuch?",
+    "answer": "Die Behandlung selbst braucht etwa 20 bis 30 Minuten. Hinzu kommt vorab das Gespräch über die betroffenen Zonen. Plane daher etwas mehr Zeit ein als nur die reine Behandlung. Nimm dir am besten das Gespräch und die Behandlung am Stück vor."
+   }
+  ]
+ },
  "botox/hyperhidrose-starkes-schwitzen@recklinghausen/palais-vest": {
   "key": "botox/hyperhidrose-starkes-schwitzen@recklinghausen/palais-vest",
   "about": {
@@ -6471,6 +6545,80 @@
    {
     "question": "Wo finde ich die Lounge im Center?",
     "answer": "Wir liegen auf Ebene −1 der Düsseldorf Arcaden, Friedrichstraße 133 in 40217 Düsseldorf. Aufzüge und Rolltreppen sind vorhanden, das Center ist barrierefrei. Eine Telefonnummer für Fragen: 0211 23091883."
+   }
+  ]
+ },
+ "botox/lachfalten@duisburg/forum": {
+  "key": "botox/lachfalten@duisburg/forum",
+  "about": {
+   "headline": "Woher Lachfalten kommen und was Botox daran ändern kann",
+   "intro": "Wer viel lacht, sieht es irgendwann an den Augenwinkeln: Dort entstehen die feinen Linien, die man Lachfalten oder Krähenfüße nennt.",
+   "paragraphs": [
+    "Sie entstehen vor allem durch Mimik, also beim Lachen, Lächeln oder wenn du die Augen zusammenkneifst. Je lebhafter dein Gesicht ist, desto eher prägen sich die Linien ein. Sonne, Rauchen, Stress und die natürliche Hautalterung verstärken das.",
+    "Das Muskelrelaxans setzt an der Ursache an. Es entspannt den Muskel, der die Falte bildet, und die Haut darüber kann sich glätten. Deine Mimik soll dabei erhalten bleiben.",
+    "Wie stark sich das auswirkt, hängt davon ab, wie ausgeprägt die Falten sind, wie kräftig deine Muskulatur ist und wie hoch die Dosis gewählt wird. Bei fachgerechter Behandlung wirkt das Ergebnis frisch und natürlich, nicht maskenhaft.",
+    "Im Forum Duisburg an der Königstraße analysiert ein erfahrener Arzt vorher deine Mimik."
+   ]
+  },
+  "benefits": {
+   "headline": "Was die Behandlung für dich tun kann",
+   "items": [
+    {
+     "heading": "Weichere Linien",
+     "text": "Entspannt sich die überaktive Muskulatur rund um die Augen, werden feine Linien dort weniger auffällig."
+    },
+    {
+     "heading": "Ein Ergebnis mit Anlauf",
+     "text": "Erste Veränderungen zeigen sich nach wenigen Tagen. Nach etwa ein bis zwei Wochen ist das volle Ergebnis zu sehen. Es hält mehrere Monate."
+    },
+    {
+     "heading": "Eine bewährte Methode",
+     "text": "Das Verfahren ist seit Jahren etabliert und wird gut vertragen. Ein erfahrener Arzt führt es durch."
+    },
+    {
+     "heading": "Lebendige Mimik",
+     "text": "Das Ziel ist ein offener, wacher Blick und ein natürliches Lächeln, kein starres Gesicht."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Wer die Behandlung in Betracht ziehen kann",
+   "paragraphs": [
+    "Wenn dich ausgeprägte Linien an den Augenwinkeln stören, kann ein Gespräch sinnvoll sein. Das gilt auch für frühe Fältchen, bevor sie sich tiefer einprägen, und für eine sehr aktive Augenmuskulatur, die dich müde wirken lässt.",
+    "Der Arzt prüft bei deinem Termin, ob die Behandlung für dich passt und welche Menge sinnvoll ist."
+   ]
+  },
+  "process": {
+   "headline": "Dein Termin Schritt für Schritt",
+   "intro": "Der Ablauf ist überschaubar und auf ein natürliches Ergebnis ausgerichtet.",
+   "steps": [
+    {
+     "heading": "Im Gespräch",
+     "text": "Der Arzt fragt nach deinen Wünschen und beurteilt die Muskulatur rund um die Augen. So kann er die Behandlung genau planen. Zeig dem Arzt am besten, wann und wo sich die Linien besonders zeigen."
+    },
+    {
+     "heading": "Bei der Injektion",
+     "text": "Eine sehr feine Nadel bringt das Mittel gezielt in die Muskeln. Die Anwendung dauert nur wenige Minuten und braucht in der Regel keine Betäubung. Du spürst im Grunde nur den feinen Einstich."
+    },
+    {
+     "heading": "Im Anschluss",
+     "text": "Du kannst direkt wieder in deinen Alltag. Nach zwei bis drei Tagen zeigen sich erste Effekte, das volle Ergebnis entwickelt sich in sieben bis vierzehn Tagen. Wie schnell der Effekt einsetzt, ist von Mensch zu Mensch verschieden."
+    }
+   ]
+  },
+  "faqHeadline": "Fragen zum Besuch im Forum Duisburg",
+  "faqs": [
+   {
+    "question": "Wo genau sitzt ihr in Duisburg?",
+    "answer": "Wir sind im Forum Duisburg, Königstraße 48, in Duisburg. Falls du auf dem Weg zu uns Hilfe brauchst, erreichst du uns unter 0203 44956569. Das Forum ist an der Königstraße 48 zu finden."
+   },
+   {
+    "question": "Bis wann kann ich abends kommen?",
+    "answer": "Von Montag bis Samstag haben wir von 10 bis 19 Uhr geöffnet. Wer nach der Arbeit kommt, sollte seinen Termin also eher früh am Abend legen. Sonntags haben wir geschlossen. Der Samstag ist ein ganz normaler Behandlungstag bei uns."
+   },
+   {
+    "question": "Brauche ich vorher ein Gespräch?",
+    "answer": "Ja, das gehört zum Ablauf. Der Arzt klärt vorab deine Wünsche und untersucht die Muskulatur. Möchtest du vorher etwas wissen, ruf uns an. Spontan ohne Termin ist es nach Verfügbarkeit möglich. Er erklärt dir auch, was du in den Tagen danach beachten solltest."
    }
   ]
  },
@@ -22381,6 +22529,664 @@
    {
     "question": "Brauche ich einen Termin?",
     "answer": "Mit Termin ist dir ein Platz sicher. Ohne Termin geht es nur nach Verfügbarkeit. Eine Beratung vorab ist sinnvoll, weil der Arzt deine Haut ansehen und entscheiden sollte, ob die Behandlung passt."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@aachen/aquis-plaza": {
+  "key": "skinbooster/lumi-face@aachen/aquis-plaza",
+  "about": {
+   "headline": "Natürlich frisch: Was Lumi Face kann und was nicht",
+   "intro": "Dieser Skinbooster soll die Haut des ganzen Gesichts verbessern, nicht dein Aussehen verändern.",
+   "paragraphs": [
+    "Beginnen wir mit dem, was er nicht macht. Er baut kein Volumen auf, er füllt keine Falten auf und er verändert deine Gesichtszüge nicht. Dein Gesicht bleibt, wie es ist.",
+    "Was er stattdessen tut: Drei Wirkstoffe arbeiten an der Haut. NAD+ stärkt den Energiehaushalt der Zellen, Polynukleotide unterstützen die Regeneration, Hyaluronsäure bindet Feuchtigkeit. Zusammen kann die Haut frischer wirken, sich praller anfühlen und feine Linien treten zurück.",
+    "Das Ergebnis soll deshalb natürlich bleiben. Wer dich kennt, sieht dich ausgeruhter, aber nicht verändert.",
+    "Im Aquis Plaza in Aachen führen erfahrene Ärzte die Behandlung durch. Sie klären vorab mit dir, ob die Haut dafür geeignet ist."
+   ]
+  },
+  "benefits": {
+   "headline": "Vier Gründe für diesen Skinbooster",
+   "items": [
+    {
+     "heading": "Drei in eins",
+     "text": "Statt einzelner Behandlungen mit je einem Wirkstoff bekommst du NAD+, Polynukleotide und Hyaluronsäure in einem Termin."
+    },
+    {
+     "heading": "Ganzes Gesicht in einer Runde",
+     "text": "Wangen, Stirn und Kinn sind mit 2,5 ml abgedeckt. An den Augen setzt Lumi Eyes an."
+    },
+    {
+     "heading": "Unauffällig",
+     "text": "Da nichts aufgebaut wird, wirkt die Haut besser, aber dein Gesicht sieht nicht nach Behandlung aus."
+    },
+    {
+     "heading": "Klare Ansprechpartner",
+     "text": "Ein Arzt untersucht deine Haut und erklärt dir den Ablauf, bevor er beginnt."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Ist das etwas für dich?",
+   "paragraphs": [
+    "Wenn du dir mehr Frische und Feuchtigkeit für deine Haut wünschst, ob als Frau oder als Mann, lohnt sich ein Blick. Das gilt besonders bei müder, fahler oder trockener Haut.",
+    "Ebenso bei feinen Linien und ersten Zeichen der Hautalterung, wenn du mehr Spannkraft suchst. Am Ende entscheidet der Arzt nach der Untersuchung."
+   ]
+  },
+  "process": {
+   "headline": "Was bei deinem Termin passiert",
+   "intro": "Kurz und klar, in drei Abschnitten.",
+   "steps": [
+    {
+     "heading": "Ankommen und besprechen",
+     "text": "Der Arzt untersucht deine Haut. Er erklärt, wie die Behandlung funktioniert, und du stellst deine Fragen. Erst danach geht es weiter. Zeig dem Arzt ruhig, was dich an deiner Haut stört."
+    },
+    {
+     "heading": "Die Behandlung selbst",
+     "text": "Mit einer feinen Nadel werden die Wirkstoffe in kleinen Mengen im ganzen Gesicht in die Haut gesetzt. Etwa 30 Minuten solltest du dafür einplanen. Die Nadel ist fein, und die Menge je Einstich ist klein."
+    },
+    {
+     "heading": "Nach dem Termin",
+     "text": "Du kannst direkt wieder in den Alltag. Kleine Quaddeln oder Rötungen sind meist nach wenigen Stunden abgeklungen. Die Haut regeneriert danach über Wochen weiter. Bleiben Rötungen länger, als du erwartest, sprich uns darauf an."
+    }
+   ]
+  },
+  "faqHeadline": "Fragen rund um deinen Besuch im Aquis Plaza",
+  "faqs": [
+   {
+    "question": "Wie lautet die Adresse?",
+    "answer": "Wir sind im Aquis Plaza, Adalbertstraße 100, in Aachen. Für Fragen zur Anreise erreichst du uns unter 0241 75080508. Das Center ist über die Adalbertstraße zu erreichen."
+   },
+   {
+    "question": "Kann ich auch die Augenpartie behandeln lassen?",
+    "answer": "Lumi Face ist für Wangen, Stirn und Kinn gedacht. Für die Augenpartie gibt es Lumi Eyes. Welche der beiden Behandlungen für dich passt, besprichst du mit dem Arzt. Sprich das am besten schon bei der Terminvereinbarung an."
+   },
+   {
+    "question": "An welchen Tagen habt ihr geöffnet?",
+    "answer": "Von Montag bis Samstag jeweils von 10 bis 20 Uhr. Sonntags haben wir zu. Wer ohne Termin kommt, wird nach Verfügbarkeit behandelt. Das ist besonders für kurzfristige Pläne wichtig."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@berlin/gesundbrunnencenter": {
+  "key": "skinbooster/lumi-face@berlin/gesundbrunnencenter",
+  "about": {
+   "headline": "Drei Wirkstoffe, ein Ziel: Haut, die frischer aussieht",
+   "intro": "Lumi Face verbindet NAD+, Polynukleotide und Hyaluronsäure in einer einzigen Behandlung für das ganze Gesicht.",
+   "paragraphs": [
+    "Manche Haut wirkt blass und müde, obwohl du gut geschlafen hast. Genau dafür ist dieser Skinbooster gedacht. Er arbeitet nicht an der Form deines Gesichts, sondern an der Qualität der Haut selbst.",
+    "Jeder der drei Wirkstoffe hat eine eigene Aufgabe. Hyaluronsäure bindet Feuchtigkeit und gibt der Haut Fülle von innen. Polynukleotide fördern die Regeneration. NAD+ unterstützt den Energiehaushalt der Hautzellen, also das, was sie für ihre Arbeit brauchen.",
+    "Im Zusammenspiel kann die Haut frischer wirken, sich praller anfühlen und feine Linien fallen weniger auf. Es wird nichts aufgebaut und nichts verändert, darum bleibt der Ausdruck natürlich.",
+    "Im Gesundbrunnen-Center in Berlin behandeln erfahrene Ärzte. Zuerst schauen sie sich deine Haut an und sagen dir ehrlich, ob die Behandlung für dich sinnvoll ist."
+   ]
+  },
+  "benefits": {
+   "headline": "Was dir die Behandlung bringen kann",
+   "items": [
+    {
+     "heading": "Ein Termin statt drei",
+     "text": "Alle drei Wirkstoffe bekommst du in einer Sitzung. Du musst sie nicht einzeln planen und nicht für jeden einen eigenen Besuch einrechnen."
+    },
+    {
+     "heading": "Ein Set für das ganze Gesicht",
+     "text": "Die Menge von 2,5 ml reicht für Wangen, Stirn und Kinn. Die Augenpartie ist ein eigenes Thema: Dafür gibt es Lumi Eyes."
+    },
+    {
+     "heading": "Ein natürlicher Eindruck",
+     "text": "Hier wird kein Volumen aufgebaut. Du siehst danach nicht verändert aus, sondern meist eher ausgeruht. Die Haut soll besser werden, nicht anders."
+    },
+    {
+     "heading": "Ärzte mit Erfahrung",
+     "text": "Der Arzt prüft vorab, ob die Behandlung zu deiner Haut passt. Du bekommst keine Standardlösung, sondern eine persönliche Einschätzung."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Für welche Haut passt das?",
+   "paragraphs": [
+    "Der Skinbooster richtet sich an Frauen und Männer, die ihrer Haut mehr Frische und Feuchtigkeit geben möchten. Typisch sind ein müdes, fahles Hautbild oder eine Haut, die sich trocken anfühlt.",
+    "Auch wenn dir feine Linien auffallen oder die ersten Zeichen der Hautalterung kommen, kann Lumi Face infrage kommen. Ob es bei dir sinnvoll ist, klärt der Arzt im Gespräch."
+   ]
+  },
+  "process": {
+   "headline": "So läuft dein Termin ab",
+   "intro": "Der Weg vom Gespräch bis zur Nachsorge ist kurz.",
+   "steps": [
+    {
+     "heading": "Vor der Behandlung",
+     "text": "Der Arzt untersucht deine Haut und fragt nach deinen Wünschen. Du kannst alles ansprechen, was dich beschäftigt. Erst danach wird entschieden, ob es losgeht. Erzähl dem Arzt, was dich an deiner Haut stört. Je genauer du das tust, desto besser kann er einschätzen, ob die Behandlung passt."
+    },
+    {
+     "heading": "Während der Behandlung",
+     "text": "Mit einer feinen Nadel kommen die Wirkstoffe in kleinen Mengen in die Haut des ganzen Gesichts. Die Behandlung selbst dauert etwa 30 Minuten. Wenn dir etwas unklar ist, kannst du jederzeit nachfragen."
+    },
+    {
+     "heading": "Danach",
+     "text": "Du kannst gleich zurück in deinen Tag. Kleine Quaddeln und Rötungen gehen meist nach wenigen Stunden zurück. In den folgenden Wochen regeneriert sich die Haut weiter. Wie stark du die Wirkung spürst, hängt von deiner Haut ab. Fällt dir etwas Ungewöhnliches auf, sprich uns an."
+    }
+   ]
+  },
+  "faqHeadline": "Fragen zum Termin im Gesundbrunnen-Center",
+  "faqs": [
+   {
+    "question": "Wo genau finde ich euch in Berlin?",
+    "answer": "Wir sind im Gesundbrunnen-Center, Badstraße 4, 13357 Berlin. Wenn du dir bei der Wegfindung im Center unsicher bist, ruf kurz an: 030 / 98 60 73 80. Dann erklären wir dir den Weg. Sag beim Anruf gern gleich, dass du wegen der Haut kommst."
+   },
+   {
+    "question": "Passt ein Termin nach Feierabend?",
+    "answer": "Wir haben von Montag bis Samstag von 10 bis 20 Uhr geöffnet, sonntags bleibt das Center für uns zu. Ein Termin am späten Nachmittag oder frühen Abend ist also möglich. Da Rötungen meist schnell abklingen, kannst du danach gut noch etwas vorhaben. Der Samstag ist bei uns ein regulärer Behandlungstag, was viele gut finden, die unter der Woche nicht abkommen."
+   },
+   {
+    "question": "Geht es auch ohne vorherigen Termin?",
+    "answer": "Spontan ist es nach Verfügbarkeit möglich. Planbarer ist ein fester Termin, weil dann für dich Zeit für das Gespräch mit dem Arzt eingeplant ist. Rufst du an, schauen wir, ob für den gewünschten Zeitpunkt ein Platz frei ist."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@duesseldorf/duesseldorf-arcaden": {
+  "key": "skinbooster/lumi-face@duesseldorf/duesseldorf-arcaden",
+  "about": {
+   "headline": "Frische für die Haut, ohne dass sich dein Gesicht ändert",
+   "intro": "Bei dieser Behandlung geht es um die Haut selbst und nicht um Form oder Volumen.",
+   "paragraphs": [
+    "Stell dir vor, deine Haut bekommt in einer Sitzung gleich drei Hilfen. NAD+ unterstützt den Energiehaushalt der Zellen, Polynukleotide fördern die Erneuerung, und Hyaluronsäure hält Feuchtigkeit fest. So sind die drei Wirkstoffe in Lumi Face gedacht.",
+    "Das Ziel ist ein Hautbild, das frischer aussieht. Feine Linien fallen weniger auf, und die Haut fühlt sich praller an. Eine Veränderung deiner Züge ist nicht vorgesehen.",
+    "Für Menschen, die eine möglichst unauffällige Behandlung suchen, ist das ein wichtiger Punkt. Niemand soll dir ansehen, dass du etwas hast machen lassen. Man soll eher denken, dass du erholt bist.",
+    "In den Düsseldorf Arcaden in Bilk begleiten dich erfahrene Ärzte durch die Behandlung."
+   ]
+  },
+  "benefits": {
+   "headline": "Darum entscheiden sich viele dafür",
+   "items": [
+    {
+     "heading": "Weniger Aufwand",
+     "text": "Weil drei Wirkstoffe in einem Termin kombiniert werden, sparst du dir mehrere Besuche."
+    },
+    {
+     "heading": "Abgedeckt: das ganze Gesicht",
+     "text": "Die Menge von 2,5 ml wird auf Wangen, Stirn und Kinn verteilt. Für die Augenpartie ist Lumi Eyes die passende Ergänzung."
+    },
+    {
+     "heading": "Natürliche Wirkung",
+     "text": "Es wird kein Volumen aufgebaut. Gesichtszüge und Mimik bleiben, wie sie sind."
+    },
+    {
+     "heading": "Ärztliche Einschätzung vorab",
+     "text": "Bevor etwas passiert, klärt der Arzt mit dir, ob die Behandlung zu deiner Haut passt."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Für wen lohnt sich ein Gespräch?",
+   "paragraphs": [
+    "Frauen und Männer, deren Haut mehr Feuchtigkeit und Frische braucht, sind hier richtig. Das betrifft vor allem fahle oder müde Haut und trockene Haut.",
+    "Auch bei feinen Linien oder ersten Zeichen der Hautalterung kann sie helfen, mehr Spannkraft zu bekommen. Wir schauen gemeinsam, ob sie in deinem Fall sinnvoll ist."
+   ]
+  },
+  "process": {
+   "headline": "Dein Weg durch den Termin",
+   "intro": "Wir erklären jeden Schritt, bevor er passiert.",
+   "steps": [
+    {
+     "heading": "Zum Start: das Gespräch",
+     "text": "Der Arzt untersucht deine Haut und beantwortet deine Fragen. Du sagst, was du dir wünschst, und er sagt dir, ob das mit Lumi Face machbar ist. Es hilft, wenn du vorab überlegst, welche Hautstellen dich am meisten stören."
+    },
+    {
+     "heading": "In der Mitte: die Behandlung",
+     "text": "Mit einer feinen Nadel werden die Wirkstoffe in kleinen Mengen im ganzen Gesicht in die Haut gebracht. Rechne mit etwa 30 Minuten. Wenn dir währenddessen etwas unklar ist, frag einfach nach."
+    },
+    {
+     "heading": "Zum Schluss: der Alltag",
+     "text": "Du kannst danach direkt wieder los. Kleine Quaddeln und Rötungen sind meist nach wenigen Stunden weg, und die Haut arbeitet in den Wochen danach weiter. Am nächsten Tag lohnt sich ein Blick in den Spiegel, aber erwarte keine plötzliche Veränderung."
+    }
+   ]
+  },
+  "faqHeadline": "Antworten für deinen Besuch in Bilk",
+  "faqs": [
+   {
+    "question": "Wie finde ich die Lounge im Center?",
+    "answer": "Du fährst auf Ebene −1, es gibt Rolltreppen und Aufzüge. Wir liegen direkt gegenüber von ALDI. Die Adresse lautet Friedrichstraße 133 in Düsseldorf. Die Düsseldorf Arcaden liegen im Stadtteil Bilk. Fährst du im Center nach unten, bist du auf dem richtigen Weg."
+   },
+   {
+    "question": "Kann ich in der Mittagspause vorbeikommen?",
+    "answer": "Möglich ist das. Wir haben montags bis samstags von 10 bis 20 Uhr offen. Bedenke aber, dass die Behandlung rund 30 Minuten dauert und vorher ein Gespräch stattfindet. Eine ganze Stunde solltest du daher einplanen. Dann bleibt genug Puffer, ohne dass du hetzen musst."
+   },
+   {
+    "question": "Kann ich vorher telefonisch etwas klären?",
+    "answer": "Ja, du erreichst uns unter 0211 23091883. Frag ruhig, ob Lumi Face für deine Haut ein Thema sein kann. Die endgültige Einschätzung trifft der Arzt beim Termin. Eine Frage zur Terminlage beantworten wir gern am Telefon."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@duisburg/forum": {
+  "key": "skinbooster/lumi-face@duisburg/forum",
+  "about": {
+   "headline": "Was NAD+ für deine Haut bedeuten kann",
+   "intro": "Haut ist ein Organ, das Energie braucht. Lumi Face setzt genau dort an und verbindet dazu zwei weitere Wirkstoffe.",
+   "paragraphs": [
+    "NAD+ unterstützt den Energiehaushalt der Hautzellen. Wenn Zellen gut versorgt sind, können sie ihre Arbeit besser machen. Das ist der erste Baustein.",
+    "Der zweite sind die Polynukleotide, die die Regeneration der Haut fördern. Der dritte ist Hyaluronsäure. Sie bindet Feuchtigkeit und lässt die Haut praller wirken.",
+    "Zusammen sollen die drei Stoffe die Hautqualität verbessern. Müde Haut kann frischer aussehen, feine Linien fallen weniger auf. Dein Gesicht verändert sich dabei nicht, denn es wird weder etwas aufgebaut noch verändert.",
+    "Im Forum Duisburg an der Königstraße behandeln erfahrene Ärzte. Sie schauen vorher genau hin und besprechen mit dir, was sinnvoll ist."
+   ]
+  },
+  "benefits": {
+   "headline": "Was dich bei uns erwartet",
+   "items": [
+    {
+     "heading": "Ein Besuch, drei Wirkstoffe",
+     "text": "Die Kombination wird in einem Termin angewendet. Du sparst dir mehrere einzelne Behandlungen."
+    },
+    {
+     "heading": "Gesicht komplett",
+     "text": "Wangen, Stirn und Kinn werden mit 2,5 ml versorgt. Die Augenpartie lässt sich mit Lumi Eyes gesondert behandeln."
+    },
+    {
+     "heading": "Ohne Maske",
+     "text": "Da kein Volumen entsteht, bleibt deine Mimik frei. Das Ergebnis wirkt natürlich."
+    },
+    {
+     "heading": "Zuerst der Arzt, dann die Nadel",
+     "text": "Im Gespräch wird geprüft, ob die Behandlung zu deiner Haut passt."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Wer ist hier richtig?",
+   "paragraphs": [
+    "Frauen und Männer, die ihrer Haut mehr Frische und Feuchtigkeit geben möchten. Besonders dann, wenn sie müde, fahl oder trocken aussieht.",
+    "Auch bei feinen Linien oder ersten Zeichen der Hautalterung kann der Skinbooster für mehr Spannkraft sorgen. Eine Zusage gibt es erst nach der ärztlichen Untersuchung."
+   ]
+  },
+  "process": {
+   "headline": "Dein Termin im Forum",
+   "intro": "Alles Wichtige zum Ablauf auf einen Blick.",
+   "steps": [
+    {
+     "heading": "Gespräch und Untersuchung",
+     "text": "Dein Arzt sieht sich die Haut an und fragt nach deinen Wünschen. Danach erfährst du, ob Lumi Face zu dir passt. Hast du Fragen zu deiner Haut, bring sie mit zum Gespräch."
+    },
+    {
+     "heading": "Die Behandlung",
+     "text": "Die Wirkstoffe werden mit einer feinen Nadel und in kleinen Mengen im ganzen Gesicht in die Haut eingebracht. Das dauert etwa 30 Minuten. Der Arzt erklärt dir, was er gerade tut."
+    },
+    {
+     "heading": "Zurück in den Alltag",
+     "text": "Es kann zu kleinen Quaddeln und Rötungen kommen. Sie gehen meist nach wenigen Stunden zurück. Die Haut regeneriert in den Wochen danach weiter. Wie lange die Regeneration dauert, merkst du daran, wie sich deine Haut in den Wochen danach anfühlt."
+    }
+   ]
+  },
+  "faqHeadline": "Fragen zum Termin im Forum Duisburg",
+  "faqs": [
+   {
+    "question": "Wie komme ich zu euch?",
+    "answer": "Wir sind im Forum Duisburg, Königstraße 48, in Duisburg. Wenn du den Weg im Center nicht gleich findest, ruf uns an: 0203 44956569. Das Forum liegt an der Königstraße, die Hausnummer lautet 48."
+   },
+   {
+    "question": "Wie spät kann ich noch kommen?",
+    "answer": "Wir sind von Montag bis Samstag von 10 bis 19 Uhr da. Der letzte Termin liegt also am späten Nachmittag. Sonntags ist geschlossen. Plane deshalb nicht zu knapp."
+   },
+   {
+    "question": "Kann ich mich vorher beraten lassen?",
+    "answer": "Ja. Du kannst telefonisch Fragen stellen oder das Gespräch direkt beim Termin führen. Der Arzt klärt in jedem Fall vor der Behandlung, ob sie für deine Haut geeignet ist. Gespräch und Behandlung zusammen füllen leicht eine Stunde."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@kaiserslautern/k-in-lautern": {
+  "key": "skinbooster/lumi-face@kaiserslautern/k-in-lautern",
+  "about": {
+   "headline": "Die Haut im Zeitverlauf: Was nach Lumi Face passiert",
+   "intro": "Die Behandlung selbst ist kurz, die Wirkung auf die Haut entwickelt sich über mehrere Wochen.",
+   "paragraphs": [
+    "Am Anfang steht der Arzt. Er prüft deine Haut und klärt, ob ein Skinbooster für dich sinnvoll ist. Dann folgt die Behandlung, die etwa eine halbe Stunde dauert und das ganze Gesicht umfasst.",
+    "Eingebracht werden drei Wirkstoffe: NAD+ für den Energiehaushalt der Hautzellen, Polynukleotide für die Regeneration und Hyaluronsäure für die Feuchtigkeit. Zusammen sollen sie die Hautqualität verbessern.",
+    "In den Stunden danach kann die Haut leicht gerötet sein. Auch kleine Quaddeln sind möglich. Beides klingt meist schnell ab. Über die nächsten Wochen regeneriert sich die Haut weiter.",
+    "Am Ende wirkt sie frischer und fühlt sich praller an. Aufgebaut wird nichts, daher bleibt dein Ausdruck, wie er ist. In K in Lautern in Kaiserslautern behandeln dich erfahrene Ärzte."
+   ]
+  },
+  "benefits": {
+   "headline": "Dafür ist die Behandlung gut",
+   "items": [
+    {
+     "heading": "Wirkstoffe, die zusammenarbeiten",
+     "text": "NAD+, Polynukleotide und Hyaluronsäure ergänzen sich. Du bekommst sie in einem Termin statt in dreien."
+    },
+    {
+     "heading": "Größerer Radius",
+     "text": "Mit 2,5 ml wird das gesamte Gesicht versorgt, also Wangen, Stirn und Kinn. Für die Augen gibt es Lumi Eyes."
+    },
+    {
+     "heading": "Natürlichkeit als Maßstab",
+     "text": "Die Hautqualität soll besser werden, ohne dass Volumen aufgebaut wird. Du bleibst erkennbar du selbst."
+    },
+    {
+     "heading": "Fachliche Abklärung",
+     "text": "Ob die Behandlung zu deiner Haut passt, entscheidet nach dem Gespräch ein erfahrener Arzt."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Wann ein Termin sinnvoll sein kann",
+   "paragraphs": [
+    "Der Skinbooster ist für Frauen und Männer, die mehr Frische und Feuchtigkeit wollen. Wer müde, fahle oder trockene Haut hat, gehört zu den typischen Kunden.",
+    "Feine Linien oder erste Zeichen der Hautalterung sind ein weiterer Grund. Gemeinsam mit dem Arzt klärst du, ob mehr Spannkraft erreichbar ist."
+   ]
+  },
+  "process": {
+   "headline": "Dein Besuch in drei Phasen",
+   "intro": "Vom Betreten der Praxis bis zur Nachsorge.",
+   "steps": [
+    {
+     "heading": "Beratung",
+     "text": "Der Arzt untersucht deine Haut und bespricht deine Wünsche. Du darfst alles fragen, was dir auf dem Herzen liegt. Komm gern ein paar Minuten früher, damit das Gespräch nicht gehetzt wirkt."
+    },
+    {
+     "heading": "Injektion",
+     "text": "Die Wirkstoffe werden mit einer feinen Nadel in kleinen Mengen im ganzen Gesicht in die Haut gebracht. Insgesamt sind das rund 30 Minuten. Spürbar ist vor allem das feine Einstechen, nicht die ganze Behandlung."
+    },
+    {
+     "heading": "Heimweg",
+     "text": "Du kannst gleich zurück in deinen Tag. Rötungen und kleine Quaddeln verschwinden meist nach wenigen Stunden, die Regeneration dauert Wochen. Fällt dir in den ersten Stunden etwas Ungewöhnliches auf, melde dich bei uns."
+    }
+   ]
+  },
+  "faqHeadline": "Fragen von Kunden in Kaiserslautern",
+  "faqs": [
+   {
+    "question": "Wo ist euer Standort in Kaiserslautern?",
+    "answer": "Wir sind im K in Lautern am Fackelrondell 1 in Kaiserslautern. Telefonisch sind wir unter 0631 75006688 für dich da, wenn du Hilfe bei der Anfahrt brauchst. Du erreichst uns mit Fragen jederzeit während der Öffnungszeiten."
+   },
+   {
+    "question": "Wie lange sollte ich einplanen?",
+    "answer": "Die Behandlung dauert rund 30 Minuten. Dazu kommen das Gespräch mit dem Arzt und die Anmeldung. Einen Puffer solltest du also einrechnen, besonders wenn du danach noch einen Termin hast. Dann kommt am Ende alles zusammen, ohne dass du in Zeitnot gerätst."
+   },
+   {
+    "question": "Bis wann habt ihr abends geöffnet?",
+    "answer": "Wir arbeiten montags bis samstags von 10 bis 20 Uhr. Das ist praktisch, wenn du erst nach der Arbeit Zeit hast. Spontan ohne Termin geht es nach Verfügbarkeit. Ein Termin sichert dir aber ausreichend Gesprächszeit."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@koeln/koeln-arcaden": {
+  "key": "skinbooster/lumi-face@koeln/koeln-arcaden",
+  "about": {
+   "headline": "Was steckt in dieser Behandlung eigentlich drin?",
+   "intro": "Drei Dinge, die Haut gut gebrauchen kann, kommen bei Lumi Face zusammen: NAD+, Polynukleotide und Hyaluronsäure.",
+   "paragraphs": [
+    "Fangen wir mit der Hyaluronsäure an. Sie ist für die Feuchtigkeit zuständig, denn sie bindet Wasser in der Haut. Das Ergebnis ist ein praller Eindruck, der sich auch so anfühlt.",
+    "Die Polynukleotide sind für die Regeneration da. Und NAD+ kümmert sich um die Energie, mit der die Hautzellen arbeiten. Jeder Stoff übernimmt also einen anderen Teil, und genau das ist die Idee dahinter.",
+    "Was nicht passiert: Das Gesicht bekommt kein zusätzliches Volumen. Gedacht ist die Behandlung für Haut, die frischer wirken soll, ohne dass sich deine Gesichtszüge ändern.",
+    "In den Köln Arcaden in Kalk findest du uns auf Ebene −1. Bevor die Nadel zum Einsatz kommt, spricht ein erfahrener Arzt mit dir und beurteilt deine Haut."
+   ]
+  },
+  "benefits": {
+   "headline": "Gut zu wissen, bevor du dich entscheidest",
+   "items": [
+    {
+     "heading": "Alles auf einmal",
+     "text": "NAD+, Polynukleotide und Hyaluronsäure bekommst du zusammen. Das ersetzt drei einzelne Behandlungen durch eine."
+    },
+    {
+     "heading": "Gesicht, nicht nur ein Fleck",
+     "text": "Mit 2,5 ml wird das ganze Gesicht versorgt, also Wangen, Stirn und Kinn. Wer auch an den Augen etwas tun möchte, schaut sich Lumi Eyes an."
+    },
+    {
+     "heading": "Haut statt Volumen",
+     "text": "Verbessert wird die Hautqualität. Dein Gesicht behält seine Form, und das Ergebnis bleibt natürlich."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Wer profitiert besonders?",
+   "paragraphs": [
+    "Wenn deine Haut trocken ist, fahl aussieht oder müde wirkt, ist das ein guter Grund für ein Gespräch. Das Gleiche gilt für feine Linien, die dir mehr auffallen als früher.",
+    "Frauen und Männer können gleichermaßen davon profitieren. Wer erste Zeichen der Hautalterung bemerkt und mehr Spannkraft möchte, ist ebenfalls richtig. Der Arzt sagt dir vorher, ob es zu dir passt."
+   ]
+  },
+  "process": {
+   "headline": "Von der Tür bis zur Nachsorge",
+   "intro": "Ein Besuch besteht aus drei Teilen, und keiner davon ist kompliziert.",
+   "steps": [
+    {
+     "heading": "Erst reden",
+     "text": "Der Arzt sieht sich deine Haut genau an. Du erzählst, was dich stört, und stellst deine Fragen. Dann entscheidet ihr gemeinsam, ob Lumi Face das Richtige ist. Du musst nichts vorbereiten, außer deine Fragen mitzubringen."
+    },
+    {
+     "heading": "Dann behandeln",
+     "text": "Kleine Mengen der Wirkstoffe werden mit einer feinen Nadel im ganzen Gesicht in die Haut eingebracht. Das dauert ungefähr eine halbe Stunde. Die Wirkstoffe kommen in kleinen Mengen, verteilt über das ganze Gesicht."
+    },
+    {
+     "heading": "Und danach",
+     "text": "Der Alltag geht gleich weiter. Es kann zu kleinen Quaddeln und Rötungen kommen, die meist nach ein paar Stunden verschwinden. Die Regeneration läuft über Wochen weiter. Wenn dir in den Tagen danach etwas auffällt, das dich beunruhigt, melde dich bei uns."
+    }
+   ]
+  },
+  "faqHeadline": "Häufige Fragen zu deinem Besuch in Kalk",
+  "faqs": [
+   {
+    "question": "Wie komme ich in den Arcaden zu euch?",
+    "answer": "Fahr im Center auf Ebene −1, entweder mit der Rolltreppe oder dem Aufzug. Unsere Lounge liegt zwischen dm und Apollo Optik. Die Adresse ist Kalker Hauptstraße 55, 51103 Köln. Du erkennst uns am hellen Empfang mit dem MY-Logo."
+   },
+   {
+    "question": "Bis wann kann ich einen Termin bekommen?",
+    "answer": "Von Montag bis Donnerstag sind wir von 10 bis 20 Uhr da. Freitags und samstags geht es sogar bis 21 Uhr. Sonntags ist geschlossen. So kommst du auch nach einem langen Arbeitstag noch zu uns. Wer freitags oder samstags kommt, hat am Abend also eine Stunde mehr Spielraum."
+   },
+   {
+    "question": "Wie viel Zeit sollte ich mitbringen?",
+    "answer": "Die Behandlung selbst dauert etwa 30 Minuten. Dazu kommt das Gespräch mit dem Arzt vorab. Plane also lieber etwas mehr ein. Fragen vor dem Besuch beantworten wir telefonisch unter 0221 80142399. Wenn du vorab etwas klären willst, fass dich ruhig kurz, wir sagen dir, was du wissen musst."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@leipzig/hoefe-am-bruehl": {
+  "key": "skinbooster/lumi-face@leipzig/hoefe-am-bruehl",
+  "about": {
+   "headline": "Eine Sitzung statt drei einzelner Behandlungen",
+   "intro": "Wer seine Haut mit NAD+, Polynukleotiden und Hyaluronsäure versorgen will, braucht dafür bei Lumi Face nur einen Termin.",
+   "paragraphs": [
+    "Früher hätte man die drei Wirkstoffe getrennt behandeln müssen. Heute sind sie in einer Behandlung vereint. Das spart Zeit, und es passt gut zu dem, was Haut braucht: Energie für die Zellen, Regeneration und Feuchtigkeit.",
+    "Gemeint ist das ganze Gesicht. Mit 2,5 ml werden Wangen, Stirn und Kinn abgedeckt. Die Haut soll dadurch frischer aussehen, und feine Linien sollen weniger auffallen.",
+    "Wichtig ist uns: Es wird kein Volumen aufgebaut. Du verlässt uns mit derselben Mimik, denselben Konturen und mehr Frische.",
+    "In den Höfen am Brühl in Leipzig führen erfahrene Ärzte die Behandlung durch. Vorab sprechen sie mit dir und prüfen deine Haut."
+   ]
+  },
+  "benefits": {
+   "headline": "Was für Lumi Face spricht",
+   "items": [
+    {
+     "heading": "Kombination in einem Zug",
+     "text": "Du bekommst NAD+, Polynukleotide und Hyaluronsäure zusammen. Das macht den Ablauf übersichtlich."
+    },
+    {
+     "heading": "Abgestimmt auf das ganze Gesicht",
+     "text": "Wangen, Stirn und Kinn sind mit der Menge von 2,5 ml abgedeckt. Die Augenpartie bleibt Lumi Eyes vorbehalten."
+    },
+    {
+     "heading": "Haut zuerst",
+     "text": "Im Mittelpunkt steht die Hautqualität. Veränderungen an der Gesichtsform sind nicht das Ziel."
+    },
+    {
+     "heading": "Ehrliche Beratung",
+     "text": "Passt die Behandlung nicht zu dir, sagt dir der Arzt das auch."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Wer sollte darüber nachdenken?",
+   "paragraphs": [
+    "Vor allem Frauen und Männer mit müder, fahler oder trockener Haut. Auch wer feine Linien bemerkt oder die ersten Zeichen der Hautalterung sieht und mehr Spannkraft möchte, kann hier fündig werden.",
+    "Die Entscheidung fällt aber nie nach Schema. Der Arzt schaut sich deine Haut an und sagt dir, was sinnvoll ist."
+   ]
+  },
+  "process": {
+   "headline": "Wie ein Besuch bei uns verläuft",
+   "intro": "Von der Begrüßung bis zum Verlassen der Praxis vergeht nicht viel Zeit.",
+   "steps": [
+    {
+     "heading": "Erstes Gespräch",
+     "text": "Du sprichst mit dem Arzt über deine Haut und deine Erwartungen. Er untersucht sie und beantwortet alles, was du wissen möchtest. Eine Liste mit deinen Fragen kann dabei helfen."
+    },
+    {
+     "heading": "Eigentliche Behandlung",
+     "text": "Die Wirkstoffe werden mit einer feinen Nadel in kleinen Mengen im gesamten Gesicht in die Haut eingebracht. Insgesamt dauert das etwa 30 Minuten. Das ganze Gesicht wird dabei in kleinen Mengen versorgt."
+    },
+    {
+     "heading": "Gleich wieder fit",
+     "text": "Danach geht der Tag weiter. Kleine Quaddeln und Rötungen verschwinden meist nach einigen Stunden. Deine Haut regeneriert sich in den folgenden Wochen weiter. Hast du am selben Tag noch etwas vor, lässt sich das meist gut verbinden."
+    }
+   ]
+  },
+  "faqHeadline": "Was Leipziger uns vor dem Termin fragen",
+  "faqs": [
+   {
+    "question": "Wo liegt euer Standort?",
+    "answer": "Du findest uns in den Höfen am Brühl, Brühl 1, in Leipzig. Falls du im Center nicht gleich den Weg findest, hilft ein Anruf unter 0341 44233320. Unsere Adresse lautet Brühl 1, du suchst uns also in diesem Center."
+   },
+   {
+    "question": "Habt ihr auch samstags auf?",
+    "answer": "Ja. Wir sind von Montag bis Samstag von 10 bis 20 Uhr für dich da. Der Samstag eignet sich gut, wenn unter der Woche wenig Zeit bleibt. So kannst du deine Woche ohne Hast planen."
+   },
+   {
+    "question": "Brauche ich vorab eine Beratung?",
+    "answer": "Das Gespräch mit dem Arzt gehört zum Termin dazu. Bevor es an die Behandlung geht, werden deine Haut und deine Wünsche besprochen. Möchtest du vorher etwas wissen, ruf uns einfach an. Dann ist die Zeit für dich auch wirklich frei."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@moenchengladbach/minto": {
+  "key": "skinbooster/lumi-face@moenchengladbach/minto",
+  "about": {
+   "headline": "Wenn die Haut müde aussieht, aber du es nicht bist",
+   "intro": "Lumi Face ist eine Behandlung für das ganze Gesicht, die drei Wirkstoffe zusammenbringt.",
+   "paragraphs": [
+    "Kennst du das? Die Haut wirkt fahl, fühlt sich trocken an, und feine Linien fallen im Spiegel stärker auf. Cremes helfen nur ein Stück. Ein Skinbooster geht tiefer, weil die Wirkstoffe in die Haut selbst kommen.",
+    "Bei diesem hier sind es drei: Hyaluronsäure für die Feuchtigkeit, Polynukleotide für die Regeneration und NAD+ für den Energiehaushalt der Hautzellen. Zusammen sollen sie die Hautqualität verbessern.",
+    "Du siehst danach nicht anders aus, sondern frischer. Es wird kein Volumen aufgebaut, und deine Züge bleiben unverändert.",
+    "Im Minto in Mönchengladbach wirst du von erfahrenen Ärzten behandelt, die vorab klären, ob das Verfahren zu deiner Haut passt."
+   ]
+  },
+  "benefits": {
+   "headline": "Was diese Behandlung auszeichnet",
+   "items": [
+    {
+     "heading": "Wirkstoffe im Dreierpack",
+     "text": "NAD+, Polynukleotide und Hyaluronsäure werden kombiniert und in einer Sitzung angewendet."
+    },
+    {
+     "heading": "Für alle Zonen außer den Augen",
+     "text": "Wangen, Stirn und Kinn bekommen zusammen 2,5 ml. Die Augenpartie hat mit Lumi Eyes eine eigene Behandlung."
+    },
+    {
+     "heading": "Echt statt aufgesetzt",
+     "text": "Die Hautqualität wird besser, ohne dass etwas aufgebaut wird. Dein Gesicht bleibt dein Gesicht."
+    },
+    {
+     "heading": "Prüfung vor der Nadel",
+     "text": "Ein erfahrener Arzt schaut sich deine Haut an, bevor überhaupt behandelt wird."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Wann das Sinn ergeben kann",
+   "paragraphs": [
+    "Ob Frau oder Mann: Wer seiner Haut mehr Frische und Feuchtigkeit geben will, kann von der Behandlung profitieren. Besonders bei trockener, müder oder fahler Haut.",
+    "Auch feine Linien oder die ersten Zeichen der Hautalterung sind ein Grund für ein Gespräch, wenn mehr Spannkraft dein Ziel ist."
+   ]
+  },
+  "process": {
+   "headline": "Deine Behandlung Schritt für Schritt",
+   "intro": "So kannst du dich auf den Besuch einstellen.",
+   "steps": [
+    {
+     "heading": "Gespräch zuerst",
+     "text": "Der Arzt untersucht deine Haut und hört sich an, was du dir wünschst. Danach beantwortet er deine Fragen und sagt dir, ob die Behandlung passt. Sag dem Arzt auch, wie sich deine Haut im Alltag anfühlt."
+    },
+    {
+     "heading": "Dann die Wirkstoffe",
+     "text": "Eine feine Nadel bringt kleine Mengen in die Haut des gesamten Gesichts. Etwa 30 Minuten dauert das. Das Ganze ist überschaubar und gut planbar."
+    },
+    {
+     "heading": "Danach kein Stillstand",
+     "text": "Direkt danach kannst du in den Alltag zurück. Kleine Quaddeln und Rötungen sind meist nach wenigen Stunden verschwunden. Die Regeneration läuft in den folgenden Wochen weiter. Gib deiner Haut in den folgenden Wochen Zeit, denn sie braucht eine Weile, um sich zu regenerieren."
+    }
+   ]
+  },
+  "faqHeadline": "Häufige Fragen zu uns im Minto",
+  "faqs": [
+   {
+    "question": "Wo im Minto seid ihr genau zu finden?",
+    "answer": "Unsere Adresse lautet Am Minto 3 in Mönchengladbach. Wenn du im Center nach uns suchst, hilft ein kurzer Anruf unter 02161 4633773. Den Weg im Center beschreiben wir dir am Telefon genau."
+   },
+   {
+    "question": "Was passiert direkt nach der Behandlung?",
+    "answer": "Du kannst gleich wieder in deinen Alltag. Es können kleine Quaddeln und Rötungen auftreten, die meist nach wenigen Stunden vorbei sind. Deine Haut regeneriert sich in den Wochen danach weiter. Nach ein paar Stunden sind diese Spuren meist vergessen."
+   },
+   {
+    "question": "Bis wie viel Uhr könnt ihr behandeln?",
+    "answer": "Wir sind montags bis samstags von 10 bis 20 Uhr da. Wer nach der Arbeit kommen möchte, findet also Zeit. Spontan ohne Termin geht es nach Verfügbarkeit. Ein spätes Zeitfenster ist deshalb meist kein Problem."
+   }
+  ]
+ },
+ "skinbooster/lumi-face@recklinghausen/palais-vest": {
+  "key": "skinbooster/lumi-face@recklinghausen/palais-vest",
+  "about": {
+   "headline": "Skinbooster am Nachmittag in Recklinghausen",
+   "intro": "Lumi Face verbindet drei Wirkstoffe, die der Haut Feuchtigkeit, Energie und Erneuerung geben sollen.",
+   "paragraphs": [
+    "Bei uns im Palais Vest beginnen die Termine erst am Nachmittag. Das passt gut zu einer Behandlung, die sich in den Tag einfügen soll: Sie dauert etwa eine halbe Stunde, und danach geht es mit dem Alltag weiter.",
+    "Die Wirkstoffe heißen NAD+, Polynukleotide und Hyaluronsäure. NAD+ unterstützt die Hautzellen bei ihrem Energiehaushalt. Polynukleotide fördern die Regeneration. Hyaluronsäure bindet Feuchtigkeit und sorgt für ein pralleres Gefühl.",
+    "Die Haut kann dadurch frischer wirken. Feine Linien fallen weniger auf. Verändert wird nichts, weil kein Volumen aufgebaut wird.",
+    "Behandelt wirst du von erfahrenen Ärzten, die sich vorher in Ruhe deine Haut ansehen."
+   ]
+  },
+  "benefits": {
+   "headline": "Das spricht für den Skinbooster",
+   "items": [
+    {
+     "heading": "Nur ein Termin nötig",
+     "text": "Die drei Wirkstoffe kommen gemeinsam zum Einsatz. Du brauchst keine Serie getrennter Behandlungen."
+    },
+    {
+     "heading": "Von Stirn bis Kinn",
+     "text": "2,5 ml sind für Wangen, Stirn und Kinn vorgesehen. Wer die Augenpartie behandeln möchte, kann sich zu Lumi Eyes beraten lassen."
+    },
+    {
+     "heading": "Dein Aussehen bleibt",
+     "text": "Weil nichts aufgebaut wird, bleibt das Ergebnis natürlich und niemand sieht ein anderes Gesicht."
+    }
+   ]
+  },
+  "suitableFor": {
+   "heading": "Für wen kommt das infrage?",
+   "paragraphs": [
+    "Für Frauen und Männer, die ihrer Haut Feuchtigkeit und Frische zurückgeben möchten. Müde, fahle und trockene Haut sind die häufigsten Gründe.",
+    "Wer feine Linien bemerkt oder die ersten Zeichen der Hautalterung, kann mit dem Arzt besprechen, ob mehr Spannkraft ein realistisches Ziel ist."
+   ]
+  },
+  "process": {
+   "headline": "Wie dein Termin im Palais Vest abläuft",
+   "intro": "Drei Abschnitte, die sich gut merken lassen.",
+   "steps": [
+    {
+     "heading": "Vorbereitung",
+     "text": "Der Arzt nimmt sich Zeit für ein Gespräch, untersucht deine Haut und beantwortet, was dir wichtig ist. Danach wird entschieden, ob es losgeht. Dass wir erst am frühen Nachmittag öffnen, lässt dir den Vormittag für anderes."
+    },
+    {
+     "heading": "Behandlung",
+     "text": "Mit einer feinen Nadel setzt der Arzt die Wirkstoffe in kleinen Mengen in die Haut des ganzen Gesichts. Das dauert etwa 30 Minuten. Das Gesicht wird in kleinen Schritten versorgt, ein Bereich nach dem anderen."
+    },
+    {
+     "heading": "Nachsorge",
+     "text": "Du kannst gleich wieder zurück in deinen Alltag. Kleine Quaddeln und Rötungen gehen meist nach wenigen Stunden vorbei. Die Haut regeneriert sich in den Wochen danach weiter. Hast du danach noch etwas vor, wirf einen kurzen Blick in den Spiegel, bevor du losgehst."
+    }
+   ]
+  },
+  "faqHeadline": "Was du über Termine im Palais Vest wissen solltest",
+  "faqs": [
+   {
+    "question": "Wann habt ihr geöffnet?",
+    "answer": "Von Montag bis Donnerstag von 13 bis 18 Uhr, freitags von 13 bis 19 Uhr und samstags von 11 bis 19 Uhr. Sonntags ist geschlossen. Vormittags unter der Woche sind wir also nicht da. Freitags hast du eine Stunde länger Zeit als an den anderen Wochentagen."
+   },
+   {
+    "question": "Wo finde ich euch?",
+    "answer": "Unsere Adresse ist Löhrhof 1 in Recklinghausen, im Palais Vest. Bei Fragen zum Weg kannst du uns unter 02361 6589600 anrufen. Das Palais Vest ist über Löhrhof 1 erreichbar."
+   },
+   {
+    "question": "Kann ich spontan vorbeikommen?",
+    "answer": "Das geht nach Verfügbarkeit. Weil unsere Zeiten kürzer sind als in anderen Centern, empfehlen wir einen festen Termin. Dann ist der Arzt für dich da und du musst nicht warten. Das gilt besonders samstags, wenn viele Termine anfragen."
    }
   ]
  },

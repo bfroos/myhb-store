@@ -139,12 +139,18 @@ export function applyLocalText<T extends Record<string, any> | null | undefined>
       faqSets: [],
     };
   }
-  if (out.tableOfContents?.index) {
+  // Einheitstext ohne Ortsbezug (Strapi, gemessen 05.11.2026): Einleitung
+  // des Inhaltsverzeichnisses (~300 Woerter) und Behandlungsplan (~250).
+  // Das Verzeichnis bleibt als Sprungliste, der Plan steht auf dem Hub.
+  delete out.treatmentPlan;
+  if (out.tableOfContents) {
     out.tableOfContents = {
       ...out.tableOfContents,
-      index: out.tableOfContents.index.map((e: { key: string; value: string }) =>
-        toc[e.key] ? { ...e, value: toc[e.key] } : e,
-      ),
+      intro: undefined,
+      content: [],
+      index: (out.tableOfContents.index ?? [])
+        .filter((e: { key: string }) => e.key !== "treatment-plan")
+        .map((e: { key: string; value: string }) => (toc[e.key] ? { ...e, value: toc[e.key] } : e)),
     };
   }
   return out as T;
