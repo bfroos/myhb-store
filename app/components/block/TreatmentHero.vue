@@ -333,6 +333,7 @@ import {
 import { IconAsterisk, IconPhone, IconShieldCheck } from "@tabler/icons-vue";
 import { isMediaImage } from "~/utils/media";
 import type { AdsClip } from "#shared/adsClips";
+import { ADS_NO_DISCOUNT } from "#shared/adsOfferVariant";
 
 const { isAdsMode: siteIsAdsMode } = useSiteModeFlags();
 
@@ -451,8 +452,12 @@ const bookingButtonVisible = computed(
     (strapiMode.value && !!props.cta) ||
     props.showBookingButton,
 );
+// Google ohne Rabatt (#2042): auf go.* kein "20 % Rabatt sichern".
 const discountButtonVisible = computed(
-  () => !klinik.value && (forceBothButtons.value || !!props.showGlobalDiscount),
+  () =>
+    !klinik.value &&
+    !(ADS_NO_DISCOUNT && isAdsMode.value) &&
+    (forceBothButtons.value || !!props.showGlobalDiscount),
 );
 
 // go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet). Texte sind

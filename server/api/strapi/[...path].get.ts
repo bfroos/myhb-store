@@ -11,6 +11,7 @@ import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
 } from "#shared/newCustomerOffer";
+import { ADS_NO_DISCOUNT } from "#shared/adsOfferVariant";
 
 // CRITICAL: When the __NUXT_PREVIEW cookie is set (via /api/preview route),
 // the request skips the cache wrapper entirely and carries status=draft.
@@ -231,6 +232,8 @@ async function fetchFromStrapiByMode(
       },
     };
   }
+  // Google ohne Rabatt (#2042): go.* zeigt regulaere Preise, keine Umrechnung.
+  if (ADS_NO_DISCOUNT) return sanitized;
   // go.: Preise in Texten der Behandlungsseite (Preistabellen, FAQ, Teaser,
   // SEO-Title/Description) zeigen den Neukundenpreis mit Sternchen
   // (shared/newCustomerOffer.ts). Nur der Behandlungsteil der Antwort: Die

@@ -9,11 +9,13 @@ import type { LocationOpenStatus } from "~/lib/strapi/dto/enums";
 import type { LocalizationDto } from "~/lib/strapi/dto/types";
 import {
   buildNewCustomerOffer,
+  formatEuroCent,
   isSurgeryPathKey,
   newCustomerPriceLabel,
 } from "#shared/newCustomerOffer";
 import { adsTreatmentHeadline } from "~/lib/strapi/mapper/adsTreatmentHeadline";
 import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
+import { ADS_NO_DISCOUNT } from "#shared/adsOfferVariant";
 import { TREATMENT_LINK_CONTEXT } from "~/lib/treatmentLinkContext";
 
 export function useLocationTreatmentPage() {
@@ -286,8 +288,9 @@ export function useLocationTreatmentPage() {
         treatment?.priceInEuroCent || treatment?.cheapestPriceInEuroCent;
       // Titel nennt denselben Preis wie der Hero: bei Muskelrelaxans-Zonen
       // "ab 79,99 € pro Zone*" statt des 1-Zonen-Preises (30.09.2026).
+      // Google ohne Rabatt (#2042): regulaerer Preis ("ab 149,99 €").
       const offer =
-        currentLocale === "de"
+        currentLocale === "de" && !ADS_NO_DISCOUNT
           ? buildNewCustomerOffer({
               pathKey: treatmentPage.value?.pathKey,
               priceCent: price,
@@ -306,6 +309,9 @@ export function useLocationTreatmentPage() {
         (currentLocale === "de" &&
           !isSurgeryPathKey(treatmentPage.value?.pathKey) &&
           (offer?.heroLine.replace(/^Neukunden\s+/, "") ||
+            (ADS_NO_DISCOUNT && price
+              ? `${treatment?.isStartingPrice ? "ab " : ""}${formatEuroCent(price)}`
+              : null) ||
             newCustomerPriceLabel(
               price,
               treatment?.isStartingPrice ? "ab" : "",

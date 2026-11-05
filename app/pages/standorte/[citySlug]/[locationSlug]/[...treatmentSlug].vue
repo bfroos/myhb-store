@@ -79,7 +79,7 @@ import { purchaseFaqs } from "#shared/purchaseFaq";
 import { seoTitleFor } from "#shared/seoTitles";
 import { anfrageZiel, isKlinikBehandlung } from "#shared/klinik";
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
-import { ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
+import { ADS_NO_DISCOUNT, ADS_OFFER_AB_ENABLED, ADS_OFFER_REDIRECT_SCRIPT } from "#shared/adsOfferVariant";
 import { rememberOfferVariant } from "~/lib/offerVariant";
 import { seoPilotCity } from "#shared/seoPilotLippen";
 import { applyLocalFacts } from "#shared/localFacts";
@@ -179,7 +179,10 @@ if (import.meta.client && isV2.value) {
 // dem ersten Zeichnen auf /ab-beratung/... (Variante B). Die Seite kommt aus
 // dem ISR-Cache ohne Query, deshalb ein Skript im <head> statt Server-Weiche.
 // Ohne den Parameter tut es nichts; hier ist man in Variante A.
-if (isV2.value && ADS_OFFER_AB_ENABLED) {
+// Google ohne Rabatt (#2042): die echte Seite ist schon B, keine Umleitung.
+if (isV2.value && ADS_NO_DISCOUNT) {
+  if (import.meta.client) rememberOfferVariant("b");
+} else if (isV2.value && ADS_OFFER_AB_ENABLED) {
   useHead({
     script: [{ key: "ads-offer-ab", innerHTML: ADS_OFFER_REDIRECT_SCRIPT, tagPosition: "head", tagPriority: "critical" }],
   });

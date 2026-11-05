@@ -16,7 +16,7 @@
     Umschaltung: shared/adsTemplateV2.ts (ADS_TEMPLATE_V2_PAGES); Inhalte je
     Behandlung: shared/adsTemplateV2Content.ts.
   -->
-  <div class="v2" :class="{ 'v2--edit': editorial, 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--preis': design === 'ci-preis', 'v2--desk': desktopLayout }">
+  <div class="v2" :class="{ 'v2--edit': editorial, 'v2--ci': design !== 'v2', 'v2--ci-hell': design === 'ci-hell', 'v2--rot': design === 'ci-rot', 'v2--preis': design === 'ci-preis', 'v2--desk': desktopLayout, 'v2--b': isB }">
     <BlockTreatmentHero
       v-bind="hero"
       :subline="editorialSubline ?? terms?.subline ?? hero.subline"
@@ -232,7 +232,7 @@
           <p class="v2-firstvisit__loc">{{ locationName }}</p>
           <p class="v2-firstvisit__regular">{{ keepAmount(priceCards[0]!.regular) }}</p>
           <p class="v2-firstvisit__offer"><strong>{{ priceCards[0]!.offer }}</strong></p>
-          <p class="v2-firstvisit__sub">{{ priceCards[0]!.label }} · {{ discountPct }}&nbsp;% Neukunden-Vorteil</p>
+          <p class="v2-firstvisit__sub">{{ priceCards[0]!.label }}<template v-if="!isB"> · {{ discountPct }}&nbsp;% Neukunden-Vorteil</template></p>
           <ul class="v2-firstvisit__list" role="list">
             <li><IconCheck size="18" aria-hidden="true" /> Kostenloses ärztliches Beratungsgespräch</li>
             <li><IconCheck size="18" aria-hidden="true" /> Individueller Behandlungsplan</li>
@@ -240,7 +240,7 @@
           </ul>
           <!-- Hinweise in der Karte statt als eigene Box daneben (Benjamin 06.10.2026) -->
           <p class="v2-firstvisit__note">{{ priceInclusion }}<template v-if="productNote"> {{ productNote }}</template></p>
-          <SharedButton v-if="bookingButton" :button="{ ...bookingButton, label: discountLabel }" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+          <SharedButton v-if="bookingButton" :button="{ ...bookingButton, label: isB ? bookingButton.label : discountLabel }" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
         </div>
         <ul v-else class="v2-prices" :class="{ 'v2-prices--many': priceCards.length >= 3 }" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
           <li v-for="card in priceCards" :key="card.key" class="v2-price" :class="{ 'v2-price--package': card.isPackage }">
@@ -3630,6 +3630,8 @@ const routeHref = computed(() => {
 .v2--edit [data-track-placement="v2_how"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Die Behandlung"; }
 .v2--edit [data-track-placement="v2_steps"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Dein Ablauf"; }
 .v2--edit [data-track-placement="v2_prices"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Dein Neukunden-Vorteil"; }
+/* Variante B / Google ohne Rabatt (#2042): kein "Neukunden-Vorteil". */
+.v2--edit.v2--b [data-track-placement="v2_prices"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Deine Preise"; }
 .v2--edit [data-track-placement="v2_doctors"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Dein Ärzteteam"; }
 .v2--edit [data-track-placement="v2_reviews"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Erfahrungen"; }
 .v2--edit [data-track-placement="v2_objections"] > .v2-h2::before { content: counter(v2edit, decimal-leading-zero) " / Noch unsicher?"; }
