@@ -1,3 +1,4 @@
+import { composeTitle } from "#shared/seoMeta";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import { replaceRestrictedDrugTerms } from "#shared/adsTerms";
@@ -178,11 +179,8 @@ export async function setPageSeo(
     const titleSuffix = globalsSeo?.titleSuffix || "";
     const titleSeparator = globalsSeo?.titleSeparator || "";
     
-    const title = metaTitle.includes(titleSuffix)
-      ? metaTitle // Already contains brand name, don't append
-      : [metaTitle, titleSeparator, titleSuffix]
-          .filter(Boolean)
-          .join(" ");
+    // E24 On-Page-Audit: Marke nur, wenn der Titel dann <= 65 Zeichen bleibt.
+    const title = composeTitle(metaTitle, titleSeparator, titleSuffix);
 
     const ogTitle = pageSeo?.openGraph?.ogTitle
       ? pageSeo.openGraph.ogTitle

@@ -14,13 +14,14 @@
       :loading="imgLoading"
       :fetchpriority="priority ? 'high' : undefined"
       decoding="async"
-      :alt="alt ?? media.alternativeText ?? media.caption ?? ''"
+      :alt="alt || media.alternativeText || media.caption || altFromFileName((media as any).name ?? imgSrc)"
       class="media-picture__img"
     />
   </picture>
 </template>
 <script setup lang="ts">
 import { getMediaUrl, IMAGE_SIZE_PRESETS } from "~/utils/media";
+import { altFromFileName } from "#shared/seoMeta";
 import { ImageFormat } from "~/lib/strapi/dto/enums";
 import type { AtomMediaPicture } from "~/lib/ui/types";
 import type { StrapiMediaFormat } from "~/lib/strapi/dto/types";
