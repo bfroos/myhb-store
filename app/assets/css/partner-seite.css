@@ -1,0 +1,280 @@
+/*
+ * Landingpage /partner (E32). Farben wie die Club-Seiten (Creme, Puder,
+ * Schwarz), aber als ganze Seite statt Blatt. Alle Klassen beginnen mit .pp,
+ * damit nichts nach aussen wirkt.
+ */
+.pp {
+  --pp-creme: #f7f3ef;
+  --pp-puder: #f5e8e0;
+  --pp-hell: #faf7f4;
+  --pp-linie: #e8dcd4;
+  --pp-akzent: #9a7b6c;
+  --pp-schwarz: #111111;
+  --pp-text: #333333;
+  --pp-leise: #666666;
+  color: var(--pp-schwarz);
+  background: #fff;
+}
+.pp__breite {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad, 16px);
+}
+.pp__abschnitt {
+  padding: clamp(48px, 8vw, 96px) 0;
+}
+.pp__abschnitt--hell { background: var(--pp-hell); }
+.pp__abschnitt--puder { background: var(--pp-puder); }
+.pp__abschnitt--dunkel { background: var(--pp-schwarz); color: #fff; }
+.pp .pp__abschnitt--dunkel h2 { color: #fff; }
+.pp__abschnitt--dunkel .pp__eyebrow { color: #d8bfb2; }
+.pp__mitte { text-align: center; }
+.pp__mitte .pp__breite { display: grid; justify-items: center; gap: 20px; }
+
+.pp__hero {
+  background: var(--pp-creme);
+  padding: clamp(56px, 10vw, 120px) 0 clamp(40px, 6vw, 72px);
+}
+.pp__hero .pp__breite { display: grid; gap: 24px; }
+.pp__eyebrow {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--pp-akzent);
+}
+.pp h1 {
+  margin: 0;
+  max-width: 18ch;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 1.07;
+  letter-spacing: -1px;
+  font-weight: 700;
+  color: var(--pp-schwarz);
+}
+.pp h2 {
+  margin: 0 0 16px;
+  max-width: 26ch;
+  font-size: clamp(26px, 3.2vw, 38px);
+  line-height: 1.18;
+  letter-spacing: -0.6px;
+  font-weight: 700;
+  color: var(--pp-schwarz);
+}
+.pp h3 {
+  margin: 0 0 8px;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+.pp__lead {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.6;
+  color: #444;
+}
+.pp__text { font-size: 17px; line-height: 1.65; color: var(--pp-text); }
+.pp__abschnitt--dunkel .pp__text { color: #ddd; }
+.pp__text p { margin: 0 0 14px; }
+.pp__text--schmal { max-width: 62ch; margin: 0 0 32px; }
+
+.pp__knoepfe { display: flex; flex-wrap: wrap; gap: 12px; }
+.pp__knopf {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 28px;
+  border-radius: 999px;
+  border: 2px solid var(--pp-schwarz);
+  background: var(--pp-schwarz);
+  color: #fff;
+  font-weight: 700;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.pp__knopf:hover { opacity: 0.88; }
+.pp__knopf:disabled { opacity: 0.5; cursor: default; }
+.pp__knopf--rand { background: transparent; color: var(--pp-schwarz); }
+.pp__knopf--hell { background: #fff; color: var(--pp-schwarz); border-color: #fff; }
+
+.pp__fakten {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 24px 0 0;
+  border-top: 1px solid var(--pp-linie);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.pp__fakten li { display: grid; gap: 4px; }
+.pp__fakten strong { font-size: 22px; }
+.pp__fakten span { font-size: 14px; color: var(--pp-leise); }
+
+.pp__zwei { display: grid; gap: 24px; }
+
+.pp__karten {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(0, 1fr);
+}
+.pp__karte {
+  position: relative;
+  background: #fff;
+  border-radius: 20px;
+  padding: 28px 24px;
+}
+.pp__karte p { margin: 0; color: var(--pp-text); line-height: 1.6; }
+.pp__karte--rand { border: 1px solid var(--pp-linie); }
+.pp__nummer {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: 14px;
+  border-radius: 50%;
+  background: var(--pp-schwarz);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+}
+.pp__hinweis { margin: 24px 0 0; font-size: 15px; color: var(--pp-leise); max-width: 70ch; }
+
+.pp__liste {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.pp__liste li {
+  display: grid;
+  gap: 4px;
+  padding: 18px 0;
+  border-top: 1px solid var(--pp-linie);
+}
+.pp__liste span { color: var(--pp-text); line-height: 1.6; }
+
+.pp__haekchen { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.pp__haekchen li {
+  position: relative;
+  padding-left: 34px;
+  font-size: 17px;
+  line-height: 1.55;
+  color: #eee;
+}
+.pp__haekchen li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--pp-schwarz);
+  font-size: 13px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.pp__schritte {
+  list-style: none;
+  counter-reset: schritt;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 16px;
+}
+.pp__schritte li {
+  counter-increment: schritt;
+  display: grid;
+  gap: 4px;
+  padding: 20px 20px 20px 72px;
+  position: relative;
+  background: var(--pp-hell);
+  border-radius: 16px;
+}
+.pp__schritte li::before {
+  content: counter(schritt);
+  position: absolute;
+  left: 20px;
+  top: 18px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--pp-schwarz);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+}
+.pp__schritte span { color: var(--pp-text); line-height: 1.55; }
+
+.pp__fragen { display: grid; gap: 0; margin-top: 16px; max-width: 860px; }
+.pp__fragen details { border-top: 1px solid var(--pp-linie); }
+.pp__fragen details:last-child { border-bottom: 1px solid var(--pp-linie); }
+.pp__fragen summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 20px 36px 20px 0;
+  position: relative;
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.4;
+}
+.pp__fragen summary::-webkit-details-marker { display: none; }
+.pp__fragen summary::after {
+  content: "+";
+  position: absolute;
+  right: 4px;
+  top: 16px;
+  font-size: 24px;
+  font-weight: 400;
+}
+.pp__fragen details[open] summary::after { content: "–"; }
+.pp__fragen details p { margin: 0 0 20px; line-height: 1.65; color: var(--pp-text); }
+
+/* Formular */
+.pp__formular {
+  background: #fff;
+  border-radius: 24px;
+  padding: clamp(24px, 5vw, 56px);
+  max-width: 880px;
+  margin: 0 auto;
+  scroll-margin-top: 96px;
+}
+.pp__form { display: grid; gap: 18px; margin-top: 8px; }
+.pp__reihe { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.pp__feld { display: grid; gap: 6px; min-width: 0; }
+.pp__feld > label,
+.pp__pakete legend { font-size: 14px; font-weight: 700; }
+.pp__feld .p-inputtext,
+.pp__feld .p-select,
+.pp__feld textarea { width: 100%; }
+.pp__pakete { border: 0; margin: 0; padding: 0; }
+.pp__pakete legend { margin-bottom: 10px; padding: 0; }
+.pp__paketListe { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+.pp__haken { display: flex; align-items: center; gap: 10px; font-size: 15px; cursor: pointer; }
+.pp__einwilligung { display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 1.5; }
+.pp__einwilligung a { text-decoration: underline; }
+.pp__honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.pp__meldung { margin: 0; }
+
+@media (min-width: 760px) {
+  .pp__fakten { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pp__zwei { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 56px; align-items: start; }
+  .pp__karten { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pp__karten--drei { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pp__reihe { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pp__paketListe { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 760px) and (max-width: 1000px) {
+  .pp__karten--drei { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

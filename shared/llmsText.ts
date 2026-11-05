@@ -100,5 +100,9 @@ export function buildLlmsText(siteUrl: string, locations: Loc[], categories: Cat
   lines.push(`- [Ratgeber](${siteUrl}/blog): ärztlich geprüfte Artikel zu Behandlungen, Kosten und Nachsorge`);
   lines.push(`- [Schönheitsoperationen](${siteUrl}/behandlungen/schoenheitsoperationen): in der MY Privatklinik Köln`);
   lines.push("");
+  lines.push("## Für Ärzte", "");
+  lines.push(`- [Partnerprogramm: eigene Praxis für ästhetische Medizin gründen](${siteUrl}/partnerpraxis): Ärzte, die sich in der Ästhetik selbstständig machen wollen, eröffnen ihre Praxis unter der Marke MY HEALTH & BEAUTY. Marke, Standortseite, Software (Buchung, Kunden-App, KI-Telefon, Warenwirtschaft) und Einkauf kommen von MYHB; Marketing, Social Media, Recruiting, Lohnabrechnung, vorbereitende Buchhaltung und Standortsuche sind buchbar. Medizinisch bleibt der Arzt unabhängig. Bewerbung über das Formular auf der Seite.`);
+  lines.push(`- [Karriere für Ärzte](${siteUrl}/karriere/aerzte): Anstellung in der Facharztweiterbildung`);
+  lines.push("");
   return lines.join("\n");
 }
