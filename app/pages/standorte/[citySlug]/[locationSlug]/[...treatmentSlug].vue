@@ -19,7 +19,7 @@
   <template v-else>
     <UiOrganismBaseBreadcrumb v-if="!isAdsMode" :items="breadcrumbItems" />
     <PagesTreatmentOrderedBlocks
-      :fixed-blocks="fixedBlocks"
+      :fixed-blocks="pageBlocks"
       :dynamic-blocks="treatmentPage?.blocks"
       :order="blockOrder"
       :hidden-blocks="(treatmentPage as any)?.hiddenBlocks"
@@ -84,6 +84,7 @@ import { rememberOfferVariant } from "~/lib/offerVariant";
 import { seoPilotCity } from "#shared/seoPilotLippen";
 import { applyLocalFacts } from "#shared/localFacts";
 import { extraFaqsForSchema, seoCityExtra } from "#shared/seoCityExtras";
+import { applyLocalText, localTextKey, type SeoLocalText } from "#shared/seoLocalTexts";
 import { isLocalGateActive, localGateCanonical, type LocalGatePageData } from "#shared/localContentGate";
 import { employeeDisplayName, pickAdsV2Reviews } from "#shared/adsTemplateV2";
 import {
@@ -136,6 +137,22 @@ const cityExtra = computed(() => {
   return seoCityExtra((treatmentPage.value as any)?.pathKey, String(p.citySlug ?? ""), String(p.locationSlug ?? ""));
 });
 const pageLoaded = await fetchPage();
+// www: E24 #396, eigene Texte je Standortseite (shared/seoLocalTexts.ts)
+// statt des Einheitstexts. Nicht auf go., nicht neben Pilot/Ergaenzung.
+const localTextKeyValue = computed(() => {
+  if (isAdsMode.value || seoPilot.value || cityExtra.value) return "";
+  if (!/^\/standorte\//.test(seoRoute.path)) return "";
+  const p = seoRoute.params as Record<string, unknown>;
+  return localTextKey((treatmentPage.value as any)?.pathKey, String(p.citySlug ?? ""), String(p.locationSlug ?? ""));
+});
+const { data: localText } = localTextKeyValue.value
+  ? await useFetch<SeoLocalText | null>("/api/seo-local-text", {
+      query: { key: localTextKeyValue.value },
+      key: `seo-local-text:${localTextKeyValue.value}`,
+      default: () => null,
+    })
+  : { data: ref<SeoLocalText | null>(null) };
+const pageBlocks = computed(() => applyLocalText(fixedBlocks.value as any, localText.value));
 // Standort-Konsolidierung: Die Behandlung gehoert in dieser Stadt zu einem
 // anderen Standort (Köln: OPs -> MediaPark, nichtoperativ -> Köln Arcaden).
 // Serverseitig ein direkter 301 auf die finale URL, ohne Zwischenschritt.
@@ -317,7 +334,7 @@ const toRich = (f: { question: string; answer: string }) => ({
 });
 // Sichtbare Strapi-Fragen (ausgeblendete Bloecke zaehlen nicht).
 const visibleStrapiFaqs = computed<any[]>(() => {
-  const faq = fixedBlocks.value?.faq as any;
+  const faq = (pageBlocks.value as any)?.faq;
   if (!faq || isV2.value || !blockOrder.value.includes("faq")) return [];
   return [...(faq.faqs ?? []), ...(faq.faqSets ?? []).flatMap((set: any) => set.faqs ?? [])];
 });
