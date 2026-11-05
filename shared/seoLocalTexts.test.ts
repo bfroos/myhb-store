@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import texts from "../server/assets/seo-local-texts.json" with { type: "json" };
 import {
   SEO_LOCAL_TEXT_FORBIDDEN,
+  rich,
   applyLocalText,
   localTextKey,
   localTextOwn,
@@ -103,12 +104,46 @@ test("applyLocalText ersetzt Texte, behaelt Bilder und 'nicht geeignet'", () => 
   assert.equal(out.benefits.items.length, 2);
   assert.equal(out.suitability.secondItem.heading, "nicht");
   assert.equal(out.treatmentProcess.steps[0].image, "i");
-  assert.deepEqual(out.faq.faqs.map((f: any) => f.question), ["Q", "s1", "s2", "s3"]);
+  assert.deepEqual(out.faq.faqs.map((f: any) => f.question), ["Q", "s1", "s2", "s3", "s4"]);
   assert.deepEqual(out.faq.faqSets, []);
   assert.equal(out.tableOfContents.index[0].value, "Neu");
-  assert.deepEqual(out.tableOfContents.index.map((e: any) => e.key), ["how-it-works", "faq"]);
-  assert.deepEqual(out.tableOfContents.content, []);
-  assert.equal(out.treatmentPlan, undefined);
+  // ohne Neufassung bleibt der Strapi-Text stehen (nichts wird geloescht)
+  assert.deepEqual(out.tableOfContents.content, ["x"]);
+  assert.equal(out.treatmentPlan.headline, "Plan");
   assert.equal(applyLocalText(fixed, null), fixed);
   assert.equal(applyLocalText(null, t), null);
+});
+
+test("Neufassungen ersetzen Verzeichnis, Aerzteblock, Plan und Strapi-Fragen", () => {
+  const fixed = {
+    tableOfContents: { headline: "alt", intro: "alt", content: ["x"], index: [{ key: "employee", value: "alt" }] },
+    medicalTeamHighlight: { headline: "alt", content: [], employee: { name: "A" } },
+    treatmentPlan: { headline: "alt", content: [], steps: [{ description: "d", image: "i" }] },
+    faq: { faqs: [{ question: "s1", answer: [] }], faqSets: [{ faqs: [{ question: "s2", answer: [] }] }] },
+  };
+  const t: SeoLocalText = {
+    key: "x@y/z",
+    faqs: [{ question: "lokal", answer: "a" }],
+    toc: { headline: "Neu", intro: "I", paragraphs: ["Mehr bei [unseren Ärzten](/aerzte)."] },
+    team: { headline: "Team neu", paragraphs: ["P"] },
+    plan: { headline: "Plan neu", paragraphs: ["P"], steps: [{ description: "neu" }] },
+    strapiFaqs: [{ question: "n1", answer: "A\n- eins\n- zwei" }, { question: "n2", answer: "B" }],
+  };
+  const out = applyLocalText(fixed, t) as any;
+  assert.equal(out.tableOfContents.headline, "Neu");
+  assert.deepEqual(out.tableOfContents.content[0].children[1], {
+    type: "link",
+    url: "https://www.myhealthandbeauty.com/aerzte",
+    children: [{ type: "text", text: "unseren Ärzten" }],
+  });
+  assert.equal(out.tableOfContents.index[0].value, "Team neu");
+  assert.equal(out.medicalTeamHighlight.employee.name, "A");
+  assert.deepEqual(out.treatmentPlan.steps[0], { description: "neu", image: "i" });
+  assert.deepEqual(out.faq.faqs.map((f: any) => f.question), ["lokal", "n1", "n2"]);
+  assert.equal(out.faq.faqs[1].answer[1].type, "list");
+  assert.equal(out.faq.faqs[1].answer[1].children.length, 2);
+});
+
+test("rich: Absaetze und Listen", () => {
+  assert.deepEqual(rich(["a", "- b\n- c", "d"]).map((b: any) => b.type), ["paragraph", "list", "paragraph"]);
 });

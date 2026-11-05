@@ -95,6 +95,7 @@ import { seoPilotCity } from "#shared/seoPilotLippen";
 import { applyLocalFacts } from "#shared/localFacts";
 import { extraFaqsForSchema, seoCityExtra } from "#shared/seoCityExtras";
 import { applyLocalText, localTextKey, type SeoLocalText } from "#shared/seoLocalTexts";
+import { applyHeadlineFixes, type HeadlineFixes } from "#shared/headlineFixes";
 import { otherCityLinks, primaryLink, type BookableLocation } from "#shared/cityLinks";
 import { isLocalGateActive, localGateCanonical, type LocalGatePageData } from "#shared/localContentGate";
 import { employeeDisplayName, pickAdsV2Reviews } from "#shared/adsTemplateV2";
@@ -163,7 +164,24 @@ const { data: localText } = localTextKeyValue.value
       default: () => null,
     })
   : { data: ref<SeoLocalText | null>(null) };
-const pageBlocks = computed(() => applyLocalText(fixedBlocks.value as any, localText.value));
+// E24: sprachliche Korrekturen der Strapi-Ueberschriften (alle Standortseiten, www).
+const headlineFixKey = !isAdsMode.value && /^\/standorte\//.test(seoRoute.path)
+  ? localTextKey(
+      (treatmentPage.value as any)?.pathKey,
+      String((seoRoute.params as any).citySlug ?? ""),
+      String((seoRoute.params as any).locationSlug ?? ""),
+    )
+  : "";
+const { data: headlineFixes } = headlineFixKey
+  ? await useFetch<HeadlineFixes>("/api/seo-headline-fixes", {
+      query: { key: headlineFixKey },
+      key: `seo-headline-fixes:${headlineFixKey}`,
+      default: () => ({}),
+    })
+  : { data: ref<HeadlineFixes>({}) };
+const pageBlocks = computed(() =>
+  applyHeadlineFixes(applyLocalText(fixedBlocks.value as any, localText.value), headlineFixes.value),
+);
 // Standort-Konsolidierung: Die Behandlung gehoert in dieser Stadt zu einem
 // anderen Standort (Köln: OPs -> MediaPark, nichtoperativ -> Köln Arcaden).
 // Serverseitig ein direkter 301 auf die finale URL, ohne Zwischenschritt.
