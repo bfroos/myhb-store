@@ -74,3 +74,8 @@ test("Club-Seite nennt den Geburtstagsbonus nicht (Ueberraschung, Benjamin 23.10
 test("Obergrenze Beauty-Sparbuch 5.000 € (seit 03.11.2026, myhb-os#2099)", () => {
   assert.equal(SPARBUCH.obergrenze, 5000);
 });
+
+test("Empfehlung nach Status, gespiegelt: 50 / 60 / 75 / 100 € (05.11.2026, myhb-os#2152)", () => {
+  assert.deepEqual(STUFEN.map((s) => s.empfehlungEuro), [50, 60, 75, 100]);
+  assert.equal(CLUB.empfehlungEuro, STUFEN[0]!.empfehlungEuro);
+});

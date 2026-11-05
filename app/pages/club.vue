@@ -129,11 +129,12 @@
           </div>
           <div class="cl__box">
             <p class="cl__eyebrow">Weiterempfehlen</p>
-            <p class="cl__boxZahl">{{ euro(CLUB.empfehlungEuro) }} + {{ euro(CLUB.empfehlungEuro) }}</p>
+            <p class="cl__boxZahl">bis zu {{ euro(empfehlungMax) }}</p>
             <p class="cl__text">
               Teil deinen persönlichen Weiterempfehlungslink aus der App. Die empfohlene
               Person bekommt {{ euro(CLUB.empfehlungEuro) }} auf ihre erste Behandlung.
               Du bekommst {{ euro(CLUB.empfehlungEuro) }} Guthaben in deinem Kundenkonto für weitere Behandlungen.
+              Mit Status bekommt ihr beide mehr: {{ empfehlungMitStatus }}.
             </p>
             <a class="cl__knopf cl__knopf--rand" :href="appUrl('club-seite', 'club')" @click="trackClick('club-seite', 'app')">Link holen</a>
           </div>
@@ -193,6 +194,11 @@ const ja = (b: boolean) => (b ? "✓" : "–");
 const beispiel = sparbuchBeispiel(STUFEN[0]!.sparbuchBonusProzent);
 const stufeNamen = (pruef: (s: (typeof STUFEN)[number]) => boolean) => STUFEN.find(pruef)?.name ?? "";
 
+// Empfehlung nach Status (myhb-app/myhb-os#2152), fuer Kasten und Tabelle.
+const empfehlungMax = Math.max(...STUFEN.map((s) => s.empfehlungEuro));
+const empfehlungStaffel = STUFEN.map((s) => `${euro(s.empfehlungEuro)} als ${s.name}`).join(", ");
+const empfehlungMitStatus = STUFEN.slice(1).map((s) => `${euro(s.empfehlungEuro)} als ${s.name}`).join(", ");
+
 // Erklaerungen zum Aufklappen (Benjamin und Michael 03.11.2026): Jeder Vorteil
 // soll nicht nur ein Wort sein, sondern sagen, was er heisst und wie er funktioniert.
 const zeilen = [
@@ -221,6 +227,14 @@ const zeilen = [
       `Beispiel: Du legst ${SPARBUCH.beispielMonate} Monate lang je ${euro(SPARBUCH.beispielRate)} zurück. Dann hast du ${euro(beispiel.eingezahlt)} Guthaben und rund ${euro(beispiel.bonus)} Beauty-Bonus dazu (bei ${prozent(STUFEN[0]!.sparbuchBonusProzent)}).`,
       "Angelegt wird das Sparbuch in der App.",
       `${prozent(STUFEN[0]!.sparbuchBonusProzent)} ${SPARBUCH_PFLICHTSATZ}`,
+    ],
+  },
+  {
+    name: "Weiterempfehlung",
+    werte: STUFEN.map((s) => `${euro(s.empfehlungEuro)} + ${euro(s.empfehlungEuro)}`),
+    erklaerung: [
+      `Teil deinen persönlichen Weiterempfehlungslink aus der App. Die empfohlene Person bekommt Guthaben auf ihre erste Behandlung, und du bekommst denselben Betrag, sobald sie bezahlt hat: ${empfehlungStaffel}.`,
+      `Beispiel: Du bist GREY und empfiehlst eine Freundin. Sie bekommt ${euro(STUFEN[2]!.empfehlungEuro)} auf ihre erste Behandlung, du ${euro(STUFEN[2]!.empfehlungEuro)} Guthaben für deinen nächsten Besuch.`,
     ],
   },
   {

@@ -48,6 +48,8 @@ export type Stufe = {
   geburtstagEuro: number;
   geschenkEuro: number | null;
   sparbuchBonusProzent: number;
+  /** Empfehlungsprämie je Seite (€): Werber und Geworbene bekommen denselben Betrag. */
+  empfehlungEuro: number;
   aktionen: boolean;
   wunscharzt: boolean;
   bevorzugterService: boolean;
@@ -59,15 +61,18 @@ export const STATUS_FENSTER_MONATE = 36;
 // seit 19.10.2026 fuer alle, White 1,5 % (statt 0 / 1 %), kein Startguthaben.
 // Benjamin 23.10.2026 (nach Michaels Mail-Werkstatt): Wunscharzt schon ab WHITE,
 // Status-Namen in Versalien, der Geburtstagsbonus wird nicht genannt (Ueberraschung).
+// Benjamin 05.11.2026 (myhb-app/myhb-os#2152): Empfehlung nach Status des Werbers,
+// 50 / 60 / 75 / 100 €, die geworbene Person bekommt denselben Betrag.
 
 export const STUFEN: Stufe[] = [
-  { name: "BASIC", ab: null, cashbackProzent: 1, geburtstagEuro: 10, geschenkEuro: null, sparbuchBonusProzent: 6, aktionen: false, wunscharzt: false, bevorzugterService: false },
-  { name: "WHITE", ab: 1000, cashbackProzent: 1.5, geburtstagEuro: 20, geschenkEuro: 50, sparbuchBonusProzent: 7, aktionen: false, wunscharzt: true, bevorzugterService: false },
-  { name: "GREY", ab: 3000, cashbackProzent: 2, geburtstagEuro: 30, geschenkEuro: 100, sparbuchBonusProzent: 8, aktionen: true, wunscharzt: true, bevorzugterService: true },
-  { name: "BLACK", ab: 5000, cashbackProzent: 3, geburtstagEuro: 50, geschenkEuro: 200, sparbuchBonusProzent: 9, aktionen: true, wunscharzt: true, bevorzugterService: true },
+  { name: "BASIC", ab: null, cashbackProzent: 1, geburtstagEuro: 10, geschenkEuro: null, sparbuchBonusProzent: 6, empfehlungEuro: 50, aktionen: false, wunscharzt: false, bevorzugterService: false },
+  { name: "WHITE", ab: 1000, cashbackProzent: 1.5, geburtstagEuro: 20, geschenkEuro: 50, sparbuchBonusProzent: 7, empfehlungEuro: 60, aktionen: false, wunscharzt: true, bevorzugterService: false },
+  { name: "GREY", ab: 3000, cashbackProzent: 2, geburtstagEuro: 30, geschenkEuro: 100, sparbuchBonusProzent: 8, empfehlungEuro: 75, aktionen: true, wunscharzt: true, bevorzugterService: true },
+  { name: "BLACK", ab: 5000, cashbackProzent: 3, geburtstagEuro: 50, geschenkEuro: 200, sparbuchBonusProzent: 9, empfehlungEuro: 100, aktionen: true, wunscharzt: true, bevorzugterService: true },
 ];
 
 export const CLUB = {
+  /** Empfehlung ohne Status (BASIC); die Staffel steht in STUFEN.empfehlungEuro. */
   empfehlungEuro: 50,
   /**
    * Jedes Bonusguthaben (auch der Sparbuch-Bonus) gilt ab Gutschrift so lange,
