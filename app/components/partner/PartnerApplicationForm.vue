@@ -70,6 +70,13 @@
         </div>
       </div>
 
+      <div class="pp__reihe">
+        <div class="pp__feld">
+          <label for="partner-ausbildung">Möchtest du vorher bei uns lernen?</label>
+          <Select id="partner-ausbildung" v-model="form.ausbildung" :options="AUSBILDUNG_OPTIONEN" placeholder="Bitte wählen" />
+        </div>
+      </div>
+
       <fieldset class="pp__feld pp__pakete">
         <legend>Welche Zusatzpakete interessieren dich? (freiwillig)</legend>
         <div class="pp__paketListe">
@@ -120,6 +127,7 @@ import Select from "primevue/select";
 import Checkbox from "primevue/checkbox";
 import Message from "primevue/message";
 import {
+  AUSBILDUNG_OPTIONEN,
   ERFAHRUNG,
   FACHRICHTUNGEN,
   PAKET_NAMEN,
@@ -142,6 +150,7 @@ const form = reactive({
   situation: "",
   erfahrung: "",
   standortweg: "",
+  ausbildung: "",
   start: "",
   pakete: [] as string[],
   nachricht: "",

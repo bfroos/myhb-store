@@ -1,7 +1,8 @@
 <template>
   <div class="pp">
     <section class="pp__hero">
-      <div class="pp__breite">
+      <div class="pp__breite pp__heroRaster">
+        <div class="pp__heroText">
         <p class="pp__eyebrow">Partnerprogramm für Ärzte</p>
         <h1>Deine eigene Praxis für ästhetische Medizin. Mit allem, was dazugehört.</h1>
         <p class="pp__lead">
@@ -13,7 +14,9 @@
           <a href="#bewerbung" class="pp__knopf" @click="klick('hero')">Jetzt bewerben</a>
           <a href="#leistungen" class="pp__knopf pp__knopf--rand">Was du bekommst</a>
         </div>
-        <ul class="pp__fakten" role="list">
+        </div>
+        <img class="pp__heroBild" :src="BILDER.team.src" :alt="BILDER.team.alt" :width="BILDER.team.width" :height="BILDER.team.height" fetchpriority="high">
+        <ul class="pp__fakten pp__vollbreit" role="list">
           <li><strong>9 Städte</strong><span>MYHB-Standorte in Deutschland</span></li>
           <li><strong>Nur Ärzte</strong><span>behandeln bei uns</span></li>
           <li><strong>Eigene Software</strong><span>von der Buchung bis zur Inventur</span></li>
@@ -27,6 +30,7 @@
         <div>
           <p class="pp__eyebrow">Das Ziel</p>
           <h2>Morgens kommen, gut behandeln, abends nach Hause gehen.</h2>
+          <img class="pp__bild" :src="BILDER.beratung.src" :alt="BILDER.beratung.alt" :width="BILDER.beratung.width" :height="BILDER.beratung.height" loading="lazy">
         </div>
         <div class="pp__text">
           <p>
@@ -50,6 +54,7 @@
           Diese vier Bausteine nutzt jede Partnerpraxis. So erlebt jeder Kunde an jedem Standort
           dieselbe Qualität, und du startest nicht bei null.
         </p>
+        <img class="pp__band" :src="BILDER.empfang.src" :alt="BILDER.empfang.alt" :width="BILDER.empfang.width" :height="BILDER.empfang.height" loading="lazy">
         <ul class="pp__karten" role="list">
           <li v-for="(k, i) in FUNDAMENT" :key="k.titel" class="pp__karte">
             <span class="pp__nummer">{{ i + 1 }}</span>
@@ -62,14 +67,19 @@
 
     <section class="pp__abschnitt">
       <div class="pp__breite">
-        <p class="pp__eyebrow">Automatisierung</p>
-        <h2>Weniger Telefon, weniger Ausfälle, mehr Zeit für Kunden</h2>
-        <ul class="pp__liste" role="list">
-          <li v-for="k in AUTOMATISIERUNG" :key="k.titel">
-            <strong>{{ k.titel }}</strong>
-            <span>{{ k.text }}</span>
-          </li>
-        </ul>
+        <div class="pp__zwei pp__zwei--bild">
+          <div>
+            <p class="pp__eyebrow">Automatisierung</p>
+            <h2>Weniger Telefon, weniger Ausfälle, mehr Zeit für Kunden</h2>
+            <ul class="pp__liste" role="list">
+              <li v-for="k in AUTOMATISIERUNG" :key="k.titel">
+                <strong>{{ k.titel }}</strong>
+                <span>{{ k.text }}</span>
+              </li>
+            </ul>
+          </div>
+          <img class="pp__bild" :src="BILDER.software.src" :alt="BILDER.software.alt" :width="BILDER.software.width" :height="BILDER.software.height" loading="lazy">
+        </div>
       </div>
     </section>
 
@@ -94,12 +104,31 @@
       <div class="pp__breite">
         <p class="pp__eyebrow">Dein Standort</p>
         <h2>Drei Wege zu deiner Praxis</h2>
+        <img class="pp__band" :src="BILDER.lounge.src" :alt="BILDER.lounge.alt" :width="BILDER.lounge.width" :height="BILDER.lounge.height" loading="lazy">
         <ul class="pp__karten pp__karten--drei" role="list">
           <li v-for="k in STANDORT_WEGE" :key="k.titel" class="pp__karte pp__karte--rand">
             <h3>{{ k.titel }}</h3>
             <p>{{ k.text }}</p>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <section id="ausbildung" class="pp__abschnitt pp__abschnitt--hell">
+      <div class="pp__breite pp__zwei pp__zwei--bild">
+        <img class="pp__bild" :src="BILDER.aerzte.src" :alt="BILDER.aerzte.alt" :width="BILDER.aerzte.width" :height="BILDER.aerzte.height" loading="lazy">
+        <div>
+          <p class="pp__eyebrow">Ausbildung</p>
+          <h2>{{ AUSBILDUNG.titel }}</h2>
+          <p class="pp__text">{{ AUSBILDUNG.text }}</p>
+          <ul class="pp__liste" role="list">
+            <li v-for="p in AUSBILDUNG.punkte" :key="p"><span>{{ p }}</span></li>
+          </ul>
+          <div class="pp__karte pp__karte--rand pp__qualitaet">
+            <h3>{{ QUALITAET.titel }}</h3>
+            <p>{{ QUALITAET.text }}</p>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -118,7 +147,7 @@
     <section class="pp__abschnitt">
       <div class="pp__breite">
         <p class="pp__eyebrow">So geht es weiter</p>
-        <h2>In fünf Schritten zur eigenen Praxis</h2>
+        <h2>In sechs Schritten zur eigenen Praxis</h2>
         <ol class="pp__schritte">
           <li v-for="k in SCHRITTE" :key="k.titel">
             <strong>{{ k.titel }}</strong>
@@ -171,13 +200,16 @@
  * die Seite erbt so die Staerke der Hauptdomain bei Google.
  */
 import {
+  AUSBILDUNG,
   AUTOMATISIERUNG,
+  BILDER,
   FRAGEN,
   FUNDAMENT,
   PAKETE,
   PAKETE_HINWEIS,
   PARTNER_PATH,
   PARTNER_SEO,
+  QUALITAET,
   SCHRITTE,
   STANDORT_WEGE,
   WEN_WIR_SUCHEN,
