@@ -1,5 +1,5 @@
 <template>
-  <div class="newsletterBlock">
+  <div v-if="sichtbar" class="newsletterBlock">
     <h2>{{ formattedHeadline }}</h2>
     <UiMoleculeNewsletterSubscriptionForm source="blog_newsletter_block" />
   </div>
@@ -14,6 +14,13 @@ const props = defineProps<{
 }>();
 
 const globals = useGlobals();
+
+// Benjamin 06.11.2026: Rabatt-Versprechen nur fuer Besucher aus einer
+// Meta-Anzeige (shared/rabattBerechtigt.ts). Blöcke ohne Rabatt im Titel bleiben.
+const rabattBerechtigt = useRabattBerechtigt();
+const sichtbar = computed(
+  () => !props.headline?.includes("newsletterDiscountPercentage") || rabattBerechtigt.value,
+);
 
 const formattedHeadline = computed(() => {
   const discountPercentage =

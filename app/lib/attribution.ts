@@ -55,7 +55,8 @@ function getCookie(name: string): string | null {
   return m ? decodeURIComponent(m.pop() as string) : null;
 }
 
-function loadRaw(): RawStore | null {
+/** Roher Stempel (first/last mit utm_* und Klick-IDs); null auf dem Server. */
+export function loadRaw(): RawStore | null {
   if (import.meta.server) return null;
   let raw: string | null = null;
   try {
