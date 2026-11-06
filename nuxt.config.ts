@@ -284,6 +284,9 @@ export default defineNuxtConfig({
       gutschein: { en: false, tr: false, ar: false, fr: false, nl: false },
       // Partnerprogramm fuer Aerzte (E32) nur auf Deutsch: Zielgruppe sind Aerzte in Deutschland.
       partnerpraxis: { en: false, tr: false, ar: false, fr: false, nl: false },
+      // Kundenvideos (E24): die Videos sind deutsch, also nur /videos.
+      videos: { en: false, tr: false, ar: false, fr: false, nl: false },
+      "videos/[slug]": { en: false, tr: false, ar: false, fr: false, nl: false },
       behandlungen: {
         en: "/treatments",
         tr: "/tedaviler",

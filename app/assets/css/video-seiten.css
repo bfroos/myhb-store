@@ -1,0 +1,92 @@
+/*
+ * Videoseiten /videos und /videos/<slug> (E24). Farben wie die Partnerseite.
+ * Alle Klassen beginnen mit .vs, damit nichts nach aussen wirkt.
+ */
+.vs {
+  --vs-hell: #faf7f4;
+  --vs-linie: #e8dcd4;
+  --vs-schwarz: #111111;
+  --vs-leise: #666666;
+  color: var(--vs-schwarz);
+  background: #fff;
+  padding-bottom: clamp(48px, 8vw, 96px);
+}
+.vs__breite {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 var(--container-pad, 16px);
+}
+.vs__kopf { padding: 24px 0 8px; max-width: 760px; }
+.vs__kopf h1, .vs__text h1 { margin: 0 0 16px; }
+.vs__lead { margin: 0; color: var(--vs-leise); font-size: 1.05rem; line-height: 1.6; }
+
+.vs__gruppe { padding-top: clamp(32px, 5vw, 56px); }
+.vs__gruppe h2 { margin: 0 0 16px; }
+.vs__raster {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 16px;
+}
+.vs__kachel {
+  display: grid;
+  gap: 4px;
+  color: inherit;
+  text-decoration: none;
+}
+.vs__kachel img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--vs-hell);
+}
+.vs__kachel:hover .vs__kachelTitel, .vs__kachel:focus-visible .vs__kachelTitel { text-decoration: underline; }
+.vs__kachelTitel { font-weight: 600; line-height: 1.3; }
+.vs__kachelOrt { color: var(--vs-leise); font-size: 0.9rem; }
+
+.vs__einzel {
+  display: grid;
+  gap: 24px;
+  padding-top: 16px;
+}
+.vs__player video {
+  display: block;
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  max-height: 85vh;
+  aspect-ratio: 9 / 16;
+  margin: 0 auto;
+  border-radius: 16px;
+  background: #000;
+  object-fit: contain;
+}
+.vs__text p { line-height: 1.6; margin: 0 0 12px; }
+.vs__links {
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.vs__knopf {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: var(--vs-schwarz);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+}
+.vs__knopf--rand { background: transparent; color: var(--vs-schwarz); border: 1px solid var(--vs-schwarz); }
+
+@media (min-width: 900px) {
+  .vs__einzel { grid-template-columns: minmax(0, 480px) minmax(0, 1fr); align-items: start; gap: 48px; }
+  .vs__player video { margin: 0; }
+  .vs__raster { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+}

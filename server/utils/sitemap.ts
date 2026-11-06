@@ -35,6 +35,8 @@ import { resolveRedirect } from "./redirects";
 import { isIndexableLocale } from "#shared/hreflang";
 import { isTestEmployeeSlug } from "#shared/reviewPrivacy";
 import { localGateInSitemap } from "#shared/localContentGate";
+import { VIDEOS_PATH } from "#shared/storyVideos";
+import { fetchStoryVideos } from "./storyVideos";
 
 type StrapiPagination = {
   page: number;
@@ -218,6 +220,7 @@ export const SITEMAP_SEGMENTS = [
   "doctors",
   "careers",
   "products",
+  "videos",
 ] as const;
 
 export type SitemapSegment = (typeof SITEMAP_SEGMENTS)[number];
@@ -375,6 +378,19 @@ const SEGMENT_BUILDERS: Record<
   SitemapSegment,
   (ctx: SegmentContext) => Promise<void>
 > = {
+  /**
+   * Kundenvideos (E24): /videos und eine Seite je Video. Nur Deutsch; die
+   * Videos selbst stehen zusaetzlich in /sitemap-videos.xml.
+   */
+  async videos({ strapiUrl, out }) {
+    const videos = await fetchStoryVideos(strapiUrl);
+    if (videos.length === 0) return;
+    out.add("videos", "static", DEFAULT_LOCALE, VIDEOS_PATH);
+    for (const v of videos) {
+      out.add("video", v.slug, DEFAULT_LOCALE, `${VIDEOS_PATH}/${v.slug}`);
+    }
+  },
+
   /** Feste Routen und /p/<slug>. */
   async pages({ fetchCollection, out }) {
     const staticRoutes: Array<keyof typeof ROUTE_MAP> = [

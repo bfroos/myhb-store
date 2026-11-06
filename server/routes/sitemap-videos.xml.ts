@@ -2,12 +2,16 @@
  * Video Sitemap for Google Video Search Indexing
  * https://developers.google.com/search/docs/crawling-indexing/sitemaps/video-sitemaps
  *
- * Story clips are excluded on purpose: Google requires the video to be the
- * page's primary content, and they are tiles repeated across many pages.
+ * Story clips (Strapi `stories`) are listed with their own page
+ * /videos/<slug> (E24), never with the pages that show them as tiles: Google
+ * requires the video to be the page's primary content, and the tiles repeat
+ * across many pages. Poster and slug: shared/storyVideos.ts.
  * Videos without a poster image are skipped rather than emitted invalid.
  */
 
 import qs from "qs";
+import { VIDEOS_PATH } from "#shared/storyVideos";
+import { fetchStoryVideos } from "../utils/storyVideos";
 
 type StrapiPagination = {
   page: number;
@@ -186,6 +190,23 @@ export default defineEventHandler(async (event) => {
       toEntry(about?.openSoon, pageUrl, location.name) ??
       toEntry(about?.comingSoon, pageUrl, location.name);
     if (entry) videos.push(entry);
+  }
+
+  // Kundenvideos: eine eigene Seite je Story (/videos/<slug>).
+  try {
+    for (const v of await fetchStoryVideos(strapiUrl)) {
+      if (!v.uploadDate) continue;
+      videos.push({
+        pageUrl: `${siteUrl}${VIDEOS_PATH}/${v.slug}`,
+        videoUrl: v.videoUrl,
+        thumbnailUrl: `${siteUrl}${v.thumbPath}`,
+        title: v.h1.substring(0, 100),
+        description: v.description.substring(0, 2048),
+        publicationDate: v.uploadDate,
+      });
+    }
+  } catch (err) {
+    console.error("[video-sitemap] Failed to fetch stories:", err);
   }
 
   const videoTags = videos
