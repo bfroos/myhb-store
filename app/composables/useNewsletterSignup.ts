@@ -83,6 +83,9 @@ export function useNewsletterSignup(
 
   const email = ref("");
   const phone = ref("");
+  // myhb-os#2246: freiwillige Einwilligung, Code und freie Termine auch per
+  // WhatsApp zu bekommen. Nie vorausgewaehlt.
+  const whatsapp = ref(false);
   const loading = ref(false);
   const success = ref<string | null>(null);
   const error = ref<string | null>(null);
@@ -174,6 +177,7 @@ export function useNewsletterSignup(
           source,
           // Handynummer ist optional; nur mitsenden, wenn ausgefuellt.
           phone: phone.value?.trim() || undefined,
+          whatsapp: whatsapp.value && !!phone.value?.trim() ? true : undefined,
           // T6 Set B (#13): Quellenstempel aus dem utm-persist-Plugin.
           // Rein additiv; wenn nichts erfasst wurde, fehlt das Feld.
           attribution: readWireAttribution() ?? undefined,
@@ -181,6 +185,7 @@ export function useNewsletterSignup(
       });
       email.value = "";
       phone.value = "";
+      whatsapp.value = false;
       suggestionShownFor.value = null;
       success.value = "ok";
       rememberNewsletterSignup();
@@ -200,6 +205,7 @@ export function useNewsletterSignup(
   return {
     email,
     phone,
+    whatsapp,
     loading,
     success,
     error,

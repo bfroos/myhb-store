@@ -130,6 +130,10 @@
         autocomplete="tel"
         required
       />
+      <label class="newsletterSignUpDialog__whatsapp">
+        <input v-model="whatsapp" type="checkbox" />
+        <span>{{ whatsappLabel }}</span>
+      </label>
       <div
         v-if="hasBooking"
         class="newsletterSignUpDialog__actions newsletterSignUpDialog__actions--stacked"
@@ -200,6 +204,7 @@ const { openCalendlyDialog } = useCalendlyDialog();
 const {
   email,
   phone,
+  whatsapp,
   loading,
   error,
   failure,
@@ -254,6 +259,18 @@ const skipLabelByLocale: Record<string, string> = {
   fr: "Réserver directement sans code",
   nl: "Direct een afspraak maken zonder code",
 };
+// myhb-os#2246: freiwillige WhatsApp-Einwilligung, nie vorausgewaehlt.
+const whatsappLabelByLocale: Record<string, string> = {
+  de: "Code und freie Termine auch per WhatsApp schicken (Abmeldung jederzeit mit STOPP)",
+  en: "Also send my code and free appointments via WhatsApp (unsubscribe any time with STOP)",
+  tr: "Kodu ve boş randevuları WhatsApp ile de gönder (istediğin zaman STOP ile iptal)",
+  ar: "أرسل الرمز والمواعيد المتاحة عبر واتساب أيضًا (إلغاء في أي وقت بكلمة STOP)",
+  fr: "Envoyer aussi le code et les créneaux libres par WhatsApp (désinscription à tout moment avec STOP)",
+  nl: "Code en vrije afspraken ook via WhatsApp sturen (afmelden kan altijd met STOP)",
+};
+const whatsappLabel = computed(
+  () => whatsappLabelByLocale[locale.value] ?? whatsappLabelByLocale.de,
+);
 const skipLabel = computed(
   () => skipLabelByLocale[locale.value] ?? skipLabelByLocale.de,
 );
@@ -444,6 +461,20 @@ async function handleSubmit() {
 
 .newsletterSignUpDialog--booking .newsletterSignUpDialog__actions {
   margin-top: var(--space-200);
+}
+
+.newsletterSignUpDialog__whatsapp {
+  display: flex;
+  gap: var(--space-200);
+  align-items: flex-start;
+  font-size: var(--font-sm);
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+.newsletterSignUpDialog__whatsapp input {
+  margin-top: 0.2em;
+  flex-shrink: 0;
 }
 
 .newsletterSignUpDialog__fine {
