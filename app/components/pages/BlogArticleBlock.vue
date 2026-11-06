@@ -60,8 +60,8 @@ const props = defineProps<{
 }>();
 
 // Ratgeber-Layout (myhb-os#418): Die Seite kann Einschuebe liefern.
-// "behandlung" ersetzt die erste schlichte blog.cta (sonst nach dem ersten
-// Block), "bild1" steht nach dem ersten Textabschnitt, "mitte" nach der
+// "behandlung" ersetzt die erste schlichte blog.cta (sonst vor dem dritten
+// Block), "bild1" steht nach "Auf einen Blick", "mitte" (Videos) nach der
 // Haelfte, "bild2" bei drei Vierteln, "ende" vor den FAQ.
 const slots = useSlots();
 const segments = computed(() => {
@@ -74,18 +74,22 @@ const segments = computed(() => {
   const n = body.length;
 
   const ctaAt = slots.behandlung ? body.findIndex((b) => b.__component === "blog.cta") : -1;
-  const cardAt = ctaAt >= 0 ? ctaAt : Math.min(1, n);
-  // Einschub -> Index des Blocks, vor dem er steht (n = nach dem letzten)
-  const plan: Array<[string, number]> = [
+  const cardAt = ctaAt >= 0 ? ctaAt : Math.min(2, n);
+  // Einschub -> Index des Blocks, vor dem er steht (n = nach dem letzten).
+  // Nie zwei Einschuebe an derselben Stelle: belegte Stellen ruecken weiter.
+  const wunsch: Array<[string, number]> = [
     ["behandlung", cardAt],
-    ["bild1", Math.min(2, n)],
-    ["mitte", Math.max(cardAt + 2, Math.ceil(n / 2))],
-    ["bild2", Math.max(cardAt + 3, Math.ceil((n * 3) / 4))],
+    ["bild1", Math.min(1, n)],
+    ["mitte", Math.ceil(n / 2) + 1],
+    ["bild2", Math.ceil((n * 3) / 4) + 1],
   ];
   const at = new Map<number, string[]>();
-  for (const [name, i] of plan) {
+  const belegt = new Set<number>();
+  for (const [name, i] of wunsch) {
     if (!slots[name]) continue;
-    const idx = Math.min(i, n);
+    let idx = Math.min(i, n);
+    while (idx < n && belegt.has(idx)) idx++;
+    belegt.add(idx);
     at.set(idx, [...(at.get(idx) ?? []), name]);
   }
 
