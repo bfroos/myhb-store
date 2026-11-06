@@ -6,7 +6,7 @@ test("Kurzantwort mit Preis aus Strapi, Dauer und Haltbarkeit", () => {
   const a = treatmentAnswer({ pathKey: "botox/zornesfalte", name: "Zornesfalte", priceInEuroCent: 14999, isStartingPrice: true });
   assert.ok(a);
   assert.match(a!, /kostet die Behandlung ab 149,99 €\./);
-  assert.match(a!, /dauert 20–30 Minuten, das Ergebnis hält meist 3–4 Monate\./);
+  assert.match(a!, /dauert 15–20 Minuten, das Ergebnis hält meist 3–6 Monate\./);
   assert.match(a!, /an 9 Standorten/);
 });
 
@@ -27,4 +27,12 @@ test("Leitplanken: kein Markenname, kein Vorher-Nachher, keine Heilversprechen",
     const a = treatmentAnswer({ pathKey: k, name: "x", priceInEuroCent: 14999 }) ?? "";
     assert.doesNotMatch(a, /botox|vorher[- ]?nachher|garantiert|heilt|dauerhaft|rabatt|neukund/i, k);
   }
+});
+
+test("Auffrischen-Angaben werden nicht als Haltbarkeit formuliert", () => {
+  const meso = treatmentAnswer({ pathKey: "anti-haarausfall/mesotherapie-haare", name: "x", priceInEuroCent: 14999 }) ?? "";
+  assert.doesNotMatch(meso, /hält meist Auffrischen/);
+  assert.match(meso, /, Auffrischen nach ca\. 6 Monaten\./);
+  const prp = treatmentAnswer({ pathKey: "anti-haarausfall/prp-haartherapie", name: "x", priceInEuroCent: 14999 }) ?? "";
+  assert.match(prp, /, Auffrischen alle 6–12 Monate\./);
 });

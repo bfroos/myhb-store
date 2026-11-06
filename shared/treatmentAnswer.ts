@@ -93,7 +93,13 @@ export function treatmentAnswer(input: AnswerInput): string | null {
     const halt = get("haltbarkeit");
     const parts: string[] = [];
     if (dauer) parts.push(`dauert ${dauer}`);
-    if (halt) parts.push(`das Ergebnis hält meist ${stripCa(halt)}`);
+    if (halt) {
+      parts.push(
+        /^Auffrischen/i.test(halt)
+          ? `Auffrischen ${stripCa(halt).replace(/^Auffrischen\s*/i, "")}`
+          : `das Ergebnis hält meist ${stripCa(halt)}`,
+      );
+    }
     if (parts.length) sentences.push(`Die Behandlung ${parts.join(", ")}.`);
   }
 

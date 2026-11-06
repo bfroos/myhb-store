@@ -55,10 +55,10 @@ test("Musterseiten: Begriffe, 6 Steckbrief-Zeilen, 4 Zeitachsen-Schritte, 7-8 FA
 
 test("Steckbrief-Werte nach Benjamin", () => {
   const s = Object.fromEntries(adsV2Facts(STIRN).map((f) => [f.key, f.value]));
-  assert.equal(s.dauer, "20–30 Minuten");
+  assert.equal(s.dauer, "15–20 Minuten");
   assert.equal(s.wirkung, "nach 3–7 Tagen");
   assert.equal(s.ergebnis, "nach 14 Tagen");
-  assert.equal(s.haltbarkeit, "ca. 3–4 Monate");
+  assert.equal(s.haltbarkeit, "ca. 3–6 Monate");
   assert.equal(s.ausfall, "keine");
   const l = Object.fromEntries(adsV2Facts(LIPPEN).map((f) => [f.key, f.value]));
   assert.equal(l.wirkung, "sofort sichtbar");
@@ -99,7 +99,7 @@ test("FAQ nennt Nebenwirkungen offen und Rueckgaengig-Weg", () => {
 
 test("Zeitachse: Tag 0, Tag 3-7, Tag 14 mit Garantie, Auffrischen", () => {
   const t = adsV2Timeline(STIRN);
-  assert.deepEqual(t.map((i) => i.when), ["Tag 0", "Tag 3–7", "Tag 14", "nach ca. 4 Monaten"]);
+  assert.deepEqual(t.map((i) => i.when), ["Tag 0", "Tag 3–7", "Tag 14", "nach ca. 3–6 Monaten"]);
   assert.match(t[2]!.text, /Zufriedenheitsgarantie/);
 });
 
@@ -234,8 +234,8 @@ test("Kacheln: jede mit Bild (Clip-Poster)", () => {
 
 test("Behandlungsspezifische Angaben", () => {
   const f = (key: string) => Object.fromEntries(adsV2Facts(key).map((x) => [x.key, x.value]));
-  assert.equal(f("muskelrelaxans/masseter").haltbarkeit, "ca. 4–6 Monate");
-  assert.equal(f("muskelrelaxans/lipflip").haltbarkeit, "ca. 2–3 Monate");
+  assert.equal(f("muskelrelaxans/masseter").haltbarkeit, "ca. 3–6 Monate");
+  assert.equal(f("muskelrelaxans/lipflip").haltbarkeit, "ca. 3–6 Monate");
   assert.equal(f("hyaluron/jawline").haltbarkeit, "ca. 9–12 Monate");
   assert.equal(f("hyaluron/full-face-hyaluron").dauer, "60–90 Minuten");
   assert.match(String(f("skinbooster/profhilo").sitzungen), /2/);
