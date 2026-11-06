@@ -205,7 +205,7 @@ async function fetchFromStrapiByMode(
   const raw = await fetchFromStrapiRaw(event, preview, previewStatus);
   // TSEO-08: eigene Links mit Weiterleitung gleich aufs Ziel (www).
   // E24: auf www "Botox" statt "BTX" (shared/seoTerms.ts).
-  if (siteMode !== 'ads') return btxToBotoxDeep(rewriteRedirectedLinks(raw));
+  if (siteMode !== 'ads') return btxToBotoxDeep(await rewriteRedirectedLinks(raw));
   const url = getRequestURL(event);
   const locale = url.searchParams.get('locale');
   // go.-Standortseite: Behandlungskacheln und Bewertungen zurueck (Inhaber,

@@ -22,3 +22,8 @@ test("Adressen und Kennungen bleiben", () => {
   assert.equal(out.faqs[0].question, "Wann wirkt Botox?");
   assert.equal(out.faqs[0].answer, "/standorte/BTX");
 });
+
+test("Promise wird abgewartet statt zu {} zu werden", async () => {
+  const out = await btxToBotoxDeep(Promise.resolve({ title: "BTX ohne Termin" }));
+  assert.deepEqual(out, { title: "Botox ohne Termin" });
+});

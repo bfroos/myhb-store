@@ -17,6 +17,10 @@ export function btxToBotox(text: string): string {
 const SKIP_KEYS = new Set(["url", "href", "slug", "pathKey", "path", "link", "src", "mime", "hash", "ext", "provider", "name", "documentId"]);
 
 export function btxToBotoxDeep<T>(input: T): T {
+  // Ein Promise wuerde sonst zu {} (06.11.: alle Seiten 404 im lokalen Build).
+  if (input && typeof (input as any).then === "function") {
+    return (input as any).then((v: unknown) => btxToBotoxDeep(v)) as T;
+  }
   const walk = (x: any, key?: string): any => {
     if (typeof x === "string") {
       if (key && SKIP_KEYS.has(key)) return x;
