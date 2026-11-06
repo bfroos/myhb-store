@@ -101,12 +101,17 @@ export default defineEventHandler(async (event) => {
     email?: string;
     source?: string;
     phone?: string;
+    whatsapp?: boolean;
     attribution?: unknown;
   }>(event);
   const email = (body.email || "").trim().toLowerCase();
   const rawSource = (body.source || "").trim();
   const source = ALLOWED_SOURCES.has(rawSource) ? rawSource : null;
   const phone = (body.phone || "").trim();
+  // myhb-os#2246: Haekchen „auch per WhatsApp“ im Rabatt-Dialog. Gilt nur mit
+  // Handynummer; wird als Mailchimp-Tag und an n8n weitergegeben.
+  const whatsapp = body.whatsapp === true && !!phone;
+  const einwilligungTags = whatsapp ? ["whatsapp-ok"] : [];
   const attribution = sanitizeAttribution(body.attribution);
 
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -145,6 +150,8 @@ export default defineEventHandler(async (event) => {
           email,
           phone: phone || null,
           source: source || "newsletter_dialog",
+          whatsapp_einwilligung: whatsapp,
+          whatsapp_einwilligung_am: whatsapp ? new Date().toISOString() : null,
           // T6 Set B (#13): first/last-Touch fuer touchpoints/identities.
           attribution: attribution || null,
         },
@@ -179,7 +186,9 @@ export default defineEventHandler(async (event) => {
     const res = await mailchimp.lists.addListMember(mailchimpAudienceId, {
       email_address: email,
       status: "subscribed",
-      ...(source ? { tags: [`source:${source}`] } : {}),
+      ...(source || whatsapp
+        ? { tags: [...(source ? [`source:${source}`] : []), ...einwilligungTags] }
+        : {}),
       ...(Object.keys(mergeFields).length ? { merge_fields: mergeFields } : {}),
     });
 
@@ -225,6 +234,17 @@ export default defineEventHandler(async (event) => {
         }
       } catch (nachholFehler) {
         console.error("[newsletter] Anmeldung bestehender Adresse fehlgeschlagen", nachholFehler);
+      }
+
+      // Die WhatsApp-Einwilligung gilt auch fuer bestehende Adressen (#2246).
+      if (whatsapp) {
+        try {
+          await mailchimp.lists.updateListMemberTags(mailchimpAudienceId, subscriberHash(email), {
+            tags: [{ name: "whatsapp-ok", status: "active" }],
+          });
+        } catch (tagFehler) {
+          console.error("[newsletter] WhatsApp-Tag fehlgeschlagen", tagFehler);
+        }
       }
 
       // Merge-Felder werden bei Bestandsmitgliedern bewusst NICHT
