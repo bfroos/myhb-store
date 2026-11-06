@@ -18,9 +18,10 @@ const globals = useGlobals();
 // Benjamin 06.11.2026: Rabatt-Versprechen nur fuer Besucher aus einer
 // Meta-Anzeige (shared/rabattBerechtigt.ts). Blöcke ohne Rabatt im Titel bleiben.
 const rabattBerechtigt = useRabattBerechtigt();
-const sichtbar = computed(
-  () => !props.headline?.includes("newsletterDiscountPercentage") || rabattBerechtigt.value,
-);
+// Auch feste Titel wie „20% Rabatt sichern!“ (13 Blogartikel, 06.11.2026).
+const versprichtRabatt = (titel: string | undefined) =>
+  /newsletterDiscountPercentage|rabatt|%|discount/i.test(titel ?? "");
+const sichtbar = computed(() => !versprichtRabatt(props.headline) || rabattBerechtigt.value);
 
 const formattedHeadline = computed(() => {
   const discountPercentage =
