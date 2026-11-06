@@ -159,7 +159,7 @@ export const COST_PAGES: Record<string, CostPageConfig> = {
       {
         question: "Wie viel Hyaluron brauche ich?",
         answer:
-          "Das legt ihr im Beratungsgespräch fest. Lieber schrittweise aufbauen: Nach etwa zwei Wochen ist die Schwellung abgeklungen, dann kann bei der Nachkontrolle ergänzt werden.",
+          "Das legt ihr im Beratungsgespräch fest. Lieber schrittweise aufbauen: Die Schwellung klingt meist nach 2 bis 5 Tagen ab, nach etwa zwei Wochen kann bei der Nachkontrolle ergänzt werden.",
       },
       {
         question: "Was kostet die Unterspritzung der Nasolabialfalte?",

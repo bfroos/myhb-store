@@ -125,7 +125,7 @@ const MR_FACTS: Facts = {
   dauer: "20–30 Minuten",
   wirkung: "nach 3–7 Tagen",
   ergebnis: "nach 14 Tagen",
-  haltbarkeit: "ca. 3–4 Monate",
+  haltbarkeit: "ca. 3–6 Monate",
   betaeubung: "Kühlung oder Betäubungscreme auf Wunsch",
   ausfall: "keine",
 };
@@ -167,7 +167,7 @@ const INFUSIONS = [
   "infusionen/anti-aging-infusion",
 ];
 const INF_FACTS: Facts = {
-  dauer: "30–45 Minuten",
+  dauer: "20–30 Minuten",
   betaeubung: "nicht nötig, nur ein kleiner Pikser für den Zugang",
   ausfall: "keine",
   sitzungen: "nach Absprache mit der Ärztin oder dem Arzt",
@@ -203,7 +203,7 @@ const SPECS: Record<string, Spec> = {
     subline: "Entspannter, frischer Blick – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "stirn",
     howItWorks: `${MR_HOW} Gesetzt wird an wenigen Punkten in einer Reihe über den Augenbrauen.`,
-    facts: MR_FACTS,
+    facts: { ...MR_FACTS, dauer: "15–20 Minuten" },
     related: others("muskelrelaxans/stirnfalte", MR_FACE),
   },
   "muskelrelaxans/zornesfalte": {
@@ -215,7 +215,7 @@ const SPECS: Record<string, Spec> = {
     subline: "Entspannter Blick zwischen den Brauen – Behandlung durch Ärzte, ohne Ausfallzeit",
     zone: "zornesfalte",
     howItWorks: `${MR_HOW} Gesetzt wird an wenigen Punkten zwischen und über den inneren Augenbrauen.`,
-    facts: MR_FACTS,
+    facts: { ...MR_FACTS, dauer: "15–20 Minuten" },
     related: others("muskelrelaxans/zornesfalte", MR_FACE),
   },
   "muskelrelaxans/kraehenfuesse": {
@@ -266,11 +266,11 @@ const SPECS: Record<string, Spec> = {
     zone: "lipflip",
     howItWorks:
       "Beim Lip Flip wird eine sehr kleine Menge Muskelrelaxans knapp über der Oberlippe gesetzt. Der Ringmuskel um den Mund entspannt sich etwas, die Oberlippe dreht sich leicht nach außen und wirkt voller. Es wird kein Volumen aufgefüllt.",
-    facts: { ...MR_FACTS, dauer: "15–20 Minuten", haltbarkeit: "ca. 2–3 Monate" },
+    facts: { ...MR_FACTS, dauer: "15–20 Minuten", haltbarkeit: "ca. 3–6 Monate" },
     firstText: "Die Oberlippe wirkt nach und nach etwas voller.",
-    refreshWhen: "nach ca. 2–3 Monaten",
+    refreshWhen: "nach ca. 3–6 Monaten",
     faq: {
-      timing: { answer: "Erste Wirkung nach 3–7 Tagen, das Endergebnis nach etwa 14 Tagen. Weil nur sehr wenig gesetzt wird, hält ein Lip Flip meist 2–3 Monate." },
+      timing: { answer: "Erste Wirkung nach 3–7 Tagen, das Endergebnis nach etwa 14 Tagen. Meist hält ein Lip Flip 3–6 Monate." },
       side: { answer: `Möglich sind eine leichte Rötung oder ein kleiner blauer Fleck. In den ersten Tagen können Trinken mit dem Strohhalm, Pfeifen oder ein deutliches „P“ ungewohnt sein – das gibt sich. Selten wirkt die Oberlippe ungleichmäßig, das gleichen wir bei der Nachkontrolle aus. ${RISK}` },
       last: { question: "Lip Flip oder Hyaluron – was ist der Unterschied?", answer: "Der Lip Flip entspannt den Muskel, die Oberlippe zeigt sich etwas mehr. Hyaluron füllt Volumen auf und hält länger. Beides lässt sich kombinieren – was zu dir passt, klärt die Beratung." },
     },
@@ -316,11 +316,10 @@ const SPECS: Record<string, Spec> = {
     about: "zur Full-Face-Behandlung",
     subline: "Stirn, Zornesfalte und Krähenfüße in einem Termin – Behandlung durch Ärzte",
     howItWorks: `${MR_HOW} Bei Full Face werden mehrere Zonen in einer Sitzung behandelt, meist Stirn, Zornesfalte und Krähenfüße – die Menge je Zone passend zu deiner Mimik.`,
-    facts: { ...MR_FACTS, dauer: "40–60 Minuten", wirkung: "nach 3–5 Tagen", ergebnis: "nach 10–14 Tagen" },
-    firstWhen: "Tag 3–5",
+    facts: { ...MR_FACTS, dauer: "40–60 Minuten" },
     firstText: "Die behandelten Falten werden nach und nach weicher.",
     faq: {
-      timing: { answer: "Erste Wirkung nach 3–5 Tagen, das Endergebnis nach 10–14 Tagen. Meist hält es 3–4 Monate." },
+      timing: { answer: "Erste Wirkung nach 3–7 Tagen, das Endergebnis nach etwa 14 Tagen. Meist hält es 3–6 Monate." },
     },
     related: MR_FACE,
   },
@@ -335,13 +334,13 @@ const SPECS: Record<string, Spec> = {
     zone: "masseter",
     howItWorks:
       "Ein Muskelrelaxans entspannt den großen Kaumuskel (Masseter) am seitlichen Unterkiefer. Mit der Zeit wird der Muskel schlanker, das Gesicht kann dadurch schmaler wirken. Gesetzt wird an wenigen Punkten je Seite.",
-    facts: { ...MR_FACTS, wirkung: "Entspannung nach wenigen Tagen", ergebnis: "schmaler nach ca. 6–8 Wochen", haltbarkeit: "ca. 4–6 Monate" },
+    facts: { ...MR_FACTS, dauer: "15–20 Minuten", wirkung: "Entspannung nach wenigen Tagen", ergebnis: "schmaler nach ca. 6–8 Wochen", haltbarkeit: "ca. 3–6 Monate" },
     firstWhen: "nach wenigen Tagen",
     firstText: "Der Kaumuskel entspannt sich. Schmaler wirkt das Gesicht erst nach einigen Wochen.",
-    refreshWhen: "nach ca. 4–6 Monaten",
+    refreshWhen: "nach ca. 3–6 Monaten",
     faq: {
       natural: { question: "Verändert sich mein Gesicht stark?", answer: "Nein, die Veränderung kommt langsam über einige Wochen. Der Unterkiefer wirkt weicher und schmaler, deine Mimik bleibt. Lieber mit weniger starten und bei Bedarf ergänzen." },
-      timing: { answer: "Die Entspannung spürst du nach wenigen Tagen. Sichtbar schmaler wird das Gesicht nach etwa 6–8 Wochen. Meist hält es 4–6 Monate." },
+      timing: { answer: "Die Entspannung spürst du nach wenigen Tagen. Sichtbar schmaler wird das Gesicht nach etwa 6–8 Wochen. Meist hält es 3–6 Monate." },
       side: { answer: `Möglich sind eine leichte Rötung oder ein kleiner blauer Fleck. In den ersten Wochen kann sich Kauen etwas schwächer anfühlen, etwa bei zähem Essen. Selten wirkt das Lächeln kurz ungleichmäßig – das bildet sich von selbst zurück. ${RISK}` },
       last: { question: "Hilft das auch beim Zähneknirschen?", answer: "Die Behandlung entspannt den Kaumuskel. Ob sie bei deinem Knirschen sinnvoll ist, klärt die Ärztin oder der Arzt in der Beratung – bei Beschwerden am Kiefer gehört auch die Zahnärztin oder der Zahnarzt dazu." },
     },
@@ -359,13 +358,13 @@ const SPECS: Record<string, Spec> = {
     zone: "masseter",
     howItWorks:
       "Ein Muskelrelaxans entspannt den Kaumuskel (Masseter), der beim Knirschen und Pressen arbeitet. Der Muskel kann dann weniger fest zubeißen. Gesetzt wird an wenigen Punkten je Seite.",
-    facts: { ...MR_FACTS, wirkung: "nach wenigen Tagen", ergebnis: "nach ca. 2 Wochen", haltbarkeit: "ca. 4–6 Monate" },
+    facts: { ...MR_FACTS, wirkung: "nach wenigen Tagen", ergebnis: "nach ca. 2 Wochen", haltbarkeit: "ca. 3–6 Monate" },
     firstWhen: "nach wenigen Tagen",
     firstText: "Der Kaumuskel entspannt sich spürbar.",
-    refreshWhen: "nach ca. 4–6 Monaten",
+    refreshWhen: "nach ca. 3–6 Monaten",
     faq: {
       natural: { question: "Verändert sich mein Gesicht?", answer: "Der Kaumuskel wird mit der Zeit etwas schlanker, das Gesicht kann dadurch leicht schmaler wirken. Deine Mimik bleibt." },
-      timing: { answer: "Die Entspannung spürst du nach wenigen Tagen, die volle Wirkung nach etwa 2 Wochen. Meist hält es 4–6 Monate." },
+      timing: { answer: "Die Entspannung spürst du nach wenigen Tagen, die volle Wirkung nach etwa 2 Wochen. Meist hält es 3–6 Monate." },
       side: { answer: `Möglich sind eine leichte Rötung oder ein kleiner blauer Fleck. In den ersten Wochen kann sich Kauen etwas schwächer anfühlen. Selten wirkt das Lächeln kurz ungleichmäßig – das bildet sich von selbst zurück. ${RISK}` },
       last: { question: "Ersetzt das die Zahnärztin oder den Zahnarzt?", answer: "Nein. Die Behandlung entspannt den Muskel. Ursachen und Schäden an den Zähnen gehören zur Zahnärztin oder zum Zahnarzt, eine Aufbissschiene kann zusätzlich sinnvoll sein." },
     },
@@ -382,13 +381,13 @@ const SPECS: Record<string, Spec> = {
     subline: "Schultern wirken schlanker, der Nacken länger – Behandlung durch Ärzte, ohne OP",
     howItWorks:
       "Ein Muskelrelaxans entspannt den oberen Teil des Trapezmuskels zwischen Nacken und Schulter. Wird der Muskel schlanker, wirken Schultern und Nacken gestreckter. Gesetzt wird an mehreren Punkten je Seite.",
-    facts: { ...MR_FACTS, wirkung: "nach wenigen Tagen", ergebnis: "nach ca. 2–3 Wochen", haltbarkeit: "ca. 4–6 Monate", betaeubung: "auf Wunsch Betäubungscreme" },
+    facts: { ...MR_FACTS, wirkung: "nach wenigen Tagen", ergebnis: "nach 14 Tagen", haltbarkeit: "ca. 3–6 Monate", betaeubung: "auf Wunsch Betäubungscreme" },
     firstWhen: "nach wenigen Tagen",
     firstText: "Der Muskel entspannt sich, die Schulterlinie wird nach und nach weicher.",
-    refreshWhen: "nach ca. 4–6 Monaten",
+    refreshWhen: "nach ca. 3–6 Monaten",
     faq: {
       natural: { question: "Sieht das natürlich aus?", answer: "Ja, die Veränderung kommt langsam über einige Wochen. Ziel ist eine weichere Schulterlinie, keine schwache Schulter. Die Menge wird an deinen Muskel angepasst." },
-      timing: { answer: "Erste Wirkung nach wenigen Tagen, das Endergebnis nach etwa 2–3 Wochen. Meist hält es 4–6 Monate." },
+      timing: { answer: "Erste Wirkung nach wenigen Tagen, das Endergebnis nach etwa 14 Tagen. Meist hält es 3–6 Monate." },
       side: { answer: `Möglich sind eine leichte Rötung, ein kleiner blauer Fleck oder ein Gefühl wie Muskelkater. Selten fühlen sich Schultern oder Arme beim Heben schwerer Dinge kurz schwächer an – das bildet sich von selbst zurück. ${RISK}` },
       last: { question: "Für wen ist die Behandlung geeignet?", answer: "Für alle, die einen ausgeprägten oberen Trapezmuskel haben und sich eine schlankere Schulterlinie wünschen. Ob das bei dir passt, prüft die Ärztin oder der Arzt in der Beratung." },
     },
@@ -405,11 +404,10 @@ const SPECS: Record<string, Spec> = {
     subline: "Hals wirkt glatter und entspannter – Behandlung durch Ärzte, ohne OP",
     howItWorks:
       "Ein Muskelrelaxans entspannt den flachen Halsmuskel (Platysma), der beim Anspannen Bänder und Falten am Hals zieht. Die Haut darüber kann sich glätten. Gesetzt wird an mehreren Punkten entlang der Muskelstränge.",
-    facts: { ...MR_FACTS, wirkung: "nach ca. 4–7 Tagen" },
-    firstWhen: "Tag 4–7",
+    facts: MR_FACTS,
     firstText: "Die Bänder am Hals werden nach und nach weicher.",
     faq: {
-      timing: { answer: "Erste Wirkung nach etwa 4–7 Tagen, das Endergebnis nach etwa 14 Tagen. Meist hält es 3–4 Monate." },
+      timing: { answer: "Erste Wirkung nach 3–7 Tagen, das Endergebnis nach etwa 14 Tagen. Meist hält es 3–6 Monate." },
       side: { answer: `Möglich sind eine leichte Rötung oder ein kleiner blauer Fleck. Selten fühlt sich das Schlucken oder Kopfheben kurz ungewohnt an – das bildet sich von selbst zurück. ${RISK}` },
     },
     related: ["muskelrelaxans/full-face-muskelrelaxans", "muskelrelaxans/barbie-muskelrelaxans", "muskelrelaxans/masseter"],
@@ -424,19 +422,19 @@ const SPECS: Record<string, Spec> = {
     subline: "Mehr Trockenheit unter den Achseln – Behandlung durch Ärzte, in einem Termin",
     howItWorks:
       "Ein Muskelrelaxans hemmt die Nervensignale an den Schweißdrüsen. Die Drüsen in der behandelten Haut bilden dann weniger Schweiß. Gesetzt wird mit sehr feinen Nadeln an vielen kleinen Punkten in der Achsel.",
-    facts: { ...MR_FACTS, wirkung: "nach 2–4 Tagen", ergebnis: "nach ca. 2 Wochen", haltbarkeit: "ca. 4–6 Monate" },
-    firstWhen: "Tag 2–4",
+    facts: { ...MR_FACTS, wirkung: "nach 3–7 Tagen", ergebnis: "nach ca. 2 Wochen", haltbarkeit: "ca. 3–6 Monate" },
     firstText: "Die Achseln werden spürbar trockener.",
-    refreshWhen: "nach ca. 4–6 Monaten",
+    refreshWhen: "nach ca. 3–6 Monaten",
     faq: {
       natural: { question: "Kann ich danach normal leben?", answer: "Ja. Du kannst direkt weitermachen. Die übrigen Schweißdrüsen am Körper arbeiten normal weiter." },
-      timing: { answer: "Erste Wirkung nach 2–4 Tagen, die volle Wirkung nach etwa 2 Wochen. Meist hält es 4–6 Monate." },
+      timing: { answer: "Erste Wirkung nach 3–7 Tagen, die volle Wirkung nach etwa 2 Wochen. Meist hält es 3–6 Monate." },
       side: { answer: `Möglich sind kleine Rötungen oder blaue Flecken in der Achsel. Manche bemerken, dass sie an anderen Stellen etwas mehr schwitzen. ${RISK}` },
       undo: { question: "Lässt sich das rückgängig machen?", answer: "Die Wirkung lässt nach einigen Monaten von selbst vollständig nach. Dann kannst du entscheiden, ob du auffrischen möchtest." },
       last: { question: "Für wen ist die Behandlung geeignet?", answer: "Für alle, die unter den Achseln deutlich mehr schwitzen, als ihnen lieb ist. Ob eine andere Ursache dahinterstecken könnte, klärt die Ärztin oder der Arzt in der Beratung." },
     },
     aftercare: [
-      "24 Stunden kein Sport, keine Sauna, kein Solarium",
+      "48 Stunden kein Sport",
+      "1 Woche keine Sauna, kein Solarium und keine starke Sonne",
       "Deo erst am nächsten Tag wieder benutzen",
       "Die Achseln nicht massieren oder reiben",
       "Am Behandlungstag keine Haarentfernung in der Achsel",
@@ -457,10 +455,10 @@ const SPECS: Record<string, Spec> = {
     howItWorks: `${HA_HOW} An Kontur und Lippenkörper gesetzt, betont es Form und Volumen.`,
     facts: HA_FACTS,
     aftercare: [
-      "24 Stunden kein Sport, keine Sauna, kein Solarium",
+      "48 Stunden kein Sport und kein Make-up",
+      "1 Woche keine Sauna, kein Solarium und keine starke Sonne",
       "Die Lippen nicht massieren oder drücken",
       "Kühlen hilft gegen die Schwellung",
-      "Lippenstift und Make-up frühestens nach einigen Stunden",
       "Heißes erst trinken, wenn die Betäubung abgeklungen ist",
       "Schwellung und Rötung sind normal und gehen nach wenigen Tagen zurück",
     ],
@@ -479,7 +477,7 @@ const SPECS: Record<string, Spec> = {
       "Bei einer Lippenkorrektur wird ein unschönes Ergebnis einer früheren Behandlung verbessert. Oft wird altes Hyaluron zuerst mit einem Enzym aufgelöst, dann werden die Lippen nach einer Pause neu geformt.",
     facts: {
       ...HA_FACTS,
-      dauer: "20–30 Minuten je Schritt",
+      dauer: "Hylase 20–30 Minuten, neue Unterspritzung 30–45 Minuten",
       wirkung: "Auflösen wirkt innerhalb von 1–2 Tagen",
       ergebnis: "ca. 2 Wochen nach der neuen Behandlung",
     },
@@ -491,10 +489,10 @@ const SPECS: Record<string, Spec> = {
       side: { answer: `In den ersten Tagen sind Schwellung, Rötung oder ein kleiner blauer Fleck normal. Selten reagiert jemand allergisch auf das Enzym zum Auflösen, selten entstehen kleine tastbare Knötchen. ${RISK}` },
     },
     aftercare: [
-      "24 Stunden kein Sport, keine Sauna, kein Solarium",
+      "48 Stunden kein Sport und kein Make-up",
+      "1 Woche keine Sauna, kein Solarium und keine starke Sonne",
       "Die Lippen nicht massieren oder drücken",
       "Kühlen hilft gegen die Schwellung",
-      "Lippenstift und Make-up frühestens nach einigen Stunden",
       "Schwellung und Rötung sind normal und gehen nach wenigen Tagen zurück",
     ],
     related: ["hyaluron/lippen-aufspritzen", "hyaluron/hylase", "muskelrelaxans/lipflip", "hyaluron/plisseefalten"],
@@ -771,14 +769,14 @@ const SPECS: Record<string, Spec> = {
       ...SB_FACTS,
       dauer: "ca. 30 Minuten plus Blutabnahme",
       wirkung: "erste Veränderungen oft nach 2–3 Monaten",
-      ergebnis: "nach mehreren Sitzungen, meist ca. 4",
-      haltbarkeit: "Auffrischen nach Absprache",
-      sitzungen: "meist ca. 4 im Abstand von einigen Wochen",
+      ergebnis: "erste Verbesserung nach 2–3 Monaten, Endergebnis nach 4–6 Monaten",
+      haltbarkeit: "Auffrischen alle 6–12 Monate",
+      sitzungen: "3–4 im Abstand von 4 Wochen",
       ausfall: "keine",
     },
     firstWhen: "nach 2–3 Monaten",
     firstText: "Viele bemerken erste Veränderungen am Haar. Geduld gehört dazu.",
-    refreshWhen: "nach Absprache",
+    refreshWhen: "alle 6–12 Monate",
     faq: {
       last: { question: "Hilft das bei jedem Haarausfall?", answer: "Nein. Haarausfall hat viele Ursachen. Die Ärztin oder der Arzt schaut sich das vorher an und sagt dir ehrlich, ob die Behandlung bei dir sinnvoll ist oder ob erst etwas anderes abgeklärt werden sollte." },
     },
@@ -788,11 +786,11 @@ const SPECS: Record<string, Spec> = {
   // ---------------------------------------------------------- Infusionen
   "infusionen/vitamin-c-infusion": infusion(
     "infusionen/vitamin-c-infusion", "Vitamin-C-Infusion", "Vitamin-C-Infusion", "mit Vitamin C",
-    "Vitamin C als Infusion – Behandlung durch Ärzte, in 30–45 Minuten",
+    "Vitamin C als Infusion – Behandlung durch Ärzte, in 20–30 Minuten",
   ),
   "infusionen/b-komplex-infusion": infusion(
     "infusionen/b-komplex-infusion", "Vitamin-B-Infusion", "Vitamin-B-Infusion", "mit B-Vitaminen",
-    "B-Vitamine als Infusion – Behandlung durch Ärzte, in 30–45 Minuten",
+    "B-Vitamine als Infusion – Behandlung durch Ärzte, in 20–30 Minuten",
   ),
   "infusionen/immun-infusion": infusion(
     "infusionen/immun-infusion", "Immun-Infusion", "Immun-Infusion", "mit Vitaminen und Mineralstoffen",
@@ -964,7 +962,7 @@ export function adsV2Facts(
   const f = s.facts;
   if (s.kind === "infusion") {
     return [
-      { key: "dauer", label: "Dauer", value: shortDuration(strapiDuration, f.dauer) },
+      { key: "dauer", label: "Dauer", value: `${shortDuration(strapiDuration, f.dauer)} (mit Beratung 30–45 Minuten)` },
       { key: "vorab", label: "Vorab", value: "kurzes ärztliches Gespräch zu Gesundheit und Medikamenten" },
       { key: "ablauf", label: "Ablauf", value: "entspannt im Sessel, über einen dünnen Zugang am Arm" },
       { key: "betaeubung", label: "Betäubung", value: f.betaeubung },
@@ -1008,7 +1006,7 @@ export function adsV2Timeline(pathKey: string | null | undefined): AdsV2Timeline
       { when: s.firstWhen ?? "Tag 3–7", title: "Erste Wirkung", text: s.firstText ?? "Die Falte wird nach und nach weicher." },
       control(pathKey),
       {
-        when: s.refreshWhen ?? "nach ca. 4 Monaten",
+        when: s.refreshWhen ?? "nach ca. 3–6 Monaten",
         title: "Auffrischen",
         text: s.refreshText ?? "Die Wirkung lässt langsam nach. Wenn du magst, frischen wir auf.",
       },
@@ -1163,7 +1161,7 @@ function defaultFaqs(s: Spec, pathKey: string): Record<FaqSlot, AdsV2FaqItem> {
     return {
       pain: { question: "Tut das weh?", answer: "Du spürst einen kleinen Pikser, wenn der dünne Zugang gelegt wird. Danach merkst du von der Infusion meist nichts mehr." },
       natural: { question: "Was ist in der Infusion?", answer: "Die genaue Zusammensetzung und Menge erklärt dir die Ärztin oder der Arzt vor dem Termin." },
-      timing: { question: "Wie lange dauert es?", answer: `Die Infusion selbst dauert etwa ${shortDuration(null, f.dauer)}. Plane mit Vorgespräch und kurzer Pause danach etwas mehr Zeit ein.` },
+      timing: { question: "Wie lange dauert es?", answer: `Die Infusion selbst dauert etwa ${shortDuration(null, f.dauer)}, mit Beratung 30–45 Minuten.` },
       side: { question: "Welche Nebenwirkungen kann es geben?", answer: `An der Einstichstelle kann ein kleiner blauer Fleck entstehen. Manche spüren ein kühles Gefühl im Arm, selten wird einem kurz schwindelig. Allergische Reaktionen sind selten. ${RISK}` },
       undo: { question: "Für wen ist eine Infusion nicht geeignet?", answer: "Zum Beispiel in der Schwangerschaft oder bei bestimmten Erkrankungen von Herz oder Nieren. Darum gibt es vorher das ärztliche Gespräch – sag dort bitte auch, welche Medikamente du nimmst." },
       guarantee: { question: "Ersetzt eine Infusion eine ärztliche Behandlung?", answer: "Nein. Eine Infusion ersetzt weder eine ausgewogene Ernährung noch die Behandlung einer Krankheit. Bei Beschwerden geh bitte zu deiner Hausärztin oder deinem Hausarzt." },
@@ -1239,19 +1237,19 @@ export function adsV2Aftercare(pathKey: string | null | undefined): string[] {
   switch (s.kind) {
     case "mr":
       list = [
-        "24 Stunden kein Sport, keine Sauna, kein Solarium",
+        "48 Stunden kein Sport und kein Make-up",
+        "1 Woche keine Sauna, kein Solarium und keine starke Sonne",
         "Die behandelten Stellen nicht massieren oder reiben",
         "4 Stunden aufrecht bleiben, nicht hinlegen",
-        "Make-up frühestens nach einigen Stunden",
         "Leichte Rötungen sind normal und gehen schnell zurück",
       ];
       break;
     case "hyaluron":
       list = [
-        "24 Stunden kein Sport, keine Sauna, kein Solarium",
+        "48 Stunden kein Sport und kein Make-up",
+        "1 Woche keine Sauna, kein Solarium und keine starke Sonne",
         "Die behandelte Stelle nicht massieren oder drücken",
         "Kühlen hilft gegen die Schwellung",
-        "Make-up frühestens nach einigen Stunden",
         "Die erste Nacht möglichst auf dem Rücken schlafen",
         "Schwellung und Rötung sind normal und gehen nach wenigen Tagen zurück",
       ];

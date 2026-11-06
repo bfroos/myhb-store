@@ -90,13 +90,13 @@ export const SEO_HUB_LIPPEN: SeoHubContent = {
       "Das hängt von deinen Lippen und deinem Wunsch ab, nicht von einer festen Regel. Bei der ersten Behandlung starten viele mit 0,5 ml: Die Lippen wirken danach meist gepflegter und etwas voller, ohne dass man es auf den ersten Blick sieht. 1 ml kommt eher infrage, wenn die Lippen sehr schmal sind oder Kontur und Volumen deutlicher werden sollen.",
     ],
     [
-      "Unser Rat: lieber schrittweise aufbauen. Nach etwa zwei Wochen ist die Schwellung abgeklungen und das Ergebnis gut zu beurteilen. Bei der Nachkontrolle kann ergänzt werden – zusätzliche Menge wird dann nach Preisliste berechnet.",
+      "Unser Rat: lieber schrittweise aufbauen. Die Schwellung klingt meist nach 2 bis 5 Tagen ab, nach etwa zwei Wochen ist das Ergebnis gut zu beurteilen. Bei der Nachkontrolle kann ergänzt werden – zusätzliche Menge wird dann nach Preisliste berechnet.",
     ],
   ],
   howHeadline: "Wie wirkt Hyaluron in den Lippen?",
   how: [
     [
-      "Hyaluronsäure ist ein Stoff, den der Körper selbst bildet und der Feuchtigkeit bindet. Als Gel in die Lippen gesetzt, betont es die Kontur (das Lippenrot), gleicht kleine Unregelmäßigkeiten aus und gibt dem Lippenkörper mehr Volumen. Das Ergebnis siehst du sofort; endgültig beurteilen lässt es sich, wenn die Schwellung nach etwa ein bis zwei Wochen abgeklungen ist.",
+      "Hyaluronsäure ist ein Stoff, den der Körper selbst bildet und der Feuchtigkeit bindet. Als Gel in die Lippen gesetzt, betont es die Kontur (das Lippenrot), gleicht kleine Unregelmäßigkeiten aus und gibt dem Lippenkörper mehr Volumen. Das Ergebnis siehst du sofort. Die Schwellung klingt meist nach 2 bis 5 Tagen ab, endgültig beurteilen lässt sich das Ergebnis nach etwa zwei Wochen.",
     ],
     [
       "Der Körper baut das Hyaluron über Monate langsam ab. Meist hält das Ergebnis 6–12 Monate – wie lange genau, hängt von Präparat, Stoffwechsel und Menge ab. Wenn du magst, wird danach aufgefrischt.",
@@ -146,7 +146,7 @@ export const SEO_HUB_LIPPEN: SeoHubContent = {
     {
       question: "Wie viel Hyaluron brauche ich für natürliche Lippen?",
       answer: [
-        "Beim ersten Mal reichen oft 0,5 ml. Lieber schrittweise aufbauen: Nach etwa zwei Wochen ist die Schwellung weg, dann kann bei der Nachkontrolle ergänzt werden.",
+        "Beim ersten Mal reichen oft 0,5 ml. Lieber schrittweise aufbauen: Die Schwellung ist meist nach 2 bis 5 Tagen weg, nach etwa zwei Wochen kann bei der Nachkontrolle ergänzt werden.",
       ],
     },
     {
@@ -178,7 +178,7 @@ export const SEO_HUB_LIPPEN: SeoHubContent = {
     {
       question: "Was muss ich nach der Behandlung beachten?",
       answer: [
-        "24 Stunden kein Sport, keine Sauna und kein Solarium, die Lippen nicht massieren und Make-up erst nach einigen Stunden. Kühlen hilft gegen die Schwellung.",
+        "48 Stunden kein Sport und kein Make-up, eine Woche keine Sauna, kein Solarium und keine starke Sonne. Die Lippen nicht massieren. Kühlen hilft gegen die Schwellung.",
       ],
     },
     {
