@@ -7,6 +7,7 @@ import { isAdsTemplateV2Excluded } from "#shared/adsTemplateV2";
 import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
 import { rewriteBeforeAfterDeep, rewritesBeforeAfterFor } from "#shared/beforeAfterWording";
 import { normalizePriceWordingDeep } from "#shared/priceWording";
+import { btxToBotoxDeep } from "#shared/seoTerms";
 import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
@@ -203,7 +204,8 @@ async function fetchFromStrapiByMode(
   const siteMode = config.siteMode || config.public.siteMode;
   const raw = await fetchFromStrapiRaw(event, preview, previewStatus);
   // TSEO-08: eigene Links mit Weiterleitung gleich aufs Ziel (www).
-  if (siteMode !== 'ads') return rewriteRedirectedLinks(raw);
+  // E24: auf www "Botox" statt "BTX" (shared/seoTerms.ts).
+  if (siteMode !== 'ads') return btxToBotoxDeep(await rewriteRedirectedLinks(raw));
   const url = getRequestURL(event);
   const locale = url.searchParams.get('locale');
   // go.-Standortseite: Behandlungskacheln und Bewertungen zurueck (Inhaber,

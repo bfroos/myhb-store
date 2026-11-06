@@ -63,7 +63,7 @@ export function buildLlmsText(siteUrl: string, locations: Loc[], categories: Cat
   const lines: string[] = [];
   lines.push("# MY HEALTH & BEAUTY", "");
   lines.push(
-    `> Ärztlich geführte Lounges für ästhetische Medizin in ${cities.length} Städten in Deutschland (${cities.join(", ")}), meist in Einkaufszentren. Es behandeln ausschließlich Ärztinnen und Ärzte; medizinisch verantwortlich ist Chefarzt Dr. Gero Ruppert. Termine online, nach Verfügbarkeit auch ohne Termin. Die Preise sind an allen Standorten gleich.`,
+    `> Ärztlich geführte Lounges für ästhetische Medizin in ${cities.length} Städten in Deutschland (${cities.join(", ")}), meist in Einkaufszentren. Es behandeln ausschließlich Ärzte; medizinisch verantwortlich ist Chefarzt Dr. Gero Ruppert. Termine online, nach Verfügbarkeit auch ohne Termin. Die Preise sind an allen Standorten gleich.`,
     "",
   );
   lines.push("## Standorte", "");
@@ -96,7 +96,7 @@ export function buildLlmsText(siteUrl: string, locations: Loc[], categories: Cat
   lines.push(`- [Alle Preise](${siteUrl}/preise)`);
   lines.push("");
   lines.push("## Weitere Seiten", "");
-  lines.push(`- [Ärztinnen und Ärzte](${siteUrl}/aerzte)`);
+  lines.push(`- [Unsere Ärzte](${siteUrl}/aerzte)`);
   lines.push(`- [Ratgeber](${siteUrl}/blog): ärztlich geprüfte Artikel zu Behandlungen, Kosten und Nachsorge`);
   lines.push(`- [Schönheitsoperationen](${siteUrl}/behandlungen/schoenheitsoperationen): in der MY Privatklinik Köln`);
   lines.push("");
