@@ -26,7 +26,7 @@
 import { hautanalyseDeeplink } from "#shared/hautanalyseCta";
 
 const props = withDefaults(
-  defineProps<{ content: string; medium?: "behandlungsseite" | "startseite"; titel?: string }>(),
+  defineProps<{ content: string; medium?: "behandlungsseite" | "startseite" | "ratgeber"; titel?: string }>(),
   { medium: "behandlungsseite", titel: "Unsicher, ob das zu dir passt?" },
 );
 const href = computed(() => hautanalyseDeeplink(props.content, props.medium));

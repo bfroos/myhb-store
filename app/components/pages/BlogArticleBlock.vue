@@ -30,7 +30,10 @@
           v-if="components && components.length > 0"
           class="blogArticle__main"
         >
-          <BlockRenderer :blocks="components" />
+          <template v-for="(seg, i) in segments" :key="i">
+            <BlockRenderer v-if="seg.blocks" :blocks="seg.blocks" />
+            <slot v-else :name="seg.slot" />
+          </template>
         </main>
         <footer
           v-if="footnotes && footnotes.length > 0"
@@ -47,7 +50,7 @@ import { ImageFormat, ImageBreakpoint } from "~/lib/strapi/dto/enums";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import type { StrapiBlock, StrapiRichText } from "~/lib/strapi/dto/types";
 
-defineProps<{
+const props = defineProps<{
   headline?: string;
   intro?: string;
   cover?: StrapiMedia;
@@ -55,6 +58,46 @@ defineProps<{
   displayDate?: string;
   footnotes?: StrapiRichText;
 }>();
+
+// Ratgeber-Layout (myhb-os#418): Die Seite kann drei Einschuebe liefern.
+// "behandlung" ersetzt die erste schlichte blog.cta (sonst nach dem ersten
+// Block), "mitte" steht nach der Haelfte des Textes, "ende" vor den FAQ.
+const slots = useSlots();
+const segments = computed(() => {
+  const blocks = props.components ?? [];
+  const out: Array<{ blocks?: StrapiBlock[]; slot?: string }> = [];
+  const push = (b: StrapiBlock[]) => b.length && out.push({ blocks: b });
+
+  const faqAt = blocks.findIndex((b) => b.__component === "blocks.faq");
+  const body = faqAt >= 0 ? blocks.slice(0, faqAt) : blocks;
+  const tail = faqAt >= 0 ? blocks.slice(faqAt) : [];
+
+  const ctaAt = slots.behandlung ? body.findIndex((b) => b.__component === "blog.cta") : -1;
+  const cardAt = slots.behandlung ? (ctaAt >= 0 ? ctaAt : Math.min(1, body.length)) : -1;
+  const mid = slots.mitte ? Math.max(cardAt + 2, Math.ceil(body.length / 2)) : -1;
+
+  let run: StrapiBlock[] = [];
+  body.forEach((b, i) => {
+    if (i === cardAt) {
+      push(run);
+      run = [];
+      out.push({ slot: "behandlung" });
+      if (i === ctaAt) return;
+    }
+    if (i === mid) {
+      push(run);
+      run = [];
+      out.push({ slot: "mitte" });
+    }
+    run.push(b);
+  });
+  push(run);
+  if (cardAt >= body.length) out.push({ slot: "behandlung" });
+  if (slots.mitte && mid >= body.length) out.push({ slot: "mitte" });
+  if (slots.ende) out.push({ slot: "ende" });
+  push(tail);
+  return out;
+});
 
 // The article already supplies the section and card, so blocks inside it must not nest a second one.
 provide("blockSurface", "inline");

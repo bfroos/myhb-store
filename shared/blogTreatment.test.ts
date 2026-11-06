@@ -11,6 +11,10 @@ test("Zuordnung Artikel -> Behandlung", () => {
   assert.equal(blogTreatmentPathKey("haartransplantation-im-ausland-worauf-mussen-patienten-achten", "haare"), null);
   assert.equal(blogTreatmentPathKey("bruststraffung-kosten", "schoenheitsoperationen"), null);
   assert.equal(blogTreatmentPathKey("geglucktes-opening-in-berlin", "my"), null);
+  assert.equal(blogTreatmentPathKey("traenensaecke-entfernen-ohne-op", "hyaluron"), "skinbooster/lumi-eyes-polynukleotide");
+  assert.equal(blogTreatmentPathKey("augenringe-ursachen-behandlung", "hyaluron"), "skinbooster/lumi-eyes-polynukleotide");
+  assert.equal(blogTreatmentPathKey("falten-unter-den-augen", "botox"), "skinbooster/lumi-eyes-polynukleotide");
+  assert.equal(blogTreatmentPathKey("gummy-smile-behandeln", "botox"), "botox/gummy-smile");
 });
 
 test("Kurze Meta-Description am Wortende", () => {
