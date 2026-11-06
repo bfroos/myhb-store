@@ -1,0 +1,5079 @@
+[
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duisburg/forum",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "koeln/koeln-arcaden",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duisburg/forum",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "behandlungen",
+  "find": "dauert nur 20-30 Minuten,",
+  "replace": "dauert nur 15-20 Minuten,"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duisburg/forum",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "behandlungen",
+  "find": "nur 20 bis 30",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Die Behandlung dauert einschließlich Beratung und Vorbereitung in der Regel etwa 20 bis 30 Minuten.",
+  "replace": "Die Behandlung dauert einschließlich Beratung und Vorbereitung in der Regel etwa 15 bis 20 Minuten."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "vollständige Behandlung dauert einschließlich Beratung und Vorbereitung in der Regel etwa 20 bis 30 Minuten.",
+  "replace": "vollständige Behandlung dauert einschließlich Beratung und Vorbereitung in der Regel etwa 15 bis 20 Minuten."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "koeln/koeln-arcaden",
+  "find": "etwa 20 bis 30",
+  "replace": "etwa 15 bis 20"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "koeln/koeln-arcaden",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "*",
+  "find": "der Regel 3–4 Monate;",
+  "replace": "der Regel 3–6 Monate;"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duisburg/forum",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "moenchengladbach/minto",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "behandlungen",
+  "find": "hält etwa 3–4 Monate",
+  "replace": "hält etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "*",
+  "find": "der Regel 3–4 Monate,",
+  "replace": "der Regel 3–6 Monate,"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duisburg/forum",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "moenchengladbach/minto",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "3 bis 4",
+  "replace": "3 bis 6"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "*",
+  "find": "der Regel 3–4 Monate,",
+  "replace": "der Regel 3–6 Monate,"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "aachen/aquis-plaza",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "duisburg/forum",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "koeln/koeln-arcaden",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "moenchengladbach/minto",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "recklinghausen/palais-vest",
+  "find": "der Regel 3-4 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "der Regel bis zu",
+  "replace": "der Regel"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "4-6",
+  "replace": "3-6"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "hält in der Regel 4–6 Monate an.",
+  "replace": "hält in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "duisburg/forum",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "koeln/koeln-arcaden",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "moenchengladbach/minto",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "halten in der Regel 4–6 Monate an.",
+  "replace": "halten in der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "1–2 Wochen und hält etwa 4–6",
+  "replace": "etwa 2 Wochen und hält etwa 3–6"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "der Regel 4–6 Monate an,",
+  "replace": "der Regel 3–6 Monate an,"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "der Regel 4–6 Monate an.",
+  "replace": "der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "der Regel 4–6 Monate an.",
+  "replace": "der Regel 3–6 Monate an."
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "*",
+  "find": "der Regel 4-6 Monate an.",
+  "replace": "der Regel 3-6 Monate an."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "*",
+  "find": "der Regel 4-6 Monate an,",
+  "replace": "der Regel 3-6 Monate an,"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "häufig etwa vier bis",
+  "replace": "häufig etwa drei bis"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "koeln/koeln-arcaden",
+  "find": "häufig etwa vier bis",
+  "replace": "häufig etwa drei bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "*",
+  "find": "der Regel 4-6 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "behandlungen",
+  "find": "der Regel 4 bis",
+  "replace": "der Regel 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "hält meist 4 bis",
+  "replace": "hält meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "hält meist 4 bis",
+  "replace": "hält meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "hält meist 4 bis",
+  "replace": "hält meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "hält meist 4 bis",
+  "replace": "hält meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "hält meist 4 bis",
+  "replace": "hält meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "hält meist 4 bis",
+  "replace": "hält meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "behandlungen",
+  "find": "hält meist 4 bis",
+  "replace": "hält meist 3 bis"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "häufig etwa 4 bis",
+  "replace": "häufig etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "koeln/koeln-arcaden",
+  "find": "häufig etwa 4 bis",
+  "replace": "häufig etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/zaehneknirschen-bruxismus",
+  "scope": "*",
+  "find": "der Regel 4–6 Monate",
+  "replace": "der Regel 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/zaehneknirschen-bruxismus",
+  "scope": "*",
+  "find": "hält etwa 4-6 Monate",
+  "replace": "hält etwa 3-6 Monate"
+ },
+ {
+  "pathKey": "botox/zaehneknirschen-bruxismus",
+  "scope": "*",
+  "find": "der Regel 4-6 Monate",
+  "replace": "der Regel 3-6 Monate"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "etwa 6 bis 12",
+  "replace": "etwa 3 bis 6"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "etwa 6 bis 12",
+  "replace": "etwa 3 bis 6"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "etwa 6 bis 12",
+  "replace": "etwa 3 bis 6"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "etwa 6 bis 12",
+  "replace": "etwa 3 bis 6"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "koeln/koeln-arcaden",
+  "find": "meist etwa 6 bis 12 Monate",
+  "replace": "meist etwa 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "koeln/koeln-arcaden",
+  "find": "häufig etwa 6 bis 12 Monate",
+  "replace": "häufig etwa 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "koeln/koeln-arcaden",
+  "find": "etwa 6 bis 12",
+  "replace": "etwa 3 bis 6"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "etwa 6 bis 12",
+  "replace": "etwa 3 bis 6"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "koeln/koeln-arcaden",
+  "find": "etwa 6 bis 12",
+  "replace": "etwa 3 bis 6"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "meist in Vollnarkose oder Dämmerschlaf, und dauert etwa 1 bis 2",
+  "replace": "in Vollnarkose – und dauert etwa 1 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "meist in Vollnarkose oder Dämmerschlaf, und dauert etwa 1 bis 2",
+  "replace": "in Vollnarkose – und dauert etwa 1 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "je nach Umfang in Vollnarkose oder im Dämmerschlaf.",
+  "replace": "in Vollnarkose."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "je nach Umfang in Vollnarkose oder im Dämmerschlaf.",
+  "replace": "in Vollnarkose."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "meist in örtlicher Betäubung oder Dämmerschlaf.",
+  "replace": "in Vollnarkose."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "meist in örtlicher Betäubung oder Dämmerschlaf.",
+  "replace": "in Vollnarkose."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "unter örtlicher Betäubung oder Dämmerschlaf",
+  "replace": "in Vollnarkose"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "unter örtlicher Betäubung oder Dämmerschlaf",
+  "replace": "in Vollnarkose"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "der Regel 1 Tag",
+  "replace": "der Regel 1 Nacht"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "der Regel 1 Tag",
+  "replace": "der Regel 1 Nacht"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "kannst Du in vielen Fällen noch am selben Tag nach Hause gehen.",
+  "replace": "bleibst Du eine Nacht in der Klinik."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "kannst Du in vielen Fällen noch am selben Tag nach Hause gehen.",
+  "replace": "bleibst Du eine Nacht in der Klinik."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "Ein kurzer stationärer Aufenthalt ist meist",
+  "replace": "Eine Nacht in der Klinik ist"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "Ein kurzer stationärer Aufenthalt ist meist",
+  "replace": "Eine Nacht in der Klinik ist"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "in der Regel 4–6 Monate an und",
+  "replace": "in der Regel 3–6 Monate an und"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "halten etwa 4–6 Monate",
+  "replace": "halten etwa 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "Wirkung meist 4 bis",
+  "replace": "Wirkung meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "Wirkung meist 4 bis",
+  "replace": "Wirkung meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Wirkung meist 4 bis",
+  "replace": "Wirkung meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Wirkung meist 4 bis",
+  "replace": "Wirkung meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "Wirkung meist 4 bis",
+  "replace": "Wirkung meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Wirkung meist 4 bis",
+  "replace": "Wirkung meist 3 bis"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "behandlungen",
+  "find": "Wirkung meist 4 bis",
+  "replace": "Wirkung meist 3 bis"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "*",
+  "find": "von etwa vier bis",
+  "replace": "von etwa drei bis"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "*",
+  "find": "Botox®-Behandlungen alle 4 bis",
+  "replace": "Botox®-Behandlungen alle 3 bis"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "Auffrischung nach spätestens 6",
+  "replace": "Auffrischung nach 3 bis 6"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "*",
+  "find": "uns nach etwa 6",
+  "replace": "uns nach 3 bis 6"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "*",
+  "find": "Regel nach etwa 6",
+  "replace": "Regel nach 3 bis 6"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "*",
+  "find": "nach etwa 4 Monaten",
+  "replace": "nach 3 bis 6 Monaten"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "duisburg/forum",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "koeln/koeln-arcaden",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "moenchengladbach/minto",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "nach etwa einem halben Jahr",
+  "replace": "alle drei bis sechs Monate"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "aachen/aquis-plaza",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "duisburg/forum",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "koeln/koeln-arcaden",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "moenchengladbach/minto",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox/migraenebehandlung",
+  "scope": "recklinghausen/palais-vest",
+  "find": "idealerweise 2 bis 3",
+  "replace": "idealerweise 3"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "duisburg/forum",
+  "find": "nach 2 bis 3",
+  "replace": "nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "nach 2 bis 3",
+  "replace": "nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "moenchengladbach/minto",
+  "find": "nach 2 bis 3",
+  "replace": "nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "nach 2 bis 3",
+  "replace": "nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "behandlungen",
+  "find": "nach 2 bis 3",
+  "replace": "nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "duisburg/forum",
+  "find": "2 bis 3",
+  "replace": "3 bis 7",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "2 bis 3",
+  "replace": "3 bis 7",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "moenchengladbach/minto",
+  "find": "2 bis 3",
+  "replace": "3 bis 7",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "2 bis 3",
+  "replace": "3 bis 7",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "behandlungen",
+  "find": "2 bis 3",
+  "replace": "3 bis 7",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "*",
+  "find": "nach 2 bis 3",
+  "replace": "nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "*",
+  "find": "2 bis 3",
+  "replace": "3 bis 7",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "aachen/aquis-plaza",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "duisburg/forum",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "moenchengladbach/minto",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "recklinghausen/palais-vest",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "behandlungen",
+  "find": "2-3 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Resultat zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "*",
+  "find": "2-3 Tagen, das vollständige Ergebnis wird innerhalb von 7-14",
+  "replace": "3-7 Tagen, das vollständige Ergebnis wird innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duisburg/forum",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "behandlungen",
+  "find": "2-3 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von 7-14",
+  "replace": "3-7 Tagen sichtbar, das vollständige Ergebnis zeigt sich innerhalb von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "*",
+  "find": "drei bis fünf Tagen",
+  "replace": "drei bis sieben Tagen"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "meist nach 3–5 Tagen.",
+  "replace": "meist nach 3–7 Tagen."
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "3 bis 5 Tagen.",
+  "replace": "3 bis 7 Tagen."
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "3 bis 5 Tagen eine",
+  "replace": "3 bis 7 Tagen eine"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "3 bis 5 Tagen.",
+  "replace": "3 bis 7 Tagen."
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duisburg/forum",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "moenchengladbach/minto",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "2 bis 4",
+  "replace": "3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "aachen/aquis-plaza",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "duisburg/forum",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "moenchengladbach/minto",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Bereits ab etwa 4",
+  "replace": "Bereits nach 3 bis 7"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "nach etwa 4 Tagen",
+  "replace": "nach 3 bis 7 Tagen"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "aachen/aquis-plaza",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "duisburg/forum",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "moenchengladbach/minto",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "behandlungen",
+  "find": "Nach etwa 5 bis",
+  "replace": "Nach etwa 3 bis"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "7 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "innerhalb von 7-14 Tagen.",
+  "replace": "innerhalb von etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/lachfalten",
+  "scope": "*",
+  "find": "nach 7 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lachfalten",
+  "scope": "*",
+  "find": "innerhalb von 7–14 Tagen",
+  "replace": "innerhalb von etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "*",
+  "find": "etwa 7 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Regel nach etwa 10 bis 14 Tagen",
+  "replace": "Regel nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Regel nach etwa 10 bis 14 Tagen",
+  "replace": "Regel nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "duisburg/forum",
+  "find": "innerhalb von 10 bis 14 Tagen.",
+  "replace": "innerhalb von etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "innerhalb von 10 bis 14 Tagen.",
+  "replace": "innerhalb von etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "moenchengladbach/minto",
+  "find": "innerhalb von 10 bis 14 Tagen.",
+  "replace": "innerhalb von etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "innerhalb von 10 bis 14 Tagen.",
+  "replace": "innerhalb von etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "duisburg/forum",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "moenchengladbach/minto",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "aachen/aquis-plaza",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "duisburg/forum",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "koeln/koeln-arcaden",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "moenchengladbach/minto",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "recklinghausen/palais-vest",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "aachen/aquis-plaza",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "duisburg/forum",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "koeln/koeln-arcaden",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "moenchengladbach/minto",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "recklinghausen/palais-vest",
+  "find": "10 bis 14",
+  "replace": "14",
+  "pfad": "faq.faqSets[0].faqs[4].answer[1].children[1].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duisburg/forum",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "moenchengladbach/minto",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "behandlungen",
+  "find": "von 10 bis 14",
+  "replace": "von etwa 14"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "aachen/aquis-plaza",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "duisburg/forum",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "moenchengladbach/minto",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "recklinghausen/palais-vest",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "behandlungen",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "*",
+  "find": "nach etwa 10–14 Tagen.",
+  "replace": "nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "nach etwa 10–14 Tagen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "rund 10 bis 14",
+  "replace": "rund 14"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "nach etwa 10 bis 14 Tagen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "aachen/aquis-plaza",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "duisburg/forum",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "moenchengladbach/minto",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "recklinghausen/palais-vest",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "behandlungen",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "koeln/koeln-arcaden",
+  "find": "etwa 10 bis 14",
+  "replace": "etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duisburg/forum",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "behandlungen",
+  "find": "nach 10 bis 14",
+  "replace": "nach etwa 14"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "innerhalb von 1–2 Wochen",
+  "replace": "innerhalb von etwa 2 Wochen"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "*",
+  "find": "folgenden 2 bis 3",
+  "replace": "folgenden zwei"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "aachen/aquis-plaza",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "duisburg/forum",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "moenchengladbach/minto",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "2 bis 3",
+  "replace": "2",
+  "pfad": "faq.faqSets[0].faqs[4].answer[0].children[3].text"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "duisburg/forum",
+  "find": "24 Stunden solltest du auf Sport, Sauna, intensive Sonne und Make-up im behandelten Bereich verzichten.",
+  "replace": "48 Stunden solltest du auf Sport und Make-up im behandelten Bereich verzichten, eine Woche lang auf Sauna und intensive Sonne."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "24 Stunden solltest du auf Sport, Sauna, intensive Sonne und Make-up im behandelten Bereich verzichten.",
+  "replace": "48 Stunden solltest du auf Sport und Make-up im behandelten Bereich verzichten, eine Woche lang auf Sauna und intensive Sonne."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "moenchengladbach/minto",
+  "find": "24 Stunden solltest du auf Sport, Sauna, intensive Sonne und Make-up im behandelten Bereich verzichten.",
+  "replace": "48 Stunden solltest du auf Sport und Make-up im behandelten Bereich verzichten, eine Woche lang auf Sauna und intensive Sonne."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "recklinghausen/palais-vest",
+  "find": "24 Stunden solltest du auf Sport, Sauna, intensive Sonne und Make-up im behandelten Bereich verzichten.",
+  "replace": "48 Stunden solltest du auf Sport und Make-up im behandelten Bereich verzichten, eine Woche lang auf Sauna und intensive Sonne."
+ },
+ {
+  "pathKey": "botox",
+  "scope": "behandlungen",
+  "find": "24 Stunden solltest du auf Sport, Sauna, intensive Sonne und Make-up im behandelten Bereich verzichten.",
+  "replace": "48 Stunden solltest du auf Sport und Make-up im behandelten Bereich verzichten, eine Woche lang auf Sauna und intensive Sonne."
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "*",
+  "find": "24 Stunden solltest du auf Sport, Sauna, intensive Sonne und Make-up im behandelten Bereich verzichten",
+  "replace": "48 Stunden solltest du auf Sport und Make-up im behandelten Bereich verzichten, eine Woche lang auf Sauna und intensive Sonne"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "*",
+  "find": "eine lokale Betäubung angewendet",
+  "replace": "eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "einer lokalen Betäubung durchgeführt",
+  "replace": "einer betäubenden Creme durchgeführt"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "die Haut vorher lokal betäubt",
+  "replace": "vorher eine betäubende Creme auf die Haut aufgetragen"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "*",
+  "find": "Optional: Lokale Betäubung für",
+  "replace": "Optional: betäubende Creme für"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "*",
+  "find": "lokale Betäubung ist in der Regel nicht notwendig, kann jedoch auf Wunsch",
+  "replace": "Betäubung ist in der Regel nicht notwendig, auf Wunsch kann jedoch eine betäubende Creme"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "eine lokale Betäubung aufgetragen",
+  "replace": "eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "eine lokale Betäubung angewendet",
+  "replace": "eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "*",
+  "find": "eine lokale Betäubung angewendet",
+  "replace": "eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "*",
+  "find": "Bedarf lokal betäubt, besonders",
+  "replace": "Bedarf mit einer betäubenden Creme vorbereitet, besonders"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "aachen/aquis-plaza",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "duisburg/forum",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "moenchengladbach/minto",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "recklinghausen/palais-vest",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "behandlungen",
+  "find": "eine lokale Betäubung verwendet.",
+  "replace": "eine betäubende Creme verwendet."
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "*",
+  "find": "eine lokale Betäubung angewendet",
+  "replace": "eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/lachfalten",
+  "scope": "*",
+  "find": "die zu behandelnde Region lokal betäubt",
+  "replace": "auf die zu behandelnde Region eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "*",
+  "find": "erfolgt eine lokale Betäubung zur Minimierung des Unbehagens während der Behandlung.",
+  "replace": "wird eine betäubende Creme zur Minimierung des Unbehagens während der Behandlung aufgetragen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "*",
+  "find": "eine lokale Betäubung angewendet",
+  "replace": "eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "*",
+  "find": "Eine lokale Betäubung wird",
+  "replace": "Eine betäubende Creme wird"
+ },
+ {
+  "pathKey": "botox/zaehneknirschen-bruxismus",
+  "scope": "*",
+  "find": "eine lokale Betäubung aufgetragen",
+  "replace": "eine betäubende Creme aufgetragen"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "duisburg/forum",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "behandlungen",
+  "find": "eine lokale Betäubung möglich.",
+  "replace": "eine betäubende Creme möglich."
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "duisburg/forum",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "behandlungen",
+  "find": "10 bis 15",
+  "replace": "15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "duisburg/forum",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "koeln/koeln-arcaden",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "20-30 Minuten",
+  "replace": "15-20 Minuten"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "duisburg/forum",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "behandlungen",
+  "find": "Regel 20 bis 30",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "*",
+  "find": "nur 10 bis 15",
+  "replace": "nur 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "Regel 10 bis 15",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "Regel 10 bis 15",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Regel 10 bis 15",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Regel 10 bis 15",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "Regel 10 bis 15",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Regel 10 bis 15",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "behandlungen",
+  "find": "Regel 10 bis 15",
+  "replace": "Regel 15 bis 20"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "*",
+  "find": "dauert etwa 20-30 Minuten.",
+  "replace": "dauert etwa 15-20 Minuten."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "10 bis 14 Tagen",
+  "replace": "6 bis 8 Wochen"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "10 bis 14 Tagen",
+  "replace": "6 bis 8 Wochen"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "koeln/koeln-arcaden",
+  "find": "10 bis 14 Tagen",
+  "replace": "6 bis 8 Wochen"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis ist nach 6 bis 8 Wochen erreicht.",
+  "pfad": "benefits.items[2].content[0].children[0].text"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis ist nach 6 bis 8 Wochen erreicht.",
+  "pfad": "benefits.items[2].content[0].children[0].text"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis ist nach 6 bis 8 Wochen erreicht.",
+  "pfad": "benefits.items[2].content[0].children[0].text"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis ist nach 6 bis 8 Wochen erreicht.",
+  "pfad": "benefits.items[2].content[0].children[0].text"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis ist nach 6 bis 8 Wochen erreicht.",
+  "pfad": "benefits.items[2].content[0].children[0].text"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis ist nach 6 bis 8 Wochen erreicht.",
+  "pfad": "benefits.items[2].content[0].children[0].text"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "behandlungen",
+  "find": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "zeigen sich nach wenigen Tagen, das vollständige Ergebnis ist nach 6 bis 8 Wochen erreicht.",
+  "pfad": "benefits.items[2].content[0].children[0].text"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "ist nach 6 bis 8 Wochen erreicht."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "ist nach 6 bis 8 Wochen erreicht."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "koeln/koeln-arcaden",
+  "find": "entwickelt sich innerhalb von 4 bis 8 Wochen.",
+  "replace": "ist nach 6 bis 8 Wochen erreicht."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen. Je",
+  "replace": "Ergebnis ist nach 6 bis 8 Wochen erreicht. Je"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen. Je",
+  "replace": "Ergebnis ist nach 6 bis 8 Wochen erreicht. Je"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen. Je",
+  "replace": "Ergebnis ist nach 6 bis 8 Wochen erreicht. Je"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen. Je",
+  "replace": "Ergebnis ist nach 6 bis 8 Wochen erreicht. Je"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen. Je",
+  "replace": "Ergebnis ist nach 6 bis 8 Wochen erreicht. Je"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen. Je",
+  "replace": "Ergebnis ist nach 6 bis 8 Wochen erreicht. Je"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "behandlungen",
+  "find": "Ergebnis entwickelt sich innerhalb von 4 bis 8 Wochen. Je",
+  "replace": "Ergebnis ist nach 6 bis 8 Wochen erreicht. Je"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "Veränderungen zeigen sich meist innerhalb von 4 bis 8 Wochen.",
+  "replace": "Veränderungen zeigen sich meist nach einigen Wochen, das volle Ergebnis nach 6 bis 8 Wochen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "Veränderungen zeigen sich meist innerhalb von 4 bis 8 Wochen.",
+  "replace": "Veränderungen zeigen sich meist nach einigen Wochen, das volle Ergebnis nach 6 bis 8 Wochen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Veränderungen zeigen sich meist innerhalb von 4 bis 8 Wochen.",
+  "replace": "Veränderungen zeigen sich meist nach einigen Wochen, das volle Ergebnis nach 6 bis 8 Wochen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Veränderungen zeigen sich meist innerhalb von 4 bis 8 Wochen.",
+  "replace": "Veränderungen zeigen sich meist nach einigen Wochen, das volle Ergebnis nach 6 bis 8 Wochen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "Veränderungen zeigen sich meist innerhalb von 4 bis 8 Wochen.",
+  "replace": "Veränderungen zeigen sich meist nach einigen Wochen, das volle Ergebnis nach 6 bis 8 Wochen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Veränderungen zeigen sich meist innerhalb von 4 bis 8 Wochen.",
+  "replace": "Veränderungen zeigen sich meist nach einigen Wochen, das volle Ergebnis nach 6 bis 8 Wochen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "behandlungen",
+  "find": "Veränderungen zeigen sich meist innerhalb von 4 bis 8 Wochen.",
+  "replace": "Veränderungen zeigen sich meist nach einigen Wochen, das volle Ergebnis nach 6 bis 8 Wochen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "aachen/aquis-plaza",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duisburg/forum",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "koeln/koeln-arcaden",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "moenchengladbach/minto",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "recklinghausen/palais-vest",
+  "find": "erste Nachbehandlung: nach ca. 3–4 Wochen.",
+  "replace": "Nachkontrolle: innerhalb von 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "aachen/aquis-plaza",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "duisburg/forum",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "moenchengladbach/minto",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Nach ca. 2–3 Wochen.",
+  "replace": "Nach etwa 14 Tagen."
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "aachen/aquis-plaza",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "duisburg/forum",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "koeln/koeln-arcaden",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "moenchengladbach/minto",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "recklinghausen/palais-vest",
+  "find": "nach ca. 2–3 Wochen",
+  "replace": "nach etwa 14 Tagen"
+ },
+ {
+  "pathKey": "anti-haarausfall",
+  "scope": "*",
+  "find": "30 und 60 Minuten.",
+  "replace": "30 und 45 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall",
+  "scope": "*",
+  "find": "von 3 Sitzungen im",
+  "replace": "von 3 bis 4 Sitzungen im"
+ },
+ {
+  "pathKey": "anti-haarausfall",
+  "scope": "*",
+  "find": "4 bis 8 Sitzungen in regelmäßigen Abständen",
+  "replace": "3 bis 4 Sitzungen im Abstand von etwa 4 Wochen"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "aachen/aquis-plaza",
+  "find": "30 und 60 Minuten.",
+  "replace": "30 und 45 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "30 und 60 Minuten.",
+  "replace": "30 und 45 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "moenchengladbach/minto",
+  "find": "30 und 60 Minuten.",
+  "replace": "30 und 45 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "recklinghausen/palais-vest",
+  "find": "30 und 60 Minuten.",
+  "replace": "30 und 45 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "behandlungen",
+  "find": "30 und 60 Minuten.",
+  "replace": "30 und 45 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "*",
+  "find": "zunächst 3 Behandlungen im",
+  "replace": "zunächst 3 bis 4 Behandlungen im"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "aachen/aquis-plaza",
+  "find": "4 bis 8 Sitzungen in regelmäßigen Abständen",
+  "replace": "3 bis 4 Sitzungen im Abstand von etwa 4 Wochen"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "4 bis 8 Sitzungen in regelmäßigen Abständen",
+  "replace": "3 bis 4 Sitzungen im Abstand von etwa 4 Wochen"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "moenchengladbach/minto",
+  "find": "4 bis 8 Sitzungen in regelmäßigen Abständen",
+  "replace": "3 bis 4 Sitzungen im Abstand von etwa 4 Wochen"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "recklinghausen/palais-vest",
+  "find": "4 bis 8 Sitzungen in regelmäßigen Abständen",
+  "replace": "3 bis 4 Sitzungen im Abstand von etwa 4 Wochen"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "behandlungen",
+  "find": "4 bis 8 Sitzungen in regelmäßigen Abständen",
+  "replace": "3 bis 4 Sitzungen im Abstand von etwa 4 Wochen"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "aachen/aquis-plaza",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "duisburg/forum",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "koeln/koeln-arcaden",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "moenchengladbach/minto",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/hair-boost-infusion4",
+  "scope": "recklinghausen/palais-vest",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 15–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "aachen/aquis-plaza",
+  "find": "dauert etwa 30 Minuten.",
+  "replace": "dauert etwa 20 bis 40 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "dauert etwa 30 Minuten.",
+  "replace": "dauert etwa 20 bis 40 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "dauert etwa 30 Minuten.",
+  "replace": "dauert etwa 20 bis 40 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "dauert etwa 30 Minuten.",
+  "replace": "dauert etwa 20 bis 40 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "moenchengladbach/minto",
+  "find": "dauert etwa 30 Minuten.",
+  "replace": "dauert etwa 20 bis 40 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "recklinghausen/palais-vest",
+  "find": "dauert etwa 30 Minuten.",
+  "replace": "dauert etwa 20 bis 40 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "behandlungen",
+  "find": "dauert etwa 30 Minuten.",
+  "replace": "dauert etwa 20 bis 40 Minuten."
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "In der Regel nach etwa 10 bis 14 Tagen",
+  "replace": "Nach einer Serie von 4 bis 6 Sitzungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "duisburg/forum",
+  "find": "In der Regel nach etwa 10 bis 14 Tagen",
+  "replace": "Nach einer Serie von 4 bis 6 Sitzungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "koeln/koeln-arcaden",
+  "find": "In der Regel nach etwa 10 bis 14 Tagen",
+  "replace": "Nach einer Serie von 4 bis 6 Sitzungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "*",
+  "find": "eine Wiederholungsbehandlung nach 4–6",
+  "replace": "3 bis 4 Sitzungen im Abstand von etwa 4"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "aachen/aquis-plaza",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "duisburg/forum",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "moenchengladbach/minto",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Nach etwa 4 Behandlungen",
+  "replace": "Nach 3 bis 4 Behandlungen"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "*",
+  "find": "Treatments spätestens alle 12",
+  "replace": "Treatments alle 6 bis 12"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-oberarm",
+  "scope": "*",
+  "find": "3 bis 4",
+  "replace": "2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-oberschenkel",
+  "scope": "*",
+  "find": "3 bis 4",
+  "replace": "2 bis 4",
+  "pfad": "tableOfContents.content[1].children[1].text"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-knie",
+  "scope": "*",
+  "find": "1 bis 2",
+  "replace": "2 bis 4",
+  "pfad": "benefits.items[1].content[0].children[1].text"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-knie",
+  "scope": "*",
+  "find": "Schon 1 bis 2",
+  "replace": "Schon 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-knie",
+  "scope": "*",
+  "find": "Knien – bereits 3 bis",
+  "replace": "Knien – bereits 2 bis"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-doppelkinn",
+  "scope": "aachen/aquis-plaza",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-doppelkinn",
+  "scope": "duisburg/forum",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-doppelkinn",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-doppelkinn",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-doppelkinn",
+  "scope": "moenchengladbach/minto",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-doppelkinn",
+  "scope": "recklinghausen/palais-vest",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-doppelkinn",
+  "scope": "behandlungen",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-bauch",
+  "scope": "*",
+  "find": "3 bis 4",
+  "replace": "2 bis 4",
+  "pfad": "tableOfContents.content[0].children[1].text"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-bauch",
+  "scope": "*",
+  "find": "braucht es 3 bis",
+  "replace": "braucht es 2 bis"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-bauch",
+  "scope": "*",
+  "find": "Veränderungen nach 2–3 Wochen",
+  "replace": "Veränderungen nach 2–4 Wochen"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "aachen/aquis-plaza",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "duisburg/forum",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "koeln/koeln-arcaden",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "moenchengladbach/minto",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "recklinghausen/palais-vest",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "aachen/aquis-plaza",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "duisburg/forum",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "koeln/koeln-arcaden",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "moenchengladbach/minto",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-huefte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "3 bis 4",
+  "replace": "4"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-oberschenkel",
+  "scope": "*",
+  "find": "etwa 3 bis 4 Wochen",
+  "replace": "etwa 4 Wochen"
+ },
+ {
+  "pathKey": "fettwegspritze/lemon-bottle-backen",
+  "scope": "*",
+  "find": "Ergebnisse sind bereits nach wenigen Tagen sichtbar, das volle Ergebnis zeigt sich innerhalb von 2",
+  "replace": "Veränderungen sind nach 2 bis 4 Wochen sichtbar, das volle Ergebnis zeigt sich nach 6 bis 8"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "*",
+  "find": "24 Stunden solltest du Sport, Sauna, intensive Sonne sowie Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du Sport und Druck auf die behandelte Region vermeiden, eine Woche lang Sauna und intensive Sonne."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "aachen/aquis-plaza",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "duisburg/forum",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "moenchengladbach/minto",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "recklinghausen/palais-vest",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "behandlungen",
+  "find": "24 Stunden solltest du starke Hitze, intensive sportliche Belastung und Druck auf die behandelte Region vermeiden.",
+  "replace": "48 Stunden solltest du intensive sportliche Belastung und Druck auf die behandelte Region vermeiden, eine Woche lang starke Hitze."
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "aachen/aquis-plaza",
+  "find": "den ersten 24 Stunden",
+  "replace": "den ersten 48 Stunden"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "duisburg/forum",
+  "find": "den ersten 24 Stunden",
+  "replace": "den ersten 48 Stunden"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "den ersten 24 Stunden",
+  "replace": "den ersten 48 Stunden"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "moenchengladbach/minto",
+  "find": "den ersten 24 Stunden",
+  "replace": "den ersten 48 Stunden"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "recklinghausen/palais-vest",
+  "find": "den ersten 24 Stunden",
+  "replace": "den ersten 48 Stunden"
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "18 Monate sichtbar bleiben.",
+  "replace": "12 Monate sichtbar bleiben, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "koeln/koeln-arcaden",
+  "find": "18 Monate sichtbar bleiben.",
+  "replace": "12 Monate sichtbar bleiben, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "*",
+  "find": "9 bis 18 Monate an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "aachen/aquis-plaza",
+  "find": "mehrere Monate bis über ein Jahr an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "duisburg/forum",
+  "find": "mehrere Monate bis über ein Jahr an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "mehrere Monate bis über ein Jahr an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "mehrere Monate bis über ein Jahr an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "moenchengladbach/minto",
+  "find": "mehrere Monate bis über ein Jahr an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "recklinghausen/palais-vest",
+  "find": "mehrere Monate bis über ein Jahr an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/augenringe-unterspritzen",
+  "scope": "behandlungen",
+  "find": "mehrere Monate bis über ein Jahr an.",
+  "replace": "9 bis 12 Monate an, oft auch länger."
+ },
+ {
+  "pathKey": "hyaluron/hylase",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "etwa 10 bis 14",
+  "replace": "1 bis 2"
+ },
+ {
+  "pathKey": "hyaluron/hylase",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "etwa 10 bis 14",
+  "replace": "1 bis 2"
+ },
+ {
+  "pathKey": "hyaluron/hylase",
+  "scope": "koeln/koeln-arcaden",
+  "find": "etwa 10 bis 14",
+  "replace": "1 bis 2"
+ },
+ {
+  "pathKey": "hyaluron/jawline",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "dauert etwa 30-45 Minuten,",
+  "replace": "dauert etwa 30-40 Minuten,"
+ },
+ {
+  "pathKey": "hyaluron/jawline",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "dauert etwa 30-45 Minuten,",
+  "replace": "dauert etwa 30-40 Minuten,"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "aachen/aquis-plaza",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "duisburg/forum",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "moenchengladbach/minto",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "recklinghausen/palais-vest",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "koeln/koeln-arcaden",
+  "find": "30 bis 40 Minuten.",
+  "replace": "30 bis 45 Minuten."
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "aachen/aquis-plaza",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "duisburg/forum",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "moenchengladbach/minto",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "aachen/aquis-plaza",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "duisburg/forum",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "moenchengladbach/minto",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "recklinghausen/palais-vest",
+  "find": "20 bis 30",
+  "replace": "30 bis 45"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "aachen/aquis-plaza",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "duisburg/forum",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "moenchengladbach/minto",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/russian-lips",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Behandlung nach 4–6 Monaten",
+  "replace": "Behandlung nach 6–12 Monaten"
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "aachen/aquis-plaza",
+  "find": "tritt nach 2-3 Tagen ein.",
+  "replace": "zeigt sich nach 10-14 Tagen."
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "duisburg/forum",
+  "find": "tritt nach 2-3 Tagen ein.",
+  "replace": "zeigt sich nach 10-14 Tagen."
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "tritt nach 2-3 Tagen ein.",
+  "replace": "zeigt sich nach 10-14 Tagen."
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "moenchengladbach/minto",
+  "find": "tritt nach 2-3 Tagen ein.",
+  "replace": "zeigt sich nach 10-14 Tagen."
+ },
+ {
+  "pathKey": "hyaluron/lippen-aufspritzen",
+  "scope": "recklinghausen/palais-vest",
+  "find": "tritt nach 2-3 Tagen ein.",
+  "replace": "zeigt sich nach 10-14 Tagen."
+ },
+ {
+  "pathKey": "hyaluron/marionettenfalten",
+  "scope": "*",
+  "find": "der Regel 20-30 Minuten.",
+  "replace": "der Regel 30-40 Minuten."
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "duisburg/forum",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "moenchengladbach/minto",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "behandlungen",
+  "find": "12 bis 18",
+  "replace": ""
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "aachen/aquis-plaza",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "duisburg/forum",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "moenchengladbach/minto",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "recklinghausen/palais-vest",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "behandlungen",
+  "find": " Monate oder länger sichtbar",
+  "replace": "auch länger sichtbar"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "aachen/aquis-plaza",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "duisburg/forum",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "koeln/koeln-arcaden",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "moenchengladbach/minto",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "infusionen/anti-aging-infusion",
+  "scope": "recklinghausen/palais-vest",
+  "find": "ca. 30–45 Minuten",
+  "replace": "ca. 20–30 Minuten (mit Beratung 30–45 Minuten)"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bauchdeckenstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "meist eine Nacht stationär",
+  "replace": "meist ein bis zwei Nächte stationär"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bauchdeckenstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "nach etwa 2 Monaten.",
+  "replace": "nach etwa 3 bis 6 Monaten."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bauchdeckenstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "sich ab etwa 3",
+  "replace": "sich nach etwa 3 bis 6"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "OP-Dauer: 1 bis 2",
+  "replace": "OP-Dauer: 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "behandlungen",
+  "find": "OP-Dauer: 1 bis 2",
+  "replace": "OP-Dauer: 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "etwa 1 bis 2",
+  "replace": "etwa 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "behandlungen",
+  "find": "etwa 1 bis 2",
+  "replace": "etwa 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "Regel 1 bis 2",
+  "replace": "Regel 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "behandlungen",
+  "find": "Regel 1 bis 2",
+  "replace": "Regel 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "rund 2 bis 3",
+  "replace": "rund 3 bis 6"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "etwa drei Monaten –",
+  "replace": "etwa drei bis sechs Monaten –"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/bruststraffung",
+  "scope": "behandlungen",
+  "find": "etwa drei Monaten –",
+  "replace": "etwa drei bis sechs Monaten –"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/brustvergroesserung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "6 bis 9 Wochen",
+  "replace": "3 Monaten"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "Betäubung oder im Dämmerschlaf.",
+  "replace": "Betäubung mit Dämmerschlaf."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "Betäubung oder im Dämmerschlaf.",
+  "replace": "Betäubung mit Dämmerschlaf."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "unter Dämmerschlaf oder Vollnarkose.",
+  "replace": "unter örtlicher Betäubung mit Dämmerschlaf."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "unter Dämmerschlaf oder Vollnarkose.",
+  "replace": "unter örtlicher Betäubung mit Dämmerschlaf."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "ambulant oder kurzer Klinikaufenthalt",
+  "replace": "ambulant, am selben Tag nach Hause"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "ambulant oder kurzer Klinikaufenthalt",
+  "replace": "ambulant, am selben Tag nach Hause"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "2 bis 3 Stunden.",
+  "replace": "2 bis 4 Stunden."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "2 bis 3 Stunden.",
+  "replace": "2 bis 4 Stunden."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "etwa 5 bis 7",
+  "replace": "etwa 7 bis 10"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "etwa einer Woche: Die",
+  "replace": "etwa 7 bis 10 Tagen: Die"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "etwa einer Woche: Die",
+  "replace": "etwa 7 bis 10 Tagen: Die"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "nach 1 bis 2",
+  "replace": "nach 2 bis 3"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "vier bis sechs Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "vier bis sechs Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "nach etwa 8 Wochen.",
+  "replace": "nach etwa 2 bis 3 Monaten."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "1 bis 2 Stunden. Ein",
+  "replace": "1 bis 3 Stunden. Ein"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "1 bis 2 Stunden. Ein",
+  "replace": "1 bis 3 Stunden. Ein"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "3–7 Tage: viele Patienten",
+  "replace": "1–2 Wochen: viele Patienten"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "3–7 Tage: viele Patienten",
+  "replace": "1–2 Wochen: viele Patienten"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "nach etwa sechs Wochen",
+  "replace": "nach etwa vier bis sechs Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "behandlungen",
+  "find": "nach etwa sechs Wochen",
+  "replace": "nach etwa vier bis sechs Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/fettabsaugung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "sich ab rund 3",
+  "replace": "sich nach rund 3 bis 6"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/lidstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "Dämmerschlaf oder in Vollnarkose.",
+  "replace": "Dämmerschlaf."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/lidstraffung",
+  "scope": "behandlungen",
+  "find": "Dämmerschlaf oder in Vollnarkose.",
+  "replace": "Dämmerschlaf."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/lidstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "etwa einer Woche entfernt.",
+  "replace": "etwa 7 bis 10 Tagen entfernt."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberarmstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "2 bis 4 Tagen",
+  "replace": "1 bis 2 Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberarmstraffung",
+  "scope": "behandlungen",
+  "find": "2 bis 4 Tagen",
+  "replace": "1 bis 2 Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberarmstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "nach rund 3 Wochen",
+  "replace": "nach rund 4 bis 6 Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberarmstraffung",
+  "scope": "behandlungen",
+  "find": "nach rund 3 Wochen",
+  "replace": "nach rund 4 bis 6 Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberarmstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "nach rund sechs Wochen",
+  "replace": "nach rund vier bis sechs Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberarmstraffung",
+  "scope": "behandlungen",
+  "find": "nach rund sechs Wochen",
+  "replace": "nach rund vier bis sechs Wochen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "Klinikaufenthalt: 2-4 Tage",
+  "replace": "Klinikaufenthalt: 1 Nacht"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "behandlungen",
+  "find": "Klinikaufenthalt: 2-4 Tage",
+  "replace": "Klinikaufenthalt: 1 Nacht"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "etwa 4 bis 6",
+  "replace": "etwa 6"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "behandlungen",
+  "find": "etwa 4 bis 6",
+  "replace": "etwa 6"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "der Regel 2 Stunden.",
+  "replace": "der Regel 1 bis 2 Stunden."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "behandlungen",
+  "find": "der Regel 2 Stunden.",
+  "replace": "der Regel 1 bis 2 Stunden."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "koeln/mediapark-klinik",
+  "find": "dauert etwa 2 Stunden.",
+  "replace": "dauert etwa 1 bis 2 Stunden."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/oberschenkelstraffung",
+  "scope": "behandlungen",
+  "find": "dauert etwa 2 Stunden.",
+  "replace": "dauert etwa 1 bis 2 Stunden."
+ },
+ {
+  "pathKey": "skinbooster",
+  "scope": "behandlungen",
+  "find": "können bis zu sechs Monate anhalten, je nach individueller Hautbeschaffenheit.",
+  "replace": "halten je nach Produkt etwa 6 bis 12 Monate an."
+ },
+ {
+  "pathKey": "skinbooster/mesotherapie-nctf-135-ha",
+  "scope": "aachen/aquis-plaza",
+  "find": "von ein bis zwei",
+  "replace": "von zwei bis vier"
+ },
+ {
+  "pathKey": "skinbooster/mesotherapie-nctf-135-ha",
+  "scope": "duisburg/forum",
+  "find": "von ein bis zwei",
+  "replace": "von zwei bis vier"
+ },
+ {
+  "pathKey": "skinbooster/mesotherapie-nctf-135-ha",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "von ein bis zwei",
+  "replace": "von zwei bis vier"
+ },
+ {
+  "pathKey": "skinbooster/mesotherapie-nctf-135-ha",
+  "scope": "moenchengladbach/minto",
+  "find": "von ein bis zwei",
+  "replace": "von zwei bis vier"
+ },
+ {
+  "pathKey": "skinbooster/mesotherapie-nctf-135-ha",
+  "scope": "recklinghausen/palais-vest",
+  "find": "von ein bis zwei",
+  "replace": "von zwei bis vier"
+ },
+ {
+  "pathKey": "skinbooster/mesotherapie-nctf-135-ha",
+  "scope": "behandlungen",
+  "find": "von ein bis zwei",
+  "replace": "von zwei bis vier"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "aachen/aquis-plaza",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "duisburg/forum",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "moenchengladbach/minto",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "recklinghausen/palais-vest",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/polynukleotide-lachssperma",
+  "scope": "behandlungen",
+  "find": "von ein bis zwei",
+  "replace": "von vier bis sechs"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "aachen/aquis-plaza",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "duisburg/forum",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "moenchengladbach/minto",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "recklinghausen/palais-vest",
+  "find": "Regel 6 bis 12",
+  "replace": "Regel bis zu 6"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "aachen/aquis-plaza",
+  "find": "in der Regel etwa",
+  "replace": "in der Regel bis zu"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "in der Regel etwa",
+  "replace": "in der Regel bis zu"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "duisburg/forum",
+  "find": "in der Regel etwa",
+  "replace": "in der Regel bis zu"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "in der Regel etwa",
+  "replace": "in der Regel bis zu"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "moenchengladbach/minto",
+  "find": "in der Regel etwa",
+  "replace": "in der Regel bis zu"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "recklinghausen/palais-vest",
+  "find": "in der Regel etwa",
+  "replace": "in der Regel bis zu"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "aachen/aquis-plaza",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[5].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[5].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "moenchengladbach/minto",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[5].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "recklinghausen/palais-vest",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[5].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqs[6].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "duisburg/forum",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqs[3].answer[0].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "aachen/aquis-plaza",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[3].answer[5].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[3].answer[5].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "moenchengladbach/minto",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[3].answer[5].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "recklinghausen/palais-vest",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqSets[0].faqs[3].answer[5].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "6 bis 12",
+  "replace": "6",
+  "pfad": "faq.faqs[8].answer[5].children[1].text"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "aachen/aquis-plaza",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "duisburg/forum",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "koeln/koeln-arcaden",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "moenchengladbach/minto",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "recklinghausen/palais-vest",
+  "find": "kommenden 1-2 Wochen verbessert",
+  "replace": "kommenden Wochen verbessert"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "aachen/aquis-plaza",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "koeln/koeln-arcaden",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "moenchengladbach/minto",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "recklinghausen/palais-vest",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/profhilo",
+  "scope": "behandlungen",
+  "find": "ein bis zwei Wochen",
+  "replace": "4 bis 8 Wochen nach der zweiten Sitzung"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "aachen/aquis-plaza",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "duisburg/forum",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "moenchengladbach/minto",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "recklinghausen/palais-vest",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "behandlungen",
+  "find": "ein bis zwei Wochen",
+  "replace": "zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "aachen/aquis-plaza",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "duisburg/forum",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "koeln/koeln-arcaden",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "moenchengladbach/minto",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "recklinghausen/palais-vest",
+  "find": "folgenden gut 10 Wochen",
+  "replace": "folgenden zwei bis drei Monaten"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "eine Baby Botox Behandlung beginnen bei MY HEALTH & BEAUTY ab 199,99 €.",
+  "replace": "eine Barbie Botox Behandlung bei MY HEALTH & BEAUTY richten sich nach der Zahl der behandelten Zonen."
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "*",
+  "find": "eine Baby Botox® Behandlung beginnen",
+  "replace": "eine Botox® Behandlung gegen Bunny Lines beginnen"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen das Erdbeerkinn beginnen"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox-Behandlung gegen Halsfalten (Platysma) beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "aachen/aquis-plaza",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "duisburg/forum",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "moenchengladbach/minto",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "recklinghausen/palais-vest",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "behandlungen",
+  "find": "eine Baby Botox Behandlung beginnen",
+  "replace": "eine Botox Behandlung gegen Krähenfüße beginnen"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "Die Kosten für eine Baby Botox Behandlung beginnen bei",
+  "replace": "Die Kosten für ein Facelift beginnen bei"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "Die Kosten für eine Baby Botox Behandlung beginnen bei",
+  "replace": "Die Kosten für ein Facelift beginnen bei"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "Der genaue Preis hängt von den behandelten Bereichen und der benötigten Menge des Präparats ab.",
+  "replace": "Der genaue Preis hängt vom Umfang des Eingriffs und der gewählten Technik ab."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "Der genaue Preis hängt von den behandelten Bereichen und der benötigten Menge des Präparats ab.",
+  "replace": "Der genaue Preis hängt vom Umfang des Eingriffs und der gewählten Technik ab."
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "koeln/mediapark-klinik",
+  "find": "auf Deine Wünsche und Deine Mimik abgestimmt ist",
+  "replace": "auf Deine Wünsche und Deine Gesichtszüge abgestimmt ist"
+ },
+ {
+  "pathKey": "schoenheitsoperationen/facelift",
+  "scope": "behandlungen",
+  "find": "auf Deine Wünsche und Deine Mimik abgestimmt ist",
+  "replace": "auf Deine Wünsche und Deine Gesichtszüge abgestimmt ist"
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Für wen ist eine Kinnkorrektur mit Hyaluron geeignet?",
+  "replace": "Für wen ist eine Lippenkorrektur mit Hyaluron geeignet?"
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Eine Kinnkorrektur mit Hyaluron eignet sich für Dich, wenn Du mit der Form oder Projektion Deines Kinns unzufrieden bist, aber keine Operation möchtest.",
+  "replace": "Eine Lippenkorrektur mit Hyaluron eignet sich für Dich, wenn Du mit dem Ergebnis einer früheren Lippenunterspritzung unzufrieden bist."
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Fliehendem oder zurückgesetztem Kinn",
+  "replace": "Asymmetrien der Lippen"
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Leichter Doppelkinn-Optik",
+  "replace": "Unebenheiten oder Knötchen"
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Unharmonischem Profil",
+  "replace": "Verhärtungen nach einer früheren Behandlung"
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Ungleichen Gesichtszügen",
+  "replace": "Unnatürlicher Form oder zu viel Volumen"
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Wunsch nach definierterem Untergesicht",
+  "replace": "Wunsch nach einer harmonischeren Lippenkontur"
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Auch wenn Du Dein Profil verbessern möchtest, etwa für Fotos oder aus ästhetischen Gründen, kann eine Kinnkorrektur mit Hyaluron eine sehr effektive Lösung sein.",
+  "replace": "Oft wird altes Hyaluron zuerst mit Hylase aufgelöst; nach etwa zwei Wochen werden die Lippen neu geformt."
+ },
+ {
+  "pathKey": "hyaluron/lippenkorrektur",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Wichtig: Die Behandlung ersetzt keine kieferchirurgische Korrektur bei starken Fehlstellungen.",
+  "replace": "Wichtig: Nicht jede Unregelmäßigkeit lässt sich sofort neu unterspritzen – manchmal muss altes Hyaluron zuerst aufgelöst werden."
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Gibt es Nebenwirkungen bei der Mesotherapie für die Haare?",
+  "replace": "Gibt es Nebenwirkungen bei der PRP-Haartherapie?"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Gibt es Nebenwirkungen bei der Mesotherapie für die Haare?",
+  "replace": "Gibt es Nebenwirkungen bei der PRP-Haartherapie?"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Die Mesotherapie gilt als sehr sichere und schonende Behandlung. Da nur kleine Mengen an Wirkstoffen verwendet werden und diese direkt in die Kopfhaut injiziert werden, sind Nebenwirkungen selten.",
+  "replace": "Die PRP-Haartherapie gilt als sehr sichere und schonende Behandlung. Da nur Dein eigenes, aufbereitetes Blutplasma direkt in die Kopfhaut injiziert wird, sind Nebenwirkungen selten."
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "koeln/koeln-arcaden",
+  "find": "Die Mesotherapie gilt als sehr sichere und schonende Behandlung. Da nur kleine Mengen an Wirkstoffen verwendet werden und diese direkt in die Kopfhaut injiziert werden, sind Nebenwirkungen selten.",
+  "replace": "Die PRP-Haartherapie gilt als sehr sichere und schonende Behandlung. Da nur Dein eigenes, aufbereitetes Blutplasma direkt in die Kopfhaut injiziert wird, sind Nebenwirkungen selten."
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "ausschließlich mit hochwertigen Wirkstoffen und sterilen Techniken gearbeitet",
+  "replace": "ausschließlich mit Deinem eigenen Blutplasma und sterilen Techniken gearbeitet"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "koeln/koeln-arcaden",
+  "find": "ausschließlich mit hochwertigen Wirkstoffen und sterilen Techniken gearbeitet",
+  "replace": "ausschließlich mit Deinem eigenen Blutplasma und sterilen Techniken gearbeitet"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Welche weiteren Hyaluron-Behandlungen sind nach Hylase in Düsseldorf möglich?",
+  "replace": "Welche Hyaluron-Behandlungen lassen sich mit der Nasolabialfalte kombinieren?"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Nach vollständiger Abheilung und erneuter ärztlicher Untersuchung können abhängig von Deiner Anatomie und Deinem Behandlungsziel weitere Behandlungen infrage kommen:",
+  "replace": "Abhängig von Deiner Anatomie und Deinem Behandlungsziel können nach ärztlicher Untersuchung weitere Behandlungen infrage kommen:"
+ },
+ {
+  "pathKey": "hyaluron/nasolabialfalte",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Eine neue Fillerbehandlung sollte erst erfolgen, wenn das Gewebe ausreichend beurteilt werden kann und keine medizinischen Gründe dagegensprechen.",
+  "replace": "Ob eine Kombination sinnvoll ist, klären wir im ärztlichen Gespräch – nur wenn keine medizinischen Gründe dagegensprechen."
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Muss die Stirn zusammen mit der Zornesfalte behandelt werden?",
+  "replace": "Kann ich die Krähenfüße zusammen mit Stirn oder Zornesfalte behandeln lassen?"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Nicht zwingend. Weil Stirn- und Glabellamuskulatur funktionell zusammenwirken,",
+  "replace": "Ja. Weil die Muskeln rund um Augen, Stirn und Zornesfalte zusammenwirken,"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Ärztlich geplant in Berlin",
+  "replace": "Ärztlich geplant in den Düsseldorf Arcaden"
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "duisburg/forum",
+  "find": "Ärztlich geplant in den Köln Arcaden",
+  "replace": "Ärztlich geplant im Forum Duisburg"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Ärztlich geplant in den Köln Arcaden",
+  "replace": "Ärztlich geplant im Gesundbrunnen-Center"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Deiner PRP-Behandlung in Köln zu erreichen",
+  "replace": "Deiner PRP-Behandlung in Berlin zu erreichen"
+ },
+ {
+  "pathKey": "skinbooster/vampir-lifting-prp",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Lounge in den Köln Arcaden beurteilen",
+  "replace": "Lounge in den Düsseldorf Arcaden beurteilen"
+ },
+ {
+  "pathKey": "hyaluron/hylase",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Ja, das ist bei uns in Köln häufig der Fall.",
+  "replace": "Ja, das ist bei uns in Berlin häufig der Fall."
+ },
+ {
+  "pathKey": "hyaluron/hylase",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Ja, das ist bei uns in Köln häufig der Fall.",
+  "replace": "Ja, das ist bei uns in Düsseldorf häufig der Fall."
+ },
+ {
+  "pathKey": "hyaluron/kinnkorrektur",
+  "scope": "duisburg/forum",
+  "find": "Kinnkorrektur Berlin - Kinn unterspritzen",
+  "replace": "Kinnkorrektur Duisburg - Kinn unterspritzen"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "Nach Deiner Botox®-Behandlung in Köln erhältst",
+  "replace": "Nach Deiner Botox®-Behandlung in Leipzig erhältst"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "duisburg/forum",
+  "find": "Du findest uns in den Köln Arcaden im Untergeschoss, neben von DM.",
+  "replace": "Du findest uns im Forum Duisburg im Untergeschoss zwischen McPaper und Cosmo."
+ },
+ {
+  "pathKey": "hyaluron/marionettenfalten",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "Hylase-Behandlung in Köln",
+  "replace": "Hylase-Behandlung in Berlin"
+ },
+ {
+  "pathKey": "hyaluron/marionettenfalten",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/hyaluron/hylase",
+  "replace": "https://www.myhealthandbeauty.com/standorte/berlin/gesundbrunnencenter/hyaluron/hylase",
+  "pfad": "faq.faqs[2].answer[0].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron/marionettenfalten",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Hylase-Behandlung in Köln",
+  "replace": "Hylase-Behandlung in Düsseldorf"
+ },
+ {
+  "pathKey": "hyaluron/marionettenfalten",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "https://www.myhealthandbeauty.com/standorte/koeln/koeln-arcaden/hyaluron/hylase",
+  "replace": "https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/hylase",
+  "pfad": "faq.faqs[2].answer[0].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "aachen/aquis-plaza",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "duisburg/forum",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "moenchengladbach/minto",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "recklinghausen/palais-vest",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "behandlungen",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/nasolabialfalte",
+  "pfad": "about.content[10].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "aachen/aquis-plaza",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "duisburg/forum",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "kaiserslautern/k-in-lautern",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "leipzig/hoefe-am-bruehl",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "moenchengladbach/minto",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "recklinghausen/palais-vest",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "hyaluron",
+  "scope": "behandlungen",
+  "find": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/jawline",
+  "replace": "https://www.myhealthandbeauty.com/behandlungen/hyaluron/kinnkorrektur",
+  "pfad": "about.content[8].children[1].url"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "duisburg/forum",
+  "find": "https://www.myhealthandbeauty.com/standorte/duisburg/forum/anti-haarausfall/kostenlose-haaranalyse",
+  "replace": "https://www.myhealthandbeauty.com/standorte/duisburg/forum/anti-haarausfall/mesotherapie-haare",
+  "pfad": "medicalTeamHighlight.content[0].children[1].url"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "berlin/gesundbrunnencenter",
+  "find": "standorte/koeln/koeln-arcaden/hyaluron/russian-lips",
+  "replace": "standorte/berlin/gesundbrunnencenter/hyaluron/russian-lips"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "https://www.myhealthandbeauty.com/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/haartransplantation",
+  "replace": "https://www.myhealthandbeauty.com/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation"
+ },
+ {
+  "pathKey": "anti-haarausfall/kostenlose-haaranalyse",
+  "scope": "duesseldorf/duesseldorf-arcaden",
+  "find": "Haartransplantation in Düsseldorf",
+  "replace": "Haartransplantation in der MediaPark Klinik Köln"
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "aachen/aquis-plaza",
+  "find": "https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/schoenheitsoperationen/haartransplantation",
+  "replace": "https://www.myhealthandbeauty.com/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation"
+ },
+ {
+  "pathKey": "anti-haarausfall/mesotherapie-haare",
+  "scope": "aachen/aquis-plaza",
+  "find": "Haartransplantation in Aachen",
+  "replace": "Haartransplantation in unserer MediaPark Klinik in Köln"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "aachen/aquis-plaza",
+  "find": "https://www.myhealthandbeauty.com/standorte/aachen/aquis-plaza/schoenheitsoperationen/haartransplantation",
+  "replace": "https://www.myhealthandbeauty.com/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation"
+ },
+ {
+  "pathKey": "anti-haarausfall/prp-haartherapie",
+  "scope": "aachen/aquis-plaza",
+  "find": "Haartransplantation in Aachen",
+  "replace": "Haartransplantation in der MediaPark Klinik Köln"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/3-zonen-botox-preise",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/baby-botox",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/barbie-botox",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/browlift",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/bunny-lines",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/erdbeerkinn",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/full-face-botox",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/halsfalten-platysma",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/hyperhidrose-starkes-schwitzen",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/kraehenfuesse",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/lachfalten",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/lachfalten",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/lipflip",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/masseter",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/stirnfalte",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/zaehneknirschen-bruxismus",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/zaehneknirschen-bruxismus",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "*",
+  "find": "alle 4 bis 6 Monate",
+  "replace": "alle 3 bis 6 Monate"
+ },
+ {
+  "pathKey": "botox/zornesfalte",
+  "scope": "*",
+  "find": "alle 4–6 Monate",
+  "replace": "alle 3–6 Monate"
+ }
+]

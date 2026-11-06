@@ -8,11 +8,15 @@ import { sanitizeReviewsDeep } from "#shared/reviewPrivacy";
 import { rewriteBeforeAfterDeep, rewritesBeforeAfterFor } from "#shared/beforeAfterWording";
 import { normalizePriceWordingDeep } from "#shared/priceWording";
 import { btxToBotoxDeep } from "#shared/seoTerms";
+import { applyTextCorrections, correctionsFor, type TextCorrection } from "#shared/textCorrections";
+import textCorrections from "../../assets/text-corrections.json";
 import {
   applyNewCustomerPricesDeep,
   isSurgeryPathKey,
 } from "#shared/newCustomerOffer";
 import { ADS_NO_DISCOUNT } from "#shared/adsOfferVariant";
+
+const TEXT_CORRECTIONS = textCorrections as TextCorrection[];
 
 // CRITICAL: When the __NUXT_PREVIEW cookie is set (via /api/preview route),
 // the request skips the cache wrapper entirely and carries status=draft.
@@ -202,7 +206,11 @@ async function fetchFromStrapiByMode(
 ) {
   const config = useRuntimeConfig(event);
   const siteMode = config.siteMode || config.public.siteMode;
-  const raw = await fetchFromStrapiRaw(event, preview, previewStatus);
+  // E24: fachliche Korrekturen je Seite (shared/textCorrections.ts), www und go.
+  const raw = applyTextCorrections(
+    await fetchFromStrapiRaw(event, preview, previewStatus),
+    correctionsFor(TEXT_CORRECTIONS, getRequestURL(event).pathname.replace(/^\/api\/strapi/, '')),
+  );
   // TSEO-08: eigene Links mit Weiterleitung gleich aufs Ziel (www).
   // E24: auf www "Botox" statt "BTX" (shared/seoTerms.ts).
   if (siteMode !== 'ads') return btxToBotoxDeep(await rewriteRedirectedLinks(raw));
