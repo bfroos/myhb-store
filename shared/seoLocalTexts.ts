@@ -10,7 +10,9 @@
  * Text, die alte Stadtseite nur Anregung fuer Aufbau und Blickwinkel.
  *
  * Benjamin, 05.11.2026: erst nur Seiten ohne Ranking, damit bestehende
- * Rankings nicht leiden. Seiten mit Ranking bekommen hier keinen Eintrag.
+ * Rankings nicht leiden. 06.11.2026: auch Seiten auf Platz 11 und
+ * schlechter (SISTRIX, 05.11.); nur Seiten in den Top 10 bekommen hier
+ * keinen Eintrag.
  *
  * Die Texte liegen in server/assets/seo-local-texts.json und kommen ueber
  * /api/seo-local-text auf die Seite (nicht ins Browser-Paket). Strapi und
