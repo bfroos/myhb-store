@@ -23,6 +23,7 @@
     :heading-level="firstTeaser === 'comingSoon' ? 1 : 2"
     :card-settings="{ colorTheme: ColorTheme.STRONG }"
   />
+  <BlockRenderer v-if="introBlocks.length > 0" :blocks="introBlocks" />
   <BlockRenderer
     v-if="bottomBlocks && bottomBlocks.length > 0"
     :blocks="bottomBlocks"
@@ -30,6 +31,7 @@
 </template>
 <script setup lang="ts">
 import { ColorTheme } from "~/lib/strapi/dto/enums";
+import { cityIntroBlocks, type CityIntro } from "#shared/cityIntros";
 
 const {
   fetchWithLocations,
@@ -56,6 +58,19 @@ const firstTeaser = computed(() =>
 );
 
 const cityLoaded = await fetchWithLocations();
+
+// www: E24 #421, eigene Einleitung je Stadt unter den Standortkarten
+// (shared/cityIntros.ts). Nicht auf go.
+const { isAdsMode } = useSiteModeFlags();
+const citySlug = String(useRoute().params.citySlug ?? "").toLowerCase();
+const { data: cityIntro } = cityLoaded && !isAdsMode.value
+  ? await useFetch<CityIntro | null>("/api/seo-city-intro", {
+      query: { city: citySlug },
+      key: `seo-city-intro:${citySlug}`,
+      default: () => null,
+    })
+  : { data: ref<CityIntro | null>(null) };
+const introBlocks = computed(() => cityIntroBlocks(cityIntro.value) as any[]);
 
 if (cityLoaded) {
   // TSEO-01: Standortseiten nur auf Deutsch, hreflang nur de + x-default.
