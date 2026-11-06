@@ -450,15 +450,21 @@ const bookingButtonVisible = computed(
   () =>
     forceBothButtons.value ||
     (strapiMode.value && !!props.cta) ||
-    props.showBookingButton,
+    props.showBookingButton ||
+    // Wer den Rabatt nicht sehen darf, bekommt dort wenigstens „Termin buchen“.
+    (rabattSeite.value && !rabattBerechtigt.value),
 );
 // Google ohne Rabatt (#2042): auf go.* kein "20 % Rabatt sichern".
-const discountButtonVisible = computed(
+// Benjamin 06.11.2026: den 20-%-Knopf sieht nur, wer ueber eine Meta-Anzeige
+// kam (shared/rabattBerechtigt.ts). Vorher sah ihn jeder www-Besucher.
+const rabattBerechtigt = useRabattBerechtigt();
+const rabattSeite = computed(
   () =>
     !klinik.value &&
     !(ADS_NO_DISCOUNT && isAdsMode.value) &&
     (forceBothButtons.value || !!props.showGlobalDiscount),
 );
+const discountButtonVisible = computed(() => rabattSeite.value && rabattBerechtigt.value);
 
 // go.: Neukundenpreis (20 % Newsletter-Rabatt eingerechnet). Texte sind
 // deutsch; andere Sprachen zeigen nichts.

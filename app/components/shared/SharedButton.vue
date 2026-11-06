@@ -60,7 +60,22 @@ const istBuchungOderRabatt = (b: SharedButtonDto | null | undefined) =>
     (b.method === "action" &&
       (b.action === SharedButtonAction.APPOINTMENT_BOOKING ||
         b.action === SharedButtonAction.NEWSLETTER_SIGN_UP)));
+// Benjamin 06.11.2026: Der Rabatt-Dialog (20-%-Code) nur fuer Besucher aus einer
+// Meta-Anzeige (shared/rabattBerechtigt.ts). Fuer alle anderen wird aus jedem
+// Rabatt-Knopf – auch aus Strapi-Inhalten und Blog – ein normaler Termin-Knopf.
+const rabattBerechtigt = useRabattBerechtigt();
 const button = computed<SharedButtonDto | null>(() => {
+  if (
+    props.button?.method === "action" &&
+    props.button.action === SharedButtonAction.NEWSLETTER_SIGN_UP &&
+    !rabattBerechtigt.value
+  ) {
+    return {
+      ...props.button,
+      label: t("cta.bookAppointment"),
+      action: SharedButtonAction.APPOINTMENT_BOOKING,
+    };
+  }
   if (klinikZiel.value && !props.ohneSeitenKontext && istBuchungOderRabatt(props.button)) {
     return {
       label: KLINIK_CTA_LABEL,
