@@ -17,6 +17,9 @@
           @play="handleVideoPlay(story.id)"
         />
       </UiOrganismTilesCard>
+      <p v-if="!isAdsMode" class="stories__alle">
+        <NuxtLink :to="VIDEOS_PATH">Alle Videos ansehen</NuxtLink>
+      </p>
     </div>
   </UiLayoutSectionBlock>
 </template>
@@ -24,8 +27,11 @@
 <script setup lang="ts">
 import type { BlockStoriesDto } from "~/lib/strapi/dto/components";
 import type { StoryDto } from "~/lib/strapi/dto/collections";
+import { VIDEOS_PATH } from "#shared/storyVideos";
 
 const props = defineProps<BlockStoriesDto>();
+// Link auf die Videoseiten (E24), die gibt es nur auf www.
+const { isAdsMode } = useSiteModeFlags();
 
 const activeVideoId = ref<string | number | null>(null);
 const videoRefs = ref<Map<string | number, { pause: () => void }>>(new Map());
@@ -69,5 +75,15 @@ function handleVideoPlay(videoId: string | number): void {
 <style scoped>
 .stories__heading {
   margin: 0;
+}
+.stories__alle {
+  margin: 16px 0 0;
+  text-align: center;
+}
+.stories__alle a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 </style>
