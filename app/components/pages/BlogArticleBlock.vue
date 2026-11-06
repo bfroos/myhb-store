@@ -59,43 +59,55 @@ const props = defineProps<{
   footnotes?: StrapiRichText;
 }>();
 
-// Ratgeber-Layout (myhb-os#418): Die Seite kann drei Einschuebe liefern.
+// Ratgeber-Layout (myhb-os#418): Die Seite kann Einschuebe liefern.
 // "behandlung" ersetzt die erste schlichte blog.cta (sonst nach dem ersten
-// Block), "mitte" steht nach der Haelfte des Textes, "ende" vor den FAQ.
+// Block), "bild1" steht nach dem ersten Textabschnitt, "mitte" nach der
+// Haelfte, "bild2" bei drei Vierteln, "ende" vor den FAQ.
 const slots = useSlots();
 const segments = computed(() => {
   const blocks = props.components ?? [];
   const out: Array<{ blocks?: StrapiBlock[]; slot?: string }> = [];
-  const push = (b: StrapiBlock[]) => b.length && out.push({ blocks: b });
 
   const faqAt = blocks.findIndex((b) => b.__component === "blocks.faq");
   const body = faqAt >= 0 ? blocks.slice(0, faqAt) : blocks;
   const tail = faqAt >= 0 ? blocks.slice(faqAt) : [];
+  const n = body.length;
 
   const ctaAt = slots.behandlung ? body.findIndex((b) => b.__component === "blog.cta") : -1;
-  const cardAt = slots.behandlung ? (ctaAt >= 0 ? ctaAt : Math.min(1, body.length)) : -1;
-  const mid = slots.mitte ? Math.max(cardAt + 2, Math.ceil(body.length / 2)) : -1;
+  const cardAt = ctaAt >= 0 ? ctaAt : Math.min(1, n);
+  // Einschub -> Index des Blocks, vor dem er steht (n = nach dem letzten)
+  const plan: Array<[string, number]> = [
+    ["behandlung", cardAt],
+    ["bild1", Math.min(2, n)],
+    ["mitte", Math.max(cardAt + 2, Math.ceil(n / 2))],
+    ["bild2", Math.max(cardAt + 3, Math.ceil((n * 3) / 4))],
+  ];
+  const at = new Map<number, string[]>();
+  for (const [name, i] of plan) {
+    if (!slots[name]) continue;
+    const idx = Math.min(i, n);
+    at.set(idx, [...(at.get(idx) ?? []), name]);
+  }
 
   let run: StrapiBlock[] = [];
-  body.forEach((b, i) => {
-    if (i === cardAt) {
-      push(run);
-      run = [];
-      out.push({ slot: "behandlung" });
-      if (i === ctaAt) return;
+  const flush = () => {
+    if (run.length) out.push({ blocks: run });
+    run = [];
+  };
+  for (let i = 0; i <= n; i++) {
+    const names = at.get(i);
+    if (names) {
+      flush();
+      for (const name of names) out.push({ slot: name });
     }
-    if (i === mid) {
-      push(run);
-      run = [];
-      out.push({ slot: "mitte" });
-    }
-    run.push(b);
-  });
-  push(run);
-  if (cardAt >= body.length) out.push({ slot: "behandlung" });
-  if (slots.mitte && mid >= body.length) out.push({ slot: "mitte" });
+    if (i === n) break;
+    // Die schlichte CTA weicht der Behandlungskarte
+    if (i === ctaAt && names?.includes("behandlung")) continue;
+    run.push(body[i]!);
+  }
+  flush();
   if (slots.ende) out.push({ slot: "ende" });
-  push(tail);
+  if (tail.length) out.push({ blocks: tail });
   return out;
 });
 

@@ -21,6 +21,12 @@
     <template v-if="bookingPathKey" #mitte>
       <BlogStoryVideos :path-key="bookingPathKey" />
     </template>
+    <template v-if="bilder[0]" #bild1>
+      <BlogArticleImage :bild="bilder[0]" />
+    </template>
+    <template v-if="bilder[1]" #bild2>
+      <BlogArticleImage :bild="bilder[1]" />
+    </template>
     <template v-if="zeigeHautanalyse" #ende>
       <BlockHautanalyseCta :content="`ratgeber-${slug}`" medium="ratgeber" />
     </template>
@@ -31,6 +37,7 @@
 <script setup lang="ts">
 import { blogTreatmentPathKey } from "#shared/blogTreatment";
 import { hatHautanalyseBlock } from "#shared/hautanalyseCta";
+import { blogBilder } from "#shared/blogBilder";
 
 const { fetchPage, seo, article, breadcrumbItems, localizations } = useBlogArticlePage();
 const { isAdsMode } = useSiteModeFlags();
@@ -43,6 +50,7 @@ const bookingPathKey = computed(() =>
 );
 
 const slug = computed(() => String(blogRoute.params.slug ?? ""));
+const bilder = computed(() => (!isAdsMode.value && blogLocale.value === "de" ? blogBilder(slug.value) : []));
 const zeigeHautanalyse = computed(() => !!bookingPathKey.value && hatHautanalyseBlock(bookingPathKey.value));
 
 const pageLoaded = await fetchPage();
