@@ -35,7 +35,7 @@ export function hatHautanalyseBlock(pathKey?: string | null): boolean {
  */
 export function hautanalyseDeeplink(
   content: string,
-  medium: "behandlungsseite" | "startseite" = "behandlungsseite",
+  medium: "behandlungsseite" | "startseite" | "ratgeber" = "behandlungsseite",
 ): string {
   const url = new URL(HAUTANALYSE_APP_URL);
   url.searchParams.set("utm_source", "website");

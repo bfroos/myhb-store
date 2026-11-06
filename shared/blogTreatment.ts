@@ -8,10 +8,12 @@
  */
 const RULES: ReadonlyArray<readonly [RegExp, string]> = [
   [/haartransplantation|schonheitsoperation|schoenheitsoperation|bruststraffung/, ""],
+  [/gummy-smile/, "botox/gummy-smile"],
   [/lip-flip/, "botox/lipflip"],
   [/lippen|(^|-)lip(-|$)/, "hyaluron/lippen-aufspritzen"],
   [/hylase/, "hyaluron/hylase"],
-  [/augenringe|traenen/, "hyaluron/augenringe-unterspritzen"],
+  // Augenpartie behandeln wir mit Lumi Eyes, nicht mit Hyaluron (Benjamin 06.11.2026)
+  [/augenringe|traenen|unter-den-augen/, "skinbooster/lumi-eyes-polynukleotide"],
   [/jawline/, "hyaluron/jawline"],
   [/nasolabial/, "hyaluron/nasolabialfalte"],
   [/masseter/, "botox/masseter"],

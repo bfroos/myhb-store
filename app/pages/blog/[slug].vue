@@ -13,12 +13,31 @@
     :components="article?.components"
     :displayDate="article?.displayDate"
     :footnotes="article?.footnotes"
-  />
+  >
+    <!-- Ratgeber-Layout (myhb-os#418): Behandlung, Kundenvideos, Hautanalyse -->
+    <template v-if="bookingPathKey" #behandlung>
+      <BlogTreatmentBox :path-key="bookingPathKey" card />
+    </template>
+    <template v-if="bookingPathKey" #mitte>
+      <BlogStoryVideos :path-key="bookingPathKey" />
+    </template>
+    <template v-if="bilder[0]" #bild1>
+      <BlogArticleImage :bild="bilder[0]" />
+    </template>
+    <template v-if="bilder[1]" #bild2>
+      <BlogArticleImage :bild="bilder[1]" />
+    </template>
+    <template v-if="zeigeHautanalyse" #ende>
+      <BlockHautanalyseCta :content="`ratgeber-${slug}`" medium="ratgeber" />
+    </template>
+  </PagesBlogArticleBlock>
   <BlogTreatmentBox v-if="bookingPathKey" :path-key="bookingPathKey" />
 </template>
 
 <script setup lang="ts">
 import { blogTreatmentPathKey } from "#shared/blogTreatment";
+import { hatHautanalyseBlock } from "#shared/hautanalyseCta";
+import { blogBilder } from "#shared/blogBilder";
 
 const { fetchPage, seo, article, breadcrumbItems, localizations } = useBlogArticlePage();
 const { isAdsMode } = useSiteModeFlags();
@@ -29,6 +48,10 @@ const bookingPathKey = computed(() =>
     ? blogTreatmentPathKey(String(blogRoute.params.slug ?? ""))
     : null,
 );
+
+const slug = computed(() => String(blogRoute.params.slug ?? ""));
+const bilder = computed(() => (!isAdsMode.value && blogLocale.value === "de" ? blogBilder(slug.value) : []));
+const zeigeHautanalyse = computed(() => !!bookingPathKey.value && hatHautanalyseBlock(bookingPathKey.value));
 
 const pageLoaded = await fetchPage();
 

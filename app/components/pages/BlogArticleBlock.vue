@@ -30,7 +30,10 @@
           v-if="components && components.length > 0"
           class="blogArticle__main"
         >
-          <BlockRenderer :blocks="components" />
+          <template v-for="(seg, i) in segments" :key="i">
+            <BlockRenderer v-if="seg.blocks" :blocks="seg.blocks" />
+            <slot v-else :name="seg.slot" />
+          </template>
         </main>
         <footer
           v-if="footnotes && footnotes.length > 0"
@@ -47,7 +50,7 @@ import { ImageFormat, ImageBreakpoint } from "~/lib/strapi/dto/enums";
 import type { StrapiMedia } from "~/lib/strapi/dto/types";
 import type { StrapiBlock, StrapiRichText } from "~/lib/strapi/dto/types";
 
-defineProps<{
+const props = defineProps<{
   headline?: string;
   intro?: string;
   cover?: StrapiMedia;
@@ -55,6 +58,62 @@ defineProps<{
   displayDate?: string;
   footnotes?: StrapiRichText;
 }>();
+
+// Ratgeber-Layout (myhb-os#418): Die Seite kann Einschuebe liefern.
+// "behandlung" ersetzt die erste schlichte blog.cta (sonst vor dem dritten
+// Block), "bild1" steht nach "Auf einen Blick", "mitte" (Videos) nach der
+// Haelfte, "bild2" bei drei Vierteln, "ende" vor den FAQ.
+const slots = useSlots();
+const segments = computed(() => {
+  const blocks = props.components ?? [];
+  const out: Array<{ blocks?: StrapiBlock[]; slot?: string }> = [];
+
+  const faqAt = blocks.findIndex((b) => b.__component === "blocks.faq");
+  const body = faqAt >= 0 ? blocks.slice(0, faqAt) : blocks;
+  const tail = faqAt >= 0 ? blocks.slice(faqAt) : [];
+  const n = body.length;
+
+  const ctaAt = slots.behandlung ? body.findIndex((b) => b.__component === "blog.cta") : -1;
+  const cardAt = ctaAt >= 0 ? ctaAt : Math.min(2, n);
+  // Einschub -> Index des Blocks, vor dem er steht (n = nach dem letzten).
+  // Nie zwei Einschuebe an derselben Stelle: belegte Stellen ruecken weiter.
+  const wunsch: Array<[string, number]> = [
+    ["behandlung", cardAt],
+    ["bild1", Math.min(1, n)],
+    ["mitte", Math.ceil(n / 2) + 1],
+    ["bild2", Math.ceil((n * 3) / 4) + 1],
+  ];
+  const at = new Map<number, string[]>();
+  const belegt = new Set<number>();
+  for (const [name, i] of wunsch) {
+    if (!slots[name]) continue;
+    let idx = Math.min(i, n);
+    while (idx < n && belegt.has(idx)) idx++;
+    belegt.add(idx);
+    at.set(idx, [...(at.get(idx) ?? []), name]);
+  }
+
+  let run: StrapiBlock[] = [];
+  const flush = () => {
+    if (run.length) out.push({ blocks: run });
+    run = [];
+  };
+  for (let i = 0; i <= n; i++) {
+    const names = at.get(i);
+    if (names) {
+      flush();
+      for (const name of names) out.push({ slot: name });
+    }
+    if (i === n) break;
+    // Die schlichte CTA weicht der Behandlungskarte
+    if (i === ctaAt && names?.includes("behandlung")) continue;
+    run.push(body[i]!);
+  }
+  flush();
+  if (slots.ende) out.push({ slot: "ende" });
+  if (tail.length) out.push({ blocks: tail });
+  return out;
+});
 
 // The article already supplies the section and card, so blocks inside it must not nest a second one.
 provide("blockSurface", "inline");

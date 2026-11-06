@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import thumbs from "./storyVideoThumbs.json" with { type: "json" };
-import { buildStoryVideos, groupStoryVideos, slugify, storyVideoSchema, toStoryVideo, type StoryInput } from "./storyVideos.ts";
+import { buildStoryVideos, groupStoryVideos, pickStoryVideos, slugify, storyVideoSchema, toStoryVideo, type StoryInput } from "./storyVideos.ts";
 
 const v = (url: string) => ({ url, mime: "video/mp4" });
 
@@ -144,4 +144,15 @@ test("Story ohne Vorschaubild faellt heraus", () => {
 test("Bilderliste passt zu den Slugs", () => {
   for (const s of thumbs as string[]) assert.match(s, /^[a-z0-9]+(-[a-z0-9]+)*$/);
   for (const x of all) assert.ok((thumbs as string[]).includes(x.slug), `kein Bild: ${x.slug}`);
+});
+
+test("Ratgeber: erst die eigene Behandlung, dann die Kategorie, nie fremde Themen", () => {
+  const all = buildStoryVideos(STORIES);
+  const zf = pickStoryVideos(all, "botox/zornesfalte", 3);
+  assert.equal(zf.length, 3);
+  assert.equal(zf[0]!.treatment!.pathKey, "botox/zornesfalte");
+  assert.ok(zf.every((x) => x.treatment!.pathKey.split("/")[0] === "botox"));
+  assert.ok(zf.every((x) => !/arabisch/i.test(x.title)));
+  assert.deepEqual(pickStoryVideos(all, "skinbooster/lumi-eyes-polynukleotide"), []);
+  assert.deepEqual(pickStoryVideos(all, null), []);
 });

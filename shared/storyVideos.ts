@@ -332,3 +332,26 @@ const THUMBS = new Set<string>(thumbSlugs as string[]);
 
 /** Gibt es public/videos/thumbs/<slug>.jpg? (Liste aus scripts/video-thumbs.mjs) */
 export const hasStoryThumb = (slug: string) => THUMBS.has(slug);
+
+/**
+ * Kundenvideos fuer einen Ratgeber-Artikel (myhb-os#418): erst Videos genau
+ * dieser Behandlung, dann aus derselben Kategorie. Die Kategorie zaehlt nur bei
+ * Botox (ueberall derselbe Wirkstoff) oder wenn der Artikel selbst zur ganzen
+ * Kategorie gehoert; ein PRP-Video gehoert nicht in einen Lumi-Eyes-Artikel.
+ * Ohne Treffer leer, damit kein fremdes Thema im Artikel steht.
+ */
+export function pickStoryVideos(videos: StoryVideo[], pathKey: string | null | undefined, limit = 3): StoryVideo[] {
+  const key = String(pathKey ?? "");
+  if (!key) return [];
+  const cat = key.split("/")[0];
+  const exakt = videos.filter((v) => v.treatment?.pathKey === key);
+  const breit = cat === "botox" || !key.includes("/");
+  const kategorie = breit
+    ? videos.filter((v) => v.treatment && v.treatment.pathKey !== key && v.treatment.pathKey.split("/")[0] === cat)
+    : [];
+  const gesehen = new Set<string>();
+  return [...exakt, ...kategorie]
+    .filter((v) => !/arabisch/i.test(`${v.title} ${v.h1}`))
+    .filter((v) => !gesehen.has(v.title) && gesehen.add(v.title))
+    .slice(0, limit);
+}
