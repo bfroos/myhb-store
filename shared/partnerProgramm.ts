@@ -21,9 +21,9 @@ export const PARTNER_PATH = "/partnerpraxis";
 export const PARTNER_SUBDOMAIN = "partner.myhealthandbeauty.com";
 
 export const PARTNER_SEO = {
-  title: "Ästhetische Praxis gründen: Partnerprogramm für Ärzte | MY HEALTH & BEAUTY",
+  title: "Privatpraxis für ästhetische Medizin gründen | MY HEALTH & BEAUTY",
   description:
-    "Als Arzt in der ästhetischen Medizin selbstständig machen: eigene Praxis unter der Marke MY HEALTH & BEAUTY, mit Website, Software, Einkauf und Service aus einer Hand.",
+    "Als Arzt eine Privatpraxis für ästhetische Medizin gründen: unter der Marke MY HEALTH & BEAUTY, mit Website, Software, Einkauf und Ausbildung aus einer Hand.",
 };
 
 export type Kachel = { titel: string; text: string };
@@ -166,6 +166,16 @@ export const FRAGEN: Frage[] = [
     frage: "Welche Voraussetzungen brauche ich?",
     antwort:
       "Eine ärztliche Approbation in Deutschland. Ein Facharzttitel ist kein Muss. Erfahrung in der Ästhetik ist ein großer Vorteil, und wenn sie dir noch fehlt, sammelst du sie zuerst an unseren Standorten. Heilpraktiker können nicht Partner werden, denn bei uns behandeln nur Ärzte.",
+  },
+  {
+    frage: "Kann jeder Arzt eine Privatpraxis eröffnen?",
+    antwort:
+      "Ja. Für eine Privatpraxis brauchst du die Approbation, aber keine Kassenzulassung. Ästhetische Behandlungen zahlen deine Kunden selbst. Du meldest die Praxis bei deiner Ärztekammer an und schließt eine Berufshaftpflicht ab. Bei allen Schritten helfen wir dir.",
+  },
+  {
+    frage: "Gibt es einen Facharzt für ästhetische Medizin?",
+    antwort:
+      "Nein, einen eigenen Facharzt für ästhetische Medizin gibt es in Deutschland nicht. Behandeln darf jeder Arzt, der die Behandlung sicher beherrscht. Genau dafür kannst du bei uns zuerst an unseren Standorten lernen.",
   },
   {
     frage: "Kann ich mich bei euch ausbilden lassen, bevor ich eine eigene Praxis eröffne?",

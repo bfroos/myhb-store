@@ -4,7 +4,7 @@
       <div class="pp__breite pp__heroRaster">
         <div class="pp__heroText">
         <p class="pp__eyebrow">Partnerprogramm für Ärzte</p>
-        <h1>Deine eigene Praxis für ästhetische Medizin. Mit allem, was dazugehört!</h1>
+        <h1>Deine eigene Privatpraxis für ästhetische Medizin. Mit allem, was dazugehört!</h1>
         <p class="pp__lead">
           Du willst dich als Arzt in der Ästhetik selbstständig machen? Eröffne deine Praxis als
           Partner von MY HEALTH & BEAUTY. Marke, Website, Software und Einkauf kommen fertig von uns.
@@ -103,7 +103,7 @@
     <section class="pp__abschnitt">
       <div class="pp__breite">
         <p class="pp__eyebrow">Dein Standort</p>
-        <h2>Drei Wege zu deiner eigenen Praxis</h2>
+        <h2>Neu gründen oder übernehmen: drei Wege zu deiner eigenen Praxis</h2>
         <img class="pp__band" :src="BILDER.lounge.src" :alt="BILDER.lounge.alt" :width="BILDER.lounge.width" :height="BILDER.lounge.height" loading="lazy">
         <ul class="pp__karten pp__karten--drei" role="list">
           <li v-for="k in STANDORT_WEGE" :key="k.titel" class="pp__karte pp__karte--rand">
