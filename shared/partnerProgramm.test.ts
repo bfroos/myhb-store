@@ -89,7 +89,7 @@ test("Wortwahl: keine riskanten Begriffe, keine weiblichen Formen, Titel kurz ge
   ].join("\n");
   // "Franchise" nur in der Frage, die den Unterschied erklaert.
   assert.equal((texte.match(/Franchise/g) ?? []).length, 1);
-  assert.doesNotMatch(texte, /Botox/i);
+  // "Botox" ist seit 07.11.2026 erlaubt (Benjamin in der Mail-Werkstatt; die Seite richtet sich an Ärzte).
   assert.doesNotMatch(texte, /garant/i);
   assert.doesNotMatch(texte, /Ärztinnen|Kundinnen|Beraterinnen|Patientinnen/);
   assert.doesNotMatch(texte, /MYH&B/);

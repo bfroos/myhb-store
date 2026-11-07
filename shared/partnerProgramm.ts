@@ -50,10 +50,10 @@ export const BILDER = {
  * Partner, denn jede Praxis traegt die Marke.
  */
 export const AUSBILDUNG = {
-  titel: "Erst bei uns lernen, dann selbstständig!",
+  titel: "Lerne erst bei uns, bevor du selbstständig startest!",
   text: "Dir fehlt noch Erfahrung in der Ästhetik? Dann starte als Arzt an einem unserer Standorte. Dort lernst du alle Behandlungen, die wir anbieten, an der Seite erfahrener Kollegen. Wenn du sicher bist, eröffnest du deine eigene Praxis.",
   punkte: [
-    "Alle Behandlungen: Faltenbehandlung, Hyaluron, Skinbooster, Mesotherapie, Infusionen und mehr",
+    "Alle Behandlungen: Botox, Hyaluron, Skinbooster, Mesotherapie, Infusionen und mehr",
     "Du lernst unsere Standards und unsere Software im Alltag kennen",
     "Kein Muss: Wer schon erfahren ist, startet direkt als Partner",
   ],
@@ -68,7 +68,7 @@ export const QUALITAET = {
 export const FUNDAMENT: Kachel[] = [
   {
     titel: "Die Marke MY HEALTH & BEAUTY",
-    text: "Du startest nicht mit einem unbekannten Namen, sondern als Standort einer Marke, die Kunden in neun Städten schon kennen und schätzen.",
+    text: "Du startest nicht mit einem unbekannten Namen, sondern als Standort einer Marke, die über 50.000 Kunden in neun Städten schon kennen und schätzen.",
   },
   {
     titel: "Deine Standortseite",
@@ -86,10 +86,10 @@ export const FUNDAMENT: Kachel[] = [
 
 /** Automatisierung, die zur Software gehoert. */
 export const AUTOMATISIERUNG: Kachel[] = [
-  { titel: "KI-Telefon", text: "Nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Auch dann, wenn am Empfang gerade viel los ist." },
-  { titel: "KI-Chat", text: "Beantwortet Nachrichten auf WhatsApp rund um die Uhr." },
+  { titel: "MY-Telefonassistenz", text: "Nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Auch dann, wenn am Empfang gerade viel los ist." },
+  { titel: "MY-Chatassistent", text: "Beantwortet Nachrichten auf WhatsApp rund um die Uhr." },
   { titel: "Terminbestätigung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch. So fallen weniger Termine aus." },
-  { titel: "Kunden-App", text: "Kunden buchen selbst, sehen ihr Guthaben und kommen wieder. Du siehst jede Behandlung auf einen Blick." },
+  { titel: "Kunden-App", text: "Kunden buchen selbst, sehen ihren Behandlungsplan und kommen wieder. Du siehst jede Behandlung auf einen Blick." },
 ];
 
 /** Was man zusaetzlich buchen kann. */
@@ -98,14 +98,14 @@ export const PAKETE: Kachel[] = [
   { titel: "Marketing-Paket", text: "Anzeigen bei Google, Instagram und Facebook, gesteuert von unserem Team." },
   { titel: "Social-Media-Paket", text: "Wir kommen in deine Praxis, drehen deine ersten Videos und betreuen deine Kanäle." },
   { titel: "Recruiting-Paket", text: "Wir finden Kundenberater und Ärzte für dein Team." },
-  { titel: "Lohn-Paket", text: "Die monatliche Lohnabrechnung für dein ganzes Team." },
+  { titel: "Lohn-Paket", text: "Die monatliche Lohnabrechnung für dein ganzes Team inkl. Zeiterfassung und Schichtenplanung." },
   { titel: "Buchhaltungs-Paket", text: "Belege, Kasse und Zahlungen jeden Monat fertig für deinen Steuerberater." },
   { titel: "Standort-Paket", text: "Wir suchen mit dir den passenden Standort und verhandeln den Mietvertrag." },
   { titel: "Kassen-Paket", text: "Kartenterminal und Kasse über uns. Die Zahlungen deiner Kunden gehen direkt auf dein Konto." },
 ];
 
 export const PAKETE_HINWEIS =
-  "Was nach Nutzung anfällt, etwa Minuten am KI-Telefon oder WhatsApp-Nachrichten, siehst du einzeln auf deiner Abrechnung.";
+  "Was nach Nutzung anfällt, etwa Minuten am Telefon oder WhatsApp-Nachrichten, siehst du einzeln auf deiner Abrechnung.";
 
 /** Drei Wege zum eigenen Standort. */
 export const STANDORT_WEGE: Kachel[] = [
@@ -119,7 +119,7 @@ export const SCHRITTE: Kachel[] = [
   { titel: "Kennenlernen", text: "Wir melden uns innerhalb von 5 Werktagen und sprechen über dich und deine Pläne." },
   { titel: "Fachlicher Check", text: "Du zeigst uns an einem unserer Standorte, wie du behandelst." },
   { titel: "Standort und Rechnung", text: "Wir finden deinen Standort und rechnen gemeinsam durch, was deine Praxis braucht." },
-  { titel: "Vertrag und Aufbau", text: "Wir richten Website, Software und Einkauf ein, du stellst dein Team zusammen." },
+  { titel: "Vertrag und Aufbau", text: "Wir richten Website, Software und Einkauf ein und stellen gemeinsam mit dir dein Team zusammen." },
   { titel: "Eröffnung", text: "Deine Praxis öffnet, und wir sind weiter für dich da." },
 ];
 
@@ -145,12 +145,12 @@ export const FRAGEN: Frage[] = [
   {
     frage: "Was kostet die Gründung einer Praxis für ästhetische Medizin?",
     antwort:
-      "Das hängt vor allem von Lage, Fläche und Ausstattung ab. Eine klassische Praxisübernahme kostet je nach Fach rund 180.000 € bis über 500.000 € (Analyse von apoBank und Zi). Eine ästhetische Praxis braucht meist weniger Geräte. Im Partnerprogramm sparst du dir außerdem Webagentur, Praxissoftware und den Aufbau einer eigenen Marke. Was es für deinen Standort kostet, rechnen wir im Gespräch gemeinsam durch.",
+      "Das hängt vor allem von Lage, Fläche und Ausstattung ab. Eine klassische Praxisübernahme kostet je nach Fach rund 180.000 € bis über 500.000 € (Analyse von apoBank und Zi). Eine ästhetische Praxis über uns ist deutlich günstiger. Im Partnerprogramm sparst du dir außerdem Webagentur, Praxissoftware und den Aufbau einer eigenen Marke. Was es für deinen Standort kostet, rechnen wir im Gespräch gemeinsam durch.",
   },
   {
     frage: "Was kostet das Partnerprogramm?",
     antwort:
-      "Das besprechen wir persönlich mit dir. Marke, Website und Software sind enthalten, Produkte beziehst du über uns. Zusatzpakete buchst du nur, wenn du sie brauchst. Was nach Nutzung anfällt, etwa Minuten am KI-Telefon, siehst du einzeln auf deiner Abrechnung.",
+      "Das besprechen wir persönlich mit dir. Marke, Website und Software sind enthalten, Produkte beziehst du über uns. Zusatzpakete buchst du nur, wenn du sie brauchst. Was nach Nutzung anfällt, etwa Minuten am Telefon, siehst du einzeln auf deiner Abrechnung.",
   },
   {
     frage: "Ist das ein Franchise?",

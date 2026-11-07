@@ -8,7 +8,7 @@
         <p class="pp__lead">
           Du willst dich als Arzt in der Ästhetik selbstständig machen? Eröffne deine Praxis als
           Partner von MY HEALTH & BEAUTY. Marke, Website, Software und Einkauf kommen fertig von uns.
-          Du kümmerst dich um deine Kunden, wir uns um den Rest.
+          Du kümmerst dich um deine Kunden, wir kümmern uns um den Rest.
         </p>
         <div class="pp__knoepfe">
           <a href="#bewerbung" class="pp__knopf" @click="klick('hero')">Jetzt bewerben</a>
@@ -29,7 +29,7 @@
       <div class="pp__breite pp__zwei">
         <div>
           <p class="pp__eyebrow">Dein Alltag</p>
-          <h2>Morgens kommen, gut behandeln, abends nach Hause gehen!</h2>
+          <h2>Du behandelst deine Patienten, wir kümmern uns um den Papierkram!</h2>
           <img class="pp__bild" :src="BILDER.beratung.src" :alt="BILDER.beratung.alt" :width="BILDER.beratung.width" :height="BILDER.beratung.height" loading="lazy">
         </div>
         <div class="pp__text">
@@ -39,7 +39,7 @@
           </p>
           <p>
             Als Partnerpraxis von MY nehmen wir dir das Meiste davon ab. Du sorgst dafür, dass deine
-            Praxis schön ist, dein Team herzlich und jeder Kunde bestens behandelt wird.
+            Praxis einladend und sauber ist, dein Team herzlich und jeder Kunde bestens behandelt wird.
             <strong>Medizinische Entscheidungen triffst nur du.</strong>
           </p>
         </div>
@@ -70,7 +70,7 @@
         <div class="pp__zwei pp__zwei--bild">
           <div>
             <p class="pp__eyebrow">Automatisch</p>
-            <h2>Weniger Telefon, mehr Zeit für deine Kunden!</h2>
+            <h2>Weniger Bürokratie, mehr Zeit für deine Kunden!</h2>
             <ul class="pp__liste" role="list">
               <li v-for="k in AUTOMATISIERUNG" :key="k.titel">
                 <strong>{{ k.titel }}</strong>
