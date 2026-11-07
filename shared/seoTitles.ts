@@ -38,7 +38,7 @@ export const SEO_TITLES: Record<string, SeoTitle> = {
   "botox/bunny-lines": { title: "Bunny Lines mit Botox glätten", withPrice: true },
   "botox/erdbeerkinn": { title: "Erdbeerkinn Botox", withPrice: true, h1: "Erdbeerkinn mit Botox behandeln" },
   "botox/full-face-botox": { title: "Full Face Botox: mehrere Zonen", withPrice: true, h1: "Full Face Botox Behandlung" },
-  "botox/halsfalten-platysma": { title: "Platysma Botox gegen Halsfalten", withPrice: true },
+  "botox/halsfalten-platysma": { title: "Nefertiti-Lift: Platysma Botox gegen Halsfalten", withPrice: true, keyword: "nefertiti lift 900" },
   "botox/hyperhidrose-starkes-schwitzen": { title: "Botox gegen Schwitzen (Hyperhidrose)", withPrice: true, keyword: "botox gegen schwitzen 850" },
   "botox/lachfalten": { title: "Lachfalten mit Botox glätten", withPrice: true, h1: "Lachfalten mit Botox glätten" },
   "botox/migraenebehandlung": { title: "Botox gegen Migräne: ärztliche Behandlung", withPrice: true },
