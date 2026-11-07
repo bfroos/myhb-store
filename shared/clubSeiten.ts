@@ -90,7 +90,7 @@ export const SPARBUCH = {
 };
 
 export const SPARBUCH_PFLICHTSATZ =
-  "Beauty-Bonus im Jahr auf dein eingezahltes Guthaben, jeden Monat als Bonusguthaben gutgeschrieben. Nicht auszahlbar, nur bei MY HEALTH & BEAUTY einlösbar. Kein Bankprodukt, keine Einlagensicherung.";
+  "Beauty-Bonus pro Jahr auf dein eingezahltes Guthaben, welches jeden Monat als Bonusguthaben gutgeschrieben wird. Nicht auszahlbar, nur bei MY HEALTH & BEAUTY einlösbar. Kein Bankprodukt, keine Einlagensicherung.";
 
 /**
  * Rechenbeispiel: gleiche Rate jeden Monat, Bonus am Monatsende auf das
