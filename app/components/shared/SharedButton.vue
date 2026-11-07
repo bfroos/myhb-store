@@ -23,6 +23,7 @@ import {
 } from "~/composables/useCalendlyDialog";
 import { hasNewsletterSignup } from "~/composables/useNewsletterSignup";
 import { NEUKUNDEN_OFFER } from "~/lib/checkoutAttempt";
+import { aktuellesStartguthabenOffer } from "~/lib/startguthaben";
 import {
   APP_BOOKING_URL,
   useAppBookingDialog,
@@ -315,7 +316,11 @@ const handleClick = () => {
   if (button.value?.method !== "action" || !button.value.action) return;
 
   if (button.value.action === SharedButtonAction.APPOINTMENT_BOOKING) {
-    openCalendlyDialogForButton();
+    // Startguthaben (myhb-app/myhb-os#2188): nur auf /aktion/<slug> mit
+    // ?gh=50/100 (oder in der Sitzung gemerkt) geht `offer=gh50|gh100` an die
+    // App. Ueberall sonst unveraendert ohne Angebot.
+    const startguthaben = aktuellesStartguthabenOffer();
+    openCalendlyDialogForButton(startguthaben ? { offer: startguthaben } : undefined);
   }
   if (button.value.action === SharedButtonAction.NEWSLETTER_SIGN_UP) {
     // go. (02.10.2026): Schon angemeldet (Marke aus dem Rabatt-Dialog in

@@ -15,6 +15,7 @@
     :terms-override="cfg.terms"
     :wording="cfg.wording"
     :standorte="STANDORTE"
+    :startguthaben="startguthaben"
   />
 </template>
 
@@ -23,6 +24,8 @@ import type { TreatmentPageDto } from "~/lib/strapi/dto/collections";
 import type { AdsV2Terms } from "#shared/adsTemplateV2Content";
 import { mapTreatmentPageFixedBlocks } from "~/lib/strapi/mapper/mapTreatmentPageBlocks";
 import { rememberOfferVariant } from "~/lib/offerVariant";
+import { aktuellesStartguthaben } from "~/lib/startguthaben";
+import { startguthabenTexte, type StartguthabenBetrag } from "#shared/startguthaben";
 
 type AktionConfig = {
   /** Allgemeine www-Behandlungsseite in Strapi (Preise, Bild, Behandlung) */
@@ -128,8 +131,21 @@ onBeforeUnmount(() => {
   (window as any).dataLayer?.push({ template: undefined });
 });
 
+// Startguthaben statt 20 % (myhb-app/myhb-os#2188, Meta-Test #2187): nur mit
+// ?gh=50 oder ?gh=100 (in der Sitzung gemerkt, shared/startguthaben.ts). Erst
+// im Browser: Die Seite ist ISR und wird ohne Query gerendert (nuxt.config.ts).
+const startguthaben = ref<StartguthabenBetrag | null>(null);
+onMounted(() => {
+  startguthaben.value = aktuellesStartguthaben();
+});
+const seitenTitel = computed(() =>
+  startguthaben.value
+    ? startguthabenTexte(startguthaben.value).titel(cfg.bookingName ?? cfg.headline)
+    : cfg.title,
+);
+
 useHead({
-  title: `${cfg.title} | MY HEALTH & BEAUTY`,
+  title: () => `${seitenTitel.value} | MY HEALTH & BEAUTY`,
   meta: [{ name: "robots", content: "noindex, nofollow" }],
 });
 // Vorschau beim Teilen (WhatsApp, Instagram, Facebook): Titelbild der

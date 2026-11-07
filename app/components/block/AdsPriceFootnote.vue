@@ -5,9 +5,9 @@
     steht seit 30.09.2026 nicht mehr im Hero (Benjamin: erster Screen ohne
     Rechnung und Fussnoten). www: nicht gerendert.
   -->
-  <UiLayoutSectionBlock v-if="offer">
+  <UiLayoutSectionBlock v-if="line">
     <p class="ads-price-footnote" data-new-customer-footnote>
-      {{ offer.pageFootnote }}
+      {{ line }}
     </p>
   </UiLayoutSectionBlock>
 </template>
@@ -20,6 +20,8 @@ const props = defineProps<{
   treatmentPathKey?: string | null;
   /** Auch auf www (bundesweite v2-Seiten fuer Meta, app/pages/aktion). */
   force?: boolean;
+  /** Eigener Text statt der Neukundenpreis-Zeile (Startguthaben, #2188). */
+  text?: string | null;
 }>();
 
 const offer = useNewCustomerOffer(
@@ -27,6 +29,7 @@ const offer = useNewCustomerOffer(
   () => props.treatmentPathKey,
   () => props.force,
 );
+const line = computed(() => props.text || offer.value?.pageFootnote || null);
 </script>
 
 <style scoped>
