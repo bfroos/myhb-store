@@ -9,6 +9,7 @@
  * (#309 offen), Schoenheits-OPs nur als Verweis ohne Preise.
  */
 import { openingHoursSummary } from "./adsTemplateV2.ts";
+import { RATGEBER, ratgeberPfad } from "./partnerRatgeber.ts";
 
 type Loc = {
   name?: string;
@@ -102,6 +103,12 @@ export function buildLlmsText(siteUrl: string, locations: Loc[], categories: Cat
   lines.push("");
   lines.push("## Für Ärzte", "");
   lines.push(`- [Partnerprogramm: eigene Praxis für ästhetische Medizin gründen](${siteUrl}/partnerpraxis): Ärzte, die sich in der Ästhetik selbstständig machen wollen, eröffnen ihre Praxis unter der Marke MY HEALTH & BEAUTY. Marke, Standortseite, Software (Buchung, Kunden-App, KI-Telefon, Warenwirtschaft) und Einkauf kommen von MYHB; Marketing, Social Media, Recruiting, Lohnabrechnung, vorbereitende Buchhaltung und Standortsuche sind buchbar. Wer noch wenig Erfahrung hat, kann vorher an MYHB-Standorten alle Behandlungsarten lernen (freiwillig); fachlich geprüft wird jeder Partner. Medizinisch bleibt der Arzt unabhängig. Bewerbung über das Formular auf der Seite.`);
+  for (const r of RATGEBER) {
+    // llms.txt nennt keine Marke "Botox" (llmsAi.test), daher der Wirkstoff.
+    const titel = r.h1.replace(/Botox/g, "Botulinumtoxin");
+    const kurz = r.kurzGesagt.replace(/Botox/g, "Botulinumtoxin");
+    lines.push(`- [${titel}](${siteUrl}${ratgeberPfad(r.slug)}): ${kurz}`);
+  }
   lines.push(`- [Karriere für Ärzte](${siteUrl}/karriere/aerzte): Anstellung in der Facharztweiterbildung`);
   lines.push("");
   return lines.join("\n");
