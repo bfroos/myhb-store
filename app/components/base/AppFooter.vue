@@ -132,6 +132,9 @@
                       Kunden Erfahrungen
                     </NuxtLinkLocale>
                   </li>
+                  <li v-if="locale === 'de'">
+                    <NuxtLink to="/partnerpraxis">Partnerpraxis für Ärzte</NuxtLink>
+                  </li>
                 </ul>
               </nav>
               <nav

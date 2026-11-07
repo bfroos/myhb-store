@@ -8,6 +8,7 @@
     v-if="bottomBlocks && bottomBlocks.length > 0"
     :blocks="bottomBlocks"
   />
+  <PartnerTeaser />
 </template>
 
 <script setup lang="ts">

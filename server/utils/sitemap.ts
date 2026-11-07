@@ -36,6 +36,7 @@ import { isIndexableLocale } from "#shared/hreflang";
 import { isTestEmployeeSlug } from "#shared/reviewPrivacy";
 import { localGateInSitemap } from "#shared/localContentGate";
 import { VIDEOS_PATH } from "#shared/storyVideos";
+import { RATGEBER, ratgeberPfad } from "#shared/partnerRatgeber";
 import { fetchStoryVideos } from "./storyVideos";
 
 type StrapiPagination = {
@@ -415,6 +416,10 @@ const SEGMENT_BUILDERS: Record<
       }
       if (locale === DEFAULT_LOCALE) {
         out.add("partnerpraxis", "static", locale, getLocalizedPath("partnerpraxis", locale));
+        // Ratgeber fuer Aerzte (E32, #435): feste Liste aus dem Code.
+        for (const r of RATGEBER) {
+          out.add("ratgeber", r.slug, locale, ratgeberPfad(r.slug));
+        }
       }
 
       const generalPages = await fetchCollection<

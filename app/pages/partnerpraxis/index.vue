@@ -163,6 +163,19 @@
       </div>
     </section>
 
+    <section class="pp__abschnitt pp__abschnitt--puder">
+      <div class="pp__breite">
+        <p class="pp__eyebrow">Ratgeber</p>
+        <h2>Alles zur eigenen Praxis in der ästhetischen Medizin</h2>
+        <ul class="pp__karten pp__karten--drei" role="list">
+          <li v-for="a in RATGEBER" :key="a.slug" class="pp__karte">
+            <h3><NuxtLink :to="ratgeberPfad(a.slug)" class="pp__ratgeberLink">{{ a.h1 }}</NuxtLink></h3>
+            <p>{{ a.beschreibung }}</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
     <section class="pp__abschnitt">
       <div class="pp__breite">
         <p class="pp__eyebrow">Gut zu wissen</p>
@@ -216,6 +229,7 @@ import {
   partnerFaqSchema,
   partnerServiceSchema,
 } from "#shared/partnerProgramm";
+import { RATGEBER, ratgeberPfad } from "#shared/partnerRatgeber";
 
 const config = useRuntimeConfig();
 const { trackEvent } = useGoogleAnalytics();
@@ -247,3 +261,7 @@ function frageGeoeffnet(e: Event, frage: string) {
 </script>
 
 <style src="~/assets/css/partner-seite.css"></style>
+<style>
+.pp__ratgeberLink { color: inherit; text-decoration: none; }
+.pp__ratgeberLink:hover { text-decoration: underline; }
+</style>

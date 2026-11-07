@@ -4,6 +4,7 @@
   <UiLayoutSectionBlock v-if="blocks">
     <CareerDoctorApplicationForm />
   </UiLayoutSectionBlock>
+  <PartnerTeaser />
 </template>
 
 <script setup lang="ts">
