@@ -151,6 +151,9 @@ function klick() {
 .rg__inhalt { max-width: 860px; }
 .rg__inhalt .pp__text { max-width: none; }
 .rg__liste { margin-top: 12px; }
+/* pp__haekchen ist fuer dunkle Abschnitte gebaut (helle Schrift, weisser Haken). */
+.rg .rg__liste li { color: var(--pp-text); }
+.rg .rg__liste li::before { background: var(--pp-schwarz); color: #fff; }
 .rg__tabelle { overflow-x: auto; margin: 16px 0; }
 .rg__tabelle table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; font-size: 15px; }
 .rg__tabelle th, .rg__tabelle td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--pp-linie); vertical-align: top; }
