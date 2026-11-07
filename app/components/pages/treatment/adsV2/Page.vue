@@ -162,7 +162,7 @@
       <div class="v2-card v2-final" :class="tone('mid', 'v2-card--accent')" data-track-placement="v2_cta_mid">
         <p class="v2-h2 v2-final__title">{{ H.final }}</p>
         <p v-if="finalPrice" class="v2-final__price">
-          {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
+          {{ finalPriceParts[0] }}<span class="v2-nowrap">{{ finalPriceParts[1] }}</span>
         </p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
@@ -232,7 +232,7 @@
           <p class="v2-firstvisit__loc">{{ locationName }}</p>
           <p class="v2-firstvisit__regular">{{ keepAmount(priceCards[0]!.regular) }}</p>
           <p class="v2-firstvisit__offer"><strong>{{ priceCards[0]!.offer }}</strong></p>
-          <p class="v2-firstvisit__sub">{{ priceCards[0]!.label }}<template v-if="!isB"> · {{ discountPct }}&nbsp;% Neukunden-Vorteil</template></p>
+          <p class="v2-firstvisit__sub">{{ priceCards[0]!.label }}<template v-if="!regularPrices"> · {{ discountPct }}&nbsp;% Neukunden-Vorteil</template></p>
           <ul class="v2-firstvisit__list" role="list">
             <li><IconCheck size="18" aria-hidden="true" /> Kostenloses ärztliches Beratungsgespräch</li>
             <li><IconCheck size="18" aria-hidden="true" /> Individueller Behandlungsplan</li>
@@ -240,7 +240,7 @@
           </ul>
           <!-- Hinweise in der Karte statt als eigene Box daneben (Benjamin 06.10.2026) -->
           <p class="v2-firstvisit__note">{{ priceInclusion }}<template v-if="productNote"> {{ productNote }}</template></p>
-          <SharedButton v-if="bookingButton" :button="{ ...bookingButton, label: isB ? bookingButton.label : discountLabel }" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
+          <SharedButton v-if="bookingButton" :button="{ ...bookingButton, label: regularPrices ? bookingButton.label : discountLabel }" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
         </div>
         <ul v-else class="v2-prices" :class="{ 'v2-prices--many': priceCards.length >= 3 }" role="list" :style="{ '--cols': String(Math.min(priceCards.length, 3)) }">
           <li v-for="card in priceCards" :key="card.key" class="v2-price" :class="{ 'v2-price--package': card.isPackage }">
@@ -569,7 +569,7 @@
       <div class="v2-card v2-final" :class="tone('final', 'v2-card--accent')" data-track-placement="v2_final">
         <h2 class="v2-h2">{{ H.final }}</h2>
         <p v-if="finalPrice" class="v2-final__price">
-          {{ priceParts(finalPrice)[0] }}<span class="v2-nowrap">{{ priceParts(finalPrice)[1] }}</span>
+          {{ finalPriceParts[0] }}<span class="v2-nowrap">{{ finalPriceParts[1] }}</span>
         </p>
         <div class="v2-actions">
           <SharedButton v-if="bookingButton" :button="bookingButton" :data="bookingData" :button-props="{ size: 'lg', variant: 'primary' }" class="v2-btn" />
@@ -577,8 +577,10 @@
       </div>
     </UiLayoutSectionBlock>
 
-    <!-- Variante B ohne Sternchen-Preise: keine Fussnote -->
-    <BlockAdsPriceFootnote v-if="!isB" :treatment="hero.treatment" :treatment-path-key="hero.treatmentPathKey" :force="bundesweit" />
+    <!-- Variante B ohne Sternchen-Preise: keine Fussnote. Startguthaben
+         (#2188): eigene Fussnote statt der zum 20-%-Angebot. -->
+    <BlockAdsPriceFootnote v-if="startguthabenText" :text="startguthabenText.fussnote" />
+    <BlockAdsPriceFootnote v-else-if="!isB" :treatment="hero.treatment" :treatment-path-key="hero.treatmentPathKey" :force="bundesweit" />
   </div>
 </template>
 
@@ -668,6 +670,7 @@ import {
   adsOfferRegularCards,
   adsOfferRegularPriceLine,
 } from "#shared/adsOfferVariant";
+import { startguthabenTexte, type StartguthabenBetrag } from "#shared/startguthaben";
 import { getGoogleReviewAggregate, getGoogleReviewForPlace } from "~/utils/schemaLocation";
 import type { AdsV2Terms } from "#shared/adsTemplateV2Content";
 
@@ -688,6 +691,13 @@ const props = defineProps<{
   wording?: ReadonlyArray<readonly [string, string]> | null;
   /** Staedte fuer "Deutschlandweit für dich da" (nur bundesweit). */
   standorte?: readonly string[];
+  /**
+   * Startguthaben statt 20 % (myhb-app/myhb-os#2188, nur /aktion/<slug> mit
+   * ?gh=50/100): Hero, Leiste, Aufrufe und Fussnote nennen den Betrag, die
+   * Preise stehen regulaer ohne Sternchen, der Knopf bucht direkt (ohne
+   * Rabatt-Dialog) und SharedButton haengt offer=gh50|gh100 an.
+   */
+  startguthaben?: StartguthabenBetrag | null;
 }>();
 
 // Bewertungen und Aerzt:innen des Standorts: eigener Endpunkt, nur hier
@@ -954,7 +964,13 @@ const bookingData = computed(() => ({
 // Der Calendly-/App-Split (#100) entscheidet in beiden Faellen beim Oeffnen.
 const discountLabel = computed(() => `${discountPct.value}\u00a0% Rabatt sichern`);
 const primaryButton = computed(() =>
-  isB.value
+  startguthabenText.value
+    ? {
+        label: startguthabenText.value.knopf,
+        method: SharedButtonMethod.ACTION,
+        action: SharedButtonAction.APPOINTMENT_BOOKING,
+      }
+    : isB.value
     ? {
         label: ADS_V2_CTA.primary,
         method: SharedButtonMethod.ACTION,
@@ -973,7 +989,9 @@ const heroCta = computed(() =>
 const bookingButton = computed(() => (props.hero.cta ? primaryButton.value : null));
 /** Leiste, eine Zeile bis 320 px neben "Anrufen". */
 const stickyLabel = computed(() =>
-  isB.value
+  startguthabenText.value
+    ? startguthabenText.value.knopfKurz
+    : isB.value
     ? ADS_V2_CTA.sticky
     : editorial.value
       ? discountLabel.value // Prototyp: laengerer Text (Zelgai)
@@ -993,8 +1011,14 @@ const offer = useNewCustomerOffer(
 // priceInEuroCent wie www), Vertrauenszeile im Hero. A = heutiger Stand.
 const offerVariant = useAdsOfferVariant();
 const isB = computed(() => offerVariant.value === "b");
-/** Neukundenangebot, wie es die Seite zeigt (B: keins). */
-const offerShown = computed(() => (isB.value ? null : offer.value));
+/** Startguthaben (#2188): Texte, sonst `null` (dann alles wie bisher). */
+const startguthabenText = computed(() =>
+  props.startguthaben ? startguthabenTexte(props.startguthaben) : null,
+);
+/** Regulaere Preise ohne Sternchen: Variante B und Startguthaben. */
+const regularPrices = computed(() => isB.value || !!startguthabenText.value);
+/** Neukundenangebot, wie es die Seite zeigt (B, Startguthaben: keins). */
+const offerShown = computed(() => (regularPrices.value ? null : offer.value));
 const regularLine = computed(() =>
   adsOfferRegularPriceLine(props.hero.treatment as any, formatEuroCent),
 );
@@ -1057,7 +1081,7 @@ const heroNote = computed(() =>
 
 /** "ab 119,99 €*" / "ab 79,99 € pro Zone*" (ohne "Neukunden"); B: "ab 149,99 €". */
 const shortPrice = computed(() =>
-  isB.value
+  regularPrices.value
     ? regularLine.value
     : offer.value
       ? offer.value.heroLine.replace(/^Neukunden\s+/, "")
@@ -1066,6 +1090,9 @@ const shortPrice = computed(() =>
 // Hero (Agentur-Feedback 01.10.2026): EINE Zeile "Ab 119,99 €* – mit 20 %
 // Neukundenrabatt" statt Preis + zweitem Rabatt-Link.
 const heroPriceLine = computed(() => {
+  if (startguthabenText.value) {
+    return { main: startguthabenText.value.hauptteil, extra: startguthabenText.value.zusatz };
+  }
   const p = shortPrice.value;
   if (!p) return null;
   return {
@@ -1082,8 +1109,18 @@ const heroPriceLine = computed(() => {
         }`,
   };
 });
-const stickyPrice = computed(() => shortPrice.value);
-const finalPrice = computed(() => (isB.value ? regularLine.value : offer.value?.heroLine ?? null));
+const stickyPrice = computed(() => startguthabenText.value?.zeile ?? shortPrice.value);
+const finalPrice = computed(() =>
+  startguthabenText.value
+    ? startguthabenText.value.zeile
+    : isB.value
+      ? regularLine.value
+      : offer.value?.heroLine ?? null,
+);
+/** Startguthaben-Zeile darf umbrechen (nur "50 €" bleibt zusammen). */
+const finalPriceParts = computed<[string, string]>(() =>
+  startguthabenText.value ? [finalPrice.value ?? "", ""] : priceParts(finalPrice.value),
+);
 
 // Stadt der Seite: Clips mit fremdem Stadtnamen im Bild fallen weg.
 // Betrag und Euro-Zeichen nicht trennen ("149,99" / "€" auf zwei Zeilen in
@@ -1313,7 +1350,7 @@ function zonePrice(href: string): string | null {
   const cent = Number(tr?.priceInEuroCent ?? 0);
   if (!cent) return null;
   const ab = tr?.isStartingPrice === false ? "" : "ab ";
-  if (isB.value) return `${ab}${formatEuroCent(cent)}`;
+  if (regularPrices.value) return `${ab}${formatEuroCent(cent)}`;
   const nc = newCustomerPriceCent(cent, discountPct.value);
   return nc ? `${ab}${formatEuroCent(nc)}*` : `${ab}${formatEuroCent(cent)}`;
 }
@@ -1334,7 +1371,7 @@ const zoneHint = computed(() => adsV2ZoneHint(priceCards.value));
 const consultPhoto = computed(() => adsV2ConsultPhoto(pathKey.value));
 const priceCards = computed(() => {
   const cards = adsV2PriceCards(pathKey.value, props.hero.treatment as any, discountPct.value);
-  return isB.value ? adsOfferRegularCards(cards) : cards;
+  return regularPrices.value ? adsOfferRegularCards(cards) : cards;
 });
 const productNote = computed(() => adsV2ProductNote(pathKey.value));
 
