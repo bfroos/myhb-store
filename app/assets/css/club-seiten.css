@@ -254,6 +254,7 @@
 .cl__stufe--white {
   background: #fff;
   border-color: #cfc6bf;
+  color: #111;
 }
 .cl__stufe--grey {
   background: #8b9098;
@@ -264,6 +265,21 @@
   background: var(--cl-schwarz);
   border-color: var(--cl-schwarz);
   color: #fff;
+}
+.cl__stufe--basic {
+  background: #d9cfc8;
+  border-color: #d9cfc8;
+  color: #111;
+}
+/* Michael 23.10.2026: Status-Namen in der schwarzen Leiste hervorheben. */
+.cl__stufe--gross {
+  padding: 9px 20px;
+  font-size: 17px;
+  letter-spacing: 3px;
+  border-width: 2px;
+}
+.cl__band .cl__stufe--black {
+  border-color: #c9a96e;
 }
 .cl__karten {
   display: none;
@@ -414,4 +430,84 @@
   .cl__text {
     font-size: 17px;
   }
+}
+
+/* Vorteile zum Aufklappen (03.11.2026) */
+.cl__zeile {
+  cursor: pointer;
+}
+.cl__zeile:hover th,
+.cl__zeile:hover td,
+.cl__zeile--offen th,
+.cl__zeile--offen td {
+  background: var(--cl-puder);
+}
+.cl__zeileKnopf {
+  all: unset;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: underline dotted;
+  text-underline-offset: 4px;
+}
+.cl__zeileKnopf::after {
+  content: "+";
+  flex: none;
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--cl-linie);
+  border-radius: 50%;
+  font-size: 15px;
+  line-height: 1;
+  background: #fff;
+}
+.cl__zeile--offen .cl__zeileKnopf::after {
+  content: "–";
+}
+.cl__zeileKnopf:focus-visible {
+  outline: 2px solid var(--cl-schwarz);
+  outline-offset: 4px;
+}
+.cl__tabelle .cl__erklaerung td {
+  text-align: left;
+  font-weight: 400;
+  background: var(--cl-puder);
+  padding: 4px 18px 18px;
+}
+.cl__erklaerung p {
+  margin: 8px 0 0;
+  max-width: 760px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--cl-text);
+}
+.cl__hinweis {
+  margin: 14px 0 0;
+  font-size: 14px;
+  color: var(--cl-leise);
+}
+.cl__vorteilErklaert {
+  display: none;
+  margin-top: 20px;
+}
+@media (max-width: 680px) {
+  .cl__vorteilErklaert {
+    display: block;
+  }
+  .cl__hinweis--tabelle {
+    display: none;
+  }
+}
+
+.cl__liste {
+  margin: 4px 0 0;
+  padding-left: 1.2em;
+  display: grid;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--cl-text);
 }

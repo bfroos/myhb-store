@@ -7,10 +7,10 @@
           <p class="cl__eyebrow">Beauty-Sparbuch · Teil vom MY Club</p>
           <h1>Du findest Ratenzahlung und Gebühren doof? Dann haben wir was für dich.</h1>
           <p class="cl__lead">
-            Leg vorher zurück statt hinterher abzuzahlen: ab {{ euro(SPARBUCH.mindestRate) }}
-            im Monat, ohne Gebühren. Jeden Monat schreiben wir dir einen Beauty-Bonus gut,
-            {{ prozent(basis.sparbuchBonusProzent) }} im Jahr, mit deiner Club-Stufe bis
-            {{ prozent(hoechste.sparbuchBonusProzent) }}.
+            Spare für deine Wunschbehandlung: ab {{ euro(SPARBUCH.mindestRate) }} im Monat,
+            ohne zusätzliche Gebühren. Du erhältst jeden Monat einen Beauty-Bonus:
+            {{ prozent(basis.sparbuchBonusProzent) }} im Jahr und als Statuskunde sogar bis zu
+            {{ prozent(hoechste.sparbuchBonusProzent) }} Bonus.
           </p>
           <div class="cl__knoepfe">
             <a class="cl__knopf" :href="appUrl('sparbuch-seite', 'sparbuch')" @click="trackClick('sparbuch-seite', 'app')">
@@ -48,16 +48,50 @@
         <div class="cl__zwei">
           <div class="cl__box">
             <p class="cl__eyebrow">Ratenzahlung</p>
-            <p class="cl__text">
-              Erst behandeln, danach monatlich abzahlen. Oft mit Gebühren und einer
-              Prüfung, ob du den Kredit bekommst.
-            </p>
+            <p class="cl__text">Erst behandeln, danach monatlich abzahlen.</p>
+            <ul class="cl__liste">
+              <li>Oft kommen Gebühren und Kreditkosten dazu. Am Ende zahlst du mehr, als die Behandlung kostet.</li>
+              <li>Vorher wird geprüft, ob du den Kredit bekommst, oft mit Abfrage bei der Schufa.</li>
+              <li>Du zahlst noch ab, wenn die Behandlung längst vorbei ist.</li>
+            </ul>
           </div>
           <div class="cl__box cl__box--puder">
             <p class="cl__eyebrow">Beauty-Sparbuch</p>
+            <p class="cl__text">Jeden Monat ein bisschen zurücklegen und buchen, wenn das Guthaben reicht.</p>
+            <ul class="cl__liste">
+              <li>Keine Gebühren, keine Kreditkosten. Jeder Euro, den du einzahlst, ist ein Euro für deine Behandlung.</li>
+              <li>Keine Prüfung, keine Schufa. Du startest einfach in der App.</li>
+              <li>Jeden Monat kommt ein Beauty-Bonus obendrauf, mit Status bis zu {{ prozent(hoechste.sparbuchBonusProzent) }} im Jahr.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="cl__abschnitt cl__abschnitt--puder">
+        <div class="cl__zwei">
+          <div>
+            <p class="cl__eyebrow">Warum wir das machen</p>
+            <h2>Schönheit ohne Schulden</h2>
             <p class="cl__text">
-              Jeden Monat ein bisschen zurücklegen und die Behandlung buchen, wenn das
-              Guthaben reicht. Ohne Gebühren, mit Bonus obendrauf.
+              Viele unserer Kunden planen ihre Behandlungen über das ganze Jahr. Wir wollen nicht,
+              dass jemand dafür einen Kredit aufnimmt oder Gebühren zahlt. Beim Beauty-Sparbuch legst
+              du vorher zurück und wir sagen Danke für deine Treue: mit einem Bonus, den du bei uns einlöst.
+            </p>
+            <p class="cl__text">
+              Für dich heißt das: Deine nächste Behandlung ist schon bezahlt, wenn du kommst.
+              Für uns: Du kommst wieder. Das ist der ganze Gedanke dahinter.
+            </p>
+          </div>
+          <div class="cl__box">
+            <p class="cl__eyebrow">Was das Beauty-Sparbuch ist</p>
+            <p class="cl__text">
+              Ein Guthaben bei MY HEALTH & BEAUTY, das du im Voraus einzahlst und für Behandlungen
+              und Produkte bei uns einlöst. Der Beauty-Bonus ist ein Treuebonus in Form von Guthaben.
+            </p>
+            <p class="cl__eyebrow">Was es nicht ist</p>
+            <p class="cl__text">
+              Kein Sparkonto, keine Geldanlage und kein Bankprodukt. Es gibt keine Einlagensicherung,
+              und weder dein Guthaben noch der Bonus werden ausgezahlt. Wir sind eine Klinik, keine Bank.
             </p>
           </div>
         </div>
@@ -84,7 +118,7 @@
               Du legst {{ SPARBUCH.beispielMonate }} Monate lang jeden Monat
               {{ euro(SPARBUCH.beispielRate) }} zurück. Dann hast du
               {{ euro(beispielBasis.eingezahlt) }} Guthaben und rund
-              {{ euro(beispielBasis.bonus) }} Beauty-Bonus dazu. In der Stufe
+              {{ euro(beispielBasis.bonus) }} Beauty-Bonus dazu. Im Status
               {{ hoechste.name }} sind es rund {{ euro(beispielHoechste.bonus) }}.
             </p>
             <p class="cl__klein">
@@ -93,7 +127,7 @@
             </p>
           </div>
           <div class="cl__box">
-            <p class="cl__eyebrow">Dein Bonus nach Club-Stufe</p>
+            <p class="cl__eyebrow">Dein Bonus nach Status</p>
             <div class="cl__tabelle" style="width: 100%">
               <table style="min-width: 0">
                 <tbody>
@@ -172,7 +206,7 @@ const fragen = [
   },
   {
     frage: "Wie lange gilt mein Guthaben?",
-    antwort: `Was du einzahlst, verfällt nie. Der Beauty-Bonus ist geschenktes Guthaben: Jeder Bonus gilt ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift, und warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt dein Bonus.`,
+    antwort: `Guthaben, das du einzahlst, ist unbegrenzt gültig. Der Beauty-Bonus ist geschenktes Guthaben: Er ist ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift gültig, und warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt dein Bonus.`,
   },
   {
     frage: "Wie lange muss ich dabei bleiben?",
