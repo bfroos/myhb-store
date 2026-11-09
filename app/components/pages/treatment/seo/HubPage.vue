@@ -204,7 +204,7 @@
     <!-- 11. Erfahrungen -->
     <UiLayoutSectionBlock v-if="reviews.length || clips.feedback.length" spacing="sibling">
       <div class="seo-card seo-card--soft" data-track-placement="seo_reviews">
-        <h2 class="seo-h2">Erfahrungen unserer Kundinnen</h2>
+        <h2 class="seo-h2">Erfahrungen unserer Kunden</h2>
         <p>Echte Google-Bewertungen aus unseren Standorten. <UiMoleculeReviewAuthenticityNote with-label /></p>
         <PagesTreatmentAdsV2ClipCarousel v-if="clips.feedback.length" :clips="clips.feedback" tap-to-play placement="seo_feedback" />
         <div v-if="reviews.length" class="seo-reviews">

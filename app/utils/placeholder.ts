@@ -43,13 +43,29 @@ function escapeRegExp(string: string): string {
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/**
+ * Wie normalizePlaceholderResult, aber ohne trim: Ein Textknoten im Richtext
+ * grenzt oft an fette Teile oder Links, deren Leerzeichen am Rand gebraucht
+ * werden. Auf den Hub-Seiten ist {{ cityPhrase }} leer, sonst bliebe aus
+ * "Was kostet Botox {{ cityPhrase }}?" ein "Was kostet Botox ?" stehen.
+ */
+export function normalizeRichtextPlaceholderText(text: string): string {
+  return text
+    .replace(/[ \t]{2,}/g, " ")
+    .replace(/[ \t]+([,.;:!?])/g, "$1");
+}
+
 function replaceInTextNode(
   node: StrapiRichTextTextNode,
   replacements: Replacement[],
 ): StrapiRichTextTextNode {
+  const replaced = replaceInString(node.text, replacements);
   return {
     ...node,
-    text: replaceInString(node.text, replacements),
+    text:
+      replaced === node.text
+        ? node.text
+        : normalizeRichtextPlaceholderText(replaced),
   };
 }
 
