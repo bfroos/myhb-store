@@ -42,6 +42,19 @@
       <Message severity="success">
         {{ text.gesichert }}
       </Message>
+      <!-- 09.11.2026: Wer hier selbst „Anmelden“ schreibt, startet den Chat
+           selbst; n8n schickt die kostenpflichtige Willkommensvorlage dann
+           nicht mehr (wartet 30 Min. und prueft die Newsletter-Liste). -->
+      <UiAtomBaseButton
+        as="a"
+        :href="WHATSAPP_CODE_LINK"
+        target="_blank"
+        rel="noopener"
+        variant="secondary"
+        data-track-placement="newsletter_whatsapp_code"
+      >
+        {{ text.whatsapp }}
+      </UiAtomBaseButton>
       <p class="newsletterSignUpDialog__termineTitel">{{ text.naechste }}</p>
       <div class="newsletterSignUpDialog__actions newsletterSignUpDialog__actions--stacked">
         <UiAtomBaseButton
@@ -354,15 +367,18 @@ const termine = ref<FreierTermin[]>([]);
 const gesichert = ref(false);
 let nachAnmeldung: BookingDialogOptions = {};
 
-const schritt2Text: Record<string, { gesichert: string; naechste: string; anderer: string; spaeter: string }> = {
-  de: { gesichert: "✓ Dein 20-%-Gutschein ist gesichert. Den Code schicken wir dir per E-Mail.", naechste: "Nächste freie Termine:", anderer: "Anderen Termin wählen", spaeter: "Später buchen" },
-  en: { gesichert: "✓ Your 20% voucher is saved. We'll email you the code.", naechste: "Next available times:", anderer: "Choose another time", spaeter: "Book later" },
-  tr: { gesichert: "✓ %20 kuponun kaydedildi. Kodu e-posta ile gönderiyoruz.", naechste: "En yakın boş randevular:", anderer: "Başka bir zaman seç", spaeter: "Daha sonra" },
-  ar: { gesichert: "✓ تم حفظ قسيمة الخصم 20٪. سنرسل لك الرمز عبر البريد الإلكتروني.", naechste: "أقرب المواعيد المتاحة:", anderer: "اختر موعدًا آخر", spaeter: "لاحقًا" },
-  fr: { gesichert: "✓ Ton bon de 20 % est enregistré. Nous t'envoyons le code par e-mail.", naechste: "Prochains créneaux libres :", anderer: "Choisir un autre créneau", spaeter: "Réserver plus tard" },
-  nl: { gesichert: "✓ Je kortingsbon van 20% is opgeslagen. We mailen je de code.", naechste: "Eerstvolgende vrije tijden:", anderer: "Andere tijd kiezen", spaeter: "Later boeken" },
+const schritt2Text: Record<string, { gesichert: string; naechste: string; anderer: string; spaeter: string; whatsapp: string }> = {
+  de: { gesichert: "✓ Dein 20-%-Gutschein ist gesichert. Den Code schicken wir dir per E-Mail.", naechste: "Nächste freie Termine:", anderer: "Anderen Termin wählen", spaeter: "Später buchen", whatsapp: "Code jetzt auch per WhatsApp holen" },
+  en: { gesichert: "✓ Your 20% voucher is saved. We'll email you the code.", naechste: "Next available times:", anderer: "Choose another time", spaeter: "Book later", whatsapp: "Get the code on WhatsApp now" },
+  tr: { gesichert: "✓ %20 kuponun kaydedildi. Kodu e-posta ile gönderiyoruz.", naechste: "En yakın boş randevular:", anderer: "Başka bir zaman seç", spaeter: "Daha sonra", whatsapp: "Kodu şimdi WhatsApp ile al" },
+  ar: { gesichert: "✓ تم حفظ قسيمة الخصم 20٪. سنرسل لك الرمز عبر البريد الإلكتروني.", naechste: "أقرب المواعيد المتاحة:", anderer: "اختر موعدًا آخر", spaeter: "لاحقًا", whatsapp: "احصل على الرمز عبر واتساب الآن" },
+  fr: { gesichert: "✓ Ton bon de 20 % est enregistré. Nous t'envoyons le code par e-mail.", naechste: "Prochains créneaux libres :", anderer: "Choisir un autre créneau", spaeter: "Réserver plus tard", whatsapp: "Recevoir le code sur WhatsApp" },
+  nl: { gesichert: "✓ Je kortingsbon van 20% is opgeslagen. We mailen je de code.", naechste: "Eerstvolgende vrije tijden:", anderer: "Andere tijd kiezen", spaeter: "Later boeken", whatsapp: "Code nu via WhatsApp ontvangen" },
 };
 const text = computed(() => schritt2Text[locale.value] ?? schritt2Text.de);
+// Stichwort der Superchat-Opt-in-Methode „Angebote und Gutscheine“; nur
+// genau dieser Text loest im NEUKUNDEN-Flow Liste und Code aus.
+const WHATSAPP_CODE_LINK = "https://wa.me/4915255793489?text=Anmelden";
 
 onMounted(async () => {
   const b = booking.value;
