@@ -2,7 +2,7 @@
  * Recruiting-Funnel Aerzte fuer Meta-Anzeigen (Ersatz fuer den Perspective-Funnel).
  *
  * Eine Seite je Stadt (/karriere/bewerben/<stadt>), kurz und fuer das Handy:
- * vier Klickfragen wie bei Perspective, dann Kontakt. Die Bewerbung geht ueber
+ * Inhalt und Fragen wie der Perspective-Funnel, dann Kontakt. Die Bewerbung geht ueber
  * /api/karriere/kurzbewerbung an `bewerbung-eingang` der App und landet im
  * Bewerber-Board (Personal > Bewerber), mit Stadt und Kampagne in `herkunft`.
  *
@@ -30,54 +30,88 @@ export const stadtAusSlug = (slug: string | undefined): FunnelStadt | null =>
 export interface FunnelFrage {
   id: string;
   frage: string;
+  /** Kleiner Hinweis unter der Frage (wie bei Perspective). */
+  hinweis?: string;
   optionen: readonly string[];
+  /** Mehrfachauswahl: Antwort wird mit MEHRFACH_TRENNER gespeichert. */
+  mehrfach?: boolean;
 }
 
+export const MEHRFACH_TRENNER = "; ";
+
 /**
- * Die Fragen des Perspective-Funnels "Recruiting - Arzt", sinngemaess
- * uebernommen, plus die Approbation vorne: Ohne Approbation kann das Team
- * nicht einstellen, und genau diese Bewerbungen fuellen heute das Board.
+ * Die Fragen des Perspective-Funnels "Recruiting - Arzt"
+ * (recruiting.myhealthandbeauty.com/docs1, Stand 12.11.2026) woertlich,
+ * in derselben Reihenfolge. Die erste steht dort schon auf der Startseite.
+ * Neu ist nur die Approbation am Ende: Ohne sie kann das Team nicht
+ * einstellen, und genau diese Bewerbungen fuellen heute das Board.
  */
 export const FUNNEL_FRAGEN: readonly FunnelFrage[] = [
   {
+    id: "situation",
+    frage: "Wie würdest du deine aktuelle Situation beschreiben?",
+    optionen: ["Ich bin aktiv auf der Suche", "Ich bin offen für neue Angebote"],
+  },
+  {
+    id: "wichtig",
+    frage: "Was ist dir wichtig, um in deinem Job richtig aufzublühen?",
+    optionen: [
+      "Patientenkontakt & Sinnhaftigkeit",
+      "Flexibilität & Work-Life-Balance",
+      "Innovation & moderne Behandlungen",
+      "Professionelles Wachstum",
+    ],
+  },
+  {
+    id: "standortwechsel",
+    frage: "Käme für dich ein Standortwechsel in Frage?",
+    optionen: [
+      "Ja, ich bin flexibel",
+      "Nein, ich bin an meinen aktuellen Standort gebunden",
+    ],
+  },
+  {
+    id: "erfahrung",
+    frage: "Wie lange arbeitest du bereits im Bereich ästhetische Medizin?",
+    optionen: [
+      "Neu im Bereich – keine Erfahrung",
+      "1-3 Jahre Erfahrung",
+      "3-5 Jahre Erfahrung",
+      "Erfahrener Profi (5+ Jahre)",
+    ],
+  },
+  {
+    id: "ziele",
+    frage: "Was sind deine Ziele in der ästhetischen Medizin?",
+    hinweis: "Denke an die nächsten 2 Jahre und wähle, was dir wichtig ist:",
+    mehrfach: true,
+    optionen: [
+      "Berufliche Weiterentwicklung in der ästhetischen Medizin",
+      "Fachliche Spezialisierung in neuen Behandlungsmethoden",
+      "Innovative Behandlungskonzepte entwickeln",
+      "Menschen zu mehr Wohlbefinden und Selbstvertrauen verhelfen",
+      "Teamführung und Praxismanagement",
+      "Eigene Praxis oder Lounge eröffnen",
+    ],
+  },
+  {
     id: "approbation",
-    frage: "Hast du eine deutsche Approbation als Arzt/Ärztin?",
+    frage: "Hast du eine deutsche Approbation als Arzt?",
     optionen: [
       "Ja, ich bin approbiert",
       "Approbation ist beantragt",
       "Nein, noch nicht",
     ],
   },
-  {
-    id: "erfahrung",
-    frage: "Wie viel Erfahrung hast du in der ästhetischen Medizin?",
-    optionen: [
-      "Neu im Bereich, keine Erfahrung",
-      "Unter 1 Jahr",
-      "1–3 Jahre Erfahrung",
-      "Mehr als 3 Jahre",
-    ],
-  },
-  {
-    id: "motivation",
-    frage: "Was reizt dich an der ästhetischen Medizin am meisten?",
-    optionen: [
-      "Menschen zu mehr Wohlbefinden und Selbstvertrauen verhelfen",
-      "Fachliche Spezialisierung in neuen Behandlungsmethoden",
-      "Planbare Arbeitszeiten ohne Nacht- und Wochenenddienste",
-      "Patientenkontakt & Sinnhaftigkeit",
-    ],
-  },
-  {
-    id: "suche",
-    frage: "Wie aktiv suchst du gerade?",
-    optionen: [
-      "Ich bin aktiv auf der Suche",
-      "Offen für das richtige Angebot",
-      "Erstmal nur informieren",
-    ],
-  },
 ];
+
+/** Gueltige Antwort auf eine Frage (bei Mehrfachauswahl jede Teilantwort). */
+export function antwortGueltig(f: FunnelFrage, antwort: string | undefined): boolean {
+  if (!antwort) return false;
+  if (!f.mehrfach) return f.optionen.includes(antwort);
+  const teile = antwort.split(MEHRFACH_TRENNER);
+  return teile.length > 0 && teile.every((t) => f.optionen.includes(t));
+}
 
 /** Antworten, die das Recruiting sofort sehen soll: keine Approbation. */
 export const ohneApprobation = (antworten: Record<string, string>): boolean =>
@@ -114,6 +148,7 @@ export interface KurzbewerbungEingabe {
   nachname: string;
   email: string;
   telefon: string;
+  wohnort?: string;
   stadt: FunnelStadt;
   antworten: Record<string, string>;
   tracking: Record<string, string>;
@@ -122,13 +157,14 @@ export interface KurzbewerbungEingabe {
 /** Eingabe -> Body im "eigenen Format" von bewerbung-eingang (myhb-os). */
 export function kurzbewerbungFuerApp(e: KurzbewerbungEingabe) {
   const antworten = FUNNEL_FRAGEN
-    .filter((f) => f.optionen.includes(e.antworten[f.id] ?? ""))
+    .filter((f) => antwortGueltig(f, e.antworten[f.id]))
     .map((f) => ({ frage: f.frage, antwort: e.antworten[f.id]! }));
   return {
     vorname: kurz(e.vorname, 120),
     nachname: kurz(e.nachname, 120),
     email: kurz(e.email, 254).toLowerCase(),
     telefon: kurz(e.telefon, 40),
+    wohnort: kurz(e.wohnort, 120) || null,
     stelle: "Arzt (m/w/d)",
     standort: e.stadt.name,
     ausbildungsstand: e.antworten.approbation ?? null,
@@ -156,7 +192,7 @@ export function pruefeKurzbewerbung(e: {
   datenschutz: boolean;
 }): string | null {
   for (const f of FUNNEL_FRAGEN) {
-    if (!f.optionen.includes(e.antworten[f.id] ?? "")) {
+    if (!antwortGueltig(f, e.antworten[f.id])) {
       return "Bitte beantworte alle Fragen.";
     }
   }

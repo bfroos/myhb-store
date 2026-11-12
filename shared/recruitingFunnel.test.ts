@@ -2,6 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   FUNNEL_FRAGEN,
+  MEHRFACH_TRENNER,
+  antwortGueltig,
   kurzbewerbungFuerApp,
   pruefeKurzbewerbung,
   stadtAusSlug,
@@ -69,4 +71,20 @@ test("pruefeKurzbewerbung verlangt Fragen, Kontakt und Einwilligung", () => {
   assert.match(pruefeKurzbewerbung({ ...gut, email: "kaputt" })!, /E-Mail/);
   assert.match(pruefeKurzbewerbung({ ...gut, telefon: "12" })!, /Telefon/);
   assert.match(pruefeKurzbewerbung({ ...gut, datenschutz: false })!, /Datenschutz/);
+});
+
+test("Mehrfachauswahl bei den Zielen", () => {
+  const ziele = FUNNEL_FRAGEN.find((f) => f.id === "ziele")!;
+  const zwei = [ziele.optionen[0], ziele.optionen[5]].join(MEHRFACH_TRENNER);
+  assert.equal(antwortGueltig(ziele, zwei), true);
+  assert.equal(antwortGueltig(ziele, `${ziele.optionen[0]}${MEHRFACH_TRENNER}erfunden`), false);
+  assert.equal(antwortGueltig(ziele, ""), false);
+  const body = kurzbewerbungFuerApp({
+    vorname: "A", nachname: "B", email: "a@b.de", telefon: "0221 1", wohnort: "Bonn",
+    stadt: stadtAusSlug("koeln")!,
+    antworten: { ...alleAntworten, ziele: zwei },
+    tracking: {},
+  });
+  assert.equal(body.wohnort, "Bonn");
+  assert.equal(body.antworten.find((a) => a.frage === ziele.frage)?.antwort, zwei);
 });

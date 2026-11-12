@@ -33,6 +33,7 @@ export default defineEventHandler(async (event) => {
     nachname: String(body.nachname ?? ""),
     email: String(body.email ?? ""),
     telefon: String(body.telefon ?? ""),
+    wohnort: String(body.wohnort ?? ""),
     antworten: (body.antworten && typeof body.antworten === "object" ? body.antworten : {}) as Record<string, string>,
     datenschutz: body.datenschutz === true,
   };
