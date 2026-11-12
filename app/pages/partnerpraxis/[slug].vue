@@ -101,6 +101,7 @@ import {
   ratgeberPfad,
   ratgeberSchema,
 } from "#shared/partnerRatgeber";
+import { PARTNER_SITE } from "#shared/partnerProgramm";
 
 const route = useRoute();
 const artikel = computed(() => findeRatgeber(String(route.params.slug)));
@@ -116,9 +117,11 @@ const weitere = computed(() => {
   return [...gleich, ...andere.filter((x) => !gleich.includes(x))].slice(0, 6);
 });
 
-const config = useRuntimeConfig();
 const { trackEvent } = useGoogleAnalytics();
-const siteUrl = ((config.public.publicUrl as string) || "https://www.myhealthandbeauty.com").replace(/\/$/, "");
+const siteUrl = PARTNER_SITE;
+// Auf go. (Ads) nie in den Index, wie alle anderen Seiten dort (TSEO-10).
+const { isAdsMode } = useSiteModeFlags();
+const robots = isAdsMode.value ? [{ name: "robots", content: "noindex, nofollow" }] : [];
 const url = computed(() => `${siteUrl}${ratgeberPfad(artikel.value!.slug)}`);
 
 useHead(() => ({
@@ -130,6 +133,7 @@ useHead(() => ({
     { property: "og:description", content: artikel.value!.beschreibung },
     { property: "og:url", content: url.value },
     { property: "og:type", content: "article" },
+    ...robots,
   ],
 }));
 useSchemaOrg(computed(() => ratgeberSchema(artikel.value!, siteUrl)));

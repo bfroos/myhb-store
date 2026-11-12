@@ -66,3 +66,8 @@ test("Kacheln der Partnerseite verlinken nur vorhandene Ratgeber, jede Gruppe ha
   const { RATGEBER_GRUPPEN, gruppeVon } = await import("./partnerRatgeber.ts");
   for (const g of RATGEBER_GRUPPEN) assert.ok(RATGEBER.some((a) => gruppeVon(a) === g.gruppe), g.gruppe);
 });
+
+test("Partnerseiten: Canonical immer auf www, auch im go.-Deployment", async () => {
+  const { PARTNER_SITE } = await import("./partnerProgramm.ts");
+  assert.equal(PARTNER_SITE, "https://www.myhealthandbeauty.com");
+});

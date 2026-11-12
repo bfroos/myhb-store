@@ -24,8 +24,10 @@ export default defineEventHandler((event) => {
   const isGoogleBot = gscAgents.some(agent => userAgent.includes(agent));
   
   if (isGoogleBot) {
-    // Remove restrictive headers for Google bots
-    setResponseHeader(event, 'X-Robots-Tag', 'all');
+    // Kein X-Robots-Tag mehr setzen (12.11.2026): "all" hob auf go. (Ads)
+    // fuer Google genau das noindex auf, das TSEO-10 dort verlangt, und landete
+    // per ISR-Cache auch bei allen anderen Besuchern. Auf www ist "all" ohnehin
+    // der Normalfall.
     setResponseHeader(event, 'X-Google-Bot-Friendly', 'true');
     
     // Allow full access
