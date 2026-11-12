@@ -57,3 +57,12 @@ test("Schema: Article und FAQPage mit denselben Fragen", () => {
   assert.equal(faq.mainEntity.length, a.fragen.length);
   assert.equal(faq.mainEntity[0].acceptedAnswer.text, a.fragen[0].antwort);
 });
+
+test("Kacheln der Partnerseite verlinken nur vorhandene Ratgeber, jede Gruppe hat Artikel", async () => {
+  const { FUNDAMENT, AUTOMATISIERUNG, PAKETE } = await import("./partnerProgramm.ts");
+  const links = [...FUNDAMENT, ...AUTOMATISIERUNG, ...PAKETE].map((k) => k.ratgeber).filter(Boolean) as string[];
+  assert.ok(links.length >= 6);
+  for (const s of links) assert.ok(findeRatgeber(s), s);
+  const { RATGEBER_GRUPPEN, gruppeVon } = await import("./partnerRatgeber.ts");
+  for (const g of RATGEBER_GRUPPEN) assert.ok(RATGEBER.some((a) => gruppeVon(a) === g.gruppe), g.gruppe);
+});

@@ -26,7 +26,8 @@ export const PARTNER_SEO = {
     "Als Arzt eine Privatpraxis für ästhetische Medizin gründen: unter der Marke MY HEALTH & BEAUTY, mit Website, Software, Einkauf und Ausbildung aus einer Hand.",
 };
 
-export type Kachel = { titel: string; text: string };
+/** ratgeber: Slug eines Ratgebers (partnerRatgeber.ts), die Kachel verlinkt ihn. */
+export type Kachel = { titel: string; text: string; ratgeber?: string };
 
 /**
  * Fotos vom eigenen Shooting 2026 aus der Strapi-Mediathek (large = 800 px).
@@ -77,27 +78,29 @@ export const FUNDAMENT: Kachel[] = [
   {
     titel: "Unsere Software",
     text: "Buchung, Kunden-App, Kundenakte, Kasse und Lager in einem System. Du behandelst, die Software erledigt den Rest.",
+    ratgeber: "praxissoftware-privatpraxis",
   },
   {
     titel: "Faire Einkaufspreise",
     text: "Produkte und Material bestellst du über uns, zu denselben Konditionen wie unsere eigenen Standorte.",
+    ratgeber: "praxisbedarf-einkauf-aesthetik",
   },
 ];
 
 /** Automatisierung, die zur Software gehoert. */
 export const AUTOMATISIERUNG: Kachel[] = [
-  { titel: "MY-Telefonassistenz", text: "Nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Auch dann, wenn am Empfang gerade viel los ist." },
+  { titel: "MY-Telefonassistenz", text: "Nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Auch dann, wenn am Empfang gerade viel los ist.", ratgeber: "ki-telefonassistent-arztpraxis" },
   { titel: "MY-Chatassistent", text: "Beantwortet Nachrichten auf WhatsApp rund um die Uhr." },
-  { titel: "Terminbestätigung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch. So fallen weniger Termine aus." },
+  { titel: "Terminbestätigung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch. So fallen weniger Termine aus.", ratgeber: "online-terminbuchung-praxis" },
   { titel: "Kunden-App", text: "Kunden buchen selbst, sehen ihren Behandlungsplan und kommen wieder. Du siehst jede Behandlung auf einen Blick." },
 ];
 
 /** Was man zusaetzlich buchen kann. */
 /** Kassen-Paket: Benjamin 05.11.2026, Kasse in der App mit Zahlungsanbieter statt Shopify (myhb-os#2207). */
 export const PAKETE: Kachel[] = [
-  { titel: "Marketing-Paket", text: "Anzeigen bei Google, Instagram und Facebook, gesteuert von unserem Team." },
+  { titel: "Marketing-Paket", text: "Anzeigen bei Google, Instagram und Facebook, gesteuert von unserem Team.", ratgeber: "praxismarketing-aesthetische-medizin" },
   { titel: "Social-Media-Paket", text: "Wir kommen in deine Praxis, drehen deine ersten Videos und betreuen deine Kanäle." },
-  { titel: "Recruiting-Paket", text: "Wir finden Kundenberater und Ärzte für dein Team." },
+  { titel: "Recruiting-Paket", text: "Wir finden Kundenberater und Ärzte für dein Team.", ratgeber: "mfa-personal-finden" },
   { titel: "Lohn-Paket", text: "Die monatliche Lohnabrechnung für dein ganzes Team inkl. Zeiterfassung und Schichtenplanung." },
   { titel: "Buchhaltungs-Paket", text: "Belege, Kasse und Zahlungen jeden Monat fertig für deinen Steuerberater." },
   { titel: "Standort-Paket", text: "Wir suchen mit dir den passenden Standort und verhandeln den Mietvertrag." },

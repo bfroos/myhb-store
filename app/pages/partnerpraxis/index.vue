@@ -60,6 +60,7 @@
             <span class="pp__nummer">{{ i + 1 }}</span>
             <h3>{{ k.titel }}</h3>
             <p>{{ k.text }}</p>
+            <NuxtLink v-if="k.ratgeber" :to="ratgeberPfad(k.ratgeber)" class="pp__mehr">Mehr dazu im Ratgeber →</NuxtLink>
           </li>
         </ul>
       </div>
@@ -75,6 +76,7 @@
               <li v-for="k in AUTOMATISIERUNG" :key="k.titel">
                 <strong>{{ k.titel }}</strong>
                 <span>{{ k.text }}</span>
+                <NuxtLink v-if="k.ratgeber" :to="ratgeberPfad(k.ratgeber)" class="pp__mehr">Mehr dazu →</NuxtLink>
               </li>
             </ul>
           </div>
@@ -94,6 +96,7 @@
           <li v-for="k in PAKETE" :key="k.titel" class="pp__karte">
             <h3>{{ k.titel }}</h3>
             <p>{{ k.text }}</p>
+            <NuxtLink v-if="k.ratgeber" :to="ratgeberPfad(k.ratgeber)" class="pp__mehr">Mehr dazu im Ratgeber →</NuxtLink>
           </li>
         </ul>
         <p class="pp__hinweis">{{ PAKETE_HINWEIS }}</p>
@@ -167,12 +170,15 @@
       <div class="pp__breite">
         <p class="pp__eyebrow">Ratgeber</p>
         <h2>Alles zur eigenen Praxis in der ästhetischen Medizin</h2>
-        <ul class="pp__karten pp__karten--drei" role="list">
-          <li v-for="a in RATGEBER" :key="a.slug" class="pp__karte">
-            <h3><NuxtLink :to="ratgeberPfad(a.slug)" class="pp__ratgeberLink">{{ a.h1 }}</NuxtLink></h3>
-            <p>{{ a.beschreibung }}</p>
-          </li>
-        </ul>
+        <template v-for="g in RATGEBER_GRUPPEN" :key="g.gruppe">
+          <h3 class="pp__ratgeberGruppe">{{ g.titel }}</h3>
+          <ul class="pp__karten pp__karten--drei" role="list">
+            <li v-for="a in RATGEBER.filter((x) => gruppeVon(x) === g.gruppe)" :key="a.slug" class="pp__karte">
+              <h3><NuxtLink :to="ratgeberPfad(a.slug)" class="pp__ratgeberLink">{{ a.h1 }}</NuxtLink></h3>
+              <p>{{ a.beschreibung }}</p>
+            </li>
+          </ul>
+        </template>
       </div>
     </section>
 
@@ -229,7 +235,7 @@ import {
   partnerFaqSchema,
   partnerServiceSchema,
 } from "#shared/partnerProgramm";
-import { RATGEBER, ratgeberPfad } from "#shared/partnerRatgeber";
+import { RATGEBER, RATGEBER_GRUPPEN, gruppeVon, ratgeberPfad } from "#shared/partnerRatgeber";
 
 const config = useRuntimeConfig();
 const { trackEvent } = useGoogleAnalytics();
@@ -264,4 +270,6 @@ function frageGeoeffnet(e: Event, frage: string) {
 <style>
 .pp__ratgeberLink { color: inherit; text-decoration: none; }
 .pp__ratgeberLink:hover { text-decoration: underline; }
+.pp__ratgeberGruppe { margin: 2rem 0 1rem; font-size: 1.15rem; }
+.pp__mehr { display: inline-block; margin-top: .5rem; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 </style>
