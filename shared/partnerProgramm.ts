@@ -90,7 +90,7 @@ export const FUNDAMENT: Kachel[] = [
 /** Automatisierung, die zur Software gehoert. */
 export const AUTOMATISIERUNG: Kachel[] = [
   { titel: "MY-Telefonassistenz", text: "Nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Auch dann, wenn am Empfang gerade viel los ist.", ratgeber: "ki-telefonassistent-arztpraxis" },
-  { titel: "MY-Chatassistent", text: "Beantwortet Nachrichten auf WhatsApp rund um die Uhr." },
+  { titel: "MY-Chatassistent", text: "Beantwortet Nachrichten auf WhatsApp rund um die Uhr.", ratgeber: "ki-in-der-arztpraxis" },
   { titel: "Terminbestätigung", text: "Kunden bekommen Bestätigung und Erinnerung automatisch. So fallen weniger Termine aus.", ratgeber: "online-terminbuchung-praxis" },
   { titel: "Kunden-App", text: "Kunden buchen selbst, sehen ihren Behandlungsplan und kommen wieder. Du siehst jede Behandlung auf einen Blick." },
 ];
