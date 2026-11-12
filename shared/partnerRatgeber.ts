@@ -16,6 +16,8 @@
  *   "botox kurs" ist der Suchbegriff (Benjamin 07.11.2026).
  */
 
+import { RATGEBER_PRAXIS } from "./partnerRatgeberPraxis.ts";
+
 export const RATGEBER_BASIS = "/partnerpraxis";
 export const RATGEBER_STAND = "November 2026";
 
@@ -31,6 +33,10 @@ export type RatgeberFrage = { frage: string; antwort: string };
 
 export type RatgeberArtikel = {
   slug: string;
+  /** Gruendung (Weg in die eigene Praxis) oder Fuehren (Alltag der Praxis). Ohne Angabe: gruenden. */
+  gruppe?: "gruenden" | "fuehren";
+  /** Letzte inhaltliche Aenderung (Schema dateModified), Standard 2026-11-07. */
+  geaendert?: string;
   /** Kurzname fuer Links und Brotkrumen. */
   kurz: string;
   h1: string;
@@ -44,7 +50,7 @@ export type RatgeberArtikel = {
   quellen: { titel: string; url: string }[];
 };
 
-export const RATGEBER: RatgeberArtikel[] = [
+const RATGEBER_GRUENDUNG: RatgeberArtikel[] = [
   {
     slug: "privatpraxis-eroeffnen",
     kurz: "Privatpraxis eröffnen",
@@ -461,6 +467,16 @@ export const RATGEBER: RatgeberArtikel[] = [
   },
 ];
 
+/** Alle Ratgeber: erst Gruendung, dann Praxis fuehren (partnerRatgeberPraxis.ts). */
+export const RATGEBER: RatgeberArtikel[] = [...RATGEBER_GRUENDUNG, ...RATGEBER_PRAXIS];
+
+export const RATGEBER_GRUPPEN = [
+  { gruppe: "gruenden", titel: "Der Weg zur eigenen Praxis" },
+  { gruppe: "fuehren", titel: "Die eigene Praxis führen" },
+] as const;
+
+export const gruppeVon = (a: RatgeberArtikel) => a.gruppe ?? "gruenden";
+
 export function ratgeberPfad(slug: string): string {
   return `${RATGEBER_BASIS}/${slug}`;
 }
@@ -482,7 +498,7 @@ export function ratgeberSchema(a: RatgeberArtikel, siteUrl: string) {
       description: a.beschreibung,
       url,
       inLanguage: "de-DE",
-      dateModified: "2026-11-07",
+      dateModified: a.geaendert ?? "2026-11-07",
       audience: { "@type": "Audience", audienceType: "Ärzte" },
       publisher: { "@type": "Organization", name: "MY HEALTH & BEAUTY", url: basis },
       isPartOf: { "@type": "WebSite", url: basis },

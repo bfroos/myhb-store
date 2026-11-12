@@ -97,6 +97,7 @@ import {
   RATGEBER_BASIS,
   RATGEBER_STAND,
   findeRatgeber,
+  gruppeVon,
   ratgeberPfad,
   ratgeberSchema,
 } from "#shared/partnerRatgeber";
@@ -107,7 +108,13 @@ if (!artikel.value) {
   throw createError({ statusCode: 404, statusMessage: "Ratgeber nicht gefunden", fatal: true });
 }
 
-const weitere = computed(() => RATGEBER.filter((a) => a.slug !== artikel.value?.slug));
+// Erst die Ratgeber aus derselben Gruppe, dann die anderen; hoechstens sechs.
+const weitere = computed(() => {
+  const a = artikel.value;
+  const andere = RATGEBER.filter((x) => x.slug !== a?.slug);
+  const gleich = a ? andere.filter((x) => gruppeVon(x) === gruppeVon(a)) : [];
+  return [...gleich, ...andere.filter((x) => !gleich.includes(x))].slice(0, 6);
+});
 
 const config = useRuntimeConfig();
 const { trackEvent } = useGoogleAnalytics();
