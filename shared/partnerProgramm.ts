@@ -20,6 +20,13 @@
 export const PARTNER_PATH = "/partnerpraxis";
 export const PARTNER_SUBDOMAIN = "partner.myhealthandbeauty.com";
 
+/**
+ * Canonical der Partnerseiten. Fest auf www, nicht publicUrl: auf go. (Ads)
+ * ist publicUrl die go.-Adresse, die Seiten nannten dort sich selbst als
+ * Original und waren fuer Google ein Duplikat (12.11.2026).
+ */
+export const PARTNER_SITE = "https://www.myhealthandbeauty.com";
+
 export const PARTNER_SEO = {
   title: "Privatpraxis für ästhetische Medizin gründen | MY HEALTH & BEAUTY",
   description:

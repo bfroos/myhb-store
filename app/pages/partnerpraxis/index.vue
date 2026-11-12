@@ -227,6 +227,7 @@ import {
   PAKETE,
   PAKETE_HINWEIS,
   PARTNER_PATH,
+  PARTNER_SITE,
   PARTNER_SEO,
   QUALITAET,
   SCHRITTE,
@@ -237,9 +238,11 @@ import {
 } from "#shared/partnerProgramm";
 import { RATGEBER, RATGEBER_GRUPPEN, gruppeVon, ratgeberPfad } from "#shared/partnerRatgeber";
 
-const config = useRuntimeConfig();
 const { trackEvent } = useGoogleAnalytics();
-const siteUrl = ((config.public.publicUrl as string) || "https://www.myhealthandbeauty.com").replace(/\/$/, "");
+const siteUrl = PARTNER_SITE;
+// Auf go. (Ads) nie in den Index, wie alle anderen Seiten dort (TSEO-10).
+const { isAdsMode } = useSiteModeFlags();
+const robots = isAdsMode.value ? [{ name: "robots", content: "noindex, nofollow" }] : [];
 
 useHead({
   title: PARTNER_SEO.title,
@@ -250,6 +253,7 @@ useHead({
     { property: "og:description", content: PARTNER_SEO.description },
     { property: "og:url", content: `${siteUrl}${PARTNER_PATH}` },
     { property: "og:type", content: "website" },
+    ...robots,
   ],
 });
 useSchemaOrg(computed(() => partnerFaqSchema()));
