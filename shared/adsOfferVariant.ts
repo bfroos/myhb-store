@@ -33,7 +33,10 @@ export const ADS_OFFER_AB_ENABLED = true;
  * Meta-Seiten auf www (/aktion/..., `bundesweit`) bleiben unveraendert.
  * false = zurueck zum Stand davor (A mit Rabatt, B nur unter /ab-beratung/).
  */
-export const ADS_NO_DISCOUNT = true;
+export const ADS_NO_DISCOUNT = false;
+// 13.11.2026: wieder aus. Seit dem 06.11. halbierten sich die Google-
+// Neukunden-Termine (16 statt ~29 je Woche, Meta stabil). Benjamin: Rabatt
+// als A/B-Test zurueck, siehe ADS_OFFER_AUTO_SPLIT (myhb-app/myhb-os#1843).
 
 export const ADS_OFFER_QUERY_KEY = "angebot";
 export const ADS_OFFER_QUERY_B = "beratung";
@@ -72,7 +75,16 @@ export function wantsAdsOfferB(query: Record<string, unknown> | URLSearchParams 
  * umgeleitet. Zum Pruefen: `?angebot=beratung` erzwingt B, `?angebot=rabatt` A
  * (beide ohne Cookie zu setzen).
  */
-export const ADS_OFFER_AUTO_SPLIT = false;
+export const ADS_OFFER_AUTO_SPLIT = true;
+// Eingeschaltet 13.11.2026 (Benjamin: "Ja, A/B-Test"): Haelfte der Google-
+// Besucher mit 20 % (A), Haelfte ohne (B). Auswertung ueber ref_path
+// /ab-beratung/... und offer_variant, myhb-app/myhb-os#1843.
+
+/** Zuteilung aus dem Cookie lesen ("a", "b" oder null, wenn noch keine). */
+export function adsOfferCookieVariant(cookie: string | null | undefined): AdsOfferVariant | null {
+  const m = new RegExp(`(?:^|; )${ADS_OFFER_COOKIE}=([ab])`).exec(String(cookie ?? ""));
+  return m ? (m[1] as AdsOfferVariant) : null;
+}
 
 /** Anteil Variante B bei automatischer Aufteilung. */
 export const ADS_OFFER_B_SHARE = 0.5;

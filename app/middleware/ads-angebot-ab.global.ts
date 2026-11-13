@@ -1,7 +1,9 @@
 import { isAdsTemplateV2LivePage } from "#shared/adsTemplateV2";
 import {
   ADS_OFFER_AB_ENABLED,
+  ADS_OFFER_AUTO_SPLIT,
   adsOfferBPath,
+  adsOfferCookieVariant,
   wantsAdsOfferB,
 } from "#shared/adsOfferVariant";
 
@@ -14,7 +16,12 @@ import {
  */
 export default defineNuxtRouteMiddleware((to) => {
   if (import.meta.server || !ADS_OFFER_AB_ENABLED) return;
-  if (!wantsAdsOfferB(to.query)) return;
+  // Automatische Aufteilung: wer per Cookie in B ist, bleibt auch bei
+  // Navigation innerhalb der App in B (das Kopf-Skript laeuft nur beim Laden).
+  const inB =
+    wantsAdsOfferB(to.query) ||
+    (ADS_OFFER_AUTO_SPLIT && to.query.angebot !== "rabatt" && adsOfferCookieVariant(document.cookie) === "b");
+  if (!inB) return;
   const { isAdsMode } = useSiteModeFlags();
   if (!isAdsMode.value) return;
   const m = /^\/standorte\/([^/]+)\/([^/]+)\/(.+?)\/?$/.exec(to.path);
