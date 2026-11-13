@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { hatHautanalyseBlock, hautanalyseDeeplink, seitenSlug } from "./hautanalyseCta.ts";
+import { hatHautanalyseBlock, hautanalyseDeeplink, hautanalysePrototypZiel, seitenSlug } from "./hautanalyseCta.ts";
 
 describe("hautanalyseCta (myhb-os#1445)", () => {
   it("Block auf messbaren Themen", () => {
@@ -21,5 +21,20 @@ describe("hautanalyseCta (myhb-os#1445)", () => {
     assert.equal(url.searchParams.get("utm_content"), "stirnfalte");
     assert.equal(url.searchParams.get("utm_medium"), "behandlungsseite");
     assert.equal(new URL(hautanalyseDeeplink("startseite", "startseite")).searchParams.get("utm_medium"), "startseite");
+  });
+
+  it("leitet den alten Prototyp /hautanalyse in die App um (myhb-os#643)", () => {
+    for (const p of ["/hautanalyse", "/hautanalyse/", "/en/hautanalyse", "/Hautanalyse"]) {
+      const url = new URL(hautanalysePrototypZiel(p)!);
+      assert.equal(url.origin + url.pathname, "https://app.myhealthandbeauty.com/hautanalyse", p);
+      assert.equal(url.searchParams.get("utm_medium"), "prototyp");
+    }
+    const mitHerkunft = new URL(hautanalysePrototypZiel("/hautanalyse", "?utm_source=meta&utm_content=reel1")!);
+    assert.equal(mitHerkunft.searchParams.get("utm_source"), "meta");
+    assert.equal(mitHerkunft.searchParams.get("utm_content"), "reel1");
+    assert.equal(mitHerkunft.searchParams.get("utm_medium"), null);
+    for (const p of ["/", "/behandlungen/botox", "/hautanalyse-test", "/ratgeber/hautanalyse", "/api/hautanalyse/analyse"]) {
+      assert.equal(hautanalysePrototypZiel(p), null, p);
+    }
   });
 });

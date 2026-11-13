@@ -128,12 +128,12 @@ const REGELN: Record<MerkmalKey, Omit<Empfehlung, "merkmal">> = {
   },
   feuchtigkeit: {
     titel: "Feuchtigkeit auffüllen",
-    text: "Deine Haut hält aktuell wenig Feuchtigkeit. Dafür gibt es Behandlungen, die von innen polstern statt nur einzucremen.",
+    text: "Deine Haut hält aktuell wenig Feuchtigkeit. Was dazu passt, bespricht die Ärztin mit dir in der kostenlosen Beratung.",
     behandlung: { name: "PROFHILO®", slug: "profhilo" },
   },
   poren: {
     titel: "Hautbild verfeinern",
-    text: "Die Poren treten sichtbar hervor. Ein Skinbooster arbeitet genau an dieser Oberfläche.",
+    text: "Die Poren treten sichtbar hervor. In der Beratung schauen wir gemeinsam, was für deine Haut infrage kommt.",
     behandlung: { name: "Mesotherapie", slug: "mesotherapie" },
   },
   textur: {
