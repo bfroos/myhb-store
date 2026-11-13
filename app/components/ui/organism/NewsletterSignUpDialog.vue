@@ -183,9 +183,9 @@ import {
 import { inject } from "vue";
 import InputText from "primevue/inputtext";
 import {
-  useCalendlyDialog,
+  useBookingDialog,
   type BookingDialogOptions,
-} from "~/composables/useCalendlyDialog";
+} from "~/composables/useBookingDialog";
 import { NEUKUNDEN_OFFER } from "~/lib/checkoutAttempt";
 import type { TreatmentType } from "~/lib/strapi/dto/enums";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
@@ -199,7 +199,7 @@ const { brandNameShort } = useBrand();
 const { locale } = useI18n();
 
 const dialogRef = inject("dialogRef") as any;
-const { openCalendlyDialog } = useCalendlyDialog();
+const { openBookingDialog } = useBookingDialog();
 
 const {
   email,
@@ -294,7 +294,6 @@ const handleClose = () => {
 };
 
 type BookingData = {
-  calendlyUrl?: string;
   appBookingUrl?: string;
   locationSlug?: string;
   treatmentType?: TreatmentType;
@@ -303,7 +302,7 @@ type BookingData = {
   treatmentContext?: BookingTreatmentContext;
 };
 
-// Buchungsdaten (calendlyUrl/treatmentType) kommen ueber die Dialog-Daten
+// Buchungsdaten (appBookingUrl/treatmentType) kommen ueber die Dialog-Daten
 // (siehe SharedButton.openNewsletterSignUpDialog). Ohne sie (z. B. Footer-
 // Knopf ohne Standort) bleibt es bei der Erfolgsmeldung.
 const booking = computed<BookingData | undefined>(
@@ -313,7 +312,6 @@ const hasBooking = computed(
   () =>
     !!booking.value &&
     !!(
-      booking.value.calendlyUrl ||
       booking.value.appBookingUrl ||
       booking.value.treatmentType ||
       booking.value.appTreatmentSlug
@@ -322,15 +320,14 @@ const hasBooking = computed(
 
 /**
  * Rabatt-Dialog schliessen und denselben Buchungsdialog oeffnen, den der
- * "Termin buchen"-Knopf der Seite verwendet (A/B-Split #100 unveraendert).
+ * "Termin buchen"-Knopf der Seite verwendet.
  * Immer `via_modal`; `offer` nur nach erfolgreicher Anmeldung.
  */
 function openBooking(options: BookingDialogOptions): boolean {
   const b = booking.value;
   if (!b || !hasBooking.value) return false;
   if (dialogRef) dialogRef.value.close();
-  openCalendlyDialog(
-    b.calendlyUrl,
+  openBookingDialog(
     b.treatmentType,
     b.appTreatmentSlug,
     {
@@ -427,7 +424,7 @@ async function handleSubmit() {
 
   // Nach erfolgreicher Anmeldung: mit freien Terminen erst Schritt 2 (#1030),
   // sonst direkt den Terminbuchungs-Dialog. Buchung mit Neukundenrabatt:
-  // Wert −20 %, InitiateCheckout erst bei der Standortwahl (useCalendlyDialog).
+  // Wert −20 %, InitiateCheckout erst bei der Standortwahl (useBookingDialog).
   nachAnmeldung = { offer: NEUKUNDEN_OFFER, prefill };
   if (termine.value.length > 0) {
     gesichert.value = true;

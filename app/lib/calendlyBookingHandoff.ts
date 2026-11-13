@@ -2,7 +2,7 @@
  * Übergabe zwischen Calendly-Dialog und Dankesseite (elanagency/myhb-os#131).
  *
  * `booking_confirmed` feuerte bis 14.09.2026 nur im eingebetteten Calendly-
- * Widget (CalendlyDialog.vue, Nachricht `calendly.event_scheduled`). Gemessen
+ * Widget (BookingLocationDialog.vue, Nachricht `calendly.event_scheduled`). Gemessen
  * gegen die Datenbank sah das Ereignis damit nur 67–75 % der Buchungen:
  * Direktlinks auf calendly.com (Funnel, WhatsApp, E-Mail, Anzeigen) laufen
  * an unseren Seiten vorbei, und auch im Embed geht ein Teil der Nachrichten

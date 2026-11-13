@@ -18,7 +18,7 @@ import { pushErweiterteConversions } from "~/lib/enhancedConversions";
  * aus Funnel, WhatsApp, E-Mail und Anzeigen — und die Embed-Buchungen, deren
  * `calendly.event_scheduled`-Nachricht im Redirect verloren ging.
  *
- * Doppelzählung verhindert die Übergabe aus CalendlyDialog.vue
+ * Doppelzählung verhindert die Übergabe aus BookingLocationDialog.vue
  * (lib/calendlyBookingHandoff.ts): Hat der Dialog dieselbe `invitee_uuid`
  * schon gemeldet, feuert die Dankesseite nicht. Reloads der Dankesseite
  * (GA4 zählte 1,22 `termin_gebucht` je Nutzer) fängt die Liste der schon

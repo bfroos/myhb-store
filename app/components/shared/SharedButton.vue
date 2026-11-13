@@ -18,16 +18,15 @@ import { defineAsyncComponent } from "vue";
 import { useDialog } from "primevue/usedialog";
 import type { SharedButtonDto } from "~/lib/strapi/dto/components";
 import {
-  useCalendlyDialog,
+  useBookingDialog,
   type BookingDialogOptions,
-} from "~/composables/useCalendlyDialog";
+} from "~/composables/useBookingDialog";
 import { hasNewsletterSignup } from "~/composables/useNewsletterSignup";
 import { NEUKUNDEN_OFFER } from "~/lib/checkoutAttempt";
 import {
   APP_BOOKING_URL,
   useAppBookingDialog,
 } from "~/composables/useAppBookingDialog";
-import { useCalendlyTreatmentEvent } from "~/composables/useCalendlyTreatmentEvent";
 import { SharedButtonAction } from "~/lib/strapi/dto/enums";
 import type { BaseButtonProps } from "~/lib/ui/types";
 import { KLINIK_CTA_LABEL, istAnfrageModal, modalBehandlung } from "#shared/klinik";
@@ -201,12 +200,9 @@ function resolveInternalToFromSharedButton(
 }
 
 const dialog = useDialog();
-const { openCalendlyDialog } = useCalendlyDialog();
+const { openBookingDialog } = useBookingDialog();
 const { openAppBookingDialog } = useAppBookingDialog();
 const { trackBookingClick } = useGoogleAnalytics();
-const { prewarmBookingWhenIdle } = useBookingPrewarm();
-const { resolveBooking } = useBookingAbTest();
-const { treatmentEventUrl } = useCalendlyTreatmentEvent();
 const { seitenStandort } = useSeitenStandort();
 const { seitenBehandlung } = useSeitenBehandlung();
 
@@ -220,11 +216,10 @@ const { seitenBehandlung } = useSeitenBehandlung();
  */
 const knopfStandort = computed(() => {
   const eigen = {
-    calendlyUrl: props.data?.calendlyUrl || button.value?.data?.calendlyUrl,
     appBookingUrl: props.data?.appBookingUrl || button.value?.data?.appBookingUrl,
     locationSlug: props.data?.locationSlug || button.value?.data?.locationSlug,
   };
-  if (eigen.calendlyUrl || eigen.appBookingUrl) return eigen;
+  if (eigen.appBookingUrl) return eigen;
   if (props.ohneSeitenKontext) return eigen;
   return seitenStandort.value ?? eigen;
 });
@@ -252,46 +247,6 @@ const knopfBehandlung = computed(() => {
   };
 });
 
-/**
- * Die Buchungs-URL dieses Knopfes, aus beiden Quellen wie beim Klick.
- *
- * #148: Kommt der Knopf von einer Behandlungsseite (`treatmentType` gesetzt),
- * zeigt die Calendly-URL direkt auf den Behandlungstermin des Kontos statt auf
- * die Terminart-Auswahl. Vorwaermen und Dialog muessen dieselbe URL sehen,
- * deshalb passiert das hier und nicht erst beim Klick.
- */
-const bookingUrl = computed(() =>
-  treatmentEventUrl(
-    knopfStandort.value.calendlyUrl,
-    knopfBehandlung.value.treatmentType,
-  ),
-);
-
-// #141: Calendly zeichnet im iFrame erst 10 bis ueber 40 Sekunden nach dem
-// Klick — es sei denn, seine Dateien liegen schon im Cache. Genau das holt das
-// Vorwaermen nach, waehrend die Seite gelesen wird. Es laeuft nur einmal je
-// Seite; weitere Buchungsknoepfe zeigen auf dieselbe URL. #180: Gestartet wird
-// erst nach dem ersten Screen (load + LCP, dann Regung oder 4 s Ruhe).
-// go. Variante A (02.10.2026): "20 % Rabatt sichern" ist dort der Hauptknopf
-// und fuehrt nach dem Rabatt-Dialog in dieselbe Buchung - also auch vorwaermen.
-onMounted(() => {
-  if (button.value?.method !== "action") return;
-  const action = button.value?.action;
-  const booksAfterSignup =
-    action === SharedButtonAction.NEWSLETTER_SIGN_UP && isAdsMode.value;
-  if (action !== SharedButtonAction.APPOINTMENT_BOOKING && !booksAfterSignup)
-    return;
-  // 07.10.2026 (nur noch App): Vorgewaermt wird nur, was der Klick wirklich
-  // oeffnet. Bucht der Standort ueber die App, laedt calendly.com hier nicht
-  // mehr im Hintergrund; nur ein Standort ohne App-Link waermt noch Calendly.
-  const ziel = resolveBooking({
-    calendlyUrl: bookingUrl.value,
-    appBookingUrl: knopfStandort.value.appBookingUrl,
-  });
-  if (ziel.url !== bookingUrl.value) return;
-  prewarmBookingWhenIdle(bookingUrl.value);
-});
-
 const { openOpAnfrage } = useOpAnfrageDialog();
 
 const handleClick = () => {
@@ -301,9 +256,8 @@ const handleClick = () => {
   }
   // New in-app booking iframe method (limited rollout, e.g. Neukundenrabatt page)
   if (button.value?.method === "app-booking") {
-    // #128: Dieser Knopf oeffnet die App unabhaengig vom A/B-Bucket. Ohne
-    // Kennzeichnung saehe ein Besucher aus dem Calendly-Arm in GA4 aus wie ein
-    // Messfehler (`booking_type=app` bei `ab_variant=calendly`).
+    // #128: Dieser Knopf oeffnet die App ohne Standort (Kennzeichnung
+    // `ab_bypass` bleibt fuer die Auswertung).
     trackBookingClick("app", { ab_bypass: true });
     openAppBookingDialog(button.value?.label, APP_BOOKING_URL, {
       abBypass: true,
@@ -315,14 +269,14 @@ const handleClick = () => {
   if (button.value?.method !== "action" || !button.value.action) return;
 
   if (button.value.action === SharedButtonAction.APPOINTMENT_BOOKING) {
-    openCalendlyDialogForButton();
+    openBookingDialogForButton();
   }
   if (button.value.action === SharedButtonAction.NEWSLETTER_SIGN_UP) {
     // go. (02.10.2026): Schon angemeldet (Marke aus dem Rabatt-Dialog in
     // diesem Browser) -> kein zweites Formular, gleich die Buchung mit
     // Rabattkennung. Ohne Buchungsdaten bleibt es beim Formular.
     if (isAdsMode.value && hasNewsletterSignup() && hasBookingTarget()) {
-      openCalendlyDialogForButton({ offer: NEUKUNDEN_OFFER });
+      openBookingDialogForButton({ offer: NEUKUNDEN_OFFER });
       return;
     }
     openNewsletterSignUpDialog();
@@ -331,25 +285,20 @@ const handleClick = () => {
 
 function hasBookingTarget(): boolean {
   return !!(
-    bookingUrl.value ||
     knopfStandort.value.appBookingUrl ||
     knopfBehandlung.value.treatmentType ||
     knopfBehandlung.value.appTreatmentSlug
   );
 }
 
-function openCalendlyDialogForButton(options?: BookingDialogOptions) {
-  const url = bookingUrl.value;
+function openBookingDialogForButton(options?: BookingDialogOptions) {
   // #66/#78: Behandlungstyp, App-Slug (`?treatment=`) und Kontextzeile —
   // eigene Daten des Knopfes oder die Behandlung der Seite.
   const { treatmentType, appTreatmentSlug, kontext } = knopfBehandlung.value;
-  // #97/#100: Zweiter Buchungsweg des Standorts. Liegt er vor und ist der
-  // Standort freigegeben, entscheidet der A/B-Split beim Klick zwischen
-  // Calendly und App — sonst bleibt es bei der Calendly-URL.
+  // App-Buchungs-URL des Standorts; ohne sie oeffnet die Standortsuche.
   const appBookingUrl = knopfStandort.value.appBookingUrl;
   const locationSlug = knopfStandort.value.locationSlug;
-  openCalendlyDialog(
-    url,
+  openBookingDialog(
     treatmentType,
     appTreatmentSlug,
     { appBookingUrl, locationSlug },
@@ -364,21 +313,17 @@ const openNewsletterSignUpDialog = () => {
       () => import("~/components/ui/organism/NewsletterSignUpDialog.vue"),
     ),
     {
-      // Buchungsdaten (calendlyUrl/appBookingUrl/treatmentType) durchreichen,
+      // Buchungsdaten (appBookingUrl/treatmentType) durchreichen,
       // damit der Dialog nach der Anmeldung den passenden Buchungs-Dialog
-      // oeffnen kann. Beide Quellen wie in openCalendlyDialogForButton: ein in
+      // oeffnen kann. Beide Quellen wie in openBookingDialogForButton: ein in
       // Strapi gepflegter Rabatt-Button traegt seine Buchungsdaten unter
       // `button.data`, nur die fest verdrahteten unter `props.data`. Fiel das
-      // weg, verlor der Weg `appBookingUrl` -- und der A/B-Split (#100) haette
-      // dort still immer Calendly geliefert.
+      // weg, verlor der Weg `appBookingUrl`.
       data: {
         ...button.value?.data,
         ...props.data,
-        // 02.10.2026: Buchung nach dem Dialog = Buchung per Knopf - dieselbe
-        // Calendly-URL (#148, Behandlungstermin statt Terminart-Auswahl) und
-        // derselbe Standort (#78, auch geerbt). Vorher ging hier die rohe
-        // Standort-URL durch.
-        calendlyUrl: bookingUrl.value,
+        // 02.10.2026: Buchung nach dem Dialog = Buchung per Knopf, derselbe
+        // Standort (#78, auch geerbt).
         appBookingUrl: knopfStandort.value.appBookingUrl,
         locationSlug: knopfStandort.value.locationSlug,
         // #78: Behandlung der Seite, falls der Knopf selbst keine traegt.

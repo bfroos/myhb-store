@@ -504,7 +504,7 @@
     }
   },
   "dialogs": {
-    "calendly": {
+    "locationSearch": {
       "header": "Kies je lounge",
       "sortedByDistance": "Gesorteerd op afstand",
       "locationDenied": "Locatie niet beschikbaar. Voer een postcode of plaats in."

@@ -524,7 +524,7 @@
   },
 
   "dialogs": {
-    "calendly": {
+    "locationSearch": {
       "header": "Choose your lounge",
       "sortedByDistance": "Sorted by distance",
       "locationDenied": "Location unavailable. Please enter a postcode or city."

@@ -300,7 +300,6 @@ const bookingButton = {
   action: SharedButtonAction.APPOINTMENT_BOOKING,
 };
 const bookingData = computed(() => ({
-  calendlyUrl: props.hero.calendlyUrl,
   appBookingUrl: props.hero.appBookingUrl ?? (props.location as any)?.appBookingUrl,
   locationSlug: props.hero.locationSlug ?? props.content.locationSlug,
   appTreatmentSlug: props.hero.appTreatmentSlug,

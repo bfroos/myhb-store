@@ -41,7 +41,7 @@ const UiMoleculeLocationMap = defineAsyncComponent(
   () => import("~/components/ui/molecule/LocationMap.vue"),
 );
 
-const { openCalendlyDialog } = useCalendlyDialog();
+const { openBookingDialog } = useBookingDialog();
 const { seitenBehandlung } = useSeitenBehandlung();
 const {
   fetchLocations,
@@ -77,15 +77,11 @@ function handleCityInputUpdate(val: string | CitySuggestion | null) {
 }
 
 function handleLocationBook(location: MoleculeLocationItem) {
-  // 07.10.2026: Ein Standort mit App-Link bucht auch ohne Calendly-URL.
-  if (!location.calendlyUrl && !location.appBookingUrl) return;
-  // #97/#100: zweiter Buchungsweg des Standorts; der Split entscheidet beim
-  // Klick, sofern der Standort dafuer freigegeben ist.
+  if (!location.appBookingUrl) return;
   // #78: Auf einer Behandlungsseite reist die Behandlung mit — Behandlungstyp,
   // App-Deeplink (#66) und Kontextzeile im Dialogkopf.
   const seite = seitenBehandlung.value;
-  openCalendlyDialog(
-    location.calendlyUrl,
+  openBookingDialog(
     seite?.treatmentType,
     seite?.appTreatmentSlug,
     { appBookingUrl: location.appBookingUrl, locationSlug: location.slug },

@@ -302,8 +302,7 @@ export type BlockTreatmentHeroDto = {
   cta?: SharedButtonDto;
   treatment?: TreatmentDto;
   cardSettings?: CardSettingsDto;
-  calendlyUrl?: string;
-  /** App-Buchungs-URL des Standorts (#97), Gegenstueck zu calendlyUrl. */
+  /** App-Buchungs-URL des Standorts (#97). */
   appBookingUrl?: string;
   /** Standort-Slug — entscheidet ueber die Freigabe des A/B-Splits (#100). */
   locationSlug?: string;

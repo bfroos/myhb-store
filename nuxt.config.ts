@@ -75,16 +75,8 @@ export default defineNuxtConfig({
     "@nuxt/fonts",
     "@nuxtjs/i18n",
     "@primevue/nuxt-module",
-    "nuxt-calendly",
     "@nuxt/scripts",
   ],
-
-  // Calendly: Widget-Script erst bei Bedarf laden (spart ~120KB beim ersten Load)
-  calendly: {
-    loadWidgetCSS: true,
-    loadWidgetCloseAnimation: true,
-    lazyLoad: true,
-  },
 
   // 🔍 Google Analytics 4 Setup
   // TSEO-13: Der fruehere Eintrag scripts.registry.googleAnalytics lud
@@ -145,28 +137,6 @@ export default defineNuxtConfig({
         {
           rel: "preconnect" as const,
           href: "https://consent.cookiebot.com",
-        },
-        // #141: Das Buchungsfenster ist ein Calendly-iFrame. Ohne diese Zeilen
-        // beginnen DNS, TLS und der erste Abruf erst mit dem Klick — mitten in
-        // der Wartezeit, die das Ticket misst. Die Verbindung steht damit, bevor
-        // jemand auf "Termin buchen" drueckt; die Seite selbst waermt
-        // useBookingPrewarm vor.
-        {
-          rel: "preconnect" as const,
-          href: "https://calendly.com",
-        },
-        {
-          rel: "preconnect" as const,
-          href: "https://assets.calendly.com",
-          crossorigin: "anonymous" as const,
-        },
-        {
-          rel: "dns-prefetch" as const,
-          href: "https://calendly.com",
-        },
-        {
-          rel: "dns-prefetch" as const,
-          href: "https://assets.calendly.com",
         },
         ...(process.env.NUXT_PUBLIC_MEDIA_URL
           ? [
@@ -498,20 +468,11 @@ export default defineNuxtConfig({
       googleMapsKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY,
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
       siteMode: process.env.NUXT_PUBLIC_SITE_MODE,
-      // A/B-Split Calendly vs. App-Buchung (#100): Anteil der Besucher in
-      // Prozent, die die App-Buchung bekommen. Leer/0 = alle bekommen
-      // Calendly; das ist der Auslieferungszustand. Wirkt nur im
-      // Ads-Deployment, siehe app/lib/bookingAbTest.ts.
+      // A/B-Split (#100) ist beendet, Calendly abgeschaltet (13.11.2026).
+      // Beide Schalter bleiben nur, damit app/lib/bookingAbTest.ts sie lesen
+      // kann; ohne Calendly-URL bucht jeder Weg ueber die App.
       abBookingSplit: process.env.NUXT_PUBLIC_AB_BOOKING_SPLIT,
-      // 07.10.2026: Test beendet, nur noch App-Buchung (go. und www.). Leer =
-      // an; "off" stellt den Split oben wieder her (Notbremse ohne Deploy),
-      // siehe app/lib/bookingAbTest.ts.
       bookingAppOnly: process.env.NUXT_PUBLIC_BOOKING_APP_ONLY,
-      // #141: Abschalter fuer das Vorwaermen des Buchungsfensters. Leer =
-      // eingeschaltet, "off" = aus. Das Vorwaermen laedt calendly.com ohne
-      // Zutun des Besuchers; wer das aus Einwilligungsgruenden nicht will,
-      // stellt es je Deployment ab, ohne Code zu deployen.
-      bookingPrewarm: process.env.NUXT_PUBLIC_BOOKING_PREWARM,
       // #282: Link "Mein Konto" zur Kunden-App in Header und Footer. Leer =
       // AUS; "on" schaltet ihn ein. Live erst nach den Schulungen Kunden-App
       // und Behandlungsplan (myhb-os#905, #906, Reihenfolge in #908).

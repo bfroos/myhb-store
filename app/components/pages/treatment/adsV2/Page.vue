@@ -940,7 +940,6 @@ const nextSlotLabel = computed(() => {
 // Alle Buchungsknoepfe: dieselbe Aktion und dieselben Daten wie der Hero
 // -> derselbe Dialog, dasselbe click_booking (A/B-Weiche unveraendert).
 const bookingData = computed(() => ({
-  calendlyUrl: props.hero.calendlyUrl,
   appBookingUrl: props.hero.appBookingUrl,
   locationSlug: props.hero.locationSlug,
   appTreatmentSlug: props.hero.appTreatmentSlug,
@@ -951,7 +950,7 @@ const bookingData = computed(() => ({
 //   (Mailchimp, newsletter_signup), danach direkt dieselbe Buchung
 //   (click_booking mit via_modal). Kein zweiter Knopf daneben.
 // - B: "Kostenlose Beratung buchen" -> direkt die Buchung (wie bisher).
-// Der Calendly-/App-Split (#100) entscheidet in beiden Faellen beim Oeffnen.
+// Mit App-URL oeffnet die App, sonst die Standortsuche.
 const discountLabel = computed(() => `${discountPct.value}\u00a0% Rabatt sichern`);
 const primaryButton = computed(() =>
   isB.value
