@@ -1,5 +1,7 @@
 # A/B-Split Calendly vs. App-Buchung (#100)
 
+> **Historisch.** Der Test endete am 07.10.2026, Calendly ist seit 13.11.2026 abgeschaltet. Split-Code und die Schalter `NUXT_PUBLIC_AB_BOOKING_SPLIT`/`NUXT_PUBLIC_BOOKING_APP_ONLY` sind entfernt; `app/lib/bookingAbTest.ts` kennt nur noch die App-Buchung. Diese Seite beschreibt, wie der Test lief.
+
 **Stand:** 15.09.2026 · **Zuschnitt:** bfroos/myhb-store#100, Begründung elanagency/myhb-os#87
 **Code:** `app/lib/bookingAbTest.ts`, `app/plugins/ab-split.client.ts`, `app/composables/useBookingAbTest.ts`
 

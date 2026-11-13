@@ -26,11 +26,6 @@ const priceHero = computed(() =>
   ),
 );
 
-// Dankesseite nach Calendly-Buchung: booking_confirmed auch fuer Buchungen
-// ausserhalb des Embeds (elanagency/myhb-os#131). Wirkt nur auf den Slugs
-// aus BOOKING_THANK_YOU_SLUGS, sonst ein No-op.
-useBookingThankYouTracking();
-
 const pageLoaded = await fetchGeneralPage();
 
 // www: eigene Kostenseiten-Vorlage (shared/costPages.ts). go. behaelt die

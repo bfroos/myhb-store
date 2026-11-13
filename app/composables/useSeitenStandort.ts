@@ -60,7 +60,6 @@ export function useSeitenStandort() {
     () => null,
   );
   const route = useRoute();
-  const { appOnly } = useBookingAbTest();
 
   /** Setzt den Standort der Seite. `null` loescht ihn. */
   function setzeSeitenStandort(location?: LocationDto | null) {
@@ -81,7 +80,7 @@ export function useSeitenStandort() {
             lat,
             long,
             phoneNumber: location.contact?.phoneNumber ?? null,
-            buchbar: istOnlineBuchbar({ appBookingUrl }, appOnly),
+            buchbar: istOnlineBuchbar({ appBookingUrl }),
           }
         : null;
     gemerkt.value =

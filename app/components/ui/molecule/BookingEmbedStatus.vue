@@ -28,16 +28,16 @@
 import { IconLoader } from "@tabler/icons-vue";
 
 /**
- * Ladezustand ueber dem Buchungs-Embed (Calendly-Widget oder App-iFrame).
+ * Ladezustand ueber dem Buchungs-Embed (App-iFrame).
  *
- * Beide Embeds sind fremde Seiten in einem iFrame: Das `load`-Ereignis sagt
- * nur, dass das Dokument da ist — Calendly und die App zeichnen erst Sekunden
+ * Das Embed ist eine fremde Seite in einem iFrame: Das `load`-Ereignis sagt
+ * nur, dass das Dokument da ist — die App zeichnet erst Sekunden
  * spaeter. Bis dahin stand im Dialog ein weisses Feld, das aussah, als sei die
  * Buchung gar nicht aufgegangen (Bugreport Benjamin, 16.09.2026, gemessen
  * ~8 s auf den Meta-Landingpages).
  *
  * `ready` meldet die einbettende Komponente, wenn das Embed sich selbst
- * meldet — Calendly per postMessage, die App per `myhb:booking-ready`.
+ * meldet — die App per `myhb:booking-ready`.
  *
  * Der Hinweis erscheint erst nach `hintAfterMs` und liegt bewusst *nicht*
  * ueber dem Embed: Bleibt eine Meldung aus, obwohl das Embed laengst
@@ -97,8 +97,8 @@ watch(
     if (wartetNoch()) return;
     if (timer) clearTimeout(timer);
     // Der Hinweis wird bewusst NICHT wieder zurueckgenommen (#141,
-    // 23.09.2026). Gemessen auf der Preview: Calendly meldet sein
-    // Render-Ereignis auch dann, wenn im Rahmen weiter nichts steht — der
+    // 23.09.2026). Gemessen auf der Preview: Das damalige Calendly-Embed
+    // meldete sein Render-Ereignis auch dann, wenn im Rahmen weiter nichts steht — der
     // Ausweg verschwand damit genau in dem Moment, in dem der Besucher ihn
     // gebraucht haette. Wer ihn einmal gesehen hat, behaelt ihn; er liegt
     // unter dem Embed und verdeckt einen fertigen Kalender nicht.
