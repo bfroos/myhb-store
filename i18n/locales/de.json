@@ -511,7 +511,7 @@
     }
   },
   "dialogs": {
-    "calendly": {
+    "locationSearch": {
       "header": "Wähle deine Lounge",
       "sortedByDistance": "Nach Entfernung sortiert",
       "locationDenied": "Standort nicht verfügbar. Bitte PLZ oder Ort eingeben.",

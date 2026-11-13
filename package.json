@@ -30,7 +30,6 @@
     "@unhead/vue": "^2.1.2",
     "@vercel/functions": "^3.9.11",
     "nuxt": "^4.2.2",
-    "nuxt-calendly": "^0.1.21",
     "primevue": "^4.5.4",
     "qs": "^6.14.0",
     "vue": "^3.5.25",

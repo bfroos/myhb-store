@@ -35,7 +35,7 @@ const GESPIEGELT = new Set([
  * in der Tabelle heisst derselbe Schritt der App `slot_selected`. So rechnet
  * die Auswertung je Arm Klick → Uhrzeit gewaehlt → gebucht mit einem Namen.
  * Die Nachricht des unsichtbaren, vorgewaermten Rahmens kommt gar nicht bis
- * hierher (isPrewarmSource in CalendlyDialog).
+ * hierher.
  */
 const UMBENANNT: Record<string, string> = {
   booking_datetime_selected: "slot_selected",

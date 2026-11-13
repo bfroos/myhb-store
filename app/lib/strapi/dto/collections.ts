@@ -155,9 +155,7 @@ export type LocationDto = {
   openingHours?: SharedOpeningHoursDto;
   about?: LocationAboutDto;
   directions?: BlockDirectionsDto;
-  calendlyUrl?: string;
-  /** App-Buchungs-URL des Standorts (#97). Neben calendlyUrl, nicht statt
-   *  dessen — der A/B-Split (#100) braucht beide. */
+  /** App-Buchungs-URL des Standorts (#97), einziger Buchungsweg. */
   appBookingUrl?: string;
   jobs?: JobDto[];
   /** Belegte Standortfakten fuer Stadtseiten (E24 #312, nur www). */

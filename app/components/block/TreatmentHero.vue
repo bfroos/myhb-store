@@ -131,7 +131,6 @@
                     v-if="klinikCta || (cta && bookingButtonVisible)"
                     :button="klinikCta ?? cta"
                     :data="{
-                      calendlyUrl: calendlyUrl,
                       appBookingUrl: appBookingUrl,
                       locationSlug: locationSlug,
                       appTreatmentSlug: appTreatmentSlug,
@@ -154,7 +153,6 @@
                     action: SharedButtonAction.NEWSLETTER_SIGN_UP,
                   }"
                   :data="{
-                    calendlyUrl: calendlyUrl,
                     appBookingUrl: appBookingUrl,
                     locationSlug: locationSlug,
                     appTreatmentSlug: appTreatmentSlug,
@@ -293,7 +291,6 @@
               v-if="klinikCta || (cta && bookingButtonVisible)"
               :button="klinikCta ?? stickyCta"
               :data="{
-                calendlyUrl: calendlyUrl,
                 appBookingUrl: appBookingUrl,
                 locationSlug: locationSlug,
                 appTreatmentSlug: appTreatmentSlug,

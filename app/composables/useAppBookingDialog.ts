@@ -5,23 +5,18 @@ import type { AbSource, BookingVariant } from "~/lib/bookingAbTest";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
 import { currentCheckoutId } from "~/lib/checkoutAttempt";
-import { markBookingDialogOpened } from "~/composables/useBookingPrewarm";
 import { withLeadToken, withoutLeadToken } from "~/lib/bookingLead";
 
 /**
- * URL of the in-app booking flow (MY Health & Beauty app).
- * Opened inside a modal iframe as an alternative to the Calendly dialog.
+ * URL of the in-app booking flow (MY Health & Beauty app), opened inside a
+ * modal iframe. Bookings run only through the app.
  */
 export const APP_BOOKING_URL =
   "https://app.myhealthandbeauty.com/book-appointment";
 
 /**
  * Returns true when the given URL points at the in-app booking flow
- * (app.myhealthandbeauty.com). Used to route the booking CTA to the in-app
- * iframe dialog instead of the Calendly widget, so locations can be migrated
- * from Calendly to the app one at a time simply by changing the
- * "Calendly URL" field in Strapi. Calendly URLs (calendly.com/...) return
- * false and keep using the Calendly widget.
+ * (app.myhealthandbeauty.com). Anything else is not a booking target.
  */
 export function isAppBookingUrl(url?: string | null): boolean {
   if (!url) return false;
@@ -349,8 +344,6 @@ export function useAppBookingDialog() {
     url: string = APP_BOOKING_URL,
     options?: AppBookingUrlOptions,
   ) {
-    // #180: Ein spaeter geplantes Calendly-Vorwaermen waere jetzt nur Ballast.
-    markBookingDialogOpened();
     // Kontaktpunkte bis zur Buchung (myhb-app/myhb-os#1088): Liste jetzt
     // einmal senden, die Reise-ID geht als `jid=` an die App, die sie nach der
     // Buchung an den Termin haengt. Ohne Einwilligung liefert $journeyId null.

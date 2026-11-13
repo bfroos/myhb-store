@@ -504,7 +504,7 @@
     }
   },
   "dialogs": {
-    "calendly": {
+    "locationSearch": {
       "header": "Choisis ton lounge",
       "sortedByDistance": "Trié par distance",
       "locationDenied": "Position indisponible. Saisis un code postal ou une ville."

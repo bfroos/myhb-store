@@ -15,6 +15,7 @@ import {
   isSurgeryPathKey,
 } from "#shared/newCustomerOffer";
 import { ADS_NO_DISCOUNT } from "#shared/adsOfferVariant";
+import { stripCalendlyDeep } from "#shared/noCalendly";
 
 const TEXT_CORRECTIONS = textCorrections as TextCorrection[];
 
@@ -186,7 +187,11 @@ async function fetchFromStrapi(
   preview: boolean,
   previewStatus: 'draft' | 'published',
 ) {
-  const result = sanitizeReviewsDeep(await fetchFromStrapiByMode(event, preview, previewStatus));
+  // Calendly ist abgeschaltet: `calendlyUrl` der Standorte nie ausliefern
+  // (shared/noCalendly.ts).
+  const result = stripCalendlyDeep(
+    sanitizeReviewsDeep(await fetchFromStrapiByMode(event, preview, previewStatus)),
+  );
   // #307: kein "Vorher-Nachher" bei Unterspritzungen (BGH I ZR 170/24) -
   // Behandlungs-, Standort- und freie Seiten, nicht der Ratgeber.
   const strapiPath = getRequestURL(event).pathname.replace(/^\/api\/strapi/, '');

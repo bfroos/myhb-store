@@ -492,7 +492,7 @@
   },
 
   "dialogs": {
-    "calendly": {
+    "locationSearch": {
       "header": "اختر صالونك",
       "sortedByDistance": "مرتبة حسب المسافة",
       "locationDenied": "الموقع غير متاح. يرجى إدخال الرمز البريدي أو المدينة."

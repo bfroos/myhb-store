@@ -29,7 +29,6 @@ import { istOnlineBuchbar } from "~/lib/bookingAbTest";
  * annimmt.
  */
 export type SeitenStandort = {
-  calendlyUrl?: string;
   appBookingUrl?: string;
   locationSlug?: string;
 };
@@ -70,7 +69,7 @@ export function useSeitenStandort() {
       gemerkterOrt.value = null;
       return;
     }
-    const { calendlyUrl, appBookingUrl } = bookingUrlsOf(location);
+    const { appBookingUrl } = bookingUrlsOf(location);
     const lat = Number(location.coordinates?.lat);
     const long = Number(location.coordinates?.long);
     gemerkterOrt.value =
@@ -82,14 +81,13 @@ export function useSeitenStandort() {
             lat,
             long,
             phoneNumber: location.contact?.phoneNumber ?? null,
-            buchbar: istOnlineBuchbar({ calendlyUrl, appBookingUrl }, appOnly),
+            buchbar: istOnlineBuchbar({ appBookingUrl }, appOnly),
           }
         : null;
     gemerkt.value =
-      calendlyUrl || appBookingUrl
+      appBookingUrl
         ? {
             pfad: route.path,
-            calendlyUrl,
             appBookingUrl,
             locationSlug: location.slug ?? undefined,
           }

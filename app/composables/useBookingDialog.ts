@@ -6,10 +6,6 @@ import {
   useAppBookingDialog,
   withAppTreatmentSlug,
 } from "~/composables/useAppBookingDialog";
-import {
-  disposeBookingPrewarm,
-  markBookingDialogOpened,
-} from "~/composables/useBookingPrewarm";
 import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { offerValue, priceFromLabel } from "~/lib/checkoutAttempt";
 import type { BookingPrefill } from "~/lib/bookingPrefill";
@@ -36,16 +32,15 @@ export type BookingDialogOptions = {
    */
   viaModal?: boolean;
   /**
-   * 07.10.2026: E-Mail/Handynummer aus dem Rabatt-Dialog, damit das
-   * Calendly-Formular sie nicht ein zweites Mal abfragt. Nur im Speicher und
-   * in der Calendly-URL — nie ins Tracking (siehe lib/bookingPrefill.ts).
+   * 07.10.2026: Lead aus dem Rabatt-Dialog (`leadToken`), damit die App die
+   * Daten nicht ein zweites Mal abfragt. Nie ins Tracking (lib/bookingPrefill.ts).
    */
   prefill?: BookingPrefill;
   /** Termin-Knopf aus dem Rabatt-Fenster (myhb-app/myhb-os#1030), nur App. */
   termin?: { date: string; time: string };
 };
 
-export function useCalendlyDialog() {
+export function useBookingDialog() {
   const dialog = useDialog();
   const { t } = useI18n();
   const { openAppBookingDialog } = useAppBookingDialog();
@@ -53,44 +48,34 @@ export function useCalendlyDialog() {
   const { resolveBooking } = useBookingAbTest();
 
   /**
+   * Oeffnet die Buchung: mit App-URL des Standorts direkt den App-Dialog,
+   * sonst die Standortsuche (BookingLocationDialog), in der der Besucher
+   * seinen Standort waehlt.
+   *
    * @param appTreatmentSlug Behandlungs-Slug fuer den App-Deeplink
-   *   (`?treatment=`). Wird an die App-Buchungs-URL gehaengt – auch an die des
-   *   Standorts, den der Nutzer erst im Standort-Dialog auswaehlt. Bei
-   *   Calendly-URLs bleibt er ohne Wirkung.
-   * @param alternatives Zweite Buchungs-URL des Standorts und sein Slug. Ohne
-   *   zugewiesenen Bucket (kein Ads-Deployment, keine Einwilligung, Split aus)
-   *   bleibt es bei `url`.
+   *   (`?treatment=`). Haengt auch an der App-URL des Standorts, den der
+   *   Nutzer erst in der Standortsuche auswaehlt.
+   * @param alternatives App-Buchungs-URL des Standorts und sein Slug.
    * @param treatmentContext Name und Preis der Behandlung, von deren Seite der
    *   Dialog geoeffnet wurde (#78). Steht als Kontextzeile im Dialogkopf und
    *   geht als `treatment_context` (true/false) an `click_booking`.
    */
-  function openCalendlyDialog(
-    url?: string,
+  function openBookingDialog(
     treatmentType?: TreatmentType,
     appTreatmentSlug?: string,
     alternatives?: BookingAlternatives,
     treatmentContext?: BookingTreatmentContext,
     options?: BookingDialogOptions,
   ) {
-    // #180: Ab jetzt laedt der Dialog selbst (oder uebernimmt den warmen
-    // Rahmen); ein noch ausstehendes Vorwaermen faellt weg.
-    markBookingDialogOpened();
-    // #100: Der Bucket steht schon seit dem Seitenaufruf fest
-    // (plugins/ab-split.client.ts); hier wird er angewendet, weil jetzt der
-    // Standort und damit die zweite URL bekannt ist.
     const { url: targetUrl, abVariant, abFallback, abSource } = resolveBooking({
-      calendlyUrl: url,
       appBookingUrl: alternatives?.appBookingUrl,
     });
-    const bookingUrl =
-      withAppTreatmentSlug(targetUrl, appTreatmentSlug) ?? targetUrl;
+    const appUrl = isAppBookingUrl(targetUrl)
+      ? (withAppTreatmentSlug(targetUrl, appTreatmentSlug) ?? targetUrl)
+      : undefined;
     const offer = options?.offer;
     const viaModal = !!options?.viaModal;
-    const clickType = isAppBookingUrl(bookingUrl)
-      ? "app"
-      : bookingUrl
-        ? "calendly"
-        : "location_search";
+    const clickType = appUrl ? "app" : "location_search";
     // Seitenpreis fuer Meta „Schedule mit Wert" (#400 in myhb-os); im
     // Rabattweg der Neukundenpreis (−20 %).
     const bookingValue = offerValue(
@@ -99,13 +84,9 @@ export function useCalendlyDialog() {
     );
     // Rabattweg ohne Standort: Die Standortsuche oeffnet von selbst nach der
     // Anmeldung, der Buchungsversuch (`click_booking` = Meta InitiateCheckout)
-    // beginnt erst mit der Standortwahl — CalendlyDialog holt ihn dort nach.
-    // Sonst stand InitiateCheckout direkt hinter der Anmeldung (Test 01.10.2026).
+    // beginnt erst mit der Standortwahl — BookingLocationDialog holt ihn dort
+    // nach. Sonst stand InitiateCheckout direkt hinter der Anmeldung.
     const deferCheckout = !!offer && clickType === "location_search";
-    // Conversion-Audit #67: booking_type war fest "calendly". Jetzt wird das
-    // System getrackt, das tatsaechlich oeffnet. Ohne URL oeffnet zuerst die
-    // Standortsuche; der konkrete Standort wird dann im Dialog getrackt
-    // (trackBookingLocationSelected).
     if (!deferCheckout) {
       trackBookingClick(clickType, {
         treatment_type: treatmentType,
@@ -122,15 +103,8 @@ export function useCalendlyDialog() {
       });
     }
 
-    // Migration path: if the location's booking URL points at the MY app,
-    // open the in-app booking iframe instead of the Calendly widget. This lets
-    // us switch locations from Calendly to the app one at a time simply by
-    // changing the "Calendly URL" field in Strapi. Everything else (a
-    // calendly.com URL, or no URL -> location search) keeps working as before.
-    if (isAppBookingUrl(bookingUrl)) {
-      // #141: Fuer die App-Buchung ist der vorgewaermte Calendly-Rahmen wertlos.
-      disposeBookingPrewarm();
-      openAppBookingDialog(t("cta.bookAppointment"), bookingUrl, {
+    if (appUrl) {
+      openAppBookingDialog(t("cta.bookAppointment"), appUrl, {
         abVariant,
         abSource,
         treatmentContext,
@@ -141,16 +115,12 @@ export function useCalendlyDialog() {
       return;
     }
 
-    // #141: Der vorgewaermte Rahmen wird hier *nicht* abgeraeumt — der Dialog
-    // legt ihn sichtbar ueber sich, statt ein zweites Mal zu laden. Passt er
-    // nicht zur URL, raeumt der Dialog ihn selbst ab.
     dialog.open(
       defineAsyncComponent(
-        () => import("~/components/ui/organism/CalendlyDialog.vue"),
+        () => import("~/components/ui/organism/BookingLocationDialog.vue"),
       ),
       {
         data: {
-          url: bookingUrl,
           treatmentType,
           appTreatmentSlug,
           treatmentContext,
@@ -162,15 +132,12 @@ export function useCalendlyDialog() {
           prefill: options?.prefill,
           deferCheckout,
           bookingValue,
-          // #141: Ab hier laeuft die Uhr, die `booking_embed_ready` misst —
-          // der Klick ist der Moment, den das Ticket abnimmt, nicht das
-          // Einhaengen des Widgets ein paar Hundert Millisekunden spaeter.
           openedAt: import.meta.client ? performance.now() : undefined,
         },
         props: {
           modal: true,
           draggable: false,
-          header: t("dialogs.calendly.header"),
+          header: t("dialogs.locationSearch.header"),
           style: {
             width: "600px",
             height: "98svh",
@@ -191,5 +158,5 @@ export function useCalendlyDialog() {
     );
   }
 
-  return { openCalendlyDialog };
+  return { openBookingDialog };
 }

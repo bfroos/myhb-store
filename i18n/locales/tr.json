@@ -492,7 +492,7 @@
   },
 
   "dialogs": {
-    "calendly": {
+    "locationSearch": {
       "header": "Salonunu seç",
       "sortedByDistance": "Mesafeye göre sıralandı",
       "locationDenied": "Konum kullanılamıyor. Lütfen posta kodu veya şehir gir."
