@@ -52,15 +52,15 @@ const WEEKDAY_TO_SCHEMA: Record<string, string> = {
 export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> = {
   "ChIJoesgRlglv0cRh0fAgCZ9MTk": {
     "rating": "4.9",
-    "count": "490"
+    "count": "493"
   },
   "ChIJoct0O2RTqEcRZthU8Tn5dGs": {
     "rating": "4.7",
-    "count": "249"
+    "count": "250"
   },
   "ChIJYyPheE7LuEcRAIgZkPAOJyU": {
     "rating": "4.9",
-    "count": "206"
+    "count": "208"
   },
   "ChIJ_7Xx1HetuEcRUE0rtbPlvEQ": {
     "rating": "4.9",
@@ -84,7 +84,7 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJScBd156_uEcRPHWNSbioDlo": {
     "rating": "4.8",
-    "count": "109"
+    "count": "110"
   }
 };
 
