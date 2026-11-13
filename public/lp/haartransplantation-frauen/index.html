@@ -167,6 +167,9 @@ input[type=range]{accent-color:#8A6A3D}
 <sc-if value="{{formError}}" hint-placeholder-val="{{ false }}">
 <p role="alert" style="margin: 0; color: #9B2C1F; font-size: 14px">Bitte gib Vorname, Telefon und E-Mail an und bestätige die Einwilligung.</p>
 </sc-if>
+<sc-if value="{{sendError}}" hint-placeholder-val="{{ false }}">
+<p role="alert" style="margin: 0; color: #9B2C1F; font-size: 14px">Deine Anfrage konnte gerade nicht gesendet werden. Bitte versuch es gleich noch einmal oder ruf uns an: 0221 29240403.</p>
+</sc-if>
 <button type="button" onClick="{{submitLead}}" style="min-height: 56px; border: none; border-radius: 999px; background: {{accent}}; color: #FFFFFF; font: inherit; font-weight: 500; cursor: pointer">Mein Ergebnis anzeigen</button>
 <button type="button" onClick="{{quizBack}}" style="align-self: flex-start; min-height: 44px; background: none; border: none; color: #6A5F57; font: inherit; font-size: 15px; cursor: pointer; padding: 0">Zurück</button>
 </div>
@@ -354,7 +357,7 @@ class Component extends DCLogic {
     // Haar-Check
     const QUESTIONS = [
       { key: 'area', text: 'Wo bemerkst du es am meisten?', opts: ['Mein Scheitel wird breiter', 'Hohe Stirn / Haaransatz', 'An den Schläfen', 'Das Haar wird insgesamt dünner'] },
-      { key: 'since', text: 'Seit wann beschäftigt dich das?', opts: ['Seit ein paar Monaten', 'Seit 1–3 Jahren', 'Seit mehr als 3 Jahren', 'Schon immer'] },
+      { key: 'since', text: 'Seit wann beschäftigt dich das Thema?', opts: ['Seit ein paar Monaten', 'Seit 1–3 Jahren', 'Seit mehr als 3 Jahren', 'Schon immer'] },
       { key: 'length', text: 'Wie trägst du dein Haar meistens?', opts: ['Kurz', 'Kinn- bis schulterlang', 'Lang'] },
       { key: 'wish', text: 'Was ist dir am wichtigsten?', opts: ['Dass es niemand bemerkt', 'Ein natürliches Ergebnis', 'Schnell zurück in den Alltag', 'Erst einmal verstehen, was los ist'] }
     ];
@@ -384,7 +387,8 @@ class Component extends DCLogic {
     const submitLead = () => {
       const ok = S.leadName.trim() && S.leadPhone.trim() && /.+@.+\..+/.test(S.leadMail) && S.consent;
       if (!ok) { this.setState({ formError: true }); return; }
-      this.setState({ formError: false, step: 5 });
+      if (S.sending) return;
+      this.setState({ formError: false, sendError: false, sending: true });
 
       try {
         const kanal = { 'WhatsApp': 'whatsapp', 'Anruf': 'anruf', 'E-Mail': 'email' }[S.contact] || null;
@@ -395,8 +399,13 @@ class Component extends DCLogic {
           kontaktweg: kanal, einwilligung: !!S.consent, antworten: antworten,
           rechner: S.rechnerUsed ? { einheiten: S.grafts, methode: S.method, zusatz: S.prp ? ['PRP'] : [], bereiche: rechnerAreas, richtpreis: total } : undefined,
           seite: location.pathname + location.search
-        }) }).catch(function () {});
-      } catch (e) {}
+        }) }).then((res) => {
+          // Danke erst, wenn die Anfrage wirklich angekommen ist (13.11.2026):
+          // vorher kam bei einem Fehler trotzdem "Vielen Dank" und der Lead fehlte.
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          this.setState({ sending: false, sendError: false, step: 5 });
+        }).catch(() => this.setState({ sending: false, sendError: true }));
+      } catch (e) { this.setState({ sending: false, sendError: true }); }
     };
     const contactWays = ['WhatsApp', 'Anruf', 'E-Mail'].map((c) => {
       const on = S.contact === c;
@@ -486,7 +495,7 @@ class Component extends DCLogic {
       canBack: S.step > 0, question: question,
       quizBack: () => this.setState({ step: Math.max(0, S.step - 1), formError: false }),
       quizReset: () => this.setState({ step: 0, answers: {}, leadName: '', leadPhone: '', leadMail: '', consent: false }),
-      leadName: S.leadName, leadPhone: S.leadPhone, leadMail: S.leadMail, consent: S.consent, formError: S.formError,
+      leadName: S.leadName, leadPhone: S.leadPhone, leadMail: S.leadMail, consent: S.consent, formError: S.formError, sendError: !!S.sendError,
       leadFirst: S.leadName.trim(),
       setName: (e) => this.setState({ leadName: e.target.value }),
       setPhone: (e) => this.setState({ leadPhone: e.target.value }),

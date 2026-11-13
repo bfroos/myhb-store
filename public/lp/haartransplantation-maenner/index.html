@@ -196,7 +196,7 @@ input[type=range]{accent-color:#8A6A3D}
 
 <sc-if value="{{qSince}}" hint-placeholder-val="{{ false }}">
 <div style="display: flex; flex-direction: column; gap: 14px">
-<p style="margin: 0; font-weight: 500; font-size: 19px">Seit wann beschäftigt dich das?</p>
+<p style="margin: 0; font-weight: 500; font-size: 19px">Seit wann beschäftigt dich das Thema?</p>
 <sc-for list="{{sinceOpts}}" as="o" hint-placeholder-count="4">
 <button type="button" onClick="{{o.pick}}" style="min-height: 56px; text-align: left; padding: 14px 18px; border: 1px solid #D6CEC2; border-radius: 12px; background: #FFFFFF; font: inherit; color: #141414; cursor: pointer">{{o.label}}</button>
 </sc-for>
@@ -246,6 +246,9 @@ input[type=range]{accent-color:#8A6A3D}
 <label style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: #5C5650; line-height: 1.5"><input type="checkbox" checked="{{consent}}" onChange="{{toggleConsent}}" style="width: 20px; height: 20px; margin-top: 2px; flex: none">Ich willige ein, dass MY HEALTH &amp; BEAUTY mich zur Haaranalyse kontaktiert. Hinweise in der Datenschutzerklärung; Widerruf jederzeit möglich.</label>
 <sc-if value="{{formError}}" hint-placeholder-val="{{ false }}">
 <p role="alert" style="margin: 0; color: #9B2C1F; font-size: 14px">Bitte füll Name, Telefon und E-Mail aus und bestätige die Einwilligung.</p>
+</sc-if>
+<sc-if value="{{sendError}}" hint-placeholder-val="{{ false }}">
+<p role="alert" style="margin: 0; color: #9B2C1F; font-size: 14px">Deine Anfrage konnte gerade nicht gesendet werden. Bitte versuch es gleich noch einmal oder ruf uns an: 0221 29240403.</p>
 </sc-if>
 <button type="button" onClick="{{submitLead}}" style="min-height: 56px; border: none; border-radius: 999px; background: {{accent}}; color: #FFFFFF; font: inherit; font-weight: 500; cursor: pointer">Analyse anfordern</button>
 <button type="button" onClick="{{quizBack}}" style="align-self: flex-start; min-height: 44px; background: none; border: none; color: #5C5650; font: inherit; cursor: pointer; padding: 0">Zurück</button>
@@ -614,6 +617,8 @@ class Component extends DCLogic {
     const submitLead = () => {
       const ok = S.leadName.trim() && S.leadPhone.trim() && /.+@.+\..+/.test(S.leadMail) && S.consent;
       if (!ok) { this.setState({ formError: true }); return; }
+      if (S.sending) return;
+      this.setState({ formError: false, sendError: false, sending: true });
 
       try {
         const kanal = { 'WhatsApp': 'whatsapp', 'Anruf': 'anruf', 'E-Mail': 'email' }[S.contact] || null;
@@ -624,9 +629,12 @@ class Component extends DCLogic {
           kontaktweg: kanal, einwilligung: !!S.consent, antworten: antworten,
           rechner: S.rechnerUsed ? { einheiten: S.grafts, methode: S.method, zusatz: S.prp ? ['PRP'] : [], bereiche: rechnerAreas, richtpreis: total } : undefined,
           seite: location.pathname + location.search
-        }) }).catch(function () {});
-      } catch (e) {}
-      this.setState({ formError: false, step: flow.length - 1 });
+        }) }).then((res) => {
+          // Danke erst, wenn die Anfrage wirklich angekommen ist (13.11.2026).
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          this.setState({ sending: false, sendError: false, step: flow.length - 1 });
+        }).catch(() => this.setState({ sending: false, sendError: true }));
+      } catch (e) { this.setState({ sending: false, sendError: true }); }
     };
 
     // Rechner
@@ -740,7 +748,7 @@ class Component extends DCLogic {
       genderOpts: genderOpts, stageOpts: stageOpts, ageOpts: ageOpts,
       quizBack: () => this.setState({ step: Math.max(0, S.step - 1), formError: false }),
       quizReset: () => this.setState({ step: 0, gender: '', stage: '', age: '', since: '', wish: '', hairLength: '', leadName: '', leadPhone: '', leadMail: '', consent: false }),
-      leadName: S.leadName, leadPhone: S.leadPhone, leadMail: S.leadMail, consent: S.consent, formError: S.formError,
+      leadName: S.leadName, leadPhone: S.leadPhone, leadMail: S.leadMail, consent: S.consent, formError: S.formError, sendError: !!S.sendError,
       leadFirst: (S.leadName.trim().split(' ')[0]) || '',
       setName: (e) => this.setState({ leadName: e.target.value }),
       setPhone: (e) => this.setState({ leadPhone: e.target.value }),
