@@ -24,7 +24,7 @@
         <div :id="anchorId" class="funnel" aria-live="polite">
           <div class="funnel__head">
             <h2 class="funnel__title">{{ headline || "Kostenlose Analyse" }}</h2>
-            <span class="funnel__count">{{ gesendet ? "Fertig" : `Schritt ${schritt + 1} von ${gesamt}` }}</span>
+            <span class="funnel__count">{{ gesendet ? "Fertig" : gesamtBekannt ? `Schritt ${schritt + 1} von ${gesamt}` : `Schritt ${schritt + 1}` }}</span>
           </div>
           <div class="funnel__bar" role="progressbar" :aria-valuenow="gesendet ? gesamt : schritt + 1" aria-valuemin="1" :aria-valuemax="gesamt">
             <div class="funnel__bar-fill" :style="{ width: `${((gesendet ? gesamt : schritt + 1) / gesamt) * 100}%` }" />
@@ -250,6 +250,12 @@ const fragen = computed<FunnelStep[]>(() => {
   return props.geschlechtWeiche ? (haarFunnelSchritte(basis, antworten.value[0]) as FunnelStep[]) : basis;
 });
 const gesamt = computed(() => fragen.value.length + 1);
+/**
+ * Mit "Frau oder Mann?" haengt die Zahl der Schritte von der ersten Antwort ab
+ * (Frau 7, Mann 4). Vorher zeigen wir nur "Schritt 1", damit der Zaehler nach
+ * "Mann" nicht von "von 7" auf "von 4" springt (Michael, 13.11.2026).
+ */
+const gesamtBekannt = computed(() => !props.geschlechtWeiche || Boolean(antworten.value[0]));
 const aktuelleFrage = computed(() => fragen.value[schritt.value] ?? null);
 
 function optionenLayout(f: FunnelStep) {
