@@ -6,6 +6,8 @@ import type { BookingTreatmentContext } from "~/lib/bookingTreatmentContext";
 import { getFunnelSessionId } from "~/lib/firstPartyFunnel";
 import { currentCheckoutId } from "~/lib/checkoutAttempt";
 import { withLeadToken, withoutLeadToken } from "~/lib/bookingLead";
+import { aktuellesAngebot } from "~/lib/werbeangebotSpeicher";
+import { mitAngebot } from "#shared/werbeangebot";
 
 /**
  * URL of the in-app booking flow (MY Health & Beauty app), opened inside a
@@ -282,6 +284,13 @@ export function buildBookingUrl(
     }
     if (options?.offer && !url.searchParams.has("offer")) {
       url.searchParams.set("offer", options.offer);
+    }
+    // Werbeangebot mit Guthaben aus dem Anzeigenlink (myhb-app/myhb-os#2188).
+    // Die App liest `angebot=` vor `offer=`; ob Guthaben gebucht wird,
+    // entscheidet allein ihre Datenbank (Tabelle werbeangebote).
+    {
+      const mitA = new URL(mitAngebot(url.toString(), aktuellesAngebot()));
+      url.search = mitA.search;
     }
     if (options?.abVariant && !url.searchParams.has("ab_variant")) {
       url.searchParams.set("ab_variant", options.abVariant);
