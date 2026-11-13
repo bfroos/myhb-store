@@ -9,6 +9,7 @@ import {
   adsOfferRegularPriceLine,
   adsOfferRegularText,
   isAdsOfferBPath,
+  adsOfferCookieVariant,
   stripAdsOfferB,
   wantsAdsOfferB,
 } from "./adsOfferVariant.ts";
@@ -44,9 +45,11 @@ function runScript(pathname: string, search: string, opts: { script?: string; co
 test("Angebots-Test: Kopf-Skript leitet nur mit ?angebot=beratung um, Query bleibt", () => {
   assert.equal(runScript(P, "?angebot=beratung&gclid=abc").target, `/ab-beratung${P}?angebot=beratung&gclid=abc`);
   assert.equal(runScript(`/ab-beratung${P}`, "?angebot=beratung").target, null);
-  // ausgeschaltet (Stand bis zum Go): ohne Parameter keine Umleitung, kein Cookie
-  assert.equal(ADS_OFFER_AUTO_SPLIT, false);
-  assert.deepEqual(runScript(P, "?gclid=abc", { rnd: 0.1 }), { target: null, cookie: "" });
+  // ausgeschaltet: ohne Parameter keine Umleitung, kein Cookie
+  assert.deepEqual(runScript(P, "?gclid=abc", { script: buildAdsOfferScript(false, 0.5), rnd: 0.1 }), { target: null, cookie: "" });
+  // seit 13.11.2026 eingeschaltet (#1843)
+  assert.equal(ADS_OFFER_AUTO_SPLIT, true);
+  assert.equal(runScript(P, "?gclid=abc", { rnd: 0.1 }).target, `/ab-beratung${P}?gclid=abc`);
 });
 
 test("Angebots-Test: automatische Aufteilung (wenn eingeschaltet)", () => {
@@ -92,4 +95,11 @@ test("Angebots-Test: regulaere Preise aus Strapi, kein Sternchen, keine Zonen-Re
     "Stirnfalte glätten in Köln ab 149,99 € ✓ MY",
   );
   assert.equal(adsOfferRegularText("Lippen in Köln ab 119,99 €* ✓", "ab 149,99 €"), "Lippen in Köln ab 149,99 € ✓");
+});
+
+test("Angebots-Test: Zuteilung aus dem Cookie", () => {
+  assert.equal(adsOfferCookieVariant("x=1; myhb_offer_ab=b"), "b");
+  assert.equal(adsOfferCookieVariant("myhb_offer_ab=a"), "a");
+  assert.equal(adsOfferCookieVariant("xmyhb_offer_ab=b"), null);
+  assert.equal(adsOfferCookieVariant(""), null);
 });
