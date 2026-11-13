@@ -44,3 +44,23 @@ export function hautanalyseDeeplink(
   url.searchParams.set("utm_content", content);
   return url.toString();
 }
+
+/**
+ * myhb-os#643: Der alte Store-Prototyp unter /hautanalyse hatte eine eigene
+ * Empfehlungslogik neben der geprueften in der App. Nichts verlinkt ihn mehr
+ * (alle Knoepfe fuehren in die App), er war aber noch erreichbar. Wer ihn
+ * aufruft (alte Lesezeichen, Anzeigen), landet jetzt in der Analyse der App.
+ * Vorhandene utm-Werte bleiben erhalten, sonst wird die Herkunft gesetzt.
+ */
+export function hautanalysePrototypZiel(pathname: string, search = ""): string | null {
+  const pfad = pathname.replace(/\/+$/, "").toLowerCase();
+  if (!/^(\/[a-z]{2})?\/hautanalyse$/.test(pfad)) return null;
+  const url = new URL(HAUTANALYSE_APP_URL);
+  new URLSearchParams(search).forEach((wert, name) => url.searchParams.set(name, wert));
+  if (!url.searchParams.has("utm_source")) {
+    url.searchParams.set("utm_source", "website");
+    url.searchParams.set("utm_medium", "prototyp");
+    url.searchParams.set("utm_campaign", "hautanalyse");
+  }
+  return url.toString();
+}
