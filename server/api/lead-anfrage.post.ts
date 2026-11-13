@@ -53,7 +53,12 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: pruefung.fehler });
   }
   // Bot: freundlich bestaetigen, damit er es nicht erneut versucht.
-  if (pruefung.bot) return { status: "ok" as const };
+  // Im Log sichtbar machen (ohne Personendaten): Fiel eine echte Anfrage in
+  // den Honeypot (Autofill), sieht man es hier statt nur am fehlenden Lead.
+  if (pruefung.bot) {
+    console.warn("[lead-anfrage] Honeypot ausgefuellt, nicht weitergeleitet");
+    return { status: "ok" as const };
+  }
 
   const anfrage = {
     ...pruefung.anfrage,

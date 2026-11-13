@@ -40,7 +40,7 @@ test("Honeypot ausgefüllt: als Bot erkannt, nichts weiterleiten", () => {
   assert.deepEqual(r, { ok: true, bot: true });
 });
 
-test("Pflichtfelder: Name, Telefon oder E-Mail, Einwilligung", () => {
+test("Pflichtfelder: Name, Telefon, Einwilligung", () => {
   assert.equal(pruefeLeadEingabe({ ...gueltig, name: " " }).ok, false);
   assert.equal(pruefeLeadEingabe({ ...gueltig, email: "", telefon: "" }).ok, false);
   assert.equal(pruefeLeadEingabe({ ...gueltig, einwilligung: "true" }).ok, false);
@@ -48,6 +48,9 @@ test("Pflichtfelder: Name, Telefon oder E-Mail, Einwilligung", () => {
   assert.equal(pruefeLeadEingabe({ ...gueltig, telefon: "123" }).ok, false);
   assert.equal(pruefeLeadEingabe({ ...gueltig, behandlung: "" }).ok, false);
   assert.equal(pruefeLeadEingabe({ ...gueltig, email: null }).ok, true);
+  // Telefon ist Pflicht (13.11.2026), E-Mail allein reicht nicht mehr.
+  assert.equal(pruefeLeadEingabe({ ...gueltig, telefon: "" }).ok, false);
+  assert.equal(pruefeLeadEingabe({ ...gueltig, telefon: null }).ok, false);
 });
 
 test("zu große Rechner-Daten werden verworfen, unbekannter Kontaktweg ignoriert", () => {

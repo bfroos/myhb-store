@@ -18,7 +18,8 @@ import { OP_BEHANDLUNGEN } from "#shared/klinik";
  * dem Funnel der Strapi-Landingpage: Haartransplantation hat einen eigenen
  * Funnel (/lp/haartransplantation), alle anderen OPs den allgemeinen
  * (/lp/op-anfrage). Steht die OP schon fest, faellt dort die Frage
- * "Welcher Eingriff interessiert dich?" weg.
+ * "Welcher Eingriff interessiert dich?" weg. Bei Haartransplantation fragt
+ * das Modal zuerst nach dem Geschlecht (#shared/haarFunnel).
  */
 const dialogRef = inject("dialogRef") as any;
 const behandlung = (dialogRef?.value?.data?.behandlung as string | null) ?? null;
@@ -40,6 +41,9 @@ onMounted(async () => {
       ...rest,
       steps,
       behandlung: behandlung ?? rest.behandlung,
+      // Der Haar-Funnel in Strapi ist der Frauen-Funnel; im Modal der
+      // allgemeinen Seite zuerst "Frau oder Mann?" (13.11.2026).
+      geschlechtWeiche: slug === "haartransplantation",
       variant: "card",
       anchor: "op-anfrage-modal",
     };

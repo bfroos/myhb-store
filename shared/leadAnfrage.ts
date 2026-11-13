@@ -99,8 +99,9 @@ export function pruefeLeadEingabe(
   if (telefon && telefon.replace(/[^\d]/g, "").length < 6) {
     return { ok: false, fehler: "Bitte prüf deine Telefonnummer." };
   }
-  if (!email && !telefon) {
-    return { ok: false, fehler: "Bitte gib eine Telefonnummer oder E-Mail an." };
+  // Telefon ist bei OP-Anfragen Pflicht (Inhaberin, 13.11.2026); E-Mail optional.
+  if (!telefon) {
+    return { ok: false, fehler: "Bitte gib deine Telefonnummer an, damit wir dich erreichen können." };
   }
   if (eingabe.einwilligung !== true) {
     return { ok: false, fehler: "Bitte bestätige die Einwilligung." };

@@ -55,11 +55,14 @@
                 class="funnel__option"
                 :class="{
                   'funnel__option--aktiv': antworten[schritt] === option.label,
-                  'funnel__option--bild': !!option.image || !!funnelIllustration(option.illustration),
+                  'funnel__option--bild': !!option.image || !!option.imageSrc || !!funnelIllustration(option.illustration),
                 }"
                 @click="waehle(option.label)"
               >
                 <UiAtomMediaPicture v-if="option.image" :media="option.image" class="funnel__option-bild" loading="lazy" />
+                <span v-else-if="option.imageSrc" class="funnel__option-illu">
+                  <img :src="option.imageSrc" alt="" width="96" height="96" class="funnel__option-foto" loading="lazy" />
+                </span>
                 <span v-else-if="funnelIllustration(option.illustration)" class="funnel__option-illu">
                   <svg width="96" height="96" viewBox="0 0 100 100" aria-hidden="true">
                     <circle cx="50" cy="50" r="47" fill="#fff" stroke="var(--color-gray-200)" stroke-width="2" />
@@ -93,8 +96,8 @@
               <input v-model.trim="kontakt.name" type="text" autocomplete="name" required />
             </label>
             <label class="funnel__feld">
-              <span>Telefon / WhatsApp</span>
-              <input v-model.trim="kontakt.telefon" type="tel" autocomplete="tel" inputmode="tel" />
+              <span>Telefon / WhatsApp (Pflichtfeld)</span>
+              <input v-model.trim="kontakt.telefon" type="tel" autocomplete="tel" inputmode="tel" required aria-required="true" />
             </label>
             <label class="funnel__feld">
               <span>E-Mail</span>
@@ -114,8 +117,10 @@
                 {{ weg.label }}
               </button>
             </fieldset>
-            <!-- Honeypot: fuer Menschen unsichtbar -->
-            <input v-model="kontakt.website" class="funnel__hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <!-- Honeypot: fuer Menschen unsichtbar. Bewusst kein Name wie "website"/"url",
+                 den Safari/Passwort-Manager beim Autofill befuellen (dann galt eine echte
+                 Anfrage als Bot und kam nie in der App an, 13.11.2026). -->
+            <input v-model="kontakt.website" class="funnel__hp" type="text" name="mhb_hp_feld" tabindex="-1" autocomplete="one-time-code" data-1p-ignore data-lpignore="true" data-form-type="other" aria-hidden="true" />
             <label class="funnel__einwilligung">
               <input v-model="kontakt.einwilligung" type="checkbox" />
               <span>{{ consentText || "Ich willige ein, dass MY HEALTH & BEAUTY mich zu meiner Anfrage kontaktiert. Hinweise in der Datenschutzerklärung; Widerruf jederzeit möglich." }}</span>
@@ -161,6 +166,7 @@ import { readWireAttribution } from "~/lib/attribution";
 import { useLeadRechner } from "~/composables/useLeadRechner";
 import { funnelIllustration } from "#shared/funnelIllustrationen";
 import { behandlungDerAnfrage } from "#shared/klinik";
+import { haarFunnelSchritte, korrigiereFrage, leadAntworten, pruefeTelefon } from "#shared/haarFunnel";
 
 /**
  * Anfrage-Funnel fuer OP-Landingpages (E28, myhb-app/myhb-os#1638).
@@ -176,6 +182,8 @@ import { behandlungDerAnfrage } from "#shared/klinik";
 type FunnelOption = {
   label: string;
   image?: StrapiMedia | null;
+  /** Statisches Bild aus public/ (Maenner-Funnel im Haar-Modal). */
+  imageSrc?: string | null;
   illustration?: string | null;
   hint?: string | null;
 };
@@ -184,6 +192,8 @@ type FunnelStep = {
   fieldKey?: string | null;
   layout?: "tiles" | "list" | "grid" | null;
   options?: FunnelOption[];
+  /** Frage-Schluessel in der Anfrage an die App; sonst der Fragetext. */
+  leadFrage?: string | null;
 };
 
 const props = defineProps<{
@@ -206,6 +216,11 @@ const props = defineProps<{
   heroImage?: StrapiMedia | null;
   resultTitle?: string | null;
   resultNote?: string | null;
+  /**
+   * Haar-Modal: zuerst "Frau oder Mann?", dann Frauen-Fragen (steps) oder
+   * Maenner-Fragen aus /lp/haartransplantation-maenner (#shared/haarFunnel).
+   */
+  geschlechtWeiche?: boolean | null;
 }>();
 
 // Rueckruf per Anruf ist der Standard (Besprechung 21.10.2026).
@@ -228,14 +243,17 @@ const trustListe = computed(() => (Array.isArray(props.trustItems) ? props.trust
 const clipId = `funnel-clip-${useId()}`;
 
 const anchorId = computed(() => (props.anchor || "anfrage").replace(/^#/, ""));
-const fragen = computed(() => (props.steps ?? []).filter((s) => s.question && s.options?.length));
-const gesamt = computed(() => fragen.value.length + 1);
 const schritt = ref(0);
 const antworten = ref<string[]>([]);
+const fragen = computed<FunnelStep[]>(() => {
+  const basis = (props.steps ?? []).filter((s) => s.question && s.options?.length).map(korrigiereFrage);
+  return props.geschlechtWeiche ? (haarFunnelSchritte(basis, antworten.value[0]) as FunnelStep[]) : basis;
+});
+const gesamt = computed(() => fragen.value.length + 1);
 const aktuelleFrage = computed(() => fragen.value[schritt.value] ?? null);
 
 function optionenLayout(f: FunnelStep) {
-  if (f.options?.some((o) => o.image || funnelIllustration(o.illustration))) return "grid";
+  if (f.options?.some((o) => o.image || o.imageSrc || funnelIllustration(o.illustration))) return "grid";
   return f.layout || "list";
 }
 
@@ -265,6 +283,10 @@ const rechner = useLeadRechner();
 const route = useRoute();
 
 function waehle(label: string) {
+  // Anderes Geschlecht gewaehlt: die Antworten des anderen Wegs passen nicht mehr.
+  if (props.geschlechtWeiche && schritt.value === 0 && antworten.value[0] !== label) {
+    antworten.value = [];
+  }
   antworten.value[schritt.value] = label;
   trackEvent("lead_funnel_step", {
     behandlung: props.behandlung,
@@ -284,9 +306,8 @@ function neuStarten() {
 async function absenden() {
   fehler.value = null;
   if (!kontakt.name) return void (fehler.value = "Bitte gib deinen Namen an.");
-  if (!kontakt.telefon && !kontakt.email) {
-    return void (fehler.value = "Bitte gib eine Telefonnummer oder E-Mail an.");
-  }
+  const telefonFehler = pruefeTelefon(kontakt.telefon);
+  if (telefonFehler) return void (fehler.value = telefonFehler);
   if (!kontakt.einwilligung) return void (fehler.value = "Bitte bestätige die Einwilligung.");
 
   sendet.value = true;
@@ -302,7 +323,7 @@ async function absenden() {
         kontaktweg: kontakt.kontaktweg,
         einwilligung: kontakt.einwilligung,
         website: kontakt.website,
-        antworten: fragen.value.map((f, i) => ({ frage: f.question, antwort: antworten.value[i] ?? "" })),
+        antworten: leadAntworten(fragen.value, antworten.value),
         rechner: rechner.value,
         seite: route.path,
         attribution: readWireAttribution(),
@@ -401,6 +422,7 @@ async function absenden() {
 .funnel__option--bild { padding: 0; overflow: hidden; border-color: var(--color-gray-200); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); border-radius: var(--border-radius-700); }
 .funnel__option-illu { display: flex; justify-content: center; padding: 14px 12px 12px; }
 .funnel__option-bild { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.funnel__option-foto { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; display: block; }
 .funnel__option--bild .funnel__option-text {
   flex: 1; display: flex; align-items: center; justify-content: center; min-height: 56px;
   padding: 10px 12px; background: var(--color-black); color: var(--color-white);
