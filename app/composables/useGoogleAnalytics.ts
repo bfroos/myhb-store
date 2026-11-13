@@ -49,9 +49,9 @@ export const useGoogleAnalytics = () => {
     eventParams?: Record<string, any>
   ) => {
     // Conversion-Events tragen die Kampagnenwerte selbst mit. GA4 kennt die
-    // Sitzungsquelle ohnehin, aber nur so lassen sich Calendly- und
-    // App-Buchungen im selben Funnel nach Kanal aufteilen — die App schickt
-    // dieselben Feldnamen mit `booking_confirmed`. Explizite Parameter des
+    // Sitzungsquelle ohnehin, aber nur so lassen sich die Buchungen im
+    // Funnel nach Kanal aufteilen — die App schickt dieselben Feldnamen mit
+    // `booking_confirmed`. Explizite Parameter des
     // Aufrufers gewinnen.
     // Leere Felder rausfiltern: Ein `ab_variant: undefined` aus einem
     // Aufrufer-Objekt wuerde sonst den Wert aus dem Speicher ueberschreiben.
@@ -151,22 +151,22 @@ export const useGoogleAnalytics = () => {
   };
 
   /**
-   * Track booking click (Calendly widget or in-app booking flow).
+   * Track booking click (in-app booking flow).
    *
-   * `bookingType` names the system that actually opens: 'app' for the
-   * app.myhealthandbeauty.com iframe, 'calendly' for the Calendly widget,
-   * 'location_search' when the location picker opens first (the concrete
-   * system is then tracked via trackBookingLocationSelected()).
+   * `bookingType` names what actually opens: 'app' for the
+   * app.myhealthandbeauty.com iframe, 'location_search' when the location
+   * picker opens first (the location is then tracked via
+   * trackBookingLocationSelected()). Calendly is gone since 13.11.2026.
    */
   const trackBookingClick = (
-    bookingType: 'calendly' | 'app' | 'location_search' = 'calendly',
+    bookingType: 'app' | 'location_search',
     extra?: {
       location_slug?: string;
       treatment_type?: string;
       cta_location?: string;
-      /** Variante des A/B-Splits (#100), falls der Besucher im Test ist. */
-      ab_variant?: 'app' | 'calendly';
-      /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
+      /** Seit dem Ende des A/B-Splits (#100) immer 'app'. */
+      ab_variant?: 'app';
+      /** Standort ohne appBookingUrl: Standortsuche statt App (#100). */
       ab_fallback?: boolean;
       /** Deployment der Zuweisung: ads oder seo — trennt die beiden Toepfe. */
       ab_source?: 'ads' | 'seo';
@@ -185,8 +185,7 @@ export const useGoogleAnalytics = () => {
       treatment_context?: boolean;
       /**
        * Preis der Behandlungsseite als Zahl (elanagency/myhb-os#400), aus
-       * der Kontextzeile. GTM liest ihn fuer Meta „Schedule mit Wert", wenn
-       * spaeter die Calendly-Buchung eintrifft.
+       * der Kontextzeile. GTM liest ihn fuer Meta „Schedule mit Wert".
        */
       booking_value?: number;
       /**
@@ -223,15 +222,13 @@ export const useGoogleAnalytics = () => {
   };
 
   /**
-   * Track the location picked inside the booking dialog. Fires with the
-   * system that opens for that location so the funnel can be split by
-   * Calendly vs. app per lounge.
+   * Track the location picked inside the booking dialog.
    */
   const trackBookingLocationSelected = (
-    bookingType: 'calendly' | 'app',
+    bookingType: 'app',
     locationSlug?: string,
     ab?: {
-      ab_variant?: 'app' | 'calendly';
+      ab_variant?: 'app';
       ab_fallback?: boolean;
       ab_source?: 'ads' | 'seo';
       /** Dialog kam von einer Behandlungsseite (#78). */
@@ -248,67 +245,6 @@ export const useGoogleAnalytics = () => {
       booking_type: bookingType,
       location_slug: locationSlug,
       ...(ab ?? {}),
-    });
-  };
-
-  /**
-   * Track that the visitor picked a slot in the Calendly widget — the step
-   * between opening the widget and confirming. Mirrors the app's
-   * `summary_view` so both systems can be compared at the same funnel stage.
-   */
-  const trackCalendlyDateTimeSelected = (extra?: {
-    location_slug?: string;
-    treatment_type?: string;
-    ab_variant?: 'app' | 'calendly';
-    ab_fallback?: boolean;
-    ab_source?: 'ads' | 'seo';
-  }) => {
-    trackEvent('booking_datetime_selected', {
-      event_category: 'conversion',
-      booking_type: 'calendly',
-      ...(extra ?? {}),
-    });
-  };
-
-  /**
-   * Track a COMPLETED Calendly booking (`calendly.event_scheduled`).
-   *
-   * Deliberately the same event name the app pushes on a confirmed booking
-   * (`booking_confirmed`, see src/lib/analytics.ts in elanagency/myhb-os), so
-   * the conversion rate of both systems is comparable in one GA4 funnel:
-   * `click_booking` → `booking_confirmed`, split by `booking_type`.
-   *
-   * Until this existed we only tracked that Calendly *opened*, never that
-   * somebody booked — Calendly had a denominator but no numerator.
-   *
-   * `event_id` carries the Calendly invitee UUID so a booking counts once even
-   * if the widget fires the message twice.
-   *
-   * Fires from two places (elanagency/myhb-os#131): the embedded widget
-   * (`embedded: true`) and the thank-you page Calendly redirects to
-   * (`confirmation_page: true`; `embedded` false for bookings made on
-   * calendly.com itself). lib/calendlyBookingHandoff.ts keeps the two from
-   * double counting. `location` is the Calendly calendar's display name
-   * (`assigned_to`) when the thank-you page has no location slug.
-   */
-  const trackCalendlyBookingConfirmed = (extra?: {
-    location_slug?: string;
-    treatment_type?: string;
-    event_id?: string;
-    embedded?: boolean;
-    location?: string;
-    confirmation_page?: boolean;
-    /** Variante des A/B-Splits (#100), falls die Buchung aus dem Test kommt. */
-    ab_variant?: 'app' | 'calendly';
-    /** App-Arm, der mangels appBookingUrl auf Calendly zurueckfiel (#100). */
-    ab_fallback?: boolean;
-    /** Deployment der Zuweisung: ads oder seo. */
-    ab_source?: 'ads' | 'seo';
-  }) => {
-    trackEvent('booking_confirmed', {
-      event_category: 'conversion',
-      booking_type: 'calendly',
-      ...(extra ?? {}),
     });
   };
 
@@ -358,8 +294,6 @@ export const useGoogleAnalytics = () => {
     trackCarouselNavigate,
     trackBookingClick,
     trackBookingLocationSelected,
-    trackCalendlyDateTimeSelected,
-    trackCalendlyBookingConfirmed,
     trackPhoneClick,
     trackCareerApply,
     trackFormSubmission,

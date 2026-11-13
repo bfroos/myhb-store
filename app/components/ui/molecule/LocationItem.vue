@@ -220,7 +220,7 @@ const googleReview = computed(() => {
 /**
  * Nimmt dieser Standort ueberhaupt Termine an? (#78)
  *
- * Bisher reichte eine `calendlyUrl` — die Sperre der Redaktion
+ * Frueher reichte eine Buchungs-URL — die Sperre der Redaktion
  * (`isBookingAllowed`) wurde hier nie ausgewertet, weil
  * `/api/locations/bookable` das Feld gar nicht auslieferte. Seit
  * bfroos/myhb-cms#32 tut es das, und damit greift `bookingUrlsOf` auch im
@@ -228,11 +228,9 @@ const googleReview = computed(() => {
  * gesperrt ist (#141: 70 Klicks in zwei Wochen, null Buchungen). Jetzt
  * bekommt sie den Kontaktweg darunter statt eines Knopfes ins Leere.
  */
-// 07.10.2026 (nur noch App): Ein App-Link allein reicht auch. Seit 13.10.
-// braucht es ihn: ohne App-Link Kontaktweg statt Calendly-Knopf.
-const { appOnly } = useBookingAbTest();
+// Seit 13.10.2026 braucht es einen App-Link: ohne ihn Kontaktweg statt Knopf.
 const buchbar = computed(() =>
-  istOnlineBuchbar(bookingUrlsOf(props.item as any), appOnly),
+  istOnlineBuchbar(bookingUrlsOf(props.item as any)),
 );
 
 const phoneHref = computed(() => {

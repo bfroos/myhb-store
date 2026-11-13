@@ -468,11 +468,6 @@ export default defineNuxtConfig({
       googleMapsKey: process.env.NUXT_PUBLIC_GOOGLE_MAPS_WEB_KEY,
       googleMapsMapId: process.env.NUXT_PUBLIC_GOOGLE_MAPS_MAP_ID,
       siteMode: process.env.NUXT_PUBLIC_SITE_MODE,
-      // A/B-Split (#100) ist beendet, Calendly abgeschaltet (13.11.2026).
-      // Beide Schalter bleiben nur, damit app/lib/bookingAbTest.ts sie lesen
-      // kann; ohne Calendly-URL bucht jeder Weg ueber die App.
-      abBookingSplit: process.env.NUXT_PUBLIC_AB_BOOKING_SPLIT,
-      bookingAppOnly: process.env.NUXT_PUBLIC_BOOKING_APP_ONLY,
       // #282: Link "Mein Konto" zur Kunden-App in Header und Footer. Leer =
       // AUS; "on" schaltet ihn ein. Live erst nach den Schulungen Kunden-App
       // und Behandlungsplan (myhb-os#905, #906, Reihenfolge in #908).

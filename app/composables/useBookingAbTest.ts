@@ -12,8 +12,7 @@ export type AppliedBooking = ResolvedBooking & { abSource?: AbSource };
  *
  * Der A/B-Split (#100) ist seit 07.10.2026 beendet, Calendly seit 13.11.2026
  * abgeschaltet: Gebucht wird nur noch ueber die App. Mit `appBookingUrl` des
- * Standorts oeffnet die App, sonst die Standortsuche (`ab_fallback` am
- * Ereignis, wenn der Standort selbst keine App-URL hat). `ab_variant: "app"`
+ * Standorts oeffnet die App, sonst die Standortsuche. `ab_variant: "app"`
  * und `ab_source` bleiben an den Ereignissen, damit die Auswertungen weiter
  * dieselben Spalten sehen.
  */
@@ -25,6 +24,5 @@ export function useBookingAbTest() {
     return { ...resolveAppOnlyTarget(urls), abSource: siteMode };
   }
 
-  // Ohne Calendly ist jeder buchbare Standort ein App-Standort.
-  return { resolveBooking, appOnly: true as const };
+  return { resolveBooking };
 }

@@ -295,7 +295,7 @@
         }
 
         function trackBookingClick() {
-            const params = { event_category: 'conversion', booking_type: 'calendly' };
+            const params = { event_category: 'conversion', booking_type: 'app' };
             if (window.gtag) window.gtag('event', 'click_booking', params);
             logEvent('click_booking', params);
         }

@@ -74,7 +74,7 @@ export async function createBookingLead(
 }
 
 /**
- * Haengt `lead=<token>` an eine App-Buchungs-URL. Andere URLs (Calendly) und
+ * Haengt `lead=<token>` an eine App-Buchungs-URL. Andere URLs und
  * fehlende/ungueltige Tokens: unveraendert. Ein vorhandenes `lead` bleibt.
  */
 export function withLeadToken(url: string, token?: string | null): string {

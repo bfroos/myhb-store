@@ -2,7 +2,7 @@
  * "Der erste Screen steht" (#180): `load` plus erster LCP-Eintrag.
  *
  * Alles, was nicht zum ersten Bild gehoert, aber trotzdem vorab laden soll
- * (Calendly-Vorwaermen, Autoplay-Videos), wartet hierauf, statt mit dem
+ * (z. B. Autoplay-Videos), wartet hierauf, statt mit dem
  * Hero-Bild um die Leitung zu konkurrieren. Browser ohne LCP-Messung (Safari
  * vor 26) warten nur auf `load`. Nach `SPAETESTENS_MS` geht es in jedem Fall
  * weiter — ein haengender Drittanbieter soll nichts ganz verhindern.

@@ -395,7 +395,7 @@ async function handleSubmit() {
   }
 
   // Vor dem Absenden festhalten: `submitNewsletter` leert die Felder. Geht
-  // nur in die Calendly-URL (Vorbefuellung), nie ins Tracking.
+  // nur in den Lead fuer `?lead=` (lib/bookingLead.ts), nie ins Tracking.
   const prefill: BookingPrefill = {
     email: email.value?.trim() || undefined,
     phone: phone.value?.trim() || undefined,

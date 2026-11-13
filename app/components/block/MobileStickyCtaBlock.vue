@@ -41,7 +41,9 @@ const handlePhoneClick = () => {
 };
 
 const handleBookClick = () => {
-  trackBookingClick();
+  // Der Knopf selbst oeffnet nichts (Eltern hoeren auf `book`); gebucht wird
+  // seit 13.11.2026 nur noch ueber die App.
+  trackBookingClick("app");
   emit('book');
 };
 </script>

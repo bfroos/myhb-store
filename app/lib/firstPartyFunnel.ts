@@ -1,10 +1,9 @@
 /**
  * Eigenes Trichter-Tracking neben GA4 (elanagency/myhb-os#521, aus #271).
  *
- * Die Ereignisse, die der A/B-Vergleich App gegen Calendly braucht, gehen
- * zusaetzlich an die Edge Function `track-funnel` der App-Datenbank und landen
- * minutenaktuell in `public.funnel_events`. GA4 liefert den laufenden Tag erst
- * am naechsten Morgen vollstaendig, verliert Calendly-Buchungen (#131) und
+ * Die Trichter-Ereignisse gehen zusaetzlich an die Edge Function `track-funnel`
+ * der App-Datenbank und landen minutenaktuell in `public.funnel_events`. GA4
+ * liefert den laufenden Tag erst am naechsten Morgen vollstaendig und verliert
  * Besucher mit Werbeblocker.
  *
  * Der Arm kommt beim Senden aus dem Cookie `myhb_ab_booking`, nicht aus der
@@ -20,26 +19,12 @@ import { readAbBucket, readAbSource, type AbSource, type BookingVariant } from "
 const ENDPUNKT = "https://forgsirmbzkxbblepscr.supabase.co/functions/v1/track-funnel";
 const SID_KEY = "mhb_fp_sid";
 
-const GESPIEGELT = new Set([
-  "ab_assigned",
-  "click_booking",
-  "booking_location_selected",
-  "booking_confirmed",
-  "slot_selected",
-]);
-
 /**
- * Datenschicht-Name → Name in `funnel_events`, wo beide Flaechen denselben
- * Schritt meinen (bfroos/myhb-store#227). Calendly meldet die gewaehlte
- * Uhrzeit (`calendly.date_and_time_selected`) als `booking_datetime_selected`;
- * in der Tabelle heisst derselbe Schritt der App `slot_selected`. So rechnet
- * die Auswertung je Arm Klick → Uhrzeit gewaehlt → gebucht mit einem Namen.
- * Die Nachricht des unsichtbaren, vorgewaermten Rahmens kommt gar nicht bis
- * hierher.
+ * Seit Calendly abgeschaltet ist (13.11.2026) meldet der Store nur noch Klick
+ * und Standortwahl; Uhrzeit und Buchung meldet die App selbst an
+ * `funnel_events` (`slot_selected`, `booking_confirmed`).
  */
-const UMBENANNT: Record<string, string> = {
-  booking_datetime_selected: "slot_selected",
-};
+const GESPIEGELT = new Set(["click_booking", "booking_location_selected"]);
 
 let sidImSpeicher: string | undefined;
 
@@ -85,7 +70,7 @@ export function mirrorFunnelEvent(payload: Record<string, unknown>): void {
   if (typeof window === "undefined") return;
   const dlEvent = text(payload.event);
   if (!dlEvent) return;
-  const event = Object.prototype.hasOwnProperty.call(UMBENANNT, dlEvent) ? UMBENANNT[dlEvent] : dlEvent;
+  const event = dlEvent;
   if (!GESPIEGELT.has(event)) return;
   try {
     const body = JSON.stringify({
@@ -94,9 +79,8 @@ export function mirrorFunnelEvent(payload: Record<string, unknown>): void {
       session_id: getFunnelSessionId(),
       client_at: new Date().toISOString(),
       page_path: window.location.pathname,
-      // ab_assigned traegt den frisch gezogenen Arm selbst; sonst gilt das Cookie.
-      ab_variant: event === "ab_assigned" ? text(payload.ab_variant) : readAbBucket() ?? standard.variant,
-      ab_source: event === "ab_assigned" ? text(payload.ab_source) : readAbSource() ?? standard.source,
+      ab_variant: readAbBucket() ?? standard.variant,
+      ab_source: readAbSource() ?? standard.source,
       booking_type: text(payload.booking_type),
       ab_fallback: payload.ab_fallback === true,
       ab_bypass: payload.ab_bypass === true,

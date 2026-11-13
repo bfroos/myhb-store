@@ -1,9 +1,15 @@
 /**
- * MYH&B UTM-Persistenz v1.7
+ * MYH&B UTM-Persistenz v1.9
+ *
+ * v1.9 (13.11.2026): Calendly ist abgeschaltet. Die Dekoration der
+ * Calendly-URLs (utm_*, salesforce_uuid-Stempel aus v1.2–v1.6, Popup-Patch)
+ * ist raus; die App-Buchung bekommt Herkunft und Einwilligung ueber
+ * useAppBookingDialog. Was bleibt: Erfassen, Speichern (inkl. Server-Stempel
+ * und Cookiebot-Rueckschreiben) und die Cross-Domain-Links.
  *
  * v1.0: Speichert utm_*, gclid, fbclid, ttclid beim Erstbesuch (First Touch)
- * und dekoriert automatisch alle Calendly-URLs (Links, Embeds, Popups) sowie
- * Cross-Domain-Links zwischen myhealthandbeauty.com und .app.
+ * und dekorierte Calendly-URLs sowie Cross-Domain-Links zwischen
+ * myhealthandbeauty.com und .app.
  *
  * v1.1 (Ideen aus utm-tracking.js von Kevin Kirch):
  * - Referrer-Fallback: ohne UTM/Click-ID wird die Quelle aus document.referrer
@@ -73,11 +79,7 @@
  * Accept wird hochgestuft.
  */
 export default defineNuxtPlugin(() => {
-  // Auf dem Server gibt es keinen Speicher und keine Klick-ID; der Dialog ruft
-  // $decorateBookingUrl trotzdem auf und bekommt die URL unveraendert zurueck.
-  if (import.meta.server) {
-    return { provide: { decorateBookingUrl: (url: string) => url } };
-  }
+  if (import.meta.server) return;
 
   const PARAMS = [
     "utm_source",
@@ -111,21 +113,6 @@ export default defineNuxtPlugin(() => {
     const cb = (window as any).Cookiebot;
     if (!cb || !cb.consent) return true;
     return !!cb.consent.marketing;
-  }
-
-  /**
-   * v1.4 (#126): Der Cookiebot-Stand als Stempel fuer den Calendly-Pfad.
-   *
-   * Bewusst NICHT hasMarketingConsent(): das defaultet auf true, weil es nur
-   * ueber die Speicherdauer entscheidet und ein fehlendes Cookiebot dort
-   * harmlos ist. Hier entscheidet der Wert, ob spaeter ein Purchase an Meta
-   * geht — deshalb drei Zustaende. Ohne Antwort des Besuchers bleibt es null,
-   * T14 schreibt dann NULL und meta-capi-purchase schweigt.
-   */
-  function marketingConsentFlag(): "1" | "0" | null {
-    const cb = (window as any).Cookiebot;
-    if (!cb || !cb.consent || !cb.hasResponse) return null;
-    return cb.consent.marketing ? "1" : "0";
   }
 
   // ---------- Storage ----------
@@ -271,7 +258,7 @@ export default defineNuxtPlugin(() => {
     save(store);
   }
 
-  // ---------- 2) Calendly-URLs dekorieren ----------
+  // ---------- 2) Cross-Domain-Links dekorieren ----------
   function pickTouch(): Touch | null {
     const store = load();
     if (!store) return null;
@@ -279,112 +266,9 @@ export default defineNuxtPlugin(() => {
     return store.first || null;
   }
 
-  // Klick-ID im Format von touchpoints.click_id, oder null.
-  function clickIdOf(t: Touch | null | undefined): string | null {
-    if (!t) return null;
-    return t.gclid
-      ? `gclid:${t.gclid}`
-      : t.fbclid
-        ? `fbclid:${t.fbclid}`
-        : t.ttclid
-          ? `ttclid:${t.ttclid}`
-          : t.msclkid
-            ? `msclkid:${t.msclkid}`
-            : null;
-  }
-
-  function decorate(url: string): string {
-    const store = load();
-    const data = pickTouch();
-    if (!data) return url;
-    try {
-      const u = new URL(url, window.location.origin);
-      if (!u.hostname.includes("calendly.com")) return url;
-      for (const p of PARAMS) {
-        if (data[p] && !u.searchParams.get(p)) u.searchParams.set(p, data[p] as string);
-      }
-      // v1.2 (T6 #24): Klick-ID via salesforce_uuid — einziger freier
-      // Passthrough, den Calendly im Webhook (tracking.salesforce_uuid)
-      // zurueckgibt. Salesforce ist bei uns nicht im Einsatz.
-      // v1.3: Fallback auf den First Touch. Ein bezahlter Klick darf nicht
-      // verloren gehen, nur weil die Person spaeter organisch zurueckkam.
-      const first = store && store.first ? store.first : null;
-      const cid = clickIdOf(data) || clickIdOf(first);
-      // v1.4 (#126): Der Consent reist als ";c:1"/";c:0" im selben Feld mit.
-      // salesforce_uuid ist der einzige freie Passthrough, den Calendly im
-      // Webhook zurueckgibt. Ohne Klick-ID wird der Stempel allein gesetzt,
-      // sonst haette eine organische Buchung nie einen Einwilligungsnachweis.
-      const consent = marketingConsentFlag();
-      const existing = u.searchParams.get("salesforce_uuid");
-      // v1.5 (#86): Kampagne des First Touch als ";ft_cmp:<id>". Sie reist hier mit
-      // und nicht in utm_term/utm_content, weil die beiden nur belegt werden, wenn
-      // sie sonst leer blieben — bei bezahltem Verkehr sind sie besetzt, also genau
-      // dort, wo die First-Touch-Kampagne interessant waere.
-      const ersterBesuchAnders = !!(
-        first && first._ts && first._ts !== data._ts && first.utm_source
-      );
-      // Semikolon ist das Trennzeichen des Stempels; ein Kampagnenname, der eines
-      // enthaelt, wuerde den Rest abschneiden. Deshalb raus damit, nicht escapen.
-      const ftCmp =
-        ersterBesuchAnders && first?.utm_campaign
-          ? String(first.utm_campaign).replace(/;/g, "").trim() || null
-          : null;
-      // v1.6 (#399): Seite, auf der die Buchung startete. Semikolon raus wie oben.
-      const lp = window.location.pathname.replace(/;/g, "").slice(0, 150) || null;
-      const stamp = [
-        cid,
-        consent ? `c:${consent}` : null,
-        ftCmp ? `ft_cmp:${ftCmp}` : null,
-        lp ? `lp:${lp}` : null,
-      ]
-        .filter(Boolean)
-        .join(";");
-      // Cookiebot antwortet oft erst nach dem ersten Dekorieren. Einen eigenen
-      // Wert ohne Stempel deshalb nachtraeglich hochstufen, einen fremden nicht.
-      const nachruesten = !!existing && !!consent && !/(^|;)c:[01](;|$)/.test(existing);
-      if (stamp && (!existing || nachruesten)) {
-        u.searchParams.set("salesforce_uuid", stamp);
-      }
-      // v1.3: First Touch zusaetzlich mitgeben, wenn er ein anderer Besuch war
-      // als der Last Touch. utm_term/utm_content werden nur belegt, wenn sie
-      // sonst leer blieben — echte Kampagnenwerte haben Vorrang. Das ft_-Praefix
-      // macht die Herkunft im Webhook eindeutig unterscheidbar.
-      if (ersterBesuchAnders && first) {
-        if (!u.searchParams.get("utm_term")) {
-          u.searchParams.set("utm_term", `ft_src:${first.utm_source}|${first.utm_medium || "none"}`);
-        }
-        const fcid = clickIdOf(first);
-        if (fcid && !u.searchParams.get("utm_content")) {
-          u.searchParams.set("utm_content", `ft_cid:${fcid}`);
-        }
-      }
-      return u.toString();
-    } catch {
-      return url;
-    }
-  }
-
   function decorateAll() {
     const data = pickTouch();
     if (!data) return;
-    document.querySelectorAll<HTMLAnchorElement>('a[href*="calendly.com"]').forEach((a) => {
-      a.href = decorate(a.href);
-    });
-    document.querySelectorAll('[data-url*="calendly.com"]').forEach((el) => {
-      el.setAttribute("data-url", decorate(el.getAttribute("data-url") as string));
-    });
-    document.querySelectorAll<HTMLIFrameElement>('iframe[src*="calendly.com"]').forEach((f) => {
-      // #141: Nur beim ersten Mal. Eine zweite Zuweisung an `src` laedt das
-      // iFrame neu — und der Ladevorgang, den der Besucher gerade ansieht,
-      // finge von vorne an. Das passierte, sobald Cookiebot spaeter antwortete:
-      // Der Einwilligungsstempel in salesforce_uuid aendert sich, die URL damit
-      // auch. Die Buchungs-URL wird seit #141 schon vor dem Einhaengen
-      // dekoriert (CalendlyDialog), hier bleibt nur der Fall fremder iFrames.
-      if (f.dataset.myhbDecorated) return;
-      const dec = decorate(f.src);
-      f.dataset.myhbDecorated = "1";
-      if (dec !== f.src) f.src = dec;
-    });
     document.querySelectorAll<HTMLAnchorElement>('a[href*="myhealthandbeauty."]').forEach((a) => {
       try {
         const u = new URL(a.href, window.location.origin);
@@ -399,28 +283,9 @@ export default defineNuxtPlugin(() => {
     });
   }
 
-  // ---------- 3) Calendly-Popup-/Inline-API abfangen ----------
-  function patchCalendly() {
-    const c = (window as any).Calendly;
-    if (!c || c.__myhbPatched) return;
-    for (const fn of ["initPopupWidget", "initInlineWidget", "initBadgeWidget"]) {
-      if (typeof c[fn] === "function") {
-        const orig = c[fn].bind(c);
-        c[fn] = (opts: any) => {
-          if (opts?.url) opts.url = decorate(opts.url);
-          return orig(opts);
-        };
-      }
-    }
-    c.__myhbPatched = true;
-  }
-
   // ---------- Init ----------
   capture();
-  const run = () => {
-    decorateAll();
-    patchCalendly();
-  };
+  const run = () => decorateAll();
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", run);
   } else {
@@ -432,8 +297,7 @@ export default defineNuxtPlugin(() => {
   });
   // v1.7 (store#168): Nach der Banner-Antwort ist der Speicher leer. Aus der
   // Kopie zurueckschreiben (bei Accept stuft save() dabei auf 90 Tage hoch) und
-  // die Calendly-URLs neu dekorieren, damit Klick-ID und c:-Stempel an der
-  // Buchung ankommen. Cookiebot raeumt nicht immer synchron zum Ereignis,
+  // die Links neu dekorieren. Cookiebot raeumt nicht immer synchron zum Ereignis,
   // deshalb zwei Nachlaeufe.
   function nachAntwort() {
     const data = load() || kopie;
@@ -453,8 +317,4 @@ export default defineNuxtPlugin(() => {
     window.addEventListener(ev, nachAntwortMitNachlauf);
   }
 
-  // #141: Die Buchungs-URL wird jetzt dekoriert, *bevor* das iFrame entsteht.
-  // Vorher hing das an der MutationObserver-Runde nach dem Einhaengen — die
-  // Zuweisung an `src` war ein zweiter Ladevorgang.
-  return { provide: { decorateBookingUrl: decorate } };
 });

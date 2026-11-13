@@ -35,8 +35,8 @@ export function isAppBookingUrl(url?: string | null): boolean {
  * the treatment here.
  *
  * No-ops (returns the URL unchanged) when there is no URL, no treatment slug,
- * or the URL is not an in-app booking URL (e.g. a calendly.com URL) — so
- * Calendly locations and locations without a treatment slug keep working.
+ * or the URL is not an in-app booking URL — so locations without a
+ * treatment slug keep working.
  */
 export function withAppTreatmentSlug(
   url?: string | null,
@@ -127,10 +127,9 @@ function splitClickId(
 }
 
 /**
- * Conversion-Audit #67: Der Calendly-Pfad bekommt utm_* und Klick-IDs ueber
- * das utm-persist-Plugin dekoriert, der App-Pfad bekam bisher nur gclid/
- * gbraid/wbraid. Damit die App (app.* Subdomain, eigener Storage) dieselbe
- * Quelle sieht wie Newsletter und Calendly, haengen wir hier den
+ * Conversion-Audit #67: Der App-Pfad bekam frueher nur gclid/gbraid/wbraid.
+ * Damit die App (app.* Subdomain, eigener Storage) dieselbe Quelle sieht wie
+ * der Newsletter, haengen wir hier den
  * Attributionsspeicher (First/Last Touch) als Query-Parameter an:
  *
  *   utm_source, utm_medium, utm_campaign, utm_term, utm_content  (Last Touch,
@@ -224,8 +223,7 @@ export type AppBookingUrlOptions = {
    * Variante des A/B-Splits (#100). Geht als `ab_variant` an die App mit: Die
    * Buchung wird im iframe auf app.myhealthandbeauty.com abgeschlossen, das
    * abschliessende `booking_confirmed` pusht also die App in ihre eigene
-   * Datenschicht. Ohne diesen Parameter liesse sich die Conversion der
-   * App-Variante nicht gegen die von Calendly stellen.
+   * Datenschicht. Seit dem Ende des Splits immer `app`.
    */
   abVariant?: BookingVariant | null;
   /**
@@ -363,7 +361,7 @@ export function useAppBookingDialog() {
           linkUrl: withoutLeadToken(bookingUrl),
           // Messung zu elanagency/myhb-os#205 (Abbruch Klick -> App geladen):
           // ab hier laeuft die Uhr fuer `booking_embed_ready` und
-          // `booking_dialog_closed`, analog zum Calendly-Dialog (#141).
+          // `booking_dialog_closed` (#141).
           openedAt: import.meta.client ? performance.now() : undefined,
           abVariant: options?.abVariant ?? undefined,
           abBypass: options?.abBypass ? true : undefined,

@@ -135,9 +135,8 @@ export function mapLocationTreatmentPageFixedBlocks(
       ...bookingUrlsOf(location),
       locationSlug: location?.slug,
       // Deeplink #66: Der Slug wird beim Öffnen des Dialogs als
-      // treatment=<slug> an die App-Buchungs-URL gehängt (Calendly-URLs
-      // bleiben unverändert), damit die Behandlung in der App vorausgewählt
-      // ist.
+      // treatment=<slug> an die App-Buchungs-URL gehängt, damit die
+      // Behandlung in der App vorausgewählt ist.
       appTreatmentSlug: resolveAppTreatmentSlug(treatmentPage),
       googlePlaceId: location?.googlePlaceId ?? undefined,
       treatmentPathKey: treatmentPage.pathKey,

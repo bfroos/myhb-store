@@ -149,7 +149,7 @@ onBeforeUnmount(() => {
   });
 });
 const { openAppBookingDialog } = useAppBookingDialog();
-const { resolveBooking, appOnly } = useBookingAbTest();
+const { resolveBooking } = useBookingAbTest();
 const {
   trackEvent,
   trackBookingClick,
@@ -300,7 +300,7 @@ const ersatzHinweis = computed(() => {
   if (!isAdsMode.value || !ort || ort.buchbar) return null;
   const naechste = sortiertNachSeitenOrt.value
     ? (dialogLocations.value.find(
-        (loc: any) => istOnlineBuchbar(bookingUrlsOf(loc), appOnly),
+        (loc: any) => istOnlineBuchbar(bookingUrlsOf(loc)),
       ) as any)
     : null;
   const km = naechste?.distanceInKilometers;
