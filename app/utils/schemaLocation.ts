@@ -72,11 +72,11 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJf4C6OSkTlkcRpTMm00E5JLE": {
     "rating": "4.7",
-    "count": "104"
+    "count": "105"
   },
   "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": {
     "rating": "4.9",
-    "count": "185"
+    "count": "186"
   },
   "ChIJuVWkFmyZwEcRM9nuZ1SejT4": {
     "rating": "4.9",
