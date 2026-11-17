@@ -56,7 +56,7 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJoct0O2RTqEcRZthU8Tn5dGs": {
     "rating": "4.7",
-    "count": "251"
+    "count": "252"
   },
   "ChIJYyPheE7LuEcRAIgZkPAOJyU": {
     "rating": "4.9",
@@ -76,7 +76,7 @@ export const GOOGLE_RATINGS: Record<string, { rating: string; count: string }> =
   },
   "ChIJ-S5ezxr5pkcRqzaZzf4jdDQ": {
     "rating": "4.9",
-    "count": "186"
+    "count": "187"
   },
   "ChIJuVWkFmyZwEcRM9nuZ1SejT4": {
     "rating": "4.9",
