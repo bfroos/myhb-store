@@ -11566,5 +11566,305 @@
     "from": "/en/pages/lip-wrinkle-duesseldorf",
     "to": "/standorte/duesseldorf/duesseldorf-arcaden/hyaluron/plisseefalten",
     "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/aachen/aquis-plaza/schoenheitsoperationen/oberschenkelstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberschenkelstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/botox-rabatt",
+    "to": "/standorte/berlin/gesundbrunnencenter/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/berlin/gesundbrunnencenter/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/bielefeld/loom/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/city/Allee-Center-Magdeburg/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/city/Allee-Center-Magdeburg/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/city/Allee-Center-Magdeburg/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/botox-rabatt",
+    "to": "/standorte/duesseldorf/duesseldorf-arcaden/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duesseldorf/duesseldorf-arcaden/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/lippen-aufspritzen-rabatt",
+    "to": "/standorte/duisburg/forum/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/duisburg/forum/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/kaiserslautern/k-in-lautern/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koblenz/loehr-center/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/koeln/mediapark-klinik/lippen-aufspritzen-rabatt",
+    "to": "/standorte/koeln/koeln-arcaden/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/lippen-aufspritzen-rabatt",
+    "to": "/standorte/leipzig/hoefe-am-bruehl/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/bruststraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bruststraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/leipzig/hoefe-am-bruehl/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/hyaluron/lippen-aufspritzen-rabatt/lippen-aufspritzen-kosten",
+    "to": "/standorte/moenchengladbach/minto/hyaluron/lippen-aufspritzen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/schoenheitsoperationen/oberarmstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberarmstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/moenchengladbach/minto/schoenheitsoperationen/oberschenkelstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/oberschenkelstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/oberhausen/centro/botox-rabatt",
+    "to": "/behandlungen/botox",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/bauchdeckenstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/bauchdeckenstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/brustvergroesserung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/brustvergroesserung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/facelift",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/facelift",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/fettabsaugung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/fettabsaugung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/haartransplantation",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/haartransplantation",
+    "code": 301
+  },
+  {
+    "from": "/standorte/recklinghausen/palais-vest/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/schoenheitsoperationen",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen",
+    "code": 301
+  },
+  {
+    "from": "/standorte/saarbruecken/europa-galerie/schoenheitsoperationen/lidstraffung",
+    "to": "/standorte/koeln/mediapark-klinik/schoenheitsoperationen/lidstraffung",
+    "code": 301
   }
 ]
