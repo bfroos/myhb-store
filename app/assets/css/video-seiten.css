@@ -14,7 +14,7 @@
 .vs__breite {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 var(--container-pad, 16px);
+  padding: 0 var(--body-pad, 16px); /* nicht --container-pad: das ist der Rand fuer volle Breite */
 }
 .vs__kopf { padding: 24px 0 8px; max-width: 760px; }
 .vs__kopf h1, .vs__text h1 { margin: 0 0 16px; }
