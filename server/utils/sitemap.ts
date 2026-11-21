@@ -35,6 +35,7 @@ import { resolveRedirect } from "./redirects";
 import { isIndexableLocale } from "#shared/hreflang";
 import { isTestEmployeeSlug } from "#shared/reviewPrivacy";
 import { localGateInSitemap } from "#shared/localContentGate";
+import { withAncestorPathKeys } from "#shared/sitemapPathKeys";
 import { VIDEOS_PATH } from "#shared/storyVideos";
 import { RATGEBER, ratgeberPfad } from "#shared/partnerRatgeber";
 import { fetchStoryVideos } from "./storyVideos";
@@ -558,17 +559,20 @@ const SEGMENT_BUILDERS: Record<
       const locationSlug = location.slug!;
       const locationGroupId = getGroupId(location, `${citySlug}/${locationSlug}`);
       if (!locationGroupId) continue;
-      for (const treatment of treatments) {
-        if (!treatment.pathKey) continue;
-        if (!localGateInSitemap(treatment.pathKey, citySlug, locationSlug)) continue;
+      // Uebersichtsseiten wie /skinbooster sind in Strapi nicht immer mit der
+      // Filiale verknuepft, obwohl die Seite existiert und rankt (E24, 21.11.).
+      // Darum kommt zu jeder Unterseite auch ihre Eltern-Seite dazu.
+      const pathKeys = withAncestorPathKeys(treatments.map((t) => t.pathKey));
+      for (const pathKey of pathKeys) {
+        if (!localGateInSitemap(pathKey, citySlug, locationSlug)) continue;
         out.add(
           "locationTreatment",
-          `${locationGroupId}/${treatment.pathKey}`,
+          `${locationGroupId}/${pathKey}`,
           locale,
           getLocalizedPath("locationTreatment", locale, {
             citySlug,
             locationSlug,
-            treatmentSlugPath: treatment.pathKey,
+            treatmentSlugPath: pathKey,
           }),
         );
       }
