@@ -20,6 +20,10 @@
     :city-name="location?.city?.name ?? ''"
     :siblings="siblingLocations"
   />
+  <BlockLocationDoctors
+    v-if="!isAdsMode && location?.slug"
+    :location-slug="location.slug"
+  />
   <BlockReviewsBlock v-if="fixedBlocks?.reviews" v-bind="fixedBlocks.reviews" />
   <BlockJobTeasers
     v-if="fixedBlocks?.jobTeasers"
