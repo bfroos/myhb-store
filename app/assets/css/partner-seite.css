@@ -18,8 +18,16 @@
 .pp__breite {
   max-width: 1120px;
   margin: 0 auto;
-  padding: 0 var(--container-pad, 16px);
+  /* --body-pad, nicht --container-pad: Letzteres ist der Rand fuer volle
+     Bildschirmbreite (halbe Restbreite) und liess in diesem auf 1120px
+     begrenzten Kasten auf 1920px nur 600px Inhalt uebrig. */
+  padding: 0 var(--body-pad, 16px);
 }
+/* Global trennen h1–h6 automatisch (hyphens: auto). Auf dieser Seite ergab
+   das "eige-ne Privat-praxis" und "dazuge-hört" mitten in grossen Titeln. */
+.pp h1,
+.pp h2,
+.pp h3 { hyphens: manual; }
 .pp__abschnitt {
   padding: clamp(48px, 8vw, 96px) 0;
 }
