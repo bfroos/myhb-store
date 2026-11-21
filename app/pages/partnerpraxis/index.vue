@@ -274,6 +274,9 @@ function frageGeoeffnet(e: Event, frage: string) {
 <style>
 .pp__ratgeberLink { color: inherit; text-decoration: none; }
 .pp__ratgeberLink:hover { text-decoration: underline; }
-.pp__ratgeberGruppe { margin: 2rem 0 1rem; font-size: 1.15rem; }
+/* .pp h3 (margin 0 0 8px) ist spezifischer als eine einzelne Klasse und hob
+   den Abstand auf: die Gruppentitel klebten an den Karten darueber. */
+.pp .pp__ratgeberGruppe { margin: 48px 0 16px; font-size: 22px; }
+.pp h2 + .pp__ratgeberGruppe { margin-top: 24px; }
 .pp__mehr { display: inline-block; margin-top: .5rem; font-weight: 600; color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 </style>

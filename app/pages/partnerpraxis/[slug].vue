@@ -149,7 +149,7 @@ function klick() {
 .rg__pfad { font-size: 14px; margin-bottom: 16px; color: var(--pp-text); }
 .rg__pfad a { color: inherit; text-decoration: underline; }
 .rg h1 { max-width: 860px; }
-.rg .pp__lead { max-width: 760px; }
+.rg .pp__lead { max-width: 760px; margin-top: 20px; } /* h1 hat margin 0, ohne Abstand klebte der Text am Titel */
 .rg__kurz {
   margin-top: 24px;
   max-width: 760px;
