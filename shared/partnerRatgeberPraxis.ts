@@ -20,14 +20,17 @@ export const RATGEBER_PRAXIS: RatgeberArtikel[] = [
   {
     slug: "ki-telefonassistent-arztpraxis",
     gruppe: "fuehren",
-    geaendert: "2026-11-12",
+    geaendert: "2026-11-21",
     kurz: "KI-Telefonassistent",
-    h1: "KI-Telefonassistent für die Arztpraxis: Was er kann und worauf du achten musst",
-    seoTitel: "KI-Telefonassistent für die Arztpraxis | MY",
+    // 21.11.2026: auf die Nische ästhetische Praxis geschärft. Für das allgemeine
+    // "ki telefonassistent arztpraxis" stand die Seite auf Platz 43–80 gegen
+    // große Softwareanbieter; die Zielgruppe sind Ärzte in der Ästhetik.
+    h1: "KI-Telefonassistent für die ästhetische Praxis: Was er kann und worauf du achten musst",
+    seoTitel: "KI-Telefonassistent für die ästhetische Arztpraxis | MY",
     beschreibung:
-      "Ein KI-Telefonassistent nimmt jeden Anruf an, beantwortet Fragen und bucht Termine. Was er in der Praxis leistet, was er kostet und was der Datenschutz fordert.",
+      "KI-Telefonassistent für die ästhetische Praxis: nimmt jeden Anruf an, beantwortet Fragen zu Behandlungen und Preisen, bucht Termine. Kosten und Datenschutz.",
     einleitung:
-      "Das Telefon ist in vielen Praxen der größte Engpass: Am Empfang steht ein Kunde, gleichzeitig klingelt es, und wer nicht durchkommt, ruft beim Nächsten an. Ein KI-Telefonassistent nimmt diese Anrufe an. Hier steht, was er heute wirklich kann.",
+      "In einer ästhetischen Praxis ist das Telefon oft der größte Engpass: Am Empfang steht ein Kunde, gleichzeitig klingelt es, und wer nicht durchkommt, ruft beim Nächsten an. Ein KI-Telefonassistent nimmt diese Anrufe an. Hier steht, was er heute wirklich kann.",
     kurzGesagt:
       "Ein KI-Telefonassistent ist eine Software, die Anrufe in natürlicher Sprache annimmt. Er beantwortet Standardfragen zu Öffnungszeiten, Preisen und Behandlungen, bucht, verschiebt und storniert Termine im Kalender und leitet alles andere an dein Team weiter. Abgerechnet wird meist eine feste Monatspauschale plus Minuten. Wichtig sind ein Auftragsverarbeitungsvertrag, Server in der EU und der Hinweis am Anfang des Gesprächs, dass eine KI spricht.",
     abschnitte: [
@@ -467,12 +470,14 @@ export const RATGEBER_PRAXIS: RatgeberArtikel[] = [
   {
     slug: "praxissoftware-privatpraxis",
     gruppe: "fuehren",
-    geaendert: "2026-11-12",
+    geaendert: "2026-11-21",
     kurz: "Praxissoftware",
-    h1: "Praxissoftware für die ästhetische Privatpraxis: Worauf es ankommt",
-    seoTitel: "Praxissoftware für die Privatpraxis: Ästhetik | MY",
+    // 21.11.2026: Suchbegriff "praxissoftware ästhetische medizin" (Sistrix 150)
+    // nach vorn. Search Console: Platz 9–17 bei 243 Impressionen in 28 Tagen.
+    h1: "Praxissoftware für die ästhetische Medizin: Worauf es in der Privatpraxis ankommt",
+    seoTitel: "Praxissoftware für ästhetische Medizin: Checkliste | MY",
     beschreibung:
-      "Welche Praxissoftware braucht eine ästhetische Privatpraxis? Termine, Akte, Fotodoku, Kasse, Lager: die Checkliste und warum ein System besser ist als fünf.",
+      "Welche Software braucht eine Praxis für ästhetische Medizin? Termine, Akte, Fotodoku, Rechnung, Lager: die Checkliste und warum ein System besser ist als fünf.",
     einleitung:
       "Klassische Praxissoftware ist für Kassenpraxen gebaut: Abrechnung mit der KV, Telematikinfrastruktur, Quartale. Eine ästhetische Privatpraxis braucht etwas anderes. Hier steht, was wirklich zählt.",
     kurzGesagt:
