@@ -1,3 +1,4 @@
+import { istIndexierbareGeplanteStadt } from "#shared/geplanteStandorte";
 import type { LocationDto } from "~/lib/strapi/dto/collections";
 import type { LocalizationDto, StrapiBlock } from "~/lib/strapi/dto/types";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
@@ -104,7 +105,10 @@ export function useCityPage() {
     seo.value = applySeoPlaceholders(rawSeo, cityName.value, locationCount);
     // TSEO-04: Stadt nur mit Filialen ohne Eroeffnungsdatum -> noindex, wie
     // in der Sitemap (citySlugsWithOpenLocations).
-    if (locationCount === 0 && seo.value) {
+    const indexierbarGeplant = istIndexierbareGeplanteStadt(citySlug);
+    if (locationCount === 0 && indexierbarGeplant) {
+      // E24: geplante Filiale (Saarbruecken) soll schon Rankings sammeln.
+    } else if (locationCount === 0 && seo.value) {
       seo.value = { ...seo.value, metaRobots: "noindex, follow" };
     } else if (locationCount === 0) {
       seo.value = { metaRobots: "noindex, follow" } as SharedSeoDto;

@@ -2,6 +2,7 @@ import type { LocationDto } from "~/lib/strapi/dto/collections";
 import type { SharedSeoDto } from "~/lib/strapi/dto/components";
 import type { LocationsPageWithLocationsDto } from "~/lib/strapi/dto/singleTypes";
 import type { StrapiBlock } from "~/lib/strapi/dto/types";
+import { istUmgeleiteterStandort } from "#shared/geplanteStandorte";
 
 export function useLocationsPage() {
   const { locale, fallbackLocale, t } = useI18n();
@@ -44,10 +45,18 @@ export function useLocationsPage() {
       throw handleNotFound(t);
     }
 
-    locations.value = data.value.data.locations as {
+    const raw = data.value.data.locations as {
       open: LocationDto[];
       openSoon: LocationDto[];
       comingSoon: LocationDto[];
+    };
+    // Nicht geplante Filialen leiten weiter (shared/geplanteStandorte.ts),
+    // darum keine Karte mehr, die auf eine Weiterleitung zeigt.
+    locations.value = {
+      ...raw,
+      comingSoon: (raw.comingSoon ?? []).filter(
+        (l) => !istUmgeleiteterStandort(l.city?.slug, l.slug),
+      ),
     };
 
     seo.value = data.value.data.locationsPage?.seo as SharedSeoDto;
