@@ -41,6 +41,32 @@ const TOPIC_PATTERNS: Record<string, RegExp> = {
   who: /wer behandelt|wer f[üu]hrt|arzt|ärztin/i,
 };
 
+/**
+ * E24 Nachmessung 21.11.2026 (myhb-os docs/seo-nachmessung-2026-11-18.md):
+ * Suchbegriffe, fuer die die Seite schon auf Platz 11 steht. Die Frage
+ * enthaelt den Suchbegriff woertlich, damit Google die Seite als Antwort
+ * erkennt. Steht immer (auch wenn Strapi schon eine Kostenfrage hat) und
+ * ersetzt nur die eigene allgemeine Kostenfrage. Nur mit Preis aus Strapi.
+ */
+const KEYWORD_COST_QUESTION: Record<string, (where: string) => string> = {
+  "skinbooster/profhilo": (w) => `Was kostet eine Profhilo-Behandlung${w}?`,
+  "skinbooster/mesotherapie-nctf-135-ha": (w) => `Was kostet Mesotherapie fürs Gesicht${w}?`,
+  "hyaluron/wangenaufbau": (w) => `Was kostet es, die Wangen aufspritzen zu lassen${w}?`,
+  "hyaluron/kinnkorrektur": (w) => `Was kostet Hyaluronsäure am Kinn${w}?`,
+  "botox/zornesfalte": (w) => `Welche Preise gelten für die Behandlung der Zornesfalte${w}?`,
+  "botox/migraenebehandlung": (w) => `Was kostet eine Botulinumtoxin-Behandlung gegen Migräne${w}?`,
+};
+
+export function keywordCostFaq(pathKey: string, priceText: string | null, where: string): PurchaseFaq | null {
+  const q = KEYWORD_COST_QUESTION[pathKey];
+  if (!q || !priceText) return null;
+  return {
+    topic: "keyword",
+    question: q(where),
+    answer: `Bei MY HEALTH & BEAUTY kostet die Behandlung ${priceText}. Der Preis gilt an allen unseren Standorten; das ärztliche Beratungsgespräch vorher ist kostenlos.`,
+  };
+}
+
 function euro(cent: number): string {
   return `${(cent / 100).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} €`;
 }
@@ -55,17 +81,22 @@ export function purchaseFaqs(input: {
 }): PurchaseFaq[] {
   const pathKey = String(input.pathKey ?? "").replace(/^\/+|\/+$/g, "");
   if (!pathKey || EXCLUDE.some((re) => re.test(pathKey))) return [];
+  const where = input.city ? ` in ${input.city}` : "";
+  const priceText = input.priceInEuroCent
+    ? `${input.isStartingPrice === false ? "" : "ab "}${euro(input.priceInEuroCent)}`
+    : null;
+  const keyword = keywordCostFaq(pathKey, priceText, where);
   const key = contentKey(pathKey);
   const terms = adsV2Terms(key);
-  if (!terms) return [];
+  if (!terms) return keyword ? [keyword] : [];
   const go = adsV2FaqsV2(key);
   const goBy = (q: RegExp) => go.find((f) => q.test(f.question));
-  const where = input.city ? ` in ${input.city}` : "";
   const thing = terms.treatment;
   const out: PurchaseFaq[] = [];
 
-  if (input.priceInEuroCent) {
-    const p = `${input.isStartingPrice === false ? "" : "ab "}${euro(input.priceInEuroCent)}`;
+  if (keyword) out.push(keyword);
+  else if (input.priceInEuroCent) {
+    const p = priceText;
     out.push({
       topic: "cost",
       question: `Was kostet die ${thing}${where}?`,

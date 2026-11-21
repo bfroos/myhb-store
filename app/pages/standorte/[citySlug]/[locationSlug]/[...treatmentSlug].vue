@@ -29,6 +29,7 @@
           v-if="answer"
           :headline="answerHeadline((treatmentPage as any)?.pathKey, treatmentPage?.name, location?.city?.name)"
           :text="answer"
+          :link="hubLink ? { href: hubLink.href, text: hubLink.text } : null"
         />
       </template>
       <template #reviewer="{ inline }">
