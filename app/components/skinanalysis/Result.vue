@@ -78,7 +78,7 @@
  * - Der Hinweis "keine Diagnose" steht unter dem Ergebnis, nicht im Impressum.
  *
  * Noch nicht gebaut: "Ergebnis per Mail schicken" aus #136. Das braucht einen
- * eigenen Einwilligungstext und den HubSpot-Weg — und es darf nie zur
+ * eigenen Einwilligungstext und einen Mailweg — und es darf nie zur
  * Bedingung fuer das Ergebnis werden, so wie beim Wettbewerb.
  */
 import {

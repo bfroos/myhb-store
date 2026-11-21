@@ -150,7 +150,7 @@
 /**
  * Bewerbungsformular fuer die Karriereseite Aerzte (bfroos/myhb-store#102).
  *
- * Schickt an /api/karriere/bewerbung, das die Bewerbung in HubSpot anlegt.
+ * Schickt an /api/karriere/bewerbung, das die Bewerbung im Bewerber-Board der App anlegt.
  * `career_apply` feuert erst, wenn die Route bestaetigt hat — sonst zaehlt die
  * einzige Conversion-Zahl des Recruiting-Funnels auch fehlgeschlagene Versuche.
  *
@@ -174,7 +174,7 @@ import {
 
 const props = withDefaults(
   defineProps<{
-    /** Landet als `bewerbung_quelle` am HubSpot-Kontakt. */
+    /** Landet als Quelle an der Bewerbung in der App. */
     quelle?: string;
   }>(),
   { quelle: "karriere-aerzte" },

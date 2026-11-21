@@ -439,20 +439,6 @@ export default defineNuxtConfig({
     mailchimpApiKey: process.env.MAILCHIMP_API_KEY,
     mailchimpServerPrefix: process.env.MAILCHIMP_SERVER_PREFIX,
     mailchimpAudienceId: process.env.MAILCHIMP_AUDIENCE_ID,
-    // HubSpot: Bewerbungsformular Aerzte (#102). Token ist ein Private-App-
-    // Token mit crm.objects.contacts/deals (read+write), crm.objects.notes
-    // (write) und files (write).
-    //
-    // In Vercel als NUXT_HUBSPOT_PRIVATE_APP_TOKEN setzen, nicht als
-    // HUBSPOT_PRIVATE_APP_TOKEN: process.env wird beim Build ausgewertet und
-    // waere damit im Bundle eingebacken. Der NUXT_-Name greift zur Laufzeit.
-    // Pipeline-/Stage-ID nur setzen, wenn nicht in die Recruiting-Pipeline des
-    // Produktiv-Portals geschrieben werden soll.
-    hubspotPrivateAppToken: process.env.HUBSPOT_PRIVATE_APP_TOKEN,
-    hubspotRecruitingPipelineId: process.env.HUBSPOT_RECRUITING_PIPELINE_ID,
-    hubspotRecruitingStageId: process.env.HUBSPOT_RECRUITING_STAGE_ID,
-    hubspotPortalId: process.env.HUBSPOT_PORTAL_ID,
-    hubspotUiDomain: process.env.HUBSPOT_UI_DOMAIN,
     // E28 (myhb-app/myhb-os#1637): Website-Funnel -> Edge Function
     // lead-anfrage. In Vercel als NUXT_LEAD_ANFRAGE_URL und
     // NUXT_LEAD_ANFRAGE_SECRET setzen (Laufzeit, nicht im Bundle).

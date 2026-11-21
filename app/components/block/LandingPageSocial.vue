@@ -350,7 +350,7 @@ const handleQuizComplete = (answers: Record<string, string>) => {
 const handleGuideSignup = async () => {
   if (!guideEmail.value) return;
   
-  // TODO: Send to HubSpot or email service
+  // TODO: an Mailchimp oder die App schicken (HubSpot ist abgeschaltet, myhb-os#1468)
   console.log('Guide signup:', guideEmail.value);
   alert('Danke! Der Guide wird in Kürze zu deiner Email versendet.');
   guideEmail.value = '';

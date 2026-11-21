@@ -6,14 +6,9 @@
  * `bewerbung-eingang` der App. Dort landet es im Bewerber-Board, der
  * Lebenslauf im privaten Fach, und das Recruiting bekommt eine Mail.
  *
- * Erreicht die Route die App nicht, faellt sie auf den alten Weg nach HubSpot
- * zurueck (sofern dort ein Token gesetzt ist): eine Bewerbung in HubSpot ist
- * besser als eine verlorene. Der HubSpot-Weg legt an:
- *   1. Lebenslauf im File Manager (PRIVATE)
- *   2. Kontakt (Upsert ueber die E-Mail)
- *   3. Deal in der Recruiting-Pipeline, Stage "Bewerbung eingegangen"
- *   4. Notiz mit allen Feldern und dem Lebenslauf als Anhang
- * Scheitert dort nur der Upload, laeuft der Rest trotzdem durch.
+ * Keinen HubSpot-Ausweichweg mehr: HubSpot wird abgeschaltet (myhb-os#1468).
+ * Erreicht die Route die App nicht, bekommt die Bewerberin eine Fehlermeldung
+ * und kann es noch einmal schicken, wie bei /api/karriere/kurzbewerbung.
  */
 import {
   AUSBILDUNGSSTAND_WERTE,
@@ -114,96 +109,40 @@ export default defineEventHandler(async (event) => {
 
   const ausbildungsstandText = ausbildungsstandLabel(ausbildungsstand);
 
-  // Erster Weg: die App. Antwortet sie, ist die Bewerbung angekommen.
+  const nichtMoeglich = (statusCode: number) =>
+    createError({ statusCode, statusMessage: "Bewerbung gerade nicht möglich. Bitte versuche es gleich noch einmal." });
+
   const runtime = useRuntimeConfig() as any;
   const appUrl = bewerbungUrl(runtime.leadAnfrageUrl);
   const secret = String(runtime.leadAnfrageSecret ?? "")
     .trim()
     .replace(/^["']|["']$/g, "")
     .trim();
-  if (appUrl && secret) {
-    try {
-      await $fetch(appUrl, {
-        method: "POST",
-        headers: { "x-lead-secret": secret, "Content-Type": "application/json" },
-        body: bewerbungFuerApp({
-          vorname,
-          nachname,
-          email,
-          telefon,
-          ausbildungsstandLabel: ausbildungsstandText,
-          wunschstandort,
-          nachricht,
-          quelle,
-          cv: cvTeil,
-        }),
-        timeout: 20_000,
-      });
-      return { status: "ok" as const };
-    } catch (error: any) {
-      // Keine Personendaten ins Log, nur der Fehlercode.
-      console.error("[bewerbung] App nicht erreicht, weiter mit HubSpot", error?.statusCode ?? error?.name ?? "unbekannt");
-    }
-  } else {
-    console.error("[bewerbung] App-Adresse fehlt (NUXT_LEAD_ANFRAGE_URL/SECRET), weiter mit HubSpot");
+  if (!appUrl || !secret) {
+    console.error("[bewerbung] App-Adresse fehlt (NUXT_LEAD_ANFRAGE_URL/SECRET)");
+    throw nichtMoeglich(503);
   }
-
-  return await nachHubspot({
-    vorname,
-    nachname,
-    email,
-    telefon,
-    ausbildungsstand,
-    ausbildungsstandLabel: ausbildungsstandText,
-    wunschstandort,
-    nachricht,
-    quelle,
-    cvTeil,
-  });
-});
-
-/** Alter Weg, nur noch Ausweichweg: Bewerbung als Deal in HubSpot. */
-async function nachHubspot(f: {
-  vorname: string;
-  nachname: string;
-  email: string;
-  telefon: string;
-  ausbildungsstand: string;
-  ausbildungsstandLabel: string;
-  wunschstandort: string;
-  nachricht: string;
-  quelle: string;
-  cvTeil: { data: Buffer; filename: string; type?: string } | null;
-}) {
-  const config = getHubspotConfig();
-  const { cvTeil, ...felder } = f;
-  const eingegangenAm = new Date();
-
-  // Upload zuerst: Scheitert er, steht das Ergebnis in der Notiz. Scheitert
-  // stattdessen HubSpot selbst, wurde noch nichts halb angelegt.
-  let cv = null;
-  let cvFehler: string | null = null;
-  if (cvTeil) {
-    try {
-      cv = await uploadCv(config, cvTeil);
-    } catch (error: any) {
-      cvFehler = "Upload in den File Manager fehlgeschlagen";
-      console.error("[bewerbung] CV-Upload fehlgeschlagen", error?.message);
-    }
-  }
-
-  const daten = { ...felder, eingegangenAm, cv, cvFehler };
-
-  const contactId = await upsertBewerberKontakt(config, daten);
-  const dealId = await createBewerbungsDeal(config, contactId, daten);
-
-  // Die Notiz ist Komfort, kein Muss: Kontakt und Deal stehen schon. Ein
-  // Fehler hier darf der Bewerberin keine Fehlermeldung zeigen.
   try {
-    await createBewerbungsNotiz(config, contactId, dealId, daten);
+    await $fetch(appUrl, {
+      method: "POST",
+      headers: { "x-lead-secret": secret, "Content-Type": "application/json" },
+      body: bewerbungFuerApp({
+        vorname,
+        nachname,
+        email,
+        telefon,
+        ausbildungsstandLabel: ausbildungsstandText,
+        wunschstandort,
+        nachricht,
+        quelle,
+        cv: cvTeil,
+      }),
+      timeout: 20_000,
+    });
   } catch (error: any) {
-    console.error("[bewerbung] Notiz fehlgeschlagen", error?.message);
+    // Keine Personendaten ins Log, nur der Fehlercode.
+    console.error("[bewerbung] App nicht erreicht", error?.statusCode ?? error?.name ?? "unbekannt");
+    throw nichtMoeglich(502);
   }
-
   return { status: "ok" as const };
-}
+});
