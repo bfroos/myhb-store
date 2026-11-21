@@ -36,6 +36,7 @@ import { isIndexableLocale } from "#shared/hreflang";
 import { isTestEmployeeSlug } from "#shared/reviewPrivacy";
 import { localGateInSitemap } from "#shared/localContentGate";
 import { withAncestorPathKeys } from "#shared/sitemapPathKeys";
+import { istIndexierbarerGeplanterStandort } from "#shared/geplanteStandorte";
 import { VIDEOS_PATH } from "#shared/storyVideos";
 import { RATGEBER, ratgeberPfad } from "#shared/partnerRatgeber";
 import { fetchStoryVideos } from "./storyVideos";
@@ -507,9 +508,14 @@ const SEGMENT_BUILDERS: Record<
 
     // Coming-soon-Filialen (ohne Eroeffnungsdatum) bleiben draussen, ebenso
     // Staedte, deren Filialen alle noch nicht eroeffnet sind.
+    // Ausnahme (E24, 21.11.2026): geplante Filialen aus
+    // shared/geplanteStandorte.ts sammeln schon jetzt Rankings.
     const openLocations = locations.filter(
       (location) =>
-        location.slug && location.city?.slug && location.newOpeningDate,
+        location.slug &&
+        location.city?.slug &&
+        (location.newOpeningDate ||
+          istIndexierbarerGeplanterStandort(location.city.slug, location.slug)),
     );
     const citySlugsWithOpenLocations = new Set(
       openLocations.map((location) => location.city!.slug!),

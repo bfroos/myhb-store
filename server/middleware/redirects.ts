@@ -1,6 +1,7 @@
 import { resolveRedirect } from "../utils/redirects";
 import { resolvePatternRedirect } from "../utils/adsRedirects";
 import { hautanalysePrototypZiel } from "#shared/hautanalyseCta";
+import { geplanterStandortZiel } from "#shared/geplanteStandorte";
 
 export default defineEventHandler(async (event) => {
   const method = event.method || "GET";
@@ -11,6 +12,10 @@ export default defineEventHandler(async (event) => {
   // myhb-os#643: alter Hautanalyse-Prototyp -> Analyse in der App.
   const hautanalyse = hautanalysePrototypZiel(pathname, search);
   if (hautanalyse) return sendRedirect(event, hautanalyse, 301);
+
+  // E24, 21.11.2026: nicht geplante Coming-soon-Filialen -> naechste offene Filiale.
+  const geplant = geplanterStandortZiel(pathname, search);
+  if (geplant) return sendRedirect(event, geplant, 301);
 
   // Muster-Weiterleitungen (beide: Aachen-Lippenseite; go.: Blog, Botox-Pfade).
   const pattern = await resolvePatternRedirect(event, pathname, search);

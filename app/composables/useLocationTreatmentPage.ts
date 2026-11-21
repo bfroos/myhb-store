@@ -1,3 +1,4 @@
+import { istIndexierbarerGeplanterStandort } from "#shared/geplanteStandorte";
 import { mapLocationTreatmentPageFixedBlocks } from "~/lib/strapi/mapper/mapLocationTreatmentPageBlocks";
 import type {
   LocationDto,
@@ -402,7 +403,8 @@ export function useLocationTreatmentPage() {
     ...(strapiSeo.value ?? {}),
     // TSEO-04: Behandlungsseiten einer Filiale ohne Eroeffnungsdatum ebenso.
     ...(location.value &&
-    getLocationStatus(location.value.newOpeningDate) === "comingSoon"
+    getLocationStatus(location.value.newOpeningDate) === "comingSoon" &&
+    !istIndexierbarerGeplanterStandort(location.value.city?.slug, location.value.slug)
       ? { metaRobots: "noindex, follow" }
       : {}),
     metaTitle: strapiSeo.value?.metaTitle || generatedSeo.value.metaTitle,

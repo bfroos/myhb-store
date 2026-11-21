@@ -1,3 +1,4 @@
+import { istIndexierbarerGeplanterStandort } from "#shared/geplanteStandorte";
 import type {
   LocationDto,
   TreatmentPageDto,
@@ -104,7 +105,9 @@ export function useLocationPage() {
     return {
       // TSEO-04: Filialen ohne Eroeffnungsdatum ("coming soon") nicht in den
       // Index, wie in der Sitemap. Mit Datum (openSoon) bleiben sie drin.
-      ...(loc && getLocationStatus(loc.newOpeningDate) === "comingSoon"
+      ...(loc &&
+      getLocationStatus(loc.newOpeningDate) === "comingSoon" &&
+      !istIndexierbarerGeplanterStandort(loc.city?.slug, loc.slug)
         ? { metaRobots: "noindex, follow" }
         : {}),
       metaTitle: t("locations.location.seo.title", {
