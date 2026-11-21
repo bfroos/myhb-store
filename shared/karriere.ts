@@ -2,13 +2,8 @@
  * Auswahlwerte des Bewerbungsformulars Aerzte (bfroos/myhb-store#102).
  *
  * Liegt in `shared/`, weil Formular und Server-Route denselben Satz brauchen:
- * das Formular zum Anzeigen, die Route zum Validieren und zum Beschriften des
- * HubSpot-Eintrags. Ein zweiter Satz Konstanten waere genau die Stelle, an der
- * ein neuer Wert in HubSpot ankommt, den dort niemand erwartet.
- *
- * Die `value`s gehen so in die HubSpot-Property `bewerbung_ausbildungsstand`.
- * Wer hier etwas aendert, aendert auch die Dropdown-Optionen in HubSpot
- * (docs/hubspot-bewerbung-aerzte.md).
+ * das Formular zum Anzeigen, die Route zum Validieren. In der App kommt das
+ * Label an (`ausbildungsstand` der Bewerbung), nicht der `value`.
  */
 export const AUSBILDUNGSSTAND_OPTIONEN = [
   { value: "in_weiterbildung", label: "In Facharztweiterbildung" },
@@ -40,7 +35,7 @@ export function ausbildungsstandLabel(value: string): string {
  */
 export const WUNSCHSTANDORT_FLEXIBEL = "Ortsunabhängig / flexibel";
 
-/** Laenge des freien Nachrichtenfeldes — HubSpot-Notiz und Formular gleich. */
+/** Laenge des freien Nachrichtenfeldes — Route und Formular gleich. */
 export const BEWERBUNG_MAX_NACHRICHT = 2000;
 
 /** Maximale Groesse des Lebenslaufs. Vercel deckelt Request-Bodies bei 4,5 MB. */

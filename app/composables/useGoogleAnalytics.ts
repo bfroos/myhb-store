@@ -262,7 +262,7 @@ export const useGoogleAnalytics = () => {
    * Track a submitted job application (bfroos/myhb-store#102).
    *
    * Fires only after the server route confirmed that the application reached
-   * HubSpot — a `career_apply` on a failed submit would inflate the only
+   * the app — a `career_apply` on a failed submit would inflate the only
    * number the recruiting funnel has.
    */
   const trackCareerApply = (extra?: {
