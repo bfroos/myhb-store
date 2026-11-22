@@ -337,6 +337,32 @@ const handleClick = (event: MouseEvent) => {
   height: 1.75em;
 }
 
+/* Schmale Bildschirme: ein langer Text darf den Knopf nicht ueber den
+   Kartenrand schieben (Startseite 360 px, Benjamin 22.11.2026). Der Knopf
+   bleibt einzeilig, solange Platz ist, und bricht erst am Rand um. */
+.button:not(.button--iconOnly):not(.button--link):not(.button--text) {
+  max-width: 100%;
+  height: auto;
+  min-height: var(--button-control-height);
+  /* Einzeilig exakt so hoch wie vorher, zweizeilig mit demselben Rand. */
+  padding-top: max(2px, calc((var(--button-control-height) - 1.2em - 4px) / 2));
+  padding-bottom: max(2px, calc((var(--button-control-height) - 1.2em - 4px) / 2));
+  white-space: normal;
+  text-align: center;
+  text-wrap: balance;
+  line-height: 1.2;
+}
+/* In Reihen (Chips, Tabs) nicht stauchen, wie bisher mit nowrap. :where haelt
+   die Spezifitaet niedrig, damit Komponenten mit flex: 1 weiter gewinnen. */
+:where(.button) {
+  flex-shrink: 0;
+}
+.button.button--sm:not(.button--iconOnly):not(.button--link):not(.button--text),
+.button.button--xs:not(.button--iconOnly):not(.button--link):not(.button--text) {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 /* Icon-only */
 .button--iconOnly {
   width: var(--button-control-height);
