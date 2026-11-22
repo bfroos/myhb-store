@@ -75,10 +75,14 @@ export function wantsAdsOfferB(query: Record<string, unknown> | URLSearchParams 
  * umgeleitet. Zum Pruefen: `?angebot=beratung` erzwingt B, `?angebot=rabatt` A
  * (beide ohne Cookie zu setzen).
  */
-export const ADS_OFFER_AUTO_SPLIT = true;
+export const ADS_OFFER_AUTO_SPLIT = false;
 // Eingeschaltet 13.11.2026 (Benjamin: "Ja, A/B-Test"): Haelfte der Google-
 // Besucher mit 20 % (A), Haelfte ohne (B). Auswertung ueber ref_path
 // /ab-beratung/... und offer_variant, myhb-app/myhb-os#1843.
+// Beendet 22.11.2026 (Benjamin: "Ja, alle mit Rabatt"): A mit Rabatt 29
+// Google-Buchungen, B ohne Rabatt 11, bei 50/50 Aufteilung; erschienen 79 %
+// gegen 43 %. Seitdem sehen alle Google-Besucher Variante A (mit 20 %).
+// Wer noch das Cookie b hat, wird nicht mehr umgeleitet.
 
 /** Zuteilung aus dem Cookie lesen ("a", "b" oder null, wenn noch keine). */
 export function adsOfferCookieVariant(cookie: string | null | undefined): AdsOfferVariant | null {
