@@ -47,9 +47,10 @@ test("Angebots-Test: Kopf-Skript leitet nur mit ?angebot=beratung um, Query blei
   assert.equal(runScript(`/ab-beratung${P}`, "?angebot=beratung").target, null);
   // ausgeschaltet: ohne Parameter keine Umleitung, kein Cookie
   assert.deepEqual(runScript(P, "?gclid=abc", { script: buildAdsOfferScript(false, 0.5), rnd: 0.1 }), { target: null, cookie: "" });
-  // seit 13.11.2026 eingeschaltet (#1843)
-  assert.equal(ADS_OFFER_AUTO_SPLIT, true);
-  assert.equal(runScript(P, "?gclid=abc", { rnd: 0.1 }).target, `/ab-beratung${P}?gclid=abc`);
+  // 13.11.2026 eingeschaltet, seit 22.11.2026 wieder aus: alle sehen A mit 20 % (#1843)
+  assert.equal(ADS_OFFER_AUTO_SPLIT, false);
+  assert.deepEqual(runScript(P, "?gclid=abc", { rnd: 0.1 }), { target: null, cookie: "" });
+  assert.equal(runScript(P, "?gclid=abc", { rnd: 0.1, cookie: "myhb_offer_ab=b" }).target, null);
 });
 
 test("Angebots-Test: automatische Aufteilung (wenn eingeschaltet)", () => {
