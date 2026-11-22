@@ -429,6 +429,9 @@ function priceCategoryLink(category: { slug: string }) {
 }
 .appFooter__city {
   font-weight: var(--font-bold);
+  /* „Mönchengladbach“ ist fett breiter als die halbe Spalte bei 360 px. */
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
 .appFooter__navTitle {

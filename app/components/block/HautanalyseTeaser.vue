@@ -32,7 +32,13 @@
           <li><strong>Hautbild sehen</strong> in rund 30 Sekunden</li>
           <li><strong>Besprechen</strong> in einer kostenlosen Beratung mit einem Arzt</li>
         </ol>
-        <UiAtomBaseButton as="a" :href="href" variant="secondary" size="lg">
+        <UiAtomBaseButton
+          class="ha-teaser__cta"
+          as="a"
+          :href="href"
+          variant="secondary"
+          size="lg"
+        >
           Kostenlose Hautanalyse starten
         </UiAtomBaseButton>
         <p class="ha-teaser__hint">
@@ -130,23 +136,37 @@ const href = hautanalyseDeeplink("startseite", "startseite");
 
 .ha-teaser__chips {
   position: absolute;
-  left: var(--space-400);
-  bottom: var(--space-400);
+  left: var(--space-300);
+  right: var(--space-300);
+  bottom: var(--space-300);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-200);
+  gap: var(--space-100);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .ha-teaser__chips li {
-  padding: 6px 12px;
+  padding: 4px 10px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(6px);
   color: var(--color-gray-900, #111);
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   font-weight: var(--font-bold);
+  line-height: 1.4;
+  white-space: nowrap;
+}
+@media (min-width: 600px) {
+  .ha-teaser__chips {
+    left: var(--space-400);
+    bottom: var(--space-400);
+    gap: var(--space-200);
+  }
+  .ha-teaser__chips li {
+    padding: 6px 12px;
+    font-size: var(--font-sm);
+  }
 }
 
 .ha-teaser__body {
@@ -154,23 +174,34 @@ const href = hautanalyseDeeplink("startseite", "startseite");
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  gap: var(--space-500);
+  gap: var(--space-400);
   padding: var(--space-card-pad);
+}
+@media (min-width: 900px) {
+  .ha-teaser__body {
+    gap: var(--space-500);
+  }
 }
 .ha-teaser__kicker {
   margin: 0;
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
+  font-weight: var(--font-bold);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-gray-300, #ccc);
 }
 .ha-teaser__title {
   margin: 0;
-  font-size: var(--font-2xl);
+  font-size: var(--font-xl);
   font-weight: var(--font-bold);
   line-height: 1.15;
   hyphens: manual;
   overflow-wrap: normal;
+}
+@media (min-width: 600px) {
+  .ha-teaser__title {
+    font-size: var(--font-2xl);
+  }
 }
 @media (min-width: 900px) {
   .ha-teaser__title {
@@ -187,8 +218,8 @@ const href = hautanalyseDeeplink("startseite", "startseite");
 }
 .ha-teaser__steps li {
   position: relative;
-  padding-left: 2.4rem;
-  line-height: 1.45;
+  padding-left: 2.25rem;
+  line-height: 1.5;
   color: var(--color-gray-200, #e5e5e5);
   counter-increment: schritt;
 }
@@ -196,23 +227,36 @@ const href = hautanalyseDeeplink("startseite", "startseite");
   content: counter(schritt);
   position: absolute;
   left: 0;
-  top: -1px;
+  top: 0.1em;
   display: grid;
   place-items: center;
-  width: 1.7rem;
-  height: 1.7rem;
+  width: 1.5rem;
+  height: 1.5rem;
   border-radius: 50%;
-  background: var(--color-white, #fff);
-  color: var(--color-gray-950, #0b0b0b);
-  font-size: var(--font-sm);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: var(--color-white, #fff);
+  font-size: var(--font-xs);
   font-weight: var(--font-bold);
 }
 .ha-teaser__steps strong {
   color: var(--color-white, #fff);
 }
+/* Heller Knopf auf Schwarz statt Grau; auf dem Handy volle Breite. */
+.ha-teaser__cta {
+  --button-secondary-color-bg: var(--color-white, #fff);
+  --button-secondary-color-bg-hover: var(--color-gray-200, #e5e5e5);
+  --button-secondary-color-text: var(--color-black, #000);
+  width: 100%;
+  margin-top: var(--space-200);
+}
+@media (min-width: 600px) {
+  .ha-teaser__cta {
+    width: auto;
+  }
+}
 .ha-teaser__hint {
   margin: 0;
-  font-size: var(--font-sm);
+  font-size: var(--font-xs);
   color: var(--color-gray-400, #999);
 }
 </style>
