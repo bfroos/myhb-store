@@ -44,7 +44,7 @@ const eintraege = computed(() => (Array.isArray(props.items) ? props.items : [])
 .karten__karte-text { color: var(--color-text-light); }
 @media (min-width: 900px) {
   .karten__titel { font-size: var(--font-5xl); line-height: var(--line-5xl); }
-  .karten__raster { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+  .karten__raster { grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr)); }
   .karten__karte { padding: var(--space-800, 32px); }
 }
 </style>

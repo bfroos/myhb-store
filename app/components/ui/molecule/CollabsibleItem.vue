@@ -236,6 +236,11 @@ watch(
 
 .collabsibleItem__title {
   flex: 1;
+  /* Lange Woerter in der Frage duerfen das Plus-Symbol nicht aus der Karte
+     schieben (320/360 px). */
+  min-width: 0;
+  overflow-wrap: anywhere;
+  hyphens: auto;
   display: flex;
   align-items: center;
   gap: var(--space-400);

@@ -291,8 +291,16 @@ function getTreatmentLinkPath(
 
 .plan__step {
   display: grid;
-  grid-template-columns: 88px 1fr;
-  gap: var(--space-500);
+  /* minmax(0, …): ein langes Wort („Auffrischungsbehandlung“) darf die
+     Textspalte nicht ueber den Kartenrand schieben (320/360 px). */
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: var(--space-300);
+}
+@media (min-width: 480px) {
+  .plan__step {
+    grid-template-columns: 88px minmax(0, 1fr);
+    gap: var(--space-500);
+  }
 }
 
 .plan__step-header {
@@ -334,6 +342,8 @@ function getTreatmentLinkPath(
 }
 
 .plan__step-heading {
+  hyphens: auto;
+  overflow-wrap: break-word;
   font-size: var(--font-lg);
   line-height: var(--line-lg);
   font-weight: var(--font-bold);
@@ -349,6 +359,13 @@ function getTreatmentLinkPath(
   padding: 0;
 }
 
+.plan__treatments > li {
+  min-width: 0;
+  max-width: 100%;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
 .plan__treatments a {
   text-decoration: underline;
 }
@@ -358,6 +375,7 @@ function getTreatmentLinkPath(
 }
 
 .plan__step-desc {
+  hyphens: auto;
   font-size: var(--font-sm);
   line-height: var(--line-sm);
   color: var(--color-text-light);

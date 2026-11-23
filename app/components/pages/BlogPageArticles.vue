@@ -97,7 +97,8 @@ const pageWindow = computed(() => {
 .blogPageArticles {
   display: grid;
   gap: var(--space-bento-gap-sm);
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  /* min(): auf schmalen Handys (320 px) ist 340 px breiter als der Platz. */
+  grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr));
   margin-bottom: var(--space-bento-gap-sm);
 }
 

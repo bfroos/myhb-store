@@ -323,6 +323,9 @@
   gap: 24px;
 }
 .cl__box {
+  min-width: 0;
+  hyphens: auto;
+  overflow-wrap: break-word;
   border: 1px solid var(--cl-linie);
   border-radius: 24px;
   padding: clamp(28px, 4vw, 44px);
@@ -331,6 +334,15 @@
   align-content: start;
   text-align: center;
   justify-items: center;
+}
+/* Die Spalte richtete sich nach dem laengsten Wort („Wunschbehandlung!“)
+   und lief bei 320 px 5 px ueber den Rand. */
+.cl__box {
+  grid-template-columns: minmax(0, 1fr);
+}
+.cl__box > * {
+  max-width: 100%;
+  hyphens: auto;
 }
 .cl__box--puder {
   background: var(--cl-puder);
