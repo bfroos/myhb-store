@@ -46,6 +46,9 @@ const allFaqs = computed((): FaqDto[] => {
   });
   return items;
 });
+
+// FAQPage-Schema (nur aktive Fragen, eins je Seite)
+useFaqBlockSchema(() => allFaqs.value);
 </script>
 
 <style scoped>

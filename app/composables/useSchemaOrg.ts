@@ -1,4 +1,5 @@
 import type { Ref, ComputedRef } from "vue";
+import { registerPageSchema } from "./useFaqBlockSchema";
 
 /**
  * Injects Schema.org JSON-LD into the document head.
@@ -9,6 +10,8 @@ export function useSchemaOrg(
     | Ref<Record<string, unknown> | null>
     | ComputedRef<Record<string, unknown> | null>,
 ): void {
+  // Damit FAQ-Bloecke kein zweites FAQPage ausgeben (useFaqBlockSchema).
+  registerPageSchema(schema);
   useHead(() => ({
     script: schema.value
       ? [
