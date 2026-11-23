@@ -899,6 +899,7 @@ const discountLabel = computed(() => {
 }
 
 .hero__cta-price--with-price {
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   gap: var(--space-200);
@@ -908,6 +909,15 @@ const discountLabel = computed(() => {
   --button-primary-color-bg: var(--color-white);
   --button-primary-color-bg-hover: var(--color-gray-200);
   --button-primary-color-text: var(--color-black);
+}
+.hero__cta-price--with-price > strong {
+  flex-shrink: 0;
+}
+/* Preis + Knopf passen auf 320 px nicht nebeneinander: der Knopf gibt nach
+   und bricht um, statt aus der schwarzen Pille zu ragen. */
+.hero__cta-price--with-price :deep(.button) {
+  flex-shrink: 1;
+  min-width: 0;
 }
 
 .theme-strong .hero__cta-price--with-price {
