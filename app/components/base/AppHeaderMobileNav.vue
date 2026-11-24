@@ -134,7 +134,7 @@
                 {{ $t("navigation.secondary.myClub") }}
               </NuxtLinkLocale>
             </li>
-            <li v-if="props.items.clubSeiten">
+            <li v-if="props.items.sparbuchSeite">
               <NuxtLinkLocale
                 to="/beauty-sparbuch"
                 class="mobileMenu__link"
@@ -196,6 +196,7 @@ const props = defineProps<{
     /** #282: "Mein Konto" zur Kunden-App; null = Schalter aus. */
     kontoHref?: string | null;
     clubSeiten?: boolean;
+    sparbuchSeite?: boolean;
   };
 }>();
 

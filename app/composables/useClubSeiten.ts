@@ -17,6 +17,13 @@ export function useClubSeiten() {
     () => !isAdsMode.value && isClubSeitenEnabled(config.public.clubSeiten),
   );
 
+  // Benjamin 24.11.2026: erst das Treueprogramm, das Sparbuch spaeter. Die Seite
+  // /beauty-sparbuch und alle Verweise darauf haengen zusaetzlich an
+  // NUXT_PUBLIC_SPARBUCH_SEITE.
+  const sparbuch = computed(
+    () => enabled.value && isClubSeitenEnabled(config.public.sparbuchSeite),
+  );
+
   const trackClick = (ort: ClubLinkOrt, ziel: "club" | "sparbuch" | "app") =>
     trackEvent("click_club_link", {
       event_category: "engagement",
@@ -24,5 +31,5 @@ export function useClubSeiten() {
       cta_target: ziel,
     });
 
-  return { enabled, appUrl, trackClick };
+  return { enabled, sparbuch, appUrl, trackClick };
 }

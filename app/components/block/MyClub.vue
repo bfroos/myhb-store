@@ -22,6 +22,7 @@
               {{ t("cta.joinMyClub", { brandNameShort }) }}
             </UiAtomBaseButton>
             <NuxtLinkLocale
+              v-if="clubSeiten.sparbuch.value"
               to="/beauty-sparbuch"
               class="myClub__sparbuch"
               @click="clubSeiten.trackClick('myclub-block', 'sparbuch')"

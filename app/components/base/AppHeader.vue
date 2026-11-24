@@ -226,6 +226,7 @@ const mobileMenuItems = computed(() => {
     adsLocation: adsLocationLink.value,
     kontoHref: kontoLink.enabled.value ? kontoLink.href("header") : null,
     clubSeiten: clubSeiten.enabled.value,
+    sparbuchSeite: clubSeiten.sparbuch.value,
   };
 });
 
