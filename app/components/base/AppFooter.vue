@@ -101,7 +101,7 @@
                         {{ $t("navigation.secondary.myClub") }}
                       </NuxtLinkLocale>
                     </li>
-                    <li>
+                    <li v-if="clubSeiten.sparbuch.value">
                       <NuxtLinkLocale
                         to="/beauty-sparbuch"
                         @click="clubSeiten.trackClick('footer', 'sparbuch')"

@@ -187,7 +187,7 @@ import {
   sparbuchBeispiel,
 } from "#shared/clubSeiten";
 
-const { enabled, appUrl, trackClick } = useClubSeiten();
+const { sparbuch: enabled, appUrl, trackClick } = useClubSeiten();
 
 const basis = STUFEN[0]!;
 const hoechste = STUFEN[STUFEN.length - 1]!;

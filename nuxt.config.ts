@@ -463,6 +463,11 @@ export default defineNuxtConfig({
       clubSeiten:
         process.env.NUXT_PUBLIC_CLUB_SEITEN ??
         (process.env.VERCEL_ENV === "preview" ? "on" : ""),
+      // /beauty-sparbuch eigens (Benjamin 24.11.2026: Treueprogramm zuerst,
+      // Sparbuch spaeter, haengt an Stripe live). Wirkt nur mit clubSeiten.
+      sparbuchSeite:
+        process.env.NUXT_PUBLIC_SPARBUCH_SEITE ??
+        (process.env.VERCEL_ENV === "preview" ? "on" : ""),
     },
   },
 
@@ -506,14 +511,15 @@ export default defineNuxtConfig({
           // sind die Seiten nur per Direktlink zum Zeigen da (Benjamin
           // 04.11.2026). Zweite Sicherung neben dem robots-Meta der Seite:
           // der Header gilt auch, wenn das Meta einmal fehlt.
-          ...(isClubSeitenEnabled(process.env.NUXT_PUBLIC_CLUB_SEITEN)
-            ? {}
-            : Object.fromEntries(
-                ["/club", "/beauty-sparbuch", "/*/club", "/*/beauty-sparbuch"].map((pfad) => [
-                  pfad,
-                  { headers: { "x-robots-tag": "noindex, nofollow" } },
-                ]),
-              )),
+          ...Object.fromEntries(
+            [
+              ...(isClubSeitenEnabled(process.env.NUXT_PUBLIC_CLUB_SEITEN) ? [] : ["/club", "/*/club"]),
+              ...(isClubSeitenEnabled(process.env.NUXT_PUBLIC_CLUB_SEITEN) &&
+              isClubSeitenEnabled(process.env.NUXT_PUBLIC_SPARBUCH_SEITE)
+                ? []
+                : ["/beauty-sparbuch", "/*/beauty-sparbuch"]),
+            ].map((pfad) => [pfad, { headers: { "x-robots-tag": "noindex, nofollow" } }]),
+          ),
           // Naechster freier Termin: 60 s am CDN, danach im Hintergrund neu
           // (die Seite selbst ist ISR, die Zeit wird im Browser nachgeladen).
           "/api/naechster-termin": {

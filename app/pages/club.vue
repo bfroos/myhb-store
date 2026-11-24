@@ -116,7 +116,7 @@
 
       <section class="cl__abschnitt">
         <div class="cl__zwei">
-          <div class="cl__box cl__box--puder">
+          <div v-if="sparbuch" class="cl__box cl__box--puder">
             <p class="cl__eyebrow">Neu: Beauty-Sparbuch</p>
             <h2>Spare für deine Wunschbehandlung!</h2>
             <p class="cl__text">
@@ -186,7 +186,7 @@ import { CLUB, SPARBUCH, SPARBUCH_PFLICHTSATZ, STATUS_FENSTER_MONATE, STUFEN, eu
 import { SharedButtonAction, SharedButtonMethod } from "~/lib/strapi/dto/enums";
 
 const { t } = useI18n();
-const { enabled, appUrl, trackClick } = useClubSeiten();
+const { enabled, sparbuch, appUrl, trackClick } = useClubSeiten();
 
 const ja = (b: boolean) => (b ? "✓" : "–");
 // „A, B und C“ statt „A, B, C“.
@@ -204,7 +204,7 @@ const empfehlungMitStatus = aufzaehlen(STUFEN.slice(1).map((s) => `${euro(s.empf
 
 // Erklaerungen zum Aufklappen (Benjamin und Michael 03.11.2026): Jeder Vorteil
 // soll nicht nur ein Wort sein, sondern sagen, was er heisst und wie er funktioniert.
-const zeilen = [
+const alleZeilen = [
   {
     name: "Cashback je Besuch",
     werte: STUFEN.map((s) => prozent(s.cashbackProzent)),
@@ -269,6 +269,10 @@ const zeilen = [
     ],
   },
 ];
+// Sparbuch-Zeile erst mit NUXT_PUBLIC_SPARBUCH_SEITE (Benjamin 24.11.2026).
+const zeilen = computed(() =>
+  alleZeilen.filter((z) => sparbuch.value || z.name !== "Bonus Beauty-Sparbuch"),
+);
 
 const offen = ref<number | null>(null);
 function umschalten(i: number) {
@@ -290,7 +294,7 @@ const fragen = [
   },
   {
     frage: "Wie lange gilt mein Guthaben?",
-    antwort: `Alles Guthaben, das wir dir schenken, ist ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift gültig, auch der Beauty-Bonus. Warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt das geschenkte Guthaben. Guthaben, das du ins Beauty-Sparbuch einzahlst, ist unbegrenzt gültig.`,
+    antwort: `Alles Guthaben, das wir dir schenken, ist ${CLUB.bonusGueltigMonate} Monate ab der Gutschrift gültig${sparbuch.value ? ", auch der Beauty-Bonus" : ""}. Warst du ${CLUB.verfallOhneBesuchMonate} Monate nicht bei uns, verfällt das geschenkte Guthaben.${sparbuch.value ? " Guthaben, das du ins Beauty-Sparbuch einzahlst, ist unbegrenzt gültig." : ""}`,
   },
   {
     frage: "Kann ich mir Guthaben auszahlen lassen?",

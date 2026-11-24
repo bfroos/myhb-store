@@ -14,7 +14,7 @@
         <strong>MY Club</strong>
         <span>Bei jedem Besuch Guthaben für den nächsten</span>
       </NuxtLinkLocale>
-      <NuxtLinkLocale to="/beauty-sparbuch" class="priceGuide__item" @click="clubSeiten.trackClick('preise', 'sparbuch')">
+      <NuxtLinkLocale v-if="clubSeiten.sparbuch.value" to="/beauty-sparbuch" class="priceGuide__item" @click="clubSeiten.trackClick('preise', 'sparbuch')">
         <strong>Beauty-Sparbuch</strong>
         <span>Monatlich zurücklegen, Beauty-Bonus dazu</span>
       </NuxtLinkLocale>
