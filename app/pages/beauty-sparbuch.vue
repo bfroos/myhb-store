@@ -105,7 +105,7 @@
               in Schritten von {{ euro(SPARBUCH.schrittRate) }}. Per Lastschrift oder Karte, in der App.</span>
           </li>
           <li><span><strong>Guthaben wachsen lassen.</strong> Jeden Monat kommt deine Rate dazu und am Monatsende dein Beauty-Bonus.</span></li>
-          <li><span><strong>Einlösen.</strong> Für Behandlungen und Produkte an allen Standorten. Sag am Empfang: „Bitte mit Guthaben.“</span></li>
+          <li><span><strong>Einlösen.</strong> Für Behandlungen und Produkte an allen Standorten. Deinen Bonus sofort, dein eingezahltes Guthaben {{ SPARBUCH.bindungMonate }} Monate nach der ersten Einzahlung. Sag am Empfang: „Bitte mit Guthaben.“</span></li>
         </ol>
       </section>
 
@@ -156,7 +156,7 @@
           </details>
         </div>
         <p class="cl__klein">
-          Anbieter ist die My Health and Beauty Klinik GmbH. Das Beauty-Sparbuch ist ein
+          Anbieter ist die MY HEALTH &amp; BEAUTY Clinic GmbH, Köln. Das Beauty-Sparbuch ist ein
           Vorauszahlungsguthaben. {{ basis.sparbuchBonusProzent }} bis
           {{ prozent(hoechste.sparbuchBonusProzent) }} {{ SPARBUCH_PFLICHTSATZ }}
         </p>
@@ -210,19 +210,19 @@ const fragen = [
   },
   {
     frage: "Wie lange muss ich dabei bleiben?",
-    antwort: `Mindestens ${SPARBUCH.mindestlaufzeitMonate} Monate. Danach kannst du jeden Monat kündigen, direkt in der App. Dein Guthaben kannst du ab dem Ende der Mindestlaufzeit einlösen.`,
+    antwort: `Du kannst jeden Monat kündigen, auch gleich am Anfang. Dein eingezahltes Guthaben kannst du ${SPARBUCH.bindungMonate} Monate nach deiner ersten Einzahlung einlösen, deinen Beauty-Bonus sofort. Hörst du in den ersten ${SPARBUCH.bindungMonate} Monaten auf, verfällt der Bonus aus dieser Zeit.`,
   },
   {
     frage: "Gibt es eine Obergrenze?",
-    antwort: `Ja, ${euro(SPARBUCH.obergrenze)}. Ist sie erreicht, pausiert deine Rate von selbst, bis du wieder etwas einlöst.`,
+    antwort: `Ja, du kannst höchstens ${euro(SPARBUCH.obergrenze)} einzahlen. Der Bonus zählt nicht mit. Passt die nächste Rate nicht mehr darunter, endet dein Sparplan von selbst zum Monatsende. Dein Guthaben bleibt, und sobald wieder Platz ist, kannst du neu starten.`,
   },
   {
     frage: "Kann ich mir mein Guthaben auszahlen lassen?",
-    antwort: `Nein, weder Guthaben noch Bonus. Ausnahme ist der Widerruf in den ersten ${SPARBUCH.widerrufTage} Tagen: Dann bekommst du deine Rate zurück, der Bonus entfällt.`,
+    antwort: `Nein, weder Guthaben noch Bonus. Ausnahme ist der Widerruf in den ersten ${SPARBUCH.widerrufTage} Tagen: Dann bekommst du deine Raten zurück, der Bonus entfällt.`,
   },
   {
-    frage: "Was passiert, wenn ich kündige?",
-    antwort: "Dein Guthaben bleibt dir, und du kannst es weiter bei uns einlösen.",
+    frage: "Wie kündige ich, und was passiert dann?",
+    antwort: "Ganz einfach ohne Anmeldung unter app.myhealthandbeauty.com/kuendigen, zum Ende des laufenden Monats. Dein eingezahltes Guthaben bleibt dir, und du löst es weiter bei uns ein.",
   },
 ];
 

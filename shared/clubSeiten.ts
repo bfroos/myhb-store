@@ -88,7 +88,9 @@ export const SPARBUCH = {
   mindestRate: 10,
   schrittRate: 10,
   obergrenze: 5000, // seit 03.11.2026 (myhb-app/myhb-os#2099), vorher 1.000 €
-  mindestlaufzeitMonate: 3,
+  // Eingezahltes erst nach so vielen Monaten einlösbar (Bindung nur fürs Eingezahlte, App seit 23.11.2026).
+  // Kein Mindestlaufzeit-Vertrag: kündbar jeden Monat, dann verfällt der Bonus aus der Bindungszeit.
+  bindungMonate: 3,
   widerrufTage: 14,
   beispielRate: 50,
   beispielMonate: 12,
