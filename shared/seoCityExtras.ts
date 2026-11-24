@@ -35,6 +35,9 @@ export type SeoCityExtra = {
 
 const BOTOX_HUB = "/behandlungen/botox";
 const BOTOX_KOSTEN = "/p/botox-kosten";
+const HYALURON_HUB = "/behandlungen/hyaluron";
+const HYALURON_KOSTEN = "/p/hyaluron-spritzen-kosten";
+const KOELN = "/standorte/koeln/koeln-arcaden/hyaluron";
 
 export const SEO_CITY_EXTRAS: Record<string, SeoCityExtra> = {
   "botox@koeln/koeln-arcaden": {
@@ -135,6 +138,65 @@ export const SEO_CITY_EXTRAS: Record<string, SeoCityExtra> = {
         question: "Wie lange vor Altweiber oder einer Hochzeit sollte ich kommen?",
         answer: [
           "Zwei bis drei Wochen vorher ist ideal. Nach etwa 10 bis 14 Tagen lässt sich das Ergebnis beurteilen, und falls nötig, bleibt Zeit für eine kleine Anpassung.",
+        ],
+      },
+    ],
+  },
+  "hyaluron@koeln/koeln-arcaden": {
+    key: "hyaluron@koeln/koeln-arcaden",
+    pathKey: "hyaluron",
+    citySlug: "koeln",
+    locationSlug: "koeln-arcaden",
+    hubPath: HYALURON_HUB,
+    headline: "Hyaluron in Köln-Kalk: erst Beratung, dann Schritt für Schritt",
+    intro: [
+      [
+        "Bei Hyaluron geht es selten um eine einzelne Falte. Meist schaut die Ärztin oder der Arzt in den Köln Arcaden auf das ganze Gesicht: Wirkt die Nasolabialfalte tiefer, weil die Wange an Volumen verloren hat? Passt ein kleiner Kinnaufbau besser als mehr Volumen in den Lippen? Deshalb beginnt jede Behandlung bei uns mit einem Gespräch, und oft wird lieber mit wenig Hyaluron angefangen und nach der Kontrolle ergänzt.",
+      ],
+      [
+        "Unsere Lounge liegt in Kalk auf Ebene −1 zwischen dm und Apollo Optik. Von Deutz bist du mit der Stadtbahn 1 oder 9 in wenigen Minuten an der Haltestelle Kalk Post, aus dem Umland kommst du über das Parkhaus der Arcaden. Montags bis donnerstags haben wir bis 20 Uhr geöffnet, freitags und samstags bis 21 Uhr. Für Beratung und Behandlung zusammen plane etwa eine Stunde ein.",
+      ],
+      [
+        "Die häufigsten Bereiche haben eigene Seiten: ",
+        { text: "Nasolabialfalte", href: `${KOELN}/nasolabialfalte` },
+        ", ",
+        { text: "Wangenaufbau", href: `${KOELN}/wangenaufbau` },
+        ", ",
+        { text: "Kinnkorrektur", href: `${KOELN}/kinnkorrektur` },
+        " und ",
+        { text: "Lippen aufspritzen in Köln", href: `${KOELN}/lippen-aufspritzen` },
+        ". Was Hyaluron kostet, steht unter ",
+        { text: "Hyaluron Kosten", href: HYALURON_KOSTEN },
+        ", wie es wirkt und welche Risiken es gibt, auf der Seite ",
+        { text: "Hyaluron-Behandlung beim Arzt", href: HYALURON_HUB },
+        ".",
+      ],
+    ],
+    factsHeadline: "Parken, Barrierefreiheit und Anreise aus dem Umland",
+    faqHeadline: "Hyaluron in den Köln Arcaden: Fragen vor dem ersten Termin",
+    faqs: [
+      {
+        question: "Wie viel Zeit brauche ich für Hyaluron in den Köln Arcaden?",
+        answer: [
+          "Rechne mit etwa einer Stunde für Gespräch, Betäubung und Behandlung. Die Injektion selbst dauert meist 20 bis 40 Minuten, je nach Bereich. Wir haben montags bis donnerstags bis 20 Uhr und freitags und samstags bis 21 Uhr geöffnet.",
+        ],
+      },
+      {
+        question: "Kann ich nach der Behandlung gleich weiter shoppen oder zur Arbeit?",
+        answer: [
+          "Meist ja. Kleine Rötungen, Schwellungen oder Einstichstellen sind in den ersten Tagen möglich. Sport, Sauna und starken Druck auf die behandelte Stelle solltest du ein bis zwei Tage meiden. Was genau für dich gilt, sagt dir die Ärztin oder der Arzt.",
+        ],
+      },
+      {
+        question: "Gibt es nach der Hyaluron-Behandlung eine Kontrolle?",
+        answer: [
+          "Ja. Nach etwa 14 Tagen schaut sich die Ärztin oder der Arzt das Ergebnis noch einmal an. Ist das Hyaluron gut verteilt, kann bei Bedarf in kleinen Schritten ergänzt werden.",
+        ],
+      },
+      {
+        question: "Wie komme ich ohne Auto zu euch nach Kalk?",
+        answer: [
+          "Mit der Stadtbahn 1 oder 9 bis Kalk Post, die Haltestelle ist barrierefrei. Von dort sind es wenige Schritte ins Center, Aufzüge fahren bis Ebene −1.",
         ],
       },
     ],

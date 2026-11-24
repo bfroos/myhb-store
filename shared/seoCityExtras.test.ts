@@ -18,6 +18,7 @@ test("Ergaenzung wird je Behandlung und Standort gefunden", () => {
   assert.equal(seoCityExtra("/botox/", "koeln", "koeln-arcaden")?.key, "botox@koeln/koeln-arcaden");
   assert.equal(seoCityExtra("botox", "duesseldorf", "duesseldorf-arcaden")?.key, "botox@duesseldorf/duesseldorf-arcaden");
   assert.equal(seoCityExtra("botox", "duisburg", "forum"), null);
+  assert.equal(seoCityExtra("hyaluron", "koeln", "koeln-arcaden")?.key, "hyaluron@koeln/koeln-arcaden");
   assert.equal(seoCityExtra("botox/zornesfalte", "koeln", "koeln-arcaden"), null);
 });
 
