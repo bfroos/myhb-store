@@ -88,6 +88,57 @@ export const SEO_CITY_EXTRAS: Record<string, SeoCityExtra> = {
       },
     ],
   },
+  "botox@duesseldorf/duesseldorf-arcaden": {
+    key: "botox@duesseldorf/duesseldorf-arcaden",
+    pathKey: "botox",
+    citySlug: "duesseldorf",
+    locationSlug: "duesseldorf-arcaden",
+    hubPath: BOTOX_HUB,
+    headline: "Botox in Düsseldorf-Bilk: direkt am S-Bahnhof, ohne langen Vorlauf",
+    intro: [
+      [
+        "Unsere Lounge in den Düsseldorf Arcaden liegt in Bilk auf Ebene −1, gegenüber von ALDI. Der Bahnhof Düsseldorf-Bilk ist direkt vor dem Center: S8, S11 und S28, die Regionalzüge und die Stadtbahnen U71, U72, U73 und U83 halten dort. Aus dem Medienhafen, aus Unterbilk oder von der Uni bist du in wenigen Minuten da, aus Neuss oder Kaarst ohne Umsteigen. Mit dem Auto fährst du über die Bachstraße ins Parkhaus der Arcaden.",
+      ],
+      [
+        "Montags bis samstags haben wir von 10 bis 20 Uhr geöffnet. Die Behandlung mit dem Muskelrelaxans selbst ist meist nach 10 bis 20 Minuten vorbei, dazu kommt das ärztliche Gespräch. Wenn du in der Mittagspause oder nach der Arbeit kommen willst, buch dir am besten vorher einen Termin; spontan geht es nach Verfügbarkeit.",
+      ],
+      [
+        "Du willst zu Altweiber, zum Rosenmontagszug oder zu einer Hochzeit glatter aussehen? Dann komm zwei bis drei Wochen vorher. Die Wirkung baut sich über einige Tage auf, nach etwa 10 bis 14 Tagen siehst du das Ergebnis, und bis zum Termin bleibt Zeit für die Kontrolle. Die Preise pro Zone findest du unter ",
+        { text: "Botox Kosten: Preise pro Zone", href: BOTOX_KOSTEN },
+        ". Wirkung, Gegenanzeigen und mögliche Nebenwirkungen erklären wir auf der Seite ",
+        { text: "Botox-Behandlung beim Arzt", href: BOTOX_HUB },
+        ".",
+      ],
+    ],
+    factsHeadline: "Parkhaus, Bahn und Anreise vom Niederrhein",
+    faqHeadline: "Botox in den Düsseldorf Arcaden: Fragen zu Zeit und Anfahrt",
+    faqs: [
+      {
+        question: "Wann habt ihr in den Düsseldorf Arcaden geöffnet?",
+        answer: [
+          "Montags bis samstags von 10 bis 20 Uhr, sonntags ist geschlossen. Für die Behandlung selbst rechne mit 10 bis 20 Minuten, das ärztliche Gespräch kommt dazu.",
+        ],
+      },
+      {
+        question: "Welche Bahn hält direkt bei euch in Bilk?",
+        answer: [
+          "Am Bahnhof Düsseldorf-Bilk direkt am Center halten die S-Bahnen S8, S11 und S28, die Regionalzüge RE 4, RE 6, RE 10 und RE 13 und die Stadtbahnen U71, U72, U73 und U83. Von dort sind es nur wenige Schritte bis zu uns auf Ebene −1.",
+        ],
+      },
+      {
+        question: "Was kostet das Parken an den Düsseldorf Arcaden?",
+        answer: [
+          "Das Parkhaus hat über 800 Plätze, die Einfahrt liegt an der Bachstraße (Navi: Bachstraße 141). Laut Center kostet jede angefangene Stunde 1,60 €, höchstens 13,00 € am Tag. Die Einfahrt ist höchstens 2 m hoch.",
+        ],
+      },
+      {
+        question: "Wie lange vor Altweiber oder einer Hochzeit sollte ich kommen?",
+        answer: [
+          "Zwei bis drei Wochen vorher ist ideal. Nach etwa 10 bis 14 Tagen lässt sich das Ergebnis beurteilen, und falls nötig, bleibt Zeit für eine kleine Anpassung.",
+        ],
+      },
+    ],
+  },
 };
 
 function normKey(pathKey: string | null | undefined): string {
