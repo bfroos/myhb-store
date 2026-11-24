@@ -102,7 +102,7 @@
         <ol class="cl__schritte">
           <li>
             <span><strong>Betrag wählen.</strong> Ab {{ euro(SPARBUCH.mindestRate) }} im Monat,
-              in Schritten von {{ euro(SPARBUCH.schrittRate) }}. Per Lastschrift oder Karte, in der App.</span>
+              in Schritten von {{ euro(SPARBUCH.schrittRate) }}. Per Karte, in der App.</span>
           </li>
           <li><span><strong>Guthaben wachsen lassen.</strong> Jeden Monat kommt deine Rate dazu und am Monatsende dein Beauty-Bonus.</span></li>
           <li><span><strong>Einlösen.</strong> Für Behandlungen und Produkte an allen Standorten. Deinen Bonus sofort, dein eingezahltes Guthaben {{ SPARBUCH.bindungMonate }} Monate nach der ersten Einzahlung. Sag am Empfang: „Bitte mit Guthaben.“</span></li>
