@@ -78,6 +78,9 @@
                     </NuxtLinkLocale>
                   </li>
                   <li>
+                    <NuxtLinkLocale to="/kontakt">Hilfe &amp; Kontakt</NuxtLinkLocale>
+                  </li>
+                  <li>
                     <NuxtLinkLocale to="/karriere">
                       {{ $t("navigation.secondary.careers") }}
                     </NuxtLinkLocale>
@@ -198,6 +201,9 @@
     <div class="appFooter__outer">
       <nav class="appFooter__legal">
         <ul>
+          <li>
+            <NuxtLinkLocale to="/kontakt">Hilfe &amp; Kontakt</NuxtLinkLocale>
+          </li>
           <li>
             <NuxtLinkLocale to="/p/impressum">
               {{ $t("navigation.meta.imprint") }}
