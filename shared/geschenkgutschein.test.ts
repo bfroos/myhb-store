@@ -6,6 +6,9 @@ import {
   GUTSCHEIN_STANDARD_EURO,
   gutscheinCheckoutUrl,
   gutscheinLink,
+  gutscheinAktionProzent,
+  gutscheinPreisCent,
+  centText,
 } from "./geschenkgutschein.ts";
 
 test("Checkout-Link fuehrt per Cart-Permalink in den Shopify-Checkout", () => {
@@ -53,4 +56,15 @@ test("Altlinks auf den Gutschein im Shop zeigen auf die Website", () => {
   );
   assert.equal(gutscheinLink("https://app.myhealthandbeauty.com"), "https://app.myhealthandbeauty.com");
   assert.equal(gutscheinLink(null), null);
+});
+
+test("Black Friday: 10 % nur im Shopify-Fenster, Preise wie im Checkout", () => {
+  assert.equal(gutscheinAktionProzent(Date.parse("2026-11-26T18:59:59Z")), 0);
+  assert.equal(gutscheinAktionProzent(Date.parse("2026-11-26T19:00:00Z")), 10);
+  assert.equal(gutscheinAktionProzent(Date.parse("2026-11-27T22:59:59Z")), 10);
+  assert.equal(gutscheinAktionProzent(Date.parse("2026-11-27T23:00:00Z")), 0);
+  assert.equal(centText(gutscheinPreisCent(100, 10)), "90 €");
+  assert.equal(centText(gutscheinPreisCent(5, 10)), "4,50 €");
+  assert.equal(centText(gutscheinPreisCent(25 * 3, 10)), "67,50 €");
+  assert.equal(centText(gutscheinPreisCent(100, 0)), "100 €");
 });
