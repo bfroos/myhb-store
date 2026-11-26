@@ -1,4 +1,5 @@
 import { istIndexierbarerGeplanterStandort } from "#shared/geplanteStandorte";
+import { seoTitleTest } from "#shared/seoTitleTests";
 import { mapLocationTreatmentPageFixedBlocks } from "~/lib/strapi/mapper/mapLocationTreatmentPageBlocks";
 import type {
   LocationDto,
@@ -382,6 +383,11 @@ export function useLocationTreatmentPage() {
       ? `ab ${(treatmentPrice.value / 100).toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}\u00a0€`
       : "";
     const city = loc?.city?.name ?? "";
+    // Titel-Test 26.11.2026 (shared/seoTitleTests.ts): nur Botox Recklinghausen und Leipzig.
+    const titleTest = seoTitleTest(treatmentPage.value?.pathKey, loc?.city?.slug, loc?.slug);
+    if (titleTest) {
+      return { metaTitle: titleTest.title(priceTag), metaDescription: titleTest.description(priceTag) };
+    }
     return {
       metaTitle: t(
         priceTag
