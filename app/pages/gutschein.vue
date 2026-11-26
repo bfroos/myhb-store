@@ -41,6 +41,11 @@
           </select>
         </label>
 
+        <p v-if="aktionProzent" class="gutschein__aktion">
+          <strong>{{ GUTSCHEIN_AKTION.name }}: {{ aktionProzent }} % auf jeden Gutschein.</strong>
+          Der Rabatt wird beim Bezahlen automatisch abgezogen, du brauchst keinen Code.
+        </p>
+
         <UiAtomBaseButton
           as="a"
           :href="checkoutUrl ?? undefined"
@@ -49,7 +54,11 @@
           rel="nofollow"
           @click="kaufGeklickt"
         >
-          Jetzt für {{ euroText(euro * menge) }} kaufen
+          <template v-if="aktionProzent">
+            Jetzt für {{ centText(gutscheinPreisCent(euro * menge, aktionProzent)) }} statt
+            {{ euroText(euro * menge) }} kaufen
+          </template>
+          <template v-else>Jetzt für {{ euroText(euro * menge) }} kaufen</template>
         </UiAtomBaseButton>
         <p class="gutschein__hinweis">
           Sichere Zahlung mit Karte, PayPal, Klarna (auch in Raten), Apple Pay oder Google Pay.
@@ -99,7 +108,11 @@ import {
   GUTSCHEIN_BETRAEGE,
   GUTSCHEIN_MAX_MENGE,
   GUTSCHEIN_STANDARD_EURO,
+  GUTSCHEIN_AKTION,
+  centText,
   euroText,
+  gutscheinAktionProzent,
+  gutscheinPreisCent,
   gutscheinCheckoutUrl,
 } from "#shared/geschenkgutschein";
 
@@ -111,6 +124,15 @@ const { trackEvent } = useGoogleAnalytics();
 
 const euro = ref(GUTSCHEIN_STANDARD_EURO);
 const menge = ref(1);
+// Erst im Browser bestimmen: die Seite liegt im ISR-Cache, ein serverseitig
+// berechneter Rabatt bliebe nach Aktionsende stehen.
+const aktionProzent = ref(0);
+let aktionTimer: ReturnType<typeof setInterval> | undefined;
+onMounted(() => {
+  aktionProzent.value = gutscheinAktionProzent();
+  aktionTimer = setInterval(() => (aktionProzent.value = gutscheinAktionProzent()), 60_000);
+});
+onBeforeUnmount(() => clearInterval(aktionTimer));
 const checkoutUrl = computed(() => gutscheinCheckoutUrl(euro.value, menge.value, route.query));
 
 function kaufGeklickt() {
@@ -223,6 +245,13 @@ useHead({
 .gutschein__betrag--aktiv:hover {
   background: var(--color-black);
   border-color: var(--color-black);
+  color: var(--color-white);
+}
+.gutschein__aktion {
+  margin: 0;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: var(--color-black);
   color: var(--color-white);
 }
 .gutschein__menge {

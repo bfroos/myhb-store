@@ -82,3 +82,33 @@ export function gutscheinLink(url: string | null | undefined): string | null {
 export function euroText(euro: number): string {
   return `${euro} €`;
 }
+
+/**
+ * Black Friday 2026 (Michael, 26.11.2026): Online-Gutscheine 10 % guenstiger.
+ * Den Abzug macht Shopify selbst mit dem automatischen Rabatt
+ * "Black Friday 27.11.2026 – Gutschein online 10 %"
+ * (gid://shopify/DiscountAutomaticNode/1958470713691). Fenster und Satz hier
+ * muessen zu diesem Rabatt passen, sonst zeigt die Seite einen anderen Preis
+ * als der Checkout.
+ */
+export const GUTSCHEIN_AKTION = {
+  name: "Black Friday",
+  prozent: 10,
+  start: Date.parse("2026-11-26T19:00:00Z"),
+  ende: Date.parse("2026-11-27T22:59:59Z"),
+} as const;
+
+/** Rabatt in Prozent, der gerade im Checkout abgezogen wird, sonst 0. */
+export function gutscheinAktionProzent(jetzt = Date.now()): number {
+  return jetzt >= GUTSCHEIN_AKTION.start && jetzt <= GUTSCHEIN_AKTION.ende ? GUTSCHEIN_AKTION.prozent : 0;
+}
+
+/** Preis nach Rabatt in Cent, kaufmaennisch gerundet wie Shopify. */
+export function gutscheinPreisCent(euro: number, prozent: number): number {
+  return Math.round(euro * 100 * (1 - prozent / 100));
+}
+
+/** 90 € / 4,50 € */
+export function centText(cent: number): string {
+  return cent % 100 === 0 ? `${cent / 100} €` : `${(cent / 100).toFixed(2).replace(".", ",")} €`;
+}
