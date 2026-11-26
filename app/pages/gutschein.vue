@@ -133,7 +133,14 @@ onMounted(() => {
   aktionTimer = setInterval(() => (aktionProzent.value = gutscheinAktionProzent()), 60_000);
 });
 onBeforeUnmount(() => clearInterval(aktionTimer));
-const checkoutUrl = computed(() => gutscheinCheckoutUrl(euro.value, menge.value, route.query));
+// Die Seite kommt aus dem ISR-Cache ohne Query; Vue gleicht ein abweichendes
+// href beim Hydrieren nicht ab. Darum die Kampagnenwerte erst nach dem Mounten
+// uebernehmen, damit der Link sicher neu gerendert wird (26.11.2026).
+const kampagne = ref<Record<string, unknown>>({});
+onMounted(() => {
+  kampagne.value = { ...route.query };
+});
+const checkoutUrl = computed(() => gutscheinCheckoutUrl(euro.value, menge.value, kampagne.value));
 
 function kaufGeklickt() {
   trackEvent("gutschein_checkout", {
