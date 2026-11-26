@@ -58,7 +58,14 @@ export function gutscheinCheckoutUrl(
   for (const key of UTM_KEYS) {
     const v = query[key];
     const s = Array.isArray(v) ? v[0] : v;
-    if (typeof s === "string" && s.trim()) params.set(key, s.trim().slice(0, 100));
+    if (typeof s === "string" && s.trim()) {
+      const wert = s.trim().slice(0, 100);
+      params.set(key, wert);
+      // Shopify speichert die UTM eines Cart-Permalinks nicht in der
+      // Customer Journey (26.11.2026: 12 von 13 Black-Friday-Gutscheinen ohne
+      // Herkunft). Als Bestellattribut bleibt sie an der Bestellung haengen.
+      params.set(`attributes[${key}]`, wert);
+    }
   }
   params.set("attributes[quelle]", "website-gutschein");
   return `${GUTSCHEIN_CHECKOUT_HOST}/cart/${betrag.variantId}:${anzahl}?${params.toString()}`;

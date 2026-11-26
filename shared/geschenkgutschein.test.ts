@@ -39,6 +39,9 @@ test("Kampagnenwerte der Seite gehen mit, andere Query-Werte nicht", () => {
   assert.equal(url.searchParams.get("utm_campaign"), "gutschein_raten");
   assert.equal(url.searchParams.get("gclid"), null);
   assert.equal(url.searchParams.get("attributes[quelle]"), "website-gutschein");
+  assert.equal(url.searchParams.get("attributes[utm_source]"), "go");
+  assert.equal(url.searchParams.get("attributes[utm_campaign]"), "gutschein_raten");
+  assert.equal(url.searchParams.get("attributes[gclid]"), null);
 });
 
 test("Standardbetrag ist kaufbar, Varianten sind eindeutig", () => {
